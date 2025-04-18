@@ -4,11 +4,17 @@ package View;
 import DAO.CeldaDAO;
 import DAO.DelitoDAO;
 import DAO.PresoDAO;
+import Model.Celda;
 import Model.Delito;
 import Model.Preso;
 import Model.Sentencia;
+import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -27,10 +33,13 @@ import java.util.HashMap;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -867,9 +876,215 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         }
     }
 
+    //DESDE AQUI 2
     
+private void configurarTablaImagenes() {
+        TablaPresos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value,
+                        isSelected, hasFocus, row, column);
+
+                if (column == 0 && value instanceof ImageIcon) {
+                    ImageIcon originalIcon = (ImageIcon) value;
+                    Image img = originalIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                    ImageIcon roundedIcon = new ImageIcon(createRoundedImage(img));
+                    label.setIcon(roundedIcon);
+                    label.setText("");
+                } else {
+                    label.setIcon(null);
+                }
+                label.setHorizontalAlignment(JLabel.CENTER);
+                return label;
+            }
+        });
+
+        TablaPresos.setRowHeight(65);
+        TablaPresos.getColumnModel().getColumn(0).setPreferredWidth(70);
+    }
+
+private Image createRoundedImage(Image image) {
+        int width = image.getWidth(null);
+        int height = image.getHeight(null);
+
+        BufferedImage output = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = output.createGraphics();
+
+        output = g2.getDeviceConfiguration().createCompatibleImage(width, height, Transparency.TRANSLUCENT);
+        g2.dispose();
+        g2 = output.createGraphics();
+
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.fillRoundRect(0, 0, width, height, 20, 20);
+        g2.setComposite(AlphaComposite.SrcIn);
+        g2.drawImage(image, 0, 0, null);
+        g2.dispose();
+
+        return output;
+    }
+
+private ImageIcon cargarImagenPreso(String path) {
+        try {
+            Image img = ImageIO.read(new File(path));
+            return new ImageIcon(img.getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+        } catch (Exception e) {
+            return new ImageIcon(getClass().getResource("/images/default_profile.png"));
+        }
+    }
     
+private Delito crearDelitoDesdeFormulario() {
+        String nombreDelito = delito.getSelectedItem().toString();
+
+        if (Codigo.getText().trim().isEmpty() || ArticuloLey.getText().trim().isEmpty()) {
+            throw new IllegalArgumentException("Debe seleccionar un delito para obtener el código y el artículo de ley.");
+        }
+
+        int codigoDelito;
+        try {
+            codigoDelito = Integer.parseInt(Codigo.getText().trim());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("El código del delito no es un número válido.");
+        }
+
+        String articuloLey = ArticuloLey.getText().trim();
+        String gravedad = Gravedad.getSelectedItem().toString();
+
+        Date fecha = FechaComision.getDate();
+        if (fecha == null) {
+            throw new IllegalArgumentException("Debe seleccionar una fecha de comisión del delito.");
+        }
+
+        LocalDate fechaComision = fecha.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+
+        String descripcionDelito = DescripcionDelito.getText().trim();
+
+        return new Delito(codigoDelito, nombreDelito, articuloLey, gravedad, descripcionDelito, fechaComision);
+    }
+
+private void actualizarProgreso() {
+        lblProgreso.setText("Delito " + delitoActual + " de " + totalDelitos);
+    }
     
+private void finalizarPresoActionPerformed() {
+        try {
+            if (delitosTemporales.size() < totalDelitos) {
+                JOptionPane.showMessageDialog(this,
+                        "Faltan delitos por ingresar. Debe ingresar " + totalDelitos + " delitos.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!validarDatosPersonales() || !validarDatosJudiciales()) {
+                JOptionPane.showMessageDialog(this,
+                        "Debe completar correctamente todos los datos personales y judiciales.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (lblFoto.getIcon() == null) {
+                JOptionPane.showMessageDialog(this,
+                        "Debe seleccionar una foto del preso",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Preso preso = crearPresoDesdeFormulario();
+            boolean guardado = new PresoDAO().guardarPreso(preso, selectedImageFile);
+
+            if (guardado) {
+                JOptionPane.showMessageDialog(this, "Preso añadido correctamente con " + delitosTemporales.size() + " delitos.");
+                limpiarFormularioCompleto();
+
+                cargarDatosEnTabla();
+
+                OficialDeRegistroView.setSelectedIndex(0);
+
+                revalidate();
+                repaint();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al guardar el preso.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            manejarError(e);
+        }
+    }
+  
+private Preso crearPresoDesdeFormulario() {
+        try {
+            String nombrePreso = InputNombrePreso.getText().trim();
+            String apellido = InputApellidoPreso.getText().trim();
+            int edad = Integer.parseInt(InputEdadPreso.getText().trim());
+            String nacionalidad = InputNacionalidadPreso.getText().trim();
+            String sexo = InputSexoPreso.getSelectedItem().toString();
+            float estatura = Float.parseFloat(InputEstaturaPreso.getText().trim());
+            float peso = Float.parseFloat(InputPesoPreso.getText().trim());
+            String tipoSangre = TipoSangreCombobox.getSelectedItem().toString();
+            String identificacion = InputIdentificacionPreso.getText().trim();
+            String condicion = condicionComb.getSelectedItem().toString();
+            String seccionAsignada = seccion.getSelectedItem().toString();
+            String nivelDeRiesgo = riesgo.getSelectedItem().toString();
+            String nivelDeSeguridad = seguridad.getSelectedItem().toString();
+
+            int años = (Integer) spinnerAñosSentencia.getValue();
+            int meses = (Integer) spinnerMesesSentencia.getValue();
+
+            Date fechaSeleccionada = datePickerFechaIngreso.getDate();
+            if (fechaSeleccionada == null) {
+                JOptionPane.showMessageDialog(null, "Debe seleccionar una fecha de ingreso");
+                return null;
+            }
+
+            LocalDate fechaIngreso = fechaSeleccionada.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+
+            Sentencia sentencia = new Sentencia(años, meses, fechaIngreso);
+
+            Celda celdaAsignada = new CeldaDAO().asignarCeldaDisponible(seccionAsignada);
+            if (celdaAsignada == null) {
+                JOptionPane.showMessageDialog(null, "No hay celdas disponibles en la sección " + seccionAsignada);
+                return null;
+            }
+
+            Preso preso = new Preso(
+                    nombrePreso,
+                    apellido,
+                    edad,
+                    0,
+                    sexo,
+                    nacionalidad,
+                    identificacion,
+                    estatura,
+                    peso,
+                    new ArrayList<>(delitosTemporales),
+                    sentencia,
+                    nivelDeSeguridad,
+                    seccionAsignada,
+                    condicion,
+                    celdaAsignada.getNombreFormateado(),
+                    false,
+                    nivelDeRiesgo,
+                    0,
+                    tipoSangre,
+                    null
+            );
+
+            return preso;
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Error en formato numérico: " + e.getMessage());
+            return null;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al crear preso: " + e.getMessage());
+            return null;
+        }
+    }
+
+
+
     private void cargarDatosEnTabla() {
         DefaultTableModel modelo = (DefaultTableModel) TablaPresos.getModel();
         modelo.setRowCount(0);
@@ -901,15 +1116,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
 
         TablaPresos.revalidate();
         TablaPresos.repaint();
-    }
-   
-    private ImageIcon cargarImagenPreso(String path) {
-        try {
-            Image img = ImageIO.read(new File(path));
-            return new ImageIcon(img.getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-        } catch (Exception e) {
-            return new ImageIcon(getClass().getResource("/images/default_profile.png"));
-        }
     }
 
    
@@ -1022,6 +1228,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         jLabel105 = new javax.swing.JLabel();
         jSeparator66 = new javax.swing.JSeparator();
         ArticuloLey = new javax.swing.JLabel();
+        lblProgreso = new javax.swing.JLabel();
         cancelarD = new javax.swing.JButton();
         jLabel29 = new javax.swing.JLabel();
         AñadirPreso = new javax.swing.JButton();
@@ -1723,6 +1930,10 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         ArticuloLey.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         ArticuloLey.setForeground(new java.awt.Color(0, 0, 0));
         jPanel10.add(ArticuloLey, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 280, 200, 30));
+
+        lblProgreso.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        lblProgreso.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel10.add(lblProgreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 40, 490, 20));
 
         PanelIngresarDelito.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 50, 780, 440));
 
@@ -3343,6 +3554,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JLabel lblFechaSalidaCalculada;
     private javax.swing.JLabel lblFoto;
+    private javax.swing.JLabel lblProgreso;
     private javax.swing.JLabel naciona;
     private javax.swing.JLabel nacionali;
     private javax.swing.JLabel nivelRiesgExp;
