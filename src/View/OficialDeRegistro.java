@@ -81,11 +81,8 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         jSeparator13 = new javax.swing.JSeparator();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
-        spinnerAñosSentencia = new com.toedter.components.JSpinField();
-        spinnerMesesSentencia = new com.toedter.components.JSpinField();
         jLabel22 = new javax.swing.JLabel();
         jSeparator14 = new javax.swing.JSeparator();
-        fechaIngreso = new com.toedter.calendar.JDateChooser();
         jLabel23 = new javax.swing.JLabel();
         jSeparator15 = new javax.swing.JSeparator();
         lblFechaSalidaCalculada = new javax.swing.JLabel();
@@ -108,7 +105,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         jLabel28 = new javax.swing.JLabel();
         jSeparator20 = new javax.swing.JSeparator();
         jSeparator21 = new javax.swing.JSeparator();
-        fechaIComision = new com.toedter.calendar.JDateChooser();
         jLabel32 = new javax.swing.JLabel();
         Codigo = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -159,8 +155,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         nuevoAislamientoCombo = new javax.swing.JComboBox<>();
         nuevoNivelRiesgoCombo = new javax.swing.JComboBox<>();
         nuevaSeccionCombo = new javax.swing.JComboBox<>();
-        spinnerNuevosAños = new com.toedter.components.JSpinField();
-        spinnerNuevosMeses = new com.toedter.components.JSpinField();
         ActualizarFotoBoton = new javax.swing.JButton();
         nuevaFoto = new javax.swing.JLabel();
         jLabel74 = new javax.swing.JLabel();
@@ -182,7 +176,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         jSeparator30 = new javax.swing.JSeparator();
         jSeparator31 = new javax.swing.JSeparator();
         jSeparator32 = new javax.swing.JSeparator();
-        fechaComisionAct = new com.toedter.calendar.JDateChooser();
         guardarNuevoDelito = new javax.swing.JButton();
         jPanel17 = new javax.swing.JPanel();
         actualizarPreso = new javax.swing.JButton();
@@ -646,8 +639,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         jLabel21.setForeground(new java.awt.Color(0, 0, 0));
         jLabel21.setText("Años");
         jPanel7.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 60, 70, 30));
-        jPanel7.add(spinnerAñosSentencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 90, -1, -1));
-        jPanel7.add(spinnerMesesSentencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 90, -1, -1));
 
         jLabel22.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel22.setForeground(new java.awt.Color(0, 0, 0));
@@ -656,7 +647,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
 
         jSeparator14.setForeground(new java.awt.Color(0, 0, 0));
         jPanel7.add(jSeparator14, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 120, 270, 10));
-        jPanel7.add(fechaIngreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 160, 150, 30));
 
         jLabel23.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(0, 0, 0));
@@ -746,7 +736,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
 
         jSeparator21.setForeground(new java.awt.Color(0, 0, 0));
         jPanel10.add(jSeparator21, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 110, 270, 10));
-        jPanel10.add(fechaIComision, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 80, 150, 30));
 
         jLabel32.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel32.setForeground(new java.awt.Color(0, 0, 0));
@@ -969,8 +958,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
 
         nuevaSeccionCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "Sección A", "Sección B", "Sección C" }));
         jPanel13.add(nuevaSeccionCombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 140, 120, 30));
-        jPanel13.add(spinnerNuevosAños, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 90, -1, -1));
-        jPanel13.add(spinnerNuevosMeses, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 90, -1, -1));
 
         ActualizarFotoBoton.setText("Actualizar foto");
         jPanel13.add(ActualizarFotoBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 390, -1, -1));
@@ -1057,7 +1044,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
 
         jSeparator32.setForeground(new java.awt.Color(0, 0, 0));
         jPanel13.add(jSeparator32, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 270, 100, 10));
-        jPanel13.add(fechaComisionAct, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 280, 200, 30));
 
         guardarNuevoDelito.setText("Guardar delito");
         jPanel13.add(guardarNuevoDelito, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 450, 130, -1));
@@ -2088,9 +2074,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     private javax.swing.JLabel edad;
     private javax.swing.JLabel edad1;
     private javax.swing.JLabel estatura;
-    private com.toedter.calendar.JDateChooser fechaComisionAct;
-    private com.toedter.calendar.JDateChooser fechaIComision;
-    private com.toedter.calendar.JDateChooser fechaIngreso;
     private javax.swing.JLabel fotoPresoExpediente;
     private javax.swing.JComboBox<String> gravedad;
     private javax.swing.JButton guardarDelito;
@@ -2351,10 +2334,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> seccion;
     private javax.swing.JComboBox<String> seguridad;
     private javax.swing.JLabel sexo;
-    private com.toedter.components.JSpinField spinnerAñosSentencia;
-    private com.toedter.components.JSpinField spinnerMesesSentencia;
-    private com.toedter.components.JSpinField spinnerNuevosAños;
-    private com.toedter.components.JSpinField spinnerNuevosMeses;
     private javax.swing.JTable tablaExpediente;
     private javax.swing.JTextArea textAreaDescripcion;
     // End of variables declaration//GEN-END:variables
