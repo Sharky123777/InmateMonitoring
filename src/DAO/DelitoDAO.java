@@ -17,7 +17,7 @@ import java.time.LocalDate;
 
 public class DelitoDAO {
    
-    private static final String JSON_FILE = "C:\\Users\\ASUS\\Documents\\NetBeansProjects\\InmateMonitoring\\src\\Resources\\DATA\\delitos.json";
+    private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\delitos.json";
     private Gson gson;
             
     
