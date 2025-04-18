@@ -186,7 +186,12 @@ public class Director extends javax.swing.JFrame {
         });
         jPopupMenu1.add(Modificar);
 
-        Eliminar.setText("jMenuItem1");
+        Eliminar.setText("Eliminar");
+        Eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarActionPerformed(evt);
+            }
+        });
         jPopupMenu1.add(Eliminar);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -710,71 +715,7 @@ private void ajustarImagenesTabla() {
     tablaGuardias.setRowHeight(60);
 }
     
-    private boolean validarFechaFinContrato() {
-    // Verificar que se haya seleccionado una fecha
-    if (jDateChooserFinContrato.getDate() == null) {
-        JOptionPane.showMessageDialog(this, 
-            "Debe seleccionar una fecha de fin de contrato", 
-            "Error", JOptionPane.ERROR_MESSAGE);
-        return false;
-    }
-    
-    // Obtener la fecha actual (inicio de contrato)
-    LocalDate fechaInicio = LocalDate.now();
-    
-    // Convertir la fecha seleccionada a LocalDate
-    LocalDate fechaFin = jDateChooserFinContrato.getDate().toInstant()
-                       .atZone(ZoneId.systemDefault()).toLocalDate();
-    
-    // Validar que la fecha fin sea después de la fecha inicio
-    if (!fechaFin.isAfter(fechaInicio)) {
-        JOptionPane.showMessageDialog(this, 
-            "La fecha de fin de contrato debe ser posterior a hoy (" + 
-            fechaInicio.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ")", 
-            "Error", JOptionPane.ERROR_MESSAGE);
-        jDateChooserFinContrato.setDate(null);
-        jDateChooserFinContrato.requestFocus();
-        return false;
-    }
-    
-    return true;
-}
-    // Este método se llamaría cuando seleccionan "Modificar" en el PopupMenu
 
-
-private void actualizarTablaGuardias() {
-    // 1. Obtener los datos actualizados desde el DAO
-    GuardiaDAO dao = new GuardiaDAO();
-    List<Guardia> guardias = dao.obtenerGuardias();
-    
-    // 2. Obtener el modelo de la tabla
-    DefaultTableModel model = (DefaultTableModel) tablaGuardias.getModel();
-    model.setRowCount(0); // Limpiar datos existentes
-    
-    // 3. Llenar la tabla con los nuevos datos
-    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    
-    for (Guardia g : guardias) {
-        model.addRow(new Object[]{
-            g.getPrimerNombre(),
-            g.getPrimerApellido(),
-            g.getIdentificacion(),
-            g.getCargo(),
-            g.getTurno(),
-            g.getFechaInicioContrato().format(dateFormatter),
-            g.getFechaFinContrato() != null ? g.getFechaFinContrato().format(dateFormatter) : "N/A",
-            g.getEdad(),
-            g.getNacionalidad()
-            // Agrega más campos según necesites
-        });
-    }
-    
-    // 4. Opcional: Ajustar tamaño de columnas
-    TableColumnModel columnModel = tablaGuardias.getColumnModel();
-    for (int i = 0; i < columnModel.getColumnCount(); i++) {
-        columnModel.getColumn(i).setPreferredWidth(150); // Ajusta según necesidad
-    }
-}
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
        try {
@@ -930,6 +871,35 @@ if (rutaImagenSeleccionada == null || rutaImagenSeleccionada.isEmpty()) {
     rutaImagenSeleccionada = null; // Cambiado de "" a null
 }
 
+ private void eliminarGuardia(String cedula, int filaSeleccionada) {
+    try {
+        // Eliminar a través del DAO
+        GuardiaDAO dao = new GuardiaDAO();
+        boolean eliminado = dao.eliminarGuardia(cedula);
+        
+        if (eliminado) {
+            // Eliminar de la tabla
+            ((DefaultTableModel)tablaGuardias.getModel()).removeRow(filaSeleccionada);
+            
+            JOptionPane.showMessageDialog(this,
+                "Guardia eliminado exitosamente",
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                "No se pudo eliminar el guardia",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this,
+            "Error al eliminar: " + ex.getMessage(),
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+        ex.printStackTrace();
+    }
+
+}
     
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
      JFileChooser fileChooser = new JFileChooser();
@@ -1310,6 +1280,33 @@ if (rutaImagenSeleccionada == null || rutaImagenSeleccionada.isEmpty()) {
     // 5. Cambiar al tab de modificación
     jTabbedPane1.setSelectedComponent(ModificarGuardia);
     }//GEN-LAST:event_ModificarActionPerformed
+
+    private void EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarActionPerformed
+        int filaSeleccionada = tablaGuardias.getSelectedRow();
+        
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(Director.this, 
+                "Por favor seleccione un guardia primero", 
+                "Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // Obtener la cédula del guardia seleccionado (asumiendo columna 4)
+        String cedula = tablaGuardias.getValueAt(filaSeleccionada, 4).toString();
+        
+        // Mostrar confirmación
+        int respuesta = JOptionPane.showConfirmDialog(
+            Director.this,
+            "¿Está seguro que desea eliminar al guardia con cédula " + cedula + "?\nEsta acción no se puede deshacer.",
+            "Confirmar eliminación",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE);
+        
+        if (respuesta == JOptionPane.YES_OPTION) {
+            eliminarGuardia(cedula, filaSeleccionada);
+        }
+    
+    }//GEN-LAST:event_EliminarActionPerformed
 
     /**
      * @param args the command line arguments

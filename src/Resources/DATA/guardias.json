@@ -49,22 +49,6 @@
       "cargo": "Oficial"
     },
     {
-      "primerNombre": "piopip",
-      "segundoNombre": "ipipo",
-      "primerApellido": "gkgkg",
-      "segundoApellido": "mv",
-      "edad": 24,
-      "identificacion": "113131354",
-      "sexo": "Femenino",
-      "nacionalidad": "asaw",
-      "correo": "@@@@@",
-      "turno": "Diurno",
-      "fechaInicioContrato": "2025-04-18",
-      "fechaFinContrato": "2000-04-20",
-      "rutaImagen": "src/Resources/imagenes_guardias/113131354_Captura de pantalla 2024-03-06 145910.png",
-      "cargo": "Oficial"
-    },
-    {
       "primerNombre": "aaaaaaaaaaaa",
       "segundoNombre": "",
       "primerApellido": "zzzzzzzz",
@@ -79,22 +63,6 @@
       "fechaFinContrato": "2000-04-20",
       "rutaImagen": "src/Resources/imagenes_guardias/0987654321_Captura de pantalla 2024-03-06 145925.png",
       "cargo": "Guardia"
-    },
-    {
-      "primerNombre": "primer nombre",
-      "segundoNombre": "segundo",
-      "primerApellido": "adawd",
-      "segundoApellido": "adaw",
-      "edad": 34,
-      "identificacion": "98765432",
-      "sexo": "Femenino",
-      "nacionalidad": "dwq",
-      "correo": "@.com",
-      "turno": "Diurno",
-      "fechaInicioContrato": "2025-04-18",
-      "fechaFinContrato": "2000-04-27",
-      "rutaImagen": "src/Resources/imagenes_guardias/98765432_Captura de pantalla 2024-03-03 160808.png",
-      "cargo": "Oficial"
     },
     {
       "primerNombre": "Shar",
