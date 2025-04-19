@@ -1,8 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package View;
+
+import Model.Visitante;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -10,9 +21,12 @@ package View;
  */
 public class PersonalDeControl extends javax.swing.JFrame {
 
-    /**
-     * Creates new form PersonalDeControl
-     */
+    private List<Visitante> visitantesTemporales = new ArrayList<>();
+    private File imagenVisitanteSeleccionada;
+    private File imagenPDCSeleccionada;
+    private List<File> imagenesTemporales = new ArrayList<>();
+    int cantidadTotal;
+
     public PersonalDeControl() {
         initComponents();
     }
@@ -26,21 +40,848 @@ public class PersonalDeControl extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        PanelBotones = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel14 = new javax.swing.JLabel();
+        jPanel15 = new javax.swing.JPanel();
+        jLabel47 = new javax.swing.JLabel();
+        TabbedPDC = new javax.swing.JTabbedPane();
+        PanelPerfil = new javax.swing.JPanel();
+        FondoFoto = new javax.swing.JPanel();
+        FotoPDC = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jSeparator6 = new javax.swing.JSeparator();
+        jSeparator7 = new javax.swing.JSeparator();
+        FechaIngresoPDC = new javax.swing.JLabel();
+        TurnoPDC = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel44 = new javax.swing.JLabel();
+        NombreCompletoPDC = new javax.swing.JLabel();
+        IdentificacionPDC = new javax.swing.JLabel();
+        EdadPDC = new javax.swing.JLabel();
+        NacionalidadPDC = new javax.swing.JLabel();
+        SexoPDC = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jSeparator3 = new javax.swing.JSeparator();
+        jSeparator4 = new javax.swing.JSeparator();
+        jSeparator5 = new javax.swing.JSeparator();
+        jLabel46 = new javax.swing.JLabel();
+        jSeparator8 = new javax.swing.JSeparator();
+        EmailPDC = new javax.swing.JLabel();
+        jLabel49 = new javax.swing.JLabel();
+        PanelListaPresos = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TablaPresos = new javax.swing.JTable();
+        BarraDeBusquedaPreso = new javax.swing.JTextField();
+        BotonBuscarPreso = new javax.swing.JButton();
+        jPanel8 = new javax.swing.JPanel();
+        ComboSeccionPreso = new javax.swing.JComboBox<>();
+        PanelAñadirVisita = new javax.swing.JPanel();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        BotonAñadirVisitante = new javax.swing.JButton();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        NacionalidadVisitante = new javax.swing.JTextField();
+        SegundoNombreVisitante = new javax.swing.JTextField();
+        PrimerApellidoVisitante = new javax.swing.JTextField();
+        SegundoApellidoVisitante = new javax.swing.JTextField();
+        IdentificacionVisitante = new javax.swing.JTextField();
+        EmailVisitante = new javax.swing.JTextField();
+        RelacionConPresoVisitante = new javax.swing.JComboBox<>();
+        SexoVisitante = new javax.swing.JComboBox<>();
+        EdadVisitante = new javax.swing.JTextField();
+        PrimerNombreVisitante = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        CantidadDeVisitantesCombo = new javax.swing.JComboBox<>();
+        jLabel15 = new javax.swing.JLabel();
+        jPanel10 = new javax.swing.JPanel();
+        jLabel33 = new javax.swing.JLabel();
+        IdentificacionPresoVisita = new javax.swing.JTextField();
+        AgregarImagenVisitante = new javax.swing.JButton();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        DuracionVisita = new javax.swing.JComboBox<>();
+        jLabel31 = new javax.swing.JLabel();
+        TipoVisita = new javax.swing.JComboBox<>();
+        jLabel32 = new javax.swing.JLabel();
+        LugarVisita = new javax.swing.JComboBox<>();
+        BotonAñadirVisita = new javax.swing.JButton();
+        jLabel22 = new javax.swing.JLabel();
+        jPanel11 = new javax.swing.JPanel();
+        VistaPreviaVisitante = new javax.swing.JLabel();
+        HoraVisita = new javax.swing.JTextField();
+        FechaVisita = new com.toedter.calendar.JDateChooser();
+        PanelActualizarInformacion = new javax.swing.JPanel();
+        jPanel13 = new javax.swing.JPanel();
+        jLabel36 = new javax.swing.JLabel();
+        jLabel37 = new javax.swing.JLabel();
+        jLabel38 = new javax.swing.JLabel();
+        jLabel39 = new javax.swing.JLabel();
+        jLabel40 = new javax.swing.JLabel();
+        jLabel41 = new javax.swing.JLabel();
+        jLabel42 = new javax.swing.JLabel();
+        jLabel43 = new javax.swing.JLabel();
+        NuevoEmail = new javax.swing.JTextField();
+        ContraseñaActual = new javax.swing.JTextField();
+        NuevoPrimerNombre = new javax.swing.JTextField();
+        NuevoPrimerApellido = new javax.swing.JTextField();
+        NuevaNacionalidad = new javax.swing.JTextField();
+        NuevaContraseña = new javax.swing.JTextField();
+        NuevoSegundoNombre = new javax.swing.JTextField();
+        NuevoSegundoApellido = new javax.swing.JTextField();
+        BotonActualizarInformacion = new javax.swing.JButton();
+        jLabel35 = new javax.swing.JLabel();
+        jPanel12 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jPanel14 = new javax.swing.JPanel();
+        VistaPreviaNuevaFoto = new javax.swing.JLabel();
+        SubirNuevaFotoPerfil = new javax.swing.JButton();
+        PanelHistorialVisitas = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TablaHistorialVisitas = new javax.swing.JTable();
+        BarraDeBusquedaVisitante = new javax.swing.JTextField();
+        BotonBuscarVisitantePorIdentificacion = new javax.swing.JButton();
+        jLabel48 = new javax.swing.JLabel();
+        PanelHistorialVisitantes = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        TablaHistorialVisitantes = new javax.swing.JTable();
+        BarraDeBusquedaVisitante2 = new javax.swing.JTextField();
+        BotonBuscarVisitantePorIdentificacion2 = new javax.swing.JButton();
+        jLabel34 = new javax.swing.JLabel();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        PanelBotones.setBackground(new java.awt.Color(29, 35, 51));
+        PanelBotones.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel3.setBackground(new java.awt.Color(29, 35, 51));
+        jPanel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel3MouseClicked(evt);
+            }
+        });
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("PERFIL");
+        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, -1, -1));
+
+        PanelBotones.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, 60));
+
+        jPanel4.setBackground(new java.awt.Color(29, 35, 51));
+        jPanel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel4MouseClicked(evt);
+            }
+        });
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("LISTA DE PRESOS");
+        jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, -1, -1));
+
+        PanelBotones.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 0, 280, 60));
+
+        jPanel5.setBackground(new java.awt.Color(29, 35, 51));
+        jPanel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel5MouseClicked(evt);
+            }
+        });
+        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel14.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel14.setText("AÑADIR VISITA");
+        jPanel5.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, -1, -1));
+
+        PanelBotones.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 0, 260, 60));
+
+        jPanel15.setBackground(new java.awt.Color(29, 35, 51));
+        jPanel15.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel15MouseClicked(evt);
+            }
+        });
+        jPanel15.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel47.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel47.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel47.setText("ACTUALIZAR INFORMACIÓN");
+        jPanel15.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, -1, -1));
+
+        PanelBotones.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 0, 300, 60));
+
+        getContentPane().add(PanelBotones, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 60));
+
+        PanelPerfil.setBackground(new java.awt.Color(255, 255, 255));
+        PanelPerfil.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        FondoFoto.setBackground(new java.awt.Color(255, 255, 255));
+        FondoFoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        FondoFoto.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        FondoFoto.add(FotoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 180, 200));
+
+        PanelPerfil.add(FondoFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 70, 200, 220));
+
+        jPanel6.setBackground(new java.awt.Color(180, 180, 195));
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel3.setFont(new java.awt.Font("Arial", 2, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel3.setText("Personal de control");
+        jPanel6.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, 160, -1));
+
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("Fecha de ingreso");
+        jPanel6.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 400, -1, -1));
+
+        jButton1.setText("Cerrar sesión");
+        jPanel6.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 480, 110, 30));
+
+        jLabel12.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel12.setText("Cargo");
+        jPanel6.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 280, -1, -1));
+
+        jLabel13.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel13.setText("Turno");
+        jPanel6.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 340, -1, -1));
+        jPanel6.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 460, 220, 20));
+        jPanel6.add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 220, 20));
+        jPanel6.add(FechaIngresoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 430, 220, 30));
+        jPanel6.add(TurnoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 220, 30));
+
+        PanelPerfil.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, 300, 530));
+
+        jLabel8.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setText("INFORMACIÓN PERSONAL");
+        PanelPerfil.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 70, -1, -1));
+
+        jPanel2.setBackground(new java.awt.Color(139, 139, 157));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        PanelPerfil.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 60));
+
+        jPanel7.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel9.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel9.setText("Nombre completo:");
+        jPanel7.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, -1, -1));
+
+        jLabel10.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel10.setText("Identificacion:");
+        jPanel7.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, -1, -1));
+
+        jLabel11.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setText("Edad:");
+        jPanel7.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, -1, -1));
+
+        jLabel44.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel44.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel44.setText("Nacionalidad:");
+        jPanel7.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, -1, -1));
+        jPanel7.add(NombreCompletoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, 390, 30));
+        jPanel7.add(IdentificacionPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 420, 30));
+        jPanel7.add(EdadPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 150, 480, 30));
+        jPanel7.add(NacionalidadPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 210, 430, 30));
+        jPanel7.add(SexoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 320, 480, 30));
+        jPanel7.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 540, 10));
+        jPanel7.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 540, 10));
+        jPanel7.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 540, 10));
+        jPanel7.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 540, 10));
+        jPanel7.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, 540, 10));
+
+        jLabel46.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel46.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel46.setText("Correo electronico:");
+        jPanel7.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, -1, -1));
+        jPanel7.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 540, 10));
+        jPanel7.add(EmailPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 270, 380, 30));
+
+        jLabel49.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel49.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel49.setText("Sexo:");
+        jPanel7.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, -1));
+
+        PanelPerfil.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 100, 630, 460));
+
+        TabbedPDC.addTab("PERFIL", PanelPerfil);
+
+        PanelListaPresos.setBackground(new java.awt.Color(255, 255, 255));
+        PanelListaPresos.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        TablaPresos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "Foto", "Id", "Nombre completo", "Edad", "Identificacion", "Nacionalidad"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(TablaPresos);
+
+        PanelListaPresos.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, 980, 460));
+        PanelListaPresos.add(BarraDeBusquedaPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 30, 600, 30));
+
+        BotonBuscarPreso.setText("Buscar");
+        PanelListaPresos.add(BotonBuscarPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 30, 90, 30));
+
+        jPanel8.setBackground(new java.awt.Color(180, 180, 195));
+        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        ComboSeccionPreso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seccion A", "Seccion B", "Seccion C" }));
+        jPanel8.add(ComboSeccionPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, 120, 30));
+
+        PanelListaPresos.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, 200, 50));
+
+        TabbedPDC.addTab("PRESOS", PanelListaPresos);
+
+        PanelAñadirVisita.setBackground(new java.awt.Color(255, 255, 255));
+        PanelAñadirVisita.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel9.setBackground(new java.awt.Color(180, 180, 195));
+        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel16.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel16.setText("Sexo:");
+        jPanel9.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, -1, -1));
+
+        jLabel17.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel17.setText("Información del visitante");
+        jPanel9.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, -1, -1));
+
+        jLabel19.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel19.setText("Segundo nombre:");
+        jPanel9.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
+
+        jLabel20.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel20.setText("Primer apellido:");
+        jPanel9.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, -1, -1));
+
+        jLabel21.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel21.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel21.setText("Segundo apellido:");
+        jPanel9.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
+
+        jLabel23.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel23.setText("Edad:");
+        jPanel9.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, -1, -1));
+
+        jLabel24.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel24.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel24.setText("Nacionalidad:");
+        jPanel9.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, -1, -1));
+
+        jLabel25.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel25.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel25.setText("Relación con el preso:");
+        jPanel9.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 430, -1, -1));
+
+        jLabel26.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel26.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel26.setText("Correo electronico:");
+        jPanel9.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, -1, -1));
+
+        BotonAñadirVisitante.setText("Añadir visitante");
+        BotonAñadirVisitante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonAñadirVisitanteActionPerformed(evt);
+            }
+        });
+        jPanel9.add(BotonAñadirVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 470, 130, 30));
+
+        jLabel27.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel27.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel27.setText("Identificación:");
+        jPanel9.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, -1, -1));
+
+        jLabel28.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel28.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel28.setText("Primer nombre:");
+        jPanel9.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
+        jPanel9.add(NacionalidadVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 380, 340, 30));
+        jPanel9.add(SegundoNombreVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 100, 310, 30));
+        jPanel9.add(PrimerApellidoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 140, 320, 30));
+        jPanel9.add(SegundoApellidoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 180, 310, 30));
+        jPanel9.add(IdentificacionVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 220, 330, 30));
+        jPanel9.add(EmailVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 260, 300, 30));
+
+        RelacionConPresoVisitante.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Esposa/Esposo", "Padre/Madre", "Hijo/Hija", "Hermano/Hermana", "Abuelo/Abuela", "Nieto/Nieta", "Tío/Tía", "Sobrino/Sobrina", "Primo/Prima", "Suegro/Suegra", "Yerno/Nuera", "Cuñado/Cuñada", "Amigo/Amiga", "Compañero de Trabajo", "Vecino/Vecina", "Conocido/Conocida", "Abogado/Abogada", "Asistente Social", "Representante Legal", "Sacerdote/Pastor", "Novio/Novia", "Tutor Legal", "Ex-Esposo/Ex-Esposa", "Familiar Político " }));
+        jPanel9.add(RelacionConPresoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 420, 280, 30));
+
+        SexoVisitante.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Femenino", "Masculino" }));
+        jPanel9.add(SexoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 340, 390, 30));
+        jPanel9.add(EdadVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 300, 390, 30));
+        jPanel9.add(PrimerNombreVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, 320, 30));
+
+        PanelAñadirVisita.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 520, 520));
+
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel5.setText("Cantidad de visitantes:");
+        PanelAñadirVisita.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+
+        CantidadDeVisitantesCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "1 visitante", "2 visitantes" }));
+        PanelAñadirVisita.add(CantidadDeVisitantesCombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, 120, -1));
+
+        jLabel15.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel15.setText("Información de la visita");
+        PanelAñadirVisita.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 40, -1, -1));
+
+        jPanel10.setBackground(new java.awt.Color(180, 180, 195));
+        jPanel10.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel33.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel33.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel33.setText("Identificación del preso:");
+        jPanel10.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
+        jPanel10.add(IdentificacionPresoVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, 180, 30));
+
+        PanelAñadirVisita.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 70, 400, 70));
+
+        AgregarImagenVisitante.setText("Añadir foto del visitante");
+        AgregarImagenVisitante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AgregarImagenVisitanteActionPerformed(evt);
+            }
+        });
+        PanelAñadirVisita.add(AgregarImagenVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 20, 170, -1));
+
+        jLabel18.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel18.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel18.setText("Lugar de visita:");
+        PanelAñadirVisita.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(619, 320, 110, -1));
+
+        jLabel29.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel29.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel29.setText("Fecha de la visita:");
+        PanelAñadirVisita.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 160, -1, -1));
+
+        jLabel30.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel30.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel30.setText("Hora de la visita:");
+        PanelAñadirVisita.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 200, -1, -1));
+
+        DuracionVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "1 hora", "2 horas", "3 horas" }));
+        PanelAñadirVisita.add(DuracionVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 230, 250, 30));
+
+        jLabel31.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel31.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel31.setText("Duración de la visita:");
+        PanelAñadirVisita.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 240, -1, -1));
+
+        TipoVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Familiar", "Intimas o Conyugales", "Legal", "Religiosas" }));
+        PanelAñadirVisita.add(TipoVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 270, 300, 30));
+
+        jLabel32.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel32.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel32.setText("Tipo de visita:");
+        PanelAñadirVisita.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(619, 280, 100, -1));
+
+        LugarVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "Sala de visitas", "Cabinas de visitas conyugales", "Salas de visitas legales" }));
+        PanelAñadirVisita.add(LugarVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 310, 290, 30));
+
+        BotonAñadirVisita.setText("Añadir visita");
+        BotonAñadirVisita.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonAñadirVisitaActionPerformed(evt);
+            }
+        });
+        PanelAñadirVisita.add(BotonAñadirVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 360, 110, 30));
+
+        jLabel22.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel22.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel22.setText("Vista previa foto visitante:");
+        PanelAñadirVisita.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 370, -1, -1));
+
+        jPanel11.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        jPanel11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel11.add(VistaPreviaVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 8, 140, 160));
+
+        PanelAñadirVisita.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 390, 160, 180));
+        PanelAñadirVisita.add(HoraVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 190, 270, 30));
+        PanelAñadirVisita.add(FechaVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 152, 270, 30));
+
+        TabbedPDC.addTab("GUARDAR VISITA", PanelAñadirVisita);
+
+        PanelActualizarInformacion.setBackground(new java.awt.Color(255, 255, 255));
+        PanelActualizarInformacion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel13.setBackground(new java.awt.Color(180, 180, 195));
+        jPanel13.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel36.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel36.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel36.setText("Segundo nombre:");
+        jPanel13.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 190, -1, -1));
+
+        jLabel37.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel37.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel37.setText("Primer apellido:");
+        jPanel13.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, -1, -1));
+
+        jLabel38.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel38.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel38.setText("Segundo apellido:");
+        jPanel13.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 260, -1, -1));
+
+        jLabel39.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel39.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel39.setText("Primer nombre:");
+        jPanel13.add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, -1));
+
+        jLabel40.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel40.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel40.setText("Contraseña actual*:");
+        jPanel13.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, -1, -1));
+
+        jLabel41.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel41.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel41.setText("Nueva contraseña:");
+        jPanel13.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 120, -1, -1));
+
+        jLabel42.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel42.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel42.setText("Correo electronico:");
+        jPanel13.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 330, -1, -1));
+
+        jLabel43.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel43.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel43.setText("Nacionalidad:");
+        jPanel13.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, -1));
+        jPanel13.add(NuevoEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 320, 170, 30));
+        jPanel13.add(ContraseñaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 110, 170, 30));
+        jPanel13.add(NuevoPrimerNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 180, 170, 30));
+        jPanel13.add(NuevoPrimerApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 250, 170, 30));
+        jPanel13.add(NuevaNacionalidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 320, 170, 30));
+        jPanel13.add(NuevaContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 110, 170, 30));
+        jPanel13.add(NuevoSegundoNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 180, 170, 30));
+        jPanel13.add(NuevoSegundoApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 250, 170, 30));
+
+        BotonActualizarInformacion.setText("Actualizar informacion");
+        BotonActualizarInformacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonActualizarInformacionActionPerformed(evt);
+            }
+        });
+        jPanel13.add(BotonActualizarInformacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 400, 170, 30));
+
+        jLabel35.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel35.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel35.setText("ACTUALIZAR INFORMACIÓN PERSONAL");
+        jPanel13.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 40, -1, -1));
+
+        PanelActualizarInformacion.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 750, 500));
+
+        jPanel12.setBackground(new java.awt.Color(139, 139, 157));
+        jPanel12.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        PanelActualizarInformacion.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 100));
+
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Vista previa nueva foto");
+        PanelActualizarInformacion.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 140, -1, -1));
+
+        jPanel14.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel14.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        jPanel14.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel14.add(VistaPreviaNuevaFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 210, 250));
+
+        PanelActualizarInformacion.add(jPanel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 180, 230, 270));
+
+        SubirNuevaFotoPerfil.setText("Subir foto de perfil");
+        SubirNuevaFotoPerfil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SubirNuevaFotoPerfilActionPerformed(evt);
+            }
+        });
+        PanelActualizarInformacion.add(SubirNuevaFotoPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 470, 150, 30));
+
+        TabbedPDC.addTab("ACTUALIZAR INFORMACION", PanelActualizarInformacion);
+
+        PanelHistorialVisitas.setBackground(new java.awt.Color(255, 255, 255));
+        PanelHistorialVisitas.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        TablaHistorialVisitas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Id", "Identificación visitante", "Fecha", "Hora", "Duración", "Tipo de visita", "Lugar", "Identificación visitado"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(TablaHistorialVisitas);
+
+        PanelHistorialVisitas.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 1040, 450));
+        PanelHistorialVisitas.add(BarraDeBusquedaVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 690, 30));
+
+        BotonBuscarVisitantePorIdentificacion.setText("Buscar");
+        PanelHistorialVisitas.add(BotonBuscarVisitantePorIdentificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 30, 80, 30));
+
+        jLabel48.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel48.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel48.setText("HISTORIAL DE VISITAS");
+        PanelHistorialVisitas.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+
+        TabbedPDC.addTab("HISTORIAL DE VISITAS", PanelHistorialVisitas);
+
+        PanelHistorialVisitantes.setBackground(new java.awt.Color(255, 255, 255));
+        PanelHistorialVisitantes.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        TablaHistorialVisitantes.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Foto", "Id", "Nombre completo", "Email", "Edad", "Identificación", "Sexo", "Nacionalidad", "Relación", "Visitado"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(TablaHistorialVisitantes);
+
+        PanelHistorialVisitantes.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 1040, 450));
+        PanelHistorialVisitantes.add(BarraDeBusquedaVisitante2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 690, 30));
+
+        BotonBuscarVisitantePorIdentificacion2.setText("Buscar");
+        PanelHistorialVisitantes.add(BotonBuscarVisitantePorIdentificacion2, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 30, 80, 30));
+
+        jLabel34.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel34.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel34.setText("HISTORIAL DE VISITANTES");
+        PanelHistorialVisitantes.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+
+        TabbedPDC.addTab("HISTORIAL VISITANTES", PanelHistorialVisitantes);
+
+        getContentPane().add(TabbedPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 1100, 630));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BotonAñadirVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonAñadirVisitanteActionPerformed
+        String primerNombre = PrimerNombreVisitante.getText().trim();
+        String segundoNombre = SegundoNombreVisitante.getText().trim();
+        String primerApellido = PrimerApellidoVisitante.getText().trim();
+        String segundoApellido = SegundoApellidoVisitante.getText().trim();
+        String identificacion = IdentificacionVisitante.getText().trim();
+        String email = EmailVisitante.getText().trim();
+        int edad = Integer.parseInt(EdadVisitante.getText().trim());
+        String sexo = SexoVisitante.getSelectedItem().toString();
+        String nacionalidad = NacionalidadVisitante.getText().trim();
+        String relacion = RelacionConPresoVisitante.getSelectedItem().toString();
+
+        int cantidadTotal;
+        try {
+            cantidadTotal = Integer.parseInt(CantidadDeVisitantesCombo.getSelectedItem().toString());
+            if (cantidadTotal <= 0) {
+                JOptionPane.showMessageDialog(this,
+                        "La cantidad de visitantes debe ser mayor a cero",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Cantidad de visitantes no válida",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        Visitante visitante = new Visitante(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, sexo, nacionalidad, identificacion, relacion, sexo, email);
+
+    }//GEN-LAST:event_BotonAñadirVisitanteActionPerformed
+
+    private void AgregarImagenVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarImagenVisitanteActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Imágenes (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif");
+        fileChooser.setFileFilter(filter);
+
+        int resultado = fileChooser.showOpenDialog(this);
+
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            imagenVisitanteSeleccionada = fileChooser.getSelectedFile();
+
+            try {
+                BufferedImage originalImage = ImageIO.read(imagenVisitanteSeleccionada);
+
+                ImageIcon icon = new ImageIcon(originalImage);
+                Image img = icon.getImage();
+                Image imgEscalada = img.getScaledInstance(
+                        VistaPreviaVisitante.getWidth(),
+                        VistaPreviaVisitante.getHeight(),
+                        Image.SCALE_SMOOTH);
+
+                VistaPreviaVisitante.setIcon(new ImageIcon(imgEscalada));
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al cargar la imagen: " + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+    }//GEN-LAST:event_AgregarImagenVisitanteActionPerformed
+    }
+    private void BotonAñadirVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonAñadirVisitaActionPerformed
+        String identificacionPreso = IdentificacionPresoVisita.getText().trim();
+        Date fechaSeleccionada = FechaVisita.getDate();
+        String duracion = DuracionVisita.getSelectedItem().toString();
+        String tipo = TipoVisita.getSelectedItem().toString();
+        String lugar = LugarVisita.getSelectedItem().toString();
+    }//GEN-LAST:event_BotonAñadirVisitaActionPerformed
+
+    private void BotonActualizarInformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonActualizarInformacionActionPerformed
+        String contraseñaActual = ContraseñaActual.getText().trim();
+        String nuevaContraseña = NuevaContraseña.getText().trim();
+        String nuevoPrimerNombre = NuevoPrimerNombre.getText().trim();
+        String nuevoSegundoNombre = NuevoSegundoNombre.getText().trim();
+        String nuevoPrimerApellido = NuevoPrimerApellido.getText().trim();
+        String nuevoSegundoApellido = NuevoSegundoApellido.getText().trim();
+        String nuevaNacionalidad = NuevaNacionalidad.getText().trim();
+        String nuevoEmail = NuevoEmail.getText().trim();
+
+    }//GEN-LAST:event_BotonActualizarInformacionActionPerformed
+
+    private void SubirNuevaFotoPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubirNuevaFotoPerfilActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Imágenes (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif");
+        fileChooser.setFileFilter(filter);
+
+        int resultado = fileChooser.showOpenDialog(this);
+
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            imagenPDCSeleccionada = fileChooser.getSelectedFile();
+
+            try {
+                BufferedImage originalImage = ImageIO.read(imagenPDCSeleccionada);
+
+                ImageIcon icon = new ImageIcon(originalImage);
+                Image img = icon.getImage();
+                Image imgEscalada = img.getScaledInstance(
+                        VistaPreviaNuevaFoto.getWidth(),
+                        VistaPreviaNuevaFoto.getHeight(),
+                        Image.SCALE_SMOOTH);
+
+                VistaPreviaNuevaFoto.setIcon(new ImageIcon(imgEscalada));
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al cargar la imagen: " + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+    }//GEN-LAST:event_SubirNuevaFotoPerfilActionPerformed
+    }
+    private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked
+        TabbedPDC.setSelectedIndex(0);
+    }//GEN-LAST:event_jPanel3MouseClicked
+
+    private void jPanel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseClicked
+        TabbedPDC.setSelectedIndex(1);
+    }//GEN-LAST:event_jPanel4MouseClicked
+
+    private void jPanel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseClicked
+        TabbedPDC.setSelectedIndex(2);
+    }//GEN-LAST:event_jPanel5MouseClicked
+
+    private void jPanel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel15MouseClicked
+        TabbedPDC.setSelectedIndex(3);
+    }//GEN-LAST:event_jPanel15MouseClicked
 
     /**
      * @param args the command line arguments
@@ -78,5 +919,138 @@ public class PersonalDeControl extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AgregarImagenVisitante;
+    private javax.swing.JTextField BarraDeBusquedaPreso;
+    private javax.swing.JTextField BarraDeBusquedaVisitante;
+    private javax.swing.JTextField BarraDeBusquedaVisitante2;
+    private javax.swing.JButton BotonActualizarInformacion;
+    private javax.swing.JButton BotonAñadirVisita;
+    private javax.swing.JButton BotonAñadirVisitante;
+    private javax.swing.JButton BotonBuscarPreso;
+    private javax.swing.JButton BotonBuscarVisitantePorIdentificacion;
+    private javax.swing.JButton BotonBuscarVisitantePorIdentificacion2;
+    private javax.swing.JComboBox<String> CantidadDeVisitantesCombo;
+    private javax.swing.JComboBox<String> ComboSeccionPreso;
+    private javax.swing.JTextField ContraseñaActual;
+    private javax.swing.JComboBox<String> DuracionVisita;
+    private javax.swing.JLabel EdadPDC;
+    private javax.swing.JTextField EdadVisitante;
+    private javax.swing.JLabel EmailPDC;
+    private javax.swing.JTextField EmailVisitante;
+    private javax.swing.JLabel FechaIngresoPDC;
+    private com.toedter.calendar.JDateChooser FechaVisita;
+    private javax.swing.JPanel FondoFoto;
+    private javax.swing.JLabel FotoPDC;
+    private javax.swing.JTextField HoraVisita;
+    private javax.swing.JLabel IdentificacionPDC;
+    private javax.swing.JTextField IdentificacionPresoVisita;
+    private javax.swing.JTextField IdentificacionVisitante;
+    private javax.swing.JComboBox<String> LugarVisita;
+    private javax.swing.JLabel NacionalidadPDC;
+    private javax.swing.JTextField NacionalidadVisitante;
+    private javax.swing.JLabel NombreCompletoPDC;
+    private javax.swing.JTextField NuevaContraseña;
+    private javax.swing.JTextField NuevaNacionalidad;
+    private javax.swing.JTextField NuevoEmail;
+    private javax.swing.JTextField NuevoPrimerApellido;
+    private javax.swing.JTextField NuevoPrimerNombre;
+    private javax.swing.JTextField NuevoSegundoApellido;
+    private javax.swing.JTextField NuevoSegundoNombre;
+    private javax.swing.JPanel PanelActualizarInformacion;
+    private javax.swing.JPanel PanelAñadirVisita;
+    private javax.swing.JPanel PanelBotones;
+    private javax.swing.JPanel PanelHistorialVisitantes;
+    private javax.swing.JPanel PanelHistorialVisitas;
+    private javax.swing.JPanel PanelListaPresos;
+    private javax.swing.JPanel PanelPerfil;
+    private javax.swing.JTextField PrimerApellidoVisitante;
+    private javax.swing.JTextField PrimerNombreVisitante;
+    private javax.swing.JComboBox<String> RelacionConPresoVisitante;
+    private javax.swing.JTextField SegundoApellidoVisitante;
+    private javax.swing.JTextField SegundoNombreVisitante;
+    private javax.swing.JLabel SexoPDC;
+    private javax.swing.JComboBox<String> SexoVisitante;
+    private javax.swing.JButton SubirNuevaFotoPerfil;
+    private javax.swing.JTabbedPane TabbedPDC;
+    private javax.swing.JTable TablaHistorialVisitantes;
+    private javax.swing.JTable TablaHistorialVisitas;
+    private javax.swing.JTable TablaPresos;
+    private javax.swing.JComboBox<String> TipoVisita;
+    private javax.swing.JLabel TurnoPDC;
+    private javax.swing.JLabel VistaPreviaNuevaFoto;
+    private javax.swing.JLabel VistaPreviaVisitante;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
+    private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel46;
+    private javax.swing.JLabel jLabel47;
+    private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator6;
+    private javax.swing.JSeparator jSeparator7;
+    private javax.swing.JSeparator jSeparator8;
     // End of variables declaration//GEN-END:variables
 }
