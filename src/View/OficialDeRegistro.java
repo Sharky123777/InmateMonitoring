@@ -1436,8 +1436,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         jSeparator13 = new javax.swing.JSeparator();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
-        spinnerAñosSentencia = new com.toedter.components.JSpinField();
-        spinnerMesesSentencia = new com.toedter.components.JSpinField();
         jLabel22 = new javax.swing.JLabel();
         jSeparator14 = new javax.swing.JSeparator();
         datePickerFechaIngreso = new com.toedter.calendar.JDateChooser();
@@ -1516,10 +1514,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         jSeparator68 = new javax.swing.JSeparator();
         nuevoNivelSeguridadCombo = new javax.swing.JComboBox<>();
         nuevoAislamientoCombo = new javax.swing.JComboBox<>();
-        nuevoNivelRiesgoCombo = new javax.swing.JComboBox<>();
         nuevaSeccionCombo = new javax.swing.JComboBox<>();
-        nuevoAño = new com.toedter.components.JSpinField();
-        nuevoMes = new com.toedter.components.JSpinField();
         ActualizarFotoBoton = new javax.swing.JButton();
         nuevaFoto = new javax.swing.JLabel();
         jLabel74 = new javax.swing.JLabel();
@@ -1541,8 +1536,8 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         jSeparator30 = new javax.swing.JSeparator();
         jSeparator31 = new javax.swing.JSeparator();
         jSeparator32 = new javax.swing.JSeparator();
-        fechaComisionActualizar = new com.toedter.calendar.JDateChooser();
-        guardarNuevoDelito = new javax.swing.JButton();
+<<<<<<< HEAD
+=======
         jPanel17 = new javax.swing.JPanel();
         actualizarPreso = new javax.swing.JButton();
         nuevoNombreField = new javax.swing.JTextField();
@@ -2189,6 +2184,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         jPanel10.add(jSeparator21, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 110, 270, 10));
         jPanel10.add(FechaComision, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 80, 150, 30));
 
+
         jLabel32.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel32.setForeground(new java.awt.Color(0, 0, 0));
         jLabel32.setText("Descripcion delito:");
@@ -2443,6 +2439,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         jPanel13.add(nuevoAño, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 90, -1, -1));
         jPanel13.add(nuevoMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 90, -1, -1));
 
+
         ActualizarFotoBoton.setText("Actualizar foto");
         jPanel13.add(ActualizarFotoBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 390, -1, -1));
 
@@ -2529,6 +2526,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         jSeparator32.setForeground(new java.awt.Color(0, 0, 0));
         jPanel13.add(jSeparator32, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 270, 100, 10));
         jPanel13.add(fechaComisionActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 280, 200, 30));
+
 
         guardarNuevoDelito.setText("Guardar delito");
         guardarNuevoDelito.addActionListener(new java.awt.event.ActionListener() {
