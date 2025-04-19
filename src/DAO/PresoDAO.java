@@ -35,7 +35,7 @@ import javax.swing.JOptionPane;
 public class PresoDAO {
 
     private static final String JSON_FILE = "C:\\Users\\ASUS\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\presos.json";
-    private static final String IMAGES_DIR = "C:\\Users\\ASUS\\Documents\\NetBeansProjects\\InmateMonitoring\\src\\Resources\\Images\\";
+    private static final String IMAGES_DIR = "C:\\Users\\ASUS\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\Images\\";
 
     private Gson gson = new GsonBuilder()
             .setPrettyPrinting()
@@ -45,7 +45,7 @@ public class PresoDAO {
     private static class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
     @Override
     public JsonElement serialize(LocalDate date, Type typeOfSrc, JsonSerializationContext context) {
-        return new JsonPrimitive(date.toString()); // "yyyy-mm-dd"
+        return new JsonPrimitive(date.toString()); 
     }
 
     @Override
@@ -230,7 +230,6 @@ public class PresoDAO {
             if(nuevoPeso != null) preso.setPeso(nuevoPeso);
             if(nuevoGrupoSanguineo != null) preso.setGrupoSanguineo(nuevoGrupoSanguineo);
 
-            // Datos judiciales (solo si al menos un campo tiene valor)
             if(nuevaSentencia != null || nuevaSeccionAsignada != null || 
                nuevoNivelSeguridad != null || nuevoEnAislamiento != null || 
                nuevoNivelRiesgo != null) {

@@ -119,7 +119,8 @@ public class Preso extends Persona {
     public String getCeldaAsignada() { return celdaAsignada; }
     public void setCeldaAsignada(String celdaAsignada) { this.celdaAsignada = celdaAsignada; }
 
-    public boolean isEnAislamiento() { return enAislamiento; }
+    public boolean isEnAislamiento()
+    { return enAislamiento; }
     public void setEnAislamiento(boolean enAislamiento) { this.enAislamiento = enAislamiento; }
 
     public String getNivelDeRiesgo() { return nivelDeRiesgo; }
