@@ -3,17 +3,27 @@ package Model;
 import java.time.LocalDate;
 
 public class OficialDeRegistro extends Persona {
-
     private String numeroPlaca;
     private String rango;
     private LocalDate fechaIngreso;
     private String turno;
 
-    public OficialDeRegistro(String nombre, String apellido, int edad, int id,
-       String sexo, String nacionalidad, String identificacion,
-            String numeroPlaca, String rango, LocalDate fechaIngreso,
-            String turno) {
-        super(nombre, apellido, edad, id, sexo, nacionalidad, identificacion);
+    public OficialDeRegistro(
+        String primerNombre,
+        String segundoNombre,
+        String primerApellido,
+        String segundoApellido,
+        int edad,
+        String sexo,
+        String nacionalidad,
+        String identificacion,
+        String numeroPlaca,
+        String rango,
+        LocalDate fechaIngreso,
+        String turno
+    ) {
+        super(primerNombre, segundoNombre, primerApellido, segundoApellido,
+              edad, sexo, nacionalidad, identificacion);
         this.numeroPlaca = numeroPlaca;
         this.rango = rango;
         this.fechaIngreso = fechaIngreso;
@@ -51,6 +61,7 @@ public class OficialDeRegistro extends Persona {
     public void setTurno(String turno) {
         this.turno = turno;
     }
-
-    
 }
+
+
+

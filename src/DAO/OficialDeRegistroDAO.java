@@ -21,7 +21,7 @@ import javax.swing.JOptionPane;
 
 public class OficialDeRegistroDAO {
    
-   private static final String JSON_FILE = "C:\\Users\\ASUS\\Documents\\NetBeansProjects\\InmateMonitoring\\src\\Resources\\oficialesDeRegistro.json";
+   private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\oficialesDeRegistro.json";
 
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -100,10 +100,12 @@ public class OficialDeRegistroDAO {
         return eliminado;
     }
    
-    public boolean actualizarOficialDeRegistro(
+   public boolean actualizarOficialDeRegistro(
     String identificacionOriginal,
-    String nuevoNombre,
-    String nuevoApellido,
+    String nuevoPrimerNombre,
+    String nuevoSegundoNombre,
+    String nuevoPrimerApellido,
+    String nuevoSegundoApellido,
     Integer nuevaEdad,
     String nuevoSexo,
     String nuevaNacionalidad,
@@ -119,8 +121,10 @@ public class OficialDeRegistroDAO {
         if (oficial.getIdentificacion().equals(identificacionOriginal)) {
             encontrado = true;
 
-            if (nuevoNombre != null) oficial.setNombre(nuevoNombre);
-            if (nuevoApellido != null) oficial.setApellido(nuevoApellido);
+            if (nuevoPrimerNombre != null) oficial.setPrimerNombre(nuevoPrimerNombre);
+            if (nuevoSegundoNombre != null) oficial.setSegundoNombre(nuevoSegundoNombre);
+            if (nuevoPrimerApellido != null) oficial.setPrimerApellido(nuevoPrimerApellido);
+            if (nuevoSegundoApellido != null) oficial.setSegundoApellido(nuevoSegundoApellido);
             if (nuevaEdad != null) oficial.setEdad(nuevaEdad);
             if (nuevoSexo != null) oficial.setSexo(nuevoSexo);
             if (nuevaNacionalidad != null) oficial.setNacionalidad(nuevaNacionalidad);
