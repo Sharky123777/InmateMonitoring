@@ -69,6 +69,9 @@ EnfermeraDAO enfermeraDAO = new EnfermeraDAO();
           DefaultTableModel modelo = cargarGuardiasConImagen();
     tablaGuardias.setModel(modelo);
     ToolTipManager.sharedInstance().setInitialDelay(10);
+    txtCedulaMod1.setEditable(false); // La cédula no debería cambiar
+txtSexoMod1.setEditable(false); // El sexo siempre es femenino
+txtFechaContratacionMod1.setEditable(false);
     
     // Ajustar visualización de imágenes
     ajustarImagenesTabla();
@@ -247,7 +250,6 @@ EnfermeraDAO enfermeraDAO = new EnfermeraDAO();
         jSeparator39 = new javax.swing.JSeparator();
         jSeparator40 = new javax.swing.JSeparator();
         jSeparator41 = new javax.swing.JSeparator();
-        jSeparator42 = new javax.swing.JSeparator();
         jSeparator43 = new javax.swing.JSeparator();
         jButton7 = new javax.swing.JButton();
         jPanel11 = new javax.swing.JPanel();
@@ -257,8 +259,6 @@ EnfermeraDAO enfermeraDAO = new EnfermeraDAO();
         txtFechaContratacionMod1 = new javax.swing.JTextField();
         dateFinContratoMod1 = new com.toedter.calendar.JDateChooser();
         jLabel48 = new javax.swing.JLabel();
-        txtCargoMod1 = new javax.swing.JComboBox<>();
-        jLabel49 = new javax.swing.JLabel();
         cmbTurnoMod1 = new javax.swing.JComboBox<>();
         jLabel50 = new javax.swing.JLabel();
         jLabel51 = new javax.swing.JLabel();
@@ -309,6 +309,11 @@ EnfermeraDAO enfermeraDAO = new EnfermeraDAO();
         jPopupMenu2.add(ModificarEnfermera);
 
         EliminarEnfermera.setText("Eliminar enfermera");
+        EliminarEnfermera.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarEnfermeraActionPerformed(evt);
+            }
+        });
         jPopupMenu2.add(EliminarEnfermera);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -928,7 +933,6 @@ EnfermeraDAO enfermeraDAO = new EnfermeraDAO();
         jPanel10.add(jSeparator39, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 360, 310, 20));
         jPanel10.add(jSeparator40, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 310, 20));
         jPanel10.add(jSeparator41, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 310, 20));
-        jPanel10.add(jSeparator42, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 50, 310, 20));
         jPanel10.add(jSeparator43, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 400, 310, 20));
 
         jButton7.setText("Modificar");
@@ -957,14 +961,6 @@ EnfermeraDAO enfermeraDAO = new EnfermeraDAO();
         jLabel48.setForeground(new java.awt.Color(255, 255, 255));
         jLabel48.setText("Fecha de finalización del contrato:");
         jPanel10.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 420, -1, -1));
-
-        txtCargoMod1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Oficial", "Guardia" }));
-        jPanel10.add(txtCargoMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 250, 30));
-
-        jLabel49.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel49.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel49.setText("Cargo:");
-        jPanel10.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 30, -1, -1));
 
         cmbTurnoMod1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Diurno", "Nocturno" }));
         jPanel10.add(cmbTurnoMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 370, 240, 30));
@@ -2381,27 +2377,31 @@ if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
     }//GEN-LAST:event_txtCorreoMod1KeyTyped
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-    JFileChooser fileChooser = new JFileChooser();
-fileChooser.setDialogTitle("Seleccionar imagen de la enfermera");
-fileChooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif"));
+     JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Seleccionar imagen de la enfermera");
+    fileChooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif"));
 
-int resultado = fileChooser.showOpenDialog(this);
-if (resultado == JFileChooser.APPROVE_OPTION) {
-    File archivoSeleccionado = fileChooser.getSelectedFile();
-    rutaImagenSeleccionada = archivoSeleccionado.getAbsolutePath(); // 💥 Aquí guardas la ruta en tu variable
-
-    try {
-        ImageIcon icon = new ImageIcon(rutaImagenSeleccionada);
-        Image img = icon.getImage().getScaledInstance(lblImagenMod1.getWidth(), lblImagenMod1.getHeight(), Image.SCALE_SMOOTH);
-        lblImagenMod1.setIcon(new ImageIcon(img));
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, 
-            "Error al cargar la imagen: " + e.getMessage(), 
-            "Error", JOptionPane.ERROR_MESSAGE);
+    int resultado = fileChooser.showOpenDialog(this);
+    if (resultado == JFileChooser.APPROVE_OPTION) {
+        File archivoSeleccionado = fileChooser.getSelectedFile();
+        imagenSeleccionadaMod = archivoSeleccionado; // Guardar el archivo directamente
+        
+        try {
+            // Mostrar vista previa
+            ImageIcon icon = new ImageIcon(archivoSeleccionado.getAbsolutePath());
+            Image img = icon.getImage().getScaledInstance(
+                lblImagenMod1.getWidth(), 
+                lblImagenMod1.getHeight(), 
+                Image.SCALE_SMOOTH
+            );
+            lblImagenMod1.setIcon(new ImageIcon(img));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error al cargar la imagen: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+            imagenSeleccionadaMod = null;
+        }
     }
-}
-
-
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void txtCorreo4FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreo4FocusLost
@@ -2461,6 +2461,48 @@ if (resultado == JFileChooser.APPROVE_OPTION) {
             "Error", JOptionPane.ERROR_MESSAGE);
     }
     }//GEN-LAST:event_ModificarEnfermeraActionPerformed
+
+    private void EliminarEnfermeraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarEnfermeraActionPerformed
+       int filaSeleccionada = tablaEnfermeras.getSelectedRow();
+    
+    if (filaSeleccionada < 0) {
+        JOptionPane.showMessageDialog(this, 
+            "Por favor seleccione una enfermera primero", 
+            "Error", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+    // Obtener datos de la fila seleccionada
+    String nombre = tablaEnfermeras.getValueAt(filaSeleccionada, 1).toString();
+    String cedula = tablaEnfermeras.getValueAt(filaSeleccionada, 4).toString();
+    
+    // Mostrar confirmación con mensaje detallado
+    int respuesta = JOptionPane.showConfirmDialog(
+        this,
+        "¿Está seguro que desea eliminar a la enfermera:\n"
+        + "Nombre: " + nombre + "\n"
+        + "Cédula: " + cedula + "\n\n"
+        + "Esta acción no es reversible y eliminará todos los datos asociados.",
+        "Confirmar eliminación",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.WARNING_MESSAGE);
+    
+    if (respuesta == JOptionPane.YES_OPTION) {
+        // Proceder con la eliminación
+        if (enfermeraDAO.eliminarEnfermera(cedula)) {
+            JOptionPane.showMessageDialog(this,
+                "Enfermera eliminada exitosamente",
+                "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            
+            // Actualizar la tabla
+            cargarDatosEnTabla();
+        } else {
+            JOptionPane.showMessageDialog(this,
+                "No se pudo eliminar la enfermera",
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    }//GEN-LAST:event_EliminarEnfermeraActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2568,7 +2610,6 @@ if (resultado == JFileChooser.APPROVE_OPTION) {
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
-    private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
@@ -2635,7 +2676,6 @@ if (resultado == JFileChooser.APPROVE_OPTION) {
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator40;
     private javax.swing.JSeparator jSeparator41;
-    private javax.swing.JSeparator jSeparator42;
     private javax.swing.JSeparator jSeparator43;
     private javax.swing.JSeparator jSeparator44;
     private javax.swing.JSeparator jSeparator5;
@@ -2652,7 +2692,6 @@ if (resultado == JFileChooser.APPROVE_OPTION) {
     private javax.swing.JTable tablaGuardias;
     private javax.swing.JComboBox<String> txtCargo1;
     private javax.swing.JComboBox<String> txtCargoMod;
-    private javax.swing.JComboBox<String> txtCargoMod1;
     private javax.swing.JTextField txtCedula;
     private javax.swing.JTextField txtCedula1;
     private javax.swing.JTextField txtCedulaMod;

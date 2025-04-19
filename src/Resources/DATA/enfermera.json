@@ -1,21 +1,6 @@
 [
   {
-    "primerNombre": "Modificada",
-    "segundoNombre": "xxxxxxxxxx",
-    "primerApellido": "eeeee",
-    "segundoApellido": "ai",
-    "edad": 45,
-    "sexo": "Femenino",
-    "nacionalidad": "yoysay",
-    "identificacion": "0909090909",
-    "turno": "Nocturno",
-    "fechaContratacion": "2025-04-19",
-    "fechaFinContrato": "2025-04-29",
-    "rutaImagen": "src/Resources/imagenes_enfermeras/0909090909_1745064458563.png",
-    "correo": "@.com"
-  },
-  {
-    "primerNombre": "Modificada",
+    "primerNombre": "PRUEBAFINAL",
     "segundoNombre": "xxxxxxxxxx",
     "primerApellido": "eeeee",
     "segundoApellido": "ai",

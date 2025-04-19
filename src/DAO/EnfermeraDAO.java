@@ -172,9 +172,20 @@ public class EnfermeraDAO {
         }
     }
     
+    
    public boolean modificarEnfermera(String cedulaOriginal, Enfermera enfermeraModificada, File nuevaImagen) {
     List<Enfermera> enfermeras = obtenerEnfermeras();
     boolean encontrada = false;
+    
+    for (Enfermera e : enfermeras) {
+        if (!e.getIdentificacion().equals(cedulaOriginal) &&
+            e.getTurno().equalsIgnoreCase(enfermeraModificada.getTurno())) {
+            JOptionPane.showMessageDialog(null,
+                "Ya hay una enfermera con el turno '" + enfermeraModificada.getTurno() + "'.",
+                "Turno duplicado", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
 
     for (int i = 0; i < enfermeras.size(); i++) {
         if (enfermeras.get(i).getIdentificacion().equals(cedulaOriginal)) {
@@ -217,6 +228,32 @@ public class EnfermeraDAO {
             "No se encontró la enfermera con cédula " + cedulaOriginal,
             "Error", JOptionPane.ERROR_MESSAGE);
     }
+    
+    if (nuevaImagen != null && nuevaImagen.exists()) {
+    try {
+        // Eliminar imagen anterior si existe
+        Enfermera enfermeraOriginal = obtenerEnfermeraPorIdentificacion(cedulaOriginal);
+        if (enfermeraOriginal.getRutaImagen() != null) {
+            Files.deleteIfExists(Paths.get(enfermeraOriginal.getRutaImagen()));
+        }
+        
+        // Copiar nueva imagen
+        String extension = nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
+        String nombreImagen = enfermeraModificada.getIdentificacion() + "_" + System.currentTimeMillis() + extension;
+        String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+        Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+        enfermeraModificada.setRutaImagen(rutaImagenFinal);
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(null,
+            "Error al guardar la nueva imagen: " + e.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+} else {
+    // Mantener imagen existente
+    Enfermera original = obtenerEnfermeraPorIdentificacion(cedulaOriginal);
+    enfermeraModificada.setRutaImagen(original.getRutaImagen());
+}
 
     return false;
 }

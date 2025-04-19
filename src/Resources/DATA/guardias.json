@@ -2,9 +2,9 @@
   "guardias": [
     {
       "primerNombre": "dadad",
-      "segundoNombre": "wdwwwww",
+      "segundoNombre": "",
       "primerApellido": "cccccccc",
-      "segundoApellido": "zzzzzzzzz",
+      "segundoApellido": "cccpo",
       "edad": 53,
       "identificacion": "01027421",
       "sexo": "Femenino",
@@ -12,24 +12,8 @@
       "correo": "@",
       "turno": "Diurno",
       "fechaInicioContrato": "2025-04-18",
-      "fechaFinContrato": "2000-04-20",
+      "fechaFinContrato": "2039-04-22",
       "rutaImagen": "src/Resources/imagenes_guardias/01027421_Captura de pantalla 2024-03-06 151101.png",
-      "cargo": "Oficial"
-    },
-    {
-      "primerNombre": "asdadawa",
-      "segundoNombre": "xxxxxx",
-      "primerApellido": "zzzzzzzz",
-      "segundoApellido": "aaaaaaaa",
-      "edad": 32,
-      "identificacion": "09875312",
-      "sexo": "Femenino",
-      "nacionalidad": "xxxxx",
-      "correo": "@@@",
-      "turno": "Diurno",
-      "fechaInicioContrato": "2025-04-18",
-      "fechaFinContrato": "2000-04-06",
-      "rutaImagen": "src/Resources/imagenes_guardias/09875312_Captura de pantalla 2024-03-07 130911.png",
       "cargo": "Oficial"
     },
     {
