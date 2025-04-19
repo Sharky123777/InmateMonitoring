@@ -4,10 +4,8 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/nicol/OneDrive/Escritorio/InmateMonitoring/src/View/PersonalDeControl.java</file>
-            <file>file:/C:/Users/nicol/OneDrive/Escritorio/InmateMonitoring/src/Model/LocalTimeAdapter.java</file>
-            <file>file:/C:/Users/nicol/OneDrive/Escritorio/InmateMonitoring/src/DAO/VisitaDAO.java</file>
-            <file>file:/C:/Users/nicol/OneDrive/Escritorio/InmateMonitoring/src/Model/Visitante.java</file>
-            <file>file:/C:/Users/nicol/OneDrive/Escritorio/InmateMonitoring/src/DAO/VisitanteDAO.java</file>
+            <file>file:/C:/Users/nicol/OneDrive/Escritorio/InmateMonitoring/src/Model/Sancion.java</file>
+            <file>file:/C:/Users/nicol/OneDrive/Escritorio/InmateMonitoring/src/View/Oficial.java</file>
         </group>
     </open-files>
 </project-private>
