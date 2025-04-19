@@ -35,7 +35,7 @@ import javax.swing.JOptionPane;
 public class PresoDAO {
 
     private static final String JSON_FILE = "C:\\Users\\ASUS\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\presos.json";
-    private static final String IMAGES_DIR = "C:\\Users\\ASUS\\Documents\\NetBeansProjects\\InmateMonitoring\\src\\Resources\\Images\\";
+    private static final String IMAGES_DIR = "C:\\Users\\ASUS\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\Images\\";
 
     private Gson gson = new GsonBuilder()
             .setPrettyPrinting()
@@ -45,7 +45,7 @@ public class PresoDAO {
     private static class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
     @Override
     public JsonElement serialize(LocalDate date, Type typeOfSrc, JsonSerializationContext context) {
-        return new JsonPrimitive(date.toString()); // "yyyy-mm-dd"
+        return new JsonPrimitive(date.toString()); 
     }
 
     @Override
@@ -198,8 +198,10 @@ public class PresoDAO {
 
   public boolean actualizarPresoConDelitos(
     String identificacionOriginal,
-    String nuevoNombre,
-    String nuevoApellido,
+    String nuevoPrimerNombre,
+    String nuevoSegundoNombre,
+    String nuevoPrimerApellido,
+    String nuevoSegundoApellido,
     Integer nuevaEdad,
     String nuevoSexo,
     String nuevaNacionalidad,
@@ -213,42 +215,43 @@ public class PresoDAO {
     String nuevoNivelRiesgo,
     File nuevaFoto,
     List<Delito> nuevosDelitos) {
+List<Preso> presos = cargarTodos();
+boolean encontrado = false;
 
-    List<Preso> presos = cargarTodos();
-    boolean encontrado = false;
+for (Preso preso : presos) {
+    if (preso.getIdentificacion().equals(identificacionOriginal)) {
+        encontrado = true;
 
-    for(Preso preso : presos) {
-        if(preso.getIdentificacion().equals(identificacionOriginal)) {
-            encontrado = true;
+        if (nuevoPrimerNombre != null) preso.setPrimerNombre(nuevoPrimerNombre);
+        if (nuevoSegundoNombre != null) preso.setSegundoNombre(nuevoSegundoNombre);
+        if (nuevoPrimerApellido != null) preso.setPrimerApellido(nuevoPrimerApellido);
+        if (nuevoSegundoApellido != null) preso.setSegundoApellido(nuevoSegundoApellido);
+        if (nuevaEdad != null) preso.setEdad(nuevaEdad);
+        if (nuevoSexo != null) preso.setSexo(nuevoSexo);
+        if (nuevaNacionalidad != null) preso.setNacionalidad(nuevaNacionalidad);
+        if (nuevaEstatura != null) preso.setEstatura(nuevaEstatura);
+        if (nuevoPeso != null) preso.setPeso(nuevoPeso);
+        if (nuevoGrupoSanguineo != null) preso.setGrupoSanguineo(nuevoGrupoSanguineo);
 
-            if(nuevoNombre != null) preso.setNombre(nuevoNombre);
-            if(nuevoApellido != null) preso.setApellido(nuevoApellido);
-            if(nuevaEdad != null) preso.setEdad(nuevaEdad);
-            if(nuevoSexo != null) preso.setSexo(nuevoSexo);
-            if(nuevaNacionalidad != null) preso.setNacionalidad(nuevaNacionalidad);
-            if(nuevaEstatura != null) preso.setEstatura(nuevaEstatura);
-            if(nuevoPeso != null) preso.setPeso(nuevoPeso);
-            if(nuevoGrupoSanguineo != null) preso.setGrupoSanguineo(nuevoGrupoSanguineo);
+        if (nuevaSentencia != null || nuevaSeccionAsignada != null ||
+            nuevoNivelSeguridad != null || nuevoEnAislamiento != null ||
+            nuevoNivelRiesgo != null) {
 
-            // Datos judiciales (solo si al menos un campo tiene valor)
-            if(nuevaSentencia != null || nuevaSeccionAsignada != null || 
-               nuevoNivelSeguridad != null || nuevoEnAislamiento != null || 
-               nuevoNivelRiesgo != null) {
-                if(!actualizarDatosJudiciales(preso, nuevaSentencia, nuevaSeccionAsignada,
-                                             nuevoNivelSeguridad, nuevoEnAislamiento,
-                                             nuevoNivelRiesgo)) {
-                    return false;
-                }
+            if (!actualizarDatosJudiciales(preso, nuevaSentencia, nuevaSeccionAsignada,
+                                           nuevoNivelSeguridad, nuevoEnAislamiento,
+                                           nuevoNivelRiesgo)) {
+                return false;
             }
-
-            if(nuevaFoto != null) actualizarFotoPreso(preso, nuevaFoto);
-            if(nuevosDelitos != null && !nuevosDelitos.isEmpty()) {
-                agregarDelitosAExpediente(preso, nuevosDelitos);
-            }
-
-            break;
         }
+        if (nuevaFoto != null) actualizarFotoPreso(preso, nuevaFoto);
+
+        if (nuevosDelitos != null && !nuevosDelitos.isEmpty()) {
+            agregarDelitosAExpediente(preso, nuevosDelitos);
+        }
+
+        break;
     }
+}
 
     if(!encontrado) {
         JOptionPane.showMessageDialog(null, 

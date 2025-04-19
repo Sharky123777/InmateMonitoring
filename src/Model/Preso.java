@@ -1,4 +1,5 @@
 package Model;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,36 +20,50 @@ public class Preso extends Persona {
     private int numeroDeVisitas = 0;
     private String grupoSanguineo;
     private String fotoPath;
+    private int id = 0;
 
-    public Preso(String nombre, String apellido, int edad, int id, String sexo, String nacionalidad,
-                 String identificacion, float estatura, float peso, List<Delito> delitos,Sentencia sentencia,
-                  String nivelDeSeguridad,String seccionAsignada , String condicion,
-                  String celdaAsignada, boolean enAislamiento, String nivelDeRiesgo,
-                 int numeroDeVisitas, String grupoSanguineo, String fotoPath) {
-        super(nombre, apellido, edad, id, sexo, nacionalidad, identificacion);
+    public Preso(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
+                 int edad, String sexo, String nacionalidad, String identificacion,
+                 float estatura, float peso, List<Delito> delitos, Sentencia sentencia,
+                 String nivelDeSeguridad, String seccionAsignada, String condicion,
+                 String celdaAsignada, boolean enAislamiento, String nivelDeRiesgo,
+                 int numeroDeVisitas, String grupoSanguineo, String fotoPath, int id) {
+
+        super(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, sexo, nacionalidad, identificacion);
+
         this.estatura = estatura;
         this.peso = peso;
         this.delitos = delitos != null ? delitos : new ArrayList<>();
-        this.nivelDeSeguridad = nivelDeSeguridad;
-        this.seccionAsignada =seccionAsignada;
-        this.condicion = condicion;
         this.sentencia = sentencia;
+        this.nivelDeSeguridad = nivelDeSeguridad;
+        this.seccionAsignada = seccionAsignada;
+        this.condicion = condicion;
         this.celdaAsignada = celdaAsignada;
         this.enAislamiento = enAislamiento;
         this.nivelDeRiesgo = nivelDeRiesgo;
         this.numeroDeVisitas = numeroDeVisitas;
         this.grupoSanguineo = grupoSanguineo;
         this.fotoPath = fotoPath;
+        this.id = id;
+
         this.expediente = crearExpedienteBasico();
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    
     private ExpedienteJudicial crearExpedienteBasico() {
         ExpedienteJudicial expediente = new ExpedienteJudicial();
         expediente.setCodigoExpediente(GeneradorDeCodigos.generarCodigoExpediente());
         expediente.setNumeroRegistro(GeneradorDeCodigos.generarNumeroRegistro());
         expediente.setFechaApertura(LocalDate.now());
-
-        expediente.setDelitos(this.delitos); 
+        expediente.setDelitos(this.delitos);
         expediente.setJuzgado("Por determinar");
         expediente.setNivelRiesgo(this.nivelDeRiesgo);
         return expediente;
@@ -56,20 +71,12 @@ public class Preso extends Persona {
 
     private void actualizarExpediente() {
         if (this.expediente != null) {
-            this.expediente.setDelitos(this.delitos); 
+            this.expediente.setDelitos(this.delitos);
         }
     }
 
-    public String getSeccionAsignada() {
-        return seccionAsignada;
-    }
+    // Métodos Getters y Setters
 
-    public void setSeccionAsignada(String seccionAsignada) {
-        this.seccionAsignada = seccionAsignada;
-    }
-
-   
-    
     public float getEstatura() { return estatura; }
     public void setEstatura(float estatura) { this.estatura = estatura; }
 
@@ -91,30 +98,24 @@ public class Preso extends Persona {
 
     public boolean eliminarDelito(Delito delito) {
         boolean eliminado = this.delitos.remove(delito);
-        if (eliminado) {
-            actualizarExpediente();
-        }
+        if (eliminado) actualizarExpediente();
         return eliminado;
     }
 
     public ExpedienteJudicial getExpediente() { return expediente; }
     public void setExpediente(ExpedienteJudicial expediente) { this.expediente = expediente; }
 
-    public Sentencia getSentencia() {
-        return sentencia;
-    }
+    public Sentencia getSentencia() { return sentencia; }
+    public void setSentencia(Sentencia sentencia) { this.sentencia = sentencia; }
 
-    public void setSentencia(Sentencia sentencia) {
-        this.sentencia = sentencia;
-    }
-
-  
     public String getNivelDeSeguridad() { return nivelDeSeguridad; }
     public void setNivelDeSeguridad(String nivelDeSeguridad) { this.nivelDeSeguridad = nivelDeSeguridad; }
 
+    public String getSeccionAsignada() { return seccionAsignada; }
+    public void setSeccionAsignada(String seccionAsignada) { this.seccionAsignada = seccionAsignada; }
+
     public String getCondicion() { return condicion; }
     public void setCondicion(String condicion) { this.condicion = condicion; }
-
 
     public String getCeldaAsignada() { return celdaAsignada; }
     public void setCeldaAsignada(String celdaAsignada) { this.celdaAsignada = celdaAsignada; }
@@ -142,18 +143,17 @@ public class Preso extends Persona {
     public void setGrupoSanguineo(String grupoSanguineo) { this.grupoSanguineo = grupoSanguineo; }
 
     public void actualizarSentencia(int años, int meses, LocalDate fechaIngreso) {
-    this.sentencia = new Sentencia(años, meses, fechaIngreso);
-}
+        this.sentencia = new Sentencia(años, meses, fechaIngreso);
+    }
 
-public String getSentenciaFormateada() {
-    return sentencia != null ? sentencia.getSentenciaFormateada() : "No definida";
-}
+    public String getSentenciaFormateada() {
+        return sentencia != null ? sentencia.getSentenciaFormateada() : "No definida";
+    }
 
-public int getSentenciaEnMeses() {
-    return sentencia != null ? sentencia.getAños() * 12 + sentencia.getMeses() : 0;
-}
+    public int getSentenciaEnMeses() {
+        return sentencia != null ? sentencia.getAños() * 12 + sentencia.getMeses() : 0;
+    }
 
-    
     public String getFotoPath() { return fotoPath; }
     public void setFotoPath(String fotoPath) { this.fotoPath = fotoPath; }
 
@@ -178,10 +178,9 @@ public int getSentenciaEnMeses() {
     @Override
     public String toString() {
         return "Preso{" +
-               "nombre='" + getNombre() + '\'' +
-               ", apellido='" + getApellido() + '\'' +
+               "nombreCompleto='" + getNombreCompleto() + '\'' +
                ", identificacion='" + getIdentificacion() + '\'' +
                ", delitos=" + delitos.size() +
                '}';
     }
-} 
+}
