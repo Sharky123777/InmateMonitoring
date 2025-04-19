@@ -1,0 +1,29 @@
+{
+  "usuarios": [
+    {
+      "email": "director@institucion.com",
+      "password": "director123",
+      "rol": "DIRECTOR"
+    },
+    {
+      "email": "oficial@institucion.com",
+      "password": "oficial123",
+      "rol": "OFICIAL"
+    },
+    {
+      "email": "control@institucion.com",
+      "password": "control123",
+      "rol": "PERSONAL_DE_CONTROL"
+    },
+    {
+      "email": "registro@institucion.com",
+      "password": "registro123",
+      "rol": "OFICIAL_DE_REGISTRO"
+    },
+    {
+      "email": "enfermera@institucion.com",
+      "password": "enfermera123",
+      "rol": "ENFERMERA"
+    }
+  ]
+}
