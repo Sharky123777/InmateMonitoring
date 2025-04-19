@@ -97,22 +97,6 @@
       "cargo": "Guardia"
     },
     {
-      "primerNombre": "oye",
-      "segundoNombre": "",
-      "primerApellido": "hernandez",
-      "segundoApellido": "Miau",
-      "edad": 34,
-      "identificacion": "21342335236",
-      "sexo": "Femenino",
-      "nacionalidad": "vaca",
-      "correo": "@.com",
-      "turno": "Diurno",
-      "fechaInicioContrato": "2025-04-18",
-      "fechaFinContrato": "2025-04-30",
-      "rutaImagen": "src/Resources/imagenes_guardias/21342335236_Captura de pantalla 2024-03-03 160808.png",
-      "cargo": "Oficial"
-    },
-    {
       "primerNombre": "z",
       "segundoNombre": "",
       "primerApellido": "wadwa",
