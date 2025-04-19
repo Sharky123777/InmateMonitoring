@@ -34,7 +34,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        jLabel34 = new javax.swing.JLabel();
+        jLabel47 = new javax.swing.JLabel();
         TabbedPDC = new javax.swing.JTabbedPane();
         PanelPerfil = new javax.swing.JPanel();
         FondoFoto = new javax.swing.JPanel();
@@ -60,12 +60,15 @@ public class PersonalDeControl extends javax.swing.JFrame {
         IdentificacionPDC = new javax.swing.JLabel();
         EdadPDC = new javax.swing.JLabel();
         NacionalidadPDC = new javax.swing.JLabel();
-        CorreoPDC = new javax.swing.JLabel();
+        SexoPDC = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
         jSeparator5 = new javax.swing.JSeparator();
+        jLabel46 = new javax.swing.JLabel();
+        jSeparator8 = new javax.swing.JSeparator();
+        CorreoPDC = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         PanelListaPresos = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -117,6 +120,8 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel22 = new javax.swing.JLabel();
         jPanel11 = new javax.swing.JPanel();
         VistaPreviaVisitante = new javax.swing.JLabel();
+        FechaVisita = new com.toedter.calendar.JDateChooser();
+        HoraVisita = new javax.swing.JTextField();
         PanelActualizarInformacion = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
         jLabel36 = new javax.swing.JLabel();
@@ -142,6 +147,18 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jPanel14 = new javax.swing.JPanel();
         VistaPreviaNuevaFoto = new javax.swing.JLabel();
         SubirNuevaFotoPerfil = new javax.swing.JButton();
+        PanelHistorialVisitas = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TablaHistorialVisitas = new javax.swing.JTable();
+        BarraDeBusquedaVisitante = new javax.swing.JTextField();
+        BotonBuscarVisitantePorIdentificacion = new javax.swing.JButton();
+        jLabel48 = new javax.swing.JLabel();
+        PanelHistorialVisitantes = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        TablaHistorialVisitantes = new javax.swing.JTable();
+        BarraDeBusquedaVisitante2 = new javax.swing.JTextField();
+        BotonBuscarVisitantePorIdentificacion2 = new javax.swing.JButton();
+        jLabel34 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -202,10 +219,10 @@ public class PersonalDeControl extends javax.swing.JFrame {
         });
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel34.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel34.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel34.setText("ACTUALIZAR INFORMACIÓN");
-        jPanel5.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, -1, -1));
+        jLabel47.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel47.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel47.setText("ACTUALIZAR INFORMACIÓN");
+        jPanel5.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, -1, -1));
 
         PanelBotones.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 0, 300, 60));
 
@@ -283,18 +300,25 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         jLabel45.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel45.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel45.setText("Correo electronico:");
-        jPanel7.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, -1, -1));
+        jLabel45.setText("Sexo:");
+        jPanel7.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, -1, -1));
         jPanel7.add(NombreCompletoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 56, 390, 30));
         jPanel7.add(IdentificacionPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 120, 420, 30));
         jPanel7.add(EdadPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 180, 480, 30));
         jPanel7.add(NacionalidadPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 240, 430, 30));
-        jPanel7.add(CorreoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 300, 380, 30));
-        jPanel7.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 540, 10));
+        jPanel7.add(SexoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 360, 480, 30));
+        jPanel7.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 540, 10));
         jPanel7.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 540, 10));
         jPanel7.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 540, 10));
         jPanel7.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 540, 10));
         jPanel7.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 540, 10));
+
+        jLabel46.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel46.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel46.setText("Correo electronico:");
+        jPanel7.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, -1, -1));
+        jPanel7.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 540, 10));
+        jPanel7.add(CorreoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 300, 380, 30));
 
         PanelPerfil.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 120, 630, 430));
 
@@ -319,9 +343,16 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 "Foto", "Id", "Nombre completo", "Edad", "Identificacion", "Nacionalidad"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, true
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -513,6 +544,8 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jPanel11.add(VistaPreviaVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 8, 140, 160));
 
         PanelAñadirVisita.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 390, 160, 180));
+        PanelAñadirVisita.add(FechaVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 152, 270, 30));
+        PanelAñadirVisita.add(HoraVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 190, 270, 30));
 
         TabbedPDC.addTab("GUARDAR VISITA", PanelAñadirVisita);
 
@@ -601,6 +634,114 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         TabbedPDC.addTab("ACTUALIZAR INFORMACION", PanelActualizarInformacion);
 
+        PanelHistorialVisitas.setBackground(new java.awt.Color(255, 255, 255));
+        PanelHistorialVisitas.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        TablaHistorialVisitas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Id", "Identificación visitante", "Fecha", "Hora", "Duración", "Tipo de visita", "Lugar", "Identificación visitado"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(TablaHistorialVisitas);
+        if (TablaHistorialVisitas.getColumnModel().getColumnCount() > 0) {
+            TablaHistorialVisitas.getColumnModel().getColumn(0).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(1).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(2).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(4).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(5).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(6).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(7).setResizable(false);
+        }
+
+        PanelHistorialVisitas.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 1040, 450));
+        PanelHistorialVisitas.add(BarraDeBusquedaVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 690, 30));
+
+        BotonBuscarVisitantePorIdentificacion.setText("Buscar");
+        PanelHistorialVisitas.add(BotonBuscarVisitantePorIdentificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 30, 80, 30));
+
+        jLabel48.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel48.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel48.setText("HISTORIAL DE VISITAS");
+        PanelHistorialVisitas.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+
+        TabbedPDC.addTab("HISTORIAL DE VISITAS", PanelHistorialVisitas);
+
+        PanelHistorialVisitantes.setBackground(new java.awt.Color(255, 255, 255));
+        PanelHistorialVisitantes.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        TablaHistorialVisitantes.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Foto", "Id", "Nombre completo", "Email", "Edad", "Identificación", "Sexo", "Nacionalidad", "Relación", "Visitado"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(TablaHistorialVisitantes);
+        if (TablaHistorialVisitantes.getColumnModel().getColumnCount() > 0) {
+            TablaHistorialVisitantes.getColumnModel().getColumn(0).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(1).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(2).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(3).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(5).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(6).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(7).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(8).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(9).setResizable(false);
+        }
+
+        PanelHistorialVisitantes.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 1040, 450));
+        PanelHistorialVisitantes.add(BarraDeBusquedaVisitante2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 690, 30));
+
+        BotonBuscarVisitantePorIdentificacion2.setText("Buscar");
+        PanelHistorialVisitantes.add(BotonBuscarVisitantePorIdentificacion2, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 30, 80, 30));
+
+        jLabel34.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel34.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel34.setText("HISTORIAL DE VISITANTES");
+        PanelHistorialVisitantes.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+
+        TabbedPDC.addTab("HISTORIAL VISITANTES", PanelHistorialVisitantes);
+
         getContentPane().add(TabbedPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 1100, 630));
 
         pack();
@@ -664,10 +805,14 @@ public class PersonalDeControl extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AgregarImagenVisitante;
     private javax.swing.JTextField BarraDeBusqueda;
+    private javax.swing.JTextField BarraDeBusquedaVisitante;
+    private javax.swing.JTextField BarraDeBusquedaVisitante2;
     private javax.swing.JButton BotonActualizarInformacion;
     private javax.swing.JButton BotonAñadirVisita;
     private javax.swing.JButton BotonAñadirVisitante;
     private javax.swing.JButton BotonBuscarPreso;
+    private javax.swing.JButton BotonBuscarVisitantePorIdentificacion;
+    private javax.swing.JButton BotonBuscarVisitantePorIdentificacion2;
     private javax.swing.JComboBox<String> CantidadDeVisitantesCombo;
     private javax.swing.JComboBox<String> ComboSeccion;
     private javax.swing.JTextField ContraseñaActual;
@@ -677,8 +822,10 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JLabel EdadPDC;
     private javax.swing.JTextField EdadVisitante;
     private javax.swing.JLabel FechaIngresoPDC;
+    private com.toedter.calendar.JDateChooser FechaVisita;
     private javax.swing.JPanel FondoFoto;
     private javax.swing.JLabel FotoPDC;
+    private javax.swing.JTextField HoraVisita;
     private javax.swing.JLabel IdentificacionPDC;
     private javax.swing.JTextField IdentificacionPresoVisita;
     private javax.swing.JTextField IdentificacionVisitante;
@@ -696,6 +843,8 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JPanel PanelActualizarInformacion;
     private javax.swing.JPanel PanelAñadirVisita;
     private javax.swing.JPanel PanelBotones;
+    private javax.swing.JPanel PanelHistorialVisitantes;
+    private javax.swing.JPanel PanelHistorialVisitas;
     private javax.swing.JPanel PanelListaPresos;
     private javax.swing.JPanel PanelPerfil;
     private javax.swing.JTextField PrimerApellidoVisitante;
@@ -703,9 +852,12 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> RelacionConPresoVisitante;
     private javax.swing.JTextField SegundoApellidoVisitante;
     private javax.swing.JTextField SegundoNombreVisitante;
+    private javax.swing.JLabel SexoPDC;
     private javax.swing.JComboBox<String> SexoVisitante;
     private javax.swing.JButton SubirNuevaFotoPerfil;
     private javax.swing.JTabbedPane TabbedPDC;
+    private javax.swing.JTable TablaHistorialVisitantes;
+    private javax.swing.JTable TablaHistorialVisitas;
     private javax.swing.JTable TablaPresos;
     private javax.swing.JComboBox<String> TipoVisita;
     private javax.swing.JLabel TurnoPDC;
@@ -752,6 +904,9 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel46;
+    private javax.swing.JLabel jLabel47;
+    private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -771,6 +926,8 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
@@ -778,5 +935,6 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
+    private javax.swing.JSeparator jSeparator8;
     // End of variables declaration//GEN-END:variables
 }
