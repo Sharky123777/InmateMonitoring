@@ -100,54 +100,8 @@ txtFechaContratacionMod1.setEditable(false);
         ListaDeGuardias = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaGuardias = new javax.swing.JTable();
-        ModificarGuardia = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jSeparator12 = new javax.swing.JSeparator();
-        jSeparator13 = new javax.swing.JSeparator();
-        jSeparator14 = new javax.swing.JSeparator();
-        jSeparator15 = new javax.swing.JSeparator();
-        jSeparator16 = new javax.swing.JSeparator();
-        jSeparator17 = new javax.swing.JSeparator();
-        jSeparator18 = new javax.swing.JSeparator();
-        jSeparator19 = new javax.swing.JSeparator();
-        jSeparator20 = new javax.swing.JSeparator();
-        jSeparator21 = new javax.swing.JSeparator();
-        jButton3 = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
-        lblImagenMod = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        txtFechaContratacionMod = new javax.swing.JTextField();
-        dateFinContratoMod = new com.toedter.calendar.JDateChooser();
-        jLabel17 = new javax.swing.JLabel();
-        txtCargoMod = new javax.swing.JComboBox<>();
-        jLabel18 = new javax.swing.JLabel();
-        cmbTurnoMod = new javax.swing.JComboBox<>();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
-        txtCorreoMod = new javax.swing.JTextField();
-        jSeparator22 = new javax.swing.JSeparator();
-        jButton4 = new javax.swing.JButton();
-        txtCorreo2 = new javax.swing.JTextField();
-        jLabel21 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
-        txtNacionalidadMod = new javax.swing.JTextField();
-        txtSexoMod = new javax.swing.JTextField();
-        jLabel23 = new javax.swing.JLabel();
-        jLabel24 = new javax.swing.JLabel();
-        txtCedulaMod = new javax.swing.JTextField();
-        txtEdadMod = new javax.swing.JTextField();
-        jLabel25 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
-        txtSegundoApellidoMod = new javax.swing.JTextField();
-        txtPrimerApellidoMod = new javax.swing.JTextField();
-        jLabel27 = new javax.swing.JLabel();
-        jLabel28 = new javax.swing.JLabel();
-        txtSegundoNombreMod = new javax.swing.JTextField();
-        txtPrimerNombreMod = new javax.swing.JTextField();
-        jLabel29 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
-        jPanel7 = new javax.swing.JPanel();
+        jPanel7 = new RoundedPanel(30);
         jSeparator23 = new javax.swing.JSeparator();
         jSeparator24 = new javax.swing.JSeparator();
         jSeparator25 = new javax.swing.JSeparator();
@@ -209,7 +163,7 @@ txtFechaContratacionMod1.setEditable(false);
         txtNacionalidad = new javax.swing.JTextField();
         txtCedula = new javax.swing.JTextField();
         txtSexo = new javax.swing.JTextField();
-        jPanel3 = new javax.swing.JPanel();
+        jPanel3 = new RoundedPanel(30);
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
@@ -241,7 +195,7 @@ txtFechaContratacionMod1.setEditable(false);
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaEnfermeras = new javax.swing.JTable();
         ModificarNurse = new javax.swing.JPanel();
-        jPanel10 = new javax.swing.JPanel();
+        jPanel10 = new RoundedPanel(30);
         jSeparator34 = new javax.swing.JSeparator();
         jSeparator35 = new javax.swing.JSeparator();
         jSeparator36 = new javax.swing.JSeparator();
@@ -283,6 +237,51 @@ txtFechaContratacionMod1.setEditable(false);
         txtSegundoNombreMod1 = new javax.swing.JTextField();
         txtPrimerNombreMod1 = new javax.swing.JTextField();
         jLabel60 = new javax.swing.JLabel();
+        ModificarGuardia = new javax.swing.JPanel();
+        jPanel4 = new RoundedPanel(30);
+        jSeparator12 = new javax.swing.JSeparator();
+        jSeparator13 = new javax.swing.JSeparator();
+        jSeparator14 = new javax.swing.JSeparator();
+        jSeparator15 = new javax.swing.JSeparator();
+        jSeparator16 = new javax.swing.JSeparator();
+        jSeparator17 = new javax.swing.JSeparator();
+        jSeparator18 = new javax.swing.JSeparator();
+        jSeparator19 = new javax.swing.JSeparator();
+        jSeparator20 = new javax.swing.JSeparator();
+        jSeparator21 = new javax.swing.JSeparator();
+        jButton3 = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        lblImagenMod = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        txtFechaContratacionMod = new javax.swing.JTextField();
+        dateFinContratoMod = new com.toedter.calendar.JDateChooser();
+        jLabel17 = new javax.swing.JLabel();
+        txtCargoMod = new javax.swing.JComboBox<>();
+        jLabel18 = new javax.swing.JLabel();
+        cmbTurnoMod = new javax.swing.JComboBox<>();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        txtCorreoMod = new javax.swing.JTextField();
+        jSeparator22 = new javax.swing.JSeparator();
+        jButton4 = new javax.swing.JButton();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        txtNacionalidadMod = new javax.swing.JTextField();
+        txtSexoMod = new javax.swing.JTextField();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        txtCedulaMod = new javax.swing.JTextField();
+        txtEdadMod = new javax.swing.JTextField();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        txtSegundoApellidoMod = new javax.swing.JTextField();
+        txtPrimerApellidoMod = new javax.swing.JTextField();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        txtSegundoNombreMod = new javax.swing.JTextField();
+        txtPrimerNombreMod = new javax.swing.JTextField();
+        jLabel29 = new javax.swing.JLabel();
 
         Modificar.setText("Modificar");
         Modificar.addActionListener(new java.awt.event.ActionListener() {
@@ -322,8 +321,10 @@ txtFechaContratacionMod1.setEditable(false);
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        Director.setBackground(new java.awt.Color(255, 255, 255));
         jTabbedPane1.addTab("Director", Director);
 
+        ListaDeGuardias.setBackground(new java.awt.Color(255, 255, 255));
         ListaDeGuardias.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tablaGuardias.setModel(new javax.swing.table.DefaultTableModel(
@@ -362,185 +363,11 @@ txtFechaContratacionMod1.setEditable(false);
             tablaGuardias.getColumnModel().getColumn(11).setResizable(false);
         }
 
-        ListaDeGuardias.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1040, 470));
+        ListaDeGuardias.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1080, 540));
 
         jTabbedPane1.addTab("ListaDeGuardias", ListaDeGuardias);
 
-        ModificarGuardia.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel4.setBackground(new java.awt.Color(29, 35, 51));
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel4.add(jSeparator12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 310, 20));
-        jPanel4.add(jSeparator13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, 310, 20));
-        jPanel4.add(jSeparator14, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, 310, 20));
-        jPanel4.add(jSeparator15, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 310, 20));
-        jPanel4.add(jSeparator16, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 280, 310, 20));
-        jPanel4.add(jSeparator17, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 360, 310, 20));
-        jPanel4.add(jSeparator18, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 310, 20));
-        jPanel4.add(jSeparator19, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 310, 20));
-        jPanel4.add(jSeparator20, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 50, 310, 20));
-        jPanel4.add(jSeparator21, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 400, 310, 20));
-
-        jButton3.setText("Modificar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-        jPanel4.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 430, 180, 40));
-
-        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel5.add(lblImagenMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 150, 180));
-
-        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 90, 190, 220));
-
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("Agregar Foto del guardia:");
-        jPanel4.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, -1, -1));
-
-        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel16.setText("Fecha de contratación:");
-        jPanel4.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 360, -1, 20));
-        jPanel4.add(txtFechaContratacionMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 380, 190, 30));
-        jPanel4.add(dateFinContratoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 440, 190, 30));
-
-        jLabel17.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel17.setText("Fecha de finalización del contrato:");
-        jPanel4.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 420, -1, -1));
-
-        txtCargoMod.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Oficial", "Guardia" }));
-        jPanel4.add(txtCargoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 250, 30));
-
-        jLabel18.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel18.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel18.setText("Cargo:");
-        jPanel4.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 30, -1, -1));
-
-        cmbTurnoMod.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Diurno", "Nocturno" }));
-        jPanel4.add(cmbTurnoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 370, 240, 30));
-
-        jLabel19.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel19.setText("Turno:");
-        jPanel4.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 380, -1, -1));
-
-        jLabel20.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel20.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel20.setText("Correo:");
-        jPanel4.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 340, -1, -1));
-
-        txtCorreoMod.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtCorreoModFocusLost(evt);
-            }
-        });
-        txtCorreoMod.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCorreoModKeyTyped(evt);
-            }
-        });
-        jPanel4.add(txtCorreoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 330, 210, 30));
-        jPanel4.add(jSeparator22, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 310, 20));
-
-        jButton4.setText("Seleccionar Imagen");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-        jPanel4.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 320, -1, -1));
-
-        txtCorreo2.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtCorreo2FocusLost(evt);
-            }
-        });
-        txtCorreo2.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCorreo2KeyTyped(evt);
-            }
-        });
-        jPanel4.add(txtCorreo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 330, 210, 30));
-
-        jLabel21.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel21.setText("Correo:");
-        jPanel4.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 340, -1, -1));
-
-        jLabel22.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel22.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel22.setText("Nacionalidad:");
-        jPanel4.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(57, 300, 90, -1));
-        jPanel4.add(txtNacionalidadMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 210, 30));
-
-        txtSexoMod.setText("Femenino");
-        jPanel4.add(txtSexoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 250, 30));
-
-        jLabel23.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel23.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel23.setText("Sexo:");
-        jPanel4.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 260, -1, -1));
-
-        jLabel24.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel24.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel24.setText("Cedula:");
-        jPanel4.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 210, -1, 30));
-
-        txtCedulaMod.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCedulaModActionPerformed(evt);
-            }
-        });
-        txtCedulaMod.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCedulaModKeyTyped(evt);
-            }
-        });
-        jPanel4.add(txtCedulaMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 240, 30));
-
-        txtEdadMod.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtEdadModKeyPressed(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtEdadModKeyTyped(evt);
-            }
-        });
-        jPanel4.add(txtEdadMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, 250, 30));
-
-        jLabel25.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel25.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel25.setText("Edad:");
-        jPanel4.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 180, -1, -1));
-
-        jLabel26.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel26.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel26.setText("Segundo Apellido:");
-        jPanel4.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, -1, 20));
-        jPanel4.add(txtSegundoApellidoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 180, 30));
-        jPanel4.add(txtPrimerApellidoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 190, 30));
-
-        jLabel27.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel27.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel27.setText("Primer Apellido:");
-        jPanel4.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 100, -1, 20));
-
-        jLabel28.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel28.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel28.setText("Segundo nombre:");
-        jPanel4.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, -1, 30));
-        jPanel4.add(txtSegundoNombreMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 180, 30));
-        jPanel4.add(txtPrimerNombreMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 200, 30));
-
-        jLabel29.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel29.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel29.setText("Primer nombre:");
-        jPanel4.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, -1, 20));
-
-        ModificarGuardia.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 790, 490));
-
-        jTabbedPane1.addTab("ModificarGuardia", ModificarGuardia);
-
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel7.setBackground(new java.awt.Color(29, 35, 51));
@@ -564,6 +391,7 @@ txtFechaContratacionMod1.setEditable(false);
         });
         jPanel7.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 430, 180, 40));
 
+        jPanel8.setBackground(new java.awt.Color(0, 0, 51));
         jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         jPanel8.add(lblImagen1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 150, 180));
 
@@ -604,6 +432,8 @@ txtFechaContratacionMod1.setEditable(false);
         jLabel36.setText("Correo:");
         jPanel7.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 340, -1, -1));
 
+        txtCorreo1.setBackground(new java.awt.Color(29, 35, 51));
+        txtCorreo1.setBorder(null);
         txtCorreo1.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtCorreo1FocusLost(evt);
@@ -646,9 +476,14 @@ txtFechaContratacionMod1.setEditable(false);
         jLabel38.setForeground(new java.awt.Color(255, 255, 255));
         jLabel38.setText("Nacionalidad:");
         jPanel7.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(57, 300, 90, -1));
+
+        txtNacionalidad1.setBackground(new java.awt.Color(29, 35, 51));
+        txtNacionalidad1.setBorder(null);
         jPanel7.add(txtNacionalidad1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 210, 30));
 
+        txtSexo1.setBackground(new java.awt.Color(29, 35, 51));
         txtSexo1.setText("Femenino");
+        txtSexo1.setBorder(null);
         jPanel7.add(txtSexo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 250, 30));
 
         jLabel39.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -661,6 +496,8 @@ txtFechaContratacionMod1.setEditable(false);
         jLabel40.setText("Cedula:");
         jPanel7.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 210, -1, 30));
 
+        txtCedula1.setBackground(new java.awt.Color(29, 35, 51));
+        txtCedula1.setBorder(null);
         txtCedula1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCedula1ActionPerformed(evt);
@@ -673,6 +510,8 @@ txtFechaContratacionMod1.setEditable(false);
         });
         jPanel7.add(txtCedula1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 240, 30));
 
+        txtEdad1.setBackground(new java.awt.Color(29, 35, 51));
+        txtEdad1.setBorder(null);
         txtEdad1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtEdad1KeyPressed(evt);
@@ -692,7 +531,13 @@ txtFechaContratacionMod1.setEditable(false);
         jLabel42.setForeground(new java.awt.Color(255, 255, 255));
         jLabel42.setText("Segundo Apellido:");
         jPanel7.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, -1, 20));
+
+        txtSegundoApellido1.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoApellido1.setBorder(null);
         jPanel7.add(txtSegundoApellido1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 180, 30));
+
+        txtPrimerApellido1.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerApellido1.setBorder(null);
         jPanel7.add(txtPrimerApellido1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 190, 30));
 
         jLabel43.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -704,7 +549,13 @@ txtFechaContratacionMod1.setEditable(false);
         jLabel44.setForeground(new java.awt.Color(255, 255, 255));
         jLabel44.setText("Segundo nombre:");
         jPanel7.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, -1, 30));
+
+        txtSegundoNombre1.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoNombre1.setBorder(null);
         jPanel7.add(txtSegundoNombre1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 180, 30));
+
+        txtPrimerNombre1.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerNombre1.setBorder(null);
         jPanel7.add(txtPrimerNombre1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 200, 30));
 
         jLabel45.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -712,7 +563,7 @@ txtFechaContratacionMod1.setEditable(false);
         jLabel45.setText("Primer nombre:");
         jPanel7.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, -1, 20));
 
-        jPanel6.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 790, 490));
+        jPanel6.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, 820, 510));
 
         jTabbedPane1.addTab("AñadirEnfermera", jPanel6);
 
@@ -758,11 +609,25 @@ txtFechaContratacionMod1.setEditable(false);
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Nacionalidad:");
         AñadirGuardia.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 310, -1, -1));
+
+        txtPrimerApellido.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerApellido.setBorder(null);
         AñadirGuardia.add(txtPrimerApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 100, 200, 30));
+
+        txtPrimerNombre.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerNombre.setBorder(null);
         AñadirGuardia.add(txtPrimerNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 210, 30));
+
+        txtSegundoNombre.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoNombre.setBorder(null);
         AñadirGuardia.add(txtSegundoNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 60, 190, 30));
+
+        txtSegundoApellido.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoApellido.setBorder(null);
         AñadirGuardia.add(txtSegundoApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 140, 190, 30));
 
+        txtEdad.setBackground(new java.awt.Color(29, 35, 51));
+        txtEdad.setBorder(null);
         txtEdad.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtEdadKeyPressed(evt);
@@ -772,8 +637,13 @@ txtFechaContratacionMod1.setEditable(false);
             }
         });
         AñadirGuardia.add(txtEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 180, 250, 30));
+
+        txtNacionalidad.setBackground(new java.awt.Color(29, 35, 51));
+        txtNacionalidad.setBorder(null);
         AñadirGuardia.add(txtNacionalidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 300, 210, 30));
 
+        txtCedula.setBackground(new java.awt.Color(29, 35, 51));
+        txtCedula.setBorder(null);
         txtCedula.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCedulaActionPerformed(evt);
@@ -786,7 +656,9 @@ txtFechaContratacionMod1.setEditable(false);
         });
         AñadirGuardia.add(txtCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 220, 240, 30));
 
+        txtSexo.setBackground(new java.awt.Color(29, 35, 51));
         txtSexo.setText("Femenino");
+        txtSexo.setBorder(null);
         AñadirGuardia.add(txtSexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 260, 250, 30));
 
         jPanel3.setBackground(new java.awt.Color(29, 35, 51));
@@ -810,6 +682,7 @@ txtFechaContratacionMod1.setEditable(false);
         });
         jPanel3.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 430, 180, 40));
 
+        jPanel2.setBackground(new java.awt.Color(0, 0, 51));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         jPanel2.add(lblFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 150, 180));
 
@@ -850,6 +723,8 @@ txtFechaContratacionMod1.setEditable(false);
         jLabel15.setText("Correo:");
         jPanel3.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 340, -1, -1));
 
+        txtCorreo.setBackground(new java.awt.Color(29, 35, 51));
+        txtCorreo.setBorder(null);
         txtCorreo.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtCorreoFocusLost(evt);
@@ -879,6 +754,7 @@ txtFechaContratacionMod1.setEditable(false);
 
         jTabbedPane1.addTab("Añadir un guardia", AñadirGuardia);
 
+        MostrarEnfermeras.setBackground(new java.awt.Color(255, 255, 255));
         MostrarEnfermeras.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tablaEnfermeras.setModel(new javax.swing.table.DefaultTableModel(
@@ -917,10 +793,11 @@ txtFechaContratacionMod1.setEditable(false);
             tablaEnfermeras.getColumnModel().getColumn(11).setResizable(false);
         }
 
-        MostrarEnfermeras.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1040, 470));
+        MostrarEnfermeras.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1070, 540));
 
         jTabbedPane1.addTab("MostrarEnfermera", MostrarEnfermeras);
 
+        ModificarNurse.setBackground(new java.awt.Color(255, 255, 255));
         ModificarNurse.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel10.setBackground(new java.awt.Color(29, 35, 51));
@@ -941,26 +818,27 @@ txtFechaContratacionMod1.setEditable(false);
                 jButton7ActionPerformed(evt);
             }
         });
-        jPanel10.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 430, 180, 40));
+        jPanel10.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 430, 180, 40));
 
+        jPanel11.setBackground(new java.awt.Color(0, 0, 51));
         jPanel11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         jPanel11.add(lblImagenMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 150, 180));
 
-        jPanel10.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 90, 190, 220));
+        jPanel10.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 50, 190, 220));
 
         jLabel46.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel46.setText("Agregar Foto del guardia:");
-        jPanel10.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, -1, -1));
+        jLabel46.setText("Modificar foto de la enfermera:");
+        jPanel10.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 30, -1, -1));
 
         jLabel47.setForeground(new java.awt.Color(255, 255, 255));
         jLabel47.setText("Fecha de contratación:");
-        jPanel10.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 360, -1, 20));
-        jPanel10.add(txtFechaContratacionMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 380, 190, 30));
-        jPanel10.add(dateFinContratoMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 440, 190, 30));
+        jPanel10.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 320, -1, 20));
+        jPanel10.add(txtFechaContratacionMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 340, 190, 30));
+        jPanel10.add(dateFinContratoMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 400, 190, 30));
 
         jLabel48.setForeground(new java.awt.Color(255, 255, 255));
         jLabel48.setText("Fecha de finalización del contrato:");
-        jPanel10.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 420, -1, -1));
+        jPanel10.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 380, -1, -1));
 
         cmbTurnoMod1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Diurno", "Nocturno" }));
         jPanel10.add(cmbTurnoMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 370, 240, 30));
@@ -975,6 +853,8 @@ txtFechaContratacionMod1.setEditable(false);
         jLabel51.setText("Correo:");
         jPanel10.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 340, -1, -1));
 
+        txtCorreoMod1.setBackground(new java.awt.Color(29, 35, 51));
+        txtCorreoMod1.setBorder(null);
         txtCorreoMod1.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtCorreoMod1FocusLost(evt);
@@ -994,7 +874,7 @@ txtFechaContratacionMod1.setEditable(false);
                 jButton8ActionPerformed(evt);
             }
         });
-        jPanel10.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 320, -1, -1));
+        jPanel10.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 280, -1, -1));
 
         txtCorreo4.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -1017,9 +897,14 @@ txtFechaContratacionMod1.setEditable(false);
         jLabel53.setForeground(new java.awt.Color(255, 255, 255));
         jLabel53.setText("Nacionalidad:");
         jPanel10.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(57, 300, 90, -1));
+
+        txtNacionalidadMod1.setBackground(new java.awt.Color(29, 35, 51));
+        txtNacionalidadMod1.setBorder(null);
         jPanel10.add(txtNacionalidadMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 210, 30));
 
+        txtSexoMod1.setBackground(new java.awt.Color(29, 35, 51));
         txtSexoMod1.setText("Femenino");
+        txtSexoMod1.setBorder(null);
         jPanel10.add(txtSexoMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 250, 30));
 
         jLabel54.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -1032,6 +917,8 @@ txtFechaContratacionMod1.setEditable(false);
         jLabel55.setText("Cedula:");
         jPanel10.add(jLabel55, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 210, -1, 30));
 
+        txtCedulaMod1.setBackground(new java.awt.Color(29, 35, 51));
+        txtCedulaMod1.setBorder(null);
         txtCedulaMod1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCedulaMod1ActionPerformed(evt);
@@ -1044,6 +931,8 @@ txtFechaContratacionMod1.setEditable(false);
         });
         jPanel10.add(txtCedulaMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 240, 30));
 
+        txtEdadMod1.setBackground(new java.awt.Color(29, 35, 51));
+        txtEdadMod1.setBorder(null);
         txtEdadMod1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtEdadMod1KeyPressed(evt);
@@ -1063,7 +952,13 @@ txtFechaContratacionMod1.setEditable(false);
         jLabel57.setForeground(new java.awt.Color(255, 255, 255));
         jLabel57.setText("Segundo Apellido:");
         jPanel10.add(jLabel57, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, -1, 20));
+
+        txtSegundoApellidoMod1.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoApellidoMod1.setBorder(null);
         jPanel10.add(txtSegundoApellidoMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 180, 30));
+
+        txtPrimerApellidoMod1.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerApellidoMod1.setBorder(null);
         jPanel10.add(txtPrimerApellidoMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 190, 30));
 
         jLabel58.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -1075,7 +970,13 @@ txtFechaContratacionMod1.setEditable(false);
         jLabel59.setForeground(new java.awt.Color(255, 255, 255));
         jLabel59.setText("Segundo nombre:");
         jPanel10.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, -1, 30));
+
+        txtSegundoNombreMod1.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoNombreMod1.setBorder(null);
         jPanel10.add(txtSegundoNombreMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 180, 30));
+
+        txtPrimerNombreMod1.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerNombreMod1.setBorder(null);
         jPanel10.add(txtPrimerNombreMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 200, 30));
 
         jLabel60.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -1083,13 +984,201 @@ txtFechaContratacionMod1.setEditable(false);
         jLabel60.setText("Primer nombre:");
         jPanel10.add(jLabel60, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, -1, 20));
 
-        ModificarNurse.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 790, 490));
+        ModificarNurse.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, 790, 490));
 
         jTabbedPane1.addTab("Modificar enfermera", ModificarNurse);
 
-        jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 1060, 540));
+        ModificarGuardia.setBackground(new java.awt.Color(255, 255, 255));
+        ModificarGuardia.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1060, 570));
+        jPanel4.setBackground(new java.awt.Color(29, 35, 51));
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel4.add(jSeparator12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 310, 20));
+        jPanel4.add(jSeparator13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, 310, 20));
+        jPanel4.add(jSeparator14, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, 310, 20));
+        jPanel4.add(jSeparator15, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 310, 20));
+        jPanel4.add(jSeparator16, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 280, 310, 20));
+        jPanel4.add(jSeparator17, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 360, 310, 20));
+        jPanel4.add(jSeparator18, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 310, 20));
+        jPanel4.add(jSeparator19, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 310, 20));
+        jPanel4.add(jSeparator20, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 50, 310, 20));
+        jPanel4.add(jSeparator21, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 400, 310, 20));
+
+        jButton3.setText("Modificar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 430, 180, 40));
+
+        jPanel5.setBackground(new java.awt.Color(0, 0, 51));
+        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel5.add(lblImagenMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 150, 180));
+
+        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 90, 190, 220));
+
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("Agregar Foto del guardia:");
+        jPanel4.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, -1, -1));
+
+        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel16.setText("Fecha de contratación:");
+        jPanel4.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 360, -1, 20));
+        jPanel4.add(txtFechaContratacionMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 380, 190, 30));
+        jPanel4.add(dateFinContratoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 440, 190, 30));
+
+        jLabel17.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel17.setText("Fecha de finalización del contrato:");
+        jPanel4.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 420, -1, -1));
+
+        txtCargoMod.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Oficial", "Guardia" }));
+        jPanel4.add(txtCargoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 250, 30));
+
+        jLabel18.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel18.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel18.setText("Cargo:");
+        jPanel4.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 30, -1, -1));
+
+        cmbTurnoMod.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Diurno", "Nocturno" }));
+        jPanel4.add(cmbTurnoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 370, 240, 30));
+
+        jLabel19.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel19.setText("Turno:");
+        jPanel4.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 380, -1, -1));
+
+        jLabel20.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel20.setText("Correo:");
+        jPanel4.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 340, -1, -1));
+
+        txtCorreoMod.setBackground(new java.awt.Color(29, 35, 51));
+        txtCorreoMod.setBorder(null);
+        txtCorreoMod.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCorreoModFocusLost(evt);
+            }
+        });
+        txtCorreoMod.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCorreoModKeyTyped(evt);
+            }
+        });
+        jPanel4.add(txtCorreoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 330, 240, 30));
+        jPanel4.add(jSeparator22, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 310, 20));
+
+        jButton4.setText("Seleccionar Imagen");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 320, -1, -1));
+
+        jLabel21.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel21.setText("Correo:");
+        jPanel4.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 340, -1, -1));
+
+        jLabel22.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel22.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel22.setText("Nacionalidad:");
+        jPanel4.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(57, 300, 90, -1));
+
+        txtNacionalidadMod.setBackground(new java.awt.Color(29, 35, 51));
+        txtNacionalidadMod.setBorder(null);
+        jPanel4.add(txtNacionalidadMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 210, 30));
+
+        txtSexoMod.setBackground(new java.awt.Color(29, 35, 51));
+        txtSexoMod.setText("Femenino");
+        txtSexoMod.setBorder(null);
+        jPanel4.add(txtSexoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 250, 30));
+
+        jLabel23.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel23.setText("Sexo:");
+        jPanel4.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 260, -1, -1));
+
+        jLabel24.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel24.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel24.setText("Cedula:");
+        jPanel4.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 210, -1, 30));
+
+        txtCedulaMod.setBackground(new java.awt.Color(29, 35, 51));
+        txtCedulaMod.setBorder(null);
+        txtCedulaMod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCedulaModActionPerformed(evt);
+            }
+        });
+        txtCedulaMod.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCedulaModKeyTyped(evt);
+            }
+        });
+        jPanel4.add(txtCedulaMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 240, 30));
+
+        txtEdadMod.setBackground(new java.awt.Color(29, 35, 51));
+        txtEdadMod.setBorder(null);
+        txtEdadMod.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtEdadModKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEdadModKeyTyped(evt);
+            }
+        });
+        jPanel4.add(txtEdadMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, 250, 30));
+
+        jLabel25.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel25.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel25.setText("Edad:");
+        jPanel4.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 180, -1, -1));
+
+        jLabel26.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel26.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel26.setText("Segundo Apellido:");
+        jPanel4.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, -1, 20));
+
+        txtSegundoApellidoMod.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoApellidoMod.setBorder(null);
+        jPanel4.add(txtSegundoApellidoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 180, 30));
+
+        txtPrimerApellidoMod.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerApellidoMod.setBorder(null);
+        jPanel4.add(txtPrimerApellidoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 190, 30));
+
+        jLabel27.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel27.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel27.setText("Primer Apellido:");
+        jPanel4.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 100, -1, 20));
+
+        jLabel28.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel28.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel28.setText("Segundo nombre:");
+        jPanel4.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, -1, 30));
+
+        txtSegundoNombreMod.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoNombreMod.setBorder(null);
+        jPanel4.add(txtSegundoNombreMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 180, 30));
+
+        txtPrimerNombreMod.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerNombreMod.setBorder(null);
+        jPanel4.add(txtPrimerNombreMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 200, 30));
+
+        jLabel29.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel29.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel29.setText("Primer nombre:");
+        jPanel4.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, -1, 20));
+
+        ModificarGuardia.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 790, 490));
+
+        jTabbedPane1.addTab("ModificarGuardia", ModificarGuardia);
+
+        jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 1100, 610));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 640));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1820,14 +1909,6 @@ if (rutaImagenSeleccionada == null || rutaImagenSeleccionada.isEmpty()) {
             }
         }
     }//GEN-LAST:event_txtEdadModKeyTyped
-
-    private void txtCorreo2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreo2KeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCorreo2KeyTyped
-
-    private void txtCorreo2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreo2FocusLost
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCorreo2FocusLost
 
     private void ModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModificarActionPerformed
                               
@@ -2698,7 +2779,6 @@ if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
     private javax.swing.JTextField txtCedulaMod1;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtCorreo1;
-    private javax.swing.JTextField txtCorreo2;
     private javax.swing.JTextField txtCorreo3;
     private javax.swing.JTextField txtCorreo4;
     private javax.swing.JTextField txtCorreoMod;
