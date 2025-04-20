@@ -24,6 +24,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 
 public class PersonalDeControl extends javax.swing.JFrame {
 
@@ -41,6 +42,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
     public void InicializarMenu() {
         JMenuItem historialVisita = new JMenuItem("Historial de visitas");
+        JMenuItem HistorialVisitantes = new JMenuItem("Historial visitantes");
         JMenuItem historialMedicoPreso = new JMenuItem("Historial Medico");
         JMenuItem historialDeSanciones = new JMenuItem("Historial de sanciones");
         JMenuItem informacionPreso = new JMenuItem("Informacion preso");
@@ -51,8 +53,56 @@ public class PersonalDeControl extends javax.swing.JFrame {
         ppMenuTablaPresos.add(historialDeSanciones);
         ppMenuTablaPresos.add(informacionPreso);
         ppMenuTablaPresos.add(expediente);
+        ppMenuTablaVisitas.add(HistorialVisitantes);
 
+        TablaHistorialVisitas.setComponentPopupMenu(ppMenuTablaVisitas);
         TablaPresos.setComponentPopupMenu(ppMenuTablaPresos);
+
+        historialVisita.addActionListener(e -> {
+            int filaSeleccionada = TablaPresos.getSelectedRow();
+            if (filaSeleccionada == -1) {
+                JOptionPane.showMessageDialog(this, "¡Selecciona un preso primero!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String identificacion = TablaPresos.getValueAt(filaSeleccionada, 4).toString();
+            Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
+
+            if (preso != null) {
+                cargarHistorialVisitas(identificacion);
+                TabbedPDC.setSelectedIndex(4);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró el preso", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+    }
+
+    private void cargarHistorialVisitas(String identificacionPreso) {
+        DefaultTableModel modelo = (DefaultTableModel) TablaHistorialVisitas.getModel();
+        modelo.setRowCount(0);
+
+        VisitaDAO visitaDAO = new VisitaDAO();
+        List<Visita> visitas = visitaDAO.cargarPorIdentificacionPreso(identificacionPreso);
+
+        for (Visita visita : visitas) {
+            for (Visitante visitante : visita.getVisitantes()) {
+                modelo.addRow(new Object[]{
+                    visita.getId(),
+                    visitante.getIdentificacion(),
+                    visita.getFechaVisita(),
+                    visita.getHoraVisita(),
+                    visita.getDuracionVisitaEnHoras(),
+                    visita.getTipoVisita(),
+                    visita.getLugarVisita(),
+                    identificacionPreso
+                });
+
+            }
+
+        }
+        TablaHistorialVisitas.revalidate();
+        TablaHistorialVisitas.repaint();
 
     }
 
@@ -61,6 +111,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private void initComponents() {
 
         ppMenuTablaPresos = new javax.swing.JPopupMenu();
+        ppMenuTablaVisitas = new javax.swing.JPopupMenu();
         PanelBotones = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -784,7 +835,6 @@ public class PersonalDeControl extends javax.swing.JFrame {
         }
 
         if (PrimerNombreVisitante.getText().trim().isEmpty()
-                || SegundoNombreVisitante.getText().trim().isEmpty()
                 || PrimerApellidoVisitante.getText().trim().isEmpty()
                 || SegundoApellidoVisitante.getText().trim().isEmpty()
                 || EdadVisitante.getText().trim().isEmpty()
@@ -1249,5 +1299,6 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JPopupMenu ppMenuTablaPresos;
+    private javax.swing.JPopupMenu ppMenuTablaVisitas;
     // End of variables declaration//GEN-END:variables
 }
