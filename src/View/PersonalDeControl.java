@@ -6,9 +6,12 @@ import DAO.VisitanteDAO;
 import Model.Preso;
 import Model.Visita;
 import Model.Visitante;
+import java.awt.AlphaComposite;
+import java.awt.Component;
+import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -21,9 +24,12 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class PersonalDeControl extends javax.swing.JFrame {
@@ -36,26 +42,23 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
     public PersonalDeControl() {
         initComponents();
+        FechaVisita.getDateEditor().setEnabled(false);
         this.setLocationRelativeTo(null);
+        cargarDatosPresoEnTabla();
+        configurarTablaImagenesPreso();
+        configurarTablaImagenesVisitantes();
+        InicializarMenu();
 
     }
 
     public void InicializarMenu() {
         JMenuItem historialVisita = new JMenuItem("Historial de visitas");
-        JMenuItem HistorialVisitantes = new JMenuItem("Historial visitantes");
-        JMenuItem historialMedicoPreso = new JMenuItem("Historial Medico");
-        JMenuItem historialDeSanciones = new JMenuItem("Historial de sanciones");
-        JMenuItem informacionPreso = new JMenuItem("Informacion preso");
-        JMenuItem expediente = new JMenuItem("Expediente");
+        JMenuItem historialVisitantes = new JMenuItem("Historial visitantes");
 
         ppMenuTablaPresos.add(historialVisita);
-        ppMenuTablaPresos.add(historialMedicoPreso);
-        ppMenuTablaPresos.add(historialDeSanciones);
-        ppMenuTablaPresos.add(informacionPreso);
-        ppMenuTablaPresos.add(expediente);
-        ppMenuTablaVisitas.add(HistorialVisitantes);
+        ppMenuTablaPresos.add(historialVisitantes);
 
-        TablaHistorialVisitas.setComponentPopupMenu(ppMenuTablaVisitas);
+        TablaPresos.setComponentPopupMenu(ppMenuTablaPresos);
         TablaPresos.setComponentPopupMenu(ppMenuTablaPresos);
 
         historialVisita.addActionListener(e -> {
@@ -71,6 +74,24 @@ public class PersonalDeControl extends javax.swing.JFrame {
             if (preso != null) {
                 cargarHistorialVisitas(identificacion);
                 TabbedPDC.setSelectedIndex(4);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró el preso", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        historialVisitantes.addActionListener(e -> {
+            int filaSeleccionada = TablaPresos.getSelectedRow();
+            if (filaSeleccionada == -1) {
+                JOptionPane.showMessageDialog(this, "¡Selecciona un preso primero!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String identificacion = TablaPresos.getValueAt(filaSeleccionada, 4).toString();
+            Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
+
+            if (preso != null) {
+                cargarHistorialVisitantes(identificacion);
+                TabbedPDC.setSelectedIndex(5);
             } else {
                 JOptionPane.showMessageDialog(this, "No se encontró el preso", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -104,6 +125,82 @@ public class PersonalDeControl extends javax.swing.JFrame {
         TablaHistorialVisitas.revalidate();
         TablaHistorialVisitas.repaint();
 
+    }
+
+    private void cargarHistorialVisitantes(String identificacionPreso) {
+        DefaultTableModel modelo = (DefaultTableModel) TablaHistorialVisitantes.getModel();
+        modelo.setRowCount(0);
+
+        VisitaDAO visitaDAO = new VisitaDAO();
+        List<Visita> visitas = visitaDAO.cargarPorIdentificacionPreso(identificacionPreso);
+
+        for (Visita visita : visitas) {
+            for (Visitante visitante : visita.getVisitantes()) {
+                ImageIcon foto = null;
+                if (visitante.getFotoPath() != null && !visitante.getFotoPath().isEmpty()) {
+                    foto = cargarImagenVisitante(visitante.getFotoPath());
+                } else {
+                    foto = null;
+                }
+                modelo.addRow(new Object[]{
+                    foto,
+                    visitante.getId(),
+                    visitante.getNombreCompleto(),
+                    visitante.getEmail(),
+                    visitante.getEdad(),
+                    visitante.getIdentificacion(),
+                    visitante.getSexo(),
+                    visitante.getNacionalidad(),
+                    visitante.getRelacionConPreso(),
+                    identificacionPreso
+
+                });
+
+            }
+            TablaHistorialVisitantes.revalidate();
+            TablaHistorialVisitantes.repaint();
+
+        }
+
+    }
+
+    private ImageIcon cargarImagenVisitante(String path) {
+        if (path == null || !new File(path).exists()) {
+            return null;
+        }
+        try {
+            Image img = ImageIO.read(new File(path));
+            return new ImageIcon(img.getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private void configurarTablaImagenesVisitantes() {
+        TablaHistorialVisitantes.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value,
+                        isSelected, hasFocus, row, column);
+
+                if (column == 0 && value instanceof ImageIcon) {
+                    ImageIcon originalIcon = (ImageIcon) value;
+                    Image img = originalIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                    ImageIcon roundedIcon = new ImageIcon(createRoundedImage(img));
+                    label.setIcon(roundedIcon);
+                    label.setText("");
+                } else {
+                    label.setIcon(null);
+                }
+                label.setHorizontalAlignment(JLabel.CENTER);
+                return label;
+            }
+        });
+
+        TablaHistorialVisitantes.setRowHeight(65);
+        TablaHistorialVisitantes.getColumnModel().getColumn(0).setPreferredWidth(70);
     }
 
     @SuppressWarnings("unchecked")
@@ -163,7 +260,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         BotonBuscarPreso = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         ComboSeccionPreso = new javax.swing.JComboBox<>();
-        PanelAñadirVisita = new javax.swing.JPanel();
+        PanelGuardarVisita = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
@@ -174,7 +271,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel24 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
-        BotonAñadirVisitante = new javax.swing.JButton();
+        BotonGuardarVisitante = new javax.swing.JButton();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
         NacionalidadVisitante = new javax.swing.JTextField();
@@ -202,7 +299,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         TipoVisita = new javax.swing.JComboBox<>();
         jLabel32 = new javax.swing.JLabel();
         LugarVisita = new javax.swing.JComboBox<>();
-        BotonAñadirVisita = new javax.swing.JButton();
+        BotonGuardarVisita = new javax.swing.JButton();
         jLabel22 = new javax.swing.JLabel();
         jPanel11 = new javax.swing.JPanel();
         VistaPreviaVisitante = new javax.swing.JLabel();
@@ -292,7 +389,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel14.setText("AÑADIR VISITA");
+        jLabel14.setText("GUARDAR VISITA");
         jPanel5.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, -1, -1));
 
         PanelBotones.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 0, 260, 60));
@@ -462,8 +559,8 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         TabbedPDC.addTab("PRESOS", PanelListaPresos);
 
-        PanelAñadirVisita.setBackground(new java.awt.Color(255, 255, 255));
-        PanelAñadirVisita.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        PanelGuardarVisita.setBackground(new java.awt.Color(255, 255, 255));
+        PanelGuardarVisita.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel9.setBackground(new java.awt.Color(180, 180, 195));
         jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -513,13 +610,13 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel26.setText("Correo electronico:");
         jPanel9.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, -1, -1));
 
-        BotonAñadirVisitante.setText("Añadir visitante");
-        BotonAñadirVisitante.addActionListener(new java.awt.event.ActionListener() {
+        BotonGuardarVisitante.setText("Guardar visitante");
+        BotonGuardarVisitante.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BotonAñadirVisitanteActionPerformed(evt);
+                BotonGuardarVisitanteActionPerformed(evt);
             }
         });
-        jPanel9.add(BotonAñadirVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 470, 130, 30));
+        jPanel9.add(BotonGuardarVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 470, 130, 30));
 
         jLabel27.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel27.setForeground(new java.awt.Color(0, 0, 0));
@@ -545,20 +642,20 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jPanel9.add(EdadVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 300, 390, 30));
         jPanel9.add(PrimerNombreVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, 320, 30));
 
-        PanelAñadirVisita.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 520, 520));
+        PanelGuardarVisita.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 520, 520));
 
         jLabel5.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Cantidad de visitantes:");
-        PanelAñadirVisita.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+        PanelGuardarVisita.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
 
         CantidadDeVisitantesCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "1", "2" }));
-        PanelAñadirVisita.add(CantidadDeVisitantesCombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, 120, -1));
+        PanelGuardarVisita.add(CantidadDeVisitantesCombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, 120, -1));
 
         jLabel15.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(0, 0, 0));
         jLabel15.setText("Información de la visita");
-        PanelAñadirVisita.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 40, -1, -1));
+        PanelGuardarVisita.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 40, -1, -1));
 
         jPanel10.setBackground(new java.awt.Color(180, 180, 195));
         jPanel10.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -569,7 +666,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jPanel10.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
         jPanel10.add(IdentificacionPresoVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, 180, 30));
 
-        PanelAñadirVisita.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 70, 400, 70));
+        PanelGuardarVisita.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 70, 400, 70));
 
         AgregarImagenVisitante.setText("Añadir foto del visitante");
         AgregarImagenVisitante.addActionListener(new java.awt.event.ActionListener() {
@@ -577,67 +674,67 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 AgregarImagenVisitanteActionPerformed(evt);
             }
         });
-        PanelAñadirVisita.add(AgregarImagenVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 20, 170, -1));
+        PanelGuardarVisita.add(AgregarImagenVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 20, 170, -1));
 
         jLabel18.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(0, 0, 0));
         jLabel18.setText("Lugar de visita:");
-        PanelAñadirVisita.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(619, 320, 110, -1));
+        PanelGuardarVisita.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(619, 320, 110, -1));
 
         jLabel29.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel29.setForeground(new java.awt.Color(0, 0, 0));
         jLabel29.setText("Fecha de la visita:");
-        PanelAñadirVisita.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 160, -1, -1));
+        PanelGuardarVisita.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 160, -1, -1));
 
         jLabel30.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel30.setForeground(new java.awt.Color(0, 0, 0));
         jLabel30.setText("Hora de la visita:");
-        PanelAñadirVisita.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 200, -1, -1));
+        PanelGuardarVisita.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 200, -1, -1));
 
         DuracionVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "1", "2 " }));
-        PanelAñadirVisita.add(DuracionVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 230, 180, 30));
+        PanelGuardarVisita.add(DuracionVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 230, 180, 30));
 
         jLabel31.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel31.setForeground(new java.awt.Color(0, 0, 0));
         jLabel31.setText("Duración de la visita en horas:");
-        PanelAñadirVisita.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 240, -1, -1));
+        PanelGuardarVisita.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 240, -1, -1));
 
         TipoVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Familiar", "Intimas o Conyugales", "Legal", "Religiosas" }));
-        PanelAñadirVisita.add(TipoVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 270, 300, 30));
+        PanelGuardarVisita.add(TipoVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 270, 300, 30));
 
         jLabel32.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel32.setForeground(new java.awt.Color(0, 0, 0));
         jLabel32.setText("Tipo de visita:");
-        PanelAñadirVisita.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(619, 280, 100, -1));
+        PanelGuardarVisita.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(619, 280, 100, -1));
 
         LugarVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "Sala de visitas", "Cabinas de visitas conyugales", "Salas de visitas legales" }));
-        PanelAñadirVisita.add(LugarVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 310, 290, 30));
+        PanelGuardarVisita.add(LugarVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 310, 290, 30));
 
-        BotonAñadirVisita.setText("Añadir visita");
-        BotonAñadirVisita.addActionListener(new java.awt.event.ActionListener() {
+        BotonGuardarVisita.setText("Guardar visita");
+        BotonGuardarVisita.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BotonAñadirVisitaActionPerformed(evt);
+                BotonGuardarVisitaActionPerformed(evt);
             }
         });
-        PanelAñadirVisita.add(BotonAñadirVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 360, 110, 30));
+        PanelGuardarVisita.add(BotonGuardarVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 360, 110, 30));
 
         jLabel22.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel22.setForeground(new java.awt.Color(0, 0, 0));
         jLabel22.setText("Vista previa foto visitante:");
-        PanelAñadirVisita.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 370, -1, -1));
+        PanelGuardarVisita.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 370, -1, -1));
 
         jPanel11.setBackground(new java.awt.Color(255, 255, 255));
         jPanel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         jPanel11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         jPanel11.add(VistaPreviaVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 8, 140, 160));
 
-        PanelAñadirVisita.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 390, 160, 180));
-        PanelAñadirVisita.add(FechaVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 152, 270, 30));
+        PanelGuardarVisita.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 390, 160, 180));
+        PanelGuardarVisita.add(FechaVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 152, 270, 30));
 
         HoraVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "08:00", "09:00", "10:00" }));
-        PanelAñadirVisita.add(HoraVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 190, 270, 30));
+        PanelGuardarVisita.add(HoraVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 190, 270, 30));
 
-        TabbedPDC.addTab("GUARDAR VISITA", PanelAñadirVisita);
+        TabbedPDC.addTab("GUARDAR VISITA", PanelGuardarVisita);
 
         PanelActualizarInformacion.setBackground(new java.awt.Color(255, 255, 255));
         PanelActualizarInformacion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -828,6 +925,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private boolean validarCamposVisitante() {
+
         if (CantidadDeVisitantesCombo.getSelectedIndex() == 0) {
             mostrarError("Primero seleccione la cantidad de visitantes");
             limpiarCamposVisitante();
@@ -853,7 +951,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         try {
             int edad = Integer.parseInt(EdadVisitante.getText().trim());
-            if (edad < 0 || edad > 120) {
+            if (edad < 18 || edad > 120) {
                 mostrarError("La edad debe estar entre 0 y 110 años");
                 return false;
             }
@@ -872,6 +970,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
     }
 
     private boolean validarCamposVisita() {
+
         if (IdentificacionPresoVisita.getText().trim().isEmpty()) {
             mostrarError("Digite la identificacion del preso");
             return false;
@@ -920,10 +1019,16 @@ public class PersonalDeControl extends javax.swing.JFrame {
     }
 
 
-    private void BotonAñadirVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonAñadirVisitanteActionPerformed
+    private void BotonGuardarVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGuardarVisitanteActionPerformed
         if (!validarCamposVisitante()) {
             return;
 
+        }
+
+        try {
+            cantidadTotal = Integer.parseInt(CantidadDeVisitantesCombo.getSelectedItem().toString());
+        } catch (NumberFormatException e) {
+            cantidadTotal = 0;
         }
 
         String primerNombre = PrimerNombreVisitante.getText().trim();
@@ -941,7 +1046,6 @@ public class PersonalDeControl extends javax.swing.JFrame {
             return;
         }
 
-        int cantidadTotal;
         try {
             cantidadTotal = Integer.parseInt(CantidadDeVisitantesCombo.getSelectedItem().toString());
             if (cantidadTotal <= 0) {
@@ -965,7 +1069,29 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 return;
             }
         }
+        for (Visitante v : visitantesTemporales) {
+            if (v.getEmail().equals(email)) {
+                mostrarError("Ya se ha registrado un visitante con este correo electronico");
+                return;
+            }
+        }
+        if (identificacion.length() < 6 || identificacion.length() > 10) {
+            mostrarError("La identificación debe tener entre 6 y 10 caracteres.");
+            return;
+        }
 
+        int opcion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de que todos los datos están correctos?\nNo podrá modificar esta información después.",
+                "Confirmación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+
+        if (opcion != JOptionPane.YES_OPTION) {
+            JOptionPane.showMessageDialog(this,
+                    "Revise la información antes de guardar.",
+                    "Revisión pendiente", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         Visitante visitante = new Visitante(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, sexo, nacionalidad, identificacion, relacion, imagenVisitanteSeleccionada.getAbsolutePath(), email);
         visitantesTemporales.add(visitante);
         imagenesTemporales.add(imagenVisitanteSeleccionada);
@@ -985,7 +1111,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
                     "Información", JOptionPane.INFORMATION_MESSAGE);
         }
 
-    }//GEN-LAST:event_BotonAñadirVisitanteActionPerformed
+    }//GEN-LAST:event_BotonGuardarVisitanteActionPerformed
 
     private void AgregarImagenVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarImagenVisitanteActionPerformed
         JFileChooser fileChooser = new JFileChooser();
@@ -1017,11 +1143,17 @@ public class PersonalDeControl extends javax.swing.JFrame {
             }
     }//GEN-LAST:event_AgregarImagenVisitanteActionPerformed
     }
-    private void BotonAñadirVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonAñadirVisitaActionPerformed
+    private void BotonGuardarVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGuardarVisitaActionPerformed
         try {
+
+            if (cantidadTotal <= 0) {
+                mostrarError("Debe seleccionar y añadir al menos un visitante.");
+                return;
+            }
             if (!validarCamposVisita()) {
                 return;
             }
+
             String identificacionPreso = IdentificacionPresoVisita.getText().trim();
             String duracion = DuracionVisita.getSelectedItem().toString();
             String tipo = TipoVisita.getSelectedItem().toString();
@@ -1031,16 +1163,33 @@ public class PersonalDeControl extends javax.swing.JFrame {
             Date fechaSeleccionada = FechaVisita.getDate();
 
             if (fechaSeleccionada == null) {
-                JOptionPane.showMessageDialog(this, "Debe seleccionar una fecha de visita");
+                JOptionPane.showMessageDialog(this, "Debe seleccionar la fecha de la visita");
                 return;
             }
             LocalDate fecha = fechaSeleccionada.toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate();
+            if (fecha.isAfter(LocalDate.now())) {
+                mostrarError("La fecha de la visita no puede ser en el futuro \nEste formulario es para guardar visitas ya realizadas");
+                return;
+            }
 
             Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacionPreso);
             if (preso == null) {
                 mostrarError("No se encontró ningún preso con esa identificacion");
+                return;
+            }
+
+            int opcion = JOptionPane.showConfirmDialog(this,
+                    "¿Está seguro de que todos los datos están correctos?\nNo podrá modificar esta información después.",
+                    "Confirmacion",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+
+            if (opcion != JOptionPane.YES_OPTION) {
+                JOptionPane.showMessageDialog(this,
+                        "Revise la información antes de guardar.",
+                        "Revisión pendiente", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
 
@@ -1069,7 +1218,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         }
 
 
-    }//GEN-LAST:event_BotonAñadirVisitaActionPerformed
+    }//GEN-LAST:event_BotonGuardarVisitaActionPerformed
 
     private void BotonActualizarInformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonActualizarInformacionActionPerformed
         String contraseñaActual = ContraseñaActual.getText().trim();
@@ -1113,6 +1262,97 @@ public class PersonalDeControl extends javax.swing.JFrame {
             }
     }//GEN-LAST:event_SubirNuevaFotoPerfilActionPerformed
     }
+
+    private void cargarDatosPresoEnTabla() {
+        DefaultTableModel modelo = (DefaultTableModel) TablaPresos.getModel();
+        modelo.setRowCount(0);
+
+        PresoDAO presoDAO = new PresoDAO();
+        List<Preso> presos = presoDAO.cargarTodos();
+
+        for (Preso preso : presos) {
+            ImageIcon foto = null;
+            if (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty()) {
+                foto = cargarImagenPreso(preso.getFotoPath());
+            } else {
+                foto = null;
+            }
+
+            modelo.addRow(new Object[]{
+                foto,
+                preso.getId(),
+                preso.getNombreCompleto(),
+                preso.getEdad(),
+                preso.getIdentificacion(),
+                preso.getNacionalidad(),
+                preso.getCeldaAsignada()
+            });
+        }
+
+        TablaPresos.revalidate();
+        TablaPresos.repaint();
+    }
+
+    private ImageIcon cargarImagenPreso(String path) {
+        if (path == null || !new File(path).exists()) {
+            return null;
+        }
+
+        try {
+            Image img = ImageIO.read(new File(path));
+            return new ImageIcon(img.getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private void configurarTablaImagenesPreso() {
+        TablaPresos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value,
+                        isSelected, hasFocus, row, column);
+
+                if (column == 0 && value instanceof ImageIcon) {
+                    ImageIcon originalIcon = (ImageIcon) value;
+                    Image img = originalIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                    ImageIcon roundedIcon = new ImageIcon(createRoundedImage(img));
+                    label.setIcon(roundedIcon);
+                    label.setText("");
+                } else {
+                    label.setIcon(null);
+                }
+                label.setHorizontalAlignment(JLabel.CENTER);
+                return label;
+            }
+        });
+
+        TablaPresos.setRowHeight(65);
+        TablaPresos.getColumnModel().getColumn(0).setPreferredWidth(70);
+    }
+
+    private Image createRoundedImage(Image image) {
+        int width = image.getWidth(null);
+        int height = image.getHeight(null);
+
+        BufferedImage output = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = output.createGraphics();
+
+        output = g2.getDeviceConfiguration().createCompatibleImage(width, height, Transparency.TRANSLUCENT);
+        g2.dispose();
+        g2 = output.createGraphics();
+
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.fillRoundRect(0, 0, width, height, 20, 20);
+        g2.setComposite(AlphaComposite.SrcIn);
+        g2.drawImage(image, 0, 0, null);
+        g2.dispose();
+
+        return output;
+    }
+
     private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked
         TabbedPDC.setSelectedIndex(0);
     }//GEN-LAST:event_jPanel3MouseClicked
@@ -1170,11 +1410,11 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JTextField BarraDeBusquedaVisitante;
     private javax.swing.JTextField BarraDeBusquedaVisitante2;
     private javax.swing.JButton BotonActualizarInformacion;
-    private javax.swing.JButton BotonAñadirVisita;
-    private javax.swing.JButton BotonAñadirVisitante;
     private javax.swing.JButton BotonBuscarPreso;
     private javax.swing.JButton BotonBuscarVisitantePorIdentificacion;
     private javax.swing.JButton BotonBuscarVisitantePorIdentificacion2;
+    private javax.swing.JButton BotonGuardarVisita;
+    private javax.swing.JButton BotonGuardarVisitante;
     private javax.swing.JComboBox<String> CantidadDeVisitantesCombo;
     private javax.swing.JComboBox<String> ComboSeccionPreso;
     private javax.swing.JTextField ContraseñaActual;
@@ -1203,8 +1443,8 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JTextField NuevoSegundoApellido;
     private javax.swing.JTextField NuevoSegundoNombre;
     private javax.swing.JPanel PanelActualizarInformacion;
-    private javax.swing.JPanel PanelAñadirVisita;
     private javax.swing.JPanel PanelBotones;
+    private javax.swing.JPanel PanelGuardarVisita;
     private javax.swing.JPanel PanelHistorialVisitantes;
     private javax.swing.JPanel PanelHistorialVisitas;
     private javax.swing.JPanel PanelListaPresos;

@@ -142,6 +142,7 @@ public class Oficial extends javax.swing.JFrame {
         jSeparator11 = new javax.swing.JSeparator();
         jComboBox1 = new javax.swing.JComboBox<>();
         jPanel19 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -662,6 +663,9 @@ public class Oficial extends javax.swing.JFrame {
 
         TabbedOficial.addTab("ASIGNAR SANCIONES", PanelAsignarSanciones);
 
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        TabbedOficial.addTab("LISTA DE SANCIONES", jPanel4);
+
         getContentPane().add(TabbedOficial, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 1100, 630));
 
         pack();
@@ -875,6 +879,7 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
