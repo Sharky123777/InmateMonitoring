@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <NonVisualComponents>
+    <Container class="javax.swing.JPopupMenu" name="ppMenuTablaPresos">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+        <Property name="useNullLayout" type="boolean" value="true"/>
+      </Layout>
+    </Container>
+  </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
@@ -1072,8 +1080,8 @@
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="3">
                     <StringItem index="0" value="&lt; Seleccionar &gt;"/>
-                    <StringItem index="1" value="1 visitante"/>
-                    <StringItem index="2" value="2 visitantes"/>
+                    <StringItem index="1" value="1"/>
+                    <StringItem index="2" value="2"/>
                   </StringArray>
                 </Property>
               </Properties>
@@ -1207,11 +1215,10 @@
             <Component class="javax.swing.JComboBox" name="DuracionVisita">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
+                  <StringArray count="3">
                     <StringItem index="0" value="&lt; Seleccionar &gt;"/>
-                    <StringItem index="1" value="1 hora"/>
-                    <StringItem index="2" value="2 horas"/>
-                    <StringItem index="3" value="3 horas"/>
+                    <StringItem index="1" value="1"/>
+                    <StringItem index="2" value="2 "/>
                   </StringArray>
                 </Property>
               </Properties>
@@ -1220,7 +1227,7 @@
               </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="770" y="230" width="250" height="30"/>
+                  <AbsoluteConstraints x="840" y="230" width="180" height="30"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -1232,7 +1239,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Duraci&#xf3;n de la visita:"/>
+                <Property name="text" type="java.lang.String" value="Duraci&#xf3;n de la visita en horas:"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -1356,17 +1363,30 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JTextField" name="HoraVisita">
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="750" y="190" width="270" height="30"/>
-                </Constraint>
-              </Constraints>
-            </Component>
             <Component class="com.toedter.calendar.JDateChooser" name="FechaVisita">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints x="750" y="152" width="270" height="30"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="HoraVisita">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="4">
+                    <StringItem index="0" value="&lt; Seleccionar &gt;"/>
+                    <StringItem index="1" value="08:00"/>
+                    <StringItem index="2" value="09:00"/>
+                    <StringItem index="3" value="10:00"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                  <AbsoluteConstraints x="750" y="190" width="270" height="30"/>
                 </Constraint>
               </Constraints>
             </Component>

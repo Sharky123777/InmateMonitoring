@@ -1,2 +1,40 @@
-{
-}
+[
+  {
+    "id": 1,
+    "fechaVisita": "2024-04-10",
+    "horaVisita": "09:00",
+    "duracionVisitaEnHoras": "1",
+    "tipoVisita": "Familiar",
+    "lugarVisita": "Sala de visitas",
+    "visitantes": [
+      {
+        "relacionConPreso": "Hermano/Hermana",
+        "fotoPath": "C:\\Users\\nicol\\Downloads\\PoliciasHombres\\Policia6.jpg",
+        "email": "Lucas123@gmail.com",
+        "id": 1,
+        "primerNombre": "Lucas",
+        "segundoNombre": "Andres",
+        "primerApellido": "Crespo",
+        "segundoApellido": "Gomez",
+        "edad": 25,
+        "sexo": "Femenino",
+        "nacionalidad": "Colombia",
+        "identificacion": "1234578933"
+      },
+      {
+        "relacionConPreso": "Conocido/Conocida",
+        "fotoPath": "C:\\Users\\nicol\\Downloads\\PoliciasMujeres\\PoliciaMujer3.jpg",
+        "email": "Maria123@gmail.com",
+        "id": 2,
+        "primerNombre": "Maria",
+        "segundoNombre": "Camila",
+        "primerApellido": "Torres",
+        "segundoApellido": "Tous",
+        "edad": 23,
+        "sexo": "Femenino",
+        "nacionalidad": "Colombia",
+        "identificacion": "43625342567"
+      }
+    ]
+  }
+]

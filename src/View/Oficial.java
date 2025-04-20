@@ -16,6 +16,7 @@ public class Oficial extends javax.swing.JFrame {
 
     public Oficial() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     @SuppressWarnings("unchecked")

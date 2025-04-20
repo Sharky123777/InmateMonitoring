@@ -10,18 +10,18 @@ public class Visita {
     private int id;
     private LocalDate fechaVisita;
     private LocalTime horaVisita;
-    private String duracionVisita;
+    private String duracionVisitaEnHoras;
     private String tipoVisita;
     private String lugarVisita;
     private Preso preso;
     private List<Visitante> visitantes;
     private static int ultimoId = 0;
 
-    public Visita(int id, LocalDate fechaVisita, LocalTime horaVisita, String duracionVisita, String tipoVisita, String lugarVisita, Preso preso, List<Visitante> visitantes) {
+    public Visita(int id, LocalDate fechaVisita, LocalTime horaVisita, String duracionVisitaEnHoras, String tipoVisita, String lugarVisita, Preso preso, List<Visitante> visitantes) {
         this.id = ++ultimoId;
         this.fechaVisita = fechaVisita;
         this.horaVisita = horaVisita;
-        this.duracionVisita = duracionVisita;
+        this.duracionVisitaEnHoras = duracionVisitaEnHoras;
         this.tipoVisita = tipoVisita;
         this.lugarVisita = lugarVisita;
         this.preso = preso;
@@ -52,12 +52,12 @@ public class Visita {
         this.horaVisita = horaVisita;
     }
 
-    public String getDuracionVisita() {
-        return duracionVisita;
+    public String getDuracionVisitaEnHoras() {
+        return duracionVisitaEnHoras;
     }
 
-    public void setDuracionVisita(String duracionVisita) {
-        this.duracionVisita = duracionVisita;
+    public void setDuracionVisitaEnHoras(String duracionVisitaEnHoras) {
+        this.duracionVisitaEnHoras = duracionVisitaEnHoras;
     }
 
     public String getTipoVisita() {
@@ -99,5 +99,4 @@ public class Visita {
     public static void setUltimoId(int ultimoId) {
         Visita.ultimoId = ultimoId;
     }
-
 }
