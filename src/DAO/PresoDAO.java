@@ -34,8 +34,8 @@ import javax.swing.JOptionPane;
 
 public class PresoDAO {
 
-    private static final String JSON_FILE = "C:\\Users\\ASUS\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\presos.json";
-    private static final String IMAGES_DIR = "C:\\Users\\ASUS\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\Images\\";
+    private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\presos.json\\";
+    private static final String IMAGES_DIR = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\";
 
     private Gson gson = new GsonBuilder()
             .setPrettyPrinting()
@@ -196,7 +196,7 @@ public class PresoDAO {
         return eliminado;
     }
 
-  public boolean actualizarPresoConDelitos(
+  public boolean actualizarPreso(
     String identificacionOriginal,
     String nuevoPrimerNombre,
     String nuevoSegundoNombre,
@@ -213,8 +213,7 @@ public class PresoDAO {
     String nuevoNivelSeguridad,
     Boolean nuevoEnAislamiento,
     String nuevoNivelRiesgo,
-    File nuevaFoto,
-    List<Delito> nuevosDelitos) {
+    File nuevaFoto) {
 List<Preso> presos = cargarTodos();
 boolean encontrado = false;
 
@@ -245,9 +244,7 @@ for (Preso preso : presos) {
         }
         if (nuevaFoto != null) actualizarFotoPreso(preso, nuevaFoto);
 
-        if (nuevosDelitos != null && !nuevosDelitos.isEmpty()) {
-            agregarDelitosAExpediente(preso, nuevosDelitos);
-        }
+       
 
         break;
     }
@@ -306,21 +303,31 @@ for (Preso preso : presos) {
         }
     }
 
-    private void agregarDelitosAExpediente(Preso preso, List<Delito> nuevosDelitos) {
-        ExpedienteJudicial expediente = preso.getExpediente();
-        if(expediente == null) {
-            expediente = new ExpedienteJudicial();
-            preso.setExpediente(expediente);
-        }
+public boolean agregarDelitosAExpediente(Preso preso, List<Delito> nuevosDelitos) {
+    ExpedienteJudicial expediente = preso.getExpediente();
+    if (expediente == null) {
+        expediente = new ExpedienteJudicial();
+        preso.setExpediente(expediente);
+    }
 
-        expediente.getDelitos().addAll(nuevosDelitos);
-        preso.getDelitos().addAll(nuevosDelitos);
+    expediente.getDelitos().addAll(nuevosDelitos);
+    preso.getDelitos().addAll(nuevosDelitos);
 
-        DelitoDAO delitoDAO = new DelitoDAO();
-        for(Delito delito : nuevosDelitos) {
-            delitoDAO.guardarDelito(delito);
+    DelitoDAO delitoDAO = new DelitoDAO();
+    for (Delito delito : nuevosDelitos) {
+        delitoDAO.guardarDelito(delito);
+    }
+
+    List<Preso> presos = cargarTodos();
+    for (int i = 0; i < presos.size(); i++) {
+        if (presos.get(i).getIdentificacion().equals(preso.getIdentificacion())) {
+            presos.set(i, preso);
+            return guardarCambios(presos); 
         }
     }
+
+    return false;
+}
 
     private boolean guardarCambios(List<Preso> presos) {
         try {

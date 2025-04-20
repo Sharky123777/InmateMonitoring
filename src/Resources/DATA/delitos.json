@@ -30,5 +30,61 @@
     "gravedad": "Media",
     "descripcion": "dc",
     "fechaComision": "2025-04-08"
+  },
+  {
+    "codigo": 265,
+    "nombre": "Daño en bien ajeno",
+    "articuloLey": "Artículo 265",
+    "gravedad": "Alta",
+    "descripcion": "kk",
+    "fechaComision": "2025-04-10"
+  },
+  {
+    "codigo": 189,
+    "nombre": "Violación de habitación ajena",
+    "articuloLey": "Artículo 189",
+    "gravedad": "Media",
+    "descripcion": "kmk",
+    "fechaComision": "2025-04-10"
+  },
+  {
+    "codigo": 208,
+    "nombre": "Acceso carnal abusivo con menor de 14 años",
+    "articuloLey": "Artículo 208",
+    "gravedad": "Media",
+    "descripcion": "mkkmk",
+    "fechaComision": "2025-04-16"
+  },
+  {
+    "codigo": 104,
+    "nombre": "Homicidio agravado",
+    "articuloLey": "Artículo 104",
+    "gravedad": "Alta",
+    "descripcion": "swd",
+    "fechaComision": "2025-04-21"
+  },
+  {
+    "codigo": 265,
+    "nombre": "Daño en bien ajeno",
+    "articuloLey": "Artículo 265",
+    "gravedad": "Media",
+    "descripcion": "",
+    "fechaComision": "2025-04-05"
+  },
+  {
+    "codigo": 233,
+    "nombre": "Inasistencia alimentaria",
+    "articuloLey": "Artículo 233",
+    "gravedad": "Baja",
+    "descripcion": "Se vio inasistiendi ajsiasa",
+    "fechaComision": "2025-04-08"
+  },
+  {
+    "codigo": 246,
+    "nombre": "Estafa",
+    "articuloLey": "Artículo 246",
+    "gravedad": "Baja",
+    "descripcion": "ESTAFO",
+    "fechaComision": "2025-04-10"
   }
 ]
