@@ -12,6 +12,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -257,9 +259,8 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         TablaPresos = new javax.swing.JTable();
         BarraDeBusquedaPreso = new javax.swing.JTextField();
-        BotonBuscarPreso = new javax.swing.JButton();
-        jPanel8 = new javax.swing.JPanel();
-        ComboSeccionPreso = new javax.swing.JComboBox<>();
+        BotonCargarTodos = new javax.swing.JButton();
+        BotonBuscarPresoIdentificacion = new javax.swing.JButton();
         PanelGuardarVisita = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
@@ -333,14 +334,10 @@ public class PersonalDeControl extends javax.swing.JFrame {
         PanelHistorialVisitas = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         TablaHistorialVisitas = new javax.swing.JTable();
-        BarraDeBusquedaVisitante = new javax.swing.JTextField();
-        BotonBuscarVisitantePorIdentificacion = new javax.swing.JButton();
         jLabel48 = new javax.swing.JLabel();
         PanelHistorialVisitantes = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         TablaHistorialVisitantes = new javax.swing.JTable();
-        BarraDeBusquedaVisitante2 = new javax.swing.JTextField();
-        BotonBuscarVisitantePorIdentificacion2 = new javax.swing.JButton();
         jLabel34 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -517,20 +514,20 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         TablaPresos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Foto", "Id", "Nombre completo", "Edad", "Identificacion", "Nacionalidad"
+                "Foto", "Id", "Nombre completo", "Edad", "Identificacion", "Nacionalidad", "Celda", "Seccion"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, true
+                false, false, false, false, false, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -543,19 +540,24 @@ public class PersonalDeControl extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(TablaPresos);
 
-        PanelListaPresos.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, 980, 460));
-        PanelListaPresos.add(BarraDeBusquedaPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 30, 600, 30));
+        PanelListaPresos.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 110, 980, 440));
+        PanelListaPresos.add(BarraDeBusquedaPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 30, 640, 30));
 
-        BotonBuscarPreso.setText("Buscar");
-        PanelListaPresos.add(BotonBuscarPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 30, 90, 30));
+        BotonCargarTodos.setText("Cargar Todos Los presos");
+        BotonCargarTodos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonCargarTodosActionPerformed(evt);
+            }
+        });
+        PanelListaPresos.add(BotonCargarTodos, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 70, 170, -1));
 
-        jPanel8.setBackground(new java.awt.Color(180, 180, 195));
-        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        ComboSeccionPreso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seccion A", "Seccion B", "Seccion C" }));
-        jPanel8.add(ComboSeccionPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, 120, 30));
-
-        PanelListaPresos.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, 200, 50));
+        BotonBuscarPresoIdentificacion.setText("Buscar preso por identificacion");
+        BotonBuscarPresoIdentificacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonBuscarPresoIdentificacionActionPerformed(evt);
+            }
+        });
+        PanelListaPresos.add(BotonBuscarPresoIdentificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 30, 200, 30));
 
         TabbedPDC.addTab("PRESOS", PanelListaPresos);
 
@@ -862,16 +864,12 @@ public class PersonalDeControl extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(TablaHistorialVisitas);
 
-        PanelHistorialVisitas.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 1040, 450));
-        PanelHistorialVisitas.add(BarraDeBusquedaVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 690, 30));
-
-        BotonBuscarVisitantePorIdentificacion.setText("Buscar");
-        PanelHistorialVisitas.add(BotonBuscarVisitantePorIdentificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 30, 80, 30));
+        PanelHistorialVisitas.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 1040, 490));
 
         jLabel48.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel48.setForeground(new java.awt.Color(0, 0, 0));
         jLabel48.setText("HISTORIAL DE VISITAS");
-        PanelHistorialVisitas.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+        PanelHistorialVisitas.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 30, -1, -1));
 
         TabbedPDC.addTab("HISTORIAL DE VISITAS", PanelHistorialVisitas);
 
@@ -906,16 +904,12 @@ public class PersonalDeControl extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(TablaHistorialVisitantes);
 
-        PanelHistorialVisitantes.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 1040, 450));
-        PanelHistorialVisitantes.add(BarraDeBusquedaVisitante2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 690, 30));
-
-        BotonBuscarVisitantePorIdentificacion2.setText("Buscar");
-        PanelHistorialVisitantes.add(BotonBuscarVisitantePorIdentificacion2, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 30, 80, 30));
+        PanelHistorialVisitantes.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 1040, 490));
 
         jLabel34.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel34.setForeground(new java.awt.Color(0, 0, 0));
         jLabel34.setText("HISTORIAL DE VISITANTES");
-        PanelHistorialVisitantes.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+        PanelHistorialVisitantes.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 30, -1, -1));
 
         TabbedPDC.addTab("HISTORIAL VISITANTES", PanelHistorialVisitantes);
 
@@ -1004,9 +998,9 @@ public class PersonalDeControl extends javax.swing.JFrame {
         IdentificacionVisitante.setText("");
         EmailVisitante.setText("");
         EdadVisitante.setText("");
-        SexoVisitante.setSelectedItem(0);
+        SexoVisitante.setSelectedIndex(0);
         NacionalidadVisitante.setText("");
-        RelacionConPresoVisitante.setSelectedItem(0);
+        RelacionConPresoVisitante.setSelectedIndex(0);
         VistaPreviaVisitante.setIcon(null);
     }
 
@@ -1285,7 +1279,9 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 preso.getEdad(),
                 preso.getIdentificacion(),
                 preso.getNacionalidad(),
-                preso.getCeldaAsignada()
+                preso.getCeldaAsignada(),
+                preso.getSeccionAsignada()
+
             });
         }
 
@@ -1369,6 +1365,82 @@ public class PersonalDeControl extends javax.swing.JFrame {
         TabbedPDC.setSelectedIndex(3);
     }//GEN-LAST:event_jPanel15MouseClicked
 
+    private void BotonCargarTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCargarTodosActionPerformed
+        DefaultTableModel modelo = (DefaultTableModel) TablaPresos.getModel();
+        modelo.setRowCount(0);
+
+        PresoDAO presoDAO = new PresoDAO();
+        List<Preso> presos = presoDAO.cargarTodos();
+
+        for (Preso preso : presos) {
+            ImageIcon foto = null;
+            if (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty()) {
+                foto = cargarImagenPreso(preso.getFotoPath());
+            } else {
+                foto = new ImageIcon(getClass().getResource("/images/default_profile.png"));
+            }
+
+            modelo.addRow(new Object[]{
+                foto,
+                preso.getId(),
+                preso.getNombreCompleto(),
+                preso.getEdad(),
+                preso.getIdentificacion(),
+                preso.getNacionalidad(),
+                preso.getCeldaAsignada(),
+                preso.getSeccionAsignada()
+
+            });
+        }
+
+        TablaPresos.revalidate();
+        TablaPresos.repaint();
+    }//GEN-LAST:event_BotonCargarTodosActionPerformed
+
+    private void BotonBuscarPresoIdentificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonBuscarPresoIdentificacionActionPerformed
+        BotonBuscarPresoIdentificacion.addActionListener(new ActionListener() {
+            @Override
+
+            public void actionPerformed(ActionEvent e) {
+                String idBuscado = BarraDeBusquedaPreso.getText().trim();
+                if (idBuscado.isEmpty()) {
+                    return;
+                }
+
+                String identificacion = BarraDeBusquedaPreso.getText();
+                List<Preso> todos = new PresoDAO().cargarTodos();
+                DefaultTableModel modelo = (DefaultTableModel) TablaPresos.getModel();
+                modelo.setRowCount(0);
+
+                for (Preso preso : todos) {
+                    if (preso.getIdentificacion().equalsIgnoreCase(identificacion)) {
+
+                        ImageIcon foto = null;
+                        if (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty()) {
+                            foto = cargarImagenPreso(preso.getFotoPath());
+                        } else {
+                            foto = null;
+                        }
+                        modelo.addRow(new Object[]{
+                            foto,
+                            preso.getId(),
+                            preso.getNombreCompleto(),
+                            preso.getEdad(),
+                            preso.getIdentificacion(),
+                            preso.getNacionalidad(),
+                            preso.getCeldaAsignada(),
+                            preso.getSeccionAsignada()
+
+                        });
+                        break;
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se encontro ningun preso con la identificación " + identificacion);
+                    }
+                }
+            }
+        });
+    }//GEN-LAST:event_BotonBuscarPresoIdentificacionActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1407,16 +1479,12 @@ public class PersonalDeControl extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AgregarImagenVisitante;
     private javax.swing.JTextField BarraDeBusquedaPreso;
-    private javax.swing.JTextField BarraDeBusquedaVisitante;
-    private javax.swing.JTextField BarraDeBusquedaVisitante2;
     private javax.swing.JButton BotonActualizarInformacion;
-    private javax.swing.JButton BotonBuscarPreso;
-    private javax.swing.JButton BotonBuscarVisitantePorIdentificacion;
-    private javax.swing.JButton BotonBuscarVisitantePorIdentificacion2;
+    private javax.swing.JButton BotonBuscarPresoIdentificacion;
+    private javax.swing.JButton BotonCargarTodos;
     private javax.swing.JButton BotonGuardarVisita;
     private javax.swing.JButton BotonGuardarVisitante;
     private javax.swing.JComboBox<String> CantidadDeVisitantesCombo;
-    private javax.swing.JComboBox<String> ComboSeccionPreso;
     private javax.swing.JTextField ContraseñaActual;
     private javax.swing.JComboBox<String> DuracionVisita;
     private javax.swing.JLabel EdadPDC;
@@ -1525,7 +1593,6 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
