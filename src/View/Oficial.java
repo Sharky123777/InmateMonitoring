@@ -1,8 +1,10 @@
 package View;
 
+import DAO.CitaMedicaDAO;
 import DAO.GuardiaDAO;
 import DAO.PresoDAO;
 import DAO.SancionDAO;
+import Model.CitaMedica;
 import Model.Guardia;
 import Model.Preso;
 import Model.Sancion;
@@ -41,6 +43,7 @@ public class Oficial extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         FechaSancion.getDateEditor().setEnabled(false);
+        FechaCita.getDateEditor().setEnabled(false);
         cargarDatosPresoEnTabla();
         cargarDatosGuardiaEnTabla();
         configurarTablaImagenesPreso();
@@ -199,8 +202,8 @@ public class Oficial extends javax.swing.JFrame {
         jLabel53 = new javax.swing.JLabel();
         jLabel54 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        Motivo = new javax.swing.JTextArea();
-        jButton2 = new javax.swing.JButton();
+        MotivoCita = new javax.swing.JTextArea();
+        botonAgendarCita = new javax.swing.JButton();
         jSeparator10 = new javax.swing.JSeparator();
         FechaCita = new com.toedter.calendar.JDateChooser();
         jPanel18 = new javax.swing.JPanel();
@@ -620,19 +623,19 @@ public class Oficial extends javax.swing.JFrame {
         jLabel54.setText("Fecha de la cita:");
         jPanel2.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, -1, -1));
 
-        Motivo.setColumns(20);
-        Motivo.setRows(5);
-        jScrollPane3.setViewportView(Motivo);
+        MotivoCita.setColumns(20);
+        MotivoCita.setRows(5);
+        jScrollPane3.setViewportView(MotivoCita);
 
         jPanel2.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 120, 360, 230));
 
-        jButton2.setText("Agendar cita medica");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        botonAgendarCita.setText("Agendar cita medica");
+        botonAgendarCita.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                botonAgendarCitaActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 400, 190, 30));
+        jPanel2.add(botonAgendarCita, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 400, 190, 30));
         jPanel2.add(jSeparator10, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 50, 390, 20));
         jPanel2.add(FechaCita, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 380, 30));
 
@@ -1154,10 +1157,95 @@ public class Oficial extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_BotonAsignarSancionActionPerformed
+    private boolean validarCamposCita() {
+        String identificacionPreso = IdentificacionPresoCita.getText().trim();
+        if (identificacionPreso.isEmpty()) {
+            mostrarError("Debe ingresar la identificación del preso");
+            return false;
+        }
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        String identificacionGuardia = IdentificacionGuardia.getText().trim();
+        if (identificacionGuardia.isEmpty()) {
+            mostrarError("Debe ingresar la identificación del guardia");
+            return false;
+        }
+
+        String motivoCita = MotivoCita.getText().trim();
+        if (motivoCita.isEmpty()) {
+            mostrarError("Debe especificar el motivo de la cita");
+            return false;
+        }
+
+        Date fechaSeleccionada = FechaCita.getDate();
+        if (fechaSeleccionada == null) {
+            mostrarError("Debe seleccionar una fecha para la cita");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void limpiarCamposCita() {
+        IdentificacionPresoCita.setText("");
+        IdentificacionGuardia.setText("");
+        MotivoCita.setText("");
+        FechaCita.setDate(null);
+    }
+
+    private void botonAgendarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgendarCitaActionPerformed
+        if (!validarCamposCita()) {
+            return;
+
+        }
+
+        String identificacionPresoCita = IdentificacionPresoCita.getText().trim();
+        String identificacionGuardia = IdentificacionGuardia.getText().trim();
+        Date fechaSeleccionada = FechaCita.getDate();
+        String motivoCita = MotivoCita.getText().trim();
+
+        if (identificacionPresoCita.isEmpty() || identificacionGuardia.isEmpty() || motivoCita.isEmpty() || fechaSeleccionada == null) {
+            mostrarError("Debe completar todos los campos.");
+            return;
+        }
+
+        if (fechaSeleccionada == null) {
+            mostrarError("Debe seleccionar una fecha");
+            return;
+        }
+
+        LocalDate fecha = fechaSeleccionada.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+
+        if (fecha.isBefore(LocalDate.now())) {
+            mostrarError("La fecha de la cita no puede ser en el pasado");
+            return;
+        }
+
+        try {
+            Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacionPresoCita);
+            Guardia guardia = new GuardiaDAO().obtenerGuardiaPorCedula(identificacionGuardia);
+
+            if (preso == null) {
+                mostrarError("No se encontró ningún preso con esa identificación");
+                return;
+            }
+
+            if (guardia == null) {
+                mostrarError("No se encontró ningún guardia con esa identificación");
+                return;
+            }
+
+            CitaMedica nuevaCita = new CitaMedica(0, fecha, motivoCita, guardia, preso);
+            new CitaMedicaDAO().guardarCita(nuevaCita);
+
+            JOptionPane.showMessageDialog(this, "La cita se agendó con éxito");
+            limpiarCamposCita();
+
+        } catch (Exception e) {
+            mostrarError("Error al agendar la cita: " + e.getMessage());
+        }
+    }//GEN-LAST:event_botonAgendarCitaActionPerformed
 
     private void ComboTipoSancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboTipoSancionActionPerformed
         // TODO add your handling code here:
@@ -1380,7 +1468,7 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JLabel IdentificacionOficial;
     private javax.swing.JTextField IdentificacionPresoCita;
     private javax.swing.JTextField IdentificacionPresoSancion;
-    private javax.swing.JTextArea Motivo;
+    private javax.swing.JTextArea MotivoCita;
     private javax.swing.JTextArea MotivoSancion;
     private javax.swing.JLabel NacionalidadOficial;
     private javax.swing.JLabel NombreCompletoOficial;
@@ -1409,8 +1497,8 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> TipoSancion;
     private javax.swing.JLabel TurnoOficial;
     private javax.swing.JLabel VistaPreviaNuevaFoto;
+    private javax.swing.JButton botonAgendarCita;
     private javax.swing.JButton botonIrPanelActualizar;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
