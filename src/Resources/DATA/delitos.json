@@ -1,90 +1,173 @@
 [
   {
-    "codigo": 221,
-    "nombre": "Calumnia",
-    "articuloLey": "",
+    "id": 1,
+    "codigo": 265,
+    "nombre": "Daño en bien ajeno",
+    "articuloLey": "Artículo 265",
     "gravedad": "Media",
-    "descripcion": "kdij",
-    "fechaComision": "2025-04-03"
+    "descripcion": "DAÑO UNA BLICLETA",
+    "fechaComision": "2025-04-15"
   },
   {
-    "codigo": 131,
-    "nombre": "Omisión de socorro",
-    "articuloLey": "",
-    "gravedad": "Media",
-    "descripcion": "dc",
+    "id": 2,
+    "codigo": 109,
+    "nombre": "Homicidio culposo",
+    "articuloLey": "Artículo 109",
+    "gravedad": "Alta",
+    "descripcion": "Mato a una persona pero de manera accidental",
     "fechaComision": "2025-04-08"
   },
   {
-    "codigo": 221,
-    "nombre": "Calumnia",
-    "articuloLey": "",
-    "gravedad": "Media",
-    "descripcion": "kdij",
-    "fechaComision": "2025-04-03"
+    "id": 3,
+    "codigo": 178,
+    "nombre": "Tortura",
+    "articuloLey": "Artículo 178",
+    "gravedad": "Alta",
+    "descripcion": "Torturaba a todos sus clientes",
+    "fechaComision": "2025-04-14"
   },
   {
-    "codigo": 131,
-    "nombre": "Omisión de socorro",
-    "articuloLey": "",
-    "gravedad": "Media",
-    "descripcion": "dc",
-    "fechaComision": "2025-04-08"
-  },
-  {
+    "id": 4,
     "codigo": 265,
     "nombre": "Daño en bien ajeno",
     "articuloLey": "Artículo 265",
     "gravedad": "Alta",
-    "descripcion": "kk",
-    "fechaComision": "2025-04-10"
+    "descripcion": "Monto una casa para dañar el bien ajeno",
+    "fechaComision": "2025-04-01"
   },
   {
-    "codigo": 189,
-    "nombre": "Violación de habitación ajena",
-    "articuloLey": "Artículo 189",
+    "id": 5,
+    "codigo": 220,
+    "nombre": "Injuria",
+    "articuloLey": "Artículo 220",
     "gravedad": "Media",
-    "descripcion": "kmk",
+    "descripcion": "Estuvo injuriando todo",
+    "fechaComision": "2025-04-08"
+  },
+  {
+    "id": 6,
+    "codigo": 269,
+    "nombre": "Acceso abusivo a sistema informático",
+    "articuloLey": "Artículo 269",
+    "gravedad": "Baja",
+    "descripcion": "Abuso del sistema",
+    "fechaComision": "2025-04-03"
+  },
+  {
+    "id": 7,
+    "codigo": 405,
+    "nombre": "Cohecho",
+    "articuloLey": "Artículo 405",
+    "gravedad": "Media",
+    "descripcion": "Perseguia a una persona durante la noche",
+    "fechaComision": "2025-04-01"
+  },
+  {
+    "id": 8,
+    "codigo": 244,
+    "nombre": "Extorsión",
+    "articuloLey": "Artículo 244 - Extorsión",
+    "gravedad": "Alta",
+    "descripcion": "Extorsiono a un hombre",
+    "fechaComision": "2025-04-01"
+  },
+  {
+    "id": 9,
+    "codigo": 411,
+    "nombre": "Tráfico de influencias",
+    "articuloLey": "Artículo 411",
+    "gravedad": "Media",
+    "descripcion": "Traficaba malas influencias",
+    "fechaComision": "2025-04-08"
+  },
+  {
+    "id": 10,
+    "codigo": 404,
+    "nombre": "Concusión",
+    "articuloLey": "Artículo 404",
+    "gravedad": "Media",
+    "descripcion": "xxxxxxxxxxxx",
     "fechaComision": "2025-04-10"
   },
   {
+    "id": 11,
+    "codigo": 296,
+    "nombre": "Usurpación de derechos",
+    "articuloLey": "Artículo 296",
+    "gravedad": "Baja",
+    "descripcion": "Se hacia pasar por africana",
+    "fechaComision": "2025-04-04"
+  },
+  {
+    "id": 12,
+    "codigo": 447,
+    "nombre": "Receptación",
+    "articuloLey": "Artículo 447",
+    "gravedad": "Baja",
+    "descripcion": "Se paro en medio de la carretera",
+    "fechaComision": "2025-04-09"
+  },
+  {
+    "id": 13,
+    "codigo": 249,
+    "nombre": "Abuso de confianza",
+    "articuloLey": "Artículo 249",
+    "gravedad": "Baja",
+    "descripcion": "se pasaba",
+    "fechaComision": "2025-04-02"
+  },
+  {
+    "id": 14,
     "codigo": 208,
     "nombre": "Acceso carnal abusivo con menor de 14 años",
     "articuloLey": "Artículo 208",
     "gravedad": "Media",
-    "descripcion": "mkkmk",
-    "fechaComision": "2025-04-16"
+    "descripcion": "Abuso de una persona en estado psicoactivo",
+    "fechaComision": "2025-04-22"
   },
   {
-    "codigo": 104,
-    "nombre": "Homicidio agravado",
-    "articuloLey": "Artículo 104",
+    "id": 15,
+    "codigo": 208,
+    "nombre": "Acceso carnal abusivo con menor de 14 años",
+    "articuloLey": "Artículo 208",
+    "gravedad": "Media",
+    "descripcion": "Abuso de una persona en estado psicoactivo",
+    "fechaComision": "2025-04-22"
+  },
+  {
+    "id": 16,
+    "codigo": 447,
+    "nombre": "Receptación",
+    "articuloLey": "Artículo 447",
+    "gravedad": "Media",
+    "descripcion": "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+    "fechaComision": "2025-04-15"
+  },
+  {
+    "id": 17,
+    "codigo": 411,
+    "nombre": "Tráfico de influencias",
+    "articuloLey": "Artículo 411",
     "gravedad": "Alta",
-    "descripcion": "swd",
+    "descripcion": "Estaba traficando hierba medicianal\nhierba buena, hierba mala",
+    "fechaComision": "2025-04-01"
+  },
+  {
+    "id": 18,
+    "codigo": 412,
+    "nombre": "Enriquecimiento ilícito",
+    "articuloLey": "Artículo 412",
+    "gravedad": "Alta",
+    "descripcion": "Fue visto traficando",
     "fechaComision": "2025-04-21"
   },
   {
+    "id": 19,
     "codigo": 265,
     "nombre": "Daño en bien ajeno",
     "articuloLey": "Artículo 265",
-    "gravedad": "Media",
-    "descripcion": "",
-    "fechaComision": "2025-04-05"
-  },
-  {
-    "codigo": 233,
-    "nombre": "Inasistencia alimentaria",
-    "articuloLey": "Artículo 233",
     "gravedad": "Baja",
-    "descripcion": "Se vio inasistiendi ajsiasa",
-    "fechaComision": "2025-04-08"
-  },
-  {
-    "codigo": 246,
-    "nombre": "Estafa",
-    "articuloLey": "Artículo 246",
-    "gravedad": "Baja",
-    "descripcion": "ESTAFO",
-    "fechaComision": "2025-04-10"
+    "descripcion": "Daño el patio ajeno",
+    "fechaComision": "2025-04-02"
   }
 ]
