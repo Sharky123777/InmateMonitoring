@@ -4,42 +4,35 @@ import java.time.LocalDate;
 
 public class PersonalDeControl extends Persona {
 
-    private LocalDate fechaIngreso;
-    private String turno;
     private static int ultimoId = 0;
     private int id;
+    private String turno;
+    private LocalDate fechaInicioContrato;
+    private LocalDate fechaFinContrato;
+    private String fotoPath;
+    private String correo;
+    private String cargo;
 
-    public PersonalDeControl(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, int edad, String sexo, String nacionalidad, String identificacion, LocalDate fechaIngreso, String turno) {
+    public PersonalDeControl(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
+            int edad, String sexo, String nacionalidad, String identificacion,
+            String turno, String correo, String cargo,
+            LocalDate fechaInicioContrato, LocalDate fechaFinContrato, String fotoPath) {
         super(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, sexo, nacionalidad, identificacion);
-        this.id = ++ultimoId;  
-        this.fechaIngreso = fechaIngreso;
+        this.id = ++ultimoId;
         this.turno = turno;
+        this.correo = correo;
+        this.cargo = cargo;
+        this.fechaInicioContrato = fechaInicioContrato;
+        this.fechaFinContrato = fechaFinContrato;
+        this.fotoPath = fotoPath;
     }
 
-
     public int getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-
-    public LocalDate getFechaIngreso() {
-        return this.fechaIngreso;
-    }
-
-    public void setFechaIngreso(LocalDate fechaIngreso) {
-        this.fechaIngreso = fechaIngreso;
-    }
-
-    public String getTurno() {
-        return this.turno;
-    }
-
-    public void setTurno(String turno) {
-        this.turno = turno;
     }
 
     public static int getUltimoId() {
@@ -48,5 +41,53 @@ public class PersonalDeControl extends Persona {
 
     public static void setUltimoId(int ultimoId) {
         PersonalDeControl.ultimoId = ultimoId;
+    }
+
+    public String getTurno() {
+        return turno;
+    }
+
+    public void setTurno(String turno) {
+        this.turno = turno;
+    }
+
+    public LocalDate getFechaInicioContrato() {
+        return fechaInicioContrato;
+    }
+
+    public void setFechaInicioContrato(LocalDate fechaInicioContrato) {
+        this.fechaInicioContrato = fechaInicioContrato;
+    }
+
+    public LocalDate getFechaFinContrato() {
+        return fechaFinContrato;
+    }
+
+    public void setFechaFinContrato(LocalDate fechaFinContrato) {
+        this.fechaFinContrato = fechaFinContrato;
+    }
+
+    public String getFotoPath() {
+        return fotoPath;
+    }
+
+    public void setFotoPath(String fotoPath) {
+        this.fotoPath = fotoPath;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
     }
 }

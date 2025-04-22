@@ -143,17 +143,17 @@ public class Oficial extends javax.swing.JFrame {
         TabbedOficial = new javax.swing.JTabbedPane();
         PanelPerfilOficial = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
         CerrarSesionBoton = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jSeparator6 = new javax.swing.JSeparator();
         jSeparator7 = new javax.swing.JSeparator();
-        FechaIngresoOficial = new javax.swing.JLabel();
+        FechaInicioContratoOficial = new javax.swing.JLabel();
         TurnoOficial = new javax.swing.JLabel();
         FondoFoto = new javax.swing.JPanel();
         FotoOficial = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jPanel12 = new javax.swing.JPanel();
@@ -179,7 +179,9 @@ public class Oficial extends javax.swing.JFrame {
         jSeparator9 = new javax.swing.JSeparator();
         SexoOficial = new javax.swing.JLabel();
         botonIrPanelActualizar = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
+        jSeparator12 = new javax.swing.JSeparator();
+        FechaFinContratoOficial = new javax.swing.JLabel();
+        jLabel50 = new javax.swing.JLabel();
         PanelListaPresos = new javax.swing.JPanel();
         BarraDeBusquedaPreso = new javax.swing.JTextField();
         BotonBuscarPresoIdentificacion = new javax.swing.JButton();
@@ -188,10 +190,10 @@ public class Oficial extends javax.swing.JFrame {
         BotonCargarTodosPresos = new javax.swing.JButton();
         PanelListaGuardias = new javax.swing.JPanel();
         BarraDeBusquedaGuardias = new javax.swing.JTextField();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        TablaGuardias = new javax.swing.JTable();
         BotonBuscarGuardia = new javax.swing.JButton();
         BotonCargarTodosGuardias = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tablaGuardias = new javax.swing.JTable();
         PanelAgendarCita = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel48 = new javax.swing.JLabel();
@@ -343,11 +345,6 @@ public class Oficial extends javax.swing.JFrame {
         jPanel6.setBackground(new java.awt.Color(180, 180, 195));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel7.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setText("Fecha de ingreso");
-        jPanel6.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 400, -1, -1));
-
         CerrarSesionBoton.setText("Cerrar sesión");
         jPanel6.add(CerrarSesionBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 480, 110, 30));
 
@@ -362,7 +359,7 @@ public class Oficial extends javax.swing.JFrame {
         jPanel6.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 340, -1, -1));
         jPanel6.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 460, 220, 20));
         jPanel6.add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 220, 20));
-        jPanel6.add(FechaIngresoOficial, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 430, 220, 30));
+        jPanel6.add(FechaInicioContratoOficial, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 430, 220, 30));
         jPanel6.add(TurnoOficial, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 220, 30));
 
         FondoFoto.setBackground(new java.awt.Color(255, 255, 255));
@@ -377,16 +374,22 @@ public class Oficial extends javax.swing.JFrame {
         jLabel4.setText("Oficial superior");
         jPanel6.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 300, 130, -1));
 
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("fecha inicio contrato");
+        jPanel6.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 400, -1, -1));
+
         PanelPerfilOficial.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 30, 300, 530));
 
         jPanel1.setBackground(new java.awt.Color(139, 139, 157));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        PanelPerfilOficial.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 60));
 
         jLabel8.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("INFORMACIÓN PERSONAL");
-        PanelPerfilOficial.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 70, -1, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 20, -1, -1));
+
+        PanelPerfilOficial.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 60));
 
         jPanel12.setBackground(new java.awt.Color(255, 255, 255));
         jPanel12.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
@@ -447,14 +450,16 @@ public class Oficial extends javax.swing.JFrame {
                 botonIrPanelActualizarMouseClicked(evt);
             }
         });
-        jPanel12.add(botonIrPanelActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 410, 150, -1));
+        jPanel12.add(botonIrPanelActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 460, 150, -1));
+        jPanel12.add(jSeparator12, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 540, 10));
+        jPanel12.add(FechaFinContratoOficial, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 400, 370, 30));
 
-        jLabel3.setFont(new java.awt.Font("Arial", 2, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel3.setText("Para actualizar su información personal:");
-        jPanel12.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 410, 340, -1));
+        jLabel50.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel50.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel50.setText("fecha fin de contrato");
+        jPanel12.add(jLabel50, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, -1, -1));
 
-        PanelPerfilOficial.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 110, 630, 450));
+        PanelPerfilOficial.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 70, 630, 500));
 
         TabbedOficial.addTab("PERFIL", PanelPerfilOficial);
 
@@ -520,45 +525,6 @@ public class Oficial extends javax.swing.JFrame {
         });
         PanelListaGuardias.add(BarraDeBusquedaGuardias, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, 670, 30));
 
-        TablaGuardias.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Foto", "Nombre completo", "Edad", "Identificacion", "Nacionalidad", "Correo electronico", "Turno", "Cargo"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane2.setViewportView(TablaGuardias);
-        if (TablaGuardias.getColumnModel().getColumnCount() > 0) {
-            TablaGuardias.getColumnModel().getColumn(0).setResizable(false);
-            TablaGuardias.getColumnModel().getColumn(1).setResizable(false);
-            TablaGuardias.getColumnModel().getColumn(2).setResizable(false);
-            TablaGuardias.getColumnModel().getColumn(3).setResizable(false);
-            TablaGuardias.getColumnModel().getColumn(4).setResizable(false);
-            TablaGuardias.getColumnModel().getColumn(5).setResizable(false);
-            TablaGuardias.getColumnModel().getColumn(6).setResizable(false);
-        }
-
-        PanelListaGuardias.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 100, 980, 450));
-
         BotonBuscarGuardia.setText("Buscar guardia por identificacion");
         BotonBuscarGuardia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -574,6 +540,29 @@ public class Oficial extends javax.swing.JFrame {
             }
         });
         PanelListaGuardias.add(BotonCargarTodosGuardias, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 70, 170, -1));
+
+        tablaGuardias.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Foto", "Nombre", "Edad", "Cedula", "Sexo", "Nacionalidad", "Correo", "Turno", "Cargo", "FechaContratacion", "FechaFinContrato"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane6.setViewportView(tablaGuardias);
+
+        PanelListaGuardias.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 1080, 470));
 
         TabbedOficial.addTab("GUARDIAS", PanelListaGuardias);
 
@@ -1016,7 +1005,7 @@ public class Oficial extends javax.swing.JFrame {
     }
 
     private void cargarDatosGuardiaEnTabla() {
-        DefaultTableModel modelo = (DefaultTableModel) TablaGuardias.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) tablaGuardias.getModel();
         modelo.setRowCount(0);
 
         GuardiaDAO guardiaDAO = new GuardiaDAO();
@@ -1039,8 +1028,9 @@ public class Oficial extends javax.swing.JFrame {
                 guardia.getNacionalidad(),
                 guardia.getCorreo(),
                 guardia.getTurno(),
-                guardia.getCargo()
-
+                guardia.getCargo(),
+                guardia.getFechaInicioContrato(),
+                guardia.getFechaFinContrato()
             });
 
         }
@@ -1263,7 +1253,7 @@ public class Oficial extends javax.swing.JFrame {
 
                 String identificacion = BarraDeBusquedaGuardias.getText();
                 List<Guardia> todos = new GuardiaDAO().obtenerGuardias();
-                DefaultTableModel modelo = (DefaultTableModel) TablaGuardias.getModel();
+                DefaultTableModel modelo = (DefaultTableModel) tablaGuardias.getModel();
                 modelo.setRowCount(0);
 
                 for (Guardia guardia : todos) {
@@ -1283,7 +1273,9 @@ public class Oficial extends javax.swing.JFrame {
                             guardia.getNacionalidad(),
                             guardia.getCorreo(),
                             guardia.getTurno(),
-                            guardia.getCargo()
+                            guardia.getCargo(),
+                            guardia.getFechaInicioContrato(),
+                            guardia.getFechaFinContrato()
 
                         });
                         break;
@@ -1380,7 +1372,7 @@ public class Oficial extends javax.swing.JFrame {
      }//GEN-LAST:event_BotonCargarTodosPresosActionPerformed
 
     private void BotonCargarTodosGuardiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCargarTodosGuardiasActionPerformed
-        DefaultTableModel modelo = (DefaultTableModel) TablaGuardias.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) tablaGuardias.getModel();
         modelo.setRowCount(0);
 
         GuardiaDAO guardiaDAO = new GuardiaDAO();
@@ -1403,7 +1395,9 @@ public class Oficial extends javax.swing.JFrame {
                 guardia.getNacionalidad(),
                 guardia.getCorreo(),
                 guardia.getTurno(),
-                guardia.getCargo()
+                guardia.getCargo(),
+                guardia.getFechaInicioContrato(),
+                guardia.getFechaFinContrato()
 
             });
 
@@ -1460,7 +1454,8 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JLabel EdadOficial;
     private javax.swing.JLabel EmailOficial;
     private com.toedter.calendar.JDateChooser FechaCita;
-    private javax.swing.JLabel FechaIngresoOficial;
+    private javax.swing.JLabel FechaFinContratoOficial;
+    private javax.swing.JLabel FechaInicioContratoOficial;
     private com.toedter.calendar.JDateChooser FechaSancion;
     private javax.swing.JPanel FondoFoto;
     private javax.swing.JLabel FotoOficial;
@@ -1491,7 +1486,6 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JLabel SexoOficial;
     private javax.swing.JButton SubirNuevaFotoPerfil;
     private javax.swing.JTabbedPane TabbedOficial;
-    private javax.swing.JTable TablaGuardias;
     private javax.swing.JTable TablaHistorialSanciones;
     private javax.swing.JTable TablaPresos;
     private javax.swing.JComboBox<String> TipoSancion;
@@ -1506,7 +1500,6 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
@@ -1524,6 +1517,7 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel52;
     private javax.swing.JLabel jLabel53;
@@ -1555,13 +1549,14 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator11;
+    private javax.swing.JSeparator jSeparator12;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
@@ -1571,5 +1566,6 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JPopupMenu ppMenuTablaPresos;
+    private javax.swing.JTable tablaGuardias;
     // End of variables declaration//GEN-END:variables
 }

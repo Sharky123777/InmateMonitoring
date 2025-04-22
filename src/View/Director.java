@@ -283,6 +283,93 @@ txtFechaContratacionMod1.setEditable(false);
         txtSegundoNombreMod1 = new javax.swing.JTextField();
         txtPrimerNombreMod1 = new javax.swing.JTextField();
         jLabel60 = new javax.swing.JLabel();
+        AñadirPersonalDeControl = new javax.swing.JPanel();
+        jPanel9 = new javax.swing.JPanel();
+        jSeparator42 = new javax.swing.JSeparator();
+        txtPrimerNombrePDC = new javax.swing.JTextField();
+        jLabel62 = new javax.swing.JLabel();
+        jLabel63 = new javax.swing.JLabel();
+        jLabel49 = new javax.swing.JLabel();
+        jLabel64 = new javax.swing.JLabel();
+        jLabel65 = new javax.swing.JLabel();
+        jLabel66 = new javax.swing.JLabel();
+        jLabel67 = new javax.swing.JLabel();
+        jLabel68 = new javax.swing.JLabel();
+        jLabel69 = new javax.swing.JLabel();
+        jLabel70 = new javax.swing.JLabel();
+        jSeparator45 = new javax.swing.JSeparator();
+        jSeparator46 = new javax.swing.JSeparator();
+        jSeparator47 = new javax.swing.JSeparator();
+        jSeparator48 = new javax.swing.JSeparator();
+        jSeparator49 = new javax.swing.JSeparator();
+        jSeparator50 = new javax.swing.JSeparator();
+        jSeparator51 = new javax.swing.JSeparator();
+        jSeparator52 = new javax.swing.JSeparator();
+        jSeparator53 = new javax.swing.JSeparator();
+        jButton9 = new javax.swing.JButton();
+        jLabel71 = new javax.swing.JLabel();
+        jLabel72 = new javax.swing.JLabel();
+        jLabel73 = new javax.swing.JLabel();
+        jDateChooserFechaContratoPDC = new com.toedter.calendar.JDateChooser();
+        jDateChooserFinContratoPDC = new com.toedter.calendar.JDateChooser();
+        jPanel12 = new javax.swing.JPanel();
+        VistaPreviaPDC = new javax.swing.JLabel();
+        jLabel74 = new javax.swing.JLabel();
+        txtSegundoNombrePDC = new javax.swing.JTextField();
+        txtPrimerApellidoPDC = new javax.swing.JTextField();
+        txtSegundoApellidoPDC = new javax.swing.JTextField();
+        txtEdadPDC = new javax.swing.JTextField();
+        txtCedulaPDC = new javax.swing.JTextField();
+        txtSexoPDC = new javax.swing.JTextField();
+        txtCorreoPDC = new javax.swing.JTextField();
+        cmbTurnoPDC = new javax.swing.JComboBox<>();
+        jButton10 = new javax.swing.JButton();
+        cmbNacionalidadPDC = new javax.swing.JComboBox<>();
+        ModificaPersonalDeControl = new javax.swing.JPanel();
+        jPanel14 = new javax.swing.JPanel();
+        jSeparator54 = new javax.swing.JSeparator();
+        txtNuevoPrimerNombrePDC = new javax.swing.JTextField();
+        jLabel75 = new javax.swing.JLabel();
+        jLabel76 = new javax.swing.JLabel();
+        jLabel61 = new javax.swing.JLabel();
+        jLabel77 = new javax.swing.JLabel();
+        jLabel78 = new javax.swing.JLabel();
+        jLabel79 = new javax.swing.JLabel();
+        jLabel80 = new javax.swing.JLabel();
+        jLabel81 = new javax.swing.JLabel();
+        jLabel82 = new javax.swing.JLabel();
+        jLabel83 = new javax.swing.JLabel();
+        jSeparator55 = new javax.swing.JSeparator();
+        jSeparator56 = new javax.swing.JSeparator();
+        jSeparator57 = new javax.swing.JSeparator();
+        jSeparator58 = new javax.swing.JSeparator();
+        jSeparator59 = new javax.swing.JSeparator();
+        jSeparator60 = new javax.swing.JSeparator();
+        jSeparator61 = new javax.swing.JSeparator();
+        jSeparator62 = new javax.swing.JSeparator();
+        jSeparator63 = new javax.swing.JSeparator();
+        BotonModificarPDC = new javax.swing.JButton();
+        jLabel84 = new javax.swing.JLabel();
+        jLabel85 = new javax.swing.JLabel();
+        jLabel86 = new javax.swing.JLabel();
+        jDateChooserNuevaFechaContratoPDC1 = new com.toedter.calendar.JDateChooser();
+        jDateChooserNuevoFinContratoPDC1 = new com.toedter.calendar.JDateChooser();
+        jPanel15 = new javax.swing.JPanel();
+        NuevaVistaPreviaPDC = new javax.swing.JLabel();
+        jLabel87 = new javax.swing.JLabel();
+        txtNuevoSegundoNombrePDC = new javax.swing.JTextField();
+        txtNuevoPrimerApellidoPDC = new javax.swing.JTextField();
+        txtNuevoSegundoApellidoPDC = new javax.swing.JTextField();
+        txtNuevaEdadPDC = new javax.swing.JTextField();
+        txtNuevaCedulaPDC = new javax.swing.JTextField();
+        txtNuevoSexoPDC = new javax.swing.JTextField();
+        txtNuevoCorreoPDC = new javax.swing.JTextField();
+        cmbNuevoTurnoPDC1 = new javax.swing.JComboBox<>();
+        BotonSeleccionarNuevaImagenPDC = new javax.swing.JButton();
+        cmbNuevaNacionalidadPDC = new javax.swing.JComboBox<>();
+        jPanel16 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tablaPDC = new javax.swing.JTable();
 
         Modificar.setText("Modificar");
         Modificar.addActionListener(new java.awt.event.ActionListener() {
@@ -1086,6 +1173,304 @@ txtFechaContratacionMod1.setEditable(false);
         ModificarNurse.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 790, 490));
 
         jTabbedPane1.addTab("Modificar enfermera", ModificarNurse);
+
+        AñadirPersonalDeControl.setBackground(new java.awt.Color(255, 255, 255));
+        AñadirPersonalDeControl.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel9.setBackground(new java.awt.Color(29, 35, 51));
+        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel9.add(jSeparator42, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 430, 290, 10));
+        jPanel9.add(txtPrimerNombrePDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 40, 180, 30));
+
+        jLabel62.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel62.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel62.setText("Contratar personal de control");
+        jPanel9.add(jLabel62, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, -1, 20));
+
+        jLabel63.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel63.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel63.setText("Segundo nombre:");
+        jPanel9.add(jLabel63, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, -1, 20));
+
+        jLabel49.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel49.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel49.setText("Primer Apellido:");
+        jPanel9.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, -1, 20));
+
+        jLabel64.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel64.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel64.setText("Segundo Apellido:");
+        jPanel9.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, -1, 20));
+
+        jLabel65.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel65.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel65.setText("Edad:");
+        jPanel9.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, -1, -1));
+
+        jLabel66.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel66.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel66.setText("Cedula:");
+        jPanel9.add(jLabel66, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, -1, 30));
+
+        jLabel67.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel67.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel67.setText("Sexo:");
+        jPanel9.add(jLabel67, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, -1, -1));
+
+        jLabel68.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel68.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel68.setText("Nacionalidad:");
+        jPanel9.add(jLabel68, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, -1));
+
+        jLabel69.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel69.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel69.setText("Correo:");
+        jPanel9.add(jLabel69, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, -1, -1));
+
+        jLabel70.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel70.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel70.setText("Turno:");
+        jPanel9.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, -1, -1));
+        jPanel9.add(jSeparator45, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 290, 10));
+        jPanel9.add(jSeparator46, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, 290, 10));
+        jPanel9.add(jSeparator47, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 290, 10));
+        jPanel9.add(jSeparator48, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 290, 10));
+        jPanel9.add(jSeparator49, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, 290, 10));
+        jPanel9.add(jSeparator50, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, 290, 10));
+        jPanel9.add(jSeparator51, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 290, 10));
+        jPanel9.add(jSeparator52, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, 290, 10));
+        jPanel9.add(jSeparator53, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 290, 10));
+
+        jButton9.setText("Contratar");
+        jPanel9.add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 450, 120, 30));
+
+        jLabel71.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel71.setText("Fecha de contratación:");
+        jPanel9.add(jLabel71, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 350, -1, 20));
+
+        jLabel72.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel72.setText("Fecha de finalización del contrato:");
+        jPanel9.add(jLabel72, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 410, -1, -1));
+
+        jLabel73.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel73.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel73.setText("Agregar foto al personal de control");
+        jPanel9.add(jLabel73, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 40, -1, 20));
+        jPanel9.add(jDateChooserFechaContratoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 370, 210, 30));
+        jPanel9.add(jDateChooserFinContratoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 430, 210, 30));
+
+        jPanel12.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel12.add(VistaPreviaPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 180, 220));
+
+        jPanel9.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 70, 200, 240));
+
+        jLabel74.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel74.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel74.setText("Primer nombre:");
+        jPanel9.add(jLabel74, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, -1, 20));
+        jPanel9.add(txtSegundoNombrePDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 82, 170, 30));
+
+        txtPrimerApellidoPDC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPrimerApellidoPDCActionPerformed(evt);
+            }
+        });
+        jPanel9.add(txtPrimerApellidoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 120, 180, 30));
+        jPanel9.add(txtSegundoApellidoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 160, 170, 30));
+        jPanel9.add(txtEdadPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 200, 250, 30));
+        jPanel9.add(txtCedulaPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 240, 230, 30));
+        jPanel9.add(txtSexoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 280, 250, 30));
+        jPanel9.add(txtCorreoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 360, 230, 30));
+
+        cmbTurnoPDC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Diurno", "Nocturno" }));
+        jPanel9.add(cmbTurnoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 402, 240, 30));
+
+        jButton10.setText("Seleccionar imagen");
+        jPanel9.add(jButton10, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 320, 140, -1));
+
+        cmbNacionalidadPDC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Afganistán  ", "Albania  ", "Alemania  ", "Andorra  ", "Angola  ", "Antigua y Barbuda  ", "Arabia Saudita  ", "Argelia  ", "Argentina  ", "Armenia  ", "Australia  ", "Austria  ", "Azerbaiyán  ", "Bahamas  ", "Bahréin  ", "Bangladés  ", "Barbados  ", "Bélgica  ", "Belice  ", "Benín  ", "Bielorrusia  ", "Birmania  ", "Bolivia  ", "Bosnia y Herzegovina  ", "Botsuana  ", "Brasil  ", "Brunéi  ", "Bulgaria  ", "Burkina Faso  ", "Burundi  ", "Bután  ", "Cabo Verde  ", "Camboya  ", "Camerún  ", "Canadá  ", "Chad  ", "Chile  ", "China  ", "Chipre  ", "Colombia  ", "Comoras  ", "Congo  ", "Corea del Norte  ", "Corea del Sur  ", "Costa de Marfil  ", "Costa Rica  ", "Croacia  ", "Cuba  ", "Dinamarca  ", "Dominica  ", "Ecuador  ", "Egipto  ", "El Salvador  ", "Emiratos Árabes Unidos  ", "Eritrea  ", "Eslovaquia  ", "Eslovenia  ", "España  ", "Estados Unidos  ", "Estonia  ", "Etiopía  ", "Filipinas  ", "Finlandia  ", "Fiyi  ", "Francia  ", "Gabón  ", "Gambia  ", "Georgia  ", "Ghana  ", "Granada  ", "Grecia  ", "Guatemala  ", "Guinea  ", "Guinea-Bisáu  ", "Guinea Ecuatorial  ", "Guyana  ", "Haití  ", "Honduras  ", "Hungría  ", "India  ", "Indonesia  ", "Irak  ", "Irán  ", "Irlanda  ", "Islandia  ", "Israel  ", "Italia  ", "Jamaica  ", "Japón  ", "Jordania  ", "Kazajistán  ", "Kenia  ", "Kirguistán  ", "Kiribati  ", "Kuwait  ", "Laos  ", "Lesoto  ", "Letonia  ", "Líbano  ", "Liberia  ", "Libia  ", "Liechtenstein  ", "Lituania  ", "Luxemburgo  ", "Madagascar  ", "Malasia  ", "Malaui  ", "Maldivas  ", "Malí  ", "Malta  ", "Marruecos  ", "Islas Marshall  ", "Mauricio  ", "Mauritania  ", "México  ", "Micronesia  ", "Moldavia  ", "Mónaco  ", "Mongolia  ", "Montenegro  ", "Mozambique  ", "Namibia  ", "Nauru  ", "Nepal  ", "Nicaragua  ", "Níger  ", "Nigeria  ", "Noruega  ", "Nueva Zelanda  ", "Omán  ", "Países Bajos  ", "Pakistán  ", "Palaos  ", "Panamá  ", "Papúa Nueva Guinea  ", "Paraguay  ", "Perú  ", "Polonia  ", "Portugal  ", "Qatar  ", "Reino Unido  ", "República Centroafricana  ", "República Checa  ", "República Dominicana  ", "Ruanda  ", "Rumanía  ", "Rusia  ", "Samoa  ", "San Cristóbal y Nieves  ", "San Marino  ", "San Vicente y las Granadinas  ", "Santa Lucía  ", "Santo Tomé y Príncipe  ", "Senegal  ", "Serbia  ", "Seychelles  ", "Sierra Leona  ", "Singapur  ", "Siria  ", "Somalia  ", "Sri Lanka  ", "Sudáfrica  ", "Sudán  ", "Sudán del Sur  ", "Suecia  ", "Suiza  ", "Surinam  ", "Tailandia  ", "Tanzania  ", "Tayikistán  ", "Timor Oriental  ", "Togo  ", "Tonga  ", "Trinidad y Tobago  ", "Túnez  ", "Turkmenistán  ", "Turquía  ", "Tuvalu  ", "Ucrania  ", "Uganda  ", "Uruguay  ", "Uzbekistán  ", "Vanuatu  ", "Vaticano  ", "Venezuela  ", "Vietnam  ", "Yemen  ", "Yibuti  ", "Zambia  ", "Zimbabue" }));
+        cmbNacionalidadPDC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbNacionalidadPDCActionPerformed(evt);
+            }
+        });
+        jPanel9.add(cmbNacionalidadPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 322, 200, 30));
+
+        AñadirPersonalDeControl.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 800, 490));
+
+        jTabbedPane1.addTab("AñadirPDC", AñadirPersonalDeControl);
+
+        ModificaPersonalDeControl.setBackground(new java.awt.Color(255, 255, 255));
+        ModificaPersonalDeControl.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel14.setBackground(new java.awt.Color(29, 35, 51));
+        jPanel14.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel14.add(jSeparator54, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 430, 290, 10));
+        jPanel14.add(txtNuevoPrimerNombrePDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 40, 180, 30));
+
+        jLabel75.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel75.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel75.setText("Contratar personal de control");
+        jPanel14.add(jLabel75, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, -1, 20));
+
+        jLabel76.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel76.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel76.setText("Segundo nombre:");
+        jPanel14.add(jLabel76, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, -1, 20));
+
+        jLabel61.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel61.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel61.setText("Primer Apellido:");
+        jPanel14.add(jLabel61, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, -1, 20));
+
+        jLabel77.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel77.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel77.setText("Segundo Apellido:");
+        jPanel14.add(jLabel77, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, -1, 20));
+
+        jLabel78.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel78.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel78.setText("Edad:");
+        jPanel14.add(jLabel78, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, -1, -1));
+
+        jLabel79.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel79.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel79.setText("Cedula:");
+        jPanel14.add(jLabel79, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, -1, 30));
+
+        jLabel80.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel80.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel80.setText("Sexo:");
+        jPanel14.add(jLabel80, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, -1, -1));
+
+        jLabel81.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel81.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel81.setText("Nacionalidad:");
+        jPanel14.add(jLabel81, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, -1));
+
+        jLabel82.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel82.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel82.setText("Correo:");
+        jPanel14.add(jLabel82, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, -1, -1));
+
+        jLabel83.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel83.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel83.setText("Turno:");
+        jPanel14.add(jLabel83, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, -1, -1));
+        jPanel14.add(jSeparator55, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 290, 10));
+        jPanel14.add(jSeparator56, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, 290, 10));
+        jPanel14.add(jSeparator57, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 290, 10));
+        jPanel14.add(jSeparator58, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 290, 10));
+        jPanel14.add(jSeparator59, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, 290, 10));
+        jPanel14.add(jSeparator60, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, 290, 10));
+        jPanel14.add(jSeparator61, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 290, 10));
+        jPanel14.add(jSeparator62, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, 290, 10));
+        jPanel14.add(jSeparator63, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 290, 10));
+
+        BotonModificarPDC.setText("Modificar información");
+        jPanel14.add(BotonModificarPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 450, 150, 30));
+
+        jLabel84.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel84.setText("Fecha de contratación:");
+        jPanel14.add(jLabel84, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 350, -1, 20));
+
+        jLabel85.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel85.setText("Fecha de finalización del contrato:");
+        jPanel14.add(jLabel85, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 410, -1, -1));
+
+        jLabel86.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel86.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel86.setText("Agregar nueva foto al personal de control");
+        jPanel14.add(jLabel86, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 40, -1, 20));
+        jPanel14.add(jDateChooserNuevaFechaContratoPDC1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 370, 210, 30));
+        jPanel14.add(jDateChooserNuevoFinContratoPDC1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 430, 210, 30));
+
+        jPanel15.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel15.add(NuevaVistaPreviaPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 180, 220));
+
+        jPanel14.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 70, 200, 240));
+
+        jLabel87.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel87.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel87.setText("Primer nombre:");
+        jPanel14.add(jLabel87, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, -1, 20));
+        jPanel14.add(txtNuevoSegundoNombrePDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 82, 170, 30));
+
+        txtNuevoPrimerApellidoPDC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNuevoPrimerApellidoPDCActionPerformed(evt);
+            }
+        });
+        jPanel14.add(txtNuevoPrimerApellidoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 120, 180, 30));
+        jPanel14.add(txtNuevoSegundoApellidoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 160, 170, 30));
+        jPanel14.add(txtNuevaEdadPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 200, 250, 30));
+        jPanel14.add(txtNuevaCedulaPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 240, 230, 30));
+        jPanel14.add(txtNuevoSexoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 280, 250, 30));
+        jPanel14.add(txtNuevoCorreoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 360, 230, 30));
+
+        cmbNuevoTurnoPDC1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Diurno", "Nocturno" }));
+        jPanel14.add(cmbNuevoTurnoPDC1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 402, 240, 30));
+
+        BotonSeleccionarNuevaImagenPDC.setText("Seleccionar nueva imagen");
+        jPanel14.add(BotonSeleccionarNuevaImagenPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 320, 180, -1));
+
+        cmbNuevaNacionalidadPDC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Afganistán  ", "Albania  ", "Alemania  ", "Andorra  ", "Angola  ", "Antigua y Barbuda  ", "Arabia Saudita  ", "Argelia  ", "Argentina  ", "Armenia  ", "Australia  ", "Austria  ", "Azerbaiyán  ", "Bahamas  ", "Bahréin  ", "Bangladés  ", "Barbados  ", "Bélgica  ", "Belice  ", "Benín  ", "Bielorrusia  ", "Birmania  ", "Bolivia  ", "Bosnia y Herzegovina  ", "Botsuana  ", "Brasil  ", "Brunéi  ", "Bulgaria  ", "Burkina Faso  ", "Burundi  ", "Bután  ", "Cabo Verde  ", "Camboya  ", "Camerún  ", "Canadá  ", "Chad  ", "Chile  ", "China  ", "Chipre  ", "Colombia  ", "Comoras  ", "Congo  ", "Corea del Norte  ", "Corea del Sur  ", "Costa de Marfil  ", "Costa Rica  ", "Croacia  ", "Cuba  ", "Dinamarca  ", "Dominica  ", "Ecuador  ", "Egipto  ", "El Salvador  ", "Emiratos Árabes Unidos  ", "Eritrea  ", "Eslovaquia  ", "Eslovenia  ", "España  ", "Estados Unidos  ", "Estonia  ", "Etiopía  ", "Filipinas  ", "Finlandia  ", "Fiyi  ", "Francia  ", "Gabón  ", "Gambia  ", "Georgia  ", "Ghana  ", "Granada  ", "Grecia  ", "Guatemala  ", "Guinea  ", "Guinea-Bisáu  ", "Guinea Ecuatorial  ", "Guyana  ", "Haití  ", "Honduras  ", "Hungría  ", "India  ", "Indonesia  ", "Irak  ", "Irán  ", "Irlanda  ", "Islandia  ", "Israel  ", "Italia  ", "Jamaica  ", "Japón  ", "Jordania  ", "Kazajistán  ", "Kenia  ", "Kirguistán  ", "Kiribati  ", "Kuwait  ", "Laos  ", "Lesoto  ", "Letonia  ", "Líbano  ", "Liberia  ", "Libia  ", "Liechtenstein  ", "Lituania  ", "Luxemburgo  ", "Madagascar  ", "Malasia  ", "Malaui  ", "Maldivas  ", "Malí  ", "Malta  ", "Marruecos  ", "Islas Marshall  ", "Mauricio  ", "Mauritania  ", "México  ", "Micronesia  ", "Moldavia  ", "Mónaco  ", "Mongolia  ", "Montenegro  ", "Mozambique  ", "Namibia  ", "Nauru  ", "Nepal  ", "Nicaragua  ", "Níger  ", "Nigeria  ", "Noruega  ", "Nueva Zelanda  ", "Omán  ", "Países Bajos  ", "Pakistán  ", "Palaos  ", "Panamá  ", "Papúa Nueva Guinea  ", "Paraguay  ", "Perú  ", "Polonia  ", "Portugal  ", "Qatar  ", "Reino Unido  ", "República Centroafricana  ", "República Checa  ", "República Dominicana  ", "Ruanda  ", "Rumanía  ", "Rusia  ", "Samoa  ", "San Cristóbal y Nieves  ", "San Marino  ", "San Vicente y las Granadinas  ", "Santa Lucía  ", "Santo Tomé y Príncipe  ", "Senegal  ", "Serbia  ", "Seychelles  ", "Sierra Leona  ", "Singapur  ", "Siria  ", "Somalia  ", "Sri Lanka  ", "Sudáfrica  ", "Sudán  ", "Sudán del Sur  ", "Suecia  ", "Suiza  ", "Surinam  ", "Tailandia  ", "Tanzania  ", "Tayikistán  ", "Timor Oriental  ", "Togo  ", "Tonga  ", "Trinidad y Tobago  ", "Túnez  ", "Turkmenistán  ", "Turquía  ", "Tuvalu  ", "Ucrania  ", "Uganda  ", "Uruguay  ", "Uzbekistán  ", "Vanuatu  ", "Vaticano  ", "Venezuela  ", "Vietnam  ", "Yemen  ", "Yibuti  ", "Zambia  ", "Zimbabue" }));
+        jPanel14.add(cmbNuevaNacionalidadPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 322, 200, 30));
+
+        ModificaPersonalDeControl.add(jPanel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 800, 490));
+
+        jTabbedPane1.addTab("ModificarPDC", ModificaPersonalDeControl);
+
+        jPanel16.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel16.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        tablaPDC.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Foto", "Id", "Nombre", "Apellido", "Edad", "Cedula", "Sexo", "Nacionalidad", "Correo", "Turno", "Cargo", "FechaContratacion", "FechaFinContrato"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tablaPDC.setComponentPopupMenu(jPopupMenu1);
+        jScrollPane3.setViewportView(tablaPDC);
+        if (tablaPDC.getColumnModel().getColumnCount() > 0) {
+            tablaPDC.getColumnModel().getColumn(0).setResizable(false);
+            tablaPDC.getColumnModel().getColumn(1).setResizable(false);
+            tablaPDC.getColumnModel().getColumn(2).setResizable(false);
+            tablaPDC.getColumnModel().getColumn(3).setResizable(false);
+            tablaPDC.getColumnModel().getColumn(4).setResizable(false);
+            tablaPDC.getColumnModel().getColumn(5).setResizable(false);
+            tablaPDC.getColumnModel().getColumn(6).setResizable(false);
+            tablaPDC.getColumnModel().getColumn(7).setResizable(false);
+            tablaPDC.getColumnModel().getColumn(8).setResizable(false);
+            tablaPDC.getColumnModel().getColumn(9).setResizable(false);
+            tablaPDC.getColumnModel().getColumn(10).setResizable(false);
+            tablaPDC.getColumnModel().getColumn(11).setResizable(false);
+            tablaPDC.getColumnModel().getColumn(12).setResizable(false);
+        }
+
+        jPanel16.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1040, 470));
+
+        jTabbedPane1.addTab("MostrarPDC", jPanel16);
 
         jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 1060, 540));
 
@@ -2504,6 +2889,18 @@ if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
     }
     }//GEN-LAST:event_EliminarEnfermeraActionPerformed
 
+    private void txtPrimerApellidoPDCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrimerApellidoPDCActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrimerApellidoPDCActionPerformed
+
+    private void txtNuevoPrimerApellidoPDCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNuevoPrimerApellidoPDCActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNuevoPrimerApellidoPDCActionPerformed
+
+    private void cmbNacionalidadPDCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbNacionalidadPDCActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbNacionalidadPDCActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2541,24 +2938,35 @@ if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel AñadirGuardia;
+    private javax.swing.JPanel AñadirPersonalDeControl;
+    private javax.swing.JButton BotonModificarPDC;
+    private javax.swing.JButton BotonSeleccionarNuevaImagenPDC;
     private javax.swing.JPanel Director;
     private javax.swing.JMenuItem Eliminar;
     private javax.swing.JMenuItem EliminarEnfermera;
     private javax.swing.JPanel ListaDeGuardias;
+    private javax.swing.JPanel ModificaPersonalDeControl;
     private javax.swing.JMenuItem Modificar;
     private javax.swing.JMenuItem ModificarEnfermera;
     private javax.swing.JPanel ModificarGuardia;
     private javax.swing.JPanel ModificarNurse;
     private javax.swing.JPanel MostrarEnfermeras;
+    private javax.swing.JLabel NuevaVistaPreviaPDC;
+    private javax.swing.JLabel VistaPreviaPDC;
     private javax.swing.JComboBox<String> cmbCargo;
+    private javax.swing.JComboBox<String> cmbNacionalidadPDC;
+    private javax.swing.JComboBox<String> cmbNuevaNacionalidadPDC;
+    private javax.swing.JComboBox<String> cmbNuevoTurnoPDC1;
     private javax.swing.JComboBox<String> cmbTurno;
     private javax.swing.JComboBox<String> cmbTurno1;
     private javax.swing.JComboBox<String> cmbTurnoMod;
     private javax.swing.JComboBox<String> cmbTurnoMod1;
+    private javax.swing.JComboBox<String> cmbTurnoPDC;
     private com.toedter.calendar.JDateChooser dateFinContrato1;
     private com.toedter.calendar.JDateChooser dateFinContratoMod;
     private com.toedter.calendar.JDateChooser dateFinContratoMod1;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -2566,7 +2974,12 @@ if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
+    private com.toedter.calendar.JDateChooser jDateChooserFechaContratoPDC;
     private com.toedter.calendar.JDateChooser jDateChooserFinContrato;
+    private com.toedter.calendar.JDateChooser jDateChooserFinContratoPDC;
+    private com.toedter.calendar.JDateChooser jDateChooserNuevaFechaContratoPDC1;
+    private com.toedter.calendar.JDateChooser jDateChooserNuevoFinContratoPDC1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2610,6 +3023,7 @@ if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
@@ -2623,12 +3037,43 @@ if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
     private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel60;
+    private javax.swing.JLabel jLabel61;
+    private javax.swing.JLabel jLabel62;
+    private javax.swing.JLabel jLabel63;
+    private javax.swing.JLabel jLabel64;
+    private javax.swing.JLabel jLabel65;
+    private javax.swing.JLabel jLabel66;
+    private javax.swing.JLabel jLabel67;
+    private javax.swing.JLabel jLabel68;
+    private javax.swing.JLabel jLabel69;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel70;
+    private javax.swing.JLabel jLabel71;
+    private javax.swing.JLabel jLabel72;
+    private javax.swing.JLabel jLabel73;
+    private javax.swing.JLabel jLabel74;
+    private javax.swing.JLabel jLabel75;
+    private javax.swing.JLabel jLabel76;
+    private javax.swing.JLabel jLabel77;
+    private javax.swing.JLabel jLabel78;
+    private javax.swing.JLabel jLabel79;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel80;
+    private javax.swing.JLabel jLabel81;
+    private javax.swing.JLabel jLabel82;
+    private javax.swing.JLabel jLabel83;
+    private javax.swing.JLabel jLabel84;
+    private javax.swing.JLabel jLabel85;
+    private javax.swing.JLabel jLabel86;
+    private javax.swing.JLabel jLabel87;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -2636,10 +3081,12 @@ if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator11;
@@ -2676,10 +3123,30 @@ if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator40;
     private javax.swing.JSeparator jSeparator41;
+    private javax.swing.JSeparator jSeparator42;
     private javax.swing.JSeparator jSeparator43;
     private javax.swing.JSeparator jSeparator44;
+    private javax.swing.JSeparator jSeparator45;
+    private javax.swing.JSeparator jSeparator46;
+    private javax.swing.JSeparator jSeparator47;
+    private javax.swing.JSeparator jSeparator48;
+    private javax.swing.JSeparator jSeparator49;
     private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator50;
+    private javax.swing.JSeparator jSeparator51;
+    private javax.swing.JSeparator jSeparator52;
+    private javax.swing.JSeparator jSeparator53;
+    private javax.swing.JSeparator jSeparator54;
+    private javax.swing.JSeparator jSeparator55;
+    private javax.swing.JSeparator jSeparator56;
+    private javax.swing.JSeparator jSeparator57;
+    private javax.swing.JSeparator jSeparator58;
+    private javax.swing.JSeparator jSeparator59;
     private javax.swing.JSeparator jSeparator6;
+    private javax.swing.JSeparator jSeparator60;
+    private javax.swing.JSeparator jSeparator61;
+    private javax.swing.JSeparator jSeparator62;
+    private javax.swing.JSeparator jSeparator63;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
@@ -2690,12 +3157,14 @@ if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
     private javax.swing.JLabel lblImagenMod1;
     private javax.swing.JTable tablaEnfermeras;
     private javax.swing.JTable tablaGuardias;
+    private javax.swing.JTable tablaPDC;
     private javax.swing.JComboBox<String> txtCargo1;
     private javax.swing.JComboBox<String> txtCargoMod;
     private javax.swing.JTextField txtCedula;
     private javax.swing.JTextField txtCedula1;
     private javax.swing.JTextField txtCedulaMod;
     private javax.swing.JTextField txtCedulaMod1;
+    private javax.swing.JTextField txtCedulaPDC;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtCorreo1;
     private javax.swing.JTextField txtCorreo2;
@@ -2703,10 +3172,12 @@ if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
     private javax.swing.JTextField txtCorreo4;
     private javax.swing.JTextField txtCorreoMod;
     private javax.swing.JTextField txtCorreoMod1;
+    private javax.swing.JTextField txtCorreoPDC;
     private javax.swing.JTextField txtEdad;
     private javax.swing.JTextField txtEdad1;
     private javax.swing.JTextField txtEdadMod;
     private javax.swing.JTextField txtEdadMod1;
+    private javax.swing.JTextField txtEdadPDC;
     private javax.swing.JTextField txtFechaContratacion;
     private javax.swing.JTextField txtFechaContratacion1;
     private javax.swing.JTextField txtFechaContratacionMod;
@@ -2715,26 +3186,39 @@ if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
     private javax.swing.JTextField txtNacionalidad1;
     private javax.swing.JTextField txtNacionalidadMod;
     private javax.swing.JTextField txtNacionalidadMod1;
+    private javax.swing.JTextField txtNuevaCedulaPDC;
+    private javax.swing.JTextField txtNuevaEdadPDC;
+    private javax.swing.JTextField txtNuevoCorreoPDC;
+    private javax.swing.JTextField txtNuevoPrimerApellidoPDC;
+    private javax.swing.JTextField txtNuevoPrimerNombrePDC;
+    private javax.swing.JTextField txtNuevoSegundoApellidoPDC;
+    private javax.swing.JTextField txtNuevoSegundoNombrePDC;
+    private javax.swing.JTextField txtNuevoSexoPDC;
     private javax.swing.JTextField txtPrimerApellido;
     private javax.swing.JTextField txtPrimerApellido1;
     private javax.swing.JTextField txtPrimerApellidoMod;
     private javax.swing.JTextField txtPrimerApellidoMod1;
+    private javax.swing.JTextField txtPrimerApellidoPDC;
     private javax.swing.JTextField txtPrimerNombre;
     private javax.swing.JTextField txtPrimerNombre1;
     private javax.swing.JTextField txtPrimerNombreMod;
     private javax.swing.JTextField txtPrimerNombreMod1;
+    private javax.swing.JTextField txtPrimerNombrePDC;
     private javax.swing.JTextField txtSegundoApellido;
     private javax.swing.JTextField txtSegundoApellido1;
     private javax.swing.JTextField txtSegundoApellidoMod;
     private javax.swing.JTextField txtSegundoApellidoMod1;
+    private javax.swing.JTextField txtSegundoApellidoPDC;
     private javax.swing.JTextField txtSegundoNombre;
     private javax.swing.JTextField txtSegundoNombre1;
     private javax.swing.JTextField txtSegundoNombreMod;
     private javax.swing.JTextField txtSegundoNombreMod1;
+    private javax.swing.JTextField txtSegundoNombrePDC;
     private javax.swing.JTextField txtSexo;
     private javax.swing.JTextField txtSexo1;
     private javax.swing.JTextField txtSexoMod;
     private javax.swing.JTextField txtSexoMod1;
+    private javax.swing.JTextField txtSexoPDC;
     // End of variables declaration//GEN-END:variables
 }
 

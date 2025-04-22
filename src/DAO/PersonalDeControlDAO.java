@@ -8,7 +8,6 @@ import com.google.gson.reflect.TypeToken;
 import javax.swing.JOptionPane;
 import java.io.*;
 import java.lang.reflect.Type;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,7 +97,6 @@ public class PersonalDeControlDAO {
             Integer nuevaEdad,
             String nuevoSexo,
             String nuevaNacionalidad,
-            LocalDate nuevaFechaIngreso,
             String nuevoTurno
     ) {
         List<PersonalDeControl> lista = cargarTodos();
@@ -115,7 +113,6 @@ public class PersonalDeControlDAO {
                 if (nuevaEdad != null) p.setEdad(nuevaEdad);
                 if (nuevoSexo != null) p.setSexo(nuevoSexo);
                 if (nuevaNacionalidad != null) p.setNacionalidad(nuevaNacionalidad);
-                if (nuevaFechaIngreso != null) p.setFechaIngreso(nuevaFechaIngreso);
                 if (nuevoTurno != null) p.setTurno(nuevoTurno);
 
                 break;

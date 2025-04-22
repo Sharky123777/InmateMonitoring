@@ -232,10 +232,10 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         jSeparator6 = new javax.swing.JSeparator();
         jSeparator7 = new javax.swing.JSeparator();
-        FechaIngresoPDC = new javax.swing.JLabel();
+        FechaInicioContrtoPDC = new javax.swing.JLabel();
         TurnoPDC = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -255,6 +255,9 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jSeparator8 = new javax.swing.JSeparator();
         EmailPDC = new javax.swing.JLabel();
         jLabel49 = new javax.swing.JLabel();
+        jLabel45 = new javax.swing.JLabel();
+        jSeparator9 = new javax.swing.JSeparator();
+        FechaFinContratoPDC = new javax.swing.JLabel();
         PanelListaPresos = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         TablaPresos = new javax.swing.JTable();
@@ -275,7 +278,6 @@ public class PersonalDeControl extends javax.swing.JFrame {
         BotonGuardarVisitante = new javax.swing.JButton();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
-        NacionalidadVisitante = new javax.swing.JTextField();
         SegundoNombreVisitante = new javax.swing.JTextField();
         PrimerApellidoVisitante = new javax.swing.JTextField();
         SegundoApellidoVisitante = new javax.swing.JTextField();
@@ -285,6 +287,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         SexoVisitante = new javax.swing.JComboBox<>();
         EdadVisitante = new javax.swing.JTextField();
         PrimerNombreVisitante = new javax.swing.JTextField();
+        NacionalidadVisitante = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         CantidadDeVisitantesCombo = new javax.swing.JComboBox<>();
         jLabel15 = new javax.swing.JLabel();
@@ -428,8 +431,8 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setText("Fecha de ingreso");
-        jPanel6.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 400, -1, -1));
+        jLabel7.setText("fecha inicio contrato");
+        jPanel6.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 400, -1, -1));
 
         jButton1.setText("Cerrar sesión");
         jPanel6.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 480, 110, 30));
@@ -445,18 +448,19 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jPanel6.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 340, -1, -1));
         jPanel6.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 460, 220, 20));
         jPanel6.add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 220, 20));
-        jPanel6.add(FechaIngresoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 430, 220, 30));
+        jPanel6.add(FechaInicioContrtoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 430, 220, 30));
         jPanel6.add(TurnoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 220, 30));
 
         PanelPerfil.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, 300, 530));
 
+        jPanel2.setBackground(new java.awt.Color(139, 139, 157));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         jLabel8.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("INFORMACIÓN PERSONAL");
-        PanelPerfil.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 70, -1, -1));
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 20, -1, -1));
 
-        jPanel2.setBackground(new java.awt.Color(139, 139, 157));
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         PanelPerfil.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 60));
 
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
@@ -487,7 +491,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jPanel7.add(EdadPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 150, 480, 30));
         jPanel7.add(NacionalidadPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 210, 430, 30));
         jPanel7.add(SexoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 320, 480, 30));
-        jPanel7.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 540, 10));
+        jPanel7.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, 540, 10));
         jPanel7.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 540, 10));
         jPanel7.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 540, 10));
         jPanel7.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 540, 10));
@@ -505,7 +509,14 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel49.setText("Sexo:");
         jPanel7.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, -1));
 
-        PanelPerfil.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 100, 630, 460));
+        jLabel45.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel45.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel45.setText("fecha fin de contrato");
+        jPanel7.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 380, -1, -1));
+        jPanel7.add(jSeparator9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 540, 10));
+        jPanel7.add(FechaFinContratoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 370, 370, 30));
+
+        PanelPerfil.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 70, 630, 490));
 
         TabbedPDC.addTab("PERFIL", PanelPerfil);
 
@@ -629,7 +640,6 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel28.setForeground(new java.awt.Color(0, 0, 0));
         jLabel28.setText("Primer nombre:");
         jPanel9.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
-        jPanel9.add(NacionalidadVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 380, 340, 30));
         jPanel9.add(SegundoNombreVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 100, 310, 30));
         jPanel9.add(PrimerApellidoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 140, 320, 30));
         jPanel9.add(SegundoApellidoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 180, 310, 30));
@@ -643,6 +653,14 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jPanel9.add(SexoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 340, 390, 30));
         jPanel9.add(EdadVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 300, 390, 30));
         jPanel9.add(PrimerNombreVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, 320, 30));
+
+        NacionalidadVisitante.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Afganistán  ", "Albania  ", "Alemania  ", "Andorra  ", "Angola  ", "Antigua y Barbuda  ", "Arabia Saudita  ", "Argelia  ", "Argentina  ", "Armenia  ", "Australia  ", "Austria  ", "Azerbaiyán  ", "Bahamas  ", "Bahréin  ", "Bangladés  ", "Barbados  ", "Bélgica  ", "Belice  ", "Benín  ", "Bielorrusia  ", "Birmania  ", "Bolivia  ", "Bosnia y Herzegovina  ", "Botsuana  ", "Brasil  ", "Brunéi  ", "Bulgaria  ", "Burkina Faso  ", "Burundi  ", "Bután  ", "Cabo Verde  ", "Camboya  ", "Camerún  ", "Canadá  ", "Chad  ", "Chile  ", "China  ", "Chipre  ", "Colombia  ", "Comoras  ", "Congo  ", "Corea del Norte  ", "Corea del Sur  ", "Costa de Marfil  ", "Costa Rica  ", "Croacia  ", "Cuba  ", "Dinamarca  ", "Dominica  ", "Ecuador  ", "Egipto  ", "El Salvador  ", "Emiratos Árabes Unidos  ", "Eritrea  ", "Eslovaquia  ", "Eslovenia  ", "España  ", "Estados Unidos  ", "Estonia  ", "Etiopía  ", "Filipinas  ", "Finlandia  ", "Fiyi  ", "Francia  ", "Gabón  ", "Gambia  ", "Georgia  ", "Ghana  ", "Granada  ", "Grecia  ", "Guatemala  ", "Guinea  ", "Guinea-Bisáu  ", "Guinea Ecuatorial  ", "Guyana  ", "Haití  ", "Honduras  ", "Hungría  ", "India  ", "Indonesia  ", "Irak  ", "Irán  ", "Irlanda  ", "Islandia  ", "Israel  ", "Italia  ", "Jamaica  ", "Japón  ", "Jordania  ", "Kazajistán  ", "Kenia  ", "Kirguistán  ", "Kiribati  ", "Kuwait  ", "Laos  ", "Lesoto  ", "Letonia  ", "Líbano  ", "Liberia  ", "Libia  ", "Liechtenstein  ", "Lituania  ", "Luxemburgo  ", "Madagascar  ", "Malasia  ", "Malaui  ", "Maldivas  ", "Malí  ", "Malta  ", "Marruecos  ", "Islas Marshall  ", "Mauricio  ", "Mauritania  ", "México  ", "Micronesia  ", "Moldavia  ", "Mónaco  ", "Mongolia  ", "Montenegro  ", "Mozambique  ", "Namibia  ", "Nauru  ", "Nepal  ", "Nicaragua  ", "Níger  ", "Nigeria  ", "Noruega  ", "Nueva Zelanda  ", "Omán  ", "Países Bajos  ", "Pakistán  ", "Palaos  ", "Panamá  ", "Papúa Nueva Guinea  ", "Paraguay  ", "Perú  ", "Polonia  ", "Portugal  ", "Qatar  ", "Reino Unido  ", "República Centroafricana  ", "República Checa  ", "República Dominicana  ", "Ruanda  ", "Rumanía  ", "Rusia  ", "Samoa  ", "San Cristóbal y Nieves  ", "San Marino  ", "San Vicente y las Granadinas  ", "Santa Lucía  ", "Santo Tomé y Príncipe  ", "Senegal  ", "Serbia  ", "Seychelles  ", "Sierra Leona  ", "Singapur  ", "Siria  ", "Somalia  ", "Sri Lanka  ", "Sudáfrica  ", "Sudán  ", "Sudán del Sur  ", "Suecia  ", "Suiza  ", "Surinam  ", "Tailandia  ", "Tanzania  ", "Tayikistán  ", "Timor Oriental  ", "Togo  ", "Tonga  ", "Trinidad y Tobago  ", "Túnez  ", "Turkmenistán  ", "Turquía  ", "Tuvalu  ", "Ucrania  ", "Uganda  ", "Uruguay  ", "Uzbekistán  ", "Vanuatu  ", "Vaticano  ", "Venezuela  ", "Vietnam  ", "Yemen  ", "Yibuti  ", "Zambia  ", "Zimbabue" }));
+        NacionalidadVisitante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NacionalidadVisitanteActionPerformed(evt);
+            }
+        });
+        jPanel9.add(NacionalidadVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 382, 340, 30));
 
         PanelGuardarVisita.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 520, 520));
 
@@ -931,14 +949,13 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 || SegundoApellidoVisitante.getText().trim().isEmpty()
                 || EdadVisitante.getText().trim().isEmpty()
                 || IdentificacionVisitante.getText().trim().isEmpty()
-                || NacionalidadVisitante.getText().trim().isEmpty()
                 || EmailVisitante.getText().trim().isEmpty()) {
             mostrarError("Por favor complete todos los campos del formulario");
             return false;
         }
 
         if (SexoVisitante.getSelectedIndex() == 0
-                || RelacionConPresoVisitante.getSelectedIndex() == 0) {
+                || RelacionConPresoVisitante.getSelectedIndex() == 0 || NacionalidadVisitante.getSelectedIndex() == 0) {
             mostrarError("Por favor seleccione una opción en todos los campos desplegables");
             return false;
         }
@@ -999,7 +1016,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         EmailVisitante.setText("");
         EdadVisitante.setText("");
         SexoVisitante.setSelectedIndex(0);
-        NacionalidadVisitante.setText("");
+        NacionalidadVisitante.setSelectedIndex(0);
         RelacionConPresoVisitante.setSelectedIndex(0);
         VistaPreviaVisitante.setIcon(null);
     }
@@ -1032,7 +1049,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         String identificacion = IdentificacionVisitante.getText().trim();
         int edad = Integer.parseInt(EdadVisitante.getText().trim());
         String sexo = SexoVisitante.getSelectedItem().toString();
-        String nacionalidad = NacionalidadVisitante.getText().trim();
+        String nacionalidad = NacionalidadVisitante.getSelectedItem().toString();
         String relacion = RelacionConPresoVisitante.getSelectedItem().toString();
         String email = EmailVisitante.getText().trim();
         if (!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$")) {
@@ -1441,6 +1458,10 @@ public class PersonalDeControl extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_BotonBuscarPresoIdentificacionActionPerformed
 
+    private void NacionalidadVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NacionalidadVisitanteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NacionalidadVisitanteActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1491,7 +1512,8 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JTextField EdadVisitante;
     private javax.swing.JLabel EmailPDC;
     private javax.swing.JTextField EmailVisitante;
-    private javax.swing.JLabel FechaIngresoPDC;
+    private javax.swing.JLabel FechaFinContratoPDC;
+    private javax.swing.JLabel FechaInicioContrtoPDC;
     private com.toedter.calendar.JDateChooser FechaVisita;
     private javax.swing.JPanel FondoFoto;
     private javax.swing.JLabel FotoPDC;
@@ -1501,7 +1523,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JTextField IdentificacionVisitante;
     private javax.swing.JComboBox<String> LugarVisita;
     private javax.swing.JLabel NacionalidadPDC;
-    private javax.swing.JTextField NacionalidadVisitante;
+    private javax.swing.JComboBox<String> NacionalidadVisitante;
     private javax.swing.JLabel NombreCompletoPDC;
     private javax.swing.JTextField NuevaContraseña;
     private javax.swing.JTextField NuevaNacionalidad;
@@ -1573,6 +1595,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel45;
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
@@ -1605,6 +1628,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
+    private javax.swing.JSeparator jSeparator9;
     private javax.swing.JPopupMenu ppMenuTablaPresos;
     private javax.swing.JPopupMenu ppMenuTablaVisitas;
     // End of variables declaration//GEN-END:variables
