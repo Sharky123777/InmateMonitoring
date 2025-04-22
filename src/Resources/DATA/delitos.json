@@ -169,5 +169,14 @@
     "gravedad": "Baja",
     "descripcion": "Daño el patio ajeno",
     "fechaComision": "2025-04-02"
+  },
+  {
+    "id": 20,
+    "codigo": 189,
+    "nombre": "Violación de habitación ajena",
+    "articuloLey": "Artículo 189",
+    "gravedad": "Baja",
+    "descripcion": "Violo una habitacion",
+    "fechaComision": "2025-04-03"
   }
 ]

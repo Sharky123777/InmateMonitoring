@@ -24,7 +24,6 @@ public class DelitoDAO {
                 .create();
     }
 
-    // ✅ Cargar todos los delitos desde el JSON
     public List<Delito> cargarTodos() {
         File archivo = new File(JSON_FILE);
 
@@ -55,11 +54,9 @@ public class DelitoDAO {
         }
     }
 
-    // ✅ Guardar (crear o actualizar) un delito en JSON
     public int guardarDelito(Delito delito) {
     List<Delito> delitos = cargarTodos();
 
-    // Si el delito tiene un ID válido (positivo) y ya existe, actualízalo
     for (int i = 0; i < delitos.size(); i++) {
         if (delitos.get(i).getId() == delito.getId()) {
             delitos.set(i, delito);
@@ -68,17 +65,14 @@ public class DelitoDAO {
         }
     }
 
-    // Si no tiene ID válido o es negativo, asignar uno nuevo
     int nuevoId = obtenerProximoIdDelito();
     delito.setId(nuevoId);
     delitos.add(delito);
     guardarTodos(delitos);
-    System.out.println("✅ Nuevo ID asignado al delito: " + nuevoId);
     return nuevoId;
 }
 
 
-    // ✅ Guardar lista completa de delitos
     public void guardarTodos(List<Delito> delitos) {
         try (FileWriter writer = new FileWriter(JSON_FILE)) {
             gson.toJson(delitos, writer);
@@ -87,7 +81,6 @@ public class DelitoDAO {
         }
     }
 
-    // ✅ Actualizar un delito existente
     public void actualizarDelito(Delito delitoActualizado) {
         List<Delito> delitos = cargarTodos();
         for (int i = 0; i < delitos.size(); i++) {
@@ -97,11 +90,9 @@ public class DelitoDAO {
                 return;
             }
         }
-        // Si no existía, lo guardamos como nuevo
         guardarDelito(delitoActualizado);
     }
 
-    // ✅ Generar el próximo ID único
   private int obtenerProximoIdDelito() {
     List<Delito> delitos = cargarTodos();
     return delitos.stream()
@@ -112,7 +103,6 @@ public class DelitoDAO {
 }
 
 
-    // ✅ Buscar delito por ID
     public Delito buscarDelitoPorId(int id) {
         if (id <= 0) return null;
 
@@ -123,14 +113,12 @@ public class DelitoDAO {
                 .orElse(null);
     }
 
-    // ✅ Eliminar delito por ID
     public void eliminarDelito(int id) {
         List<Delito> delitos = cargarTodos();
         delitos.removeIf(d -> d.getId() == id);
         guardarTodos(delitos);
     }
 
-    // ✅ Mostrar delitos para debug
     public void debugMostrarDelitos() {
         List<Delito> delitos = cargarTodos();
         System.out.println("--- DELITOS EN JSON ---");

@@ -1,25 +1,36 @@
-
 package Controller;
 
+import DAO.CeldaDAO;
 import DAO.PresoDAO;
+import Model.Celda;
+import Model.Delito;
 import Model.Preso;
 import Model.Sentencia;
 import View.OficialDeRegistro;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 
 public class PresoController {
   
-    private PresoDAO presoDAO;
-    private OficialDeRegistro view;
+   private final PresoDAO presoDAO;
+    private final CeldaDAO celdaDAO;
 
-    public PresoController(OficialDeRegistro view) {
-        this.view = view;
-        this.presoDAO = new PresoDAO();
+    public PresoController(PresoDAO presoDAO, CeldaDAO celdaDAO) {
+        this.presoDAO = presoDAO;
+        this.celdaDAO = celdaDAO;
     }
     
-   public boolean hayCambios(String primerNombre, String primerApellido, String edad, 
+    public boolean hayCambios(String primerNombre, String primerApellido, String edad, 
                             String estatura, String peso, String nacionalidad,
                             Object grupoSanguineo, Object año, Object mes, 
                             Object seccion, Object nivelSeguridad, 
@@ -102,8 +113,136 @@ public class PresoController {
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+    }
+    
+    public boolean registrarPreso(String primerNombre, String segundoNombre, String primerApellido, 
+                                String segundoApellido, String edad, String nacionalidad, 
+                                String sexo, String estatura, String peso, String tipoSangre,
+                                String identificacion, String condicion, String seccionAsignada,
+                                String nivelDeRiesgo, String nivelDeSeguridad, String añosSentencia,
+                                String mesesSentencia, Date fechaIngreso, List<Delito> delitos,
+                               File selectedImageFile) {
+        try {
+            validarDatosPersonales(primerNombre, segundoNombre, primerApellido, segundoApellido,
+                                  edad, nacionalidad, estatura, peso, identificacion);
+            
+            int edadNum = Integer.parseInt(edad);
+            float estaturaNum = Float.parseFloat(estatura);
+            float pesoNum = Float.parseFloat(peso);
+            int años = Integer.parseInt(añosSentencia);
+            int meses = Integer.parseInt(mesesSentencia);
+            
+            if (años < 0 || meses < 0 || meses > 11 || (años == 0 && meses == 0)) {
+                throw new IllegalArgumentException("Sentencia inválida");
+            }
+            
+            if (delitos == null || delitos.isEmpty()) {
+                throw new IllegalArgumentException("Debe registrar al menos un delito");
+            }
+            
+            Preso preso = crearPreso(primerNombre, segundoNombre, primerApellido, segundoApellido,
+                                   edadNum, sexo, nacionalidad, identificacion, estaturaNum,
+                                   pesoNum, delitos, años, meses, fechaIngreso, seccionAsignada,
+                                   nivelDeSeguridad, condicion, nivelDeRiesgo, tipoSangre);
+            
+        return presoDAO.guardarPreso(preso, selectedImageFile);
+            
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Datos numéricos inválidos: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("Error al registrar preso: " + e.getMessage(), e);
+        }
+    }
+    
+private Preso crearPreso(String primerNombre, String segundoNombre, String primerApellido,
+                       String segundoApellido, int edad, String sexo, String nacionalidad,
+                       String identificacion, float estatura, float peso, List<Delito> delitos,
+                       int añosSentencia, int mesesSentencia, Date fechaIngreso,
+                       String seccionAsignada, String nivelDeSeguridad, String condicion,
+                       String nivelDeRiesgo, String tipoSangre) {
+    LocalDate fechaIngresoLocal = fechaIngreso.toInstant()
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate();
+    
+    Sentencia sentencia = new Sentencia(añosSentencia, mesesSentencia, fechaIngresoLocal);
+    
+    Celda celdaAsignada = celdaDAO.asignarCeldaDisponible(seccionAsignada);
+    if (celdaAsignada == null) {
+        throw new RuntimeException("No hay celdas disponibles en la sección " + seccionAsignada);
+    }
+    
+    return new Preso(
+            primerNombre, segundoNombre, primerApellido, segundoApellido,
+            edad, sexo, nacionalidad, identificacion, estatura, peso,
+            new ArrayList<>(delitos), sentencia, nivelDeSeguridad,
+            seccionAsignada, condicion, celdaAsignada.getNombreFormateado(), false,
+            nivelDeRiesgo, 0, tipoSangre, null, 0
+    );
 }
     
+    private void validarDatosPersonales(String... datos) {
+        List<String> nombresCampos = List.of(
+            "primer nombre", "segundo nombre", "primer apellido", "segundo apellido",
+            "edad", "nacionalidad", "estatura", "peso", "identificación"
+        );
+        
+        if (datos.length != nombresCampos.size()) {
+            throw new IllegalArgumentException("Número incorrecto de parámetros");
+        }
+        
+        List<String> camposFaltantes = new ArrayList<>();
+        for (int i = 0; i < datos.length; i++) {
+            if (datos[i] == null || datos[i].trim().isEmpty()) {
+                camposFaltantes.add(nombresCampos.get(i));
+            }
+        }
+        
+        if (!camposFaltantes.isEmpty()) {
+            throw new IllegalArgumentException(
+                "Campos requeridos faltantes: " + String.join(", ", camposFaltantes));
+        }
+    }
+
+    public boolean agregarDelitosAPreso(Preso preso, List<Delito> nuevosDelitos) {
+        try {
+            return presoDAO.agregarDelitosAExpediente(preso, nuevosDelitos);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al agregar delitos: " + e.getMessage(), e);
+        }
+    }
     
     
+     public Preso obtenerPresoDesdeTabla(int filaSeleccionada, JTable tablaPresos) {
+        if (filaSeleccionada == -1) {
+            throw new IllegalArgumentException("Seleccione un preso primero");
+        }
+
+        String identificacion = tablaPresos.getValueAt(filaSeleccionada, 5).toString();
+        Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
+
+        if (preso == null) {
+            throw new IllegalStateException("Preso no encontrado");
+        }
+
+        return preso;
+    }
+
+    public boolean validarEliminacionPreso(Preso preso, Date fechaValidacion) {
+        if (preso == null || preso.getSentencia() == null) {
+            throw new IllegalArgumentException("Datos del preso incompletos");
+        }
+
+        LocalDate fechaActual = fechaValidacion.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+
+        LocalDate fechaSalida = preso.getSentencia().getFechaSalidaCalculada();
+
+        return !fechaActual.isBefore(fechaSalida);
+    }
+
+    public boolean eliminarPreso(String identificacion) {
+        return presoDAO.eliminarPreso(identificacion);
+    }
+  
 }

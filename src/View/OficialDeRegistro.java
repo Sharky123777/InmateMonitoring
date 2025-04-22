@@ -1,6 +1,8 @@
 package View;
 
+import Controller.DelitoController;
 import Controller.PresoController;
+import Controller.ExpedienteController;
 import DAO.CeldaDAO;
 import DAO.DelitoDAO;
 import DAO.PresoDAO;
@@ -54,6 +56,11 @@ public class OficialDeRegistro extends javax.swing.JFrame {
 
     private HashMap<String, String[]> datosDelitos;
 
+    private final ExpedienteController expedienteController;
+    private final PresoController presoController;
+    private final PresoDAO presoDAO;
+    private final DelitoDAO delitoDAO;
+
     CeldaDAO celda = new CeldaDAO();
 
     private Preso preso;
@@ -66,6 +73,12 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     private List<Delito> delitosTemporales = new ArrayList<>();
 
     public OficialDeRegistro() {
+        this.presoDAO = new PresoDAO();
+        this.delitoDAO = new DelitoDAO();
+
+        this.expedienteController = new ExpedienteController(presoDAO, delitoDAO);
+        this.presoController = new PresoController(presoDAO, celda);
+
         initComponents();
         inicializarMenu();
         cargarDelitosConCodigoYArticulo();
@@ -97,9 +110,9 @@ public class OficialDeRegistro extends javax.swing.JFrame {
                 }
             }
         });
-        
+
         guardarDelito.addActionListener(e -> agregarDelitoTemporalAñadir());
-                     
+
         ActualizarFotoBoton.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -166,8 +179,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         ppMenuTablaPresos.add(historialMedico);
 
         TablaPresos.setComponentPopupMenu(ppMenuTablaPresos);
-        
-        
+
         AñadirDelito.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -197,7 +209,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
                 OficialDeRegistroView.setSelectedIndex(7);
             }
         });
-    
+
         Sanciones.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -263,133 +275,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
             }
         });
 
-        Eliminar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int filaSeleccionada = TablaPresos.getSelectedRow();
-                if (filaSeleccionada == -1) {
-                    JOptionPane.showMessageDialog(null,
-                            "Seleccione un preso primero",
-                            "Advertencia",
-                            JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-
-                String identificacion = (String) TablaPresos.getValueAt(filaSeleccionada, 5);
-                PresoDAO presoDAO = new PresoDAO();
-                Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
-
-                if (preso == null) {
-                    JOptionPane.showMessageDialog(null,
-                            "Preso no encontrado",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                ValidarFechaDialog dialogo = new ValidarFechaDialog(null, true);
-                dialogo.setVisible(true);
-
-                if (!dialogo.isAceptado()) {
-                    return;
-                }
-
-                Date fechaIngresada = dialogo.getFechaSeleccionada();
-                if (fechaIngresada == null) {
-                    JOptionPane.showMessageDialog(null,
-                            "¡Debe seleccionar una fecha válida!",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                LocalDate fechaActual = fechaIngresada.toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate();
-
-                LocalDate fechaSalida = preso.getSentencia().getFechaSalidaCalculada();
-
-                if (fechaActual.isBefore(fechaSalida)) {
-                    JOptionPane.showMessageDialog(null,
-                            "No se puede eliminar: El preso no ha completado su condena.\n"
-                            + "Fecha de liberación: " + fechaSalida.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                int confirmacion = JOptionPane.showConfirmDialog(null,
-                        "¿Está seguro de eliminar al preso con identificación " + identificacion + "?",
-                        "Confirmar Eliminación",
-                        JOptionPane.YES_NO_OPTION);
-
-                if (confirmacion == JOptionPane.YES_OPTION) {
-                    boolean eliminado = presoDAO.eliminarPreso(identificacion);
-                    if (eliminado) {
-                        JOptionPane.showMessageDialog(null, "Preso eliminado correctamente");
-                        cargarDatosEnTabla();
-                    } else {
-                        JOptionPane.showMessageDialog(null,
-                                "Error al eliminar el preso",
-                                "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            }
-        });
-
-        Expediente.addActionListener(e -> {
-            int filaSeleccionada = TablaPresos.getSelectedRow();
-            if (filaSeleccionada == -1) {
-                JOptionPane.showMessageDialog(this, "¡Selecciona un preso primero!", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            String identificacion = TablaPresos.getValueAt(filaSeleccionada, 5).toString();
-            Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
-
-            if (preso != null) {
-                cargarExpedienteCompleto(preso);
-                OficialDeRegistroView.setSelectedIndex(2);
-            } else {
-                JOptionPane.showMessageDialog(this, "No se encontró el preso", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-        tablaExpediente.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                int selectedRow = tablaExpediente.getSelectedRow();
-                if (selectedRow != -1) {
-                    try {
-                        Object idValue = tablaExpediente.getValueAt(selectedRow, 1);
-                        if (idValue == null) {
-                            DescripDelito.setText("Sin ID de delito");
-                            return;
-                        }
-
-                        int idDelito;
-                        try {
-                            idDelito = Integer.parseInt(idValue.toString());
-                        } catch (NumberFormatException ex) {
-                            DescripDelito.setText("ID inválido: " + idValue);
-                            return;
-                        }
-
-                        Delito delitoSeleccionado = new DelitoDAO().buscarDelitoPorId(idDelito);
-
-                        if (delitoSeleccionado != null) {
-                            DescripDelito.setText(delitoSeleccionado.getDescripcion());
-                        } else {
-                            DescripDelito.setText("Delito no encontrado (ID: " + idDelito + ")");
-                            new DelitoDAO().debugMostrarDelitos();
-                        }
-                    } catch (Exception ex) {
-                        DescripDelito.setText("Error al cargar");
-                        ex.printStackTrace();
-                    }
-                }
-            }
-        });
-
         Informacion.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -449,45 +334,74 @@ public class OficialDeRegistro extends javax.swing.JFrame {
             }
         });
 
+        Expediente.addActionListener(e -> {
+            try {
+                int filaSeleccionada = TablaPresos.getSelectedRow();
+                Preso preso = presoController.obtenerPresoDesdeTabla(filaSeleccionada, TablaPresos);
+
+                expedienteController.cargarExpedienteCompleto(
+                        preso,
+                        RegistroNum, CodExpe, FechaAper, Estado, Juzgado, nivelRiesgExp,
+                        nom, ape, edad, identi, naciona, fotoPresoExpediente, tablaExpediente
+                );
+
+                OficialDeRegistroView.setSelectedIndex(2);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        tablaExpediente.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = tablaExpediente.getSelectedRow();
+                if (selectedRow != -1) {
+                    try {
+                        Object idValue = tablaExpediente.getValueAt(selectedRow, 1);
+                        if (idValue != null) {
+                            int idDelito = Integer.parseInt(idValue.toString());
+                            String descripcion = expedienteController.obtenerDescripcionDelito(idDelito, delitoDAO);
+                            DescripDelito.setText(descripcion);
+                        }
+                    } catch (Exception ex) {
+                        DescripDelito.setText("Error al cargar descripción");
+                    }
+                }
+            }
+        });
+
+        Eliminar.addActionListener(e -> {
+            try {
+                int filaSeleccionada = TablaPresos.getSelectedRow();
+                Preso preso = presoController.obtenerPresoDesdeTabla(filaSeleccionada, TablaPresos);
+
+                ValidarFechaDialog dialogo = new ValidarFechaDialog(null, true);
+                dialogo.setVisible(true);
+
+                if (dialogo.isAceptado() && dialogo.getFechaSeleccionada() != null) {
+                    if (!presoController.validarEliminacionPreso(preso, dialogo.getFechaSeleccionada())) {
+                        JOptionPane.showMessageDialog(null,
+                                "No se puede eliminar: El preso no ha completado su condena.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    int confirmacion = JOptionPane.showConfirmDialog(null,
+                            "¿Está seguro de eliminar al preso " + preso.getIdentificacion() + "?",
+                            "Confirmar", JOptionPane.YES_NO_OPTION);
+
+                    if (confirmacion == JOptionPane.YES_OPTION
+                            && presoController.eliminarPreso(preso.getIdentificacion())) {
+                        JOptionPane.showMessageDialog(null, "Preso eliminado correctamente");
+                        cargarDatosEnTabla();
+                    }
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
     }
-
-    private void cargarExpedienteCompleto(Preso preso) {
-        RegistroNum.setText(preso.getExpediente().getNumeroRegistro());
-        CodExpe.setText(preso.getExpediente().getCodigoExpediente());
-        FechaAper.setText(preso.getExpediente().getFechaApertura().toString());
-        Estado.setText(preso.getExpediente().getEstado());
-        Juzgado.setText(preso.getExpediente().getJuzgado());
-        nivelRiesgExp.setText(preso.getNivelDeRiesgo());
-
-        nom.setText(preso.getNombresCompletos());
-        ape.setText(preso.getApellidosCompletos());
-        edad.setText(String.valueOf(preso.getEdad()));
-        identi.setText(preso.getIdentificacion());
-        naciona.setText(preso.getNacionalidad());
-
-        ImageIcon icon = new ImageIcon(preso.getFotoPath());
-        Image img = icon.getImage().getScaledInstance(
-                fotoPresoExpediente.getWidth(),
-                fotoPresoExpediente.getHeight(),
-                Image.SCALE_SMOOTH
-        );
-        fotoPresoExpediente.setIcon(new ImageIcon(img));
-
-        DefaultTableModel model = (DefaultTableModel) tablaExpediente.getModel();
-        model.setRowCount(0);
-
-        for (Delito delito : preso.getExpediente().getDelitos()) {
-            model.addRow(new Object[]{
-                delito.getNombre(),
-                delito.getId(),
-                preso.getSentencia().getFechaIngreso(),
-                preso.getSentenciaFormateada(),
-                delito.getGravedad(),
-                delito.getFechaComision(),
-                preso.getSentencia().getFechaSalidaCalculada()
-            });
-        }
-    }
+    
+    
 
     private void calcularFechaSalida() {
         try {
@@ -556,100 +470,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         selectedImageFile = null;
     }
 
-    private void cargarDelitosConCodigoYArticulo() {
-        datosDelitos = new HashMap<>();
-
-        datosDelitos.put("Injuria", new String[]{"220", "Artículo 220"});
-        datosDelitos.put("Calumnia", new String[]{"221", "Artículo 221"});
-        datosDelitos.put("Daño en bien ajeno", new String[]{"265", "Artículo 265"});
-        datosDelitos.put("Violación de habitación ajena", new String[]{"189", "Artículo 189"});
-        datosDelitos.put("Inasistencia alimentaria", new String[]{"233", "Artículo 233"});
-        datosDelitos.put("Omisión de socorro", new String[]{"131", "Artículo 131"});
-        datosDelitos.put("Lesiones personales leves", new String[]{"111", "Artículo 111"});
-        datosDelitos.put("Falsedad en documento privado", new String[]{"289", "Artículo 289"});
-        datosDelitos.put("Usurpación de derechos", new String[]{"296", "Artículo 296"});
-        datosDelitos.put("Uso de documento falso", new String[]{"291", "Artículo 291"});
-        datosDelitos.put("Abuso de confianza", new String[]{"249", "Artículo 249"});
-        datosDelitos.put("Hurto simple", new String[]{"239", "Artículo 239"});
-        datosDelitos.put("Receptación", new String[]{"447", "Artículo 447"});
-        datosDelitos.put("Estafa", new String[]{"490", "Artículo 490"});
-        datosDelitos.put("Violación de cerraduras o sellos", new String[]{"189", "Artículo 189"});
-        datosDelitos.put("Fraude", new String[]{"246", "Artículo 246 - Fraude"});
-        datosDelitos.put("Violación de medidas sanitarias", new String[]{"368", "Artículo 368"});
-        datosDelitos.put("Invasión de tierras o edificaciones", new String[]{"263", "Artículo 263"});
-        datosDelitos.put("Suplantación de identidad", new String[]{"296", "Artículo 296"});
-        datosDelitos.put("Contrabando", new String[]{"319", "Artículo 319 - Contrabando"});
-        datosDelitos.put("Hurto calificado", new String[]{"240", "Artículo 240"});
-        datosDelitos.put("Lesiones personales graves", new String[]{"111", "Artículo 111"});
-        datosDelitos.put("Extorsión", new String[]{"244", "Artículo 244 - Extorsión"});
-        datosDelitos.put("Falsedad en documento público", new String[]{"287", "Artículo 287"});
-        datosDelitos.put("Lavado de activos", new String[]{"323", "Artículo 323"});
-        datosDelitos.put("Peculado por uso", new String[]{"399", "Artículo 399"});
-        datosDelitos.put("Violencia intrafamiliar", new String[]{"229", "Artículo 229"});
-        datosDelitos.put("Acoso sexual", new String[]{"210", "Artículo 210"});
-        datosDelitos.put("Acceso abusivo a sistema informático", new String[]{"269", "Artículo 269"});
-        datosDelitos.put("Suplantación en medios electrónicos", new String[]{"296", "Artículo 296"});
-        datosDelitos.put("Daño informático", new String[]{"269", "Artículo 269 - Daño informático"});
-        datosDelitos.put("Tráfico de influencias", new String[]{"411", "Artículo 411"});
-        datosDelitos.put("Porte ilegal de armas", new String[]{"365", "Artículo 365"});
-        datosDelitos.put("Cohecho", new String[]{"405", "Artículo 405"});
-        datosDelitos.put("Concusión", new String[]{"404", "Artículo 404"});
-        datosDelitos.put("Prevaricato", new String[]{"413", "Artículo 413 - Penal"});
-        datosDelitos.put("Abuso de autoridad", new String[]{"416", "Artículo 416 - Penal"});
-        datosDelitos.put("Perturbación del orden público", new String[]{"353", "Artículo 353"});
-        datosDelitos.put("Enriquecimiento ilícito", new String[]{"412", "Artículo 412"});
-        datosDelitos.put("Tráfico de fauna o flora silvestre", new String[]{"328", "Artículo 328"});
-        datosDelitos.put("Minería ilegal", new String[]{"338", "Artículo 338"});
-        datosDelitos.put("Hurto agravado", new String[]{"240", "Artículo 240"});
-        datosDelitos.put("Homicidio culposo", new String[]{"109", "Artículo 109"});
-        datosDelitos.put("Acceso carnal abusivo con menor de 14 años", new String[]{"208", "Artículo 208"});
-        datosDelitos.put("Actos sexuales con menor de 14 años", new String[]{"209", "Artículo 209"});
-        datosDelitos.put("Acceso carnal violento", new String[]{"205", "Artículo 205"});
-        datosDelitos.put("Acto sexual violento", new String[]{"206", "Artículo 206"});
-        datosDelitos.put("Violación", new String[]{"205", "Artículo 205 - Violación"});
-        datosDelitos.put("Secuestro simple", new String[]{"168", "Artículo 168"});
-        datosDelitos.put("Tráfico de estupefacientes", new String[]{"376", "Artículo 376"});
-        datosDelitos.put("Fabricación o porte de estupefacientes", new String[]{"376", "Artículo 376"});
-        datosDelitos.put("Concierto para delinquir", new String[]{"340", "Artículo 340"});
-        datosDelitos.put("Homicidio", new String[]{"103", "Artículo 103"});
-        datosDelitos.put("Homicidio agravado", new String[]{"104", "Artículo 104"});
-        datosDelitos.put("Tortura", new String[]{"178", "Artículo 178"});
-        datosDelitos.put("Desaparición forzada", new String[]{"165", "Artículo 165"});
-        datosDelitos.put("Terrorismo", new String[]{"343", "Artículo 343"});
-        datosDelitos.put("Rebelión", new String[]{"467", "Artículo 467"});
-        datosDelitos.put("Genocidio", new String[]{"101", "Artículo 101"});
-        datosDelitos.put("Crímenes de lesa humanidad", new String[]{"7", "Artículo 7"});
-
-        for (String delito : datosDelitos.keySet()) {
-            NuevosDelitosNombre1.addItem(delito);
-            this.delito.addItem(delito);
-        }
-
-        NuevosDelitosNombre1.addActionListener(e -> {
-            String delitoSeleccionado = NuevosDelitosNombre1.getSelectedItem().toString();
-            String[] datos = datosDelitos.get(delitoSeleccionado);
-            if (datos != null) {
-                cod.setText(datos[0]); 
-                art.setText(datos[1]); 
-            } else {
-                cod.setText("");
-                art.setText("");
-            }
-        });
-
-        delito.addActionListener(e -> {
-            String delitoSeleccionado = delito.getSelectedItem().toString();
-            String[] datos = datosDelitos.get(delitoSeleccionado);
-            if (datos != null) {
-                Codigo.setText(datos[0]); 
-                ArticuloLey.setText(datos[1]); 
-            } else {
-                Codigo.setText("");
-                ArticuloLey.setText("");
-            }
-        });
-    }
-    
     private void agregarDelitoTemporalAñadir() {
         try {
             if (Codigo.getText().trim().isEmpty()
@@ -668,7 +488,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
             String descripcion = DescripcionDelito.getText().trim();
             String nombreDelito = delito.getSelectedItem().toString();
 
-            // Crear delito con ID temporal (negativo)
             Delito nuevoDelito = new Delito(
                     0,
                     codigo,
@@ -679,22 +498,18 @@ public class OficialDeRegistro extends javax.swing.JFrame {
                     fecha
             );
 
-            // Guardar delito en JSON para obtener un ID real
             DelitoDAO dao = new DelitoDAO();
             int idAsignado = dao.guardarDelito(nuevoDelito);
             nuevoDelito.setId(idAsignado);
 
-            // Agregar a la lista temporal con ID real
             delitosTemporales.add(nuevoDelito);
 
-            // Actualizar interfaz
             SwingUtilities.invokeLater(() -> {
                 actualizarProgreso();
                 actualizarEstadoBotonDelito();
                 actualizarEstadoBoton();
             });
 
-            // Limpiar campos
             Codigo.setText("");
             ArticuloLey.setText("");
             FechaComision.setDate(null);
@@ -838,113 +653,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         }
     }
 
-    private boolean validarCantidadDelitos() {
-        try {
-            if (cantidadDelitos.getSelectedIndex() <= 0) {
-                return false;
-            }
-
-            int requeridos = Integer.parseInt(cantidadDelitos.getSelectedItem().toString());
-            return delitosTemporales.size() >= requeridos;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private boolean validarDatosPersonales() {
-        if (InputNombrePreso.getText().trim().isEmpty()
-                || InputSegundoNombre.getText().trim().isEmpty()
-                || InputApellidoPreso.getText().trim().isEmpty()
-                || InputSegundoApellido.getText().trim().isEmpty()
-                || InputEdadPreso.getText().trim().isEmpty()
-                || InputIdentificacionPreso.getText().trim().isEmpty()
-                || InputSexoPreso.getSelectedItem().toString().equals("Seleccione")
-                || InputNacionalidadPreso.getText().trim().isEmpty()
-                || InputEstaturaPreso.getText().trim().isEmpty()
-                || InputPesoPreso.getText().trim().isEmpty()
-                || TipoSangreCombobox.getSelectedItem().toString().equals("Seleccione")
-                || lblFoto.getIcon() == null) {
-            return false;
-        }
-
-        try {
-            Integer.parseInt(InputEdadPreso.getText().trim());
-            Float.parseFloat(InputEstaturaPreso.getText().trim());
-            Float.parseFloat(InputPesoPreso.getText().trim());
-            return true;
-        } catch (NumberFormatException ex) {
-            return false;
-        }
-    }
-
-    private boolean validarDatosJudiciales() {
-        if (seccion.getSelectedIndex() == 0
-                || seguridad.getSelectedIndex() == 0
-                || riesgo.getSelectedIndex() == 0
-                || condicionComb.getSelectedIndex() == 0) {
-            return false;
-        }
-
-        if (datePickerFechaIngreso.getDate() == null) {
-            return false;
-        }
-
-        Object valorAños = spinnerAñosSentencia.getValue();
-        Object valorMeses = spinnerMesesSentencia.getValue();
-
-        Integer años = valorAños != null ? (Integer) valorAños : 0;
-        Integer meses = valorMeses != null ? (Integer) valorMeses : 0;
-
-        if (años < 0 || meses < 0 || meses > 11) {
-            return false;
-        }
-
-        if (años == 0 && meses == 0) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean validarDatosDelito() {
-        if (!delitosTemporales.isEmpty()) {
-            return true;
-        }
-
-        return !delito.getSelectedItem().toString().equals("<Seleccionar>")
-                && !Codigo.getText().trim().isEmpty()
-                && !ArticuloLey.getText().trim().isEmpty()
-                && !Gravedad.getSelectedItem().toString().equals("<Seleccionar>")
-                && FechaComision.getDate() != null
-                && !DescripcionDelito.getText().trim().isEmpty();
-    }
-
-    private boolean validarFecha(String fechaStr) {
-        try {
-            LocalDate fecha = LocalDate.parse(fechaStr);
-
-            if (fecha.getMonthValue() > 12 || fecha.getDayOfMonth() > 31) {
-                return false;
-            }
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private boolean validarNumero(String numeroStr, boolean esEntero) {
-        try {
-            if (esEntero) {
-                Integer.parseInt(numeroStr);
-            } else {
-                Float.parseFloat(numeroStr);
-            }
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
     private void configurarTablaImagenes() {
         TablaPresos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
@@ -1021,124 +729,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         }
     }
 
-    private void finalizarPresoActionPerformed() {
-        try {
-            if (delitosTemporales.size() < totalDelitos) {
-                JOptionPane.showMessageDialog(this,
-                        "Faltan delitos por ingresar. Debe ingresar " + totalDelitos + " delitos.",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            if (!validarDatosPersonales() || !validarDatosJudiciales()) {
-                JOptionPane.showMessageDialog(this,
-                        "Debe completar correctamente todos los datos personales y judiciales.",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            if (lblFoto.getIcon() == null) {
-                JOptionPane.showMessageDialog(this,
-                        "Debe seleccionar una foto del preso",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            Preso preso = crearPresoDesdeFormulario();
-            boolean guardado = new PresoDAO().guardarPreso(preso, selectedImageFile);
-
-            if (guardado) {
-                JOptionPane.showMessageDialog(this, "Preso añadido correctamente con " + delitosTemporales.size() + " delitos.");
-                limpiarFormularioCompleto();
-
-                cargarDatosEnTabla();
-
-                OficialDeRegistroView.setSelectedIndex(0);
-
-                revalidate();
-                repaint();
-            } else {
-                JOptionPane.showMessageDialog(this, "Error al guardar el preso.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception e) {
-            manejarError(e);
-        }
-    }
-
-    private Preso crearPresoDesdeFormulario() {
-        try {
-            String primerNombre = InputNombrePreso.getText().trim();
-            String segundoNombre = InputSegundoNombre.getText().trim();
-            String primerApellido = InputApellidoPreso.getText().trim();
-            String segundoApellido = InputSegundoApellido.getText().trim();
-            int edad = Integer.parseInt(InputEdadPreso.getText().trim());
-            String nacionalidad = InputNacionalidadPreso.getText().trim();
-            String sexo = InputSexoPreso.getSelectedItem().toString();
-            float estatura = Float.parseFloat(InputEstaturaPreso.getText().trim());
-            float peso = Float.parseFloat(InputPesoPreso.getText().trim());
-            String tipoSangre = TipoSangreCombobox.getSelectedItem().toString();
-            String identificacion = InputIdentificacionPreso.getText().trim();
-            String condicion = condicionComb.getSelectedItem().toString();
-            String seccionAsignada = seccion.getSelectedItem().toString();
-            String nivelDeRiesgo = riesgo.getSelectedItem().toString();
-            String nivelDeSeguridad = seguridad.getSelectedItem().toString();
-
-            int años = (Integer) spinnerAñosSentencia.getValue();
-            int meses = (Integer) spinnerMesesSentencia.getValue();
-
-            Date fechaSeleccionada = datePickerFechaIngreso.getDate();
-            if (fechaSeleccionada == null) {
-                JOptionPane.showMessageDialog(null, "Debe seleccionar una fecha de ingreso");
-                return null;
-            }
-
-            LocalDate fechaIngreso = fechaSeleccionada.toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate();
-
-            Sentencia sentencia = new Sentencia(años, meses, fechaIngreso);
-
-            Celda celdaAsignada = new CeldaDAO().asignarCeldaDisponible(seccionAsignada);
-            if (celdaAsignada == null) {
-                JOptionPane.showMessageDialog(null, "No hay celdas disponibles en la sección " + seccionAsignada);
-                return null;
-            }
-
-            Preso preso = new Preso(
-                    primerNombre,
-                    segundoNombre,
-                    primerApellido,
-                    segundoApellido,
-                    edad,
-                    sexo,
-                    nacionalidad,
-                    identificacion,
-                    estatura,
-                    peso,
-                    new ArrayList<>(delitosTemporales),
-                    sentencia,
-                    nivelDeSeguridad,
-                    seccionAsignada,
-                    condicion,
-                    celdaAsignada.getNombreFormateado(),
-                    false,
-                    nivelDeRiesgo,
-                    0,
-                    tipoSangre,
-                    null,
-                    0
-            );
-
-            return preso;
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Error en formato numérico: " + e.getMessage());
-            return null;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al crear preso: " + e.getMessage());
-            return null;
-        }
-    }
-
     private void limpiarCamposDelito() {
         delito.setSelectedIndex(0);
         Codigo.setText("");
@@ -1206,13 +796,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         delitoActual = 1;
         totalDelitos = 1;
         lblProgreso.setText("Delito 1 de 1");
-    }
-
-    private void manejarError(Exception e) {
-        JOptionPane.showMessageDialog(this,
-                "Error inesperado: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
     }
 
     private void cargarDatosEnTabla() {
@@ -1875,7 +1458,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
                 btnIngresarFotoActionPerformed(evt);
             }
         });
-        jPanel3.add(btnIngresarFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 80, 130, -1));
+        jPanel3.add(btnIngresarFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 67, 130, 40));
 
         jSeparator27.setForeground(new java.awt.Color(0, 0, 0));
         jPanel3.add(jSeparator27, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, 410, 10));
@@ -3053,7 +2636,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
 
         jPanel28.setBackground(new java.awt.Color(29, 35, 51));
         jPanel28.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel27.add(jPanel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, 960, 20));
+        jPanel27.add(jPanel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, 960, 10));
 
         jLabel98.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel98.setForeground(new java.awt.Color(0, 0, 0));
@@ -3205,7 +2788,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
 
         jPanel29.setBackground(new java.awt.Color(29, 35, 51));
         jPanel29.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel27.add(jPanel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 20));
+        jPanel27.add(jPanel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 10));
 
         jPanel26.setBackground(new java.awt.Color(29, 35, 51));
 
@@ -3251,14 +2834,14 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         jPanel31.setLayout(jPanel31Layout);
         jPanel31Layout.setHorizontalGroup(
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
+            .addGap(0, 10, Short.MAX_VALUE)
         );
         jPanel31Layout.setVerticalGroup(
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 430, Short.MAX_VALUE)
         );
 
-        jPanel27.add(jPanel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 10, 20, 430));
+        jPanel27.add(jPanel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 10, 10, 430));
 
         javax.swing.GroupLayout jPanel32Layout = new javax.swing.GroupLayout(jPanel32);
         jPanel32.setLayout(jPanel32Layout);
@@ -3617,38 +3200,39 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     }//GEN-LAST:event_nuevoNivelSeguridadComboActionPerformed
 
     private void actualizarPresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarPresoActionPerformed
-    PresoController controller = new PresoController(this);
-    
-    boolean actualizado = controller.actualizarPreso(
-        presoOriginal,
-        nuevoPrimerNombreField.getText(),
-        nuevoSegundoNombreField.getText(),
-        nuevoPrimerApellidoField.getText(),
-        nuevoSegundoApellidoField.getText(),
-        nuevaEdadField.getText(),
-        nuevaNacionalidadField.getText(),
-        nuevaEstaturaField.getText(),
-        nuevoPesoField.getText(),
-        (Integer) nuevoAño.getValue(),
-        (Integer) nuevoMes.getValue(),
-        nuevoGrupoSanguineoCombo.getSelectedItem(),
-        nuevaSeccionCombo.getSelectedItem(),
-        nuevoNivelSeguridadCombo.getSelectedItem(),
-        nuevoAislamientoCombo.getSelectedItem(),
-        nuevoNivelRiesgoCombo.getSelectedItem(),
-        selectedImageFile
-    );
-    
-    if (actualizado) {
-        JOptionPane.showMessageDialog(this, "Preso actualizado correctamente", 
-                                   "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        cargarDatosEnTabla();
-        limpiarCamposActualizacion();
 
-        OficialDeRegistroView.setSelectedIndex(4);
-    
-}
-        
+        PresoController controller = new PresoController(presoDAO, celda);
+
+        boolean actualizado = controller.actualizarPreso(
+                presoOriginal,
+                nuevoPrimerNombreField.getText(),
+                nuevoSegundoNombreField.getText(),
+                nuevoPrimerApellidoField.getText(),
+                nuevoSegundoApellidoField.getText(),
+                nuevaEdadField.getText(),
+                nuevaNacionalidadField.getText(),
+                nuevaEstaturaField.getText(),
+                nuevoPesoField.getText(),
+                (Integer) nuevoAño.getValue(),
+                (Integer) nuevoMes.getValue(),
+                nuevoGrupoSanguineoCombo.getSelectedItem(),
+                nuevaSeccionCombo.getSelectedItem(),
+                nuevoNivelSeguridadCombo.getSelectedItem(),
+                nuevoAislamientoCombo.getSelectedItem(),
+                nuevoNivelRiesgoCombo.getSelectedItem(),
+                selectedImageFile
+        );
+
+        if (actualizado) {
+            JOptionPane.showMessageDialog(this, "Preso actualizado correctamente",
+                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            cargarDatosEnTabla();
+            limpiarCamposActualizacion();
+
+            OficialDeRegistroView.setSelectedIndex(4);
+
+        }
+
 
     }//GEN-LAST:event_actualizarPresoActionPerformed
 
@@ -3732,47 +3316,49 @@ public class OficialDeRegistro extends javax.swing.JFrame {
 
     private void btnBuscarIdentificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarIdentificacionActionPerformed
 
-        btnBuscarIdentificacion.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String idBuscado = identificacionB.getText().trim();
-                if (idBuscado.isEmpty()) {
-                    return;
-                }
+        try {
 
-                String identificacion = identificacionB.getText();
-                List<Preso> todos = new PresoDAO().cargarTodos();
-                DefaultTableModel model = (DefaultTableModel) TablaPresos.getModel();
-                model.setRowCount(0);
+            String idBuscado = identificacionB.getText().trim();
+            if (idBuscado.isEmpty()) {
+                return;
+            }
 
-                for (Preso preso : todos) {
-                    if (preso.getIdentificacion().equalsIgnoreCase(identificacion)) {
+            String identificacion = identificacionB.getText();
+            List<Preso> todos = new PresoDAO().cargarTodos();
+            DefaultTableModel model = (DefaultTableModel) TablaPresos.getModel();
+            model.setRowCount(0);
 
-                        ImageIcon foto = null;
-                        if (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty()) {
-                            foto = cargarImagenPreso(preso.getFotoPath());
-                        } else {
-                            foto = new ImageIcon(getClass().getResource("/images/default_profile.png"));
-                        }
-                        model.addRow(new Object[]{
-                            foto,
-                            preso.getId(),
-                            preso.getPrimerNombre(),
-                            preso.getPrimerApellido(),
-                            preso.getEdad(),
-                            preso.getIdentificacion(),
-                            preso.getNacionalidad(),
-                            preso.getSeccionAsignada(),
-                            preso.getCeldaAsignada()
+            for (Preso preso : todos) {
+                if (preso.getIdentificacion().equalsIgnoreCase(identificacion)) {
 
-                        });
-                        break;
+                    ImageIcon foto = null;
+                    if (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty()) {
+                        foto = cargarImagenPreso(preso.getFotoPath());
                     } else {
-                        JOptionPane.showMessageDialog(null, "NO se encontro ningun preso con la identificación " + identificacion);
+                        foto = new ImageIcon(getClass().getResource("/images/default_profile.png"));
                     }
+                    model.addRow(new Object[]{
+                        foto,
+                        preso.getId(),
+                        preso.getPrimerNombre(),
+                        preso.getPrimerApellido(),
+                        preso.getEdad(),
+                        preso.getIdentificacion(),
+                        preso.getNacionalidad(),
+                        preso.getSeccionAsignada(),
+                        preso.getCeldaAsignada()
+
+                    });
+                    break;
+                } else {
+                    JOptionPane.showMessageDialog(null, "NO se encontro ningun preso con la identificación " + identificacion);
                 }
             }
-        });
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(null, "Error al buscar al preso");
+        }
 
 
     }//GEN-LAST:event_btnBuscarIdentificacionActionPerformed
@@ -3809,9 +3395,238 @@ public class OficialDeRegistro extends javax.swing.JFrame {
             }
         }    }//GEN-LAST:event_SelectorSeccionActionPerformed
 
+    private boolean validarCantidadDelitos() {
+        try {
+            if (cantidadDelitos.getSelectedIndex() <= 0) {
+                return false;
+            }
+
+            int requeridos = Integer.parseInt(cantidadDelitos.getSelectedItem().toString());
+            return delitosTemporales.size() >= requeridos;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean validarDatosPersonales() {
+        if (InputNombrePreso.getText().trim().isEmpty()
+                || InputSegundoNombre.getText().trim().isEmpty()
+                || InputApellidoPreso.getText().trim().isEmpty()
+                || InputSegundoApellido.getText().trim().isEmpty()
+                || InputEdadPreso.getText().trim().isEmpty()
+                || InputIdentificacionPreso.getText().trim().isEmpty()
+                || InputSexoPreso.getSelectedItem().toString().equals("Seleccione")
+                || InputNacionalidadPreso.getText().trim().isEmpty()
+                || InputEstaturaPreso.getText().trim().isEmpty()
+                || InputPesoPreso.getText().trim().isEmpty()
+                || TipoSangreCombobox.getSelectedItem().toString().equals("Seleccione")
+                || lblFoto.getIcon() == null) {
+            return false;
+        }
+
+        try {
+            Integer.parseInt(InputEdadPreso.getText().trim());
+            Float.parseFloat(InputEstaturaPreso.getText().trim());
+            Float.parseFloat(InputPesoPreso.getText().trim());
+            return true;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+    }
+
+    private boolean validarDatosJudiciales() {
+        if (seccion.getSelectedIndex() == 0
+                || seguridad.getSelectedIndex() == 0
+                || riesgo.getSelectedIndex() == 0
+                || condicionComb.getSelectedIndex() == 0) {
+            return false;
+        }
+
+        if (datePickerFechaIngreso.getDate() == null) {
+            return false;
+        }
+
+        Object valorAños = spinnerAñosSentencia.getValue();
+        Object valorMeses = spinnerMesesSentencia.getValue();
+
+        Integer años = valorAños != null ? (Integer) valorAños : 0;
+        Integer meses = valorMeses != null ? (Integer) valorMeses : 0;
+
+        if (años < 0 || meses < 0 || meses > 11) {
+            return false;
+        }
+
+        if (años == 0 && meses == 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private void cargarDelitosConCodigoYArticulo() {
+        datosDelitos = new HashMap<>();
+
+        datosDelitos.put("Injuria", new String[]{"220", "Artículo 220"});
+        datosDelitos.put("Calumnia", new String[]{"221", "Artículo 221"});
+        datosDelitos.put("Daño en bien ajeno", new String[]{"265", "Artículo 265"});
+        datosDelitos.put("Violación de habitación ajena", new String[]{"189", "Artículo 189"});
+        datosDelitos.put("Inasistencia alimentaria", new String[]{"233", "Artículo 233"});
+        datosDelitos.put("Omisión de socorro", new String[]{"131", "Artículo 131"});
+        datosDelitos.put("Lesiones personales leves", new String[]{"111", "Artículo 111"});
+        datosDelitos.put("Falsedad en documento privado", new String[]{"289", "Artículo 289"});
+        datosDelitos.put("Usurpación de derechos", new String[]{"296", "Artículo 296"});
+        datosDelitos.put("Uso de documento falso", new String[]{"291", "Artículo 291"});
+        datosDelitos.put("Abuso de confianza", new String[]{"249", "Artículo 249"});
+        datosDelitos.put("Hurto simple", new String[]{"239", "Artículo 239"});
+        datosDelitos.put("Receptación", new String[]{"447", "Artículo 447"});
+        datosDelitos.put("Estafa", new String[]{"490", "Artículo 490"});
+        datosDelitos.put("Violación de cerraduras o sellos", new String[]{"189", "Artículo 189"});
+        datosDelitos.put("Fraude", new String[]{"246", "Artículo 246 - Fraude"});
+        datosDelitos.put("Violación de medidas sanitarias", new String[]{"368", "Artículo 368"});
+        datosDelitos.put("Invasión de tierras o edificaciones", new String[]{"263", "Artículo 263"});
+        datosDelitos.put("Suplantación de identidad", new String[]{"296", "Artículo 296"});
+        datosDelitos.put("Contrabando", new String[]{"319", "Artículo 319 - Contrabando"});
+        datosDelitos.put("Hurto calificado", new String[]{"240", "Artículo 240"});
+        datosDelitos.put("Lesiones personales graves", new String[]{"111", "Artículo 111"});
+        datosDelitos.put("Extorsión", new String[]{"244", "Artículo 244 - Extorsión"});
+        datosDelitos.put("Falsedad en documento público", new String[]{"287", "Artículo 287"});
+        datosDelitos.put("Lavado de activos", new String[]{"323", "Artículo 323"});
+        datosDelitos.put("Peculado por uso", new String[]{"399", "Artículo 399"});
+        datosDelitos.put("Violencia intrafamiliar", new String[]{"229", "Artículo 229"});
+        datosDelitos.put("Acoso sexual", new String[]{"210", "Artículo 210"});
+        datosDelitos.put("Acceso abusivo a sistema informático", new String[]{"269", "Artículo 269"});
+        datosDelitos.put("Suplantación en medios electrónicos", new String[]{"296", "Artículo 296"});
+        datosDelitos.put("Daño informático", new String[]{"269", "Artículo 269 - Daño informático"});
+        datosDelitos.put("Tráfico de influencias", new String[]{"411", "Artículo 411"});
+        datosDelitos.put("Porte ilegal de armas", new String[]{"365", "Artículo 365"});
+        datosDelitos.put("Cohecho", new String[]{"405", "Artículo 405"});
+        datosDelitos.put("Concusión", new String[]{"404", "Artículo 404"});
+        datosDelitos.put("Prevaricato", new String[]{"413", "Artículo 413 - Penal"});
+        datosDelitos.put("Abuso de autoridad", new String[]{"416", "Artículo 416 - Penal"});
+        datosDelitos.put("Perturbación del orden público", new String[]{"353", "Artículo 353"});
+        datosDelitos.put("Enriquecimiento ilícito", new String[]{"412", "Artículo 412"});
+        datosDelitos.put("Tráfico de fauna o flora silvestre", new String[]{"328", "Artículo 328"});
+        datosDelitos.put("Minería ilegal", new String[]{"338", "Artículo 338"});
+        datosDelitos.put("Hurto agravado", new String[]{"240", "Artículo 240"});
+        datosDelitos.put("Homicidio culposo", new String[]{"109", "Artículo 109"});
+        datosDelitos.put("Acceso carnal abusivo con menor de 14 años", new String[]{"208", "Artículo 208"});
+        datosDelitos.put("Actos sexuales con menor de 14 años", new String[]{"209", "Artículo 209"});
+        datosDelitos.put("Acceso carnal violento", new String[]{"205", "Artículo 205"});
+        datosDelitos.put("Acto sexual violento", new String[]{"206", "Artículo 206"});
+        datosDelitos.put("Violación", new String[]{"205", "Artículo 205 - Violación"});
+        datosDelitos.put("Secuestro simple", new String[]{"168", "Artículo 168"});
+        datosDelitos.put("Tráfico de estupefacientes", new String[]{"376", "Artículo 376"});
+        datosDelitos.put("Fabricación o porte de estupefacientes", new String[]{"376", "Artículo 376"});
+        datosDelitos.put("Concierto para delinquir", new String[]{"340", "Artículo 340"});
+        datosDelitos.put("Homicidio", new String[]{"103", "Artículo 103"});
+        datosDelitos.put("Homicidio agravado", new String[]{"104", "Artículo 104"});
+        datosDelitos.put("Tortura", new String[]{"178", "Artículo 178"});
+        datosDelitos.put("Desaparición forzada", new String[]{"165", "Artículo 165"});
+        datosDelitos.put("Terrorismo", new String[]{"343", "Artículo 343"});
+        datosDelitos.put("Rebelión", new String[]{"467", "Artículo 467"});
+        datosDelitos.put("Genocidio", new String[]{"101", "Artículo 101"});
+        datosDelitos.put("Crímenes de lesa humanidad", new String[]{"7", "Artículo 7"});
+
+        for (String delito : datosDelitos.keySet()) {
+            NuevosDelitosNombre1.addItem(delito);
+            this.delito.addItem(delito);
+        }
+
+        NuevosDelitosNombre1.addActionListener(e -> {
+            String delitoSeleccionado = NuevosDelitosNombre1.getSelectedItem().toString();
+            String[] datos = datosDelitos.get(delitoSeleccionado);
+            if (datos != null) {
+                cod.setText(datos[0]);
+                art.setText(datos[1]);
+            } else {
+                cod.setText("");
+                art.setText("");
+            }
+        });
+
+        delito.addActionListener(e -> {
+            String delitoSeleccionado = delito.getSelectedItem().toString();
+            String[] datos = datosDelitos.get(delitoSeleccionado);
+            if (datos != null) {
+                Codigo.setText(datos[0]);
+                ArticuloLey.setText(datos[1]);
+            } else {
+                Codigo.setText("");
+                ArticuloLey.setText("");
+            }
+        });
+    }
+
+    private boolean validarDatosDelito() {
+        if (!delitosTemporales.isEmpty()) {
+            return true;
+        }
+
+        return !delito.getSelectedItem().toString().equals("<Seleccionar>")
+                && !Codigo.getText().trim().isEmpty()
+                && !ArticuloLey.getText().trim().isEmpty()
+                && !Gravedad.getSelectedItem().toString().equals("<Seleccionar>")
+                && FechaComision.getDate() != null
+                && !DescripcionDelito.getText().trim().isEmpty();
+    }
+
+
     private void AñadirPresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AñadirPresoActionPerformed
-        finalizarPresoActionPerformed();
-        OficialDeRegistroView.setSelectedIndex(4);
+        try {
+            if (delitosTemporales.size() < totalDelitos) {
+                throw new IllegalArgumentException(
+                        "Faltan delitos por ingresar. Debe ingresar " + totalDelitos + " delitos.");
+            }
+
+            if (lblFoto.getIcon() == null) {
+                throw new IllegalArgumentException("Debe seleccionar una foto del preso");
+            }
+
+            PresoController controller = new PresoController(presoDAO, celda);
+            boolean exito = controller.registrarPreso(
+                    InputNombrePreso.getText().trim(),
+                    InputSegundoNombre.getText().trim(),
+                    InputApellidoPreso.getText().trim(),
+                    InputSegundoApellido.getText().trim(),
+                    InputEdadPreso.getText().trim(),
+                    InputNacionalidadPreso.getText().trim(),
+                    InputSexoPreso.getSelectedItem().toString(),
+                    InputEstaturaPreso.getText().trim(),
+                    InputPesoPreso.getText().trim(),
+                    TipoSangreCombobox.getSelectedItem().toString(),
+                    InputIdentificacionPreso.getText().trim(),
+                    condicionComb.getSelectedItem().toString(),
+                    seccion.getSelectedItem().toString(),
+                    riesgo.getSelectedItem().toString(),
+                    seguridad.getSelectedItem().toString(),
+                    Integer.toString(spinnerAñosSentencia.getValue()),
+                    Integer.toString(spinnerMesesSentencia.getValue()),
+                    datePickerFechaIngreso.getDate(),
+                    delitosTemporales,
+                    selectedImageFile.getAbsoluteFile()
+            );
+
+            if (exito) {
+                JOptionPane.showMessageDialog(this,
+                        "Preso registrado exitosamente con " + delitosTemporales.size() + " delitos.",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+                limpiarFormularioCompleto();
+                cargarDatosEnTabla();
+                OficialDeRegistroView.setSelectedIndex(4);
+            } else {
+                throw new RuntimeException("Error al guardar el preso en la base de datos");
+            }
+
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error inesperado: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+
     }//GEN-LAST:event_AñadirPresoActionPerformed
 
     private void cancelarDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarDActionPerformed
@@ -3920,77 +3735,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_guardarDelitoActionPerformed
 
-private void agregarDelitoYFinalizar() {
-    try {
-        if (preso == null) {
-            JOptionPane.showMessageDialog(this, 
-                "Seleccione un preso primero", 
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        if (cod.getText().trim().isEmpty() || 
-            art.getText().trim().isEmpty() || 
-            fechaComisionActualizar.getDate() == null) {
-            JOptionPane.showMessageDialog(this,
-                "Complete todos los campos obligatorios",
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        Delito nuevoDelito = new Delito(
-            0, 
-            Integer.parseInt(cod.getText().trim()),
-            NuevosDelitosNombre1.getSelectedItem().toString(),
-            art.getText().trim(),
-            grav.getSelectedItem().toString(),
-            textAreaDescripcion1.getText().trim(),
-            fechaComisionActualizar.getDate().toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalDate()
-        );
-
-        DelitoDAO delitoDAO = new DelitoDAO();
-        PresoDAO presoDAO = new PresoDAO();
-        
-        int idDelito = delitoDAO.guardarDelito(nuevoDelito);
-        nuevoDelito.setId(idDelito);
-        
-        List<Delito> delitos = new ArrayList<>();
-        delitos.add(nuevoDelito);
-        
-        boolean exito = presoDAO.agregarDelitosAExpediente(preso, delitos);
-
-        if (exito) {
-            JOptionPane.showMessageDialog(this,
-                "Delito añadido exitosamente al expediente",
-                "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            
-            cod.setText("");
-            art.setText("");
-            fechaComisionActualizar.setDate(null);
-            grav.setSelectedIndex(0);
-            textAreaDescripcion1.setText("");
-            
-            OficialDeRegistroView.setSelectedIndex(4);
-        } else {
-            JOptionPane.showMessageDialog(this,
-                "Error al asociar el delito al preso",
-                "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this,
-            "El código debe ser un número válido",
-            "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this,
-            "Error inesperado: " + e.getMessage(),
-            "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
-}
-
-
     private void limpiarCamposDelitoNuevo() {
         cod.setText("");
         art.setText("");
@@ -4000,15 +3744,35 @@ private void agregarDelitoYFinalizar() {
         textAreaDescripcion1.setText("");
     }
 
-    
-
 
     private void finalizarDelitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finalizarDelitoActionPerformed
 
-    agregarDelitoYFinalizar();
-    limpiarCamposDelitoNuevo();
-    OficialDeRegistroView.setSelectedIndex(4);
+        try {
+            DelitoController controller = new DelitoController();
+
+            boolean exito = controller.agregarDelitoAPreso(
+                    preso,
+                    cod.getText(),
+                    art.getText(),
+                    NuevosDelitosNombre1.getSelectedItem().toString(),
+                    grav.getSelectedItem().toString(),
+                    textAreaDescripcion1.getText(),
+                    fechaComisionActualizar.getDate()
+            );
+
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "Delito registrado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                limpiarCamposDelitoNuevo();
+                OficialDeRegistroView.setSelectedIndex(4);
+            }
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_finalizarDelitoActionPerformed
+
 
     private void NuevosDelitosNombre1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevosDelitosNombre1ActionPerformed
         // TODO add your handling code here:

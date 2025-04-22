@@ -240,87 +240,33 @@
     "identificacion": "112233"
   },
   {
-    "estatura": 126.0,
-    "peso": 45.0,
+    "estatura": 128.0,
+    "peso": 22.0,
     "delitos": [
       {
-        "id": 4,
-        "codigo": 265,
-        "nombre": "Daño en bien ajeno",
-        "articuloLey": "Artículo 265",
-        "gravedad": "Alta",
-        "descripcion": "Monto una casa para dañar el bien ajeno",
-        "fechaComision": "2025-04-01"
-      },
-      {
-        "id": 5,
-        "codigo": 220,
-        "nombre": "Injuria",
-        "articuloLey": "Artículo 220",
-        "gravedad": "Media",
-        "descripcion": "Estuvo injuriando todo",
-        "fechaComision": "2025-04-08"
-      },
-      {
-        "id": 16,
-        "codigo": 447,
-        "nombre": "Receptación",
-        "articuloLey": "Artículo 447",
-        "gravedad": "Media",
-        "descripcion": "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
-        "fechaComision": "2025-04-15"
-      },
-      {
-        "id": 17,
-        "codigo": 411,
-        "nombre": "Tráfico de influencias",
-        "articuloLey": "Artículo 411",
-        "gravedad": "Alta",
-        "descripcion": "Estaba traficando hierba medicianal\nhierba buena, hierba mala",
-        "fechaComision": "2025-04-01"
+        "id": 20,
+        "codigo": 189,
+        "nombre": "Violación de habitación ajena",
+        "articuloLey": "Artículo 189",
+        "gravedad": "Baja",
+        "descripcion": "Violo una habitacion",
+        "fechaComision": "2025-04-03"
       }
     ],
     "expediente": {
-      "codigoExpediente": "EXP-BJJ0-4YGW",
-      "numeroRegistro": "REG-2025-9056",
-      "fechaApertura": "2025-04-20",
+      "codigoExpediente": "EXP-JX4R-F532",
+      "numeroRegistro": "REG-2025-4631",
+      "fechaApertura": "2025-04-22",
       "estado": "Activo",
       "delitos": [
         {
-          "id": 4,
-          "codigo": 265,
-          "nombre": "Daño en bien ajeno",
-          "articuloLey": "Artículo 265",
-          "gravedad": "Alta",
-          "descripcion": "Monto una casa para dañar el bien ajeno",
-          "fechaComision": "2025-04-01"
-        },
-        {
-          "id": 5,
-          "codigo": 220,
-          "nombre": "Injuria",
-          "articuloLey": "Artículo 220",
-          "gravedad": "Media",
-          "descripcion": "Estuvo injuriando todo",
-          "fechaComision": "2025-04-08"
-        },
-        {
-          "id": 16,
-          "codigo": 447,
-          "nombre": "Receptación",
-          "articuloLey": "Artículo 447",
-          "gravedad": "Media",
-          "descripcion": "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
-          "fechaComision": "2025-04-15"
-        },
-        {
-          "id": 17,
-          "codigo": 411,
-          "nombre": "Tráfico de influencias",
-          "articuloLey": "Artículo 411",
-          "gravedad": "Alta",
-          "descripcion": "Estaba traficando hierba medicianal\nhierba buena, hierba mala",
-          "fechaComision": "2025-04-01"
+          "id": 20,
+          "codigo": 189,
+          "nombre": "Violación de habitación ajena",
+          "articuloLey": "Artículo 189",
+          "gravedad": "Baja",
+          "descripcion": "Violo una habitacion",
+          "fechaComision": "2025-04-03"
         }
       ],
       "juzgado": "Por determinar",
@@ -328,31 +274,31 @@
       "nivelAdaptacion": "Por evaluar",
       "actividades": [],
       "observacionesConducta": "Ninguna",
-      "nivelRiesgo": "Medio"
+      "nivelRiesgo": "Riesgo medio"
     },
     "sentencia": {
-      "años": 12,
-      "meses": 0,
-      "fechaIngreso": "2025-04-15",
-      "fechaSalidaCalculada": "2037-04-15"
+      "años": 4,
+      "meses": 3,
+      "fechaIngreso": "2025-04-02",
+      "fechaSalidaCalculada": "2029-07-02"
     },
-    "nivelDeSeguridad": "Media",
+    "nivelDeSeguridad": "Alto",
     "seccionAsignada": "Sección B",
     "condicion": "Condenado en traslado",
-    "celdaAsignada": "CELD-43",
+    "celdaAsignada": "CELD-45",
     "enAislamiento": false,
-    "nivelDeRiesgo": "Medio",
+    "nivelDeRiesgo": "Riesgo medio",
     "numeroDeVisitas": 0,
-    "grupoSanguineo": "AB+",
-    "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_8.jpg",
-    "id": 8,
-    "primerNombre": "Luciana",
-    "segundoNombre": "Jimena",
-    "primerApellido": "Rupm",
-    "segundoApellido": "0101022",
-    "edad": 22,
+    "grupoSanguineo": "B+",
+    "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_9.jpg",
+    "id": 9,
+    "primerNombre": "Carlita",
+    "segundoNombre": "Manuela",
+    "primerApellido": "Tovara",
+    "segundoApellido": "Linear",
+    "edad": 77,
     "sexo": "F",
-    "nacionalidad": "Chilena",
-    "identificacion": "0101022"
+    "nacionalidad": "Colombia",
+    "identificacion": "12346543"
   }
 ]
