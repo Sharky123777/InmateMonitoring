@@ -15,35 +15,27 @@ import java.util.List;
 public class OficialDAO {
 
     private static final String JSON_FILE = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\oficiales.json";
-
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public List<Oficial> cargarTodos() {
         File archivo = new File(JSON_FILE);
 
-        if (!archivo.exists()) {
-            try {
+        try {
+            if (!archivo.exists()) {
                 archivo.createNewFile();
-                try (FileWriter writer = new FileWriter(JSON_FILE)) {
-                    gson.toJson(new ArrayList<Oficial>(), writer);
-                }
-                return new ArrayList<>();
-            } catch (IOException e) {
-                System.err.println("Error al crear archivo JSON: " + e.getMessage());
-                return new ArrayList<>();
+                guardarTodos(new ArrayList<>());
             }
-        }
 
-        if (archivo.length() == 0) {
-            return new ArrayList<>();
-        }
+            if (archivo.length() == 0) return new ArrayList<>();
 
-        try (Reader reader = new FileReader(JSON_FILE)) {
-            Type tipoLista = new TypeToken<ArrayList<Oficial>>() {}.getType();
-            List<Oficial> lista = gson.fromJson(reader, tipoLista);
-            return lista != null ? lista : new ArrayList<>();
+            try (Reader reader = new FileReader(archivo)) {
+                Type tipoLista = new TypeToken<List<Oficial>>() {}.getType();
+                List<Oficial> lista = gson.fromJson(reader, tipoLista);
+                return lista != null ? lista : new ArrayList<>();
+            }
+
         } catch (IOException e) {
-            System.err.println("Error al leer archivo JSON: " + e.getMessage());
+            System.err.println("Error al cargar oficiales: " + e.getMessage());
             return new ArrayList<>();
         }
     }
@@ -55,16 +47,15 @@ public class OficialDAO {
     }
 
     public void guardarTodos(List<Oficial> lista) {
-        try (FileWriter writer = new FileWriter(JSON_FILE)) {
+        try (Writer writer = new FileWriter(JSON_FILE)) {
             gson.toJson(lista, writer);
         } catch (IOException e) {
-            System.err.println("Error al guardar en archivo JSON: " + e.getMessage());
+            System.err.println("Error al guardar oficiales: " + e.getMessage());
         }
     }
 
     public Oficial buscarPorIdentificacion(String identificacion) {
-        List<Oficial> lista = cargarTodos();
-        for (Oficial o : lista) {
+        for (Oficial o : cargarTodos()) {
             if (o.getIdentificacion().equals(identificacion)) {
                 return o;
             }
@@ -75,18 +66,10 @@ public class OficialDAO {
     public boolean eliminarPorIdentificacion(String identificacion) {
         List<Oficial> lista = cargarTodos();
         boolean eliminado = lista.removeIf(o -> o.getIdentificacion().equals(identificacion));
-
         if (eliminado) {
-            try (Writer writer = new FileWriter(JSON_FILE)) {
-                gson.toJson(lista, writer);
-                return true;
-            } catch (IOException e) {
-                System.err.println("Error al guardar después de eliminar: " + e.getMessage());
-                return false;
-            }
+            guardarTodos(lista);
         }
-
-        return false;
+        return eliminado;
     }
 
     public boolean actualizarOficial(
@@ -109,8 +92,6 @@ public class OficialDAO {
 
         for (Oficial o : lista) {
             if (o.getIdentificacion().equals(identificacionOriginal)) {
-                encontrado = true;
-
                 if (nuevoPrimerNombre != null) o.setPrimerNombre(nuevoPrimerNombre);
                 if (nuevoSegundoNombre != null) o.setSegundoNombre(nuevoSegundoNombre);
                 if (nuevoPrimerApellido != null) o.setPrimerApellido(nuevoPrimerApellido);
@@ -118,33 +99,22 @@ public class OficialDAO {
                 if (nuevaEdad != null) o.setEdad(nuevaEdad);
                 if (nuevoSexo != null) o.setSexo(nuevoSexo);
                 if (nuevaNacionalidad != null) o.setNacionalidad(nuevaNacionalidad);
-                if (nuevaFechaIngreso != null) o.setFechaIngreso(nuevaFechaIngreso);
+                if (nuevaFechaIngreso != null) o.setFechaInicioContrato(nuevaFechaIngreso);
                 if (nuevoTurno != null) o.setTurno(nuevoTurno);
                 if (nuevaPlaca != null) o.setPlaca(nuevaPlaca);
                 if (nuevoCargo != null) o.setCargo(nuevoCargo);
                 if (nuevaFotoPath != null) o.setFotoPath(nuevaFotoPath);
-
+                encontrado = true;
                 break;
             }
         }
 
         if (!encontrado) {
-            JOptionPane.showMessageDialog(null,
-                    "Oficial no encontrado: " + identificacionOriginal,
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Oficial no encontrado: " + identificacionOriginal, "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
-        return guardarCambios(lista);
-    }
-
-    private boolean guardarCambios(List<Oficial> lista) {
-        try {
-            guardarTodos(lista);
-            return true;
-        } catch (Exception e) {
-            System.err.println("Error al guardar cambios: " + e.getMessage());
-            return false;
-        }
+        guardarTodos(lista);
+        return true;
     }
 }
