@@ -41,19 +41,20 @@ public class PresoDAO {
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
             .create();
-    
-    private static class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
-    @Override
-    public JsonElement serialize(LocalDate date, Type typeOfSrc, JsonSerializationContext context) {
-        return new JsonPrimitive(date.toString()); 
-    }
 
-    @Override
-    public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) 
-        throws JsonParseException {
-        return LocalDate.parse(json.getAsString());
+    private static class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
+
+        @Override
+        public JsonElement serialize(LocalDate date, Type typeOfSrc, JsonSerializationContext context) {
+            return new JsonPrimitive(date.toString());
+        }
+
+        @Override
+        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
+            return LocalDate.parse(json.getAsString());
+        }
     }
-}
 
     private int obtenerProximoId() {
         List<Preso> presos = cargarTodos();
@@ -62,7 +63,7 @@ public class PresoDAO {
         }
 
         int maxId = presos.stream()
-             .mapToInt(Preso::getId)
+                .mapToInt(Preso::getId)
                 .max()
                 .orElse(0);
 
@@ -196,99 +197,121 @@ public class PresoDAO {
         return eliminado;
     }
 
-  public boolean actualizarPreso(
-    String identificacionOriginal,
-    String nuevoPrimerNombre,
-    String nuevoSegundoNombre,
-    String nuevoPrimerApellido,
-    String nuevoSegundoApellido,
-    Integer nuevaEdad,
-    String nuevoSexo,
-    String nuevaNacionalidad,
-    Float nuevaEstatura,
-    Float nuevoPeso,
-    Sentencia nuevaSentencia,  
-    String nuevoGrupoSanguineo,
-    String nuevaSeccionAsignada,
-    String nuevoNivelSeguridad,
-    Boolean nuevoEnAislamiento,
-    String nuevoNivelRiesgo,
-    File nuevaFoto) {
-List<Preso> presos = cargarTodos();
-boolean encontrado = false;
+    public boolean actualizarPreso(
+            String identificacionOriginal,
+            String nuevoPrimerNombre,
+            String nuevoSegundoNombre,
+            String nuevoPrimerApellido,
+            String nuevoSegundoApellido,
+            Integer nuevaEdad,
+            String nuevoSexo,
+            String nuevaNacionalidad,
+            Float nuevaEstatura,
+            Float nuevoPeso,
+            String nuevoGrupoSanguineo,
+            String nuevaSeccionAsignada,
+            String nuevoNivelSeguridad,
+            Boolean nuevoEnAislamiento,
+            String nuevoNivelRiesgo,
+            File nuevaFoto) {
+        List<Preso> presos = cargarTodos();
+        boolean encontrado = false;
 
-for (Preso preso : presos) {
-    if (preso.getIdentificacion().equals(identificacionOriginal)) {
-        encontrado = true;
+        for (Preso preso : presos) {
+            if (preso.getIdentificacion().equals(identificacionOriginal)) {
+                encontrado = true;
 
-        if (nuevoPrimerNombre != null) preso.setPrimerNombre(nuevoPrimerNombre);
-        if (nuevoSegundoNombre != null) preso.setSegundoNombre(nuevoSegundoNombre);
-        if (nuevoPrimerApellido != null) preso.setPrimerApellido(nuevoPrimerApellido);
-        if (nuevoSegundoApellido != null) preso.setSegundoApellido(nuevoSegundoApellido);
-        if (nuevaEdad != null) preso.setEdad(nuevaEdad);
-        if (nuevoSexo != null) preso.setSexo(nuevoSexo);
-        if (nuevaNacionalidad != null) preso.setNacionalidad(nuevaNacionalidad);
-        if (nuevaEstatura != null) preso.setEstatura(nuevaEstatura);
-        if (nuevoPeso != null) preso.setPeso(nuevoPeso);
-        if (nuevoGrupoSanguineo != null) preso.setGrupoSanguineo(nuevoGrupoSanguineo);
+                if (nuevoPrimerNombre != null) {
+                    preso.setPrimerNombre(nuevoPrimerNombre);
+                }
+                if (nuevoSegundoNombre != null) {
+                    preso.setSegundoNombre(nuevoSegundoNombre);
+                }
+                if (nuevoPrimerApellido != null) {
+                    preso.setPrimerApellido(nuevoPrimerApellido);
+                }
+                if (nuevoSegundoApellido != null) {
+                    preso.setSegundoApellido(nuevoSegundoApellido);
+                }
+                if (nuevaEdad != null) {
+                    preso.setEdad(nuevaEdad);
+                }
+                if (nuevoSexo != null) {
+                    preso.setSexo(nuevoSexo);
+                }
+                if (nuevaNacionalidad != null) {
+                    preso.setNacionalidad(nuevaNacionalidad);
+                }
+                if (nuevaEstatura != null) {
+                    preso.setEstatura(nuevaEstatura);
+                }
+                if (nuevoPeso != null) {
+                    preso.setPeso(nuevoPeso);
+                }
+                if (nuevoGrupoSanguineo != null) {
+                    preso.setGrupoSanguineo(nuevoGrupoSanguineo);
+                }
 
-        if (nuevaSentencia != null || nuevaSeccionAsignada != null ||
-            nuevoNivelSeguridad != null || nuevoEnAislamiento != null ||
-            nuevoNivelRiesgo != null) {
+                if (nuevaSeccionAsignada != null
+                        || nuevoNivelSeguridad != null || nuevoEnAislamiento != null
+                        || nuevoNivelRiesgo != null) {
 
-            if (!actualizarDatosJudiciales(preso, nuevaSentencia, nuevaSeccionAsignada,
-                                           nuevoNivelSeguridad, nuevoEnAislamiento,
-                                           nuevoNivelRiesgo)) {
-                return false;
+                    if (!actualizarDatosJudiciales(preso, nuevaSeccionAsignada,
+                            nuevoNivelSeguridad, nuevoEnAislamiento,
+                            nuevoNivelRiesgo)) {
+                        return false;
+                    }
+                }
+                if (nuevaFoto != null) {
+                    actualizarFotoPreso(preso, nuevaFoto);
+                }
+
+                break;
             }
         }
-        if (nuevaFoto != null) actualizarFotoPreso(preso, nuevaFoto);
 
-       
-
-        break;
-    }
-}
-
-    if(!encontrado) {
-        JOptionPane.showMessageDialog(null, 
-            "Preso no encontrado: " + identificacionOriginal, 
-            "Error", JOptionPane.ERROR_MESSAGE);
-        return false;
-    }
-
-    return guardarCambios(presos);
-}
-
- private boolean actualizarDatosJudiciales(Preso preso, Sentencia nuevaSentencia, String nuevaSeccion, 
-                                      String nivelSeguridad, Boolean enAislamiento, 
-                                      String nivelRiesgo) {
-    CeldaDAO celdaDAO = new CeldaDAO();
-
-    if(nuevaSeccion != null && !nuevaSeccion.equals(preso.getSeccionAsignada())) {
-        Celda nuevaCelda = celdaDAO.asignarCeldaDisponible(nuevaSeccion);
-        if(nuevaCelda == null) {
-            JOptionPane.showMessageDialog(null, 
-                "No hay celdas disponibles en la sección " + nuevaSeccion, 
-                "Error", JOptionPane.ERROR_MESSAGE);
+        if (!encontrado) {
+            JOptionPane.showMessageDialog(null,
+                    "Preso no encontrado: " + identificacionOriginal,
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
-        celdaDAO.liberarCelda(preso.getCeldaAsignada());
-        preso.setCeldaAsignada(nuevaCelda.getNombreFormateado());
-        preso.setSeccionAsignada(nuevaSeccion);
+        return guardarCambios(presos);
     }
 
-    if(nuevaSentencia != null) {
-        preso.setSentencia(nuevaSentencia);
-    }
-    
-    if(nivelSeguridad != null) preso.setNivelDeSeguridad(nivelSeguridad);
-    if(enAislamiento != null) preso.setEnAislamiento(enAislamiento);
-    if(nivelRiesgo != null) preso.setNivelDeRiesgo(nivelRiesgo);
+    private boolean actualizarDatosJudiciales(Preso preso, String nuevaSeccion,
+            String nivelSeguridad, Boolean enAislamiento,
+            String nivelRiesgo) {
+        CeldaDAO celdaDAO = new CeldaDAO();
 
-    return true;
-}
+        if (nuevaSeccion != null && !nuevaSeccion.equals(preso.getSeccionAsignada())) {
+            Celda nuevaCelda = celdaDAO.asignarCeldaDisponible(nuevaSeccion);
+            if (nuevaCelda == null) {
+                JOptionPane.showMessageDialog(null,
+                        "No hay celdas disponibles en la sección " + nuevaSeccion,
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            celdaDAO.liberarCelda(preso.getCeldaAsignada());
+            preso.setCeldaAsignada(nuevaCelda.getNombreFormateado());
+            preso.setSeccionAsignada(nuevaSeccion);
+        }
+
+        if (nivelSeguridad != null) {
+            preso.setNivelDeSeguridad(nivelSeguridad);
+        }
+        if (enAislamiento != null) {
+            preso.setEnAislamiento(enAislamiento);
+        }
+        if (nivelRiesgo != null) {
+            preso.setNivelDeRiesgo(nivelRiesgo);
+        }
+
+        return true;
+    }
+
     private void actualizarFotoPreso(Preso preso, File nuevaFoto) {
         try {
             String extension = nuevaFoto.getName().substring(nuevaFoto.getName().lastIndexOf("."));
@@ -298,46 +321,66 @@ for (Preso preso : presos) {
             new File(IMAGES_DIR).mkdirs();
             Files.copy(nuevaFoto.toPath(), new File(rutaDestino).toPath(), StandardCopyOption.REPLACE_EXISTING);
             preso.setFotoPath(rutaDestino);
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.err.println("Error al guardar imagen: " + e.getMessage());
         }
     }
 
-public boolean agregarDelitosAExpediente(Preso preso, List<Delito> nuevosDelitos) {
-    ExpedienteJudicial expediente = preso.getExpediente();
-    if (expediente == null) {
-        expediente = new ExpedienteJudicial();
-        preso.setExpediente(expediente);
-    }
-
-    expediente.getDelitos().addAll(nuevosDelitos);
-    preso.getDelitos().addAll(nuevosDelitos);
-
-    DelitoDAO delitoDAO = new DelitoDAO();
-    for (Delito delito : nuevosDelitos) {
-        delitoDAO.guardarDelito(delito);
-    }
-
-    List<Preso> presos = cargarTodos();
-    for (int i = 0; i < presos.size(); i++) {
-        if (presos.get(i).getIdentificacion().equals(preso.getIdentificacion())) {
-            presos.set(i, preso);
-            return guardarCambios(presos); 
+    public boolean agregarDelitosAExpediente(Preso preso, List<Delito> nuevosDelitos) {
+        ExpedienteJudicial expediente = preso.getExpediente();
+        if (expediente == null) {
+            expediente = new ExpedienteJudicial();
+            preso.setExpediente(expediente);
         }
-    }
 
-    return false;
-}
+        expediente.getDelitos().addAll(nuevosDelitos);
+        preso.getDelitos().addAll(nuevosDelitos);
+
+        DelitoDAO delitoDAO = new DelitoDAO();
+        for (Delito delito : nuevosDelitos) {
+            delitoDAO.guardarDelito(delito);
+        }
+
+        List<Preso> presos = cargarTodos();
+        for (int i = 0; i < presos.size(); i++) {
+            if (presos.get(i).getIdentificacion().equals(preso.getIdentificacion())) {
+                presos.set(i, preso);
+                return guardarCambios(presos);
+            }
+        }
+
+        return false;
+    }
 
     private boolean guardarCambios(List<Preso> presos) {
         try {
             guardarTodos(presos);
             return true;
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("Error al guardar: " + e.getMessage());
             return false;
         }
     }
     
+    public boolean existePresoConIdentificacion(String identificacion) {
+    List<Preso> presos = cargarTodos(); 
+    for (Preso preso : presos) {
+        if (preso.getIdentificacion().equals(identificacion)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+    public List<Preso> buscarPorSeccion(String seccion) {
+    List<Preso> todos = cargarTodos(); 
+    List<Preso> filtrados = new ArrayList<>();
     
+    for (Preso preso : todos) {
+        if (preso.getSeccionAsignada().equalsIgnoreCase(seccion)) {
+            filtrados.add(preso);
+        }
+    }
+    return filtrados;
+}
 }
