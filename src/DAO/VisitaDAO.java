@@ -1,0 +1,101 @@
+package DAO;
+
+import Model.LocalDateAdapter;
+import Model.LocalTimeAdapter;
+import Model.Visita;
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
+import java.io.*;
+import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
+public class VisitaDAO {
+
+    private static final String JSON_FILE = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\visitas.json";
+    private Gson gson;
+
+    public VisitaDAO() {
+        this.gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
+                .create();
+    }
+
+    public List<Visita> cargarTodas() {
+        File archivo = new File(JSON_FILE);
+
+        if (!archivo.exists()) {
+            try {
+                archivo.createNewFile();
+                guardarTodas(new ArrayList<>());
+                return new ArrayList<>();
+            } catch (IOException e) {
+                System.err.println("Error al crear archivo JSON: " + e.getMessage());
+                return new ArrayList<>();
+            }
+        }
+
+        if (archivo.length() == 0) {
+            return new ArrayList<>();
+        }
+
+        try (Reader reader = new FileReader(JSON_FILE)) {
+            Type tipoListaVisita = new TypeToken<ArrayList<Visita>>() {
+            }.getType();
+            List<Visita> visitas = gson.fromJson(reader, tipoListaVisita);
+            return visitas != null ? visitas : new ArrayList<>();
+        } catch (JsonSyntaxException | IOException e) {
+            System.err.println("Error al leer archivo JSON: " + e.getMessage());
+            guardarTodas(new ArrayList<>());
+            return new ArrayList<>();
+        }
+    }
+
+    public void guardarVisita(Visita visita) {
+        List<Visita> visitas = cargarTodas();
+
+        if (visita.getId() == 0) {
+            int nuevoId = obtenerProximoId(visitas);
+            visita.setId(nuevoId);
+        }
+
+        visitas.add(visita);
+        guardarTodas(visitas);
+    }
+
+    private int obtenerProximoId(List<Visita> visitas) {
+        if (visitas.isEmpty()) {
+            return 1;
+        }
+        return visitas.stream()
+                .mapToInt(Visita::getId)
+                .max()
+                .orElse(0) + 1;
+    }
+
+    public List<Visita> cargarPorIdentificacionPreso(String identificacionPreso) {
+        List<Visita> todasVisitas = cargarTodas();
+        List<Visita> visitasFiltradas = new ArrayList<>();
+
+        for (Visita visita : todasVisitas) {
+            if (visita.getPreso() != null
+                    && visita.getPreso().getIdentificacion().equals(identificacionPreso)) {
+                visitasFiltradas.add(visita);
+            }
+        }
+
+        return visitasFiltradas;
+    }
+
+    public void guardarTodas(List<Visita> visitas) {
+        try (FileWriter writer = new FileWriter(JSON_FILE)) {
+            gson.toJson(visitas, writer);
+        } catch (IOException e) {
+            System.err.println("Error al guardar en archivo JSON: " + e.getMessage());
+        }
+    }
+}

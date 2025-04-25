@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 public class Delito {
 
+    private int id;
     private int codigo;
     private String nombre;
     private String articuloLey;
@@ -12,13 +13,22 @@ public class Delito {
     private String descripcion;
     private LocalDate fechaComision;
 
-    public Delito(int codigo, String nombre, String articuloLey, String gravedad, String descripcion, LocalDate fechaComision) {
+    public Delito(int id, int codigo, String nombre, String articuloLey, String gravedad, String descripcion, LocalDate fechaComision) {
+       this.id = id;
         this.codigo = codigo;
         this.nombre = nombre;
         this.articuloLey = articuloLey;
         this.gravedad = gravedad;
         this.descripcion = descripcion;
         this.fechaComision = fechaComision;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getCodigo() {

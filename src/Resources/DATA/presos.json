@@ -1,3 +1,358 @@
 [
-
+  {
+    "estatura": 145.0,
+    "peso": 22.0,
+    "delitos": [
+      {
+        "id": 1,
+        "codigo": 265,
+        "nombre": "Daño en bien ajeno",
+        "articuloLey": "Artículo 265",
+        "gravedad": "Media",
+        "descripcion": "DAÑO UNA BLICLETA",
+        "fechaComision": "2025-04-15"
+      }
+    ],
+    "expediente": {
+      "codigoExpediente": "EXP-KXD3-G9CR",
+      "numeroRegistro": "REG-2025-6841",
+      "fechaApertura": "2025-04-20",
+      "estado": "Activo",
+      "delitos": [
+        {
+          "id": 1,
+          "codigo": 265,
+          "nombre": "Daño en bien ajeno",
+          "articuloLey": "Artículo 265",
+          "gravedad": "Media",
+          "descripcion": "DAÑO UNA BLICLETA",
+          "fechaComision": "2025-04-15"
+        }
+      ],
+      "juzgado": "Por determinar",
+      "totalVisitas": 0,
+      "nivelAdaptacion": "Por evaluar",
+      "actividades": [],
+      "observacionesConducta": "Ninguna",
+      "nivelRiesgo": "Riesgo medio"
+    },
+    "sentencia": {
+      "años": 1,
+      "meses": 1,
+      "fechaIngreso": "2025-04-04",
+      "fechaSalidaCalculada": "2026-05-04"
+    },
+    "nivelDeSeguridad": "Medio",
+    "seccionAsignada": "Sección A",
+    "condicion": "Condenado",
+    "celdaAsignada": "CELD-9",
+    "enAislamiento": false,
+    "nivelDeRiesgo": "Riesgo medio",
+    "numeroDeVisitas": 0,
+    "grupoSanguineo": "B-",
+    "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_5.jpg",
+    "id": 5,
+    "primerNombre": "Lina",
+    "segundoNombre": "Loon",
+    "primerApellido": "Hum",
+    "segundoApellido": "Ham",
+    "edad": 23,
+    "sexo": "F",
+    "nacionalidad": "Cihina",
+    "identificacion": "121212"
+  },
+  {
+    "estatura": 123.0,
+    "peso": 11.0,
+    "delitos": [
+      {
+        "id": 2,
+        "codigo": 109,
+        "nombre": "Homicidio culposo",
+        "articuloLey": "Artículo 109",
+        "gravedad": "Alta",
+        "descripcion": "Mato a una persona pero de manera accidental",
+        "fechaComision": "2025-04-08"
+      },
+      {
+        "id": 3,
+        "codigo": 178,
+        "nombre": "Tortura",
+        "articuloLey": "Artículo 178",
+        "gravedad": "Alta",
+        "descripcion": "Torturaba a todos sus clientes",
+        "fechaComision": "2025-04-14"
+      }
+    ],
+    "expediente": {
+      "codigoExpediente": "EXP-NCE1-HP92",
+      "numeroRegistro": "REG-2025-1819",
+      "fechaApertura": "2025-04-20",
+      "estado": "Activo",
+      "delitos": [
+        {
+          "id": 2,
+          "codigo": 109,
+          "nombre": "Homicidio culposo",
+          "articuloLey": "Artículo 109",
+          "gravedad": "Alta",
+          "descripcion": "Mato a una persona pero de manera accidental",
+          "fechaComision": "2025-04-08"
+        },
+        {
+          "id": 3,
+          "codigo": 178,
+          "nombre": "Tortura",
+          "articuloLey": "Artículo 178",
+          "gravedad": "Alta",
+          "descripcion": "Torturaba a todos sus clientes",
+          "fechaComision": "2025-04-14"
+        }
+      ],
+      "juzgado": "Por determinar",
+      "totalVisitas": 0,
+      "nivelAdaptacion": "Por evaluar",
+      "actividades": [],
+      "observacionesConducta": "Ninguna",
+      "nivelRiesgo": "Riesgo medio"
+    },
+    "sentencia": {
+      "años": 12,
+      "meses": 1,
+      "fechaIngreso": "2025-04-14",
+      "fechaSalidaCalculada": "2037-05-14"
+    },
+    "nivelDeSeguridad": "Bajo",
+    "seccionAsignada": "Sección A",
+    "condicion": "Condenado",
+    "celdaAsignada": "CELD-10",
+    "enAislamiento": false,
+    "nivelDeRiesgo": "Riesgo medio",
+    "numeroDeVisitas": 0,
+    "grupoSanguineo": "B-",
+    "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_6.jpg",
+    "id": 6,
+    "primerNombre": "Marina",
+    "segundoNombre": "Ser",
+    "primerApellido": "Tovar",
+    "segundoApellido": "Ham",
+    "edad": 55,
+    "sexo": "F",
+    "nacionalidad": "Coreana",
+    "identificacion": "235432"
+  },
+  {
+    "estatura": 124.0,
+    "peso": 44.0,
+    "delitos": [
+      {
+        "id": 0,
+        "codigo": 229,
+        "nombre": "Violencia intrafamiliar",
+        "articuloLey": "Artículo 229",
+        "gravedad": "Baja",
+        "descripcion": "Golpeaba a su familia por que se enojaba",
+        "fechaComision": "2025-04-10"
+      },
+      {
+        "id": 18,
+        "codigo": 412,
+        "nombre": "Enriquecimiento ilícito",
+        "articuloLey": "Artículo 412",
+        "gravedad": "Alta",
+        "descripcion": "Fue visto traficando",
+        "fechaComision": "2025-04-21"
+      },
+      {
+        "id": 19,
+        "codigo": 265,
+        "nombre": "Daño en bien ajeno",
+        "articuloLey": "Artículo 265",
+        "gravedad": "Baja",
+        "descripcion": "Daño el patio ajeno",
+        "fechaComision": "2025-04-02"
+      }
+    ],
+    "expediente": {
+      "codigoExpediente": "EXP-CTDY-NSL7",
+      "numeroRegistro": "REG-2025-3706",
+      "fechaApertura": "2025-04-20",
+      "estado": "Activo",
+      "delitos": [
+        {
+          "id": 0,
+          "codigo": 229,
+          "nombre": "Violencia intrafamiliar",
+          "articuloLey": "Artículo 229",
+          "gravedad": "Baja",
+          "descripcion": "Golpeaba a su familia por que se enojaba",
+          "fechaComision": "2025-04-10"
+        },
+        {
+          "id": 18,
+          "codigo": 412,
+          "nombre": "Enriquecimiento ilícito",
+          "articuloLey": "Artículo 412",
+          "gravedad": "Alta",
+          "descripcion": "Fue visto traficando",
+          "fechaComision": "2025-04-21"
+        },
+        {
+          "id": 19,
+          "codigo": 265,
+          "nombre": "Daño en bien ajeno",
+          "articuloLey": "Artículo 265",
+          "gravedad": "Baja",
+          "descripcion": "Daño el patio ajeno",
+          "fechaComision": "2025-04-02"
+        }
+      ],
+      "juzgado": "Por determinar",
+      "totalVisitas": 0,
+      "nivelAdaptacion": "Por evaluar",
+      "actividades": [],
+      "observacionesConducta": "Ninguna",
+      "nivelRiesgo": "Alto"
+    },
+    "sentencia": {
+      "años": 17,
+      "meses": 5,
+      "fechaIngreso": "2025-04-15",
+      "fechaSalidaCalculada": "2042-09-15"
+    },
+    "nivelDeSeguridad": "\u003cSeleccionar\u003e",
+    "seccionAsignada": "Sección B",
+    "condicion": "Condenado en traslado",
+    "celdaAsignada": "CELD-44",
+    "enAislamiento": true,
+    "nivelDeRiesgo": "Alto",
+    "numeroDeVisitas": 0,
+    "grupoSanguineo": "\u003cSeleccione\u003e",
+    "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_7.jpg",
+    "id": 7,
+    "primerNombre": "DANIELA",
+    "segundoNombre": "Tom",
+    "primerApellido": "Xep",
+    "segundoApellido": "112233",
+    "edad": 22,
+    "sexo": "F",
+    "nacionalidad": "Colombia",
+    "identificacion": "112233"
+  },
+  {
+    "estatura": 126.0,
+    "peso": 45.0,
+    "delitos": [
+      {
+        "id": 4,
+        "codigo": 265,
+        "nombre": "Daño en bien ajeno",
+        "articuloLey": "Artículo 265",
+        "gravedad": "Alta",
+        "descripcion": "Monto una casa para dañar el bien ajeno",
+        "fechaComision": "2025-04-01"
+      },
+      {
+        "id": 5,
+        "codigo": 220,
+        "nombre": "Injuria",
+        "articuloLey": "Artículo 220",
+        "gravedad": "Media",
+        "descripcion": "Estuvo injuriando todo",
+        "fechaComision": "2025-04-08"
+      },
+      {
+        "id": 16,
+        "codigo": 447,
+        "nombre": "Receptación",
+        "articuloLey": "Artículo 447",
+        "gravedad": "Media",
+        "descripcion": "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "fechaComision": "2025-04-15"
+      },
+      {
+        "id": 17,
+        "codigo": 411,
+        "nombre": "Tráfico de influencias",
+        "articuloLey": "Artículo 411",
+        "gravedad": "Alta",
+        "descripcion": "Estaba traficando hierba medicianal\nhierba buena, hierba mala",
+        "fechaComision": "2025-04-01"
+      }
+    ],
+    "expediente": {
+      "codigoExpediente": "EXP-BJJ0-4YGW",
+      "numeroRegistro": "REG-2025-9056",
+      "fechaApertura": "2025-04-20",
+      "estado": "Activo",
+      "delitos": [
+        {
+          "id": 4,
+          "codigo": 265,
+          "nombre": "Daño en bien ajeno",
+          "articuloLey": "Artículo 265",
+          "gravedad": "Alta",
+          "descripcion": "Monto una casa para dañar el bien ajeno",
+          "fechaComision": "2025-04-01"
+        },
+        {
+          "id": 5,
+          "codigo": 220,
+          "nombre": "Injuria",
+          "articuloLey": "Artículo 220",
+          "gravedad": "Media",
+          "descripcion": "Estuvo injuriando todo",
+          "fechaComision": "2025-04-08"
+        },
+        {
+          "id": 16,
+          "codigo": 447,
+          "nombre": "Receptación",
+          "articuloLey": "Artículo 447",
+          "gravedad": "Media",
+          "descripcion": "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+          "fechaComision": "2025-04-15"
+        },
+        {
+          "id": 17,
+          "codigo": 411,
+          "nombre": "Tráfico de influencias",
+          "articuloLey": "Artículo 411",
+          "gravedad": "Alta",
+          "descripcion": "Estaba traficando hierba medicianal\nhierba buena, hierba mala",
+          "fechaComision": "2025-04-01"
+        }
+      ],
+      "juzgado": "Por determinar",
+      "totalVisitas": 0,
+      "nivelAdaptacion": "Por evaluar",
+      "actividades": [],
+      "observacionesConducta": "Ninguna",
+      "nivelRiesgo": "Medio"
+    },
+    "sentencia": {
+      "años": 12,
+      "meses": 0,
+      "fechaIngreso": "2025-04-15",
+      "fechaSalidaCalculada": "2037-04-15"
+    },
+    "nivelDeSeguridad": "Media",
+    "seccionAsignada": "Sección B",
+    "condicion": "Condenado en traslado",
+    "celdaAsignada": "CELD-43",
+    "enAislamiento": false,
+    "nivelDeRiesgo": "Medio",
+    "numeroDeVisitas": 0,
+    "grupoSanguineo": "AB+",
+    "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_8.jpg",
+    "id": 8,
+    "primerNombre": "Luciana",
+    "segundoNombre": "Jimena",
+    "primerApellido": "Rupm",
+    "segundoApellido": "0101022",
+    "edad": 22,
+    "sexo": "F",
+    "nacionalidad": "Chilena",
+    "identificacion": "0101022"
+  }
 ]
