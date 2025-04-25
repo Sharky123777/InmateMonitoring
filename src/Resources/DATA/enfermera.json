@@ -1,7 +1,7 @@
 [
   {
-    "primerNombre": "PRUEBAFINAL",
-    "segundoNombre": "xxxxxxxxxx",
+    "primerNombre": "PRUEBAz",
+    "segundoNombre": "xxxxxxxxxxkk",
     "primerApellido": "xzzc",
     "segundoApellido": "ai",
     "edad": 45,
@@ -9,9 +9,9 @@
     "nacionalidad": "yoysay",
     "identificacion": "234223232",
     "turno": "Nocturno",
-    "fechaContratacion": "2025-04-19",
+    "fechaContratacion": "2025-04-24",
     "fechaFinContrato": "2025-04-29",
-    "rutaImagen": "src/Resources/imagenes_enfermeras/234223232_1745081264590.jpg",
+    "rutaImagen": "src/Resources/imagenes_enfermeras/234223232_1745541967197.png",
     "correo": "@.com"
   }
 ]

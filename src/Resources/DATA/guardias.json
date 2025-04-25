@@ -17,22 +17,6 @@
       "cargo": "Oficial"
     },
     {
-      "primerNombre": "aaaaaaaaaaaa",
-      "segundoNombre": "",
-      "primerApellido": "zzzzzzzz",
-      "segundoApellido": "qqqqqqqq",
-      "edad": 19,
-      "identificacion": "0987654321",
-      "sexo": "Femenino",
-      "nacionalidad": "vwve",
-      "correo": "@.com",
-      "turno": "Diurno",
-      "fechaInicioContrato": "2025-04-18",
-      "fechaFinContrato": "2000-04-20",
-      "rutaImagen": "src/Resources/imagenes_guardias/0987654321_Captura de pantalla 2024-03-06 145925.png",
-      "cargo": "Guardia"
-    },
-    {
       "primerNombre": "Shar",
       "segundoNombre": "Lok",
       "primerApellido": "Restrepo",
@@ -82,7 +66,7 @@
     },
     {
       "primerNombre": "z",
-      "segundoNombre": "",
+      "segundoNombre": "sd",
       "primerApellido": "wadwa",
       "segundoApellido": "zzzzz",
       "edad": 34,

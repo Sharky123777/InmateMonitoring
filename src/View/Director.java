@@ -4,6 +4,8 @@
  */
 package View;
 
+import Controller.EnfermeraController;
+import Controller.GuardiaController;
 import Controller.PersonalDeControlController;
 import DAO.EnfermeraDAO;
 import DAO.GuardiaDAO;
@@ -65,6 +67,8 @@ public class Director extends javax.swing.JFrame {
     private File imagenSeleccionadaMod; // ✅ Añade esta línea
     private PersonalDeControlController controller;
     private File imagenPDCSeleccionada;
+    private final GuardiaController guardiaController = new GuardiaController();
+private final EnfermeraController enfermeraController = new EnfermeraController();
 
     public Director() {
         initComponents();
