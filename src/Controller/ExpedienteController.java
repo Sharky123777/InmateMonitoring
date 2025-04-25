@@ -6,28 +6,31 @@ import Model.Preso;
 import Model.Delito;
 import Model.ExpedienteJudicial;
 import Model.Sentencia;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JTextField;
 import java.awt.Image;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 public class ExpedienteController {
     
     private final PresoDAO presoDAO;
     private final DelitoDAO delitoDAO;
+    private final PresoController presoController;
 
-    public ExpedienteController(PresoDAO presoDAO, DelitoDAO delitoDAO) {
+    public ExpedienteController(PresoDAO presoDAO, DelitoDAO delitoDAO, PresoController presoController) {
         this.presoDAO = presoDAO;
         this.delitoDAO = delitoDAO;
+        this.presoController = presoController;
     }
     
     public ExpedienteController() {
         this.presoDAO = new PresoDAO();
         this.delitoDAO = new DelitoDAO();
+        this.presoController = new PresoController(presoDAO, null, delitoDAO); 
     }
     
     public void cargarExpedienteCompleto(Preso preso, 
@@ -43,10 +46,20 @@ public class ExpedienteController {
                                         JLabel identificacion,
                                         JLabel nacionalidad,
                                         JLabel fotoLabel,
-                                        JTable tablaExpediente) {
+                                        JTable tablaExpediente,
+                                        JLabel SentenciaTotal) {
         
-        if (preso == null || preso.getExpediente() == null) {
-            throw new IllegalArgumentException("Preso o expediente no pueden ser nulos");
+        if (preso == null) {
+            throw new IllegalArgumentException("Preso no puede ser nulo");
+        }
+
+        List<Delito> delitosActualizados = delitoDAO.obtenerDelitosPorPreso(preso.getIdentificacion());
+        if (preso.getExpediente() == null) {
+            ExpedienteJudicial expediente = new ExpedienteJudicial();
+            expediente.setDelitos(delitosActualizados);
+            preso.setExpediente(expediente);
+        } else {
+            preso.getExpediente().setDelitos(delitosActualizados);
         }
 
         ExpedienteJudicial expediente = preso.getExpediente();
@@ -66,7 +79,14 @@ public class ExpedienteController {
 
         cargarFotoPreso(preso.getFotoPath(), fotoLabel);
 
-        cargarTablaDelitos(preso, tablaExpediente);
+        Sentencia sentenciaTotal = new Sentencia(0, 0, preso.getExpediente().getDelitos().get(0).getSentencia().getFechaIngreso());
+        for (Delito delito : preso.getExpediente().getDelitos()) {
+            sentenciaTotal.sumarSentencia(delito.getSentencia());
+        }
+
+        SentenciaTotal.setText(sentenciaTotal.getSentenciaFormateada());
+
+        presoController.cargarTablaDelitos(preso, tablaExpediente);
     }
 
     private void cargarFotoPreso(String fotoPath, JLabel fotoLabel) {
@@ -82,28 +102,10 @@ public class ExpedienteController {
             fotoLabel.setIcon(null);
         }
     }
-
-    private void cargarTablaDelitos(Preso preso, JTable tablaExpediente) {
-        DefaultTableModel model = (DefaultTableModel) tablaExpediente.getModel();
-        model.setRowCount(0);
-
-        if (preso.getExpediente().getDelitos() != null) {
-            for (Delito delito : preso.getExpediente().getDelitos()) {
-                model.addRow(new Object[]{
-                    delito.getNombre(),
-                    delito.getId(),
-                    preso.getSentencia() != null ? preso.getSentencia().getFechaIngreso() : "",
-                    preso.getSentenciaFormateada(),
-                    delito.getGravedad(),
-                    delito.getFechaComision(),
-                    preso.getSentencia() != null ? preso.getSentencia().getFechaSalidaCalculada() : ""
-                });
-            }
-        }
+    
+    public String obtenerDescripcionDelito(int idDelito) {
+        return delitoDAO.obtenerDescripcionDelito(idDelito);
     }
     
-    public String obtenerDescripcionDelito(int idDelito, DelitoDAO delitoDAO) {
-        Delito delito = delitoDAO.buscarDelitoPorId(idDelito);
-        return delito != null ? delito.getDescripcion() : "Descripción no disponible";
-    }
+
 }

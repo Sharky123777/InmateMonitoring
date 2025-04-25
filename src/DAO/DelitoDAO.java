@@ -11,9 +11,11 @@ import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import javax.swing.JOptionPane;
 
 public class DelitoDAO {
-    
+
     private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\delitos.json";
     private Gson gson;
 
@@ -45,7 +47,8 @@ public class DelitoDAO {
         }
 
         try (Reader reader = new FileReader(JSON_FILE)) {
-            Type tipoListaDelitos = new TypeToken<ArrayList<Delito>>() {}.getType();
+            Type tipoListaDelitos = new TypeToken<ArrayList<Delito>>() {
+            }.getType();
             List<Delito> delitos = gson.fromJson(reader, tipoListaDelitos);
             return delitos != null ? delitos : new ArrayList<>();
         } catch (IOException e) {
@@ -55,23 +58,22 @@ public class DelitoDAO {
     }
 
     public int guardarDelito(Delito delito) {
-    List<Delito> delitos = cargarTodos();
+        List<Delito> delitos = cargarTodos();
 
-    for (int i = 0; i < delitos.size(); i++) {
-        if (delitos.get(i).getId() == delito.getId()) {
-            delitos.set(i, delito);
-            guardarTodos(delitos);
-            return delito.getId();
+        for (int i = 0; i < delitos.size(); i++) {
+            if (delitos.get(i).getId() == delito.getId()) {
+                delitos.set(i, delito);
+                guardarTodos(delitos);
+                return delito.getId();
+            }
         }
+
+        int nuevoId = obtenerProximoIdDelito();
+        delito.setId(nuevoId);
+        delitos.add(delito);
+        guardarTodos(delitos);
+        return nuevoId;
     }
-
-    int nuevoId = obtenerProximoIdDelito();
-    delito.setId(nuevoId);
-    delitos.add(delito);
-    guardarTodos(delitos);
-    return nuevoId;
-}
-
 
     public void guardarTodos(List<Delito> delitos) {
         try (FileWriter writer = new FileWriter(JSON_FILE)) {
@@ -93,18 +95,19 @@ public class DelitoDAO {
         guardarDelito(delitoActualizado);
     }
 
-  private int obtenerProximoIdDelito() {
-    List<Delito> delitos = cargarTodos();
-    return delitos.stream()
-            .mapToInt(Delito::getId)
-            .filter(id -> id > 0)
-            .max()
-            .orElse(0) + 1;
-}
-
+    private int obtenerProximoIdDelito() {
+        List<Delito> delitos = cargarTodos();
+        return delitos.stream()
+                .mapToInt(Delito::getId)
+                .filter(id -> id > 0)
+                .max()
+                .orElse(0) + 1;
+    }
 
     public Delito buscarDelitoPorId(int id) {
-        if (id <= 0) return null;
+        if (id <= 0) {
+            return null;
+        }
 
         List<Delito> delitos = cargarTodos();
         return delitos.stream()
@@ -119,14 +122,19 @@ public class DelitoDAO {
         guardarTodos(delitos);
     }
 
-    public void debugMostrarDelitos() {
-        List<Delito> delitos = cargarTodos();
-        System.out.println("--- DELITOS EN JSON ---");
-        delitos.forEach(d -> System.out.println(
-                "ID: " + d.getId() +
-                        ", Nombre: " + d.getNombre() +
-                        ", Código: " + d.getCodigo()
-        ));
-        System.out.println("-----------------------");
+ 
+
+public List<Delito> obtenerDelitosPorPreso(String identificacionPreso) {
+    return cargarTodos().stream()
+            .filter(d -> identificacionPreso.equals(d.getPresoId()))  
+            .collect(Collectors.toList());
+}
+    public String obtenerDescripcionDelito(int idDelito) {
+        List<Delito> delitos = cargarTodos(); 
+        return delitos.stream()
+                .filter(d -> d.getId() == idDelito)
+                .findFirst()
+                .map(Delito::getDescripcion)
+                .orElse(null);
     }
 }

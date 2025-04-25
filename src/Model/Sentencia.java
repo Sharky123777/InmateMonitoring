@@ -22,6 +22,17 @@ import java.time.Period;
         this.fechaIngreso = fechaIngreso;
         calcularFechaSalida();
     }
+    
+   public void sumarSentencia(Sentencia otra) {
+    this.años += otra.getAños();
+    this.meses += otra.getMeses();
+
+    this.años += this.meses / 12;
+    this.meses = this.meses % 12;
+
+    calcularFechaSalida();
+}
+
 
     private void calcularFechaSalida() {
         Period periodo = Period.of(años, meses, 0);
