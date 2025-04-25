@@ -6,23 +6,48 @@ import java.time.LocalDate;
 public class Delito {
 
     private int id;
+     private String presoId;
     private int codigo;
     private String nombre;
     private String articuloLey;
     private String gravedad;
     private String descripcion;
     private LocalDate fechaComision;
+   private Sentencia sentencia; 
 
-    public Delito(int id, int codigo, String nombre, String articuloLey, String gravedad, String descripcion, LocalDate fechaComision) {
-       this.id = id;
+    public Delito(int id, String presoId,  int codigo, String nombre, String articuloLey, 
+                 String gravedad, String descripcion, LocalDate fechaComision, 
+                 Sentencia sentencia) {
+        this.id = id;
+        this.presoId = presoId;
         this.codigo = codigo;
         this.nombre = nombre;
         this.articuloLey = articuloLey;
         this.gravedad = gravedad;
         this.descripcion = descripcion;
         this.fechaComision = fechaComision;
+        this.sentencia = sentencia;
     }
 
+    public String getPresoId() {
+        return presoId;
+    }
+
+    public void setPresoId(String presoId) {
+        this.presoId = presoId;
+    }
+
+   
+    
+    
+
+    public Sentencia getSentencia() {
+        return sentencia;
+    }
+
+    public void setSentencia(Sentencia sentencia) {
+        this.sentencia = sentencia;
+    }
     public int getId() {
         return id;
     }

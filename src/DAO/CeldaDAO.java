@@ -85,6 +85,19 @@ public boolean liberarCelda(String nombreCelda) {
     }
     return false;
 }
+
+public int obtenerCeldasDisponibles(String tipo) {
+    List<Celda> celdas = cargarTodas();
+    int disponibles = 0;
+    
+    for (Celda celda : celdas) {
+        if (!celda.isOcupada() && celda.getTipo().equalsIgnoreCase(tipo)) {
+            disponibles++;
+        }
+    }
+    
+    return disponibles;
+}
     
  
 }

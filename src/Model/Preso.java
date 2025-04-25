@@ -10,7 +10,6 @@ public class Preso extends Persona {
     private float peso;
     private List<Delito> delitos = new ArrayList<>();
     private ExpedienteJudicial expediente;
-    private Sentencia sentencia;
     private String nivelDeSeguridad;
     private String seccionAsignada;
     private String condicion;
@@ -24,7 +23,7 @@ public class Preso extends Persona {
 
     public Preso(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
                  int edad, String sexo, String nacionalidad, String identificacion,
-                 float estatura, float peso, List<Delito> delitos, Sentencia sentencia,
+                 float estatura, float peso, List<Delito> delitos, 
                  String nivelDeSeguridad, String seccionAsignada, String condicion,
                  String celdaAsignada, boolean enAislamiento, String nivelDeRiesgo,
                  int numeroDeVisitas, String grupoSanguineo, String fotoPath, int id) {
@@ -34,7 +33,6 @@ public class Preso extends Persona {
         this.estatura = estatura;
         this.peso = peso;
         this.delitos = delitos != null ? delitos : new ArrayList<>();
-        this.sentencia = sentencia;
         this.nivelDeSeguridad = nivelDeSeguridad;
         this.seccionAsignada = seccionAsignada;
         this.condicion = condicion;
@@ -75,8 +73,25 @@ public class Preso extends Persona {
         }
     }
 
-    // Métodos Getters y Setters
-
+    public Sentencia getSentenciaTotal() {
+        int totalAños = 0;
+        int totalMeses = 0;
+        LocalDate fechaIngreso = null;
+        
+        if (!delitos.isEmpty()) {
+            fechaIngreso = delitos.get(0).getSentencia().getFechaIngreso();
+            
+            for (Delito delito : delitos) {
+                totalAños += delito.getSentencia().getAños();
+                totalMeses += delito.getSentencia().getMeses();
+            }
+            
+            totalAños += totalMeses / 12;
+            totalMeses = totalMeses % 12;
+        }
+        
+        return new Sentencia(totalAños, totalMeses, fechaIngreso);
+    }
     public float getEstatura() { return estatura; }
     public void setEstatura(float estatura) { this.estatura = estatura; }
 
@@ -105,9 +120,7 @@ public class Preso extends Persona {
     public ExpedienteJudicial getExpediente() { return expediente; }
     public void setExpediente(ExpedienteJudicial expediente) { this.expediente = expediente; }
 
-    public Sentencia getSentencia() { return sentencia; }
-    public void setSentencia(Sentencia sentencia) { this.sentencia = sentencia; }
-
+   
     public String getNivelDeSeguridad() { return nivelDeSeguridad; }
     public void setNivelDeSeguridad(String nivelDeSeguridad) { this.nivelDeSeguridad = nivelDeSeguridad; }
 
@@ -142,18 +155,7 @@ public class Preso extends Persona {
     public String getGrupoSanguineo() { return grupoSanguineo; }
     public void setGrupoSanguineo(String grupoSanguineo) { this.grupoSanguineo = grupoSanguineo; }
 
-    public void actualizarSentencia(int años, int meses, LocalDate fechaIngreso) {
-        this.sentencia = new Sentencia(años, meses, fechaIngreso);
-    }
-
-    public String getSentenciaFormateada() {
-        return sentencia != null ? sentencia.getSentenciaFormateada() : "No definida";
-    }
-
-    public int getSentenciaEnMeses() {
-        return sentencia != null ? sentencia.getAños() * 12 + sentencia.getMeses() : 0;
-    }
-
+    
     public String getFotoPath() { return fotoPath; }
     public void setFotoPath(String fotoPath) { this.fotoPath = fotoPath; }
 
