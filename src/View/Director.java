@@ -86,7 +86,7 @@ private final EnfermeraController enfermeraController = new EnfermeraController(
         // Ajustar visualización de imágenes
         ajustarImagenesTabla();
         txtFechaContratacion1.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        cargarDatosEnTabla();
+        cargarTablaGuardias();
     }
 
     /**
@@ -1197,36 +1197,10 @@ private final EnfermeraController enfermeraController = new EnfermeraController(
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCedulaActionPerformed
 
-    private void cargarDatosEnTabla() {
-        EnfermeraDAO enfermeraDAO = new EnfermeraDAO();
-
-        // Obtener datos del DAO
-        List<Object[]> datos = enfermeraDAO.obtenerDatosEnfermerasParaTabla();
-        String[] columnas = enfermeraDAO.getNombresColumnas();
-        Class<?>[] tipos = enfermeraDAO.getTiposColumnas();
-
-        // Crear modelo de tabla
-        DefaultTableModel model = new DefaultTableModel(datos.toArray(new Object[0][]), columnas) {
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                return tipos[columnIndex];
-            }
-
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; // Hacer que la tabla no sea editable
-            }
-        };
-
-        // Asignar modelo a la tabla
-        tablaEnfermeras.setModel(model);
-
-        // Configurar renderizador para la columna de foto
-        tablaEnfermeras.getColumnModel().getColumn(0).setCellRenderer(new ImagenRenderer());
-
-        // Ajustar tamaño de filas para las fotos
-        tablaEnfermeras.setRowHeight(80);
-    }
+    private void cargarTablaGuardias() {
+    guardiaController.cargarDatosEnTabla(tablaGuardias);
+    ajustarImagenesTabla(); // Tu método existente para ajustar visualización
+}
 
     public DefaultTableModel cargarGuardiasConImagen() {
         String[] columnas = {
@@ -1482,50 +1456,29 @@ private final EnfermeraController enfermeraController = new EnfermeraController(
             // 8. Convertir edad a entero (sin validación)
             int edadInt = Integer.parseInt(edad);
 
-            // 9. Guardar en la base de datos
-            boolean guardado = dao.guardarGuardia(
-                    primerNombre,
-                    segundoNombre,
-                    primerApellido,
-                    segundoApellido,
-                    edadInt,
-                    cedula,
-                    nacionalidad,
-                    correo,
-                    turno,
-                    fechaFin,
-                    cargo,
-                    imagenFile
-            );
-
-            if (guardado) {
-                JOptionPane.showMessageDialog(this,
-                        "Guardia contratado exitosamente",
-                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-                // Actualizar tabla
-                DefaultTableModel modelo = cargarGuardiasConImagen();
-                tablaGuardias.setModel(modelo);
-                ajustarImagenesTabla();
-
-                // Limpiar formulario
-                limpiarFormulario();
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        "Error al guardar el guardia",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (NumberFormatException e) {
-            // Esto capturará errores si la edad no es número, pero no mostramos mensaje
-            JOptionPane.showMessageDialog(this,
-                    "Error en los datos ingresados",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this,
-                    "Error inesperado: " + ex.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
+            boolean exito = guardiaController.registrarGuardia(
+            primerNombre, 
+            txtSegundoNombre.getText().trim(),
+            txtPrimerApellido.getText().trim(),
+            txtSegundoApellido.getText().trim(),
+            Integer.parseInt(txtEdad.getText()),
+            txtCedula.getText().trim(),
+            txtNacionalidad.getText().trim(),
+            txtCorreo.getText().trim(),
+            cmbTurno.getSelectedItem().toString(),
+            jDateChooserFinContrato.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+            cmbCargo.getSelectedItem().toString(),
+            new File(rutaImagenSeleccionada)
+        );
+        
+        if (exito) {
+            cargarTablaGuardias();
+            limpiarFormulario();
+            JOptionPane.showMessageDialog(this, "Guardia registrado exitosamente");
         }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void limpiarFormulario() {
@@ -2092,7 +2045,7 @@ private final EnfermeraController enfermeraController = new EnfermeraController(
                         "Enfermera registrada exitosamente",
                         "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 limpiarFormularioEnfermera();
-                cargarDatosEnTabla();
+                cargarTablaGuardias();
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
@@ -2104,7 +2057,7 @@ private final EnfermeraController enfermeraController = new EnfermeraController(
 
     // 3. Método para actualizar la tabla cuando hay cambios
     public void actualizarTabla() {
-        cargarDatosEnTabla();
+        cargarTablaGuardias();
     }
 
     private void cargarDatosEnfermeraParaModificar(Enfermera enfermera) {
@@ -2579,7 +2532,7 @@ private final EnfermeraController enfermeraController = new EnfermeraController(
                         "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
                 // Actualizar la tabla
-                cargarDatosEnTabla();
+                cargarTablaGuardias();
             } else {
                 JOptionPane.showMessageDialog(this,
                         "No se pudo eliminar la enfermera",

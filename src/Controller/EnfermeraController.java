@@ -7,6 +7,7 @@ import DAO.EnfermeraDAO;
 import Model.Enfermera;
 import java.io.File;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -53,22 +54,31 @@ public class EnfermeraController {
         return enfermeraDAO.existeEnfermera(cedula);
     }
     
-   public void cargarDatosEnTabla(JTable tabla) {
-    // Convertir la List<Object[]> a Object[][]
-    List<Object[]> datos = enfermeraDAO.obtenerDatosEnfermerasParaTabla();
-    Object[][] datosArray = datos.toArray(new Object[0][]);
+public void cargarDatosEnTabla(JTable tabla) {
+    if (tabla == null) return;
     
-    DefaultTableModel modelo = new DefaultTableModel(
-        datosArray, // Ahora es Object[][]
-        enfermeraDAO.getNombresColumnas()
-    ) {
-        @Override
-        public Class<?> getColumnClass(int columnIndex) {
-            return enfermeraDAO.getTiposColumnas()[columnIndex];
-        }
-    };
-    
-    tabla.setModel(modelo);
+    try {
+        List<Object[]> datos = enfermeraDAO.obtenerDatosEnfermerasParaTabla();
+        if (datos == null) datos = new ArrayList<>();
+        
+        Object[][] datosArray = datos.toArray(new Object[0][]);
+        String[] columnas = enfermeraDAO.getNombresColumnas();
+        
+        DefaultTableModel modelo = new DefaultTableModel(datosArray, columnas) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                Class<?>[] tipos = enfermeraDAO.getTiposColumnas();
+                return (columnIndex >= 0 && columnIndex < tipos.length) 
+                    ? tipos[columnIndex] 
+                    : Object.class;
+            }
+        };
+        
+        tabla.setModel(modelo);
+    } catch (Exception e) {
+        // Manejar el error adecuadamente (log, mostrar mensaje, etc.)
+        e.printStackTrace();
+    }
 }
     
     // Método para construir objeto Enfermera desde la vista
