@@ -54,7 +54,7 @@ import javax.swing.table.TableColumnModel;
 
 /**
  *
- * @author gameV
+ * @author Sharlok
  */
 public class Director extends javax.swing.JFrame {
 
@@ -63,30 +63,37 @@ public class Director extends javax.swing.JFrame {
     /**
      * Creates new form Director
      */
+    private GuardiaController guardiaController;
     private String rutaImagenSeleccionada = "";
     private File imagenSeleccionadaMod; // ✅ Añade esta línea
     private PersonalDeControlController controller;
     private File imagenPDCSeleccionada;
-    private final GuardiaController guardiaController = new GuardiaController();
-private final EnfermeraController enfermeraController = new EnfermeraController();
 
     public Director() {
         initComponents();
-        txtSexo.setEditable(false);
-        txtSexo.setText("Femenino");
+        // Inicializar controlador
+         // Inicializar el controller pasándole los componentes
+        guardiaController = new GuardiaController(
+            txtPrimerNombre, txtSegundoNombre, txtPrimerApellido, txtSegundoApellido,
+            txtEdad, txtCedula, txtNacionalidad, txtCorreo,
+            cmbTurno, cmbCargo, jDateChooserFinContrato
+        );
+
+        // Configurar campo de fecha de contratación (no editable)
         txtFechaContratacion.setEditable(false);
         txtFechaContratacion.setText(LocalDate.now().toString());
-        DefaultTableModel modelo = cargarGuardiasConImagen();
-        tablaGuardias.setModel(modelo);
-        ToolTipManager.sharedInstance().setInitialDelay(10);
-        txtCedulaMod1.setEditable(false); // La cédula no debería cambiar
-        txtSexoMod1.setEditable(false); // El sexo siempre es femenino
-        txtFechaContratacionMod1.setEditable(false);
 
-        // Ajustar visualización de imágenes
-        ajustarImagenesTabla();
-        txtFechaContratacion1.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        cargarTablaGuardias();
+        // Configurar campo de sexo (femenino por defecto)
+        txtSexo.setEditable(false);
+        txtSexo.setText("Femenino");
+
+        // Inicializar tabla
+        actualizarTablaGuardias();
+
+        // Configurar tooltip para cédula
+        ToolTipManager.sharedInstance().setInitialDelay(10);
+        jDateChooserFinContrato.setDateFormatString("yyyy/MM/dd"); 
+
     }
 
     /**
@@ -1194,72 +1201,21 @@ private final EnfermeraController enfermeraController = new EnfermeraController(
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_txtCedulaActionPerformed
 
     private void cargarTablaGuardias() {
-    guardiaController.cargarDatosEnTabla(tablaGuardias);
-    ajustarImagenesTabla(); // Tu método existente para ajustar visualización
-}
+        // Obtener el modelo de tabla desde el controlador
+        DefaultTableModel modelo = guardiaController.obtenerModeloTablaGuardias();
 
-    public DefaultTableModel cargarGuardiasConImagen() {
-        String[] columnas = {
-            "Foto",
-            "Nombres",
-            "Apellidos",
-            "Edad",
-            "Cédula",
-            "Sexo",
-            "Nacionalidad",
-            "Correo",
-            "Turno",
-            "Cargo",
-            "Fecha Inicio",
-            "Fecha Fin"
-        };
+        // Asignar el modelo a la tabla
+        tablaGuardias.setModel(modelo);
 
-        DefaultTableModel modelo = new DefaultTableModel(columnas, 0) {
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                return columnIndex == 0 ? ImageIcon.class : String.class;
-            }
-        };
+        // Configurar el renderizador para la columna de imagen
+        tablaGuardias.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
 
-        GuardiaDAO dao = new GuardiaDAO();
-        List<Guardia> guardias = dao.obtenerGuardias();
-
-        for (Guardia guardia : guardias) {
-            ImageIcon icono = null;
-            try {
-                if (guardia.getRutaImagen() != null && !guardia.getRutaImagen().isEmpty()) {
-                    File imgFile = new File(guardia.getRutaImagen());
-                    if (imgFile.exists()) {
-                        ImageIcon original = new ImageIcon(guardia.getRutaImagen());
-                        Image imagenEscalada = original.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
-                        icono = new ImageIcon(imagenEscalada);
-                    }
-                }
-            } catch (Exception e) {
-                System.err.println("Error al cargar imagen: " + e.getMessage());
-            }
-
-            modelo.addRow(new Object[]{
-                icono,
-                guardia.getNombresCompletos(),
-                guardia.getApellidosCompletos(),
-                String.valueOf(guardia.getEdad()),
-                guardia.getIdentificacion(),
-                guardia.getSexo(),
-                guardia.getNacionalidad(),
-                guardia.getCorreo(),
-                guardia.getTurno(),
-                guardia.getCargo(),
-                guardia.getFechaInicioContratoFormateada(),
-                guardia.getFechaFinContratoFormateada()
-            });
-        }
-
-        return modelo;
+        // Ajustar visualización
+        ajustarImagenesTabla();
     }
 
     private void cargarDatosEnPanelModificacion(Guardia guardia) {
@@ -1328,28 +1284,6 @@ private final EnfermeraController enfermeraController = new EnfermeraController(
         }
     }
 
-    private void ajustarImagenesTabla() {
-        tablaGuardias.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value,
-                    boolean isSelected, boolean hasFocus, int row, int column) {
-
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, "", isSelected, hasFocus, row, column);
-                label.setHorizontalAlignment(JLabel.CENTER);
-
-                if (value instanceof ImageIcon) {
-                    label.setIcon((ImageIcon) value);
-                } else {
-                    label.setIcon(null);
-                }
-
-                return label;
-            }
-        });
-
-        tablaGuardias.setRowHeight(60);
-    }
-
     private void limpiarFormularioEnfermera() {
         txtPrimerNombre1.setText("");
         txtSegundoNombre1.setText("");
@@ -1368,118 +1302,93 @@ private final EnfermeraController enfermeraController = new EnfermeraController(
 
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            // 1. Obtener valores del formulario
-            String primerNombre = txtPrimerNombre.getText().trim();
-            String segundoNombre = txtSegundoNombre.getText().trim();
-            String primerApellido = txtPrimerApellido.getText().trim();
-            String segundoApellido = txtSegundoApellido.getText().trim();
-            String edad = txtEdad.getText().trim();
-            String cedula = txtCedula.getText().trim();
-            String nacionalidad = txtNacionalidad.getText().trim();
-            String correo = txtCorreo.getText().trim();
-            String turno = cmbTurno.getSelectedItem().toString();
-            String cargo = cmbCargo.getSelectedItem().toString();
-
-            // 2. Validar campos obligatorios (excepto segundo nombre)
-            if (primerNombre.isEmpty()
-                    || primerApellido.isEmpty()
-                    || segundoApellido.isEmpty()
-                    || cedula.isEmpty()
-                    || edad.isEmpty()
-                    || nacionalidad.isEmpty()
-                    || correo.isEmpty()) {
-
-                JOptionPane.showMessageDialog(this,
-                        "Debe completar todos los campos obligatorios",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // 3. Validar que la cédula no esté registrada
-            GuardiaDAO dao = new GuardiaDAO();
-            if (dao.existeGuardia(cedula)) {
-                JOptionPane.showMessageDialog(this,
-                        "Ya existe un guardia registrado con esta cédula",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                txtCedula.requestFocus();
-                return;
-            }
-
-            if (rutaImagenSeleccionada == null || rutaImagenSeleccionada.isEmpty()) {
-                JOptionPane.showMessageDialog(this,
-                        "Debe seleccionar una imagen antes de guardar",
-                        "Imagen obligatoria", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            File imagenFile = new File(rutaImagenSeleccionada);
-            if (!imagenFile.exists()) {
-                JOptionPane.showMessageDialog(this,
-                        "La imagen seleccionada no existe",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                jButton2.requestFocus();
-                return;
-            }
-
-            // 6. Validar fecha fin de contrato
-            if (jDateChooserFinContrato.getDate() == null) {
-                JOptionPane.showMessageDialog(this,
-                        "Seleccione la fecha de finalización del contrato",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                jDateChooserFinContrato.requestFocus();
-                return;
-            }
-
-            LocalDate fechaFin = jDateChooserFinContrato.getDate().toInstant()
-                    .atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate fechaInicio = LocalDate.now();
-
-            if (!fechaFin.isAfter(fechaInicio)) {
-                JOptionPane.showMessageDialog(this,
-                        "Fecha fin debe ser posterior a fecha inicio (" + fechaInicio + ")",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                jDateChooserFinContrato.setDate(null);
-                jDateChooserFinContrato.requestFocus();
-                return;
-            }
-
-            // 7. Confirmar guardado
-            int confirmacion = JOptionPane.showConfirmDialog(this,
-                    "¿Desea contratar a este guardia?",
-                    "Confirmar", JOptionPane.YES_NO_OPTION);
-
-            if (confirmacion != JOptionPane.YES_OPTION) {
-                return;
-            }
-
-            // 8. Convertir edad a entero (sin validación)
-            int edadInt = Integer.parseInt(edad);
-
-            boolean exito = guardiaController.registrarGuardia(
-            primerNombre, 
-            txtSegundoNombre.getText().trim(),
-            txtPrimerApellido.getText().trim(),
-            txtSegundoApellido.getText().trim(),
-            Integer.parseInt(txtEdad.getText()),
-            txtCedula.getText().trim(),
-            txtNacionalidad.getText().trim(),
-            txtCorreo.getText().trim(),
-            cmbTurno.getSelectedItem().toString(),
-            jDateChooserFinContrato.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
-            cmbCargo.getSelectedItem().toString(),
-            new File(rutaImagenSeleccionada)
-        );
+       try {
+        boolean resultado = guardiaController.agregarGuardia();
         
-        if (exito) {
-            cargarTablaGuardias();
+        if (resultado) {
+            JOptionPane.showMessageDialog(this, 
+                "Guardia registrado exitosamente", 
+                "Éxito", JOptionPane.INFORMATION_MESSAGE);
             limpiarFormulario();
-            JOptionPane.showMessageDialog(this, "Guardia registrado exitosamente");
+            actualizarTablaGuardias();
         }
+    } catch (IllegalArgumentException e) {
+        // Mostrar mensajes de validación específicos
+        JOptionPane.showMessageDialog(this, 
+            e.getMessage(), 
+            "Error de validación", JOptionPane.ERROR_MESSAGE);
     } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        // Manejar otros errores
+        JOptionPane.showMessageDialog(this, 
+            "Error inesperado: " + e.getMessage(), 
+            "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
     }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void actualizarTablaGuardias() {
+        List<Guardia> guardias = guardiaController.obtenerTodosGuardias();
+        DefaultTableModel modelo = (DefaultTableModel) tablaGuardias.getModel();
+        modelo.setRowCount(0); // Limpiar tabla
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        for (Guardia guardia : guardias) {
+            // Obtener imagen como ImageIcon (para mostrar en tabla)
+            ImageIcon icono = null;
+            if (guardia.getRutaImagen() != null && !guardia.getRutaImagen().isEmpty()) {
+                try {
+                    ImageIcon original = new ImageIcon(guardia.getRutaImagen());
+                    Image imagenEscalada = original.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
+                    icono = new ImageIcon(imagenEscalada);
+                } catch (Exception e) {
+                    System.err.println("Error al cargar imagen: " + e.getMessage());
+                }
+            }
+
+            modelo.addRow(new Object[]{
+                icono,
+                guardia.getNombresCompletos(),
+                guardia.getApellidosCompletos(),
+                guardia.getEdad(),
+                guardia.getIdentificacion(),
+                guardia.getSexo(),
+                guardia.getNacionalidad(),
+                guardia.getCorreo(),
+                guardia.getTurno(),
+                guardia.getCargo(),
+                guardia.getFechaInicioContrato().format(dateFormatter),
+                guardia.getFechaFinContrato() != null
+                ? guardia.getFechaFinContrato().format(dateFormatter) : ""
+            });
+        }
+
+        // Ajustar visualización de imágenes en la tabla
+        ajustarImagenesTabla();
+    }
+
+    private void ajustarImagenesTabla() {
+        tablaGuardias.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+
+                JLabel label = new JLabel();
+                label.setHorizontalAlignment(JLabel.CENTER);
+
+                if (value instanceof ImageIcon) {
+                    label.setIcon((ImageIcon) value);
+                } else {
+                    label.setIcon(null);
+                    label.setText("(Sin imagen)");
+                }
+
+                return label;
+            }
+        });
+
+        tablaGuardias.setRowHeight(70); // Altura suficiente para las imágenes
+    }
 
     private void limpiarFormulario() {
         txtPrimerNombre.setText("");
@@ -1488,14 +1397,14 @@ private final EnfermeraController enfermeraController = new EnfermeraController(
         txtSegundoApellido.setText("");
         txtEdad.setText("");
         txtCedula.setText("");
-        txtCorreo.setText("");
         txtNacionalidad.setText("");
+        txtCorreo.setText("");
         cmbTurno.setSelectedIndex(0);
         cmbCargo.setSelectedIndex(0);
         jDateChooserFinContrato.setDate(null);
         txtFechaContratacion.setText(LocalDate.now().toString());
         lblFoto.setIcon(null);
-        rutaImagenSeleccionada = null; // Cambiado de "" a null
+        rutaImagenSeleccionada = null;
     }
 
     private void eliminarGuardia(String cedula, int filaSeleccionada) {
@@ -1529,75 +1438,30 @@ private final EnfermeraController enfermeraController = new EnfermeraController(
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Seleccionar imagen del guardia");
-
-        // Configurar filtros para imágenes
-        fileChooser.setAcceptAllFileFilterUsed(false);
-        fileChooser.addChoosableFileFilter(
-                new javax.swing.filechooser.FileNameExtensionFilter(
-                        "Imágenes (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif")
-        );
-
+            JFileChooser fileChooser = new JFileChooser();
+    int resultado = fileChooser.showOpenDialog(this);
+    
+    if (resultado == JFileChooser.APPROVE_OPTION) {
+        File archivoSeleccionado = fileChooser.getSelectedFile();
+        // Guardar la ruta ABSOLUTA en el controller
+        guardiaController.setRutaImagenSeleccionada(archivoSeleccionado.getAbsolutePath());
+        
+        // Mostrar preview (opcional)
         try {
-            int resultado = fileChooser.showOpenDialog(this);
+            ImageIcon icono = new ImageIcon(archivoSeleccionado.getAbsolutePath());
+            Image imagenEscalada = icono.getImage().getScaledInstance(
+                lblFoto.getWidth(), 
+                lblFoto.getHeight(), 
+                Image.SCALE_SMOOTH
+            );
+            lblFoto.setIcon(new ImageIcon(imagenEscalada));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error al cargar la imagen: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
-            if (resultado == JFileChooser.APPROVE_OPTION) {
-                File archivoSeleccionado = fileChooser.getSelectedFile();
-
-                // Validación 1: Archivo existe
-                if (!archivoSeleccionado.exists()) {
-                    JOptionPane.showMessageDialog(this,
-                            "El archivo seleccionado no existe",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                // Validación 2: Es una imagen válida
-                String nombreArchivo = archivoSeleccionado.getName().toLowerCase();
-                if (!nombreArchivo.endsWith(".jpg")
-                        && !nombreArchivo.endsWith(".jpeg")
-                        && !nombreArchivo.endsWith(".png")
-                        && !nombreArchivo.endsWith(".gif")) {
-                    JOptionPane.showMessageDialog(this,
-                            "Formato de imagen no válido. Use JPG, PNG o GIF",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                // Validación 3: Tamaño máximo (opcional)
-                long tamañoMaximo = 5 * 1024 * 1024; // 5 MB
-                if (archivoSeleccionado.length() > tamañoMaximo) {
-                    JOptionPane.showMessageDialog(this,
-                            "La imagen es demasiado grande (máximo 5MB)",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                // Si pasa todas las validaciones
-                rutaImagenSeleccionada = archivoSeleccionado.getAbsolutePath();
-
-                // Mostrar vista previa
-                try {
-                    ImageIcon icon = new ImageIcon(rutaImagenSeleccionada);
-                    Image img = icon.getImage().getScaledInstance(
-                            lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_SMOOTH);
-                    lblFoto.setIcon(new ImageIcon(img));
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(this,
-                            "No se pudo cargar la imagen seleccionada",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                    rutaImagenSeleccionada = null;
-                    lblFoto.setIcon(null);
-                }
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this,
-                    "Error inesperado al seleccionar imagen: " + ex.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
-
-        };
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void txtEdadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadKeyPressed
@@ -1649,149 +1513,6 @@ private final EnfermeraController enfermeraController = new EnfermeraController(
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
-        try {
-            // 1. Validar campos obligatorios (todos excepto segundo nombre)
-            if (txtPrimerNombreMod.getText().trim().isEmpty()
-                    || txtPrimerApellidoMod.getText().trim().isEmpty()
-                    || txtSegundoApellidoMod.getText().trim().isEmpty()
-                    || txtEdadMod.getText().trim().isEmpty()
-                    || txtNacionalidadMod.getText().trim().isEmpty()
-                    || txtCorreoMod.getText().trim().isEmpty()
-                    || txtCargoMod.getSelectedItem() == null) {
-
-                // Construir mensaje detallado
-                StringBuilder camposFaltantes = new StringBuilder("Los siguientes campos son obligatorios:\n");
-
-                if (txtPrimerNombreMod.getText().trim().isEmpty()) {
-                    camposFaltantes.append("- Primer nombre\n");
-                }
-                if (txtPrimerApellidoMod.getText().trim().isEmpty()) {
-                    camposFaltantes.append("- Primer apellido\n");
-                }
-                if (txtSegundoApellidoMod.getText().trim().isEmpty()) {
-                    camposFaltantes.append("- Segundo apellido\n");
-                }
-                if (txtEdadMod.getText().trim().isEmpty()) {
-                    camposFaltantes.append("- Edad\n");
-                }
-                if (txtNacionalidadMod.getText().trim().isEmpty()) {
-                    camposFaltantes.append("- Nacionalidad\n");
-                }
-                if (txtCorreoMod.getText().trim().isEmpty()) {
-                    camposFaltantes.append("- Correo\n");
-                }
-                if (txtCargoMod.getSelectedItem() == null) {
-                    camposFaltantes.append("- Cargo\n");
-                }
-
-                JOptionPane.showMessageDialog(this,
-                        camposFaltantes.toString(),
-                        "Campos obligatorios", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // 2. Validar formato de edad (debe ser número)
-            try {
-                int edad = Integer.parseInt(txtEdadMod.getText());
-                if (edad <= 0 || edad > 90) {
-                    JOptionPane.showMessageDialog(this,
-                            "La edad debe ser un número entre 1 y 90",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this,
-                        "La edad debe ser un número válido",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // 4. Obtener cédula (no editable)
-            String cedula = txtCedulaMod.getText();
-
-            // 5. Validar fecha fin de contrato
-            if (dateFinContratoMod.getDate() == null) {
-                JOptionPane.showMessageDialog(this,
-                        "Seleccione fecha fin de contrato",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            LocalDate fechaFin = dateFinContratoMod.getDate().toInstant()
-                    .atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate fechaInicio = LocalDate.parse(txtFechaContratacionMod.getText());
-
-            if (!fechaFin.isAfter(fechaInicio)) {
-                JOptionPane.showMessageDialog(this,
-                        "Fecha fin debe ser posterior a fecha inicio (" + fechaInicio + ")",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // 6. Obtener imagen (puede ser null si no se cambió)
-            File nuevaImagen = null;
-            if (lblImagenMod.getIcon() != null && lblImagenMod.getToolTipText() != null) {
-                String ruta = lblImagenMod.getToolTipText();
-                if (!ruta.isEmpty()) {
-                    nuevaImagen = new File(ruta);
-                    if (!nuevaImagen.exists()) {
-                        JOptionPane.showMessageDialog(this,
-                                "La imagen seleccionada no existe",
-                                "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                }
-            }
-
-            // 7. Confirmar modificación
-            int confirmacion = JOptionPane.showConfirmDialog(this,
-                    "¿Está seguro que desea modificar este guardia?",
-                    "Confirmar modificación", JOptionPane.YES_NO_OPTION);
-
-            if (confirmacion != JOptionPane.YES_OPTION) {
-                return;
-            }
-
-            // 8. Actualizar en el DAO
-            GuardiaDAO dao = new GuardiaDAO();
-            boolean exito = dao.modificarGuardia(
-                    cedula,
-                    txtPrimerNombreMod.getText().trim(),
-                    txtSegundoNombreMod.getText().trim(), // Puede estar vacío
-                    txtPrimerApellidoMod.getText().trim(),
-                    txtSegundoApellidoMod.getText().trim(),
-                    Integer.parseInt(txtEdadMod.getText()),
-                    txtNacionalidadMod.getText().trim(),
-                    txtCorreoMod.getText().trim(),
-                    cmbTurnoMod.getSelectedItem().toString(),
-                    fechaFin,
-                    txtCargoMod.getSelectedItem().toString(),
-                    nuevaImagen
-            );
-
-            if (exito) {
-                JOptionPane.showMessageDialog(this,
-                        "Guardia modificado exitosamente",
-                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-                // Actualizar tabla
-                DefaultTableModel modelo = cargarGuardiasConImagen();
-                tablaGuardias.setModel(modelo);
-                ajustarImagenesTabla();
-
-                // Volver a lista
-                jTabbedPane1.setSelectedComponent(ListaDeGuardias);
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        "No se pudo actualizar el guardia",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error inesperado: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -2961,6 +2682,5 @@ private final EnfermeraController enfermeraController = new EnfermeraController(
     public File getImagenPDCSeleccionada() {
         return imagenPDCSeleccionada;
     }
-    
-    
+
 }

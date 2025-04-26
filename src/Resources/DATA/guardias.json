@@ -17,22 +17,6 @@
       "cargo": "Oficial"
     },
     {
-      "primerNombre": "Shar",
-      "segundoNombre": "Lok",
-      "primerApellido": "Restrepo",
-      "segundoApellido": "Gomes",
-      "edad": 32,
-      "identificacion": "213423352364",
-      "sexo": "Femenino",
-      "nacionalidad": "dddd",
-      "correo": "sad@@@.com",
-      "turno": "Diurno",
-      "fechaInicioContrato": "2025-04-18",
-      "fechaFinContrato": "2026-04-17",
-      "rutaImagen": "src/Resources/imagenes_guardias/213423352364_Captura de pantalla 2024-03-03 160808.png",
-      "cargo": "Oficial"
-    },
-    {
       "primerNombre": "Sharky",
       "segundoNombre": "No",
       "primerApellido": "Alcacerser",
@@ -110,6 +94,54 @@
       "fechaInicioContrato": "2025-04-18",
       "fechaFinContrato": "2025-04-29",
       "rutaImagen": "src/Resources/imagenes_guardias/103940340_WIN_20241028_13_49_03_Pro.jpg",
+      "cargo": "Oficial"
+    },
+    {
+      "primerNombre": "dadwdawd",
+      "segundoNombre": "wdadawd",
+      "primerApellido": "kajdawda",
+      "segundoApellido": "sdadawd",
+      "edad": 55,
+      "identificacion": "34234234",
+      "sexo": "Femenino",
+      "nacionalidad": "adwdadaw",
+      "correo": "@.com",
+      "turno": "Nocturno",
+      "fechaInicioContrato": "2025-04-26",
+      "fechaFinContrato": "2025-04-30",
+      "rutaImagen": "src/Resources/imagenes_guardias/34234234_Captura de pantalla 2025-02-23 175040.png",
+      "cargo": "Oficial"
+    },
+    {
+      "primerNombre": "Sharlok",
+      "segundoNombre": "adawdad",
+      "primerApellido": "wadadasdxx",
+      "segundoApellido": "eedwdadsz",
+      "edad": 33,
+      "identificacion": "87381273",
+      "sexo": "Femenino",
+      "nacionalidad": "njasdhadbad",
+      "correo": "@.com",
+      "turno": "Diurno",
+      "fechaInicioContrato": "2025-04-26",
+      "fechaFinContrato": "2025-04-30",
+      "rutaImagen": "src/Resources/imagenes_guardias/87381273_Captura de pantalla 2025-02-25 134036.png",
+      "cargo": "Guardia"
+    },
+    {
+      "primerNombre": "dadawdas",
+      "segundoNombre": "",
+      "primerApellido": "awdasdaz",
+      "segundoApellido": "zzzzzzzzz",
+      "edad": 65,
+      "identificacion": "9872345678",
+      "sexo": "Femenino",
+      "nacionalidad": "awadasdas",
+      "correo": "@.com",
+      "turno": "Diurno",
+      "fechaInicioContrato": "2025-04-26",
+      "fechaFinContrato": "2025-04-30",
+      "rutaImagen": "src/Resources/imagenes_guardias/9872345678_Captura de pantalla 2025-04-24 131700.png",
       "cargo": "Oficial"
     }
   ]
