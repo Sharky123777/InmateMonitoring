@@ -230,7 +230,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
                         JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
             }
-        });;
+        });
 
         AñadirDelito.addActionListener(new ActionListener() {
             @Override
@@ -2005,11 +2005,11 @@ public class OficialDeRegistro extends javax.swing.JFrame {
 
         ApellidoODR.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         ApellidoODR.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel19.add(ApellidoODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 260, 30));
+        jPanel19.add(ApellidoODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, 260, 30));
 
         IdentificacionODR.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         IdentificacionODR.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel19.add(IdentificacionODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, 330, 30));
+        jPanel19.add(IdentificacionODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 130, 280, 30));
 
         EdadODR.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         EdadODR.setForeground(new java.awt.Color(0, 0, 0));
@@ -2021,11 +2021,11 @@ public class OficialDeRegistro extends javax.swing.JFrame {
 
         NacionalidadODR.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         NacionalidadODR.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel19.add(NacionalidadODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 250, 330, 30));
+        jPanel19.add(NacionalidadODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 250, 280, 30));
 
         nombreODR.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         nombreODR.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel19.add(nombreODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 50, 260, 30));
+        jPanel19.add(nombreODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, 260, 30));
 
         Perfil.add(jPanel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 110, 490, 330));
 
@@ -2051,8 +2051,8 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         jLabel46.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
         jLabel46.setForeground(new java.awt.Color(0, 0, 0));
         jLabel46.setText("Numero de placa");
-        jPanel18.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 130, -1));
-        jPanel18.add(LabelNumeroPlaca, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 340, 80, 20));
+        jPanel18.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, 130, -1));
+        jPanel18.add(LabelNumeroPlaca, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 330, 80, 20));
 
         jLabel47.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
         jLabel47.setForeground(new java.awt.Color(0, 0, 0));
@@ -2069,7 +2069,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         jPanel18.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 50, -1));
 
         jSeparator41.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel18.add(jSeparator41, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 220, 10));
+        jPanel18.add(jSeparator41, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, 220, 10));
 
         cerrarSesionODR.setText("Cerrar sesión");
         cerrarSesionODR.addActionListener(new java.awt.event.ActionListener() {
