@@ -1,6 +1,7 @@
 
 package View;
 
+import Controller.ActividadController;
 import Controller.DelitoController;
 import Controller.ExpedienteController;
 import Controller.PresoController;
@@ -31,7 +32,9 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
         inicializarMenuActividadesEspecifica();
         inicializarMenuActividadesPreso();
         inicializarMenuActividadesGeneral();
-        cargarTodosLosPresos();
+        
+ActividadController controlador = new ActividadController();
+controlador.cargarActividadesEnTabla(actividadesTabla);
         
         this.presoDAO = new PresoDAO();
         this.celdaDAO = new CeldaDAO();
@@ -341,17 +344,17 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
 
         actividadesTabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "id", "Nombre", "Tipo", "Cupo maximo", "Lugar", "Horario"
+                "id", "Nombre", "Tipo", "Día", "Horario", "Lugar", "Cupo maximo", "Inscritos"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

@@ -202,4 +202,90 @@ public class Validador {
             throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG");
         }
     }
+    
+public static void validarNombreActividad(String nombre) {
+    if (nombre == null || nombre.trim().isEmpty()) {
+        throw new IllegalArgumentException("El nombre de la actividad no puede estar vacío");
+    }
+    
+    if (!Pattern.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]{2,50}$", nombre)) {
+        throw new IllegalArgumentException("El nombre de la actividad solo puede contener letras y espacios (2-50 caracteres)");
+    }
+}
+
+public static void validarTipoActividad(String tipo) {
+    if (tipo == null || tipo.trim().isEmpty()) {
+        throw new IllegalArgumentException("Debe seleccionar un tipo de actividad");
+    }
+
+    String tipoUpper = tipo.trim().toUpperCase();
+    if (!(tipoUpper.equals("DEPORTIVA") || tipoUpper.equals("EDUCATIVA") || tipoUpper.equals("LABORAL"))) {
+        throw new IllegalArgumentException("Tipo de actividad no válido. Solo se permite: Deportiva, Educativa o Laboral");
+    }
+}
+
+public static void validarDiaActividad(Object dia) {
+    if (dia == null || dia.toString().equals("<Seleccionar>")) {
+        throw new IllegalArgumentException("Debe seleccionar un día válido para la actividad");
+    }
+    
+    String valor = dia.toString().trim().toLowerCase();
+    List<String> diasValidos = List.of(
+        "lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"
+    );
+    
+    if (!diasValidos.contains(valor)) {
+        throw new IllegalArgumentException("Día seleccionado no es válido");
+    }
+}
+
+public static void validarHorarioActividad(Object horario) {
+    if (horario == null || horario.toString().equals("<Seleccionar>")) {
+        throw new IllegalArgumentException("Debe seleccionar un horario válido para la actividad");
+    }
+    
+    String valor = horario.toString().trim();
+    List<String> horariosValidos = List.of(
+        "07:00 am - 08:45 am",
+        "08:45 am - 10:15 am",
+        "10:45 am - 12:45 am",
+        "02:00 pm - 04:15 pm",
+        "04:15 pm - 05:15 pm"
+    );
+    
+    if (!horariosValidos.contains(valor)) {
+        throw new IllegalArgumentException("Horario seleccionado no es válido");
+    }
+}
+
+public static void validarLugarActividad(String lugar) {
+    if (lugar == null || lugar.trim().isEmpty()) {
+        throw new IllegalArgumentException("El lugar de la actividad es obligatorio");
+    }
+}
+
+public static void validarCupoMaximo(String cupoStr) {
+    if (cupoStr == null || cupoStr.trim().isEmpty()) {
+        throw new IllegalArgumentException("Debe ingresar el cupo máximo de participantes");
+    }
+
+    try {
+        int cupo = Integer.parseInt(cupoStr);
+        if (cupo <= 0 || cupo > 50) {
+            throw new IllegalArgumentException("El cupo máximo debe estar entre 1 y 500 personas");
+        }
+    } catch (NumberFormatException e) {
+        throw new IllegalArgumentException("El cupo máximo debe ser un número válido");
+    }
+}
+
+public static void validarActividadCompleta(String nombre, String tipo, Object dia, Object horario, String lugar, String cupoMaximoStr) {
+    validarNombreActividad(nombre);
+    validarTipoActividad(tipo);
+    validarDiaActividad(dia);
+    validarHorarioActividad(horario);
+    validarLugarActividad(lugar);
+    validarCupoMaximo(cupoMaximoStr);
+}
+
 }
