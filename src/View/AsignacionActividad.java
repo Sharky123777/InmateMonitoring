@@ -1,77 +1,85 @@
-
 package View;
 
+import Controller.ActividadController;
+import Model.Preso;
+import java.awt.Dialog;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
 
 public class AsignacionActividad extends javax.swing.JDialog {
 
-   
-    public AsignacionActividad(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-    }
+    private Preso preso;
 
-  
+    private final ActividadController controlador;
+
+    public AsignacionActividad(java.awt.Frame parent, boolean modal, Preso preso) {
+        super(parent, modal);
+        this.preso = preso;
+        this.controlador = ActividadController.getInstancia();
+        initComponents();
+        this.setLocationRelativeTo(null);
+        controlador.cargarActividadesDisponiblesEnTabla(actividadesTablaParaAsignar, preso.getIdentificacion());
+
+     presoNomApe.setText(preso.getNombresCompletos() + " " + preso.getApellidosCompletos());
+identif.setText(preso.getIdentificacion());
+    }
+    
+
+    
+    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        ActividadesCombobox = new javax.swing.JComboBox<>();
-        jLabel1 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jLabel3 = new javax.swing.JLabel();
-        jComboBox6 = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox<>();
         btnAsignar = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jPanel2 = new RoundedPanel(20);
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        actividadesTablaParaAsignar = new javax.swing.JTable();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel6 = new javax.swing.JLabel();
+        presoNomApe = new javax.swing.JLabel();
+        identif = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        ActividadesCombobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccione>", "Cursos de alfabetización  ", "Educación secundaria ", "Talleres de lectura y escritura  ", "Aprendizaje de idiomas  ", "Cursos de informática (básica)  ", "Trabajo en talleres de carpintería  ", "Fabricación de muebles  ", "Costura y confección de ropa  ", "Agricultura y jardinería  ", "Panadería y repostería  ", "Limpieza y mantenimiento de la prisión  ", "Deportes (fútbol, baloncesto, gimnasio)  ", "Juegos de mesa (ajedrez, damas, dominó)  ", "Pintura y dibujo  ", "Música y coro  ", "Teatro y expresión artística  ", "Yoga y meditación  ", "Terapia psicológica grupal  ", "Programas contra adicciones (AA, NA)  ", "Talleres de reinserción social  ", "Charlas sobre violencia de género  ", "Meditación y manejo del estrés  ", "Servicios religiosos (misas, estudios bíblicos)" }));
-        jPanel1.add(ActividadesCombobox, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 140, 240, 40));
-
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Tipo:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 80, 70, 30));
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccione>", "Laboral", "Recreativa", "Educativa" }));
-        jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 80, 240, 40));
-
-        jLabel3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Día:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 270, 70, 30));
-
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "07:00 am - 08:45 am", "08:45 am - 10:15 am", "10:45 am - 12:45 am", "02:00 pm - 04:15 pm", "04:15 pm - 05:15 pm" }));
-        jPanel1.add(jComboBox6, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 200, 240, 40));
-
         jLabel4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel4.setText("Horario:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 210, 70, 30));
-
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes" }));
-        jPanel1.add(jComboBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 260, 240, 40));
+        jLabel4.setText("LISTA DE ACTIVIDADES DISPONIBLES");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 210, 280, 30));
 
         btnAsignar.setBackground(new java.awt.Color(24, 24, 50));
         btnAsignar.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         btnAsignar.setForeground(new java.awt.Color(255, 255, 255));
         btnAsignar.setText("Asignar ");
-        jPanel1.add(btnAsignar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 390, 150, 40));
+        btnAsignar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAsignarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAsignar, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 120, 150, 40));
 
         jButton1.setBackground(new java.awt.Color(51, 0, 0));
         jButton1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Cancelar");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 390, 140, 40));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 70, 150, 40));
 
         jPanel2.setBackground(new java.awt.Color(32, 32, 53));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -79,82 +87,134 @@ public class AsignacionActividad extends javax.swing.JDialog {
         jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("ASIGNACIÓN DE ACTIVIDAD");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 0, -1, 40));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 0, -1, 40));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 580, 40));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1040, 40));
 
         jLabel5.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setText("Actividad:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 150, 130, 30));
+        jLabel5.setText("Preso: ");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, 80, 30));
+
+        actividadesTablaParaAsignar.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Seleccionar", "id", "Nombre", "Tipo", "Día", "Horario", "Lugar", "Inscritos"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        actividadesTablaParaAsignar.setRowHeight(50);
+        jScrollPane1.setViewportView(actividadesTablaParaAsignar);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 250, 930, 270));
+
+        jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, 510, 10));
+
+        jSeparator2.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 120, 510, 10));
+
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setText("Identificación:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 130, 130, 30));
+
+        presoNomApe.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        presoNomApe.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(presoNomApe, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 90, 440, 30));
+
+        identif.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        identif.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(identif, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 130, 410, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 577, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1040, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 458, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-   
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+    private void btnAsignarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarActionPerformed
+        DefaultTableModel model = (DefaultTableModel) actividadesTablaParaAsignar.getModel();
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            if ((Boolean) model.getValueAt(i, 0)) {
+                String idActividad = (String) model.getValueAt(i, 1);
+
+                if (controlador.asignarPresoAActividad(idActividad, preso.getIdentificacion())) {
+                    actualizarTablasDespuesDeAsignacion();
+                    this.dispose();
+                    return;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AsignacionActividad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AsignacionActividad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AsignacionActividad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AsignacionActividad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                AsignacionActividad dialog = new AsignacionActividad(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
+        JOptionPane.showMessageDialog(this, "Seleccione una actividad", "Error", JOptionPane.ERROR_MESSAGE);
+
+    }//GEN-LAST:event_btnAsignarActionPerformed
+
+    private void actualizarTablasDespuesDeAsignacion() {
+
+        CoordinadorDeActividades framePrincipal = (CoordinadorDeActividades) SwingUtilities.getWindowAncestor(this);
+
+        controlador.cargarActividadesEnTabla(framePrincipal.getActividadesTabla());
+
+        controlador.cargarActividadesPresoEnTabla(framePrincipal.getActividadesPresoTabla(), preso.getIdentificacion());
     }
+    
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        JOptionPane.showMessageDialog(null, "Se canceló la asignacion de actividad para el preso " + this.preso.getApellidosCompletos());
+        dispose();
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> ActividadesCombobox;
+    private javax.swing.JTable actividadesTablaParaAsignar;
     private javax.swing.JButton btnAsignar;
+    private javax.swing.JLabel identif;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox6;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JLabel presoNomApe;
     // End of variables declaration//GEN-END:variables
 }

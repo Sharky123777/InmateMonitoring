@@ -10,10 +10,25 @@ import java.util.regex.Pattern;
 
 public class Validador {
     
+    private static volatile Validador instancia;
+    
     private final PresoDAO presoDAO;
     
-    public Validador(PresoDAO presoDAO) {
-        this.presoDAO = presoDAO;
+    private Validador() {
+        this.presoDAO = PresoDAO.getInstancia();
+    }
+    
+    public static Validador getInstancia() {
+        Validador result = instancia;
+        if (result == null) {
+            synchronized (Validador.class) {
+                result = instancia;
+                if (result == null) {
+                    instancia = result = new Validador();
+                }
+            }
+        }
+        return result;
     }
     
     public void validarIdentificacionUnica(String identificacion) {
@@ -33,8 +48,7 @@ public class Validador {
             throw new IllegalArgumentException("La identificación debe tener entre 9 y 15 dígitos");
         }
     }
-    
-    
+      
     public static void validarDatosPersonales(String primerNombre, String primerApellido, 
                                            String edad, String nacionalidad) {
         validarCampoObligatorio("primer nombre", primerNombre);
@@ -49,8 +63,7 @@ public class Validador {
         if (!Pattern.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]{2,50}$", primerApellido)) {
             throw new IllegalArgumentException("El primer apellido solo puede contener letras y espacios (2-50 caracteres)");
         }
-    }
-    
+    } 
     public static void validarMedidasFisicas(String estaturaStr, String pesoStr) {
         validarCampoObligatorio("estatura", estaturaStr);
         validarCampoObligatorio("peso", pesoStr);
@@ -79,9 +92,7 @@ public class Validador {
             throw new IllegalArgumentException("Debe seleccionar un valor para " + campo);
         }
     }
-    
- 
-    
+      
     public static void validarCampoObligatorio(String campo, String valor) {
         if (valor == null || valor.trim().isEmpty()) {
             throw new IllegalArgumentException("El campo " + campo + " es obligatorio");
@@ -93,8 +104,7 @@ public class Validador {
             throw new IllegalArgumentException("Debe agregar al menos un " + campo);
         }
     }
-    
- 
+   
     
     public static void mostrarError(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
@@ -107,9 +117,6 @@ public class Validador {
     public static void mostrarInfo(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
     }
-    
-  
-  
     
     public static void validarNombre(String nombre) {
         if (nombre == null || nombre.trim().isEmpty()) {
@@ -157,7 +164,6 @@ public class Validador {
     }
 }
 
-    
     public static void validarPeso(String pesoStr) {
         validarCampoObligatorio("peso", pesoStr);
         
@@ -205,7 +211,7 @@ public class Validador {
     
 public static void validarNombreActividad(String nombre) {
     if (nombre == null || nombre.trim().isEmpty()) {
-        throw new IllegalArgumentException("El nombre de la actividad no puede estar vacío");
+JOptionPane.showMessageDialog(null, "El nombre de la actividad no puede estar vacío");  
     }
     
     if (!Pattern.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]{2,50}$", nombre)) {
@@ -279,13 +285,15 @@ public static void validarCupoMaximo(String cupoStr) {
     }
 }
 
-public static void validarActividadCompleta(String nombre, String tipo, Object dia, Object horario, String lugar, String cupoMaximoStr) {
+public static void validarActividadCompleta(String nombre, String tipo, Object dia, Object horario, String lugar, String cupoMaximoStr, String reponsa) {
     validarNombreActividad(nombre);
     validarTipoActividad(tipo);
     validarDiaActividad(dia);
     validarHorarioActividad(horario);
     validarLugarActividad(lugar);
     validarCupoMaximo(cupoMaximoStr);
+    validarFormatoIdentificacion(reponsa);
+    
 }
 
 }

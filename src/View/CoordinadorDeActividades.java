@@ -1,19 +1,27 @@
-
 package View;
 
 import Controller.ActividadController;
-import Controller.DelitoController;
-import Controller.ExpedienteController;
 import Controller.PresoController;
 import DAO.CeldaDAO;
 import DAO.DelitoDAO;
 import DAO.PresoDAO;
 import Model.Preso;
 import Utilidades.Validador;
+import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.Transparency;
+import java.awt.image.BufferedImage;
 import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class CoordinadorDeActividades extends javax.swing.JFrame {
@@ -26,67 +34,134 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
     CeldaDAO celda = new CeldaDAO();
     private Preso presoOriginal;
 
-
     public CoordinadorDeActividades() {
         initComponents();
         inicializarMenuActividadesEspecifica();
         inicializarMenuActividadesPreso();
         inicializarMenuActividadesGeneral();
-        
-ActividadController controlador = new ActividadController();
-controlador.cargarActividadesEnTabla(actividadesTabla);
-        
+        this.setLocationRelativeTo(null);
+
+        ActividadController controlador = ActividadController.getInstancia();
+        controlador.cargarActividadesEnTabla(actividadesTabla);
+
         this.presoDAO = new PresoDAO();
         this.celdaDAO = new CeldaDAO();
         this.delitoDAO = new DelitoDAO();
-        this.presoController = new PresoController(presoDAO, celda, delitoDAO);
-        this.validador = new Validador(presoDAO);
+        this.presoController = PresoController.getInstancia();
+        this.validador = Validador.getInstancia();
+
+        configurarTablaImagenes();
+        cargarTodosLosPresos();
+
     }
 
-    
-    public void inicializarMenuActividadesPreso(){
-        JMenuItem AsignarActividad =  new JMenuItem("Asignar actividad");
+    public void inicializarMenuActividadesPreso() {
+        JMenuItem AsignarActividad = new JMenuItem("Asignar actividad");
         JMenuItem MostrarActividad = new JMenuItem("Ver actividades");
-        
+
         ppMenuActividadesPreso.add(AsignarActividad);
         ppMenuActividadesPreso.add(MostrarActividad);
-        
+
         TablaPresosCoor.setComponentPopupMenu(ppMenuActividadesPreso);
-        
-        AsignarActividad.addActionListener( e -> {
-      
-        CoordinadorDeActividades.setSelectedIndex(2);
-     
-        
-    });
-        
+
+        AsignarActividad.addActionListener(e -> {
+
+            try {
+                int filaSeleccionada = TablaPresosCoor.getSelectedRow();
+                if (filaSeleccionada == -1) {
+                    throw new Exception("Seleccione un preso primero");
+                }
+
+                Preso preso = presoController.obtenerPresoDesdeTabla(filaSeleccionada, TablaPresosCoor);
+
+                AsignacionActividad dialogo = new AsignacionActividad(null, true, preso);
+                dialogo.setVisible(true);
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null,
+                        ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        });
+
+        MostrarActividad.addActionListener(e -> {
+
+            try {
+                int filaSeleccionada = TablaPresosCoor.getSelectedRow();
+                if (filaSeleccionada == -1) {
+                    throw new IllegalArgumentException("Seleccione un preso primero");
+                }
+                Preso preso = presoController.obtenerPresoDesdeTabla(filaSeleccionada, TablaPresosCoor);
+
+                nom.setText(preso.getNombresCompletos());
+                ape.setText(preso.getApellidosCompletos());
+                identi.setText(preso.getIdentificacion());
+                edad.setText(String.valueOf(preso.getEdad()));
+                naciona.setText(preso.getNacionalidad());
+
+                ImageIcon icon = new ImageIcon(preso.getFotoPath());
+                Image img = icon.getImage().getScaledInstance(
+                        fotoPresoActividades.getWidth(),
+                        fotoPresoActividades.getHeight(),
+                        Image.SCALE_SMOOTH
+                );
+                fotoPresoActividades.setIcon(new ImageIcon(img));
+
+                ActividadController ac = ActividadController.getInstancia();
+
+                ac.cargarActividadesPresoEnTabla(ActividadPresosUnitario, preso.getIdentificacion());
+
+                CoordinadorDeActividades.setSelectedIndex(5);
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+
+            }
+
+        });
     }
-   
-    
-    public void inicializarMenuActividadesEspecifica(){
-          JMenuItem CambiarEstado =  new JMenuItem("Cambiar estado");
-          ppMenuTablaActidadSelectiva.add(CambiarEstado);     
-          tablaActividadPresos.setComponentPopupMenu(ppMenuTablaActidadSelectiva);     
-          
+
+    public void inicializarMenuActividadesEspecifica() {
+        JMenuItem CambiarEstado = new JMenuItem("Cambiar estado");
+        ppMenuTablaActidadSelectiva.add(CambiarEstado);
+        ActividadPresosUnitario.setComponentPopupMenu(ppMenuTablaActidadSelectiva);
+
     }
-    
-    public void inicializarMenuActividadesGeneral(){
+
+    public void inicializarMenuActividadesGeneral() {
         JMenuItem verPresosAsignados = new JMenuItem("Ver presos asignadados");
-        
+
         ppMenuTablaActividadesGeneral.add(verPresosAsignados);
-        tablaPresosAsignadosActividad.setComponentPopupMenu(ppMenuTablaActividadesGeneral);
-        
-        
-         verPresosAsignados.addActionListener( e -> {
-      
-        CoordinadorDeActividades.setSelectedIndex(6);
-     
-        
-    });
+        actividadesTabla.setComponentPopupMenu(ppMenuTablaActividadesGeneral);
+
+        verPresosAsignados.addActionListener(e -> {
+            try {
+                int filaSeleccionada = actividadesTabla.getSelectedRow();
+                if (filaSeleccionada == -1) {
+                    throw new Exception("Seleccione una actividad primero");
+                }
+
+                String idActividad = (String) actividadesTabla.getValueAt(filaSeleccionada, 0);
+
+                String name = (String) actividadesTabla.getValueAt(filaSeleccionada, 1);
+
+                ActividadController controller = ActividadController.getInstancia();
+                controller.cargarPresosAsignadosEnTabla(tablaPresosAsignadosActividad, idActividad);
+
+                lblNombreActividad.setText(name);
+
+                CoordinadorDeActividades.setSelectedIndex(6);
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null,
+                        ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
     }
-    
-    
-     private void cargarTodosLosPresos() {
+
+    private void cargarTodosLosPresos() {
         try {
             DefaultTableModel modelo = (DefaultTableModel) TablaPresosCoor.getModel();
             modelo.setRowCount(0);
@@ -103,10 +178,62 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
             JOptionPane.showMessageDialog(null, "Error al cargar los presos: " + e.getMessage());
         }
     }
-    
-    
-    
-    
+
+    private void configurarTablaImagenes() {
+        TablaPresosCoor.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value,
+                        isSelected, hasFocus, row, column);
+
+                if (column == 0 && value instanceof ImageIcon) {
+                    ImageIcon originalIcon = (ImageIcon) value;
+                    Image img = originalIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                    ImageIcon roundedIcon = new ImageIcon(createRoundedImage(img));
+                    label.setIcon(roundedIcon);
+                    label.setText("");
+                } else {
+                    label.setIcon(null);
+                }
+                label.setHorizontalAlignment(JLabel.CENTER);
+                return label;
+            }
+        });
+
+        TablaPresosCoor.setRowHeight(65);
+        TablaPresosCoor.getColumnModel().getColumn(0).setPreferredWidth(70);
+    }
+
+    private Image createRoundedImage(Image image) {
+        int width = image.getWidth(null);
+        int height = image.getHeight(null);
+
+        BufferedImage output = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = output.createGraphics();
+
+        output = g2.getDeviceConfiguration().createCompatibleImage(width, height, Transparency.TRANSLUCENT);
+        g2.dispose();
+        g2 = output.createGraphics();
+
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.fillRoundRect(0, 0, width, height, 20, 20);
+        g2.setComposite(AlphaComposite.SrcIn);
+        g2.drawImage(image, 0, 0, null);
+        g2.dispose();
+
+        return output;
+    }
+
+    public JTable getActividadesTabla() {
+        return this.actividadesTabla;
+    }
+
+    public JTable getActividadesPresoTabla() {
+        return this.ActividadPresosUnitario;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -140,24 +267,24 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
         ;
         jLabel6 = new javax.swing.JLabel();
         btnRegresarLista = new javax.swing.JButton();
-        NombreAct5 = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        tipoAct = new javax.swing.JComboBox<>();
         cupoMax = new javax.swing.JComboBox<>();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        lugarCom = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox<>();
-        jComboBox6 = new javax.swing.JComboBox<>();
+        diaCom = new javax.swing.JComboBox<>();
+        horarioCom = new javax.swing.JComboBox<>();
         jLabel14 = new javax.swing.JLabel();
-        NombreAct6 = new javax.swing.JTextField();
+        NombreAct = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
         btnAñadirActividad = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        responsableiden = new javax.swing.JTextField();
         AsignadorPreso = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         TablaPresosCoor = new javax.swing.JTable();
@@ -236,7 +363,7 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
         btnActualizarInfoCoor = new javax.swing.JButton();
         ActividadesPreso = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tablaActividadPresos = new javax.swing.JTable();
+        ActividadPresosUnitario = new javax.swing.JTable();
         jLabel67 = new javax.swing.JLabel();
         nom = new javax.swing.JLabel();
         jSeparator42 = new javax.swing.JSeparator();
@@ -344,23 +471,24 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
 
         actividadesTabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "id", "Nombre", "Tipo", "Día", "Horario", "Lugar", "Cupo maximo", "Inscritos"
+                "id", "Nombre", "Tipo", "Día", "Horario", "Lugar", "Cupo maximo", "Inscritos", "Responsable"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        actividadesTabla.setRowHeight(50);
         jScrollPane1.setViewportView(actividadesTabla);
 
         ListaActividades.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 1020, 370));
@@ -392,7 +520,7 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 20, 160, 40));
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, 160, 40));
 
         ListaActividades.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 1020, 80));
 
@@ -429,38 +557,29 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
 
         CrearActividad.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, 1030, 40));
 
-        NombreAct5.setBackground(new java.awt.Color(204, 204, 204));
-        NombreAct5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        CrearActividad.add(NombreAct5, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 360, 200, 30));
-
         jLabel8.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel8.setText("Nombre:");
-        CrearActividad.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 150, 70, 20));
+        jLabel8.setText(" Guardia responsable (Identificación):");
+        CrearActividad.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 370, 280, 20));
 
         jLabel9.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Tipo:");
         CrearActividad.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, 70, 20));
 
-        jLabel10.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel10.setText("Identificación supervisor");
-        CrearActividad.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 370, 190, 20));
-
         jLabel11.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("Lugar:");
         CrearActividad.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 300, 70, 20));
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccione>", "Laboral", "Recreativa", "Educativa" }));
-        CrearActividad.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, 290, 40));
+        tipoAct.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccione>", "Laboral", "Recreativa", "Educativa" }));
+        CrearActividad.add(tipoAct, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, 290, 40));
 
         cupoMax.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccione>", "10", "20", "30" }));
         CrearActividad.add(cupoMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 280, 280, 40));
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccione>", "Taller de Carpintería", "Taller de Soldadura/Herrería", "Taller de Costura y Confección", "Taller de Serigrafía/Estampado", "Taller de Reparación de Electrodomésticos", "Taller de Panadería/Repostería", "Taller de Jardinería y Vivero", "Aula de Alfabetización (Educación Básica)", "Aula de Educación Media/Superior", "Biblioteca Principal", "Sala de Computación", "Aula de Idiomas", "Sala de Talleres de Escritura", "Patio Central", "Cancha de Fútbol", "Cancha de Baloncesto", "Gimnasio (Máquinas/Pesas)", "Sala de Terapia Grupal", "Huerto Terapéutico", "Sala de Meditación/Mindfulness", "Taller de Manejo de Emociones", "Cocina Industrial", "Comedor Principal", "Lavandería/Ropería", "Sala de Estudios Bíblicos/Religiosos" }));
-        CrearActividad.add(jComboBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 280, 290, 40));
+        lugarCom.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccione>", "Taller de Carpintería", "Taller de Soldadura/Herrería", "Taller de Costura y Confección", "Taller de Serigrafía/Estampado", "Taller de Reparación de Electrodomésticos", "Taller de Panadería/Repostería", "Taller de Jardinería y Vivero", "Aula de Alfabetización (Educación Básica)", "Aula de Educación Media/Superior", "Biblioteca Principal", "Sala de Computación", "Aula de Idiomas", "Sala de Talleres de Escritura", "Patio Central", "Cancha de Fútbol", "Cancha de Baloncesto", "Gimnasio (Máquinas/Pesas)", "Sala de Terapia Grupal", "Huerto Terapéutico", "Sala de Meditación/Mindfulness", "Taller de Manejo de Emociones", "Cocina Industrial", "Comedor Principal", "Lavandería/Ropería", "Sala de Estudios Bíblicos/Religiosos" }));
+        CrearActividad.add(lugarCom, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 280, 290, 40));
 
         jLabel12.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(0, 0, 0));
@@ -472,20 +591,25 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
         jLabel13.setText("Horario:");
         CrearActividad.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 230, 110, 20));
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes" }));
-        CrearActividad.add(jComboBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 140, 300, 40));
+        diaCom.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes" }));
+        CrearActividad.add(diaCom, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 140, 300, 40));
 
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "07:00 am - 08:45 am", "08:45 am - 10:15 am", "10:45 am - 12:45 am", "02:00 pm - 04:15 pm", "04:15 pm - 05:15 pm" }));
-        CrearActividad.add(jComboBox6, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 210, 290, 40));
+        horarioCom.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "07:00 am - 08:45 am", "08:45 am - 10:15 am", "10:45 am - 12:45 am", "02:00 pm - 04:15 pm", "04:15 pm - 05:15 pm" }));
+        CrearActividad.add(horarioCom, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 210, 290, 40));
 
         jLabel14.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(0, 0, 0));
         jLabel14.setText("Cupo maximo:");
         CrearActividad.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 290, 120, 20));
 
-        NombreAct6.setBackground(new java.awt.Color(204, 204, 204));
-        NombreAct6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        CrearActividad.add(NombreAct6, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 140, 280, 30));
+        NombreAct.setBackground(new java.awt.Color(204, 204, 204));
+        NombreAct.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        NombreAct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NombreActActionPerformed(evt);
+            }
+        });
+        CrearActividad.add(NombreAct, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 140, 280, 30));
 
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
@@ -502,7 +626,21 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
         btnAñadirActividad.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnAñadirActividad.setForeground(new java.awt.Color(255, 255, 255));
         btnAñadirActividad.setText("Añadir Actividad");
+        btnAñadirActividad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAñadirActividadActionPerformed(evt);
+            }
+        });
         CrearActividad.add(btnAñadirActividad, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 467, 210, 40));
+
+        jLabel10.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel10.setText("Nombre:");
+        CrearActividad.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 150, 70, 20));
+
+        responsableiden.setBackground(new java.awt.Color(204, 204, 204));
+        responsableiden.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        CrearActividad.add(responsableiden, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 360, 280, 30));
 
         CoordinadorDeActividades.addTab("tab3", CrearActividad);
 
@@ -544,7 +682,6 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
         });
         TablaPresosCoor.setGridColor(new java.awt.Color(0, 0, 0));
         TablaPresosCoor.setShowGrid(false);
-        TablaPresosCoor.setShowHorizontalLines(true);
         TablaPresosCoor.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 TablaPresosCoorMousePressed(evt);
@@ -552,7 +689,7 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
         });
         jScrollPane3.setViewportView(TablaPresosCoor);
 
-        AsignadorPreso.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 1020, 390));
+        AsignadorPreso.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 1020, 390));
 
         jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
@@ -954,7 +1091,7 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
         ActividadesPreso.setBackground(new java.awt.Color(255, 255, 255));
         ActividadesPreso.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tablaActividadPresos.setModel(new javax.swing.table.DefaultTableModel(
+        ActividadPresosUnitario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -973,9 +1110,10 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(tablaActividadPresos);
+        ActividadPresosUnitario.setRowHeight(50);
+        jScrollPane2.setViewportView(ActividadPresosUnitario);
 
-        ActividadesPreso.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 261, 1030, 330));
+        ActividadesPreso.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 261, 1010, 330));
 
         jLabel67.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel67.setForeground(new java.awt.Color(0, 0, 0));
@@ -1039,7 +1177,7 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jPanel6.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, 150, 40));
 
-        ActividadesPreso.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 170, 420, 60));
+        ActividadesPreso.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 40, 420, 60));
 
         jLabel68.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel68.setForeground(new java.awt.Color(0, 0, 0));
@@ -1047,7 +1185,7 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
         ActividadesPreso.add(jLabel68, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 160, -1, 20));
 
         fotoPresoActividades.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true));
-        ActividadesPreso.add(fotoPresoActividades, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 40, 170, 120));
+        ActividadesPreso.add(fotoPresoActividades, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 120, 120, 120));
 
         CoordinadorDeActividades.addTab("tab6", ActividadesPreso);
 
@@ -1073,6 +1211,7 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
                 return canEdit [columnIndex];
             }
         });
+        tablaPresosAsignadosActividad.setRowHeight(50);
         jScrollPane4.setViewportView(tablaPresosAsignadosActividad);
 
         PresosEnActividad.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 1050, 440));
@@ -1086,13 +1225,13 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
         jLabel5.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Actividad: ");
-        jPanel7.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, 100, 30));
+        jPanel7.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 100, 30));
 
-        lblNombreActividad.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblNombreActividad.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         lblNombreActividad.setForeground(new java.awt.Color(255, 255, 255));
-        jPanel7.add(lblNombreActividad, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 20, 240, 30));
+        jPanel7.add(lblNombreActividad, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 20, 330, 30));
 
-        jPanel5.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 0, 430, 70));
+        jPanel5.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 510, 70));
 
         PresosEnActividad.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 1040, 70));
 
@@ -1115,7 +1254,6 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnActualizarInfoCoorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarInfoCoorActionPerformed
-
 
 
     }//GEN-LAST:event_btnActualizarInfoCoorActionPerformed
@@ -1154,7 +1292,7 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
     }//GEN-LAST:event_nuevoSegundoNombreCActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    CoordinadorDeActividades.setSelectedIndex(1);
+        CoordinadorDeActividades.setSelectedIndex(1);
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -1163,7 +1301,7 @@ controlador.cargarActividadesEnTabla(actividadesTabla);
     }//GEN-LAST:event_BuscadorActividadActionPerformed
 
     private void btnRegresarListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarListaActionPerformed
-CoordinadorDeActividades.setSelectedIndex(0);
+        CoordinadorDeActividades.setSelectedIndex(0);
 
     }//GEN-LAST:event_btnRegresarListaActionPerformed
 
@@ -1172,17 +1310,17 @@ CoordinadorDeActividades.setSelectedIndex(0);
     }//GEN-LAST:event_TablaPresosCoorMousePressed
 
     private void PanelPerfilSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PanelPerfilSMouseClicked
-CoordinadorDeActividades.setSelectedIndex(4);
+        CoordinadorDeActividades.setSelectedIndex(4);
 
     }//GEN-LAST:event_PanelPerfilSMouseClicked
 
     private void PanelGestionActSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PanelGestionActSMouseClicked
-CoordinadorDeActividades.setSelectedIndex(0);
+        CoordinadorDeActividades.setSelectedIndex(0);
 
     }//GEN-LAST:event_PanelGestionActSMouseClicked
 
     private void PanelAsignacionSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PanelAsignacionSMouseClicked
-CoordinadorDeActividades.setSelectedIndex(2);
+        CoordinadorDeActividades.setSelectedIndex(2);
 
     }//GEN-LAST:event_PanelAsignacionSMouseClicked
 
@@ -1210,8 +1348,47 @@ CoordinadorDeActividades.setSelectedIndex(2);
         PanelAsignacionS.setBackground(new Color(29, 35, 51));
     }//GEN-LAST:event_PanelAsignacionSMouseExited
 
-   
-    
+    private void btnAñadirActividadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirActividadActionPerformed
+
+        try {
+            String nombre = NombreAct.getText().trim();
+            String tipo = (String) tipoAct.getSelectedItem();
+            Object dia = diaCom.getSelectedItem();
+            Object horario = horarioCom.getSelectedItem();
+            String lugar = (String) lugarCom.getSelectedItem();
+            String cupoMaximo = (String) cupoMax.getSelectedItem();
+            String responsableIden = responsableiden.getText();
+
+            ActividadController controller = ActividadController.getInstancia();
+            controller.agregarActividad(nombre, tipo, dia, horario, lugar, cupoMaximo, responsableIden);
+
+            controller.cargarActividadesEnTabla(actividadesTabla);
+
+            limpiarFormularioActividad();
+
+            CoordinadorDeActividades.setSelectedIndex(0);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al agregar actividad: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void limpiarFormularioActividad() {
+        NombreAct.setText("");
+        tipoAct.setSelectedIndex(0);
+        diaCom.setSelectedIndex(0);
+        horarioCom.setSelectedIndex(0);
+        lugarCom.setSelectedIndex(0);
+        cupoMax.setSelectedIndex(0);
+
+    }//GEN-LAST:event_btnAñadirActividadActionPerformed
+
+    private void NombreActActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NombreActActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NombreActActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -1245,6 +1422,7 @@ CoordinadorDeActividades.setSelectedIndex(2);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable ActividadPresosUnitario;
     private javax.swing.JPanel ActividadesPreso;
     private javax.swing.JPanel ActualizarCoo;
     private javax.swing.JButton Actualizarimagenodr;
@@ -1258,8 +1436,7 @@ CoordinadorDeActividades.setSelectedIndex(2);
     private javax.swing.JLabel LabelFOTOC;
     private javax.swing.JPanel ListaActividades;
     private javax.swing.JLabel NacionalidadCoor;
-    private javax.swing.JTextField NombreAct5;
-    private javax.swing.JTextField NombreAct6;
+    private javax.swing.JTextField NombreAct;
     private javax.swing.JPanel PanelAsignacionS;
     private javax.swing.JPanel PanelFondoTextoPrincipal;
     private javax.swing.JPanel PanelGestionActS;
@@ -1277,15 +1454,13 @@ CoordinadorDeActividades.setSelectedIndex(2);
     private javax.swing.JButton btnBuscarActividad;
     private javax.swing.JButton btnRegresarLista;
     private javax.swing.JComboBox<String> cupoMax;
+    private javax.swing.JComboBox<String> diaCom;
     private javax.swing.JLabel edad;
     private javax.swing.JLabel fotoPresoActividades;
+    private javax.swing.JComboBox<String> horarioCom;
     private javax.swing.JLabel identi;
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel100;
@@ -1374,6 +1549,7 @@ CoordinadorDeActividades.setSelectedIndex(2);
     private javax.swing.JSeparator jSeparator83;
     private javax.swing.JSeparator jSeparator85;
     private javax.swing.JLabel lblNombreActividad;
+    private javax.swing.JComboBox<String> lugarCom;
     private javax.swing.JLabel naciona;
     private javax.swing.JLabel nom;
     private javax.swing.JLabel nombreCoor;
@@ -1389,8 +1565,9 @@ CoordinadorDeActividades.setSelectedIndex(2);
     private javax.swing.JPopupMenu ppMenuTablaActidadSelectiva;
     private javax.swing.JPopupMenu ppMenuTablaActividadesGeneral;
     private javax.swing.JTextField primerNuevoApellidoC;
+    private javax.swing.JTextField responsableiden;
     private javax.swing.JTextField segundoNuevoApellidoC;
-    private javax.swing.JTable tablaActividadPresos;
     private javax.swing.JTable tablaPresosAsignadosActividad;
+    private javax.swing.JComboBox<String> tipoAct;
     // End of variables declaration//GEN-END:variables
 }

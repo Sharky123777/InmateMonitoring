@@ -67,32 +67,30 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     private HashMap<String, String[]> datosDelitos;
 
     private List<Delito> delitosTemporales = new ArrayList<>();
-    private final DelitoController delitoController;
-    private final ExpedienteController expedienteController;
-    private final PresoController presoController;
     private final PresoDAO presoDAO;
 
-    private final Validador validador;
-
     private final DelitoDAO delitoDAO;
-    private final CeldaDAO celdaDAO;
     private Preso presoOriginal;
-
     CeldaDAO celda = new CeldaDAO();
-
     private int delitoActual = 1;
     private int totalDelitos = 1;
     private BufferedImage originalImage;
     private File selectedImageFile;
 
+    private final ExpedienteController expedienteController;
+    private final PresoController presoController;
+    private final Validador validador;
+    private final CeldaDAO celdaDAO;
+
     public OficialDeRegistro() {
-        this.presoDAO = new PresoDAO();
-        this.delitoDAO = new DelitoDAO();
-        this.celdaDAO = new CeldaDAO();
-        this.delitoController = new DelitoController(delitoDAO, presoDAO);
-        this.presoController = new PresoController(presoDAO, celda, delitoDAO);
-        this.expedienteController = new ExpedienteController(presoDAO, delitoDAO, presoController);
-        this.validador = new Validador(presoDAO);
+        this.presoDAO = PresoDAO.getInstancia();
+        this.delitoDAO = DelitoDAO.getInstancia();
+        this.celdaDAO = CeldaDAO.getInstancia();
+
+        this.presoController = PresoController.getInstancia();
+        this.expedienteController = ExpedienteController.getInstancia();
+        this.validador = Validador.getInstancia();
+
         initComponents();
         inicializarMenuPresos();
         inicializarMenuDelitos();
@@ -418,26 +416,26 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         });
     }
 
-    private void calcularFechaSalida() {
-        try {
-            if (delitosTemporales.isEmpty()) {
-                lblFechaSalidaCalculada.setText("Ingrese al menos un delito");
-                return;
-            }
-
-            PresoController presoController = new PresoController(presoDAO, celdaDAO, delitoDAO);
-            LocalDate fechaSalida = presoController.calcularFechaSalidaPreso(delitosTemporales);
-
-            lblFechaSalidaCalculada.setText(
-                    fechaSalida.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-            );
-
-        } catch (Exception ex) {
-            lblFechaSalidaCalculada.setText("Error calculando fecha");
-            ex.printStackTrace();
+private void calcularFechaSalida() {
+    try {
+        if (delitosTemporales.isEmpty()) {
+            lblFechaSalidaCalculada.setText("Ingrese al menos un delito");
+            return;
         }
-    }
 
+        PresoController presoController = PresoController.getInstancia();
+        
+        LocalDate fechaSalida = presoController.calcularFechaSalidaPreso(delitosTemporales);
+
+        lblFechaSalidaCalculada.setText(
+                fechaSalida.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        );
+
+    } catch (Exception ex) {
+        lblFechaSalidaCalculada.setText("Error calculando fecha");
+        ex.printStackTrace();
+    }
+}
     private void cargarDatosPresoEnFormularioActualizacion(Preso preso) {
         this.presoOriginal = preso;
         this.delitosTemporales = new ArrayList<>();
@@ -673,7 +671,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         nuevaNacionalidadField.setText("");
         nuevoGrupoSanguineoCombo.setSelectedIndex(0);
 
-      
         nuevoNivelSeguridadCombo.setSelectedIndex(0);
         nuevoAislamientoCombo.setSelectedIndex(0);
         nuevoNivelRiesgoCombo.setSelectedIndex(0);
@@ -3079,7 +3076,8 @@ public class OficialDeRegistro extends javax.swing.JFrame {
                 ppMenuTablaPresos.setVisible(false);
             }
 
-            PresoController controller = new PresoController(presoDAO, celdaDAO, delitoDAO);
+                 PresoController controller = PresoController.getInstancia();
+
             boolean actualizado = controller.actualizarPreso(
                     presoOriginal,
                     nuevoPrimerNombreField.getText(),
@@ -3388,7 +3386,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
                 throw new IllegalArgumentException("Debe seleccionar una foto del preso");
             }
 
-            PresoController controller = new PresoController(presoDAO, celdaDAO, delitoDAO);
+                 PresoController controller = PresoController.getInstancia();
 
             LocalDate fechaIngreso = datePickerFechaIngreso.getDate()
                     .toInstant()
@@ -3461,8 +3459,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
             Validador.validarCampoObligatorio("edad", InputEdadPreso.getText());
             Validador.validarCampoObligatorio("estatura", InputEstaturaPreso.getText());
             Validador.validarCampoObligatorio("peso", InputPesoPreso.getText());
-
-            
 
             Validador.validarNombre(InputNombrePreso.getText());
             Validador.validarNombre(InputApellidoPreso.getText());
@@ -3665,8 +3661,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
                 throw new IllegalStateException("Datos del preso no están inicializados correctamente");
             }
 
-            PresoController presoController = new PresoController(presoDAO, celdaDAO, delitoDAO);
-            ExpedienteController expedienteController = new ExpedienteController(presoDAO, delitoDAO, presoController);
+        PresoController presoController = PresoController.getInstancia();
 
             boolean delitoAgregado = presoController.agregarDelitoAPreso(
                     presoOriginal,

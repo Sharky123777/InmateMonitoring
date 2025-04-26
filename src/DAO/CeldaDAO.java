@@ -17,9 +17,20 @@ import java.util.List;
 
 public class CeldaDAO {
 
+            private static CeldaDAO instancia;
+
+    
     private static final String JSON_FILE = "C:\\Users\\ASUS\\Documents\\NetBeansProjects\\InmateMonitoring\\src\\Resources\\DATA\\celdas.json";
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
+    
+     public static synchronized CeldaDAO getInstancia() {
+        if (instancia == null) {
+            instancia = new CeldaDAO();
+        }
+        return instancia;
+    }
+    
     public List<Celda> cargarTodas() {
         try (Reader reader = new FileReader(JSON_FILE)) {
             Type listType = new TypeToken<ArrayList<Celda>>() {}.getType();

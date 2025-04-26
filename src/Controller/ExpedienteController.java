@@ -17,20 +17,32 @@ import javax.swing.table.DefaultTableModel;
 
 public class ExpedienteController {
     
+    private static volatile ExpedienteController instancia;
     private final PresoDAO presoDAO;
     private final DelitoDAO delitoDAO;
     private final PresoController presoController;
-
-    public ExpedienteController(PresoDAO presoDAO, DelitoDAO delitoDAO, PresoController presoController) {
+    
+    private ExpedienteController(PresoDAO presoDAO, DelitoDAO delitoDAO, PresoController presoController) {
         this.presoDAO = presoDAO;
         this.delitoDAO = delitoDAO;
         this.presoController = presoController;
     }
     
-    public ExpedienteController() {
-        this.presoDAO = new PresoDAO();
-        this.delitoDAO = new DelitoDAO();
-        this.presoController = new PresoController(presoDAO, null, delitoDAO); 
+    public static ExpedienteController getInstancia() {
+        ExpedienteController result = instancia;
+        if (result == null) {
+            synchronized (ExpedienteController.class) {
+                result = instancia;
+                if (result == null) {
+                    instancia = result = new ExpedienteController(
+                        PresoDAO.getInstancia(),
+                        DelitoDAO.getInstancia(),
+                        PresoController.getInstancia()
+                    );
+                }
+            }
+        }
+        return result;
     }
     
     public void cargarExpedienteCompleto(Preso preso, 

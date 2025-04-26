@@ -34,6 +34,8 @@ import javax.swing.JOptionPane;
 
 public class PresoDAO {
 
+    private static PresoDAO instancia;
+
     private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\presos.json\\";
     private static final String IMAGES_DIR = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\";
 
@@ -41,6 +43,13 @@ public class PresoDAO {
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
             .create();
+
+    public static synchronized PresoDAO getInstancia() {
+        if (instancia == null) {
+            instancia = new PresoDAO();
+        }
+        return instancia;
+    }
 
     private static class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
 
@@ -361,26 +370,26 @@ public class PresoDAO {
             return false;
         }
     }
-    
+
     public boolean existePresoConIdentificacion(String identificacion) {
-    List<Preso> presos = cargarTodos(); 
-    for (Preso preso : presos) {
-        if (preso.getIdentificacion().equals(identificacion)) {
-            return true;
+        List<Preso> presos = cargarTodos();
+        for (Preso preso : presos) {
+            if (preso.getIdentificacion().equals(identificacion)) {
+                return true;
+            }
         }
+        return false;
     }
-    return false;
-}
 
     public List<Preso> buscarPorSeccion(String seccion) {
-    List<Preso> todos = cargarTodos(); 
-    List<Preso> filtrados = new ArrayList<>();
-    
-    for (Preso preso : todos) {
-        if (preso.getSeccionAsignada().equalsIgnoreCase(seccion)) {
-            filtrados.add(preso);
+        List<Preso> todos = cargarTodos();
+        List<Preso> filtrados = new ArrayList<>();
+
+        for (Preso preso : todos) {
+            if (preso.getSeccionAsignada().equalsIgnoreCase(seccion)) {
+                filtrados.add(preso);
+            }
         }
+        return filtrados;
     }
-    return filtrados;
-}
 }

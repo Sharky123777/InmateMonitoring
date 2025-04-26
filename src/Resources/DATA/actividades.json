@@ -1,3 +1,31 @@
 [
- 
+  {
+    "idActividad": "ACT-1745686133748",
+    "nombre": "Lectura bibliotecaria",
+    "tipo": "Educativa",
+    "dia": "Lunes",
+    "horario": "07:00 am - 08:45 am",
+    "lugar": "Biblioteca Principal",
+    "cupoMaximo": 10,
+    "presosAsignadosIds": [
+      "001122334"
+    ],
+    "estado": "Activa",
+    "presosInscritos": 1
+  },
+  {
+    "idActividad": "ACT-1745695177951",
+    "nombre": "Ajedrez",
+    "tipo": "Educativa",
+    "dia": "Viernes",
+    "horario": "07:00 am - 08:45 am",
+    "lugar": "Patio Central",
+    "cupoMaximo": 10,
+    "presosAsignadosIds": [
+      "001122334"
+    ],
+    "estado": "Activa",
+    "presosInscritos": 1,
+    "responsable": "120012001"
+  }
 ]

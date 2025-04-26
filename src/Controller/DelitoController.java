@@ -13,17 +13,30 @@ import java.util.Date;
 import java.util.List;
 
 public class DelitoController {
+    private static volatile DelitoController instancia;
+    
     private final DelitoDAO delitoDAO;
     private final PresoDAO presoDAO;
     
-    public DelitoController(DelitoDAO delitoDAO, PresoDAO presoDAO) {
-        if (delitoDAO == null || presoDAO == null) {
-            throw new IllegalArgumentException("DAOs no pueden ser nulos");
+    private DelitoController() {
+        this.delitoDAO = DelitoDAO.getInstancia();
+        this.presoDAO = PresoDAO.getInstancia();
+    }
+    
+    public static DelitoController getInstancia() {
+        DelitoController result = instancia;
+        if (result == null) {
+            synchronized (DelitoController.class) {
+                result = instancia;
+                if (result == null) {
+                    instancia = result = new DelitoController();
+                }
+            }
         }
-        this.delitoDAO = delitoDAO;
-        this.presoDAO = presoDAO;
+        return result;
     }
-    }
+    
+}
     
    
  

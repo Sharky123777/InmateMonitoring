@@ -27,16 +27,30 @@ import javax.swing.table.DefaultTableModel;
 
 public class PresoController {
 
+   private static PresoController instancia;
+
     private final PresoDAO presoDAO;
     private final CeldaDAO celdaDAO;
     private final DelitoDAO delitoDAO;
     private final Validador validador;
 
-    public PresoController(PresoDAO presoDAO, CeldaDAO celdaDAO, DelitoDAO delitoDAO) {
+   private PresoController(PresoDAO presoDAO, CeldaDAO celdaDAO, DelitoDAO delitoDAO, Validador vañidador) {
         this.presoDAO = presoDAO;
         this.celdaDAO = celdaDAO;
         this.delitoDAO = delitoDAO;
-        this.validador = new Validador(presoDAO);
+        this.validador = vañidador;
+    }
+    
+    public static synchronized PresoController getInstancia() {
+        if (instancia == null) {
+            instancia = new PresoController(
+                PresoDAO.getInstancia(),
+                CeldaDAO.getInstancia(),
+                DelitoDAO.getInstancia(),
+                    Validador.getInstancia()
+            );
+        }
+        return instancia;
     }
 
     public boolean hayCambios(Preso presoOriginal,
