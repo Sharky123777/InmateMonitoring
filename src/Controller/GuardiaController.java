@@ -8,7 +8,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -33,7 +33,7 @@ public class GuardiaController {
                            JTextField txtNacionalidad, JTextField txtCorreo,
                            JComboBox<String> cmbTurno, JComboBox<String> cmbCargo,
                            JDateChooser dateChooserFinContrato) {
-        this.guardiaDAO = new GuardiaDAO();
+        this.guardiaDAO = GuardiaDAO.getInstancia();
         this.txtPrimerNombre = txtPrimerNombre;
         this.txtSegundoNombre = txtSegundoNombre;
         this.txtPrimerApellido = txtPrimerApellido;
@@ -47,8 +47,111 @@ public class GuardiaController {
         this.dateChooserFinContrato = dateChooserFinContrato;
     }
 
-    public void setRutaImagenSeleccionada(String ruta) {
-        this.rutaImagenSeleccionada = ruta;
+    // Método para preparar modificación (nuevo)
+    public Map<String, Object> prepararModificacion(String cedula) {
+        Guardia guardia = obtenerGuardiaPorCedula(cedula);
+        if (guardia == null) {
+            throw new IllegalArgumentException("Guardia no encontrado con cédula: " + cedula);
+        }
+
+        Map<String, Object> datos = new LinkedHashMap<>();
+        datos.put("cedula", guardia.getIdentificacion());
+        datos.put("primerNombre", guardia.getPrimerNombre());
+        datos.put("segundoNombre", guardia.getSegundoNombre());
+        datos.put("primerApellido", guardia.getPrimerApellido());
+        datos.put("segundoApellido", guardia.getSegundoApellido());
+        datos.put("edad", guardia.getEdad());
+        datos.put("nacionalidad", guardia.getNacionalidad());
+        datos.put("correo", guardia.getCorreo());
+        datos.put("turno", guardia.getTurno());
+        datos.put("cargo", guardia.getCargo());
+        datos.put("fechaInicio", guardia.getFechaInicioContrato());
+        datos.put("fechaFin", guardia.getFechaFinContrato());
+        datos.put("sexo", guardia.getSexo());
+        datos.put("rutaImagen", guardia.getRutaImagen());
+
+        return datos;
+    }
+
+    // Método principal para procesar modificación (nuevo)
+    public boolean procesarModificacion(String cedulaOriginal, 
+                                      Map<String, Object> cambios, 
+                                      File nuevaImagen) {
+        try {
+            if (!hayCambiosReales(cedulaOriginal, cambios, nuevaImagen)) {
+                throw new IllegalArgumentException("No se detectaron cambios");
+            }
+
+            validarCamposModificacion(cambios);
+            validarEdad((int) cambios.get("edad"));
+            validarFechasContrato((LocalDate) cambios.get("fechaInicio"), 
+                                 (LocalDate) cambios.get("fechaFin"));
+
+            return guardiaDAO.modificarGuardia(
+                cedulaOriginal,
+                (String) cambios.get("primerNombre"),
+                (String) cambios.get("segundoNombre"),
+                (String) cambios.get("primerApellido"),
+                (String) cambios.get("segundoApellido"),
+                (int) cambios.get("edad"),
+                (String) cambios.get("nacionalidad"),
+                (String) cambios.get("correo"),
+                (String) cambios.get("turno"),
+                (LocalDate) cambios.get("fechaFin"),
+                (String) cambios.get("cargo"),
+                nuevaImagen
+            );
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al modificar guardia: " + e.getMessage(), e);
+        }
+    }
+
+    // Métodos de validación (nuevos)
+    private boolean hayCambiosReales(String cedula, Map<String, Object> cambios, File nuevaImagen) {
+        Guardia original = obtenerGuardiaPorCedula(cedula);
+        
+        boolean cambiosEnCampos = !original.getPrimerNombre().equals(cambios.get("primerNombre")) ||
+                                !Objects.equals(original.getSegundoNombre(), cambios.get("segundoNombre")) ||
+                                !original.getPrimerApellido().equals(cambios.get("primerApellido")) ||
+                                !original.getSegundoApellido().equals(cambios.get("segundoApellido")) ||
+                                original.getEdad() != (int) cambios.get("edad") ||
+                                !original.getNacionalidad().equals(cambios.get("nacionalidad")) ||
+                                !original.getCorreo().equals(cambios.get("correo")) ||
+                                !original.getTurno().equals(cambios.get("turno")) ||
+                                !original.getCargo().equals(cambios.get("cargo")) ||
+                                !original.getFechaFinContrato().equals(cambios.get("fechaFin"));
+
+        boolean cambioImagen = nuevaImagen != null && 
+                             (original.getRutaImagen() == null || 
+                             !nuevaImagen.getAbsolutePath().equals(original.getRutaImagen()));
+
+        return cambiosEnCampos || cambioImagen;
+    }
+
+    private void validarCamposModificacion(Map<String, Object> cambios) {
+        StringBuilder errores = new StringBuilder();
+        
+        if (((String) cambios.get("primerNombre")).trim().isEmpty()) {
+            errores.append("- Primer nombre es obligatorio\n");
+        }
+        if (((String) cambios.get("primerApellido")).trim().isEmpty()) {
+            errores.append("- Primer apellido es obligatorio\n");
+        }
+        if (((String) cambios.get("segundoApellido")).trim().isEmpty()) {
+            errores.append("- Segundo apellido es obligatorio\n");
+        }
+        if (((String) cambios.get("nacionalidad")).trim().isEmpty()) {
+            errores.append("- Nacionalidad es obligatoria\n");
+        }
+        if (((String) cambios.get("correo")).trim().isEmpty()) {
+            errores.append("- Correo es obligatorio\n");
+        }
+        
+        if (errores.length() > 0) {
+            throw new IllegalArgumentException(errores.toString());
+        }
     }
 
   public boolean agregarGuardia() {
@@ -319,6 +422,17 @@ private ImageIcon cargarImagenGuardia(Guardia guardia) {
     }
     return null;
 }
+
+private void validarEdad(int edad) {
+        if (edad < 18 || edad > 70) {
+            throw new IllegalArgumentException("La edad debe estar entre 18 y 70 años");
+        }
+    }
+
+    public void setRutaImagenSeleccionada(String rutaImagenSeleccionada) {
+        this.rutaImagenSeleccionada = rutaImagenSeleccionada;
+    }
+
 
 
 }

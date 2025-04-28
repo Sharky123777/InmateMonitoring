@@ -34,7 +34,9 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -68,16 +70,21 @@ public class Director extends javax.swing.JFrame {
     private File imagenSeleccionadaMod; // ✅ Añade esta línea
     private PersonalDeControlController controller;
     private File imagenPDCSeleccionada;
+    private String cedulaActualModificacion;
+    
 
     public Director() {
         initComponents();
         // Inicializar controlador
          // Inicializar el controller pasándole los componentes
         guardiaController = new GuardiaController(
-            txtPrimerNombre, txtSegundoNombre, txtPrimerApellido, txtSegundoApellido,
-            txtEdad, txtCedula, txtNacionalidad, txtCorreo,
-            cmbTurno, cmbCargo, jDateChooserFinContrato
-        );
+    txtPrimerNombreMod, txtSegundoNombreMod, 
+    txtPrimerApellidoMod, txtSegundoApellidoMod,
+    txtEdadMod, txtCedulaMod,
+    txtNacionalidadMod, txtCorreoMod,
+    cmbTurnoMod, txtCargoMod,
+    dateFinContratoMod
+);
 
         // Configurar campo de fecha de contratación (no editable)
         txtFechaContratacion.setEditable(false);
@@ -1252,8 +1259,30 @@ public class Director extends javax.swing.JFrame {
             }
         } else {
             lblImagenMod.setIcon(null);
+        
+            // Asignar la cédula actual (IMPORTANTE)
+    this.cedulaActualModificacion = guardia.getIdentificacion(); // <-- Esta línea es crucial
+    this.imagenSeleccionadaMod = null; // Resetear imagen al cargar
+     // Debug: Verifica que la cédula se asignó
+    System.out.println("Cédula asignada: " + this.cedulaActualModificacion);
         }
     }
+    
+    private void limpiarFormularioModificacion() {
+    txtPrimerNombreMod.setText("");
+        txtSegundoNombreMod.setText("");
+        txtPrimerApellidoMod.setText("");
+        txtSegundoApellidoMod.setText("");
+        txtEdadMod.setText("");
+        txtCedulaMod.setText("");
+        txtNacionalidadMod.setText("");
+        txtCorreoMod.setText("");
+        cmbTurnoMod.setSelectedIndex(0);
+        dateFinContratoMod.setDate(null);
+        txtFechaContratacionMod.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        lblImagenMod.setIcon(null);
+        rutaImagenSeleccionada = null;
+}
 
     private class ImagenRenderer extends DefaultTableCellRenderer {
 
@@ -1512,7 +1541,70 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCedulaKeyTyped
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+// Verificación EXTRA de la cédula
+    if (cedulaActualModificacion == null || cedulaActualModificacion.isEmpty()) {
+        JOptionPane.showMessageDialog(this, 
+            "Error interno: No se detectó cédula para modificar", 
+            "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    try {
+        // Recoger datos del formulario
+        Map<String, Object> cambios = new HashMap<>();
+        // 2. Recoger todos los valores modificados
+        String primerNombre = txtPrimerNombreMod.getText().trim();
+        String segundoNombre = txtSegundoNombreMod.getText().trim();
+        String primerApellido = txtPrimerApellidoMod.getText().trim();
+        String segundoApellido = txtSegundoApellidoMod.getText().trim();
+        int edad = Integer.parseInt(txtEdadMod.getText());
+        String nacionalidad = txtNacionalidadMod.getText().trim();
+        String correo = txtCorreoMod.getText().trim();
+        String turno = cmbTurnoMod.getSelectedItem().toString();
+        String cargo = txtCargoMod.getSelectedItem().toString();
+        LocalDate fechaFin = dateFinContratoMod.getDate().toInstant()
+                          .atZone(ZoneId.systemDefault()).toLocalDate();
 
+        // 3. Procesar la modificación a través del Controller
+        boolean exito = guardiaController.actualizarGuardia(
+            cedulaActualModificacion,
+            primerNombre,
+            segundoNombre,
+            primerApellido,
+            segundoApellido,
+            edad,
+            nacionalidad,
+            correo,
+            turno,
+            fechaFin,
+            cargo,
+            imagenSeleccionadaMod // Puede ser null si no se cambió la imagen
+        );
+
+        if (exito) {
+            JOptionPane.showMessageDialog(this, 
+                "Guardia modificado exitosamente", 
+                "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                
+            // Limpiar y actualizar
+            limpiarFormularioModificacion();
+            actualizarTablaGuardias();
+            jTabbedPane1.setSelectedComponent(ModificarGuardia);
+        }
+        
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, 
+            "La edad debe ser un número válido", 
+            "Error", JOptionPane.ERROR_MESSAGE);
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error en los datos:\n" + e.getMessage(), 
+            "Error", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error al modificar: " + e.getMessage(), 
+            "Error", JOptionPane.ERROR_MESSAGE);
+    }
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -1537,30 +1629,20 @@ public class Director extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Seleccionar nueva imagen");
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "png", "jpeg"));
-
-        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            File imagen = fileChooser.getSelectedFile();
-            try {
-                // Guardar la ruta de la imagen seleccionada
-                rutaImagenSeleccionada = imagen.getAbsolutePath();
-
-                // Mostrar vista previa
-                ImageIcon icon = new ImageIcon(rutaImagenSeleccionada);
-                Image img = icon.getImage().getScaledInstance(
-                        lblImagenMod.getWidth(),
-                        lblImagenMod.getHeight(),
-                        Image.SCALE_SMOOTH
-                );
-                lblImagenMod.setIcon(new ImageIcon(img));
-                lblImagenMod.setToolTipText(rutaImagenSeleccionada); // Guardamos la ruta aquí
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error al cargar imagen: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                rutaImagenSeleccionada = null;
-                lblImagenMod.setIcon(null);
-            }
-        }
+    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+        "Imágenes", "jpg", "png", "jpeg");
+    fileChooser.setFileFilter(filter);
+    
+    if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+        imagenSeleccionadaMod = fileChooser.getSelectedFile();
+        // Mostrar previsualización
+        ImageIcon icon = new ImageIcon(imagenSeleccionadaMod.getAbsolutePath());
+        Image scaled = icon.getImage().getScaledInstance(
+            lblImagenMod.getWidth(), 
+            lblImagenMod.getHeight(), 
+            Image.SCALE_SMOOTH);
+        lblImagenMod.setIcon(new ImageIcon(scaled));
+    }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void txtCedulaModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaModActionPerformed
@@ -1596,30 +1678,38 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtEdadModKeyTyped
 
     private void ModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModificarActionPerformed
-
+try {
         int fila = tablaGuardias.getSelectedRow();
         if (fila < 0) {
-            JOptionPane.showMessageDialog(this, "Seleccione un guardia primero", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, 
+                "Seleccione un guardia primero", 
+                "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // 2. Obtener cédula del guardia seleccionado
-        String cedula = tablaGuardias.getValueAt(fila, 4).toString(); // Asumiendo columna 4 es cédula
+        // Obtener cédula directamente de la tabla
+        String cedula = tablaGuardias.getValueAt(fila, 4).toString(); // Asume columna 4 es cédula
+        this.cedulaActualModificacion = cedula; // <-- ASIGNACIÓN CLAVE
 
-        // 3. Obtener datos completos del guardia
-        GuardiaDAO dao = new GuardiaDAO();
-        Guardia guardia = dao.obtenerGuardiaPorCedula(cedula);
-
+        // Cargar datos usando el controller
+        Guardia guardia = guardiaController.obtenerGuardiaPorCedula(cedula);
+        
         if (guardia == null) {
-            JOptionPane.showMessageDialog(this, "No se encontró el guardia seleccionado", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, 
+                "No se encontró el guardia seleccionado", 
+                "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // 4. Cargar datos en el panel de modificación
         cargarDatosEnPanelModificacion(guardia);
-
-        // 5. Cambiar al tab de modificación
         jTabbedPane1.setSelectedComponent(ModificarGuardia);
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error: " + e.getMessage(), 
+            "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
     }//GEN-LAST:event_ModificarActionPerformed
 
     private void EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarActionPerformed
