@@ -2,12 +2,21 @@ package Model;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import com.google.gson.annotations.SerializedName;
 
 public class Enfermera extends Persona {
     private String turno; // "Diurno" o "Nocturno"
+    
+    @SerializedName("fechaContratacion")
     private LocalDate fechaContratacion;
+    
+    @SerializedName("fechaFinContrato")
     private LocalDate fechaFinContrato;
+    
+    @SerializedName("rutaImagen")
     private String rutaImagen;
+    
+    @SerializedName("correo")
     private String correo;
     
     public Enfermera(String primerNombre, String segundoNombre, 
@@ -26,7 +35,7 @@ public class Enfermera extends Persona {
 
     // Getters y Setters
     public String getTurno() {
-        return turno;
+        return turno != null ? turno : "";
     }
 
     public void setTurno(String turno) {
@@ -60,7 +69,7 @@ public class Enfermera extends Persona {
     }
 
     public String getRutaImagen() {
-        return rutaImagen;
+        return rutaImagen != null ? rutaImagen : "";
     }
 
     public void setRutaImagen(String rutaImagen) {
@@ -74,9 +83,20 @@ public class Enfermera extends Persona {
     public void setCorreo(String correo) {
         this.correo = correo;
     }
+ public String getNombresParaTabla() {
+        String nombres = getPrimerNombre();
+        if (!getSegundoNombre().isEmpty()) {
+            nombres += " " + getSegundoNombre();
+        }
+        return nombres.trim();
+    }
 
-    @Override
-    public String toString() {
-        return getNombreCompleto() + " (" + turno + ") - " + correo;
+    // Método específico para mostrar apellidos en tabla
+    public String getApellidosParaTabla() {
+        String apellidos = getPrimerApellido();
+        if (!getSegundoApellido().isEmpty()) {
+            apellidos += " " + getSegundoApellido();
+        }
+        return apellidos.trim();
     }
 }

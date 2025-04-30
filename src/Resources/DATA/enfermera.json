@@ -1,17 +1,19 @@
-[
-  {
-    "primerNombre": "PRUEBAz",
-    "segundoNombre": "xxxxxxxxxxkk",
-    "primerApellido": "xzzc",
-    "segundoApellido": "ai",
-    "edad": 45,
-    "sexo": "Femenino",
-    "nacionalidad": "yoysay",
-    "identificacion": "234223232",
-    "turno": "Nocturno",
-    "fechaContratacion": "2025-04-24",
-    "fechaFinContrato": "2025-04-29",
-    "rutaImagen": "src/Resources/imagenes_enfermeras/234223232_1745541967197.png",
-    "correo": "@.com"
-  }
-]
+{
+  "enfermeras": [
+    {
+      "turno": "Nocturno",
+      "fechaContratacion": "2025-04-30",
+      "fechaFinContrato": "2025-07-07",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/28371287_Captura de pantalla 2024-12-21 181901.png",
+      "correo": "luz@gmail.com",
+      "primerNombre": "akwdajiwd",
+      "segundoNombre": "amwdjkd",
+      "primerApellido": "akdkawdnd",
+      "segundoApellido": "aadjawdj",
+      "edad": 45,
+      "sexo": "Femenino",
+      "nacionalidad": "jksawjkdbwad",
+      "identificacion": "28371287"
+    }
+  ]
+}

@@ -61,6 +61,7 @@ import javax.swing.table.TableColumnModel;
 public class Director extends javax.swing.JFrame {
 
     EnfermeraDAO enfermeraDAO = new EnfermeraDAO();
+    private EnfermeraController enfermeraController;
 
     /**
      * Creates new form Director
@@ -71,24 +72,37 @@ public class Director extends javax.swing.JFrame {
     private PersonalDeControlController controller;
     private File imagenPDCSeleccionada;
     private String cedulaActualModificacion;
-    
 
     public Director() {
         initComponents();
         // Inicializar controlador
-         // Inicializar el controller pasándole los componentes
+        // Inicializar el controller pasándole los componentes
         guardiaController = new GuardiaController(
-    txtPrimerNombreMod, txtSegundoNombreMod, 
-    txtPrimerApellidoMod, txtSegundoApellidoMod,
-    txtEdadMod, txtCedulaMod,
-    txtNacionalidadMod, txtCorreoMod,
-    cmbTurnoMod, txtCargoMod,
-    dateFinContratoMod
-);
+                txtPrimerNombreMod, txtSegundoNombreMod,
+                txtPrimerApellidoMod, txtSegundoApellidoMod,
+                txtEdadMod, txtCedulaMod,
+                txtNacionalidadMod, txtCorreoMod,
+                cmbTurnoMod, txtCargoMod,
+                dateFinContratoMod
+        );
+
+        enfermeraController = EnfermeraController.getInstancia(
+                txtPrimerNombre1, txtSegundoNombre1,
+                txtPrimerApellido1, txtSegundoApellido1,
+                txtEdad1, txtCedula1,
+                txtNacionalidad1, txtCorreo1,
+                cmbTurno1,
+                dateFinContrato1
+        );
+
+// Luego llama a actualizar la tabla
+        actualizarTablaEnfermeras();
 
         // Configurar campo de fecha de contratación (no editable)
         txtFechaContratacion.setEditable(false);
         txtFechaContratacion.setText(LocalDate.now().toString());
+        txtFechaContratacion1.setEditable(false); // Para el formulario de añadir
+        txtFechaContratacionMod1.setEditable(false); // Para el formulario de modificar
 
         // Configurar campo de sexo (femenino por defecto)
         txtSexo.setEditable(false);
@@ -96,10 +110,12 @@ public class Director extends javax.swing.JFrame {
 
         // Inicializar tabla
         actualizarTablaGuardias();
+        txtFechaContratacion1.setText(LocalDate.now().toString());
 
         // Configurar tooltip para cédula
         ToolTipManager.sharedInstance().setInitialDelay(10);
-        jDateChooserFinContrato.setDateFormatString("yyyy/MM/dd"); 
+        jDateChooserFinContrato.setDateFormatString("yyyy/MM/dd");
+        
 
     }
 
@@ -216,6 +232,7 @@ public class Director extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jLabel30 = new javax.swing.JLabel();
         MostrarEnfermeras = new javax.swing.JPanel();
+        jButton9 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaEnfermeras = new javax.swing.JTable();
         ModificarNurse = new javax.swing.JPanel();
@@ -461,6 +478,11 @@ public class Director extends javax.swing.JFrame {
         txtCorreo1.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtCorreo1FocusLost(evt);
+            }
+        });
+        txtCorreo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCorreo1ActionPerformed(evt);
             }
         });
         txtCorreo1.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -781,6 +803,14 @@ public class Director extends javax.swing.JFrame {
         MostrarEnfermeras.setBackground(new java.awt.Color(255, 255, 255));
         MostrarEnfermeras.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jButton9.setText("jButton9");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+        MostrarEnfermeras.add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 0, 60, -1));
+
         tablaEnfermeras.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null, null, null},
@@ -817,7 +847,7 @@ public class Director extends javax.swing.JFrame {
             tablaEnfermeras.getColumnModel().getColumn(11).setResizable(false);
         }
 
-        MostrarEnfermeras.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1070, 540));
+        MostrarEnfermeras.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1070, 550));
 
         jTabbedPane1.addTab("MostrarEnfermera", MostrarEnfermeras);
 
@@ -1259,17 +1289,17 @@ public class Director extends javax.swing.JFrame {
             }
         } else {
             lblImagenMod.setIcon(null);
-        
+
             // Asignar la cédula actual (IMPORTANTE)
-    this.cedulaActualModificacion = guardia.getIdentificacion(); // <-- Esta línea es crucial
-    this.imagenSeleccionadaMod = null; // Resetear imagen al cargar
-     // Debug: Verifica que la cédula se asignó
-    System.out.println("Cédula asignada: " + this.cedulaActualModificacion);
+            this.cedulaActualModificacion = guardia.getIdentificacion(); // <-- Esta línea es crucial
+            this.imagenSeleccionadaMod = null; // Resetear imagen al cargar
+            // Debug: Verifica que la cédula se asignó
+            System.out.println("Cédula asignada: " + this.cedulaActualModificacion);
         }
     }
-    
+
     private void limpiarFormularioModificacion() {
-    txtPrimerNombreMod.setText("");
+        txtPrimerNombreMod.setText("");
         txtSegundoNombreMod.setText("");
         txtPrimerApellidoMod.setText("");
         txtSegundoApellidoMod.setText("");
@@ -1282,7 +1312,7 @@ public class Director extends javax.swing.JFrame {
         txtFechaContratacionMod.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         lblImagenMod.setIcon(null);
         rutaImagenSeleccionada = null;
-}
+    }
 
     private class ImagenRenderer extends DefaultTableCellRenderer {
 
@@ -1331,28 +1361,28 @@ public class Director extends javax.swing.JFrame {
 
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       try {
-        boolean resultado = guardiaController.agregarGuardia();
-        
-        if (resultado) {
-            JOptionPane.showMessageDialog(this, 
-                "Guardia registrado exitosamente", 
-                "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            limpiarFormulario();
-            actualizarTablaGuardias();
+        try {
+            boolean resultado = guardiaController.agregarGuardia();
+
+            if (resultado) {
+                JOptionPane.showMessageDialog(this,
+                        "Guardia registrado exitosamente",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                limpiarFormulario();
+                actualizarTablaGuardias();
+            }
+        } catch (IllegalArgumentException e) {
+            // Mostrar mensajes de validación específicos
+            JOptionPane.showMessageDialog(this,
+                    e.getMessage(),
+                    "Error de validación", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            // Manejar otros errores
+            JOptionPane.showMessageDialog(this,
+                    "Error inesperado: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-    } catch (IllegalArgumentException e) {
-        // Mostrar mensajes de validación específicos
-        JOptionPane.showMessageDialog(this, 
-            e.getMessage(), 
-            "Error de validación", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        // Manejar otros errores
-        JOptionPane.showMessageDialog(this, 
-            "Error inesperado: " + e.getMessage(), 
-            "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void actualizarTablaGuardias() {
@@ -1467,29 +1497,29 @@ public class Director extends javax.swing.JFrame {
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-            JFileChooser fileChooser = new JFileChooser();
-    int resultado = fileChooser.showOpenDialog(this);
-    
-    if (resultado == JFileChooser.APPROVE_OPTION) {
-        File archivoSeleccionado = fileChooser.getSelectedFile();
-        // Guardar la ruta ABSOLUTA en el controller
-        guardiaController.setRutaImagenSeleccionada(archivoSeleccionado.getAbsolutePath());
-        
-        // Mostrar preview (opcional)
-        try {
-            ImageIcon icono = new ImageIcon(archivoSeleccionado.getAbsolutePath());
-            Image imagenEscalada = icono.getImage().getScaledInstance(
-                lblFoto.getWidth(), 
-                lblFoto.getHeight(), 
-                Image.SCALE_SMOOTH
-            );
-            lblFoto.setIcon(new ImageIcon(imagenEscalada));
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error al cargar la imagen: " + e.getMessage(), 
-                "Error", JOptionPane.ERROR_MESSAGE);
+        JFileChooser fileChooser = new JFileChooser();
+        int resultado = fileChooser.showOpenDialog(this);
+
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File archivoSeleccionado = fileChooser.getSelectedFile();
+            // Guardar la ruta ABSOLUTA en el controller
+            guardiaController.setRutaImagenSeleccionada(archivoSeleccionado.getAbsolutePath());
+
+            // Mostrar preview (opcional)
+            try {
+                ImageIcon icono = new ImageIcon(archivoSeleccionado.getAbsolutePath());
+                Image imagenEscalada = icono.getImage().getScaledInstance(
+                        lblFoto.getWidth(),
+                        lblFoto.getHeight(),
+                        Image.SCALE_SMOOTH
+                );
+                lblFoto.setIcon(new ImageIcon(imagenEscalada));
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al cargar la imagen: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
-    }
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -1542,69 +1572,69 @@ public class Director extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 // Verificación EXTRA de la cédula
-    if (cedulaActualModificacion == null || cedulaActualModificacion.isEmpty()) {
-        JOptionPane.showMessageDialog(this, 
-            "Error interno: No se detectó cédula para modificar", 
-            "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-    
-    try {
-        // Recoger datos del formulario
-        Map<String, Object> cambios = new HashMap<>();
-        // 2. Recoger todos los valores modificados
-        String primerNombre = txtPrimerNombreMod.getText().trim();
-        String segundoNombre = txtSegundoNombreMod.getText().trim();
-        String primerApellido = txtPrimerApellidoMod.getText().trim();
-        String segundoApellido = txtSegundoApellidoMod.getText().trim();
-        int edad = Integer.parseInt(txtEdadMod.getText());
-        String nacionalidad = txtNacionalidadMod.getText().trim();
-        String correo = txtCorreoMod.getText().trim();
-        String turno = cmbTurnoMod.getSelectedItem().toString();
-        String cargo = txtCargoMod.getSelectedItem().toString();
-        LocalDate fechaFin = dateFinContratoMod.getDate().toInstant()
-                          .atZone(ZoneId.systemDefault()).toLocalDate();
-
-        // 3. Procesar la modificación a través del Controller
-        boolean exito = guardiaController.actualizarGuardia(
-            cedulaActualModificacion,
-            primerNombre,
-            segundoNombre,
-            primerApellido,
-            segundoApellido,
-            edad,
-            nacionalidad,
-            correo,
-            turno,
-            fechaFin,
-            cargo,
-            imagenSeleccionadaMod // Puede ser null si no se cambió la imagen
-        );
-
-        if (exito) {
-            JOptionPane.showMessageDialog(this, 
-                "Guardia modificado exitosamente", 
-                "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                
-            // Limpiar y actualizar
-            limpiarFormularioModificacion();
-            actualizarTablaGuardias();
-            jTabbedPane1.setSelectedComponent(ModificarGuardia);
+        if (cedulaActualModificacion == null || cedulaActualModificacion.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Error interno: No se detectó cédula para modificar",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
-        
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, 
-            "La edad debe ser un número válido", 
-            "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (IllegalArgumentException e) {
-        JOptionPane.showMessageDialog(this, 
-            "Error en los datos:\n" + e.getMessage(), 
-            "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, 
-            "Error al modificar: " + e.getMessage(), 
-            "Error", JOptionPane.ERROR_MESSAGE);
-    }
+
+        try {
+            // Recoger datos del formulario
+            Map<String, Object> cambios = new HashMap<>();
+            // 2. Recoger todos los valores modificados
+            String primerNombre = txtPrimerNombreMod.getText().trim();
+            String segundoNombre = txtSegundoNombreMod.getText().trim();
+            String primerApellido = txtPrimerApellidoMod.getText().trim();
+            String segundoApellido = txtSegundoApellidoMod.getText().trim();
+            int edad = Integer.parseInt(txtEdadMod.getText());
+            String nacionalidad = txtNacionalidadMod.getText().trim();
+            String correo = txtCorreoMod.getText().trim();
+            String turno = cmbTurnoMod.getSelectedItem().toString();
+            String cargo = txtCargoMod.getSelectedItem().toString();
+            LocalDate fechaFin = dateFinContratoMod.getDate().toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate();
+
+            // 3. Procesar la modificación a través del Controller
+            boolean exito = guardiaController.actualizarGuardia(
+                    cedulaActualModificacion,
+                    primerNombre,
+                    segundoNombre,
+                    primerApellido,
+                    segundoApellido,
+                    edad,
+                    nacionalidad,
+                    correo,
+                    turno,
+                    fechaFin,
+                    cargo,
+                    imagenSeleccionadaMod // Puede ser null si no se cambió la imagen
+            );
+
+            if (exito) {
+                JOptionPane.showMessageDialog(this,
+                        "Guardia modificado exitosamente",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+                // Limpiar y actualizar
+                limpiarFormularioModificacion();
+                actualizarTablaGuardias();
+                jTabbedPane1.setSelectedComponent(ModificarGuardia);
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "La edad debe ser un número válido",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error en los datos:\n" + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al modificar: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -1629,20 +1659,20 @@ public class Director extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         JFileChooser fileChooser = new JFileChooser();
-    FileNameExtensionFilter filter = new FileNameExtensionFilter(
-        "Imágenes", "jpg", "png", "jpeg");
-    fileChooser.setFileFilter(filter);
-    
-    if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-        imagenSeleccionadaMod = fileChooser.getSelectedFile();
-        // Mostrar previsualización
-        ImageIcon icon = new ImageIcon(imagenSeleccionadaMod.getAbsolutePath());
-        Image scaled = icon.getImage().getScaledInstance(
-            lblImagenMod.getWidth(), 
-            lblImagenMod.getHeight(), 
-            Image.SCALE_SMOOTH);
-        lblImagenMod.setIcon(new ImageIcon(scaled));
-    }
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Imágenes", "jpg", "png", "jpeg");
+        fileChooser.setFileFilter(filter);
+
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            imagenSeleccionadaMod = fileChooser.getSelectedFile();
+            // Mostrar previsualización
+            ImageIcon icon = new ImageIcon(imagenSeleccionadaMod.getAbsolutePath());
+            Image scaled = icon.getImage().getScaledInstance(
+                    lblImagenMod.getWidth(),
+                    lblImagenMod.getHeight(),
+                    Image.SCALE_SMOOTH);
+            lblImagenMod.setIcon(new ImageIcon(scaled));
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void txtCedulaModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaModActionPerformed
@@ -1678,37 +1708,37 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtEdadModKeyTyped
 
     private void ModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModificarActionPerformed
-try {
-        int fila = tablaGuardias.getSelectedRow();
-        if (fila < 0) {
-            JOptionPane.showMessageDialog(this, 
-                "Seleccione un guardia primero", 
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+        try {
+            int fila = tablaGuardias.getSelectedRow();
+            if (fila < 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Seleccione un guardia primero",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Obtener cédula directamente de la tabla
+            String cedula = tablaGuardias.getValueAt(fila, 4).toString(); // Asume columna 4 es cédula
+            this.cedulaActualModificacion = cedula; // <-- ASIGNACIÓN CLAVE
+
+            // Cargar datos usando el controller
+            Guardia guardia = guardiaController.obtenerGuardiaPorCedula(cedula);
+
+            if (guardia == null) {
+                JOptionPane.showMessageDialog(this,
+                        "No se encontró el guardia seleccionado",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            cargarDatosEnPanelModificacion(guardia);
+            jTabbedPane1.setSelectedComponent(ModificarGuardia);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        // Obtener cédula directamente de la tabla
-        String cedula = tablaGuardias.getValueAt(fila, 4).toString(); // Asume columna 4 es cédula
-        this.cedulaActualModificacion = cedula; // <-- ASIGNACIÓN CLAVE
-
-        // Cargar datos usando el controller
-        Guardia guardia = guardiaController.obtenerGuardiaPorCedula(cedula);
-        
-        if (guardia == null) {
-            JOptionPane.showMessageDialog(this, 
-                "No se encontró el guardia seleccionado", 
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        cargarDatosEnPanelModificacion(guardia);
-        jTabbedPane1.setSelectedComponent(ModificarGuardia);
-        
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, 
-            "Error: " + e.getMessage(), 
-            "Error", JOptionPane.ERROR_MESSAGE);
-    }
 
     }//GEN-LAST:event_ModificarActionPerformed
 
@@ -1740,130 +1770,33 @@ try {
     }//GEN-LAST:event_EliminarActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        try {
-            // 1. Obtener valores del formulario
-            String primerNombre = txtPrimerNombre1.getText().trim();
-            String segundoNombre = txtSegundoNombre1.getText().trim();
-            String primerApellido = txtPrimerApellido1.getText().trim();
-            String segundoApellido = txtSegundoApellido1.getText().trim();
-            String edadText = txtEdad1.getText().trim();
-            String cedula = txtCedula1.getText().trim();
-            String nacionalidad = txtNacionalidad1.getText().trim();
-            String correo = txtCorreo1.getText().trim();
-            String turno = cmbTurno1.getSelectedItem().toString();
-
-            // 2. Validar campos obligatorios (excepto segundo nombre)
-            if (primerNombre.isEmpty() || primerApellido.isEmpty()
-                    || segundoApellido.isEmpty() || cedula.isEmpty()
-                    || edadText.isEmpty() || nacionalidad.isEmpty()
-                    || correo.isEmpty() || rutaImagenSeleccionada == null) {
-
-                JOptionPane.showMessageDialog(this,
-                        "Complete todos los campos obligatorios (excepto segundo nombre)",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // 3. Validar edad numérica
-            int edad;
-            try {
-                edad = Integer.parseInt(edadText);
-                if (edad < 18 || edad > 90) {
-                    JOptionPane.showMessageDialog(this,
-                            "La edad debe estar entre 18 y 90 años",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this,
-                        "La edad debe ser un número válido",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // 4. Validar cédula única
-            EnfermeraDAO enfermeraDAO = new EnfermeraDAO();
-            if (enfermeraDAO.existeEnfermera(cedula)) {
-                JOptionPane.showMessageDialog(this,
-                        "Ya existe una enfermera con esta cédula",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                txtCedula1.requestFocus();
-                return;
-            }
-
-            // 5. Validar fecha fin de contrato
-            if (dateFinContrato1.getDate() == null) {
-                JOptionPane.showMessageDialog(this,
-                        "Seleccione la fecha de finalización del contrato",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                dateFinContrato1.requestFocus();
-                return;
-            }
-
-            LocalDate fechaFin = dateFinContrato1.getDate().toInstant()
-                    .atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate fechaInicio = LocalDate.now();
-
-            if (!fechaFin.isAfter(fechaInicio)) {
-                JOptionPane.showMessageDialog(this,
-                        "La fecha de fin debe ser posterior a la fecha actual",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                dateFinContrato1.setDate(null);
-                return;
-            }
-
-            // 6. Validar límite de enfermeras (2 máximo)
-            List<Model.Enfermera> enfermeras = enfermeraDAO.obtenerEnfermeras();
-            if (enfermeras == null) {
-                enfermeras = new ArrayList<>(); // Prevenir NullPointerException
-            }
-
-            if (enfermeras.size() >= 2) {
-                JOptionPane.showMessageDialog(this,
-                        "Solo se permiten 2 enfermeras (1 diurna y 1 nocturna)",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // 7. Validar turno único
-            for (Model.Enfermera e : enfermeras) {
-                if (e.getTurno().equalsIgnoreCase(turno)) {
-                    JOptionPane.showMessageDialog(this,
-                            "Ya existe una enfermera para el turno " + turno,
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-            }
-
-            // 8. Confirmar guardado
-            int confirmacion = JOptionPane.showConfirmDialog(this,
-                    "¿Desea registrar a esta enfermera?",
-                    "Confirmar", JOptionPane.YES_NO_OPTION);
-            if (confirmacion != JOptionPane.YES_OPTION) {
-                return;
-            }
-
-            // 9. Crear y guardar enfermera
-            File imagenFile = new File(rutaImagenSeleccionada);
-            Model.Enfermera enfermera = new Model.Enfermera(
-                    primerNombre, segundoNombre, primerApellido, segundoApellido,
-                    edad, "Femenino", nacionalidad, cedula,
-                    turno, fechaInicio, fechaFin, correo
-            );
-
-            if (enfermeraDAO.guardarEnfermera(enfermera, imagenFile)) {
-                JOptionPane.showMessageDialog(this,
-                        "Enfermera registrada exitosamente",
-                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                limpiarFormularioEnfermera();
-                cargarTablaGuardias();
-            }
-        } catch (Exception ex) {
+try {
+        // Verificar primero si hay imagen seleccionada
+        if (imagenSeleccionadaMod == null || !imagenSeleccionadaMod.exists()) {
             JOptionPane.showMessageDialog(this,
-                    "Error inesperado: " + ex.getMessage(),
+                    "Debe seleccionar una imagen válida de la enfermera",
                     "Error", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
+            return;
         }
+
+        // Llamar al controlador para agregar
+        if (enfermeraController.agregarEnfermera()) {
+            JOptionPane.showMessageDialog(this,
+                    "Enfermera registrada exitosamente",
+                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            limpiarFormularioEnfermera();
+            actualizarTablaEnfermeras();
+        }
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this,
+                e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+                "Error inesperado: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     // 3. Método para actualizar la tabla cuando hay cambios
@@ -1892,46 +1825,56 @@ try {
             dateFinContratoMod1.setDate(null);
         }
 
-        // Cargar imagen
-        if (enfermera.getRutaImagen() != null && !enfermera.getRutaImagen().isEmpty()) {
-            try {
-                ImageIcon icon = new ImageIcon(enfermera.getRutaImagen());
-                Image img = icon.getImage().getScaledInstance(lblImagenMod1.getWidth(), lblImagenMod1.getHeight(), Image.SCALE_SMOOTH);
-                lblImagenMod1.setIcon(new ImageIcon(img));
-            } catch (Exception e) {
-                lblImagenMod1.setIcon(null);
-            }
-        } else {
+        // Cargar imagen existente
+    if (enfermera.getRutaImagen() != null) {
+        try {
+            ImageIcon icon = new ImageIcon(enfermera.getRutaImagen());
+            Image img = icon.getImage().getScaledInstance(
+                    lblImagenMod1.getWidth(),
+                    lblImagenMod1.getHeight(),
+                    Image.SCALE_SMOOTH);
+            lblImagenMod1.setIcon(new ImageIcon(img));
+            // Guardar la ruta actual en el controller
+            enfermeraController.setRutaImagenSeleccionada(enfermera.getRutaImagen());
+        } catch (Exception e) {
             lblImagenMod1.setIcon(null);
         }
     }
+    }
 
     private void actualizarTablaEnfermeras() {
-        // Obtener los datos del DAO
-        List<Object[]> datos = enfermeraDAO.obtenerDatosEnfermerasParaTabla();
-        String[] columnas = enfermeraDAO.getNombresColumnas();
+        try {
+            // Obtener el modelo de tabla desde el controlador
+            DefaultTableModel modelo = enfermeraController.obtenerModeloTablaEnfermeras();
 
-        // Crear el modelo de tabla
-        DefaultTableModel modelo = new DefaultTableModel(datos.toArray(new Object[0][]), columnas) {
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                return enfermeraDAO.getTiposColumnas()[columnIndex];
-            }
+            // Asignar el modelo a la tabla
+            tablaEnfermeras.setModel(modelo);
 
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; // Hacer que todas las celdas no sean editables
-            }
-        };
+            // Configurar el renderizador para la columna de imagen
+            tablaEnfermeras.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
 
-        // Asignar el modelo a la tabla
-        tablaEnfermeras.setModel(modelo);
+            // Ajustar visualización
+            ajustarVisualizacionTablaEnfermeras();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar datos de enfermeras: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
 
-        // Configurar el renderizador para la columna de imagen
-        tablaEnfermeras.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
+    private void ajustarVisualizacionTablaEnfermeras() {
+        // Ajustar altura de filas para las imágenes
+        tablaEnfermeras.setRowHeight(70);
 
-        // Ajustar el ancho de las columnas
-        ajustarAnchoColumnas();
+        // Ajustar anchos de columnas
+        TableColumnModel columnModel = tablaEnfermeras.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(80);  // Foto
+        columnModel.getColumn(1).setPreferredWidth(150); // Nombres
+        columnModel.getColumn(2).setPreferredWidth(150); // Apellidos
+        columnModel.getColumn(3).setPreferredWidth(50);  // Edad
+        columnModel.getColumn(4).setPreferredWidth(100); // Cédula
+        // Ajustar otras columnas según necesidad
     }
 
     private class ImagenTablaRenderer extends DefaultTableCellRenderer {
@@ -1939,28 +1882,19 @@ try {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column) {
-            if (value instanceof String) {
-                String rutaImagen = (String) value;
-                try {
-                    ImageIcon icon = new ImageIcon(rutaImagen);
-                    Image img = icon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-                    setIcon(new ImageIcon(img));
-                    setHorizontalAlignment(SwingConstants.CENTER);
-                } catch (Exception e) {
-                    setIcon(null);
-                    setText("Sin imagen");
-                }
-            }
-            return this;
-        }
-    }
 
-    private void ajustarAnchoColumnas() {
-        TableColumnModel columnModel = tablaEnfermeras.getColumnModel();
-        columnModel.getColumn(0).setPreferredWidth(100); // Foto
-        columnModel.getColumn(1).setPreferredWidth(150); // Nombre
-        columnModel.getColumn(2).setPreferredWidth(150); // Apellido
-        // Ajustar otras columnas según necesidad
+            JLabel label = new JLabel();
+            label.setHorizontalAlignment(SwingConstants.CENTER);
+
+            if (value instanceof ImageIcon) {
+                label.setIcon((ImageIcon) value);
+            } else {
+                label.setIcon(null);
+                label.setText("(Sin imagen)");
+            }
+
+            return label;
+        }
     }
 
     private void validarFechaFinContrato() {
@@ -2060,40 +1994,38 @@ try {
     }//GEN-LAST:event_txtCorreo1KeyTyped
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // 1. Asegúrate de tener declarado esto como variable de clase:
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Seleccionar imagen de la enfermera");
+    fileChooser.setAcceptAllFileFilterUsed(false);
+    fileChooser.addChoosableFileFilter(
+            new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif"));
 
-// 2. Código del botón "Seleccionar Imagen":
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Seleccionar imagen de la enfermera");
+    if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+        File imagenSeleccionada = fileChooser.getSelectedFile();
+        
+        // 1. Guardar la ruta en el controlador
+        enfermeraController.setRutaImagenSeleccionada(imagenSeleccionada.getAbsolutePath());
+        
+        // 2. Guardar el archivo para usarlo después (opcional pero recomendado)
+        this.imagenSeleccionadaMod = imagenSeleccionada;
 
-// Configurar filtro para imágenes
-        fileChooser.setAcceptAllFileFilterUsed(false);
-        fileChooser.addChoosableFileFilter(
-                new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif"));
-
-        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            // Guardar la ruta como String
-            rutaImagenSeleccionada = fileChooser.getSelectedFile().getAbsolutePath();
-
-            // Mostrar vista previa
-            try {
-                ImageIcon icon = new ImageIcon(rutaImagenSeleccionada);
-                // Escalar manteniendo proporciones
-                Image img = icon.getImage().getScaledInstance(
-                        lblImagen1.getWidth(),
-                        lblImagen1.getHeight(),
-                        Image.SCALE_SMOOTH
-                );
-                lblImagen1.setIcon(new ImageIcon(img));
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this,
-                        "Error al cargar la imagen: " + e.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                rutaImagenSeleccionada = null;
-            }
+        // Mostrar vista previa
+        try {
+            ImageIcon icon = new ImageIcon(imagenSeleccionada.getAbsolutePath());
+            Image img = icon.getImage().getScaledInstance(
+                    lblImagen1.getWidth(),
+                    lblImagen1.getHeight(),
+                    Image.SCALE_SMOOTH
+            );
+            lblImagen1.setIcon(new ImageIcon(img));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar la imagen: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            enfermeraController.setRutaImagenSeleccionada(null);
+            this.imagenSeleccionadaMod = null;
         }
-
-
+    }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void txtCorreo3FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreo3FocusLost
@@ -2122,80 +2054,43 @@ try {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         try {
-            // 1. Validar campos obligatorios
-            if (txtPrimerNombreMod1.getText().trim().isEmpty()
-                    || txtPrimerApellidoMod1.getText().trim().isEmpty()
-                    || txtSegundoApellidoMod1.getText().trim().isEmpty()
-                    || txtEdadMod1.getText().trim().isEmpty()
-                    || txtNacionalidadMod1.getText().trim().isEmpty()
-                    || txtCorreoMod1.getText().trim().isEmpty()) {
-
-                JOptionPane.showMessageDialog(this,
-                        "Todos los campos obligatorios deben ser llenados (excepto segundo nombre)",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // 2. Validar edad
-            try {
-                int edad = Integer.parseInt(txtEdadMod1.getText().trim());
-                if (edad < 18 || edad > 90) {
-                    JOptionPane.showMessageDialog(this,
-                            "La edad debe estar entre 18 y 90 años",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this,
-                        "La edad debe ser un número válido",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // 3. Validar fecha fin de contrato
-            if (dateFinContratoMod1.getDate() == null) {
-                JOptionPane.showMessageDialog(this,
-                        "Debe seleccionar una fecha de fin de contrato",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            LocalDate fechaFin = dateFinContratoMod1.getDate().toInstant()
-                    .atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate fechaInicio = LocalDate.parse(txtFechaContratacionMod1.getText(),
-                    DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-
-            if (!fechaFin.isAfter(fechaInicio)) {
-                JOptionPane.showMessageDialog(this,
-                        "La fecha de fin debe ser posterior a la fecha de inicio ("
-                        + fechaInicio.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ")",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // 4. Obtener datos del formulario
-            Enfermera enfermeraModificada = obtenerDatosModificados();
-            String cedulaOriginal = txtCedulaMod1.getText().trim();
-
-            // 5. Llamar al DAO para modificar
-            if (enfermeraDAO.modificarEnfermera(cedulaOriginal, enfermeraModificada, imagenSeleccionadaMod)) {
-                JOptionPane.showMessageDialog(this,
-                        "Enfermera modificada exitosamente",
-                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-                // Actualizar tabla y limpiar
-                actualizarTablaEnfermeras();
-                cerrarPanelModificacion();
-
-                // Cambiar a la pestaña de lista
-                jTabbedPane1.setSelectedComponent(MostrarEnfermeras);
-            }
-        } catch (Exception e) {
+        // Obtener la cédula original
+        String cedulaOriginal = txtCedulaMod1.getText().trim();
+        
+        // Preparar cambios
+        Map<String, Object> cambios = new HashMap<>();
+        cambios.put("primerNombre", txtPrimerNombreMod1.getText().trim());
+        cambios.put("segundoNombre", txtSegundoNombreMod1.getText().trim());
+        cambios.put("primerApellido", txtPrimerApellidoMod1.getText().trim());
+        cambios.put("segundoApellido", txtSegundoApellidoMod1.getText().trim());
+        cambios.put("edad", Integer.parseInt(txtEdadMod1.getText().trim()));
+        cambios.put("nacionalidad", txtNacionalidadMod1.getText().trim());
+        cambios.put("correo", txtCorreoMod1.getText().trim());
+        cambios.put("turno", cmbTurnoMod1.getSelectedItem().toString());
+        cambios.put("fechaFin", dateFinContratoMod1.getDate().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDate());
+        
+        // Procesar modificación
+        boolean resultado = enfermeraController.procesarModificacion(
+            cedulaOriginal, cambios, imagenSeleccionadaMod);
+        
+        if (resultado) {
             JOptionPane.showMessageDialog(this,
-                    "Error al modificar enfermera: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+                    "Operación completada",
+                    "Información", JOptionPane.INFORMATION_MESSAGE);
+            actualizarTablaEnfermeras();
+            jTabbedPane1.setSelectedComponent(MostrarEnfermeras);
         }
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this,
+                e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+                "Error al modificar: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
 
     }//GEN-LAST:event_jButton7ActionPerformed
 
@@ -2225,31 +2120,31 @@ try {
     }//GEN-LAST:event_txtCorreoMod1KeyTyped
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Seleccionar imagen de la enfermera");
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif"));
+       JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Seleccionar imagen de la enfermera");
+    fileChooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif"));
 
-        int resultado = fileChooser.showOpenDialog(this);
-        if (resultado == JFileChooser.APPROVE_OPTION) {
-            File archivoSeleccionado = fileChooser.getSelectedFile();
-            imagenSeleccionadaMod = archivoSeleccionado; // Guardar el archivo directamente
+    int resultado = fileChooser.showOpenDialog(this);
+    if (resultado == JFileChooser.APPROVE_OPTION) {
+        imagenSeleccionadaMod = fileChooser.getSelectedFile();
+        enfermeraController.setRutaImagenSeleccionada(imagenSeleccionadaMod.getAbsolutePath()); // Guardar ruta en controller
 
-            try {
-                // Mostrar vista previa
-                ImageIcon icon = new ImageIcon(archivoSeleccionado.getAbsolutePath());
-                Image img = icon.getImage().getScaledInstance(
-                        lblImagenMod1.getWidth(),
-                        lblImagenMod1.getHeight(),
-                        Image.SCALE_SMOOTH
-                );
-                lblImagenMod1.setIcon(new ImageIcon(img));
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this,
-                        "Error al cargar la imagen: " + e.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                imagenSeleccionadaMod = null;
-            }
+        try {
+            ImageIcon icon = new ImageIcon(imagenSeleccionadaMod.getAbsolutePath());
+            Image img = icon.getImage().getScaledInstance(
+                    lblImagenMod1.getWidth(),
+                    lblImagenMod1.getHeight(),
+                    Image.SCALE_SMOOTH
+            );
+            lblImagenMod1.setIcon(new ImageIcon(img));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar la imagen: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            imagenSeleccionadaMod = null;
+            enfermeraController.setRutaImagenSeleccionada(null);
         }
+    }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void txtCorreo4FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreo4FocusLost
@@ -2372,35 +2267,65 @@ try {
     }//GEN-LAST:event_BotonContratarPDCActionPerformed
 
     private void AgregarImagenBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarImagenBotonActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "Imágenes (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif");
-        fileChooser.setFileFilter(filter);
-
-        int resultado = fileChooser.showOpenDialog(this);
-
-        if (resultado == JFileChooser.APPROVE_OPTION) {
-            imagenPDCSeleccionada = fileChooser.getSelectedFile();
-
-            try {
-                BufferedImage originalImage = ImageIO.read(imagenPDCSeleccionada);
-
-                ImageIcon icon = new ImageIcon(originalImage);
-                Image img = icon.getImage();
-                Image imgEscalada = img.getScaledInstance(
-                        VistaPreviaPDC.getWidth(),
-                        VistaPreviaPDC.getHeight(),
-                        Image.SCALE_SMOOTH);
-
-                VistaPreviaPDC.setIcon(new ImageIcon(imgEscalada));
-
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this,
-                        "Error al cargar la imagen: " + ex.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+       
     }//GEN-LAST:event_AgregarImagenBotonActionPerformed
+
+    private void txtCorreo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreo1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreo1ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        try {
+        // 1. Obtener el modelo actualizado del controlador
+        DefaultTableModel modelo = enfermeraController.obtenerModeloTablaEnfermeras();
+        
+        // 2. Aplicar el nuevo modelo a la tabla
+        tablaEnfermeras.setModel(modelo);
+        
+        // 3. Configurar el renderizador de imágenes para la columna 0 (Foto)
+        tablaEnfermeras.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                
+                JLabel label = new JLabel();
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                
+                if (value instanceof ImageIcon) {
+                    label.setIcon((ImageIcon) value);
+                } else {
+                    label.setIcon(null);
+                    label.setText("(Sin foto)");
+                }
+                
+                return label;
+            }
+        });
+        
+        // 4. Ajustar dimensiones de la tabla
+        tablaEnfermeras.setRowHeight(70); // Altura adecuada para las imágenes
+        
+        // 5. Ajustar anchos de columnas
+        TableColumnModel columnModel = tablaEnfermeras.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(80);   // Columna Foto
+        columnModel.getColumn(1).setPreferredWidth(150);  // Nombres
+        columnModel.getColumn(2).setPreferredWidth(150);  // Apellidos
+        columnModel.getColumn(4).setPreferredWidth(100);  // Cédula
+        
+        // 6. Mostrar mensaje de éxito
+        JOptionPane.showMessageDialog(this, 
+            "Datos de enfermeras actualizados correctamente", 
+            "Actualización exitosa", 
+            JOptionPane.INFORMATION_MESSAGE);
+            
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error al actualizar la tabla: " + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+    }//GEN-LAST:event_jButton9ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2438,33 +2363,21 @@ try {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton AgregarImagenBoton;
     private javax.swing.JPanel AñadirGuardia;
-    private javax.swing.JPanel AñadirPersonalDeControl;
-    private javax.swing.JButton BotonContratarPDC;
-    private javax.swing.JButton BotonModificarPDC;
-    private javax.swing.JButton BotonSeleccionarNuevaImagenPDC;
     private javax.swing.JPanel Director;
     private javax.swing.JMenuItem Eliminar;
     private javax.swing.JMenuItem EliminarEnfermera;
     private javax.swing.JPanel ListaDeGuardias;
-    private javax.swing.JPanel ModificaPersonalDeControl;
     private javax.swing.JMenuItem Modificar;
     private javax.swing.JMenuItem ModificarEnfermera;
     private javax.swing.JPanel ModificarGuardia;
     private javax.swing.JPanel ModificarNurse;
     private javax.swing.JPanel MostrarEnfermeras;
-    private javax.swing.JLabel NuevaVistaPreviaPDC;
-    private javax.swing.JLabel VistaPreviaPDC;
     private javax.swing.JComboBox<String> cmbCargo;
-    private javax.swing.JComboBox<String> cmbNacionalidadPDC;
-    private javax.swing.JComboBox<String> cmbNuevaNacionalidadPDC;
-    private javax.swing.JComboBox<String> cmbNuevoTurnoPDC1;
     private javax.swing.JComboBox<String> cmbTurno;
     private javax.swing.JComboBox<String> cmbTurno1;
     private javax.swing.JComboBox<String> cmbTurnoMod;
     private javax.swing.JComboBox<String> cmbTurnoMod1;
-    private javax.swing.JComboBox<String> cmbTurnoPDC;
     private com.toedter.calendar.JDateChooser dateFinContrato1;
     private com.toedter.calendar.JDateChooser dateFinContratoMod;
     private com.toedter.calendar.JDateChooser dateFinContratoMod1;
@@ -2476,11 +2389,8 @@ try {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
-    private com.toedter.calendar.JDateChooser jDateChooserFechaContratoPDC;
+    private javax.swing.JButton jButton9;
     private com.toedter.calendar.JDateChooser jDateChooserFinContrato;
-    private com.toedter.calendar.JDateChooser jDateChooserFinContratoPDC;
-    private com.toedter.calendar.JDateChooser jDateChooserNuevaFechaContratoPDC1;
-    private com.toedter.calendar.JDateChooser jDateChooserNuevoFinContratoPDC1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2524,7 +2434,6 @@ try {
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
-    private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
@@ -2538,43 +2447,12 @@ try {
     private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel60;
-    private javax.swing.JLabel jLabel61;
-    private javax.swing.JLabel jLabel62;
-    private javax.swing.JLabel jLabel63;
-    private javax.swing.JLabel jLabel64;
-    private javax.swing.JLabel jLabel65;
-    private javax.swing.JLabel jLabel66;
-    private javax.swing.JLabel jLabel67;
-    private javax.swing.JLabel jLabel68;
-    private javax.swing.JLabel jLabel69;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel70;
-    private javax.swing.JLabel jLabel71;
-    private javax.swing.JLabel jLabel72;
-    private javax.swing.JLabel jLabel73;
-    private javax.swing.JLabel jLabel74;
-    private javax.swing.JLabel jLabel75;
-    private javax.swing.JLabel jLabel76;
-    private javax.swing.JLabel jLabel77;
-    private javax.swing.JLabel jLabel78;
-    private javax.swing.JLabel jLabel79;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel80;
-    private javax.swing.JLabel jLabel81;
-    private javax.swing.JLabel jLabel82;
-    private javax.swing.JLabel jLabel83;
-    private javax.swing.JLabel jLabel84;
-    private javax.swing.JLabel jLabel85;
-    private javax.swing.JLabel jLabel86;
-    private javax.swing.JLabel jLabel87;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
-    private javax.swing.JPanel jPanel14;
-    private javax.swing.JPanel jPanel15;
-    private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -2582,12 +2460,10 @@ try {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator11;
@@ -2624,30 +2500,10 @@ try {
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator40;
     private javax.swing.JSeparator jSeparator41;
-    private javax.swing.JSeparator jSeparator42;
     private javax.swing.JSeparator jSeparator43;
     private javax.swing.JSeparator jSeparator44;
-    private javax.swing.JSeparator jSeparator45;
-    private javax.swing.JSeparator jSeparator46;
-    private javax.swing.JSeparator jSeparator47;
-    private javax.swing.JSeparator jSeparator48;
-    private javax.swing.JSeparator jSeparator49;
     private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JSeparator jSeparator50;
-    private javax.swing.JSeparator jSeparator51;
-    private javax.swing.JSeparator jSeparator52;
-    private javax.swing.JSeparator jSeparator53;
-    private javax.swing.JSeparator jSeparator54;
-    private javax.swing.JSeparator jSeparator55;
-    private javax.swing.JSeparator jSeparator56;
-    private javax.swing.JSeparator jSeparator57;
-    private javax.swing.JSeparator jSeparator58;
-    private javax.swing.JSeparator jSeparator59;
     private javax.swing.JSeparator jSeparator6;
-    private javax.swing.JSeparator jSeparator60;
-    private javax.swing.JSeparator jSeparator61;
-    private javax.swing.JSeparator jSeparator62;
-    private javax.swing.JSeparator jSeparator63;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
@@ -2658,26 +2514,22 @@ try {
     private javax.swing.JLabel lblImagenMod1;
     private javax.swing.JTable tablaEnfermeras;
     private javax.swing.JTable tablaGuardias;
-    private javax.swing.JTable tablaPDC;
     private javax.swing.JComboBox<String> txtCargo1;
     private javax.swing.JComboBox<String> txtCargoMod;
     private javax.swing.JTextField txtCedula;
     private javax.swing.JTextField txtCedula1;
     private javax.swing.JTextField txtCedulaMod;
     private javax.swing.JTextField txtCedulaMod1;
-    private javax.swing.JTextField txtCedulaPDC;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtCorreo1;
     private javax.swing.JTextField txtCorreo3;
     private javax.swing.JTextField txtCorreo4;
     private javax.swing.JTextField txtCorreoMod;
     private javax.swing.JTextField txtCorreoMod1;
-    private javax.swing.JTextField txtCorreoPDC;
     private javax.swing.JTextField txtEdad;
     private javax.swing.JTextField txtEdad1;
     private javax.swing.JTextField txtEdadMod;
     private javax.swing.JTextField txtEdadMod1;
-    private javax.swing.JTextField txtEdadPDC;
     private javax.swing.JTextField txtFechaContratacion;
     private javax.swing.JTextField txtFechaContratacion1;
     private javax.swing.JTextField txtFechaContratacionMod;
@@ -2686,91 +2538,26 @@ try {
     private javax.swing.JTextField txtNacionalidad1;
     private javax.swing.JTextField txtNacionalidadMod;
     private javax.swing.JTextField txtNacionalidadMod1;
-    private javax.swing.JTextField txtNuevaCedulaPDC;
-    private javax.swing.JTextField txtNuevaEdadPDC;
-    private javax.swing.JTextField txtNuevoCorreoPDC;
-    private javax.swing.JTextField txtNuevoPrimerApellidoPDC;
-    private javax.swing.JTextField txtNuevoPrimerNombrePDC;
-    private javax.swing.JTextField txtNuevoSegundoApellidoPDC;
-    private javax.swing.JTextField txtNuevoSegundoNombrePDC;
-    private javax.swing.JTextField txtNuevoSexoPDC;
     private javax.swing.JTextField txtPrimerApellido;
     private javax.swing.JTextField txtPrimerApellido1;
     private javax.swing.JTextField txtPrimerApellidoMod;
     private javax.swing.JTextField txtPrimerApellidoMod1;
-    private javax.swing.JTextField txtPrimerApellidoPDC;
     private javax.swing.JTextField txtPrimerNombre;
     private javax.swing.JTextField txtPrimerNombre1;
     private javax.swing.JTextField txtPrimerNombreMod;
     private javax.swing.JTextField txtPrimerNombreMod1;
-    private javax.swing.JTextField txtPrimerNombrePDC;
     private javax.swing.JTextField txtSegundoApellido;
     private javax.swing.JTextField txtSegundoApellido1;
     private javax.swing.JTextField txtSegundoApellidoMod;
     private javax.swing.JTextField txtSegundoApellidoMod1;
-    private javax.swing.JTextField txtSegundoApellidoPDC;
     private javax.swing.JTextField txtSegundoNombre;
     private javax.swing.JTextField txtSegundoNombre1;
     private javax.swing.JTextField txtSegundoNombreMod;
     private javax.swing.JTextField txtSegundoNombreMod1;
-    private javax.swing.JTextField txtSegundoNombrePDC;
     private javax.swing.JTextField txtSexo;
     private javax.swing.JTextField txtSexo1;
     private javax.swing.JTextField txtSexoMod;
     private javax.swing.JTextField txtSexoMod1;
-    private javax.swing.JTextField txtSexoPDC;
     // End of variables declaration//GEN-END:variables
-
-    public JTextField getTxtPrimerNombrePDC() {
-        return txtPrimerNombrePDC;
-    }
-
-    public JTextField getTxtSegundoNombrePDC() {
-        return txtSegundoNombrePDC;
-    }
-
-    public JTextField getTxtPrimerApellidoPDC() {
-        return txtPrimerApellidoPDC;
-    }
-
-    public JTextField getTxtSegundoApellidoPDC() {
-        return txtSegundoApellidoPDC;
-    }
-
-    public JTextField getTxtEdadPDC() {
-        return txtEdadPDC;
-    }
-
-    public JTextField getTxtCedulaPDC() {
-        return txtCedulaPDC;
-    }
-
-    public JTextField getTxtSexoPDC() {
-        return txtSexoPDC;
-    }
-
-    public JComboBox<String> getCmbNacionalidadPDC() {
-        return cmbNacionalidadPDC;
-    }
-
-    public JTextField getTxtCorreoPDC() {
-        return txtCorreoPDC;
-    }
-
-    public JComboBox<String> getCmbTurnoPDC() {
-        return cmbTurnoPDC;
-    }
-
-    public JDateChooser getJDateChooserFechaContratoPDC() {
-        return jDateChooserFechaContratoPDC;
-    }
-
-    public JDateChooser getJDateChooserFinContratoPDC() {
-        return jDateChooserFinContratoPDC;
-    }
-
-    public File getImagenPDCSeleccionada() {
-        return imagenPDCSeleccionada;
-    }
 
 }
