@@ -389,6 +389,11 @@ public class OficialDeRegistro extends javax.swing.JFrame {
                 int filaSeleccionada = TablaPresos.getSelectedRow();
                 Preso preso = presoController.obtenerPresoDesdeTabla(filaSeleccionada, TablaPresos);
 
+                JOptionPane.showMessageDialog(null, "Delitos: " + (preso.getDelitos() == null ? "null" : preso.getDelitos().size()) + "Preso ID: " + preso.getIdentificacion());
+                
+              
+                
+                
                 ValidarFechaDialog dialogo = new ValidarFechaDialog(null, true);
                 dialogo.setVisible(true);
 
@@ -446,7 +451,7 @@ private void calcularFechaSalida() {
         nuevoSegundoApellidoField.setText("");
         nuevaEstaturaField.setText("");
         nuevoPesoField.setText("");
-        nuevaNacionalidadField.setText("");
+        nuevaNacionalidadField.setSelectedIndex(0);
         nuevoGrupoSanguineoCombo.setSelectedIndex(0);
         nuevoNivelSeguridadCombo.setSelectedIndex(0);
         nuevoAislamientoCombo.setSelectedIndex(0);
@@ -668,7 +673,7 @@ private void calcularFechaSalida() {
         nuevaEdadField.setText("");
         nuevaEstaturaField.setText("");
         nuevoPesoField.setText("");
-        nuevaNacionalidadField.setText("");
+        nuevaNacionalidadField.setSelectedIndex(0);
         nuevoGrupoSanguineoCombo.setSelectedIndex(0);
 
         nuevoNivelSeguridadCombo.setSelectedIndex(0);
@@ -882,11 +887,11 @@ private void calcularFechaSalida() {
         nuevoSegundoApellidoField = new javax.swing.JTextField();
         nuevaEstaturaField = new javax.swing.JTextField();
         nuevoPesoField = new javax.swing.JTextField();
-        nuevaNacionalidadField = new javax.swing.JTextField();
         jSeparator81 = new javax.swing.JSeparator();
         jLabel73 = new javax.swing.JLabel();
         jSeparator82 = new javax.swing.JSeparator();
         nuevoSegundoNombreField = new javax.swing.JTextField();
+        nuevaNacionalidadField = new javax.swing.JComboBox<>();
         jLabel30 = new javax.swing.JLabel();
         Perfil = new javax.swing.JPanel();
         jPanel19 = new javax.swing.JPanel();
@@ -1804,7 +1809,7 @@ private void calcularFechaSalida() {
         nuevoAislamientoCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "Sí", "No" }));
         jPanel13.add(nuevoAislamientoCombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 140, 200, 30));
 
-        nuevoNivelRiesgoCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "Bajo", "Medio", "Alto" }));
+        nuevoNivelRiesgoCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "Riesgo bajo", "Riesgo medio", "Riesgo alto" }));
         nuevoNivelRiesgoCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nuevoNivelRiesgoComboActionPerformed(evt);
@@ -1903,11 +1908,6 @@ private void calcularFechaSalida() {
         });
         jPanel13.add(nuevoPesoField, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 310, 250, 30));
 
-        nuevaNacionalidadField.setBackground(new java.awt.Color(204, 204, 204));
-        nuevaNacionalidadField.setForeground(new java.awt.Color(0, 0, 0));
-        nuevaNacionalidadField.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel13.add(nuevaNacionalidadField, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 350, 210, 30));
-
         jSeparator81.setForeground(new java.awt.Color(0, 0, 0));
         jPanel13.add(jSeparator81, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 140, 310, 10));
 
@@ -1928,6 +1928,9 @@ private void calcularFechaSalida() {
             }
         });
         jPanel13.add(nuevoSegundoNombreField, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 110, 180, 30));
+
+        nuevaNacionalidadField.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccione>", "Afgana", "Alemana", "Americana", "Andorrana", "Angoleña", "Antiguana", "Árabe Saudita", "Argelina", "Argentina", "Armenia", "Arubeña", "Australiana", "Austriaca", "Azerbaiyana", "Bahameña", "Bahreiní", "Bangladesí", "Barbadense", "Belga", "Beliceña", "Beninesa", "Bermudeña", "Bielorrusa", "Birmana", "Boliviana", "Bosnia", "Botsuana", "Brasileña", "Británica", "Bruneana", "Búlgara", "Burkinesa", "Burundesa", "Butanesa", "Cabo Verdiana", "Camboyana", "Camerunesa", "Canadiense", "Catari", "Centroafricana", "Chadiana", "Checa", "Chilena", "China", "Chipriota", "Colombiana", "Comorense", "Congoleña", "Costarricense", "Croata", "Cubana", "Danesa", "Dominicana", "Ecuatoriana", "Egipcia", "Emiratí", "Eritrea", "Eslovaca", "Eslovena", "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa", "Fiyiana", "Francesa", "Gabonesa", "Galesa", "Gambiana", "Georgiana", "Ghanesa", "Gibraltareña", "Granadina", "Griega", "Guatemalteca", "Guineana", "Guineana-Bisáu", "Guineana Ecuatorial", "Guyanesa", "Haitiana", "Hondureña", "Hongkonesa", "Húngara", "India", "Indonesa", "Iraní", "Iraquí", "Irlandesa", "Islandesa", "Israelí", "Italiana", "Jamaicana", "Japonesa", "Jordana", "Kazaja", "Keniata", "Kirguisa", "Kiribatiana", "Kuwaití", "Laosiana", "Lesotense", "Letona", "Libanesa", "Liberiana", "Libia", "Liechtensteiniana", "Lituana", "Luxemburguesa", "Macedonia", "Malasia", "Malauí", "Maldiva", "Malgache", "Maliense", "Maltesa", "Marfileña", "Marroquí", "Marshallesa", "Mauriciana", "Mauritana", "Mexicana", "Micronesia", "Moldava", "Monegasca", "Mongola", "Montenegrina", "Mozambiqueña", "Namibia", "Nauruana", "Nepalí", "Nicaragüense", "Nigeriana", "Nigerina", "Norcoreana", "Noruega", "Neozelandesa", "Omana", "Neerlandesa (Holandesa)", "Paquistaní", "Palaosiana", "Panameña", "Papú", "Paraguaya", "Peruana", "Polaca", "Portuguesa", "Puertorriqueña", "Ruandesa", "Rumana", "Rusa", "Saharaui", "Salomonense", "Salvadoreña", "Samoana", "Sanmarinense", "Santotomense", "Saudí", "Senegalesa", "Serbia", "Seychellense", "Sierraleonesa", "Singapurense", "Siria", "Somalí", "Sri Lanka", "Sudafricana", "Sudanesa", "Sueca", "Suiza", "Surcoreana", "Surinamense", "Suazi", "Tailandesa", "Taiwanesa", "Tayika", "Tanzana", "Timorense", "Togolesa", "Tongana", "Trinitense", "Tunecina", "Turca", "Turkmena", "Tuvaluana", "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeca", "Vanuatuense", "Venezolana", "Vietnamita", "Yemení", "Yibutiana", "Zambiana", "Zimbabuense" }));
+        jPanel13.add(nuevaNacionalidadField, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 350, 210, 30));
 
         ActualizarInformacionPreso.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 1060, 510));
 
@@ -3085,7 +3088,7 @@ private void calcularFechaSalida() {
                     nuevoPrimerApellidoField.getText(),
                     nuevoSegundoApellidoField.getText(),
                     nuevaEdadField.getText(),
-                    nuevaNacionalidadField.getText(),
+                    nuevaNacionalidadField.getSelectedItem(),
                     nuevaEstaturaField.getText(),
                     nuevoPesoField.getText(),
                     nuevoGrupoSanguineoCombo.getSelectedItem(),
@@ -4149,7 +4152,7 @@ private void calcularFechaSalida() {
     private javax.swing.JLabel nuevaFoto;
     private javax.swing.JTextField nuevaIdenti;
     private javax.swing.JTextField nuevaNacio;
-    private javax.swing.JTextField nuevaNacionalidadField;
+    private javax.swing.JComboBox<String> nuevaNacionalidadField;
     private javax.swing.JComboBox<String> nuevoAislamientoCombo;
     private javax.swing.JTextField nuevoCorreo;
     private javax.swing.JComboBox<String> nuevoGrupoSanguineoCombo;

@@ -30,5 +30,101 @@
       "fechaIngreso": "2025-04-25",
       "fechaSalidaCalculada": "2029-07-25"
     }
+  },
+  {
+    "id": 3,
+    "presoId": "123123123",
+    "codigo": 246,
+    "nombre": "Fraude",
+    "articuloLey": "Artículo 246 - Fraude",
+    "gravedad": "Media",
+    "descripcion": "Comentio un fraude de manera ilegal",
+    "fechaComision": "2025-04-01",
+    "sentencia": {
+      "años": 2,
+      "meses": 1,
+      "fechaIngreso": "2025-04-26",
+      "fechaSalidaCalculada": "2027-05-26"
+    }
+  },
+  {
+    "id": 4,
+    "presoId": "123123123",
+    "codigo": 209,
+    "nombre": "Actos sexuales con menor de 14 años",
+    "articuloLey": "Artículo 209",
+    "gravedad": "Alta",
+    "descripcion": "Cometio actos sexuales con un menor de 16 años de edad\ny los padres lo sabian",
+    "fechaComision": "2025-04-01",
+    "sentencia": {
+      "años": 5,
+      "meses": 5,
+      "fechaIngreso": "2025-04-26",
+      "fechaSalidaCalculada": "2030-09-26"
+    }
+  },
+  {
+    "id": 5,
+    "presoId": "123123123",
+    "codigo": 338,
+    "nombre": "Minería ilegal",
+    "articuloLey": "Artículo 338",
+    "gravedad": "Media",
+    "descripcion": "Minaba de manera ilegal",
+    "fechaComision": "2025-04-02",
+    "sentencia": {
+      "años": 2,
+      "meses": 5,
+      "fechaIngreso": "2025-04-26",
+      "fechaSalidaCalculada": "2027-09-26"
+    }
+  },
+  {
+    "id": 6,
+    "presoId": "123123123",
+    "codigo": 416,
+    "nombre": "Abuso de autoridad",
+    "articuloLey": "Artículo 416 - Penal",
+    "gravedad": "Media",
+    "descripcion": "Abusaba de autoridad",
+    "fechaComision": "2025-04-05",
+    "sentencia": {
+      "años": 1,
+      "meses": 5,
+      "fechaIngreso": "2025-04-26",
+      "fechaSalidaCalculada": "2026-09-26"
+    }
+  },
+  {
+    "id": 7,
+    "presoId": "414141414",
+    "codigo": 269,
+    "nombre": "Daño informático",
+    "articuloLey": "Artículo 269 - Daño informático",
+    "gravedad": "Baja",
+    "descripcion": "Dañaba cosas infomaticas",
+    "fechaComision": "2025-04-01",
+    "sentencia": {
+      "años": 1,
+      "meses": 0,
+      "fechaIngreso": "2025-04-26",
+      "fechaSalidaCalculada": "2026-04-26"
+    }
+  },
+  {
+    "id": 8,
+    "presoId": "889900776",
+    "codigo": 189,
+    "nombre": "Violación de habitación ajena",
+    "articuloLey": "Artículo 189",
+    "gravedad": "Baja",
+    "descripcion": "Entro a una habitacion mientras la persona dormia",
+    "fechaComision": "2025-04-02",
+    "sentencia": {
+      "años": 1,
+      "meses": 0,
+      "fechaIngreso": "2025-04-26",
+      "fechaSalidaCalculada": "2026-04-26"
+    }
   }
 ]

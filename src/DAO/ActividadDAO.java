@@ -1,6 +1,8 @@
 package DAO;
 
 import Model.Actividad;
+import Model.Oficial;
+import Model.Preso;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import java.io.*;
@@ -14,13 +16,9 @@ import javax.swing.JOptionPane;
 public class ActividadDAO {
 
     private static ActividadDAO instancia;
-    private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\actividades.json\\";
-    private Gson gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-            .create();
 
-    private ActividadDAO() {}
+    private ActividadDAO() {
+    }
 
     public static ActividadDAO getInstancia() {
         if (instancia == null) {
@@ -29,7 +27,14 @@ public class ActividadDAO {
         return instancia;
     }
 
+    private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\actividades.json\\";
+    private Gson gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+            .create();
+
     private static class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
+
         @Override
         public JsonElement serialize(LocalDate date, Type typeOfSrc, JsonSerializationContext context) {
             return new JsonPrimitive(date.toString());
@@ -61,20 +66,28 @@ public class ActividadDAO {
         }
 
         try (Reader reader = new FileReader(JSON_FILE)) {
-            Type tipoListaActividad = new TypeToken<ArrayList<Actividad>>() {}.getType();
+            Type tipoListaActividad = new TypeToken<ArrayList<Actividad>>() {
+            }.getType();
             List<Actividad> actividades = gson.fromJson(reader, tipoListaActividad);
-            
+
             if (actividades != null) {
                 for (Actividad act : actividades) {
                     act.setPresosInscritos(act.getPresosAsignadosIds().size());
                 }
             }
-            
+
             return actividades != null ? actividades : new ArrayList<>();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error al leer el archivo de actividades: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return new ArrayList<>();
         }
+    }
+
+    public List<Actividad> buscarPorTipo(String tipo) {
+        List<Actividad> todas = cargarActividades();
+        return todas.stream()
+                .filter(a -> a.getTipo().equalsIgnoreCase(tipo))
+                .collect(Collectors.toList());
     }
 
     public boolean guardarActividades(List<Actividad> actividades) {
@@ -122,7 +135,13 @@ public class ActividadDAO {
         return false;
     }
 
-    public boolean actualizarActividad(String idOriginal, String nuevoHorario, Integer nuevoCupoMaximo) {
+    public boolean actualizarActividad(String idOriginal,
+            String nuevoNombre,
+            String nuevoDia,
+            String nuevoHorario,
+            String nuevoLugar,
+            Integer nuevoCupoMaximo,
+            String nuevoResponsableOficial) {
         List<Actividad> actividades = cargarActividades();
         boolean encontrado = false;
 
@@ -130,81 +149,97 @@ public class ActividadDAO {
             if (actividad.getIdActividad().equals(idOriginal)) {
                 encontrado = true;
 
+                if (nuevoNombre != null) {
+                    actividad.setNombre(nuevoNombre);
+                }
+                if (nuevoDia != null) {
+                    actividad.setDia(nuevoDia);
+                }
                 if (nuevoHorario != null) {
                     actividad.setHorario(nuevoHorario);
                 }
+                if (nuevoLugar != null) {
+                    actividad.setLugar(nuevoLugar);
+                }
                 if (nuevoCupoMaximo != null) {
                     if (nuevoCupoMaximo < actividad.getPresosInscritos()) {
-                        JOptionPane.showMessageDialog(null, 
-                            "El nuevo cupo no puede ser menor a la cantidad actual de presos inscritos (" + 
-                            actividad.getPresosInscritos() + ").", 
-                            "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null,
+                                "El nuevo cupo no puede ser menor a la cantidad actual de presos inscritos ("
+                                + actividad.getPresosInscritos() + ").",
+                                "Error", JOptionPane.ERROR_MESSAGE);
                         return false;
                     }
                     actividad.setCupoMaximo(nuevoCupoMaximo);
+                }
+                if (nuevoResponsableOficial != null) {
+                    actividad.setResponsableOficial(nuevoResponsableOficial);
                 }
                 break;
             }
         }
 
         if (!encontrado) {
-            JOptionPane.showMessageDialog(null, "No se encontró la actividad para actualizar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                    "Actividad no encontrada: " + idOriginal,
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
-        if (guardarActividades(actividades)) {
-            JOptionPane.showMessageDialog(null, "Actividad actualizada correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
-            return true;
-        } else {
-            return false;
-        }
+        return guardarActividades(actividades);
     }
 
     public List<Actividad> buscarActividadesPorPreso(String identificacionP) {
-    List<Actividad> actividades = cargarActividades();
-    List<Actividad> resultado = new ArrayList<>();
-    for (Actividad act : actividades) {
-        if (act.getPresosAsignadosIds().contains(String.valueOf(identificacionP))) {
-            resultado.add(act);
+        List<Actividad> actividades = cargarActividades();
+        List<Actividad> resultado = new ArrayList<>();
+        for (Actividad act : actividades) {
+            if (act.getPresosAsignadosIds().contains(String.valueOf(identificacionP))) {
+                resultado.add(act);
+            }
         }
+        return resultado;
     }
-    return resultado;
-}
 
-public boolean asignarPresoAActividad(String idActividad, String identificacionP) {
-    List<Actividad> actividades = cargarActividades();
-    for (Actividad act : actividades) {
-        if (act.getIdActividad().equals(idActividad)) {
-            if (act.getPresosInscritos() >= act.getCupoMaximo()) {
-                JOptionPane.showMessageDialog(null, 
-                    "No hay cupo disponible en esta actividad.", 
-                    "Advertencia", JOptionPane.WARNING_MESSAGE);
-                return false;
-            }
-            
-            if (act.getPresosAsignadosIds().contains(identificacionP)) {
-                JOptionPane.showMessageDialog(null, 
-                    "Este preso ya está asignado a esta actividad.", 
-                    "Advertencia", JOptionPane.WARNING_MESSAGE);
-                return false;
-            }
-            
-            act.getPresosAsignadosIds().add(identificacionP);
-            act.setPresosInscritos(act.getPresosInscritos() + 1);
-            
-            if (guardarActividades(actividades)) {
-                JOptionPane.showMessageDialog(null, 
-                    "Preso asignado a la actividad correctamente.", 
-                    "Información", JOptionPane.INFORMATION_MESSAGE);
-                return true;
-            } else {
-                return false;
+    public boolean asignarPresoAActividad(String idActividad, String identificacionP) {
+        List<Actividad> actividades = cargarActividades();
+        for (Actividad act : actividades) {
+            if (act.getIdActividad().equals(idActividad)) {
+                if (act.getPresosInscritos() >= act.getCupoMaximo()) {
+                    JOptionPane.showMessageDialog(null,
+                            "No hay cupo disponible en esta actividad.",
+                            "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    return false;
+                }
+
+                if (act.getPresosAsignadosIds().contains(identificacionP)) {
+                    JOptionPane.showMessageDialog(null,
+                            "Este preso ya está asignado a esta actividad.",
+                            "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    return false;
+                }
+
+                if (!puedeAsignarActividadAPreso(identificacionP)) {
+                    JOptionPane.showMessageDialog(null,
+                            "Este preso ha alcanzado el límite de actividades permitidas.",
+                            "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    return false;
+                }
+
+                act.getPresosAsignadosIds().add(identificacionP);
+                act.setPresosInscritos(act.getPresosInscritos() + 1);
+
+                if (guardarActividades(actividades)) {
+                    JOptionPane.showMessageDialog(null,
+                            "Preso asignado a la actividad correctamente.",
+                            "Información", JOptionPane.INFORMATION_MESSAGE);
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }
+        JOptionPane.showMessageDialog(null, "Actividad no encontrada.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return false;
     }
-    JOptionPane.showMessageDialog(null, "Actividad no encontrada.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-    return false;
-}
 
     public boolean removerPresoDeActividad(String idActividad, String idPreso) {
         List<Actividad> actividades = cargarActividades();
@@ -213,15 +248,15 @@ public boolean asignarPresoAActividad(String idActividad, String identificacionP
                 if (act.getPresosAsignadosIds().remove(idPreso)) {
                     act.setPresosInscritos(act.getPresosInscritos() - 1);
                     if (guardarActividades(actividades)) {
-                        JOptionPane.showMessageDialog(null, 
-                            "Preso removido de la actividad correctamente.", 
-                            "Información", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null,
+                                "Preso removido de la actividad correctamente.",
+                                "Información", JOptionPane.INFORMATION_MESSAGE);
                         return true;
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, 
-                        "El preso no estaba asignado a esta actividad.", 
-                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null,
+                            "El preso no estaba asignado a esta actividad.",
+                            "Advertencia", JOptionPane.WARNING_MESSAGE);
                     return false;
                 }
             }
@@ -255,21 +290,148 @@ public boolean asignarPresoAActividad(String idActividad, String identificacionP
         }
         return filtradas;
     }
-    
+
     public List<Actividad> buscarActividadesDisponiblesParaPreso(String identificacionP) {
-    List<Actividad> todas = cargarActividades()
-        .stream()
-        .filter(a -> a.getEstado().equalsIgnoreCase("ACTIVA"))
-        .collect(Collectors.toList());
-    
-    List<String> idsAsignadas = buscarActividadesPorPreso(identificacionP)
-        .stream()
-        .map(Actividad::getIdActividad)
-        .collect(Collectors.toList());
-    
-    return todas.stream()
-        .filter(a -> !idsAsignadas.contains(a.getIdActividad())) // No asignadas
-        .filter(a -> a.getPresosInscritos() < a.getCupoMaximo()) // Con cupo
-        .collect(Collectors.toList());
-}
+        List<Actividad> todas = cargarActividades()
+                .stream()
+                .filter(a -> a.getEstado().equalsIgnoreCase("ACTIVA"))
+                .collect(Collectors.toList());
+
+        List<String> idsAsignadas = buscarActividadesPorPreso(identificacionP)
+                .stream()
+                .map(Actividad::getIdActividad)
+                .collect(Collectors.toList());
+
+        return todas.stream()
+                .filter(a -> !idsAsignadas.contains(a.getIdActividad()))
+                .filter(a -> a.getPresosInscritos() < a.getCupoMaximo())
+                .collect(Collectors.toList());
+    }
+
+    public boolean tieneActividadEnMismoHorario(Oficial responsable, Object dia, Object horario) {
+        List<Actividad> actividades = cargarActividades();
+        for (Actividad actividad : actividades) {
+            if (actividad.getResponsableOficial() != null
+                    && actividad.getResponsableOficial().equals(responsable.getIdentificacion())
+                    && actividad.getDia().equals(dia)
+                    && actividad.getHorario().equals(horario)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int contarActividadesResponsable(String responsableId) {
+        List<Actividad> actividades = cargarActividades();
+
+        int count = 0;
+        for (Actividad actividad : actividades) {
+            if (actividad.getResponsableOficial().equals(responsableId)
+                    && !actividad.getHorario().equalsIgnoreCase("Cancelada")) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int contarActividadesPreso(String presoId) {
+        List<Actividad> actividades = cargarActividades();
+        int count = 0;
+
+        for (Actividad actividad : actividades) {
+            if (actividad.getPresosAsignadosIds().contains(presoId)
+                    && !actividad.getEstado().equalsIgnoreCase("Cancelada")
+                    && !actividad.getEstado().equalsIgnoreCase("Terminada")) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    public boolean puedeAsignarActividadAPreso(String presoId) {
+        int actividadesAsignadas = contarActividadesPreso(presoId);
+        int limiteActividadesPreso = 5;
+        return actividadesAsignadas < limiteActividadesPreso;
+    }
+
+    public String obtenerProximoIdActividad() {
+        List<Actividad> actividades = cargarActividades();
+        if (actividades.isEmpty()) {
+            return "ACT-1";
+        }
+
+        int maxId = actividades.stream()
+                .mapToInt(a -> Integer.parseInt(a.getIdActividad().replace("ACT-", "")))
+                .max()
+                .orElse(0);
+
+        return "ACT-" + (maxId + 1);
+    }
+
+    public boolean actualizarEstadoActividad(String idActividad, String nuevoEstado) {
+        List<Actividad> actividades = cargarActividades();
+        boolean encontrado = false;
+
+        for (Actividad actividad : actividades) {
+            if (actividad.getIdActividad().equals(idActividad)) {
+                actividad.setEstado(nuevoEstado);
+                encontrado = true;
+                break;
+            }
+        }
+        if (!encontrado) {
+            JOptionPane.showMessageDialog(null, "No se encontró la actividad para actualizar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        return guardarActividades(actividades);
+    }
+
+    public void actualizarEstadoPresosActividad(String idActividad, String estado) {
+        List<Actividad> actividades = cargarActividades();
+        PresoDAO presoDAO = PresoDAO.getInstancia();
+
+        for (Actividad actividad : actividades) {
+            if (actividad.getIdActividad().equals(idActividad)) {
+                if (estado.equalsIgnoreCase("CANCELADA")) {
+                    for (String idPreso : actividad.getPresosAsignadosIds()) {
+                        Preso preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
+
+                        if (preso != null) {
+                            preso.marcarActividadCancelada(idActividad);
+
+                            presoDAO.actualizarPreso(preso);
+                        }
+                    }
+                }
+                break;
+            }
+        }
+
+        for (Actividad actividad : actividades) {
+            if (actividad.getIdActividad().equals(idActividad)) {
+                actividad.setEstado(estado);
+                break;
+            }
+        }
+
+        guardarActividades(actividades);
+    }
+
+    public boolean tieneActividadEnMismoHorarioPreso(String idPreso, Object dia, Object horario) {
+        List<Actividad> actividades = cargarActividades();
+        for (Actividad actividad : actividades) {
+            if (!actividad.getEstado().equalsIgnoreCase("ACTIVA")) {
+                continue;
+            }
+
+            if (actividad.getPresosAsignadosIds().contains(idPreso)
+                    && actividad.getDia().equals(dia)
+                    && actividad.getHorario().equals(horario)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

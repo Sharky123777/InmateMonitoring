@@ -2,6 +2,7 @@ package DAO;
 
 import DAO.DelitoDAO;
 import DAO.CeldaDAO;
+import Model.Actividad;
 import Model.Celda;
 import Model.ExpedienteJudicial;
 
@@ -392,4 +393,67 @@ public class PresoDAO {
         }
         return filtrados;
     }
+    
+public boolean actualizarPreso(Preso preso) {
+    List<Preso> presos = cargarTodos();
+    
+    try {
+        boolean encontrado = false;
+        for (int i = 0; i < presos.size(); i++) {
+            if (presos.get(i).getIdentificacion().equals(preso.getIdentificacion())) {
+                presos.set(i, preso);
+                encontrado = true;
+                break;
+            }
+        }
+        
+        if (!encontrado) {
+            return false;
+        }
+        
+        guardarTodos(presos);
+        return true;
+        
+    } catch (RuntimeException e) {
+        System.err.println("Error al actualizar preso: " + e.getMessage());
+        return false;
+    }
+}
+
+public boolean agregarActividadAsignada(String idPreso, String idActividad) {
+    List<Preso> presos = cargarTodos();
+    
+    try {
+        for (Preso preso : presos) {
+            if (preso.getIdentificacion().equals(idPreso)) {
+                preso.agregarActividadAsignada(idActividad);
+                guardarTodos(presos);
+                return true;
+            }
+        }
+        return false;
+    } catch (RuntimeException e) {
+        System.err.println("Error al agregar actividad: " + e.getMessage());
+        return false;
+    }
+}
+
+public boolean marcarActividadCancelada(String idPreso, String idActividad) {
+    List<Preso> presos = cargarTodos();
+    
+    try {
+        for (Preso preso : presos) {
+            if (preso.getIdentificacion().equals(idPreso)) {
+                preso.marcarActividadCancelada(idActividad);
+                guardarTodos(presos);
+                return true;
+            }
+        }
+        return false;
+    } catch (RuntimeException e) {
+        System.err.println("Error al marcar actividad como cancelada: " + e.getMessage());
+        return false;
+    }
+}
+
 }

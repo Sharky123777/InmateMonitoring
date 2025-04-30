@@ -1,1 +1,36 @@
-[]
+[
+  {
+    "primerNombre": "Sandra",
+    "segundoNombre": "Carlos",
+    "primerApellido": "Pérez",
+    "segundoApellido": "González",
+    "edad": 35,
+    "sexo": "Femenino",
+    "nacionalidad": "Mexicana",
+    "identificacion": "222233334",
+    "placa": "ABC123",
+    "cargo": "Oficial",
+    "fechaInicioContrato": "2020-01-01",
+    "fechaFinContrato": "2025-01-01",
+    "turno": "Mañana",
+    "fotoPath": "C:/Fotos/Oficial1.jpg"
+  },
+  {
+    "primerNombre": "Rachel",
+    "segundoNombre": "María",
+    "primerApellido": "James",
+    "segundoApellido": "Sánchez",
+    "edad": 28,
+    "sexo": "Femenino",
+    "nacionalidad": "Mexicana",
+    "identificacion": "111122223",
+    "placa": "XYZ456",
+    "cargo": "Oficial",
+    "fechaInicioContrato": "2021-06-15",
+    "fechaFinContrato": "2026-06-15",
+    "turno": "Tarde",
+    "fotoPath": "C:/Fotos/Oficial2.jpg"
+  }
+  
+  
+]

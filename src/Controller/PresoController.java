@@ -17,7 +17,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -27,26 +26,26 @@ import javax.swing.table.DefaultTableModel;
 
 public class PresoController {
 
-   private static PresoController instancia;
+    private static PresoController instancia;
 
     private final PresoDAO presoDAO;
     private final CeldaDAO celdaDAO;
     private final DelitoDAO delitoDAO;
     private final Validador validador;
 
-   private PresoController(PresoDAO presoDAO, CeldaDAO celdaDAO, DelitoDAO delitoDAO, Validador vañidador) {
+    private PresoController(PresoDAO presoDAO, CeldaDAO celdaDAO, DelitoDAO delitoDAO, Validador vañidador) {
         this.presoDAO = presoDAO;
         this.celdaDAO = celdaDAO;
         this.delitoDAO = delitoDAO;
         this.validador = vañidador;
     }
-    
+
     public static synchronized PresoController getInstancia() {
         if (instancia == null) {
             instancia = new PresoController(
-                PresoDAO.getInstancia(),
-                CeldaDAO.getInstancia(),
-                DelitoDAO.getInstancia(),
+                    PresoDAO.getInstancia(),
+                    CeldaDAO.getInstancia(),
+                    DelitoDAO.getInstancia(),
                     Validador.getInstancia()
             );
         }
@@ -54,109 +53,121 @@ public class PresoController {
     }
 
     public boolean hayCambios(Preso presoOriginal,
-        String primerNombre,
-        String segundoNombre,
-        String primerApellido,
-        String segundoApellido,
-        String edad,
-        String estatura,
-        String peso,
-        String nacionalidad,
-        Object grupoSanguineo,
-        Object nivelSeguridad,
-        Object aislamiento,
-        Object nivelRiesgo,
-        Object imagen) {
+            String primerNombre,
+            String segundoNombre,
+            String primerApellido,
+            String segundoApellido,
+            String edad,
+            String estatura,
+            String peso,
+            Object nacionalidad,
+            Object grupoSanguineo,
+            Object nivelSeguridad,
+            Object aislamiento,
+            Object nivelRiesgo,
+            Object imagen) {
 
-    return Stream.of(
-        !primerNombre.trim().isEmpty() && !primerNombre.equals(presoOriginal.getPrimerNombre()),
-        !segundoNombre.trim().isEmpty() && !segundoNombre.equals(presoOriginal.getSegundoNombre()),
-        !primerApellido.trim().isEmpty() && !primerApellido.equals(presoOriginal.getPrimerApellido()),
-        !segundoApellido.trim().isEmpty() && !segundoApellido.equals(presoOriginal.getSegundoApellido()),
-        !edad.trim().isEmpty() && Integer.parseInt(edad.trim()) != presoOriginal.getEdad(),
-        !estatura.trim().isEmpty() && Float.parseFloat(estatura.trim()) != presoOriginal.getEstatura(),
-        !peso.trim().isEmpty() && Float.parseFloat(peso.trim()) != presoOriginal.getPeso(),
-        !nacionalidad.trim().isEmpty() && !nacionalidad.equals(presoOriginal.getNacionalidad()),
-        grupoSanguineo != null && !grupoSanguineo.toString().equals("<Seleccionar>") 
-            && !grupoSanguineo.toString().equals(presoOriginal.getGrupoSanguineo()),
-        nivelSeguridad != null && !nivelSeguridad.toString().equals("<Seleccionar>") 
-            && !nivelSeguridad.toString().equals(presoOriginal.getNivelDeSeguridad()),
-        nivelRiesgo != null && !nivelRiesgo.toString().equals("<Seleccionar>") 
-            && !nivelRiesgo.toString().equals(presoOriginal.getNivelDeRiesgo()),
-        aislamiento != null && aislamiento.toString().equalsIgnoreCase("Sí") != presoOriginal.isEnAislamiento(),
-        imagen != null
-    ).anyMatch(Boolean::booleanValue);
-}
+        return Stream.of(
+                !primerNombre.trim().isEmpty() && !primerNombre.equals(presoOriginal.getPrimerNombre()),
+                !segundoNombre.trim().isEmpty() && !segundoNombre.equals(presoOriginal.getSegundoNombre()),
+                !primerApellido.trim().isEmpty() && !primerApellido.equals(presoOriginal.getPrimerApellido()),
+                !segundoApellido.trim().isEmpty() && !segundoApellido.equals(presoOriginal.getSegundoApellido()),
+                !edad.trim().isEmpty() && Integer.parseInt(edad.trim()) != presoOriginal.getEdad(),
+                !estatura.trim().isEmpty() && Float.parseFloat(estatura.trim()) != presoOriginal.getEstatura(),
+                !peso.trim().isEmpty() && Float.parseFloat(peso.trim()) != presoOriginal.getPeso(),
+                nacionalidad != null && !nacionalidad.toString().equals("<Seleccione>"),
+                grupoSanguineo != null && !grupoSanguineo.toString().equals("<Seleccione>")
+                && !grupoSanguineo.toString().equals(presoOriginal.getGrupoSanguineo()),
+                nivelSeguridad != null && !nivelSeguridad.toString().equals("<Seleccionar>")
+                && !nivelSeguridad.toString().equals(presoOriginal.getNivelDeSeguridad()),
+                nivelRiesgo != null && !nivelRiesgo.toString().equals("<Seleccionar>")
+                && !nivelRiesgo.toString().equals(presoOriginal.getNivelDeRiesgo()),
+                aislamiento != null && aislamiento.toString().equalsIgnoreCase("Sí") != presoOriginal.isEnAislamiento(),
+                imagen != null
+        ).anyMatch(Boolean::booleanValue);
+    }
 
-  public boolean actualizarPreso(Preso presoOriginal,
-        String primerNombre,
-        String segundoNombre,
-        String primerApellido,
-        String segundoApellido,
-        String edad,
-        String nacionalidad,
-        String estatura,
-        String peso,
-        Object grupoSanguineo,
-        Object nivelSeguridad,
-        Object aislamiento,
-        Object nivelRiesgo,
-        File selectedImageFile) {
+    public boolean actualizarPreso(Preso presoOriginal,
+            String primerNombre,
+            String segundoNombre,
+            String primerApellido,
+            String segundoApellido,
+            String edad,
+            Object nacionalidad,
+            String estatura,
+            String peso,
+            Object grupoSanguineo,
+            Object nivelSeguridad,
+            Object aislamiento,
+            Object nivelRiesgo,
+            File selectedImageFile) {
 
-    try {
-        if (!hayCambios(presoOriginal, primerNombre, segundoNombre, primerApellido, segundoApellido, 
-                edad, estatura, peso, nacionalidad, grupoSanguineo, nivelSeguridad, aislamiento, nivelRiesgo, selectedImageFile)) {
-            Validador.mostrarAdvertencia("No hay cambios para guardar");
+        try {
+            if (!hayCambios(presoOriginal, primerNombre, segundoNombre, primerApellido, segundoApellido,
+                    edad, estatura, peso, nacionalidad, grupoSanguineo, nivelSeguridad, aislamiento, nivelRiesgo, selectedImageFile)) {
+                Validador.mostrarAdvertencia("No hay cambios para guardar");
+                return false;
+            }
+
+            if (!primerNombre.trim().isEmpty()) {
+                Validador.validarNombre(primerNombre);
+            }
+            if (!segundoNombre.trim().isEmpty()) {
+                Validador.validarNombre(segundoNombre);
+            }
+            if (!primerApellido.trim().isEmpty()) {
+                Validador.validarNombre(primerApellido);
+            }
+            if (!segundoApellido.trim().isEmpty()) {
+                Validador.validarNombre(segundoApellido);
+            }
+            if (!edad.trim().isEmpty()) {
+                Validador.validarEdad(edad);
+            }
+            if (!estatura.trim().isEmpty()) {
+                Validador.validarEstatura(estatura);
+            }
+            if (!peso.trim().isEmpty()) {
+                Validador.validarPeso(peso);
+            }
+
+            boolean resultado = presoDAO.actualizarPreso(
+                    presoOriginal.getIdentificacion(),
+                    primerNombre.trim().isEmpty() ? presoOriginal.getPrimerNombre() : primerNombre.trim(),
+                    segundoNombre.trim().isEmpty() ? presoOriginal.getSegundoNombre() : segundoNombre.trim(),
+                    primerApellido.trim().isEmpty() ? presoOriginal.getPrimerApellido() : primerApellido.trim(),
+                    segundoApellido.trim().isEmpty() ? presoOriginal.getSegundoApellido() : segundoApellido.trim(),
+                    edad.trim().isEmpty() ? presoOriginal.getEdad() : Integer.parseInt(edad.trim()),
+                    presoOriginal.getSexo(),
+                    nacionalidad == null || nacionalidad.toString().equals("<Seleccione>")
+                    ? presoOriginal.getNacionalidad() : nacionalidad.toString(),
+                    estatura.trim().isEmpty() ? presoOriginal.getEstatura() : Float.parseFloat(estatura.trim()),
+                    peso.trim().isEmpty() ? presoOriginal.getPeso() : Float.parseFloat(peso.trim()),
+                    grupoSanguineo == null || grupoSanguineo.toString().equals("<Seleccionar>")
+                    ? presoOriginal.getGrupoSanguineo() : grupoSanguineo.toString(),
+                    presoOriginal.getSeccionAsignada(),
+                    nivelSeguridad == null || nivelSeguridad.toString().equals("<Seleccionar>")
+                    ? presoOriginal.getNivelDeSeguridad() : nivelSeguridad.toString(),
+                    aislamiento != null && aislamiento.toString().equalsIgnoreCase("Sí"),
+                    nivelRiesgo == null || nivelRiesgo.toString().equals("<Seleccionar>")
+                    ? presoOriginal.getNivelDeRiesgo() : nivelRiesgo.toString(),
+                    selectedImageFile != null ? selectedImageFile : new File(presoOriginal.getFotoPath())
+            );
+
+            if (resultado) {
+                Validador.mostrarInfo("Preso actualizado correctamente");
+            } else {
+                Validador.mostrarError("No se pudo actualizar el preso");
+            }
+
+            return resultado;
+
+        } catch (Exception e) {
+            Validador.mostrarError("Error al actualizar: " + e.getMessage());
             return false;
         }
-
-        if (!primerNombre.trim().isEmpty()) Validador.validarNombre(primerNombre);
-        if (!segundoNombre.trim().isEmpty()) Validador.validarNombre(segundoNombre);
-        if (!primerApellido.trim().isEmpty()) Validador.validarNombre(primerApellido);
-        if (!segundoApellido.trim().isEmpty()) Validador.validarNombre(segundoApellido);
-        if (!edad.trim().isEmpty()) Validador.validarEdad(edad);
-        if (!estatura.trim().isEmpty()) Validador.validarEstatura(estatura);
-        if (!peso.trim().isEmpty()) Validador.validarPeso(peso);
-
-        boolean resultado = presoDAO.actualizarPreso(
-                presoOriginal.getIdentificacion(),
-                primerNombre.trim().isEmpty() ? presoOriginal.getPrimerNombre() : primerNombre.trim(),
-                segundoNombre.trim().isEmpty() ? presoOriginal.getSegundoNombre() : segundoNombre.trim(),
-                primerApellido.trim().isEmpty() ? presoOriginal.getPrimerApellido() : primerApellido.trim(),
-                segundoApellido.trim().isEmpty() ? presoOriginal.getSegundoApellido() : segundoApellido.trim(),
-                edad.trim().isEmpty() ? presoOriginal.getEdad() : Integer.parseInt(edad.trim()),
-                presoOriginal.getSexo(),
-                nacionalidad.trim().isEmpty() ? presoOriginal.getNacionalidad() : nacionalidad.trim(),
-                estatura.trim().isEmpty() ? presoOriginal.getEstatura() : Float.parseFloat(estatura.trim()),
-                peso.trim().isEmpty() ? presoOriginal.getPeso() : Float.parseFloat(peso.trim()),
-                grupoSanguineo == null || grupoSanguineo.toString().equals("<Seleccionar>") 
-                    ? presoOriginal.getGrupoSanguineo() : grupoSanguineo.toString(),
-                presoOriginal.getSeccionAsignada(),
-                nivelSeguridad == null || nivelSeguridad.toString().equals("<Seleccionar>") 
-                    ? presoOriginal.getNivelDeSeguridad() : nivelSeguridad.toString(),
-                aislamiento != null && aislamiento.toString().equalsIgnoreCase("Sí"),
-                nivelRiesgo == null || nivelRiesgo.toString().equals("<Seleccionar>") 
-                    ? presoOriginal.getNivelDeRiesgo() : nivelRiesgo.toString(),
-                selectedImageFile != null ? selectedImageFile : new File(presoOriginal.getFotoPath())
-        );
-
-        if (resultado) {
-            Validador.mostrarInfo("Preso actualizado correctamente");
-        } else {
-            Validador.mostrarError("No se pudo actualizar el preso");
-        }
-
-        return resultado;
-
-    } catch (Exception e) {
-        Validador.mostrarError("Error al actualizar: " + e.getMessage());
-        return false;
     }
-}
-    
-   
-    
-    
+
     public boolean registrarPresoCompleto(
             String primerNombre,
             String segundoNombre,
@@ -185,13 +196,13 @@ public class PresoController {
 
             Validador.validarNombre(primerNombre);
             Validador.validarNombre(primerApellido);
-            validador.validarIdentificacionUnica((String)identificacion);
-            
+            validador.validarIdentificacionUnica((String) identificacion);
+
             Validador.validarEdad(edadStr);
-            
+
             float estatura = Float.parseFloat(estaturaStr);
             Validador.validarEstatura(estaturaStr);
-            
+
             float peso = Float.parseFloat(pesoStr);
             Validador.validarPeso(pesoStr);
 
@@ -218,7 +229,7 @@ public class PresoController {
 
             Preso nuevoPreso = new Preso(
                     primerNombre, segundoNombre, primerApellido, segundoApellido,
-                   Integer.parseInt(edadStr), sexo, nacionalidad, (String)identificacion, estatura, peso,
+                    Integer.parseInt(edadStr), sexo, nacionalidad, (String) identificacion, estatura, peso,
                     new ArrayList<>(),
                     nivelSeguridad.toString(), seccionStr, "En espera",
                     celdaAsignada.getNombreFormateado(), false,
@@ -229,7 +240,7 @@ public class PresoController {
 
             if (presoGuardado) {
                 for (Delito delito : delitos) {
-                    delito.setPresoId((String)identificacion);
+                    delito.setPresoId((String) identificacion);
                     delitoDAO.guardarDelito(delito);
                 }
 
@@ -249,37 +260,37 @@ public class PresoController {
         }
     }
 
-    public boolean agregarDelitoAPreso(Preso preso, String codigoStr, String articulo, 
-                                     String nombreDelito, String gravedad, 
-                                     String descripcion, Date fechaComision, 
-                                     String añosStr, String mesesStr) {
+    public boolean agregarDelitoAPreso(Preso preso, String codigoStr, String articulo,
+            String nombreDelito, String gravedad,
+            String descripcion, Date fechaComision,
+            String añosStr, String mesesStr) {
         try {
             if (preso == null) {
                 throw new IllegalArgumentException("Preso no puede ser nulo");
             }
-            
+
             Validador.validarCampoObligatorio("código del delito", codigoStr);
             Validador.validarCampoObligatorio("artículo", articulo);
             Validador.validarCampoObligatorio("nombre del delito", nombreDelito);
             Validador.validarCampoObligatorio("gravedad", gravedad);
             Validador.validarCampoObligatorio("años de sentencia", añosStr);
             Validador.validarCampoObligatorio("meses de sentencia", mesesStr);
-            
+
             int codigo = Integer.parseInt(codigoStr);
             int años = Integer.parseInt(añosStr);
             int meses = Integer.parseInt(mesesStr);
-            
+
             Validador.validarSentencia(años, meses);
-            
+
             LocalDate fechaComisionLocal = fechaComision.toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate();
-            
+
             Validador.validarFechaNoFutura(fechaComisionLocal, "comisión del delito");
 
-            LocalDate fechaIngreso = preso.getDelitos().isEmpty() ? 
-                    LocalDate.now() : 
-                    preso.getDelitos().get(0).getSentencia().getFechaIngreso();
+            LocalDate fechaIngreso = preso.getDelitos().isEmpty()
+                    ? LocalDate.now()
+                    : preso.getDelitos().get(0).getSentencia().getFechaIngreso();
 
             Sentencia sentenciaDelito = new Sentencia(años, meses, fechaIngreso);
 
@@ -336,12 +347,18 @@ public class PresoController {
             Validador.validarFormatoIdentificacion(identificacion);
 
             Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
+
             if (preso == null) {
                 throw new IllegalStateException("No se encontró el preso con identificación: " + identificacion);
             }
 
+            if (preso != null) {
+                List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(identificacion);
+                preso.setDelitos(delitos);
+            }
+
             List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(identificacion);
-            
+
             if (preso.getExpediente() == null) {
                 ExpedienteJudicial expediente = new ExpedienteJudicial();
                 expediente.setDelitos(delitos);
@@ -371,12 +388,16 @@ public class PresoController {
                 throw new IllegalArgumentException("La fecha de validación no puede ser nula");
             }
 
-
             LocalDate fechaActual = fechaValidacion.toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate();
 
-            LocalDate fechaSalida = calcularFechaSalidaPreso(preso.getDelitos());
+            LocalDate fechaSalida;
+            try {
+                fechaSalida = calcularFechaSalidaPreso(preso.getDelitos());
+            } catch (RuntimeException e) {
+                throw new IllegalArgumentException("No se pudo calcular la fecha de salida: " + e.getMessage());
+            }
 
             if (fechaActual.isBefore(fechaSalida)) {
                 throw new IllegalArgumentException("No se puede eliminar: El preso no ha completado su condena.\n"
@@ -386,9 +407,6 @@ public class PresoController {
 
         } catch (IllegalArgumentException e) {
             Validador.mostrarError(e.getMessage());
-            return false;
-        } catch (Exception e) {
-            Validador.mostrarError("Error al validar eliminación: " + e.getMessage());
             return false;
         }
     }
@@ -429,20 +447,29 @@ public class PresoController {
             Validador.validarListaNoVacia("delitos", delitos);
 
             LocalDate fechaIngreso = delitos.get(0).getSentencia().getFechaIngreso();
+            if (fechaIngreso == null) {
+                throw new IllegalArgumentException("La fecha de ingreso no puede ser nula");
+            }
+
             Sentencia sentenciaAcumulada = new Sentencia(0, 0, fechaIngreso);
 
             for (Delito delito : delitos) {
-                sentenciaAcumulada.sumarSentencia(delito.getSentencia());
+                Sentencia s = delito.getSentencia();
+                if (s == null) {
+                    throw new IllegalArgumentException("Una sentencia no puede ser nula");
+                }
+                sentenciaAcumulada.sumarSentencia(s);
             }
 
-            return sentenciaAcumulada.getFechaSalidaCalculada();
+            LocalDate fechaSalida = sentenciaAcumulada.getFechaSalidaCalculada();
+            if (fechaSalida == null) {
+                throw new IllegalStateException("La fecha de salida calculada no puede ser nula");
+            }
 
-        } catch (IllegalArgumentException e) {
-            Validador.mostrarError(e.getMessage());
-            return null;
-        } catch (Exception e) {
-            Validador.mostrarError("Error al calcular fecha de salida: " + e.getMessage());
-            return null;
+            return fechaSalida;
+
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            throw new RuntimeException("Error al calcular fecha de salida: " + e.getMessage(), e);
         }
     }
 
@@ -464,7 +491,7 @@ public class PresoController {
                 return;
             }
 
-            Sentencia sentenciaTotal = new Sentencia(0, 0, 
+            Sentencia sentenciaTotal = new Sentencia(0, 0,
                     preso.getExpediente().getDelitos().get(0).getSentencia().getFechaIngreso());
 
             for (Delito delito : preso.getExpediente().getDelitos()) {
@@ -491,64 +518,64 @@ public class PresoController {
             Validador.mostrarError("Error al cargar delitos: " + e.getMessage());
         }
     }
-    
+
     public Preso obtenerPresoConDelitos(String identificacion) {
-    try {
-        Validador.validarFormatoIdentificacion(identificacion);
-        
-        Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
-        if (preso == null) {
-            throw new IllegalStateException("No se encontró el preso con identificación: " + identificacion);
-        }
+        try {
+            Validador.validarFormatoIdentificacion(identificacion);
 
-        List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(identificacion);
-        
-        if (preso.getExpediente() == null) {
-            ExpedienteJudicial expediente = new ExpedienteJudicial();
-            expediente.setDelitos(delitos);
-            preso.setExpediente(expediente);
-        } else {
-            preso.getExpediente().setDelitos(delitos);
-        }
+            Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
+            if (preso == null) {
+                throw new IllegalStateException("No se encontró el preso con identificación: " + identificacion);
+            }
 
-        return preso;
-    } catch (IllegalArgumentException | IllegalStateException e) {
-        Validador.mostrarError(e.getMessage());
-        return null;
-    } catch (Exception e) {
-        Validador.mostrarError("Error al obtener preso: " + e.getMessage());
-        return null;
+            List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(identificacion);
+
+            if (preso.getExpediente() == null) {
+                ExpedienteJudicial expediente = new ExpedienteJudicial();
+                expediente.setDelitos(delitos);
+                preso.setExpediente(expediente);
+            } else {
+                preso.getExpediente().setDelitos(delitos);
+            }
+
+            return preso;
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            Validador.mostrarError(e.getMessage());
+            return null;
+        } catch (Exception e) {
+            Validador.mostrarError("Error al obtener preso: " + e.getMessage());
+            return null;
+        }
     }
-}
-    
+
     public Sentencia calcularSentenciaTotal(List<Delito> delitos) {
-    try {
-        Validador.validarListaNoVacia("delitos", delitos);
-        
-        LocalDate fechaIngreso = delitos.get(0).getSentencia().getFechaIngreso();
-        
-        Sentencia sentenciaTotal = new Sentencia(0, 0, fechaIngreso);
-        
-        for (Delito delito : delitos) {
-            sentenciaTotal.sumarSentencia(delito.getSentencia());
+        try {
+            Validador.validarListaNoVacia("delitos", delitos);
+
+            LocalDate fechaIngreso = delitos.get(0).getSentencia().getFechaIngreso();
+
+            Sentencia sentenciaTotal = new Sentencia(0, 0, fechaIngreso);
+
+            for (Delito delito : delitos) {
+                sentenciaTotal.sumarSentencia(delito.getSentencia());
+            }
+
+            return sentenciaTotal;
+
+        } catch (IllegalArgumentException e) {
+            Validador.mostrarError(e.getMessage());
+            return null;
+        } catch (Exception e) {
+            Validador.mostrarError("Error al calcular sentencia total: " + e.getMessage());
+            return null;
         }
-        
-        return sentenciaTotal;
-        
-    } catch (IllegalArgumentException e) {
-        Validador.mostrarError(e.getMessage());
-        return null;
-    } catch (Exception e) {
-        Validador.mostrarError("Error al calcular sentencia total: " + e.getMessage());
-        return null;
     }
-}
-    
+
     public Preso buscarPreso(String identificacion) throws Exception {
         return presoDAO.buscarPresoPorIdentificacion(identificacion);
     }
-    
-      private ImageIcon cargarImagenPreso(String path) {
+
+    private ImageIcon cargarImagenPreso(String path) {
         try {
             Image img = ImageIO.read(new File(path));
             return new ImageIcon(img.getScaledInstance(50, 50, Image.SCALE_SMOOTH));
@@ -556,59 +583,61 @@ public class PresoController {
             return new ImageIcon(getClass().getResource("/images/default_profile.png"));
         }
     }
-    
+
     public ImageIcon obtenerFotoPreso(Preso preso) {
         if (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty()) {
             return cargarImagenPreso(preso.getFotoPath());
         }
         return new ImageIcon(getClass().getResource("/images/default_profile.png"));
     }
-    
+
     public List<Object[]> obtenerPresosPorSeccion(String seccion) {
-    List<Preso> presos = presoDAO.buscarPorSeccion(seccion);
-    List<Object[]> filas = new ArrayList<>();
-    
-    for (Preso preso : presos) {
-        ImageIcon foto = obtenerFotoPreso(preso); 
-        
-        filas.add(new Object[]{
-            foto,
-            preso.getPrimerNombre(),
-            preso.getPrimerApellido(),
-            preso.getEdad(),
-            preso.getSexo(),
-            preso.getNacionalidad(),
-            preso.getIdentificacion(),
-            preso.getCeldaAsignada(),
-            preso.getSeccionAsignada()
-        });
+        List<Preso> presos = presoDAO.buscarPorSeccion(seccion);
+        List<Object[]> filas = new ArrayList<>();
+
+        for (Preso preso : presos) {
+            ImageIcon foto = obtenerFotoPreso(preso);
+
+            filas.add(new Object[]{
+                foto,
+                preso.getPrimerNombre(),
+                preso.getPrimerApellido(),
+                preso.getEdad(),
+                preso.getSexo(),
+                preso.getNacionalidad(),
+                preso.getIdentificacion(),
+                preso.getCeldaAsignada(),
+                preso.getSeccionAsignada()
+            });
+        }
+
+        return filas;
     }
-    
-    return filas;
-}
+
     public List<Object[]> obtenerTodosLosPresosParaTabla() {
-    List<Preso> presos = presoDAO.cargarTodos();
-    List<Object[]> filas = new ArrayList<>();
-    
-    for (Preso preso : presos) {
-        ImageIcon foto = obtenerFotoPreso(preso); 
-        
-        filas.add(new Object[]{
-            foto,
-            preso.getId(),
-            preso.getNombresCompletos(),
-            preso.getApellidosCompletos(),
-            preso.getEdad(),
-            preso.getIdentificacion(),
-            preso.getNacionalidad(),
-            preso.getSeccionAsignada(),
-            preso.getCeldaAsignada()
-        });
+        List<Preso> presos = presoDAO.cargarTodos();
+        List<Object[]> filas = new ArrayList<>();
+
+        for (Preso preso : presos) {
+            ImageIcon foto = obtenerFotoPreso(preso);
+
+            List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(preso.getIdentificacion());
+            preso.setDelitos(delitos);
+
+            filas.add(new Object[]{
+                foto,
+                preso.getId(),
+                preso.getNombresCompletos(),
+                preso.getApellidosCompletos(),
+                preso.getEdad(),
+                preso.getIdentificacion(),
+                preso.getNacionalidad(),
+                preso.getSeccionAsignada(),
+                preso.getCeldaAsignada()
+            });
+        }
+
+        return filas;
     }
-    
-    return filas;
-}
-    
-    
-    
+
 }

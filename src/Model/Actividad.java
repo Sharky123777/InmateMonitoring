@@ -15,10 +15,10 @@ public class Actividad {
     private List<String> presosAsignadosIds; 
     private String estado; 
     private int presosInscritos;
-    private String responsable;
+    private String responsableOficial;
 
     public Actividad(String idActividad, String nombre, String tipo, String dia, 
-                    String horario, String lugar, int cupoMaximo, String responsable) {
+                    String horario, String lugar, int cupoMaximo, String responsableOficial) {
         this.idActividad = idActividad;
         this.nombre = nombre;
         this.tipo = tipo;
@@ -29,16 +29,19 @@ public class Actividad {
         this.presosAsignadosIds = new ArrayList<>();
         this.presosInscritos = presosInscritos;
         this.estado = "Activa";
-        this.responsable = responsable;
+        this.responsableOficial = responsableOficial;
     }
 
-    public String getResponsable() {
-        return responsable;
+    public String getResponsableOficial() {
+        return responsableOficial;
     }
 
-    public void setResponsable(String responsable) {
-        this.responsable = responsable;
+    public void setResponsableOficial(String responsableOficial) {
+        this.responsableOficial = responsableOficial;
     }
+
+ 
+
     
     
 

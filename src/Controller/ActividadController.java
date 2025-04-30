@@ -1,27 +1,37 @@
 package Controller;
 
 import DAO.ActividadDAO;
+import DAO.OficialDAO;
+import DAO.PresoDAO;
 import Model.Actividad;
+import Model.Oficial;
 import Model.Preso;
 import Utilidades.Validador;
+import View.ActividadRenderer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class ActividadController {
 
-  private static volatile ActividadController instancia;
-    
+    private static volatile ActividadController instancia;
+    private final OficialDAO oficialDAO;
     private final ActividadDAO actividadDAO;
-    
+    private final PresoDAO presoDAO;
+    PresoController pc = PresoController.getInstancia();
+
     private ActividadController() {
-        this.actividadDAO = ActividadDAO.getInstancia(); 
+        this.actividadDAO = ActividadDAO.getInstancia();
+        this.presoDAO = PresoDAO.getInstancia();
+        this.oficialDAO = OficialDAO.getInstancia();
     }
-    
+
     public static ActividadController getInstancia() {
         ActividadController result = instancia;
         if (result == null) {
@@ -34,38 +44,47 @@ public class ActividadController {
         }
         return result;
     }
-    public void agregarActividad(String nombre, String tipo, Object dia, Object horario, String lugar, String cupoMaximoStr, String responsable) {
+
+    public boolean puedeAgregarActividad(Oficial responsable) {
+        int limiteActividades = 2;
+        int actividadesActuales = actividadDAO.contarActividadesResponsable(responsable.getIdentificacion());
+        return actividadesActuales < limiteActividades;
+    }
+
+    public boolean agregarActividad(String nombre, String tipo, Object dia, Object horario, String lugar, String cupoMaximoStr, Oficial responsable) {
         try {
-            Validador.validarActividadCompleta(nombre, tipo, dia, horario, lugar, cupoMaximoStr, responsable);
+            Validador.validarActividadCompleta(nombre, tipo, dia, horario, lugar, cupoMaximoStr);
+
+            ActividadController controller = ActividadController.getInstancia();
+
+            boolean tieneActividad = actividadDAO.tieneActividadEnMismoHorario(responsable, dia, horario);
+
+            if (tieneActividad) {
+                Validador.mostrarError("El oficial ya tiene una actividad en el mismo día y horario.");
+                return false;
+            }
+
+            if (!controller.puedeAgregarActividad(responsable)) {
+                Validador.mostrarError("El responsable ya tiene el límite de actividades alcanzado.");
+                return false;
+            }
 
             int cupoMaximo = Integer.parseInt(cupoMaximoStr);
-            String idActividad = generarIdUnico();
-            Actividad actividad = new Actividad(idActividad, nombre, tipo, dia.toString(), horario.toString(), lugar, cupoMaximo, responsable);
+
+            String idActividad = actividadDAO.obtenerProximoIdActividad();
+            Actividad actividad = new Actividad(idActividad, nombre, tipo, dia.toString(), horario.toString(), lugar, cupoMaximo, responsable.getIdentificacion());
 
             if (actividadDAO.agregarActividad(actividad)) {
                 Validador.mostrarInfo("Actividad agregada exitosamente");
+                return true;
             } else {
                 Validador.mostrarError("No se pudo agregar la actividad");
+                return false;
             }
+
         } catch (IllegalArgumentException e) {
             Validador.mostrarError(e.getMessage());
-        }
-    }
-
-    public void actualizarActividad(String idActividad, Object nuevoHorario, String nuevoCupoMaximoStr) {
-        try {
-            Validador.validarHorarioActividad(nuevoHorario);
-            Validador.validarCupoMaximo(nuevoCupoMaximoStr);
-
-            int nuevoCupoMaximo = Integer.parseInt(nuevoCupoMaximoStr);
-
-            if (actividadDAO.actualizarActividad(idActividad, nuevoHorario.toString(), nuevoCupoMaximo)) {
-                Validador.mostrarInfo("Actividad actualizada correctamente");
-            } else {
-                Validador.mostrarError("No se pudo actualizar la actividad");
-            }
-        } catch (IllegalArgumentException e) {
-            Validador.mostrarError(e.getMessage());
+            return false;
         }
     }
 
@@ -87,7 +106,6 @@ public class ActividadController {
         }
     }
 
-    
     public List<Actividad> buscarActividadesPorPreso(String identificacionP) {
         return actividadDAO.buscarActividadesPorPreso(identificacionP);
     }
@@ -96,16 +114,15 @@ public class ActividadController {
         return actividadDAO.buscarActividadesPorEstado(estado);
     }
 
-    private String generarIdUnico() {
-        return "ACT-" + System.currentTimeMillis();
-    }
-
     public void cargarActividadesEnTabla(JTable actividadesTabla) {
         List<Actividad> actividades = actividadDAO.cargarActividades();
         DefaultTableModel modelo = (DefaultTableModel) actividadesTabla.getModel();
         modelo.setRowCount(0);
 
         for (Actividad actividad : actividades) {
+            Oficial oficial = oficialDAO.buscarPorIdentificacion(actividad.getResponsableOficial());
+            String nombreOficial = (oficial != null) ? oficial.getPrimerNombre() + " " + oficial.getPrimerApellido() : "Sin asignar";
+
             modelo.addRow(new Object[]{
                 actividad.getIdActividad(),
                 actividad.getNombre(),
@@ -114,8 +131,9 @@ public class ActividadController {
                 actividad.getHorario(),
                 actividad.getLugar(),
                 actividad.getCupoMaximo(),
-                actividad.getPresosInscritos()
-
+                actividad.getPresosInscritos(),
+                nombreOficial,
+                actividad.getEstado()
             });
         }
     }
@@ -147,6 +165,10 @@ public class ActividadController {
         List<Actividad> actividades = actividadDAO.buscarActividadesPorPreso(identificacionP);
 
         for (Actividad actividad : actividades) {
+
+            Oficial oficial = oficialDAO.buscarPorIdentificacion(actividad.getResponsableOficial());
+            String nombreOficial = (oficial != null) ? oficial.getPrimerNombre() + " " + oficial.getPrimerApellido() : "Sin asignar";
+
             modelo.addRow(new Object[]{
                 actividad.getNombre(),
                 actividad.getTipo(),
@@ -154,41 +176,218 @@ public class ActividadController {
                 actividad.getDia(),
                 actividad.getHorario(),
                 actividad.getEstado(),
-                actividad.getResponsable()
+                nombreOficial
             });
         }
-    }
-    
-public void cargarPresosAsignadosEnTabla(JTable tablaPresos, String idActividad) {
-    DefaultTableModel model = (DefaultTableModel) tablaPresos.getModel();
-    model.setRowCount(0); 
 
-    Actividad actividad = actividadDAO.buscarActividadPorId(idActividad);
-    
-    if (actividad == null || actividad.getPresosAsignadosIds().isEmpty()) {
-        model.addRow(new Object[]{"", "", "No hay presos asignados", "", "", ""});
-        return;
+        tabla.getColumnModel().getColumn(5).setCellRenderer(new ActividadRenderer());
     }
 
-    PresoController presoController = PresoController.getInstancia();
-    
-    for (String idPreso : actividad.getPresosAsignadosIds()) {
-        try {
-            Preso preso = presoController.buscarPreso(idPreso);
-            
-            if (preso != null) {
-                model.addRow(new Object[]{
+    public void cargarPresosAsignadosEnTabla(JTable tablaPresos, String idActividad) {
+        DefaultTableModel model = (DefaultTableModel) tablaPresos.getModel();
+        model.setRowCount(0);
+
+        Actividad actividad = actividadDAO.buscarActividadPorId(idActividad);
+
+        if (actividad == null || actividad.getPresosAsignadosIds().isEmpty()) {
+            model.addRow(new Object[]{"", "", "No hay presos asignados", "", "", ""});
+            return;
+        }
+
+        PresoController presoController = PresoController.getInstancia();
+
+        for (String idPreso : actividad.getPresosAsignadosIds()) {
+            try {
+                Preso preso = presoController.buscarPreso(idPreso);
+
+                if (preso != null) {
+                    model.addRow(new Object[]{
+                        preso.getNombresCompletos(),
+                        preso.getApellidosCompletos(),
+                        preso.getEdad(),
+                        preso.getIdentificacion(),
+                        actividad.getHorario(),
+                        actividad.getEstado()
+                    });
+                }
+            } catch (Exception e) {
+                System.err.println("Error cargando preso " + idPreso + ": " + e.getMessage());
+            }
+        }
+    }
+
+    public List<Object[]> obtenerActividadesPorTipo(String tipo) {
+        List<Actividad> actividades = actividadDAO.buscarPorTipo(tipo);
+        List<Object[]> filas = new ArrayList<>();
+
+        for (Actividad actividad : actividades) {
+            Oficial oficial = oficialDAO.buscarPorIdentificacion(actividad.getResponsableOficial());
+            String nombreOficial = (oficial != null) ? oficial.getPrimerNombre() + " " + oficial.getPrimerApellido() : "Sin asignar";
+
+            filas.add(new Object[]{
+                actividad.getIdActividad(),
+                actividad.getNombre(),
+                actividad.getTipo(),
+                actividad.getDia(),
+                actividad.getHorario(),
+                actividad.getLugar(),
+                actividad.getCupoMaximo(),
+                actividad.getPresosInscritos(),
+                nombreOficial
+            });
+        }
+
+        return filas;
+    }
+
+    public List<Object[]> obtenerPresosParaActividades() {
+        List<Preso> presos = presoDAO.cargarTodos();
+
+        List<Object[]> filas = new ArrayList<>();
+
+        for (Preso preso : presos) {
+            if (preso.getNivelDeRiesgo().equalsIgnoreCase("RIESGO BAJO") && !preso.isEnAislamiento()) {
+                ImageIcon foto = pc.obtenerFotoPreso(preso);
+
+                filas.add(new Object[]{
+                    foto,
+                    preso.getId(),
                     preso.getNombresCompletos(),
                     preso.getApellidosCompletos(),
                     preso.getEdad(),
                     preso.getIdentificacion(),
-                    actividad.getHorario(),
-                    actividad.getEstado()
+                    preso.getNacionalidad(),
+                    preso.getSeccionAsignada(),
+                    preso.getCeldaAsignada()
                 });
             }
+        }
+
+        return filas;
+    }
+
+    public boolean actualizarEstadoActividad(String idActividad, String nuevoEstado) {
+        return actividadDAO.actualizarEstadoActividad(idActividad, nuevoEstado);
+    }
+
+    public void actualizarEstadoPresosActividad(String idActividad, String estado) {
+        actividadDAO.actualizarEstadoPresosActividad(idActividad, estado);
+    }
+
+    public boolean hayCambiosActividad(Actividad actividadOriginal,
+            String nombre,
+            Object dia,
+            Object horario,
+            Object lugar,
+            Object cupoMaximo,
+            String responsableOficial) {
+
+        if (actividadOriginal == null) {
+            return false;
+        }
+
+        return Stream.of(
+                !nombre.trim().isEmpty() && !nombre.equals(actividadOriginal.getNombre()),
+                dia != null && !dia.toString().equals("<Seleccione>") && !dia.toString().equals(actividadOriginal.getDia()),
+                horario != null && !horario.toString().equals("<Seleccione>") && !horario.toString().equals(actividadOriginal.getHorario()),
+                lugar != null && !lugar.toString().equals("<Seleccione>") && !lugar.toString().equals(actividadOriginal.getLugar()),
+                cupoMaximo != null && !cupoMaximo.toString().equals("<Seleccione>")
+                && Integer.parseInt(cupoMaximo.toString()) != actividadOriginal.getCupoMaximo(),
+                !responsableOficial.trim().isEmpty() && !responsableOficial.equals(actividadOriginal.getResponsableOficial())
+        ).anyMatch(Boolean::booleanValue);
+    }
+
+    public boolean actualizarActividad(Actividad actividadOriginal,
+            String nombre,
+            Object dia,
+            Object horario,
+            Object lugar,
+            Object cupoMaximo,
+            String responsableOficial) {
+
+        try {
+            if (!hayCambiosActividad(actividadOriginal, nombre, dia, horario, lugar, cupoMaximo, responsableOficial)) {
+                Validador.mostrarAdvertencia("No hay cambios para guardar");
+                return false;
+            }
+
+            String nombreFinal = nombre.trim().isEmpty() ? actividadOriginal.getNombre() : nombre.trim();
+            String diaFinal = (dia == null || dia.toString().equals("<Seleccione>"))
+                    ? actividadOriginal.getDia() : dia.toString();
+            String horarioFinal = (horario == null || horario.toString().equals("<Seleccione>"))
+                    ? actividadOriginal.getHorario() : horario.toString();
+            String lugarFinal = (lugar == null || lugar.toString().equals("<Seleccione>"))
+                    ? actividadOriginal.getLugar() : lugar.toString();
+            int cupoFinal = (cupoMaximo == null || cupoMaximo.toString().equals("<Seleccione>"))
+                    ? actividadOriginal.getCupoMaximo() : Integer.parseInt(cupoMaximo.toString());
+            String responsableFinal = responsableOficial.trim().isEmpty()
+                    ? actividadOriginal.getResponsableOficial() : responsableOficial.trim();
+
+            if (!nombre.trim().isEmpty()) {
+                Validador.validarNombre(nombre);
+            }
+
+            if (cupoMaximo != null && !cupoMaximo.toString().equals("<Seleccione>")) {
+                Validador.validarCupoMaximo(cupoMaximo.toString());
+                int nuevoCupo = Integer.parseInt(cupoMaximo.toString());
+                if (nuevoCupo < actividadOriginal.getPresosInscritos()) {
+                    throw new Exception("El cupo no puede ser menor a los presos inscritos");
+                }
+            }
+
+            if (!responsableOficial.trim().isEmpty()
+                    && !responsableOficial.equals(actividadOriginal.getResponsableOficial())) {
+
+                Oficial oficial = oficialDAO.buscarPorIdentificacion(responsableOficial);
+                if (oficial == null) {
+                    throw new Exception("No se encontró el guardia con ID: " + responsableOficial);
+                }
+
+                if (!puedeAgregarActividad(oficial)) {
+                    throw new Exception("El guardia ya tiene 2 actividades asignadas");
+                }
+
+                if (!diaFinal.equals(actividadOriginal.getDia())
+                        || !horarioFinal.equals(actividadOriginal.getHorario())) {
+
+                    if (actividadDAO.tieneActividadEnMismoHorario(oficial, diaFinal, horarioFinal)) {
+                        throw new Exception("El guardia ya tiene actividad en ese horario");
+                    }
+                }
+            }
+
+            if ((!diaFinal.equals(actividadOriginal.getDia())
+                    || (!horarioFinal.equals(actividadOriginal.getHorario())))) {
+
+                for (String idPreso : actividadOriginal.getPresosAsignadosIds()) {
+                    if (actividadDAO.tieneActividadEnMismoHorarioPreso(idPreso, diaFinal, horarioFinal)) {
+                        Preso preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
+                        throw new Exception("El preso " + preso.getNombresCompletos()
+                                + " tiene conflicto de horario con la nueva programación");
+                    }
+                }
+            }
+
+            boolean resultado = actividadDAO.actualizarActividad(
+                    actividadOriginal.getIdActividad(),
+                    nombreFinal,
+                    diaFinal,
+                    horarioFinal,
+                    lugarFinal,
+                    cupoFinal,
+                    responsableFinal);
+
+            if (resultado) {
+                Validador.mostrarInfo("Actividad actualizada correctamente");
+            } else {
+                Validador.mostrarError("No se pudo actualizar la actividad");
+            }
+
+            return resultado;
+
         } catch (Exception e) {
-            System.err.println("Error cargando preso " + idPreso + ": " + e.getMessage());
+            Validador.mostrarError("Error al actualizar: " + e.getMessage());
+            return false;
         }
     }
-}
 }
