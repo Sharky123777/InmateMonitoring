@@ -667,7 +667,7 @@ public class VisitaController {
             );
 
             if (visitanteActualizado != null) {
-                JOptionPane.showMessageDialog(null, "Visitante actualizado correctamente. Si desea continuar modificando vuelva a seleccionar al visitante.");
+                JOptionPane.showMessageDialog(null, "Visitante actualizado correctamente. Si desea continuar modificando vuelva a seleccionar un visitante en la tabla.");
 
                 return visitanteActualizado;
             } else {
@@ -677,6 +677,60 @@ public class VisitaController {
 
         } catch (Exception e) {
             mostrarError("Error al actualizar visitante: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private boolean hayCambiosVisita(Visita visitaOriginal,
+            String duracion,
+            String tipo,
+            String lugar) {
+
+        if (duracion != null && duracion.equals(visitaOriginal.getDuracionVisitaEnHoras())) {
+            return false;
+        }
+        if (tipo != null && tipo.equals(visitaOriginal.getTipoVisita())) {
+            return false;
+        }
+        if (lugar != null && lugar.equals(visitaOriginal.getLugarVisita())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public Visita actualizarVisita(int idVisita,
+            String nuevaDuracion,
+            String nuevoTipo,
+            String nuevoLugar) {
+
+        Visita visitaOriginal = visitaDAO.buscarVisitaPorId(idVisita);
+
+        if (visitaOriginal == null) {
+            mostrarError("No se encontró la visita con el ID proporcionado.");
+            return null;
+        }
+
+        String duracionFinal = nuevaDuracion.equals("< Seleccionar >") ? visitaOriginal.getDuracionVisitaEnHoras() : nuevaDuracion;
+        String tipoFinal = nuevoTipo.equals("< Seleccionar >") ? visitaOriginal.getTipoVisita() : nuevoTipo;
+        String lugarFinal = nuevoLugar.equals("< Seleccionar >") ? visitaOriginal.getLugarVisita() : nuevoLugar;
+        
+        if (!hayCambiosVisita(visitaOriginal, nuevaDuracion, nuevoTipo, nuevoLugar)) {
+            mostrarError("No hay cambios para guardar.");
+            return null;
+        }
+        Visita visitaActualizada = visitaDAO.modificarDatosVisitaYDevolver(
+                idVisita,
+                duracionFinal,
+                tipoFinal,
+                lugarFinal
+        );
+
+        if (visitaActualizada != null) {
+            JOptionPane.showMessageDialog(null, "Visita actualizada correctamente.  Si desea continuar modificando vuelva a seleccionar una visita en la tabla");
+            return visitaActualizada;
+        } else {
+            mostrarError("Error al guardar los cambios de la visita.");
             return null;
         }
     }

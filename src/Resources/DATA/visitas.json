@@ -3,7 +3,7 @@
     "id": 1,
     "fechaVisita": "2025-05-01",
     "horaVisita": "09:00",
-    "duracionVisitaEnHoras": "2 ",
+    "duracionVisitaEnHoras": "1",
     "tipoVisita": "Visita regular",
     "lugarVisita": "Sala de visitas",
     "preso": {
