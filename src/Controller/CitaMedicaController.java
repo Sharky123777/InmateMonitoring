@@ -67,6 +67,26 @@ public class CitaMedicaController {
         Date fechaSeleccionada = view.getFechaCita().getDate();
         String horaSeleccionada = view.getComboHoraCita().getSelectedItem().toString();
 
+        if (!identificacionPreso.matches("\\d+")) {
+            mostrarError("La identificación del preso debe contener solo números");
+            return false;
+        }
+
+        if (!identificacionPreso.matches("\\d{6,10}")) {
+            mostrarError("La identificación debe contener entre 6 y 10 dígitos numéricos.");
+            return false;
+        }
+
+        if (!identificacionGuardia.matches("\\d+")) {
+            mostrarError("La identificación del preso debe contener solo números");
+            return false;
+        }
+
+        if (!identificacionGuardia.matches("\\d{6,10}")) {
+            mostrarError("La identificación debe contener entre 6 y 10 dígitos numéricos.");
+            return false;
+        }
+
         LocalDate fecha = fechaSeleccionada.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalTime hora;
 
