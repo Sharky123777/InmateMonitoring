@@ -33,6 +33,23 @@
       "sexo": "Femenino",
       "nacionalidad": "Colombiana",
       "identificacion": "73132479"
+    },
+    {
+      "usuario": "awdawawdawd52@",
+      "contrasena": "DZpDV7l9",
+      "turno": "Nocturno",
+      "fechaContratacion": "2025-05-01",
+      "fechaFinContrato": "2025-05-27",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/adawd_Captura de pantalla 2025-04-06 134603.png",
+      "correo": "adwawd@gmail.com",
+      "primerNombre": "Miranda",
+      "segundoNombre": "awdawd",
+      "primerApellido": "awdawd",
+      "segundoApellido": "awda",
+      "edad": 43,
+      "sexo": "Femenino",
+      "nacionalidad": "awdawd",
+      "identificacion": "adawd"
     }
   ]
 }

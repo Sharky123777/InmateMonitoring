@@ -1,3 +1,20 @@
 {
-  "guardias": []
+  "guardias": [
+    {
+      "primerNombre": "Maria",
+      "segundoNombre": "Liz",
+      "primerApellido": "Leon",
+      "segundoApellido": "Mier",
+      "edad": 19,
+      "identificacion": "42342355",
+      "sexo": "Femenino",
+      "nacionalidad": "Peruana",
+      "correo": "Mñiz@hotmail.com",
+      "turno": "Nocturno",
+      "fechaInicioContrato": "2025-05-01",
+      "fechaFinContrato": "2025-05-26",
+      "rutaImagen": "src/Resources/imagenes_guardias/42342355_pampam.jpg",
+      "cargo": "Guardia"
+    }
+  ]
 }
