@@ -1,25 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Model;
 
-
 public class Usuario {
-     private String usuario;
-    private String contraseña;
+    private String usuario;
+    private String password; // Cambiado a password para consistencia
     private Rol rol;
     private Persona persona;
 
-   
-    public Usuario(String usuario, String contraseña, Rol rol) {
-        this(usuario, contraseña, rol, null);
+    public Usuario(String usuario, String password, Rol rol) {
+        this(usuario, password, rol, null);
     }
 
-    
-    public Usuario(String usuario, String contraseña, Rol rol, Persona persona) {
+    public Usuario(String usuario, String password, Rol rol, Persona persona) {
         this.usuario = usuario;
-        this.contraseña = contraseña;
+        this.password = password;
         this.rol = rol;
         this.persona = persona;
     }
@@ -32,12 +25,12 @@ public class Usuario {
         this.usuario = usuario;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getPassword() {
+        return password;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Rol getRol() {
@@ -55,7 +48,4 @@ public class Usuario {
     public void setPersona(Persona persona) {
         this.persona = persona;
     }
-
-    
-    
 }

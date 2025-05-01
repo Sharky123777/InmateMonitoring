@@ -433,6 +433,10 @@ public class EnfermeraController {
 
         return true;
     }
+    
+    public Enfermera obtenerEnfermeraPorUsuario(String usuario) {
+    return enfermeraDAO.obtenerEnfermeraPorUsuario(usuario);
+}
 
     private boolean validarFechasContrato(LocalDate inicio, LocalDate fin) {
         if (fin == null) {

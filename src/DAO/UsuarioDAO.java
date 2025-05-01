@@ -24,30 +24,66 @@ public class UsuarioDAO {
         return instancia;
     }
     
-    public Usuario validarCredenciales(String usuario, String password, Rol rolSeleccionado) {
-        try (FileReader reader = new FileReader(JSON_FILE)) {
-            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
-            JsonArray usuariosJson = jsonObject.getAsJsonArray("usuarios");
-            
-            for (int i = 0; i < usuariosJson.size(); i++) {
-                JsonObject usuarioJson = usuariosJson.get(i).getAsJsonObject();
-                
-                String userUsuario = usuarioJson.get("usuario").getAsString();
-                String userPassword = usuarioJson.get("password").getAsString();
-                Rol userRol = Rol.valueOf(usuarioJson.get("rol").getAsString());
-                
-                if (userUsuario.equalsIgnoreCase(usuario) && 
-                    userPassword.equals(password) && 
-                    userRol == rolSeleccionado) {
-                   
-                    return new Usuario(userUsuario, userPassword, userRol);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+   public Usuario validarCredenciales(String usuario, String password, Rol rolSeleccionado) {
+    try (FileReader reader = new FileReader(JSON_FILE)) {
+        JsonElement jsonElement = JsonParser.parseReader(reader);
+        
+        if (jsonElement == null || !jsonElement.isJsonObject()) {
+            System.err.println("El archivo JSON no contiene un objeto válido");
+            return null;
         }
-        return null;
+        
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        JsonArray usuariosJson = jsonObject.getAsJsonArray("usuarios");
+        
+        if (usuariosJson == null) {
+            System.err.println("No se encontró el array 'usuarios' en el JSON");
+            return null;
+        }
+        
+        for (JsonElement element : usuariosJson) {
+            if (!element.isJsonObject()) continue;
+            
+            JsonObject userJson = element.getAsJsonObject();
+            
+            // Verificación robusta de campos
+            String jsonUser = userJson.has("usuario") ? userJson.get("usuario").getAsString() : null;
+            String jsonPass = userJson.has("password") ? userJson.get("password").getAsString() : null;
+            String jsonRol = userJson.has("rol") ? userJson.get("rol").getAsString() : null;
+            
+            if (jsonUser == null || jsonPass == null || jsonRol == null) {
+                System.err.println("Usuario en JSON con campos faltantes");
+                continue;
+            }
+            
+            // Depuración: Imprime los valores que se están comparando
+            System.out.println("Comparando: " + jsonUser + "==" + usuario + ", " + 
+                              jsonPass + "==" + password + ", " + 
+                              jsonRol + "==" + rolSeleccionado.name());
+            
+            try {
+                Rol rol = Rol.valueOf(jsonRol);
+                if (jsonUser.equals(usuario) &&  // Cambiado de equalsIgnoreCase a equals
+                    jsonPass.equals(password) && 
+                    rol == rolSeleccionado) {
+                    return new Usuario(jsonUser, jsonPass, rol);
+                }
+            } catch (IllegalArgumentException e) {
+                System.err.println("Rol no válido en JSON: " + jsonRol);
+            }
+        }
+    } catch (Exception e) {
+        System.err.println("Error al leer el archivo JSON: " + e.getMessage());
+        e.printStackTrace();
     }
+    return null;
+}
+    
+    // Método auxiliar para obtener valores seguros del JSON
+private String getStringSafe(JsonObject jsonObject, String key) {
+    JsonElement element = jsonObject.get(key);
+    return (element != null && !element.isJsonNull()) ? element.getAsString() : null;
+}
     
     public boolean esDirector(Usuario usuario) {
         return usuario != null && usuario.getRol() == Rol.DIRECTOR;

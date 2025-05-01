@@ -139,13 +139,13 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        String email = FieldUsuario.getText();
+        String usuarios = FieldUsuario.getText();
         String contraseña = new String(Password.getPassword());
         String rolTexto = (String) RolCmbBox.getSelectedItem();
         Rol rolSeleccionado = Rol.valueOf(rolTexto);
 
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-        Usuario usuario = usuarioDAO.validarCredenciales(email, contraseña, rolSeleccionado);
+        UsuarioDAO usuarioDAO = UsuarioDAO.getInstancia();
+        Usuario usuario = usuarioDAO.validarCredenciales(usuarios, contraseña, rolSeleccionado);
 
         if (usuario != null) {
             

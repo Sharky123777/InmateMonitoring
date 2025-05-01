@@ -89,18 +89,29 @@ public class EnfermeraDAO {
         }
     }
     
-    // Método para guardar un nuevo usuario
-    private void guardarUsuario(Usuario usuario) throws IOException {
-        List<Usuario> usuarios = obtenerTodosUsuarios();
-        usuarios.add(usuario);
-        
-        try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
-            JsonObject jsonObject = new JsonObject();
-            JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
-            jsonObject.add("usuarios", usuariosArray);
-            gson.toJson(jsonObject, writer);
-        }
+   private void guardarUsuario(Usuario usuario) throws IOException {
+    List<Usuario> usuarios = obtenerTodosUsuarios();
+    
+    // Eliminar usuario existente si ya está (para evitar duplicados)
+    usuarios.removeIf(u -> u.getUsuario().equals(usuario.getUsuario()));
+    
+    usuarios.add(usuario);
+    
+    try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
+        JsonObject jsonObject = new JsonObject();
+        JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
+        jsonObject.add("usuarios", usuariosArray);
+        gson.toJson(jsonObject, writer);
     }
+}
+    
+    public Enfermera obtenerEnfermeraPorUsuario(String usuario) {
+    List<Enfermera> enfermeras = obtenerEnfermeras();
+    return enfermeras.stream()
+            .filter(e -> e.getUsuario().equals(usuario))
+            .findFirst()
+            .orElse(null);
+}
     
     // Método para obtener todos los usuarios
     private List<Usuario> obtenerTodosUsuarios() throws IOException {
@@ -387,4 +398,4 @@ public class EnfermeraDAO {
             String.class
         };
     }
-}
+} 

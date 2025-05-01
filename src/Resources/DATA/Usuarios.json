@@ -1,37 +1,13 @@
 {
   "usuarios": [
     {
-      "usuario": "director",
-      "rol": "DIRECTOR"
-    },
-    {
-      "usuario": "oficial",
-      "rol": "OFICIAL"
-    },
-    {
-      "usuario": "control",
-      "rol": "PERSONAL_DE_CONTROL"
-    },
-    {
-      "usuario": "registro",
-      "rol": "OFICIAL_DE_REGISTRO"
-    },
-    {
-      "usuario": "enfermera",
-      "rol": "ENFERMERA"
-    },
-    {
-      "usuario": "coordinador",
-      "rol": "COORDINADOR"
-    },
-    {
       "usuario": "SharlokAlcazar502*",
-      "contraseña": "CEx*cwE6",
+      "password": "CEx*cwE6",
       "rol": "ENFERMERA"
     },
     {
-      "usuario": "CelinaRestrepo139\u0026",
-      "contraseña": "58fpZS#h",
+      "usuario": "CelinaRestrepo139&",
+      "password": "58fpZS#h",
       "rol": "ENFERMERA"
     }
   ]
