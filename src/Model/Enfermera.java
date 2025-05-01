@@ -4,7 +4,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import com.google.gson.annotations.SerializedName;
 
+
 public class Enfermera extends Persona {
+    private String usuario;
+private String contrasena;
     private String turno; // "Diurno" o "Nocturno"
     
     @SerializedName("fechaContratacion")
@@ -20,18 +23,20 @@ public class Enfermera extends Persona {
     private String correo;
     
     public Enfermera(String primerNombre, String segundoNombre, 
-                   String primerApellido, String segundoApellido,
-                   int edad, String sexo, String nacionalidad, 
-                   String identificacion, String turno,
-                   LocalDate fechaContratacion, LocalDate fechaFinContrato,
-                   String correo) {
-        super(primerNombre, segundoNombre, primerApellido, segundoApellido, 
-              edad, sexo, nacionalidad, identificacion);
-        this.turno = turno;
-        this.fechaContratacion = fechaContratacion;
-        this.fechaFinContrato = fechaFinContrato;
-        this.correo = correo;
-    }
+               String primerApellido, String segundoApellido,
+               int edad, String sexo, String nacionalidad, 
+               String identificacion, String turno,
+               LocalDate fechaContratacion, LocalDate fechaFinContrato,
+               String correo, String usuario, String contrasena) {
+    super(primerNombre, segundoNombre, primerApellido, segundoApellido, 
+          edad, sexo, nacionalidad, identificacion);
+    this.turno = turno;
+    this.fechaContratacion = fechaContratacion;
+    this.fechaFinContrato = fechaFinContrato;
+    this.correo = correo;
+    this.usuario = usuario;
+    this.contrasena = contrasena;
+}
 
     // Getters y Setters
     public String getTurno() {
@@ -83,6 +88,24 @@ public class Enfermera extends Persona {
     public void setCorreo(String correo) {
         this.correo = correo;
     }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+    
+    
  public String getNombresParaTabla() {
         String nombres = getPrimerNombre();
         if (!getSegundoNombre().isEmpty()) {

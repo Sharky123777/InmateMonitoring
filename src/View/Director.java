@@ -168,7 +168,6 @@ public class Director extends javax.swing.JFrame {
         txtCorreo1 = new javax.swing.JTextField();
         jSeparator33 = new javax.swing.JSeparator();
         jButton6 = new javax.swing.JButton();
-        txtCorreo3 = new javax.swing.JTextField();
         jLabel37 = new javax.swing.JLabel();
         jLabel38 = new javax.swing.JLabel();
         txtNacionalidad1 = new javax.swing.JTextField();
@@ -232,7 +231,6 @@ public class Director extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jLabel30 = new javax.swing.JLabel();
         MostrarEnfermeras = new javax.swing.JPanel();
-        jButton9 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaEnfermeras = new javax.swing.JTable();
         ModificarNurse = new javax.swing.JPanel();
@@ -404,7 +402,7 @@ public class Director extends javax.swing.JFrame {
             tablaGuardias.getColumnModel().getColumn(11).setResizable(false);
         }
 
-        ListaDeGuardias.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1080, 540));
+        ListaDeGuardias.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1080, 550));
 
         jTabbedPane1.addTab("ListaDeGuardias", ListaDeGuardias);
 
@@ -490,7 +488,7 @@ public class Director extends javax.swing.JFrame {
                 txtCorreo1KeyTyped(evt);
             }
         });
-        jPanel7.add(txtCorreo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 330, 210, 30));
+        jPanel7.add(txtCorreo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 330, 240, 30));
         jPanel7.add(jSeparator33, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 310, 20));
 
         jButton6.setText("Seleccionar Imagen");
@@ -500,18 +498,6 @@ public class Director extends javax.swing.JFrame {
             }
         });
         jPanel7.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 320, -1, -1));
-
-        txtCorreo3.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtCorreo3FocusLost(evt);
-            }
-        });
-        txtCorreo3.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCorreo3KeyTyped(evt);
-            }
-        });
-        jPanel7.add(txtCorreo3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 330, 210, 30));
 
         jLabel37.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel37.setForeground(new java.awt.Color(255, 255, 255));
@@ -527,6 +513,7 @@ public class Director extends javax.swing.JFrame {
         txtNacionalidad1.setBorder(null);
         jPanel7.add(txtNacionalidad1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 210, 30));
 
+        txtSexo1.setEditable(false);
         txtSexo1.setBackground(new java.awt.Color(29, 35, 51));
         txtSexo1.setText("Femenino");
         txtSexo1.setBorder(null);
@@ -803,14 +790,6 @@ public class Director extends javax.swing.JFrame {
         MostrarEnfermeras.setBackground(new java.awt.Color(255, 255, 255));
         MostrarEnfermeras.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton9.setText("jButton9");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
-            }
-        });
-        MostrarEnfermeras.add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 0, 60, -1));
-
         tablaEnfermeras.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null, null, null},
@@ -847,7 +826,7 @@ public class Director extends javax.swing.JFrame {
             tablaEnfermeras.getColumnModel().getColumn(11).setResizable(false);
         }
 
-        MostrarEnfermeras.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1070, 550));
+        MostrarEnfermeras.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 1080, 560));
 
         jTabbedPane1.addTab("MostrarEnfermera", MostrarEnfermeras);
 
@@ -1771,32 +1750,42 @@ public class Director extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
 try {
-        // Verificar primero si hay imagen seleccionada
-        if (imagenSeleccionadaMod == null || !imagenSeleccionadaMod.exists()) {
-            JOptionPane.showMessageDialog(this,
-                    "Debe seleccionar una imagen válida de la enfermera",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Llamar al controlador para agregar
-        if (enfermeraController.agregarEnfermera()) {
-            JOptionPane.showMessageDialog(this,
-                    "Enfermera registrada exitosamente",
-                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            limpiarFormularioEnfermera();
-            actualizarTablaEnfermeras();
-        }
-    } catch (IllegalArgumentException e) {
+    // Verificar imagen seleccionada
+    if (imagenSeleccionadaMod == null || !imagenSeleccionadaMod.exists()) {
         JOptionPane.showMessageDialog(this,
-                e.getMessage(),
+                "Debe seleccionar una imagen válida de la enfermera",
                 "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this,
-                "Error inesperado: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
+        return;
     }
+
+    // Llamar al controlador para agregar
+    Enfermera enfermeraGuardada = enfermeraController.agregarEnfermera();
+    if (enfermeraGuardada != null) {
+        // Construir el mensaje con formato usando \n y \t
+        String mensaje = "¡Enfermera registrada con éxito!\n\n" +
+                         "Credenciales de acceso:\n\n" +
+                         "Usuario: \t" + enfermeraGuardada.getUsuario() + "\n" +
+                         "Contraseña: \t" + enfermeraGuardada.getContrasena() + "\n\n" +
+                         "¡Guarde esta información en un lugar seguro!";
+
+        JOptionPane.showMessageDialog(this,
+                mensaje,
+                "Registro Exitoso", 
+                JOptionPane.INFORMATION_MESSAGE);
+
+        limpiarFormularioEnfermera();
+        actualizarTablaEnfermeras();
+    }
+} catch (IllegalArgumentException e) {
+    JOptionPane.showMessageDialog(this,
+            e.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
+} catch (Exception e) {
+    JOptionPane.showMessageDialog(this,
+            "Error inesperado: " + e.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
+    e.printStackTrace();
+}
     }//GEN-LAST:event_jButton5ActionPerformed
 
     // 3. Método para actualizar la tabla cuando hay cambios
@@ -1969,18 +1958,20 @@ try {
         LocalDate fechaFinContrato = fechaFin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
         return new Enfermera(
-                primerNombre,
-                segundoNombre.isEmpty() ? null : segundoNombre,
-                primerApellido,
-                segundoApellido,
-                edad,
-                "Femenino", // Sexo siempre femenino
-                nacionalidad,
-                cedula,
-                turno,
-                fechaContratacion,
-                fechaFinContrato,
-                correo
+               primerNombre,
+                    segundoNombre,
+                    primerApellido,
+                    segundoApellido,
+                    edad,
+                    "Femenino",
+                    nacionalidad,
+                    cedula,
+                    turno,
+                    LocalDate.now(),
+                    fechaFinContrato,
+                    correo,
+                    "", // El DAO generará el usuario
+                    ""  // El DAO generará la contraseña
         );
     }
 
@@ -2027,14 +2018,6 @@ try {
         }
     }
     }//GEN-LAST:event_jButton6ActionPerformed
-
-    private void txtCorreo3FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreo3FocusLost
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCorreo3FocusLost
-
-    private void txtCorreo3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreo3KeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCorreo3KeyTyped
 
     private void txtCedula1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedula1ActionPerformed
         // TODO add your handling code here:
@@ -2238,7 +2221,7 @@ try {
                         "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
                 // Actualizar la tabla
-                cargarTablaGuardias();
+                actualizarTablaEnfermeras();
             } else {
                 JOptionPane.showMessageDialog(this,
                         "No se pudo eliminar la enfermera",
@@ -2273,59 +2256,6 @@ try {
     private void txtCorreo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreo1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCorreo1ActionPerformed
-
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        try {
-        // 1. Obtener el modelo actualizado del controlador
-        DefaultTableModel modelo = enfermeraController.obtenerModeloTablaEnfermeras();
-        
-        // 2. Aplicar el nuevo modelo a la tabla
-        tablaEnfermeras.setModel(modelo);
-        
-        // 3. Configurar el renderizador de imágenes para la columna 0 (Foto)
-        tablaEnfermeras.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value,
-                    boolean isSelected, boolean hasFocus, int row, int column) {
-                
-                JLabel label = new JLabel();
-                label.setHorizontalAlignment(SwingConstants.CENTER);
-                
-                if (value instanceof ImageIcon) {
-                    label.setIcon((ImageIcon) value);
-                } else {
-                    label.setIcon(null);
-                    label.setText("(Sin foto)");
-                }
-                
-                return label;
-            }
-        });
-        
-        // 4. Ajustar dimensiones de la tabla
-        tablaEnfermeras.setRowHeight(70); // Altura adecuada para las imágenes
-        
-        // 5. Ajustar anchos de columnas
-        TableColumnModel columnModel = tablaEnfermeras.getColumnModel();
-        columnModel.getColumn(0).setPreferredWidth(80);   // Columna Foto
-        columnModel.getColumn(1).setPreferredWidth(150);  // Nombres
-        columnModel.getColumn(2).setPreferredWidth(150);  // Apellidos
-        columnModel.getColumn(4).setPreferredWidth(100);  // Cédula
-        
-        // 6. Mostrar mensaje de éxito
-        JOptionPane.showMessageDialog(this, 
-            "Datos de enfermeras actualizados correctamente", 
-            "Actualización exitosa", 
-            JOptionPane.INFORMATION_MESSAGE);
-            
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, 
-            "Error al actualizar la tabla: " + e.getMessage(), 
-            "Error", 
-            JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
-    }//GEN-LAST:event_jButton9ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2389,7 +2319,6 @@ try {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
     private com.toedter.calendar.JDateChooser jDateChooserFinContrato;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -2522,7 +2451,6 @@ try {
     private javax.swing.JTextField txtCedulaMod1;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtCorreo1;
-    private javax.swing.JTextField txtCorreo3;
     private javax.swing.JTextField txtCorreo4;
     private javax.swing.JTextField txtCorreoMod;
     private javax.swing.JTextField txtCorreoMod1;

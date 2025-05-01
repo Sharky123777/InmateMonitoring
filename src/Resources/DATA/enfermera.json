@@ -1,19 +1,38 @@
 {
   "enfermeras": [
     {
-      "turno": "Nocturno",
+      "usuario": "SharlokAlcazar502*",
+      "contrasena": "CEx*cwE6",
+      "turno": "Diurno",
       "fechaContratacion": "2025-04-30",
-      "fechaFinContrato": "2025-07-07",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/28371287_Captura de pantalla 2024-12-21 181901.png",
-      "correo": "luz@gmail.com",
-      "primerNombre": "akwdajiwd",
-      "segundoNombre": "amwdjkd",
-      "primerApellido": "akdkawdnd",
-      "segundoApellido": "aadjawdj",
-      "edad": 45,
+      "fechaFinContrato": "2025-11-04",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/81372134_Captura de pantalla 2025-04-22 200615.png",
+      "correo": "sharlok@gmail.com",
+      "primerNombre": "Sharlok",
+      "segundoNombre": "Maia",
+      "primerApellido": "Alcazar",
+      "segundoApellido": "Gutierrez",
+      "edad": 34,
       "sexo": "Femenino",
-      "nacionalidad": "jksawjkdbwad",
-      "identificacion": "28371287"
+      "nacionalidad": "Ferrero",
+      "identificacion": "81372134"
+    },
+    {
+      "usuario": "CelinaRestrepo139\u0026",
+      "contrasena": "58fpZS#h",
+      "turno": "Diurno",
+      "fechaContratacion": "2025-04-30",
+      "fechaFinContrato": "2025-09-14",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/73132479_Captura de pantalla 2025-03-02 170849.png",
+      "correo": "Celina@hotmail.com",
+      "primerNombre": "Celina",
+      "segundoNombre": "",
+      "primerApellido": "Restrepo",
+      "segundoApellido": "Murillo",
+      "edad": 56,
+      "sexo": "Femenino",
+      "nacionalidad": "Colombiana",
+      "identificacion": "73132479"
     }
   ]
 }

@@ -2,6 +2,8 @@ package DAO;
 
 import Model.Enfermera;
 import Model.Guardia;
+import Model.Rol;
+import Model.Usuario;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
@@ -16,8 +18,9 @@ import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
 public class EnfermeraDAO {
-    private static final String RUTA_JSON = "C:\\Users\\gameV\\Documents\\NetBeansProjects\\InmateMonitorinG\\src\\Resources\\DATA\\enfermera.json";
+   private static final String RUTA_JSON = "C:\\Users\\gameV\\Documents\\NetBeansProjects\\InmateMonitorinG\\src\\Resources\\DATA\\enfermera.json";
     private static final String RUTA_IMAGENES = "src/Resources/imagenes_enfermeras/";
+    private static final String RUTA_USUARIOS = "src/Resources/DATA/usuarios.json";
     private final Gson gson;
     private static EnfermeraDAO instancia;
     
@@ -46,9 +49,10 @@ public class EnfermeraDAO {
                 "Error al crear directorios: " + e.getMessage(), 
                 "Error", JOptionPane.ERROR_MESSAGE);
         }
+    
     }
     
-    private static class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
+     private static class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
         private final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
         
         @Override
@@ -62,59 +66,136 @@ public class EnfermeraDAO {
             return LocalDate.parse(json.getAsString(), formatter);
         }
     }
+     
+     // Método para generar un nombre de usuario único
+    private String generarUsuarioUnico(String primerNombre, String primerApellido, List<Usuario> usuariosExistentes) {
+        Random random = new Random();
+        String usuarioBase = primerNombre + primerApellido;
+        String caracteresEspeciales = "!@#$%^&*";
+        
+        while (true) {
+            int numeroRandom = random.nextInt(1000) + 1;
+            char caracterEspecial = caracteresEspeciales.charAt(random.nextInt(caracteresEspeciales.length()));
+            
+            String usuarioGenerado = usuarioBase + numeroRandom + caracterEspecial;
+            
+            // Verificar si el usuario ya existe
+            boolean existe = usuariosExistentes.stream()
+                .anyMatch(u -> u.getUsuario().equalsIgnoreCase(usuarioGenerado));
+                
+            if (!existe) {
+                return usuarioGenerado;
+            }
+        }
+    }
+    
+    // Método para guardar un nuevo usuario
+    private void guardarUsuario(Usuario usuario) throws IOException {
+        List<Usuario> usuarios = obtenerTodosUsuarios();
+        usuarios.add(usuario);
+        
+        try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
+            JsonObject jsonObject = new JsonObject();
+            JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
+            jsonObject.add("usuarios", usuariosArray);
+            gson.toJson(jsonObject, writer);
+        }
+    }
+    
+    // Método para obtener todos los usuarios
+    private List<Usuario> obtenerTodosUsuarios() throws IOException {
+        File archivo = new File(RUTA_USUARIOS);
+        
+        if (!archivo.exists() || archivo.length() == 0) {
+            return new ArrayList<>();
+        }
+        
+        try (FileReader reader = new FileReader(archivo)) {
+            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+            JsonArray usuariosArray = jsonObject.getAsJsonArray("usuarios");
+            
+            Type tipoLista = new TypeToken<List<Usuario>>() {}.getType();
+            return gson.fromJson(usuariosArray, tipoLista);
+        }
+    }
+    
+    // Método para eliminar un usuario por nombre de usuario
+    private void eliminarUsuario(String usuario) throws IOException {
+        List<Usuario> usuarios = obtenerTodosUsuarios();
+        usuarios.removeIf(u -> u.getUsuario().equals(usuario));
+        
+        try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
+            JsonObject jsonObject = new JsonObject();
+            JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
+            jsonObject.add("usuarios", usuariosArray);
+            gson.toJson(jsonObject, writer);
+        }
+    }
+    
+    
+    // Método para generar una contraseña aleatoria
+    private String generarContrasena() {
+        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder(8);
+        
+        for (int i = 0; i < 8; i++) {
+            sb.append(caracteres.charAt(random.nextInt(caracteres.length())));
+        }
+        
+        return sb.toString();
+    }
+    
+    
     
     public boolean guardarEnfermera(Enfermera enfermera, File imagen) {
-    try {
-        // Validar que la identificación no sea nula
-        if (enfermera.getIdentificacion() == null || enfermera.getIdentificacion().trim().isEmpty()) {
-            throw new IllegalArgumentException("La cédula no puede estar vacía");
-        }
-        
-         if (!puedeAgregarEnfermera(enfermera.getTurno())) {
-            throw new IllegalArgumentException("No se puede agregar más enfermeras. Límite alcanzado.");
-        }
-        
-        if (enfermera == null) {
-            JOptionPane.showMessageDialog(null, "La enfermera no puede ser nula", 
+        try {
+            // Validaciones existentes...
+            if (enfermera.getIdentificacion() == null || enfermera.getIdentificacion().trim().isEmpty()) {
+                throw new IllegalArgumentException("La cédula no puede estar vacía");
+            }
+            
+            if (!puedeAgregarEnfermera(enfermera.getTurno())) {
+                throw new IllegalArgumentException("No se puede agregar más enfermeras. Límite alcanzado.");
+            }
+            
+            if (existeEnfermeraConCedula(enfermera.getIdentificacion())) {
+                throw new IllegalArgumentException("Ya existe una enfermera con esta cédula: " + enfermera.getIdentificacion());
+            }
+
+            // Generar credenciales
+            List<Usuario> usuariosExistentes = obtenerTodosUsuarios();
+            String usuario = generarUsuarioUnico(enfermera.getPrimerNombre(), enfermera.getPrimerApellido(), usuariosExistentes);
+            String contrasena = generarContrasena();
+            
+            // Crear y guardar usuario
+            Usuario nuevoUsuario = new Usuario(usuario, contrasena, Rol.ENFERMERA);
+            guardarUsuario(nuevoUsuario);
+            
+            // Asignar credenciales a la enfermera
+            enfermera.setUsuario(usuario);
+            enfermera.setContrasena(contrasena);
+
+            // Manejar la imagen
+            if (imagen != null && imagen.exists()) {
+                String nombreImagen = enfermera.getIdentificacion() + "_" + imagen.getName();
+                String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+                Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+                enfermera.setRutaImagen(rutaImagenFinal);
+            }
+
+            List<Enfermera> enfermeras = obtenerEnfermeras();
+            enfermeras.add(enfermera);
+            guardarListaEnfermeras(enfermeras);
+
+            return true;
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al guardar la enfermera: " + e.getMessage(), 
                 "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-
-        if (existeEnfermeraConCedula(enfermera.getIdentificacion())) {
-            JOptionPane.showMessageDialog(null, "Ya existe una enfermera con esta cédula: " + enfermera.getIdentificacion(), 
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        if (!puedeAgregarEnfermera(enfermera.getTurno())) {
-            JOptionPane.showMessageDialog(null, "No se puede agregar más enfermeras al turno " + enfermera.getTurno() + 
-                ". Máximo 2 por turno y 4 en total.", "Límite alcanzado", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-
-        // Manejar la imagen
-        if (imagen != null && imagen.exists()) {
-            String nombreImagen = enfermera.getIdentificacion() + "_" + imagen.getName();
-            String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-            Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
-            enfermera.setRutaImagen(rutaImagenFinal);
-        }
-        
-        
-
-
-        List<Enfermera> enfermeras = obtenerEnfermeras();
-        enfermeras.add(enfermera);
-        guardarListaEnfermeras(enfermeras);
-
-        return true;
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(null, "Error al guardar la enfermera: " + e.getMessage(), 
-            "Error", JOptionPane.ERROR_MESSAGE);
-        return false;
+    
     }
-}
-
     
    public List<Enfermera> obtenerEnfermeras() {
     List<Enfermera> enfermeras = new ArrayList<>();
@@ -122,41 +203,26 @@ public class EnfermeraDAO {
 
     try {
         if (!archivo.exists() || archivo.length() == 0) {
-            // Si el archivo no existe o está vacío, crea uno con estructura básica
             guardarListaEnfermeras(new ArrayList<>());
             return enfermeras;
         }
 
-        // Leer el archivo con manejo de errores mejorado
         String contenido = new String(Files.readAllBytes(archivo.toPath()));
         
-        // Verificar si el contenido es un JSON válido
         if (contenido.trim().isEmpty()) {
             guardarListaEnfermeras(new ArrayList<>());
             return enfermeras;
         }
 
         try {
-            Type tipoLista = new TypeToken<Map<String, List<Enfermera>>>() {}.getType();
-            Map<String, List<Enfermera>> datos = gson.fromJson(contenido, tipoLista);
+            JsonObject jsonObject = JsonParser.parseString(contenido).getAsJsonObject();
+            JsonArray enfermerasArray = jsonObject.getAsJsonArray("enfermeras");
             
-            if (datos != null && datos.containsKey("enfermeras")) {
-                return datos.get("enfermeras");
-            }
+            Type tipoLista = new TypeToken<List<Enfermera>>() {}.getType();
+            return gson.fromJson(enfermerasArray, tipoLista);
         } catch (JsonSyntaxException e) {
-            // Si falla, intentar leer como array directo (para compatibilidad)
-            try {
-                Type tipoListaDirecta = new TypeToken<List<Enfermera>>() {}.getType();
-                List<Enfermera> listaDirecta = gson.fromJson(contenido, tipoListaDirecta);
-                if (listaDirecta != null) {
-                    // Migrar a nuevo formato
-                    guardarListaEnfermeras(listaDirecta);
-                    return listaDirecta;
-                }
-            } catch (JsonSyntaxException e2) {
-                System.err.println("Formato JSON inválido. Creando nuevo archivo.");
-                guardarListaEnfermeras(new ArrayList<>());
-            }
+            System.err.println("Formato JSON inválido. Creando nuevo archivo.");
+            guardarListaEnfermeras(new ArrayList<>());
         }
     } catch (IOException e) {
         JOptionPane.showMessageDialog(null, 
@@ -202,9 +268,16 @@ public class EnfermeraDAO {
     public boolean eliminarEnfermera(String cedula) {
         try {
             List<Enfermera> enfermeras = obtenerEnfermeras();
-            boolean removido = enfermeras.removeIf(e -> e.getIdentificacion().equals(cedula));
+            Optional<Enfermera> enfermeraAEliminar = enfermeras.stream()
+                .filter(e -> e.getIdentificacion().equals(cedula))
+                .findFirst();
             
-            if (removido) {
+            if (enfermeraAEliminar.isPresent()) {
+                // Eliminar usuario asociado
+                eliminarUsuario(enfermeraAEliminar.get().getUsuario());
+                
+                // Eliminar enfermera
+                enfermeras.removeIf(e -> e.getIdentificacion().equals(cedula));
                 guardarListaEnfermeras(enfermeras);
                 return true;
             }
