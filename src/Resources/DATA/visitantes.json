@@ -1,30 +1,3 @@
 [
-  {
-    "relacionConPreso": "Hermano/Hermana",
-    "fotoPath": "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\Images\\visitante_1.jpg",
-    "email": "Lucas123@gmail.com",
-    "id": 1,
-    "primerNombre": "Lucas",
-    "segundoNombre": "Andres",
-    "primerApellido": "Crespo",
-    "segundoApellido": "Gomez",
-    "edad": 26,
-    "sexo": "Masculino",
-    "nacionalidad": "Colombiana",
-    "identificacion": "23456334566"
-  },
-  {
-    "relacionConPreso": "Amigo/Amiga",
-    "fotoPath": "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\Images\\visitante_2.jpg",
-    "email": "Maria123@gmail.com",
-    "id": 2,
-    "primerNombre": "Maria",
-    "segundoNombre": "",
-    "primerApellido": "Torres",
-    "segundoApellido": "Tous",
-    "edad": 30,
-    "sexo": "Femenino",
-    "nacionalidad": "Colombiana",
-    "identificacion": "6226263354"
-  }
+
 ]

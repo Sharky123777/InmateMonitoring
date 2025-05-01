@@ -1,5 +1,6 @@
 package DAO;
 
+import Model.Visita;
 import Model.Visitante;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -9,11 +10,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Writer;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class VisitanteDAO {
 
@@ -63,7 +66,7 @@ public class VisitanteDAO {
         List<Visitante> visitantes = cargarTodos();
 
         if (visitante.getId() == 0) {
-            int nuevoId = obtenerProximoId(visitantes); 
+            int nuevoId = obtenerProximoId(visitantes);
             visitante.setId(nuevoId);
         }
 
@@ -87,7 +90,7 @@ public class VisitanteDAO {
 
         boolean existe = false;
         for (int i = 0; i < visitantes.size(); i++) {
-            if (visitantes.get(i).getId() == visitante.getId()) { 
+            if (visitantes.get(i).getId() == visitante.getId()) {
                 visitantes.set(i, visitante);
                 existe = true;
                 break;
@@ -150,4 +153,175 @@ public class VisitanteDAO {
         }
     }
 
+    public boolean modificarDatosVisitante(String identificacion,
+            String nuevoPrimerNombre,
+            String nuevoSegundoNombre,
+            String nuevoPrimerApellido,
+            String nuevoSegundoApellido,
+            int nuevaEdad,
+            String nuevoSexo,
+            String nuevaRelacionConPreso,
+            File nuevaImagen) {
+        List<Visitante> visitantes = cargarTodos();
+        boolean encontrado = false;
+
+        for (Visitante visitante : visitantes) {
+            if (visitante.getIdentificacion().equals(identificacion)) {
+                encontrado = true;
+
+                if (nuevoPrimerNombre != null && !nuevoPrimerNombre.isEmpty()) {
+                    visitante.setPrimerNombre(nuevoPrimerNombre);
+                }
+                if (nuevoSegundoNombre != null) {
+                    visitante.setSegundoNombre(nuevoSegundoNombre);
+                }
+                if (nuevoPrimerApellido != null && !nuevoPrimerApellido.isEmpty()) {
+                    visitante.setPrimerApellido(nuevoPrimerApellido);
+                }
+                if (nuevoSegundoApellido != null) {
+                    visitante.setSegundoApellido(nuevoSegundoApellido);
+                }
+                if (nuevaEdad > 0) {
+                    visitante.setEdad(nuevaEdad);
+                }
+                if (nuevoSexo != null && !nuevoSexo.isEmpty()) {
+                    visitante.setSexo(nuevoSexo);
+                }
+                if (nuevaRelacionConPreso != null && !nuevaRelacionConPreso.isEmpty()) {
+                    visitante.setRelacionConPreso(nuevaRelacionConPreso);
+                }
+
+                if (nuevaImagen != null) {
+                    try {
+                        String extension = getExtension(nuevaImagen.getName());
+                        String nombreArchivo = "visitante_" + visitante.getId() + extension;
+                        String rutaDestino = IMAGES_DIR + nombreArchivo;
+
+                        new File(IMAGES_DIR).mkdirs();
+                        Files.copy(nuevaImagen.toPath(),
+                                new File(rutaDestino).toPath(),
+                                StandardCopyOption.REPLACE_EXISTING);
+
+                        visitante.setFotoPath(rutaDestino);
+                    } catch (IOException e) {
+                        System.err.println("Error al actualizar imagen: " + e.getMessage());
+                        return false;
+                    }
+                }
+
+                break;
+            }
+        }
+
+        if (!encontrado) {
+            return false;
+        }
+
+        try {
+            guardarTodos(visitantes);
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error al guardar cambios en visitantes: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean actualizarVisitante(String identificacionOriginal, Visitante visitanteActualizado, File nuevaImagen) {
+        List<Visitante> visitantes = cargarTodos();
+        boolean encontrado = false;
+
+        for (int i = 0; i < visitantes.size(); i++) {
+            if (visitantes.get(i).getIdentificacion().equals(identificacionOriginal)) {
+                encontrado = true;
+
+                if (nuevaImagen != null) {
+                    String nuevaRutaImagen = guardarImagenVisitante(nuevaImagen, visitanteActualizado.getIdentificacion());
+                    visitanteActualizado.setFotoPath(nuevaRutaImagen);
+                } else {
+                    visitanteActualizado.setFotoPath(visitantes.get(i).getFotoPath());
+                }
+
+                visitantes.set(i, visitanteActualizado);
+                break;
+            }
+        }
+
+        if (!encontrado) {
+            JOptionPane.showMessageDialog(null,
+                    "Visitante no encontrado: " + identificacionOriginal,
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return guardarCambios(visitantes);
+    }
+
+    public Visitante modificarDatosVisitanteYDevolver(String identificacion,
+            String primerNombre, String segundoNombre, String primerApellido,
+            String segundoApellido, int edad, String sexo, String relacion,
+            File imagen) {
+
+        List<Visitante> visitantes = cargarTodos();
+
+        for (Visitante visitante : visitantes) {
+            if (visitante.getIdentificacion().equals(identificacion)) {
+                // Actualizar campos
+                if (primerNombre != null) {
+                    visitante.setPrimerNombre(primerNombre);
+                }
+                if (segundoNombre != null) {
+                    visitante.setSegundoNombre(segundoNombre);
+                }
+                if (primerApellido != null) {
+                    visitante.setPrimerApellido(primerApellido);
+                }
+                if (segundoApellido != null) {
+                    visitante.setSegundoApellido(segundoApellido);
+                }
+                visitante.setEdad(edad);
+                if (sexo != null) {
+                    visitante.setSexo(sexo);
+                }
+                if (relacion != null) {
+                    visitante.setRelacionConPreso(relacion);
+                }
+
+                if (imagen != null) {
+                    String nuevaRuta = guardarImagenVisitante(imagen, identificacion);
+                    visitante.setFotoPath(nuevaRuta);
+                }
+
+                if (guardarCambios(visitantes)) {
+                    return visitante;
+                }
+                return null;
+            }
+        }
+        return null;
+    }
+
+    private String guardarImagenVisitante(File imagen, String identificacion) {
+        try {
+            String extension = imagen.getName().substring(imagen.getName().lastIndexOf("."));
+            String nombreArchivo = "visitante_" + identificacion + extension;
+            String rutaDestino = IMAGES_DIR + nombreArchivo;
+
+            new File(IMAGES_DIR).mkdirs();
+            Files.copy(imagen.toPath(), new File(rutaDestino).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            return rutaDestino;
+        } catch (IOException e) {
+            System.err.println("Error al guardar imagen del visitante: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private boolean guardarCambios(List<?> lista) {
+        try (Writer writer = new FileWriter(JSON_FILE)) {
+            gson.toJson(lista, writer);
+            return true;
+        } catch (IOException e) {
+            System.err.println("Error al guardar cambios: " + e.getMessage());
+            return false;
+        }
+    }
 }

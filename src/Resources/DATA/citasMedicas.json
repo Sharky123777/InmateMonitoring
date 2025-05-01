@@ -24,6 +24,7 @@
       "peso": 99.0,
       "delitos": [
         {
+          "id": 0,
           "codigo": 131,
           "nombre": "Omisión de socorro",
           "articuloLey": "Artículo 131",
@@ -32,6 +33,7 @@
           "fechaComision": "2028-04-05"
         },
         {
+          "id": 0,
           "codigo": 246,
           "nombre": "Estafa",
           "articuloLey": "Artículo 246",
@@ -40,6 +42,7 @@
           "fechaComision": "2025-04-01"
         },
         {
+          "id": 0,
           "codigo": 189,
           "nombre": "Violación de cerraduras o sellos",
           "articuloLey": "Artículo 189",
@@ -48,6 +51,7 @@
           "fechaComision": "2023-04-03"
         },
         {
+          "id": 0,
           "codigo": 365,
           "nombre": "Porte ilegal de armas",
           "articuloLey": "Artículo 365",
@@ -56,6 +60,7 @@
           "fechaComision": "2024-04-16"
         },
         {
+          "id": 0,
           "codigo": 289,
           "nombre": "Falsedad en documento privado",
           "articuloLey": "Artículo 289",
@@ -64,6 +69,7 @@
           "fechaComision": "2020-04-09"
         },
         {
+          "id": 0,
           "codigo": 319,
           "nombre": "Contrabando",
           "articuloLey": "Artículo 319 - Contrabando",
@@ -79,6 +85,7 @@
         "estado": "Activo",
         "delitos": [
           {
+            "id": 0,
             "codigo": 131,
             "nombre": "Omisión de socorro",
             "articuloLey": "Artículo 131",
@@ -87,6 +94,7 @@
             "fechaComision": "2028-04-05"
           },
           {
+            "id": 0,
             "codigo": 246,
             "nombre": "Estafa",
             "articuloLey": "Artículo 246",
@@ -95,6 +103,7 @@
             "fechaComision": "2025-04-01"
           },
           {
+            "id": 0,
             "codigo": 189,
             "nombre": "Violación de cerraduras o sellos",
             "articuloLey": "Artículo 189",
@@ -103,6 +112,7 @@
             "fechaComision": "2023-04-03"
           },
           {
+            "id": 0,
             "codigo": 365,
             "nombre": "Porte ilegal de armas",
             "articuloLey": "Artículo 365",
@@ -111,6 +121,7 @@
             "fechaComision": "2024-04-16"
           },
           {
+            "id": 0,
             "codigo": 289,
             "nombre": "Falsedad en documento privado",
             "articuloLey": "Artículo 289",
@@ -119,6 +130,7 @@
             "fechaComision": "2020-04-09"
           },
           {
+            "id": 0,
             "codigo": 319,
             "nombre": "Contrabando",
             "articuloLey": "Artículo 319 - Contrabando",
@@ -133,12 +145,6 @@
         "actividades": [],
         "observacionesConducta": "Ninguna",
         "nivelRiesgo": "Riesgo medio"
-      },
-      "sentencia": {
-        "años": 4,
-        "meses": 2,
-        "fechaIngreso": "2025-04-09",
-        "fechaSalidaCalculada": "2029-06-09"
       },
       "nivelDeSeguridad": "Medio",
       "seccionAsignada": "Sección A",
@@ -158,6 +164,79 @@
       "sexo": "M",
       "nacionalidad": "Canadiense",
       "identificacion": "12345678"
+    }
+  },
+  {
+    "id": 2,
+    "fecha": "2026-04-10",
+    "hora": "08:20",
+    "motivo": "Le duele la cabeza",
+    "guardia": {
+      "correo": "@",
+      "turno": "Diurno",
+      "fechaInicioContrato": "2025-04-18",
+      "fechaFinContrato": "2039-04-22",
+      "rutaImagen": "src/Resources/imagenes_guardias/01027421_Captura de pantalla 2024-03-06 151101.png",
+      "cargo": "Oficial",
+      "primerNombre": "dadad",
+      "segundoNombre": "",
+      "primerApellido": "cccccccc",
+      "segundoApellido": "cccpo",
+      "edad": 53,
+      "sexo": "Femenino",
+      "nacionalidad": "qeqeqw",
+      "identificacion": "01027421"
+    },
+    "preso": {
+      "estatura": 1.7,
+      "peso": 89.0,
+      "delitos": [],
+      "expediente": {
+        "codigoExpediente": "EXP-QSLY-HPC0",
+        "numeroRegistro": "REG-2025-5274",
+        "fechaApertura": "2025-04-25",
+        "estado": "Activo",
+        "delitos": [],
+        "juzgado": "Por determinar",
+        "totalVisitas": 0,
+        "nivelAdaptacion": "Por evaluar",
+        "actividades": [],
+        "observacionesConducta": "Ninguna",
+        "nivelRiesgo": "Riesgo medio"
+      },
+      "nivelDeSeguridad": "Alto",
+      "seccionAsignada": "Sección C",
+      "condicion": "En espera",
+      "celdaAsignada": "CELD-52",
+      "enAislamiento": false,
+      "nivelDeRiesgo": "Riesgo medio",
+      "numeroDeVisitas": 0,
+      "grupoSanguineo": "A-",
+      "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_1.jpg",
+      "id": 1,
+      "primerNombre": "Luz",
+      "segundoNombre": "Dari",
+      "primerApellido": "Crespo",
+      "segundoApellido": "Gomez",
+      "edad": 20,
+      "sexo": "F",
+      "nacionalidad": "Laosiana",
+      "identificacion": "001122334"
+    },
+    "enfermera": {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-04-24",
+      "fechaFinContrato": "2025-04-29",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/234223232_1745541967197.png",
+      "correo": "@qqqqq.com",
+      "primerNombre": "yyyyyyy",
+      "segundoNombre": "xxxxxxxxxxkk",
+      "primerApellido": "xzzc",
+      "segundoApellido": "yyyi",
+      "edad": 45,
+      "sexo": "Femenino",
+      "nacionalidad": "hdueduehd",
+      "identificacion": "122333000"
     }
   }
 ]

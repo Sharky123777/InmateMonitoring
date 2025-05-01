@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class VisitaDAO {
 
@@ -96,6 +97,122 @@ public class VisitaDAO {
             gson.toJson(visitas, writer);
         } catch (IOException e) {
             System.err.println("Error al guardar en archivo JSON: " + e.getMessage());
+        }
+    }
+
+    public boolean actualizarVisita(int idVisita, LocalDate nuevaFecha, LocalTime nuevaHora,
+            String nuevaDuracion, String nuevoTipo, String nuevoLugar) {
+        List<Visita> visitas = cargarTodas();
+        boolean encontrada = false;
+
+        for (Visita visita : visitas) {
+            if (visita.getId() == idVisita) {
+                encontrada = true;
+
+                if (nuevaFecha != null) {
+                    visita.setFechaVisita(nuevaFecha);
+                }
+                if (nuevaHora != null) {
+                    visita.setHoraVisita(nuevaHora);
+                }
+                if (nuevaDuracion != null) {
+                    visita.setDuracionVisitaEnHoras(nuevaDuracion);
+                }
+                if (nuevoTipo != null) {
+                    visita.setTipoVisita(nuevoTipo);
+                }
+                if (nuevoLugar != null) {
+                    visita.setLugarVisita(nuevoLugar);
+                }
+
+                break;
+            }
+        }
+
+        if (!encontrada) {
+            return false;
+        }
+
+        try {
+            guardarTodas(visitas);
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error al guardar cambios en visitas: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public Visita buscarVisitaPorId(int id) {
+        List<Visita> visitas = cargarTodas();
+        for (Visita visita : visitas) {
+            if (visita.getId() == id) {
+                return visita;
+            }
+        }
+        return null;
+    }
+
+    public boolean actualizarVisita(int idVisita, Visita visitaActualizada) {
+        List<Visita> visitas = cargarTodas();
+        boolean encontrado = false;
+
+        for (int i = 0; i < visitas.size(); i++) {
+            if (visitas.get(i).getId() == idVisita) {
+                visitas.set(i, visitaActualizada);
+                encontrado = true;
+                break;
+            }
+        }
+
+        if (!encontrado) {
+            JOptionPane.showMessageDialog(null,
+                    "Visita no encontrada con ID: " + idVisita,
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return guardarCambios(visitas);
+    }
+
+    public Visita modificarDatosVisitanteYDevolver(int id, LocalDate fecha, LocalTime hora,
+            String duracion, String tipo, String lugar) {
+
+        List<Visita> visitas = cargarTodas();
+
+        for (Visita visita : visitas) {
+            if (visita.getId() == id) {
+                if (fecha != null) {
+                    visita.setFechaVisita(fecha);
+                }
+                if (hora != null) {
+                    visita.setHoraVisita(hora);
+                }
+                if (duracion != null) {
+                    visita.setDuracionVisitaEnHoras(duracion);
+                }
+                if (tipo != null) {
+                    visita.setTipoVisita(tipo);
+                }
+                if (lugar != null) {
+                    visita.setLugarVisita(lugar);
+                }
+
+                if (guardarCambios(visitas)) {
+                    return visita;
+                }
+                return null;
+            }
+        }
+        return null;
+    }
+
+    private boolean guardarCambios(List<?> lista) {
+        try (Writer writer = new FileWriter(JSON_FILE)) {
+            gson.toJson(lista, writer);
+            return true;
+        } catch (IOException e) {
+            System.err.println("Error al guardar cambios: " + e.getMessage());
+            return false;
         }
     }
 }

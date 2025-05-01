@@ -3,10 +3,12 @@ package Controller;
 import DAO.PersonalDeControlDAO;
 import View.Director;
 import Model.PersonalDeControl;
+import java.awt.Image;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 public class PersonalDeControlController {
@@ -108,6 +110,33 @@ public class PersonalDeControlController {
         } catch (Exception e) {
             e.printStackTrace();
             mostrarError("Error inesperado: " + e.getMessage());
+        }
+    }
+
+    public void mostrarDatosPersonalDeControl(View.PersonalDeControl view, String identificacion) {
+        Model.PersonalDeControl personal = personalDeControlDAO.buscarPorIdentificacion(identificacion);
+
+        if (personal != null) {
+            view.getNombreCompletoPDC().setText(personal.getNombreCompleto());
+            view.getIdentificacionPDC().setText(personal.getIdentificacion());
+            view.getEdadPDC().setText(String.valueOf(personal.getEdad()));
+            view.getNacionalidadPDC().setText(personal.getNacionalidad());
+            view.getEmailPDC().setText(personal.getCorreo());
+            view.getSexoPDC().setText(personal.getSexo());
+            view.getFechaInicioContratoPDC().setText(personal.getFechaInicioContrato().toString());
+            view.getFechaFinContratoPDC().setText(personal.getFechaFinContrato().toString());
+            view.getTurnoPDC().setText(personal.getTurno());
+
+            ImageIcon imagen = new ImageIcon(personal.getFotoPath());
+            Image imgEscalada = imagen.getImage().getScaledInstance(
+                    view.getFotoPDC().getWidth(),
+                    view.getFotoPDC().getHeight(),
+                    Image.SCALE_SMOOTH
+            );
+            view.getFotoPDC().setIcon(new ImageIcon(imgEscalada));
+
+        } else {
+            JOptionPane.showMessageDialog(null, "No se encontró personal con esa identificación.", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }
 
