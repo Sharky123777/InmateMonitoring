@@ -1,21 +1,26 @@
 package Model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class CitaMedica {
 
     private int id;
     private LocalDate fecha;
+    private LocalTime hora;
     private String motivo;
     private Guardia guardia;
     private Preso preso;
+    private Enfermera enfermera;
 
-    public CitaMedica(int id, LocalDate fecha, String motivo, Guardia guardia, Preso preso) {
+    public CitaMedica(int id, LocalDate fecha, LocalTime hora, String motivo, Guardia guardia, Preso preso, Enfermera enfermera) {
         this.id = id;
         this.fecha = fecha;
+        this.hora = hora;
         this.motivo = motivo;
         this.guardia = guardia;
         this.preso = preso;
+        this.enfermera = enfermera;
     }
 
     public int getId() {
@@ -32,6 +37,14 @@ public class CitaMedica {
 
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
+    }
+
+    public LocalTime getHora() {
+        return hora;
+    }
+
+    public void setHora(LocalTime hora) {
+        this.hora = hora;
     }
 
     public String getMotivo() {
@@ -58,4 +71,11 @@ public class CitaMedica {
         this.preso = preso;
     }
 
+    public Enfermera getEnfermera() {
+        return enfermera;
+    }
+
+    public void setEnfermera(Enfermera enfermera) {
+        this.enfermera = enfermera;
+    }
 }

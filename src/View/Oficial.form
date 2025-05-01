@@ -853,6 +853,29 @@
                 </Constraint>
               </Constraints>
             </Component>
+            <Component class="javax.swing.JComboBox" name="JcomboSeccion1">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="4">
+                    <StringItem index="0" value="&lt; Seleccionar secci&#xf3;n &gt;"/>
+                    <StringItem index="1" value="Secci&#xf3;n A"/>
+                    <StringItem index="2" value="Secci&#xf3;n B"/>
+                    <StringItem index="3" value="Secci&#xf3;n C"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JcomboSeccion1ActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                  <AbsoluteConstraints x="60" y="70" width="170" height="30"/>
+                </Constraint>
+              </Constraints>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="PanelListaGuardias">
@@ -880,19 +903,6 @@
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints x="140" y="30" width="670" height="30"/>
-                </Constraint>
-              </Constraints>
-            </Component>
-            <Component class="javax.swing.JButton" name="BotonBuscarGuardia">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Buscar guardia por identificacion"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BotonBuscarGuardiaActionPerformed"/>
-              </Events>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="830" y="30" width="-1" height="30"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -1004,6 +1014,19 @@
                 </Component>
               </SubComponents>
             </Container>
+            <Component class="javax.swing.JButton" name="BotonBuscarGuardia1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Buscar guardia por identificacion"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BotonBuscarGuardia1ActionPerformed"/>
+              </Events>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                  <AbsoluteConstraints x="820" y="30" width="210" height="30"/>
+                </Constraint>
+              </Constraints>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="PanelAgendarCita">
@@ -1073,7 +1096,7 @@
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="40" y="180" width="-1" height="-1"/>
+                      <AbsoluteConstraints x="40" y="160" width="-1" height="-1"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -1083,7 +1106,7 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="40" y="210" width="380" height="30"/>
+                      <AbsoluteConstraints x="40" y="190" width="380" height="30"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -1141,7 +1164,7 @@
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="40" y="280" width="-1" height="-1"/>
+                      <AbsoluteConstraints x="40" y="250" width="-1" height="-1"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -1174,7 +1197,7 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="400" y="400" width="190" height="30"/>
+                      <AbsoluteConstraints x="400" y="420" width="190" height="30"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -1188,7 +1211,77 @@
                 <Component class="com.toedter.calendar.JDateChooser" name="FechaCita">
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="40" y="310" width="380" height="30"/>
+                      <AbsoluteConstraints x="40" y="280" width="380" height="30"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
+                <Component class="javax.swing.JComboBox" name="JcomboHoraCita">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="38">
+                        <StringItem index="0" value="&lt; Seleccionar &gt;"/>
+                        <StringItem index="1" value="08:00"/>
+                        <StringItem index="2" value="08:20"/>
+                        <StringItem index="3" value="08:40"/>
+                        <StringItem index="4" value="09:00"/>
+                        <StringItem index="5" value="09:20"/>
+                        <StringItem index="6" value="09:40"/>
+                        <StringItem index="7" value="10:00"/>
+                        <StringItem index="8" value="10:20"/>
+                        <StringItem index="9" value="10:40"/>
+                        <StringItem index="10" value="11:00"/>
+                        <StringItem index="11" value="11:20"/>
+                        <StringItem index="12" value="11:40"/>
+                        <StringItem index="13" value="12:00"/>
+                        <StringItem index="14" value="12:20"/>
+                        <StringItem index="15" value="12:40"/>
+                        <StringItem index="16" value="13:00"/>
+                        <StringItem index="17" value="13:20"/>
+                        <StringItem index="18" value="13:40"/>
+                        <StringItem index="19" value="14:00"/>
+                        <StringItem index="20" value="14:20"/>
+                        <StringItem index="21" value="14:40"/>
+                        <StringItem index="22" value="15:00"/>
+                        <StringItem index="23" value="15:20"/>
+                        <StringItem index="24" value="15:40"/>
+                        <StringItem index="25" value="16:00"/>
+                        <StringItem index="26" value="16:20"/>
+                        <StringItem index="27" value="16:40"/>
+                        <StringItem index="28" value="17:00"/>
+                        <StringItem index="29" value="17:20"/>
+                        <StringItem index="30" value="17:40"/>
+                        <StringItem index="31" value="18:00"/>
+                        <StringItem index="32" value="18:20"/>
+                        <StringItem index="33" value="18:40"/>
+                        <StringItem index="34" value="19:00"/>
+                        <StringItem index="35" value="19:20"/>
+                        <StringItem index="36" value="19:40"/>
+                        <StringItem index="37" value="20:00"/>
+                      </StringArray>
+                    </Property>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                  </AuxValues>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="40" y="360" width="380" height="30"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabel62">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Arial" size="18" style="0"/>
+                    </Property>
+                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="0" green="0" red="0" type="rgb"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Hora de la cita:"/>
+                  </Properties>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="40" y="330" width="-1" height="-1"/>
                     </Constraint>
                   </Constraints>
                 </Component>

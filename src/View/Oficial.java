@@ -1,5 +1,7 @@
 package View;
 
+import Controller.CitaMedicaController;
+import Controller.VisitaController;
 import DAO.CitaMedicaDAO;
 import DAO.GuardiaDAO;
 import DAO.PresoDAO;
@@ -8,6 +10,7 @@ import Model.CitaMedica;
 import Model.Guardia;
 import Model.Preso;
 import Model.Sancion;
+import com.toedter.calendar.JDateChooser;
 import java.awt.AlphaComposite;
 import java.awt.Component;
 import java.awt.Graphics2D;
@@ -25,11 +28,14 @@ import java.util.Date;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -44,9 +50,11 @@ public class Oficial extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         FechaSancion.getDateEditor().setEnabled(false);
         FechaCita.getDateEditor().setEnabled(false);
-        cargarDatosPresoEnTabla();
-        cargarDatosGuardiaEnTabla();
-        configurarTablaImagenesPreso();
+        CitaMedicaController controller = new CitaMedicaController();
+        controller.cargarTodosLosPresos(TablaPresos);
+        controller.configurarTablaImagenes(TablaPresos);
+        controller.cargarTodosLosGuardias(tablaGuardias);
+        controller.configurarTablaImagenes(tablaGuardias);
         InicializarMenu();
         ComboTipoSancion.addActionListener(e -> filtrarSanciones());
 
@@ -188,12 +196,13 @@ public class Oficial extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         TablaPresos = new javax.swing.JTable();
         BotonCargarTodosPresos = new javax.swing.JButton();
+        JcomboSeccion1 = new javax.swing.JComboBox<>();
         PanelListaGuardias = new javax.swing.JPanel();
         BarraDeBusquedaGuardias = new javax.swing.JTextField();
-        BotonBuscarGuardia = new javax.swing.JButton();
         BotonCargarTodosGuardias = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
         tablaGuardias = new javax.swing.JTable();
+        BotonBuscarGuardia1 = new javax.swing.JButton();
         PanelAgendarCita = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel48 = new javax.swing.JLabel();
@@ -208,6 +217,8 @@ public class Oficial extends javax.swing.JFrame {
         botonAgendarCita = new javax.swing.JButton();
         jSeparator10 = new javax.swing.JSeparator();
         FechaCita = new com.toedter.calendar.JDateChooser();
+        JcomboHoraCita = new javax.swing.JComboBox<>();
+        jLabel62 = new javax.swing.JLabel();
         jPanel18 = new javax.swing.JPanel();
         PanelActualizarInformacion = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
@@ -513,6 +524,14 @@ public class Oficial extends javax.swing.JFrame {
         });
         PanelListaPresos.add(BotonCargarTodosPresos, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 70, 170, -1));
 
+        JcomboSeccion1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar sección >", "Sección A", "Sección B", "Sección C" }));
+        JcomboSeccion1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JcomboSeccion1ActionPerformed(evt);
+            }
+        });
+        PanelListaPresos.add(JcomboSeccion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 70, 170, 30));
+
         TabbedOficial.addTab("PRESOS", PanelListaPresos);
 
         PanelListaGuardias.setBackground(new java.awt.Color(255, 255, 255));
@@ -524,14 +543,6 @@ public class Oficial extends javax.swing.JFrame {
             }
         });
         PanelListaGuardias.add(BarraDeBusquedaGuardias, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, 670, 30));
-
-        BotonBuscarGuardia.setText("Buscar guardia por identificacion");
-        BotonBuscarGuardia.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BotonBuscarGuardiaActionPerformed(evt);
-            }
-        });
-        PanelListaGuardias.add(BotonBuscarGuardia, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 30, -1, 30));
 
         BotonCargarTodosGuardias.setText("Cargar todos Los guardias");
         BotonCargarTodosGuardias.addActionListener(new java.awt.event.ActionListener() {
@@ -564,6 +575,14 @@ public class Oficial extends javax.swing.JFrame {
 
         PanelListaGuardias.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 1080, 470));
 
+        BotonBuscarGuardia1.setText("Buscar guardia por identificacion");
+        BotonBuscarGuardia1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonBuscarGuardia1ActionPerformed(evt);
+            }
+        });
+        PanelListaGuardias.add(BotonBuscarGuardia1, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 30, 210, 30));
+
         TabbedOficial.addTab("GUARDIAS", PanelListaGuardias);
 
         PanelAgendarCita.setBackground(new java.awt.Color(255, 255, 255));
@@ -581,14 +600,14 @@ public class Oficial extends javax.swing.JFrame {
         jLabel51.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel51.setForeground(new java.awt.Color(0, 0, 0));
         jLabel51.setText("Identificación del guardia asignado:");
-        jPanel2.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, -1, -1));
+        jPanel2.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, -1, -1));
 
         IdentificacionGuardia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 IdentificacionGuardiaActionPerformed(evt);
             }
         });
-        jPanel2.add(IdentificacionGuardia, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 380, 30));
+        jPanel2.add(IdentificacionGuardia, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 380, 30));
 
         jLabel52.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel52.setForeground(new java.awt.Color(0, 0, 0));
@@ -610,7 +629,7 @@ public class Oficial extends javax.swing.JFrame {
         jLabel54.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel54.setForeground(new java.awt.Color(0, 0, 0));
         jLabel54.setText("Fecha de la cita:");
-        jPanel2.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, -1, -1));
+        jPanel2.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, -1, -1));
 
         MotivoCita.setColumns(20);
         MotivoCita.setRows(5);
@@ -624,9 +643,17 @@ public class Oficial extends javax.swing.JFrame {
                 botonAgendarCitaActionPerformed(evt);
             }
         });
-        jPanel2.add(botonAgendarCita, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 400, 190, 30));
+        jPanel2.add(botonAgendarCita, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 420, 190, 30));
         jPanel2.add(jSeparator10, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 50, 390, 20));
-        jPanel2.add(FechaCita, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 380, 30));
+        jPanel2.add(FechaCita, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 380, 30));
+
+        JcomboHoraCita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "08:00", "08:20", "08:40", "09:00", "09:20", "09:40", "10:00", "10:20", "10:40", "11:00", "11:20", "11:40", "12:00", "12:20", "12:40", "13:00", "13:20", "13:40", "14:00", "14:20", "14:40", "15:00", "15:20", "15:40", "16:00", "16:20", "16:40", "17:00", "17:20", "17:40", "18:00", "18:20", "18:40", "19:00", "19:20", "19:40", "20:00" }));
+        jPanel2.add(JcomboHoraCita, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 380, 30));
+
+        jLabel62.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel62.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel62.setText("Hora de la cita:");
+        jPanel2.add(jLabel62, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, -1));
 
         PanelAgendarCita.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, 980, 490));
 
@@ -912,144 +939,6 @@ public class Oficial extends javax.swing.JFrame {
     }//GEN-LAST:event_SubirNuevaFotoPerfilActionPerformed
     }
 
-    private void cargarDatosPresoEnTabla() {
-        DefaultTableModel modelo = (DefaultTableModel) TablaPresos.getModel();
-        modelo.setRowCount(0);
-
-        PresoDAO presoDAO = new PresoDAO();
-        List<Preso> presos = presoDAO.cargarTodos();
-
-        for (Preso preso : presos) {
-            ImageIcon foto = null;
-            if (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty()) {
-                foto = cargarImagenPreso(preso.getFotoPath());
-            } else {
-                foto = null;
-            }
-
-            modelo.addRow(new Object[]{
-                foto,
-                preso.getId(),
-                preso.getNombreCompleto(),
-                preso.getEdad(),
-                preso.getIdentificacion(),
-                preso.getNacionalidad(),
-                preso.getCeldaAsignada(),
-                preso.getSeccionAsignada()
-
-            });
-        }
-
-        TablaPresos.revalidate();
-        TablaPresos.repaint();
-    }
-
-    private ImageIcon cargarImagenPreso(String path) {
-        if (path == null || !new File(path).exists()) {
-            return null;
-        }
-
-        try {
-            Image img = ImageIO.read(new File(path));
-            return new ImageIcon(img.getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private void configurarTablaImagenesPreso() {
-        TablaPresos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value,
-                    boolean isSelected, boolean hasFocus, int row, int column) {
-
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value,
-                        isSelected, hasFocus, row, column);
-
-                if (column == 0 && value instanceof ImageIcon) {
-                    ImageIcon originalIcon = (ImageIcon) value;
-                    Image img = originalIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-                    ImageIcon roundedIcon = new ImageIcon(createRoundedImage(img));
-                    label.setIcon(roundedIcon);
-                    label.setText("");
-                } else {
-                    label.setIcon(null);
-                }
-                label.setHorizontalAlignment(JLabel.CENTER);
-                return label;
-            }
-        });
-
-        TablaPresos.setRowHeight(65);
-        TablaPresos.getColumnModel().getColumn(0).setPreferredWidth(70);
-    }
-
-    private Image createRoundedImage(Image image) {
-        int width = image.getWidth(null);
-        int height = image.getHeight(null);
-
-        BufferedImage output = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = output.createGraphics();
-
-        output = g2.getDeviceConfiguration().createCompatibleImage(width, height, Transparency.TRANSLUCENT);
-        g2.dispose();
-        g2 = output.createGraphics();
-
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.fillRoundRect(0, 0, width, height, 20, 20);
-        g2.setComposite(AlphaComposite.SrcIn);
-        g2.drawImage(image, 0, 0, null);
-        g2.dispose();
-
-        return output;
-    }
-
-    private void cargarDatosGuardiaEnTabla() {
-        DefaultTableModel modelo = (DefaultTableModel) tablaGuardias.getModel();
-        modelo.setRowCount(0);
-
-        GuardiaDAO guardiaDAO = new GuardiaDAO();
-        List<Guardia> guardias = guardiaDAO.obtenerGuardias();
-
-        for (Guardia guardia : guardias) {
-            ImageIcon foto = null;
-            if (guardia.getRutaImagen() != null && !guardia.getRutaImagen().isEmpty()) {
-                foto = cargarImagenGuardia(guardia.getRutaImagen());
-
-            } else {
-                foto = null;
-            }
-
-            modelo.addRow(new Object[]{
-                foto,
-                guardia.getNombreCompleto(),
-                guardia.getEdad(),
-                guardia.getIdentificacion(),
-                guardia.getNacionalidad(),
-                guardia.getCorreo(),
-                guardia.getTurno(),
-                guardia.getCargo(),
-                guardia.getFechaInicioContrato(),
-                guardia.getFechaFinContrato()
-            });
-
-        }
-
-    }
-
-    private ImageIcon cargarImagenGuardia(String path) {
-        if (path == null || !new File(path).exists()) {
-            return null;
-        }
-
-        try {
-            Image img = ImageIO.read(new File(path));
-            return new ImageIcon(img.getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
 
     private void IdentificacionPresoSancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IdentificacionPresoSancionActionPerformed
         // TODO add your handling code here:
@@ -1147,144 +1036,16 @@ public class Oficial extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_BotonAsignarSancionActionPerformed
-    private boolean validarCamposCita() {
-        String identificacionPreso = IdentificacionPresoCita.getText().trim();
-        if (identificacionPreso.isEmpty()) {
-            mostrarError("Debe ingresar la identificación del preso");
-            return false;
-        }
 
-        String identificacionGuardia = IdentificacionGuardia.getText().trim();
-        if (identificacionGuardia.isEmpty()) {
-            mostrarError("Debe ingresar la identificación del guardia");
-            return false;
-        }
-
-        String motivoCita = MotivoCita.getText().trim();
-        if (motivoCita.isEmpty()) {
-            mostrarError("Debe especificar el motivo de la cita");
-            return false;
-        }
-
-        Date fechaSeleccionada = FechaCita.getDate();
-        if (fechaSeleccionada == null) {
-            mostrarError("Debe seleccionar una fecha para la cita");
-            return false;
-        }
-
-        return true;
-    }
-
-    private void limpiarCamposCita() {
-        IdentificacionPresoCita.setText("");
-        IdentificacionGuardia.setText("");
-        MotivoCita.setText("");
-        FechaCita.setDate(null);
-    }
 
     private void botonAgendarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgendarCitaActionPerformed
-        if (!validarCamposCita()) {
-            return;
-
-        }
-
-        String identificacionPresoCita = IdentificacionPresoCita.getText().trim();
-        String identificacionGuardia = IdentificacionGuardia.getText().trim();
-        Date fechaSeleccionada = FechaCita.getDate();
-        String motivoCita = MotivoCita.getText().trim();
-
-        if (identificacionPresoCita.isEmpty() || identificacionGuardia.isEmpty() || motivoCita.isEmpty() || fechaSeleccionada == null) {
-            mostrarError("Debe completar todos los campos.");
-            return;
-        }
-
-        if (fechaSeleccionada == null) {
-            mostrarError("Debe seleccionar una fecha");
-            return;
-        }
-
-        LocalDate fecha = fechaSeleccionada.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-
-        if (fecha.isBefore(LocalDate.now())) {
-            mostrarError("La fecha de la cita no puede ser en el pasado");
-            return;
-        }
-
-        try {
-            Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacionPresoCita);
-            Guardia guardia = new GuardiaDAO().obtenerGuardiaPorCedula(identificacionGuardia);
-
-            if (preso == null) {
-                mostrarError("No se encontró ningún preso con esa identificación");
-                return;
-            }
-
-            if (guardia == null) {
-                mostrarError("No se encontró ningún guardia con esa identificación");
-                return;
-            }
-
-            CitaMedica nuevaCita = new CitaMedica(0, fecha, motivoCita, guardia, preso);
-            new CitaMedicaDAO().guardarCita(nuevaCita);
-
-            JOptionPane.showMessageDialog(this, "La cita se agendó con éxito");
-            limpiarCamposCita();
-
-        } catch (Exception e) {
-            mostrarError("Error al agendar la cita: " + e.getMessage());
-        }
+        CitaMedicaController citaController = new CitaMedicaController();
+        citaController.agendarCita(this);
     }//GEN-LAST:event_botonAgendarCitaActionPerformed
 
     private void ComboTipoSancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboTipoSancionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ComboTipoSancionActionPerformed
-
-    private void BotonBuscarGuardiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonBuscarGuardiaActionPerformed
-        BotonBuscarGuardia.addActionListener(new ActionListener() {
-            @Override
-
-            public void actionPerformed(ActionEvent e) {
-                String idBuscado = BarraDeBusquedaGuardias.getText().trim();
-                if (idBuscado.isEmpty()) {
-                    return;
-                }
-
-                String identificacion = BarraDeBusquedaGuardias.getText();
-                List<Guardia> todos = new GuardiaDAO().obtenerGuardias();
-                DefaultTableModel modelo = (DefaultTableModel) tablaGuardias.getModel();
-                modelo.setRowCount(0);
-
-                for (Guardia guardia : todos) {
-                    if (guardia.getIdentificacion().equalsIgnoreCase(identificacion)) {
-
-                        ImageIcon foto = null;
-                        if (guardia.getRutaImagen() != null && !guardia.getRutaImagen().isEmpty()) {
-                            foto = cargarImagenPreso(guardia.getRutaImagen());
-                        } else {
-                            foto = null;
-                        }
-                        modelo.addRow(new Object[]{
-                            foto,
-                            guardia.getNombreCompleto(),
-                            guardia.getEdad(),
-                            guardia.getIdentificacion(),
-                            guardia.getNacionalidad(),
-                            guardia.getCorreo(),
-                            guardia.getTurno(),
-                            guardia.getCargo(),
-                            guardia.getFechaInicioContrato(),
-                            guardia.getFechaFinContrato()
-
-                        });
-                        break;
-                    } else {
-                        JOptionPane.showMessageDialog(null, "No se encontro ningun guardia con la identificación " + identificacion);
-                    }
-                }
-            }
-        });    }//GEN-LAST:event_BotonBuscarGuardiaActionPerformed
 
     private void BarraDeBusquedaGuardiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BarraDeBusquedaGuardiasActionPerformed
         // TODO add your handling code here:
@@ -1295,114 +1056,32 @@ public class Oficial extends javax.swing.JFrame {
     }//GEN-LAST:event_botonIrPanelActualizarMouseClicked
 
     private void BotonBuscarPresoIdentificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonBuscarPresoIdentificacionActionPerformed
-        BotonBuscarPresoIdentificacion.addActionListener(new ActionListener() {
-            @Override
-
-            public void actionPerformed(ActionEvent e) {
-                String idBuscado = BarraDeBusquedaPreso.getText().trim();
-                if (idBuscado.isEmpty()) {
-                    return;
-                }
-
-                String identificacion = BarraDeBusquedaPreso.getText();
-                List<Preso> todos = new PresoDAO().cargarTodos();
-                DefaultTableModel modelo = (DefaultTableModel) TablaPresos.getModel();
-                modelo.setRowCount(0);
-
-                for (Preso preso : todos) {
-                    if (preso.getIdentificacion().equalsIgnoreCase(identificacion)) {
-
-                        ImageIcon foto = null;
-                        if (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty()) {
-                            foto = cargarImagenPreso(preso.getFotoPath());
-                        } else {
-                            foto = null;
-                        }
-                        modelo.addRow(new Object[]{
-                            foto,
-                            preso.getId(),
-                            preso.getNombreCompleto(),
-                            preso.getEdad(),
-                            preso.getIdentificacion(),
-                            preso.getNacionalidad(),
-                            preso.getCeldaAsignada(),
-                            preso.getSeccionAsignada()
-
-                        });
-                        break;
-                    } else {
-                        JOptionPane.showMessageDialog(null, "No se encontro ningun preso con la identificación " + identificacion);
-                    }
-                }
-            }
-        });
-
+        CitaMedicaController CitaMedicaController = new CitaMedicaController();
+        CitaMedicaController.buscarPresoPorIdentificacion(BarraDeBusquedaPreso.getText().trim(), TablaPresos);
     }//GEN-LAST:event_BotonBuscarPresoIdentificacionActionPerformed
 
     private void BotonCargarTodosPresosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCargarTodosPresosActionPerformed
-        DefaultTableModel modelo = (DefaultTableModel) TablaPresos.getModel();
-        modelo.setRowCount(0);
+        CitaMedicaController CitaMedicaController = new CitaMedicaController();
+        CitaMedicaController.cargarTodosLosPresos(TablaPresos);
 
-        PresoDAO presoDAO = new PresoDAO();
-        List<Preso> presos = presoDAO.cargarTodos();
-
-        for (Preso preso : presos) {
-            ImageIcon foto = null;
-            if (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty()) {
-                foto = cargarImagenPreso(preso.getFotoPath());
-            } else {
-                foto = new ImageIcon(getClass().getResource("/images/default_profile.png"));
-            }
-
-            modelo.addRow(new Object[]{
-                foto,
-                preso.getId(),
-                preso.getNombreCompleto(),
-                preso.getEdad(),
-                preso.getIdentificacion(),
-                preso.getNacionalidad(),
-                preso.getCeldaAsignada(),
-                preso.getSeccionAsignada()
-
-            });
-        }
-
-        TablaPresos.revalidate();
-        TablaPresos.repaint();
      }//GEN-LAST:event_BotonCargarTodosPresosActionPerformed
 
     private void BotonCargarTodosGuardiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCargarTodosGuardiasActionPerformed
-        DefaultTableModel modelo = (DefaultTableModel) tablaGuardias.getModel();
-        modelo.setRowCount(0);
-
-        GuardiaDAO guardiaDAO = new GuardiaDAO();
-        List<Guardia> guardias = guardiaDAO.obtenerGuardias();
-
-        for (Guardia guardia : guardias) {
-            ImageIcon foto = null;
-            if (guardia.getRutaImagen() != null && !guardia.getRutaImagen().isEmpty()) {
-                foto = cargarImagenGuardia(guardia.getRutaImagen());
-
-            } else {
-                foto = null;
-            }
-
-            modelo.addRow(new Object[]{
-                foto,
-                guardia.getNombreCompleto(),
-                guardia.getEdad(),
-                guardia.getIdentificacion(),
-                guardia.getNacionalidad(),
-                guardia.getCorreo(),
-                guardia.getTurno(),
-                guardia.getCargo(),
-                guardia.getFechaInicioContrato(),
-                guardia.getFechaFinContrato()
-
-            });
-
-        }
+        CitaMedicaController CitaMedicaController = new CitaMedicaController();
+        CitaMedicaController.cargarTodosLosGuardias(tablaGuardias);
     }//GEN-LAST:event_BotonCargarTodosGuardiasActionPerformed
+
+    private void JcomboSeccion1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JcomboSeccion1ActionPerformed
+        String seccionSeleccionada = JcomboSeccion1.getSelectedItem().toString();
+        CitaMedicaController citaMedicaController = new CitaMedicaController();
+        citaMedicaController.cargarDatosPresoEnTablaPorSeccion(seccionSeleccionada, TablaPresos);
+
+    }//GEN-LAST:event_JcomboSeccion1ActionPerformed
+
+    private void BotonBuscarGuardia1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonBuscarGuardia1ActionPerformed
+        CitaMedicaController citaMedicaController = new CitaMedicaController();
+        citaMedicaController.buscarGuardiaPorIdentificacion(BarraDeBusquedaGuardias.getText().trim(), tablaGuardias);
+    }//GEN-LAST:event_BotonBuscarGuardia1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1444,7 +1123,7 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JTextField BarraDeBusquedaPreso;
     private javax.swing.JButton BotonActualizarInformacion;
     private javax.swing.JButton BotonAsignarSancion;
-    private javax.swing.JButton BotonBuscarGuardia;
+    private javax.swing.JButton BotonBuscarGuardia1;
     private javax.swing.JButton BotonBuscarPresoIdentificacion;
     private javax.swing.JButton BotonCargarTodosGuardias;
     private javax.swing.JButton BotonCargarTodosPresos;
@@ -1463,6 +1142,8 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JLabel IdentificacionOficial;
     private javax.swing.JTextField IdentificacionPresoCita;
     private javax.swing.JTextField IdentificacionPresoSancion;
+    private javax.swing.JComboBox<String> JcomboHoraCita;
+    private javax.swing.JComboBox<String> JcomboSeccion1;
     private javax.swing.JTextArea MotivoCita;
     private javax.swing.JTextArea MotivoSancion;
     private javax.swing.JLabel NacionalidadOficial;
@@ -1529,6 +1210,7 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel60;
     private javax.swing.JLabel jLabel61;
+    private javax.swing.JLabel jLabel62;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -1568,4 +1250,52 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JPopupMenu ppMenuTablaPresos;
     private javax.swing.JTable tablaGuardias;
     // End of variables declaration//GEN-END:variables
+   public JTextField getIdentificacionPresoCita() {
+        return IdentificacionPresoCita;
+    }
+
+    public JTextField getIdentificacionGuardia() {
+        return IdentificacionGuardia;
+    }
+
+    public JTextArea getMotivoCita() {
+        return MotivoCita;
+    }
+
+    public JDateChooser getFechaCita() {
+        return FechaCita;
+    }
+
+    public JComboBox<String> getComboHoraCita() {
+        return JcomboHoraCita;
+    }
+
+    public JTextField getIdentificacionPresoSancion() {
+        return IdentificacionPresoSancion;
+    }
+
+    public JTextArea getMotivoSancion() {
+        return MotivoSancion;
+    }
+
+    public JComboBox<String> getTipoSancion() {
+        return TipoSancion;
+    }
+
+    public JDateChooser getFechaSancion() {
+        return FechaSancion;
+    }
+
+    public JTable getTablaPresos() {
+        return TablaPresos;
+    }
+
+    public JTable getTablaGuardias() {
+        return tablaGuardias;
+    }
+
+    public JTable getTablaHistorialSanciones() {
+        return TablaHistorialSanciones;
+    }
+
 }

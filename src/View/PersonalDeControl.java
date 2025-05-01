@@ -1116,6 +1116,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private void JcomboSeccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JcomboSeccionActionPerformed
         String seccionSeleccionada = JcomboSeccion.getSelectedItem().toString();
         VisitaController visitaController = new VisitaController();
+        visitaController.cargarDatosPresoEnTablaPorSeccion(seccionSeleccionada, TablaPresos);
     }//GEN-LAST:event_JcomboSeccionActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
