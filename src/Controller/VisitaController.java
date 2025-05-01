@@ -343,6 +343,9 @@ public class VisitaController {
 
         for (Map.Entry<String, Visitante> entry : infoVisitantes.entrySet()) {
             Visitante visitante = entry.getValue();
+
+            visitante = visitanteDAO.buscarVisitantePorIdentificacion(visitante.getIdentificacion());
+
             int totalVisitas = contadorVisitas.get(visitante.getIdentificacion());
             ImageIcon foto = cargarImagen(visitante.getFotoPath());
 
@@ -543,72 +546,38 @@ public class VisitaController {
             String relacion,
             File imagen) {
 
-        return Stream.of(
-                !primerNombre.trim().isEmpty() && !primerNombre.equals(visitanteOriginal.getPrimerNombre()),
-                !segundoNombre.trim().isEmpty() && !segundoNombre.equals(visitanteOriginal.getSegundoNombre()),
-                !primerApellido.trim().isEmpty() && !primerApellido.equals(visitanteOriginal.getPrimerApellido()),
-                !segundoApellido.trim().isEmpty() && !segundoApellido.equals(visitanteOriginal.getSegundoApellido()),
-                !edad.trim().isEmpty() && Integer.parseInt(edad.trim()) != visitanteOriginal.getEdad(),
-                !sexo.equals("< Seleccionar >") && !sexo.equals(visitanteOriginal.getSexo()),
-                !relacion.equals("< Seleccionar >") && !relacion.equals(visitanteOriginal.getRelacionConPreso()),
-                imagen != null
-        ).anyMatch(Boolean::booleanValue);
-    }
-
-    private boolean hayCambiosVisita(Visita visitaOriginal,
-            LocalDate fecha,
-            LocalTime hora,
-            String duracion,
-            String tipo,
-            String lugar) {
-
-        return Stream.of(
-                fecha != null && !fecha.equals(visitaOriginal.getFechaVisita()),
-                hora != null && !hora.equals(visitaOriginal.getHoraVisita()),
-                !duracion.equals("< Seleccionar >") && !duracion.equals(visitaOriginal.getDuracionVisitaEnHoras()),
-                !tipo.equals("< Seleccionar >") && !tipo.equals(visitaOriginal.getTipoVisita()),
-                !lugar.equals("< Seleccionar >") && !lugar.equals(visitaOriginal.getLugarVisita())
-        ).anyMatch(Boolean::booleanValue);
-    }
-
-    public boolean actualizarVisita(Visita visitaOriginal,
-            LocalDate fecha,
-            LocalTime hora,
-            String duracion,
-            String tipo,
-            String lugar) {
-
-        try {
-
-            if (!hayCambiosVisita(visitaOriginal, fecha, hora, duracion, tipo, lugar)) {
-                JOptionPane.showMessageDialog(null, "No hay cambios para guardar", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                return false;
-            }
-
-            boolean resultado = visitaDAO.actualizarVisita(
-                    visitaOriginal.getId(),
-                    fecha != null ? fecha : visitaOriginal.getFechaVisita(),
-                    hora != null ? hora : visitaOriginal.getHoraVisita(),
-                    duracion == null || duracion.equals("< Seleccionar >") || duracion.isEmpty()
-                    ? visitaOriginal.getDuracionVisitaEnHoras() : duracion.trim(),
-                    tipo == null || tipo.equals("< Seleccionar >") || tipo.isEmpty()
-                    ? visitaOriginal.getTipoVisita() : tipo.trim(),
-                    lugar == null || lugar.equals("< Seleccionar >") || lugar.isEmpty()
-                    ? visitaOriginal.getLugarVisita() : lugar.trim()
-            );
-
-            if (resultado) {
-                JOptionPane.showMessageDialog(null, "Visita actualizada correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, "No se pudo actualizar la visita", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-
-            return resultado;
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al actualizar visita: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+        if (!primerNombre.trim().isEmpty() && !primerNombre.equals(visitanteOriginal.getPrimerNombre())) {
+            return true;
         }
+        if (!segundoNombre.trim().isEmpty() && !segundoNombre.equals(visitanteOriginal.getSegundoNombre())) {
+            return true;
+        }
+
+        if (!primerApellido.trim().isEmpty() && !primerApellido.equals(visitanteOriginal.getPrimerApellido())) {
+            return true;
+        }
+
+        if (!segundoApellido.trim().isEmpty() && !segundoApellido.equals(visitanteOriginal.getSegundoApellido())) {
+            return true;
+        }
+
+        if (!edad.trim().isEmpty() && Integer.parseInt(edad.trim()) != visitanteOriginal.getEdad()) {
+            return true;
+        }
+
+        if (!sexo.equals("< Seleccionar >") && !sexo.equals(visitanteOriginal.getSexo())) {
+            return true;
+        }
+
+        if (!relacion.equals("< Seleccionar >") && !relacion.equals(visitanteOriginal.getRelacionConPreso())) {
+            return true;
+        }
+
+        if (imagen != null && !imagen.equals(new File(visitanteOriginal.getFotoPath()))) {
+            return true;
+        }
+
+        return false;
     }
 
     public Visitante actualizarVisitante(Visitante visitanteOriginal,
@@ -628,6 +597,63 @@ public class VisitaController {
                 return null;
             }
 
+            if (!primerNombre.trim().isEmpty() && !primerNombre.equals(visitanteOriginal.getPrimerNombre())) {
+                if (!primerNombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]{2,}$")) {
+                    mostrarError("El primer nombre solo debe contener letras y tener al menos 2 caracteres.");
+                    return null;
+                }
+            }
+
+            if (!segundoNombre.trim().isEmpty() && !segundoNombre.equals(visitanteOriginal.getSegundoNombre())) {
+                if (!segundoNombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]{2,}$")) {
+                    mostrarError("El segundo nombre solo debe contener letras y tener al menos 2 caracteres.");
+                    return null;
+                }
+            }
+
+            if (!primerApellido.trim().isEmpty() && !primerApellido.equals(visitanteOriginal.getPrimerApellido())) {
+                if (!primerApellido.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]{2,}$")) {
+                    mostrarError("El primer apellido solo debe contener letras y tener al menos 2 caracteres.");
+                    return null;
+                }
+            }
+
+            if (!segundoApellido.trim().isEmpty() && !segundoApellido.equals(visitanteOriginal.getSegundoApellido())) {
+                if (!segundoApellido.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]{2,}$")) {
+                    mostrarError("El segundo apellido solo debe contener letras y tener al menos 2 caracteres.");
+                    return null;
+                }
+            }
+
+            if (!edad.trim().isEmpty()) {
+                int edadVisitanteInt;
+
+                try {
+                    edadVisitanteInt = Integer.parseInt(edad.trim());
+                } catch (NumberFormatException ex) {
+                    mostrarError("La edad debe ser un número válido.");
+                    return null;
+                }
+
+                if (edadVisitanteInt < 1 || edadVisitanteInt > 120) {
+                    mostrarError("La edad debe estar entre 1 y 120 años.");
+                    return null;
+                }
+
+                boolean edadModificada = edadVisitanteInt != visitanteOriginal.getEdad();
+                boolean mismoGrupoEdad = (edadVisitanteInt < 18 && visitanteOriginal.getEdad() < 18)
+                        || (edadVisitanteInt >= 18 && visitanteOriginal.getEdad() >= 18);
+
+                if (edadModificada && !mismoGrupoEdad) {
+                    mostrarError("No se puede cambiar de menor a mayor de edad o viceversa.");
+                    return null;
+                }
+            }
+
+            String relacionFinal = relacion.equals("< Seleccionar >") ? visitanteOriginal.getRelacionConPreso() : relacion;
+
+            String sexoFinal = sexo.equals("< Seleccionar >") ? visitanteOriginal.getSexo() : sexo;
+
             Visitante visitanteActualizado = visitanteDAO.modificarDatosVisitanteYDevolver(
                     visitanteOriginal.getIdentificacion(),
                     primerNombre.trim().isEmpty() ? visitanteOriginal.getPrimerNombre() : primerNombre.trim(),
@@ -635,13 +661,14 @@ public class VisitaController {
                     primerApellido.trim().isEmpty() ? visitanteOriginal.getPrimerApellido() : primerApellido.trim(),
                     segundoApellido.trim().isEmpty() ? visitanteOriginal.getSegundoApellido() : segundoApellido.trim(),
                     edad.trim().isEmpty() ? visitanteOriginal.getEdad() : Integer.parseInt(edad.trim()),
-                    sexo.equals("<Seleccionar>") ? visitanteOriginal.getSexo() : sexo,
-                    relacion.equals("<Seleccionar>") ? visitanteOriginal.getRelacionConPreso() : relacion,
+                    sexoFinal,
+                    relacionFinal,
                     imagen != null ? imagen : new File(visitanteOriginal.getFotoPath())
             );
 
             if (visitanteActualizado != null) {
-                JOptionPane.showMessageDialog(null, "Visitante actualizado correctamente");
+                JOptionPane.showMessageDialog(null, "Visitante actualizado correctamente. Si desea continuar modificando vuelva a seleccionar al visitante.");
+
                 return visitanteActualizado;
             } else {
                 mostrarError("No se pudo actualizar el visitante");
@@ -654,25 +681,15 @@ public class VisitaController {
         }
     }
 
-    public Visita buscarVisitaPorId(int id) {
-        return visitaDAO.buscarVisitaPorId(id);
-    }
-
-    public Visitante buscarVisitantePorIdentificacion(String identificacion) {
-        return visitanteDAO.buscarVisitantePorIdentificacion(identificacion);
-    }
-
-    public String obtenerIdentificacionPresoDeVisitante(String identificacionVisitante) {
-        List<Visita> todasVisitas = visitaDAO.cargarTodas();
-
-        for (Visita visita : todasVisitas) {
-            for (Visitante visitante : visita.getVisitantes()) {
-                if (visitante.getIdentificacion().equals(identificacionVisitante)) {
-                    return visita.getPreso().getIdentificacion();
-                }
+    public Visitante obtenerVisitantePorIdentificacion(String identificacion) {
+        try {
+            if (identificacion == null || identificacion.trim().isEmpty()) {
+                throw new IllegalArgumentException("La identificación no puede estar vacía");
             }
+            return visitanteDAO.buscarVisitantePorIdentificacion(identificacion);
+        } catch (Exception e) {
+            mostrarError("Error al obtener visitante: " + e.getMessage());
+            return null;
         }
-        return null;
     }
-
 }
