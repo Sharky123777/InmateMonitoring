@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 public class PersonalDeControlController {
 
     private PersonalDeControlDAO personalDeControlDAO = new PersonalDeControlDAO();
-
+/*
     public void contratarPersonalDeControl(Director view) {
         try {
             String primerNombrePDC = view.getTxtPrimerNombrePDC().getText().trim();
@@ -143,5 +143,5 @@ public class PersonalDeControlController {
     private void mostrarError(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
-
+*/
 }

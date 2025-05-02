@@ -2860,9 +2860,9 @@ coordinadorController.setComponentes(
     }//GEN-LAST:event_cmbNacionalidadPDCActionPerformed
 
     private void BotonContratarPDCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonContratarPDCActionPerformed
-        PersonalDeControlController controller = new PersonalDeControlController();
+       /* PersonalDeControlController controller = new PersonalDeControlController();
         controller.contratarPersonalDeControl(this);
-
+*/
 
     }//GEN-LAST:event_BotonContratarPDCActionPerformed
 
