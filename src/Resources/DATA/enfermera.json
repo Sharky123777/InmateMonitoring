@@ -6,7 +6,7 @@
       "turno": "Diurno",
       "fechaContratacion": "2025-04-30",
       "fechaFinContrato": "2025-11-04",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/81372134_Captura de pantalla 2025-04-22 200615.png",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/81372134_enfermera1.jpg",
       "correo": "sharlok@gmail.com",
       "primerNombre": "Sharlok",
       "segundoNombre": "Maia",
@@ -14,7 +14,7 @@
       "segundoApellido": "Gutierrez",
       "edad": 34,
       "sexo": "Femenino",
-      "nacionalidad": "Ferrero",
+      "nacionalidad": "Venezolana",
       "identificacion": "81372134"
     },
     {
@@ -23,7 +23,7 @@
       "turno": "Diurno",
       "fechaContratacion": "2025-04-30",
       "fechaFinContrato": "2025-09-14",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/73132479_Captura de pantalla 2025-03-02 170849.png",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/73132479_enfermera2.jpeg",
       "correo": "Celina@hotmail.com",
       "primerNombre": "Celina",
       "segundoNombre": "",
@@ -33,23 +33,6 @@
       "sexo": "Femenino",
       "nacionalidad": "Colombiana",
       "identificacion": "73132479"
-    },
-    {
-      "usuario": "awdawawdawd52@",
-      "contrasena": "DZpDV7l9",
-      "turno": "Nocturno",
-      "fechaContratacion": "2025-05-01",
-      "fechaFinContrato": "2025-05-27",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/adawd_Captura de pantalla 2025-04-06 134603.png",
-      "correo": "adwawd@gmail.com",
-      "primerNombre": "Miranda",
-      "segundoNombre": "awdawd",
-      "primerApellido": "awdawd",
-      "segundoApellido": "awda",
-      "edad": 43,
-      "sexo": "Femenino",
-      "nacionalidad": "awdawd",
-      "identificacion": "adawd"
     }
   ]
 }

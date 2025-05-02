@@ -4,9 +4,11 @@
  */
 package View;
 
+import Controller.CoordinadorDeActividadesController;
 import Controller.EnfermeraController;
 import Controller.GuardiaController;
 import Controller.PersonalDeControlController;
+import DAO.CoordinadorDeActividadesDAO;
 import DAO.EnfermeraDAO;
 import DAO.GuardiaDAO;
 import java.awt.Image;
@@ -66,6 +68,8 @@ public class Director extends javax.swing.JFrame {
     /**
      * Creates new form Director
      */
+    
+private CoordinadorDeActividadesController coordinadorController;
     private GuardiaController guardiaController;
     private String rutaImagenSeleccionada = "";
     private File imagenSeleccionadaMod; // ✅ Añade esta línea
@@ -115,6 +119,22 @@ public class Director extends javax.swing.JFrame {
                 cmbTurno1,
                 dateFinContrato1
         );
+        
+           coordinadorController = CoordinadorDeActividadesController.getInstancia();
+coordinadorController.setComponentes(
+    txtPrimerNombre2,
+    txtSegundoNombre2,
+    txtPrimerApellido2,
+    txtSegundoApellido2,
+    txtEdad2,
+    txtCedula2,
+    txtNacionalidad2,
+    txtCorreo2,
+    cmbTurno2,
+    cmbCargo2,  // Ahora es JComboBox
+    dateFinContrato2
+);
+
 
         // 7. Actualizar tablas (después de tener los controladores inicializados)
         actualizarTablaGuardias();
@@ -167,7 +187,6 @@ public class Director extends javax.swing.JFrame {
         jSeparator28 = new javax.swing.JSeparator();
         jSeparator29 = new javax.swing.JSeparator();
         jSeparator30 = new javax.swing.JSeparator();
-        jSeparator31 = new javax.swing.JSeparator();
         jSeparator32 = new javax.swing.JSeparator();
         jButton5 = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
@@ -177,8 +196,6 @@ public class Director extends javax.swing.JFrame {
         txtFechaContratacion1 = new javax.swing.JTextField();
         dateFinContrato1 = new com.toedter.calendar.JDateChooser();
         jLabel33 = new javax.swing.JLabel();
-        txtCargo1 = new javax.swing.JComboBox<>();
-        jLabel34 = new javax.swing.JLabel();
         cmbTurno1 = new javax.swing.JComboBox<>();
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
@@ -338,6 +355,99 @@ public class Director extends javax.swing.JFrame {
         txtSegundoNombreMod = new javax.swing.JTextField();
         txtPrimerNombreMod = new javax.swing.JTextField();
         jLabel29 = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        jPanel12 = new RoundedPanel(30);
+        jSeparator42 = new javax.swing.JSeparator();
+        jSeparator45 = new javax.swing.JSeparator();
+        jSeparator46 = new javax.swing.JSeparator();
+        jSeparator47 = new javax.swing.JSeparator();
+        jSeparator48 = new javax.swing.JSeparator();
+        jSeparator49 = new javax.swing.JSeparator();
+        jSeparator50 = new javax.swing.JSeparator();
+        jSeparator51 = new javax.swing.JSeparator();
+        jSeparator52 = new javax.swing.JSeparator();
+        jSeparator53 = new javax.swing.JSeparator();
+        jButton9 = new javax.swing.JButton();
+        jPanel13 = new javax.swing.JPanel();
+        lblImagen2 = new javax.swing.JLabel();
+        jLabel49 = new javax.swing.JLabel();
+        jLabel61 = new javax.swing.JLabel();
+        txtFechaContratacion2 = new javax.swing.JTextField();
+        dateFinContrato2 = new com.toedter.calendar.JDateChooser();
+        jLabel62 = new javax.swing.JLabel();
+        cmbCargo2 = new javax.swing.JComboBox<>();
+        jLabel63 = new javax.swing.JLabel();
+        cmbTurno2 = new javax.swing.JComboBox<>();
+        jLabel64 = new javax.swing.JLabel();
+        jLabel65 = new javax.swing.JLabel();
+        txtCorreo2 = new javax.swing.JTextField();
+        jSeparator54 = new javax.swing.JSeparator();
+        jButton10 = new javax.swing.JButton();
+        jLabel66 = new javax.swing.JLabel();
+        jLabel67 = new javax.swing.JLabel();
+        txtNacionalidad2 = new javax.swing.JTextField();
+        txtSexo2 = new javax.swing.JTextField();
+        jLabel68 = new javax.swing.JLabel();
+        jLabel69 = new javax.swing.JLabel();
+        txtCedula2 = new javax.swing.JTextField();
+        txtEdad2 = new javax.swing.JTextField();
+        jLabel70 = new javax.swing.JLabel();
+        jLabel71 = new javax.swing.JLabel();
+        txtSegundoApellido2 = new javax.swing.JTextField();
+        txtPrimerApellido2 = new javax.swing.JTextField();
+        jLabel72 = new javax.swing.JLabel();
+        jLabel73 = new javax.swing.JLabel();
+        txtSegundoNombre2 = new javax.swing.JTextField();
+        txtPrimerNombre2 = new javax.swing.JTextField();
+        jLabel74 = new javax.swing.JLabel();
+        jPanel14 = new javax.swing.JPanel();
+        jPanel15 = new RoundedPanel(30);
+        jSeparator55 = new javax.swing.JSeparator();
+        jSeparator56 = new javax.swing.JSeparator();
+        jSeparator57 = new javax.swing.JSeparator();
+        jSeparator58 = new javax.swing.JSeparator();
+        jSeparator59 = new javax.swing.JSeparator();
+        jSeparator60 = new javax.swing.JSeparator();
+        jSeparator61 = new javax.swing.JSeparator();
+        jSeparator62 = new javax.swing.JSeparator();
+        jSeparator63 = new javax.swing.JSeparator();
+        jSeparator64 = new javax.swing.JSeparator();
+        jButton11 = new javax.swing.JButton();
+        jPanel16 = new javax.swing.JPanel();
+        lblImagenMod2 = new javax.swing.JLabel();
+        jLabel75 = new javax.swing.JLabel();
+        jLabel76 = new javax.swing.JLabel();
+        txtFechaContratacionMod2 = new javax.swing.JTextField();
+        dateFinContratoMod2 = new com.toedter.calendar.JDateChooser();
+        jLabel77 = new javax.swing.JLabel();
+        txtCargoMod1 = new javax.swing.JComboBox<>();
+        jLabel78 = new javax.swing.JLabel();
+        cmbTurnoMod2 = new javax.swing.JComboBox<>();
+        jLabel79 = new javax.swing.JLabel();
+        jLabel80 = new javax.swing.JLabel();
+        txtCorreoMod2 = new javax.swing.JTextField();
+        jSeparator65 = new javax.swing.JSeparator();
+        jButton12 = new javax.swing.JButton();
+        jLabel81 = new javax.swing.JLabel();
+        jLabel82 = new javax.swing.JLabel();
+        txtNacionalidadMod2 = new javax.swing.JTextField();
+        txtSexoMod2 = new javax.swing.JTextField();
+        jLabel83 = new javax.swing.JLabel();
+        jLabel84 = new javax.swing.JLabel();
+        txtCedulaMod2 = new javax.swing.JTextField();
+        txtEdadMod2 = new javax.swing.JTextField();
+        jLabel85 = new javax.swing.JLabel();
+        jLabel86 = new javax.swing.JLabel();
+        txtSegundoApellidoMod2 = new javax.swing.JTextField();
+        txtPrimerApellidoMod2 = new javax.swing.JTextField();
+        jLabel87 = new javax.swing.JLabel();
+        jLabel88 = new javax.swing.JLabel();
+        txtSegundoNombreMod2 = new javax.swing.JTextField();
+        txtPrimerNombreMod2 = new javax.swing.JTextField();
+        jLabel89 = new javax.swing.JLabel();
+        jPanel17 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tablaCDA = new javax.swing.JTable();
 
         Modificar.setText("Modificar");
         Modificar.addActionListener(new java.awt.event.ActionListener() {
@@ -436,7 +546,6 @@ public class Director extends javax.swing.JFrame {
         jPanel7.add(jSeparator28, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 360, 310, 20));
         jPanel7.add(jSeparator29, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 310, 20));
         jPanel7.add(jSeparator30, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 310, 20));
-        jPanel7.add(jSeparator31, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 50, 310, 20));
         jPanel7.add(jSeparator32, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 400, 310, 20));
 
         jButton5.setText("Añadir");
@@ -451,29 +560,21 @@ public class Director extends javax.swing.JFrame {
         jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         jPanel8.add(lblImagen1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 150, 180));
 
-        jPanel7.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 90, 190, 220));
+        jPanel7.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 50, 190, 220));
 
         jLabel31.setForeground(new java.awt.Color(255, 255, 255));
         jLabel31.setText("Agregar Foto de la enfermera:");
-        jPanel7.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 70, -1, -1));
+        jPanel7.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 30, -1, -1));
 
         jLabel32.setForeground(new java.awt.Color(255, 255, 255));
         jLabel32.setText("Fecha de contratación:");
-        jPanel7.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 360, -1, 20));
-        jPanel7.add(txtFechaContratacion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 380, 190, 30));
-        jPanel7.add(dateFinContrato1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 440, 190, 30));
+        jPanel7.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 330, -1, 20));
+        jPanel7.add(txtFechaContratacion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 350, 190, 30));
+        jPanel7.add(dateFinContrato1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 410, 190, 30));
 
         jLabel33.setForeground(new java.awt.Color(255, 255, 255));
         jLabel33.setText("Fecha de finalización del contrato:");
-        jPanel7.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 420, -1, -1));
-
-        txtCargo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Oficial", "Guardia" }));
-        jPanel7.add(txtCargo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 250, 30));
-
-        jLabel34.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel34.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel34.setText("Cargo:");
-        jPanel7.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 30, -1, -1));
+        jPanel7.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 390, -1, -1));
 
         cmbTurno1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Diurno", "Nocturno" }));
         jPanel7.add(cmbTurno1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 370, 240, 30));
@@ -514,7 +615,7 @@ public class Director extends javax.swing.JFrame {
                 jButton6ActionPerformed(evt);
             }
         });
-        jPanel7.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 320, -1, -1));
+        jPanel7.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 290, -1, -1));
 
         jLabel37.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel37.setForeground(new java.awt.Color(255, 255, 255));
@@ -752,7 +853,7 @@ public class Director extends javax.swing.JFrame {
         jLabel14.setText("Fecha de finalización del contrato:");
         jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 420, -1, -1));
 
-        cmbCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Oficial", "Guardia" }));
+        cmbCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Guardia jefe", "Guardia" }));
         jPanel3.add(cmbCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 250, 30));
 
         jLabel10.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -1082,7 +1183,7 @@ public class Director extends javax.swing.JFrame {
         jLabel17.setText("Fecha de finalización del contrato:");
         jPanel4.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 420, -1, -1));
 
-        txtCargoMod.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Oficial", "Guardia" }));
+        txtCargoMod.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Guardia jefe", "Guardia" }));
         jPanel4.add(txtCargoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 250, 30));
 
         jLabel18.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -1226,6 +1327,431 @@ public class Director extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("ModificarGuardia", ModificarGuardia);
 
+        jPanel9.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel12.setBackground(new java.awt.Color(29, 35, 51));
+        jPanel12.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel12.add(jSeparator42, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 310, 20));
+        jPanel12.add(jSeparator45, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, 310, 20));
+        jPanel12.add(jSeparator46, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, 310, 20));
+        jPanel12.add(jSeparator47, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 310, 20));
+        jPanel12.add(jSeparator48, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 280, 310, 20));
+        jPanel12.add(jSeparator49, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 360, 310, 20));
+        jPanel12.add(jSeparator50, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 310, 20));
+        jPanel12.add(jSeparator51, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 310, 20));
+        jPanel12.add(jSeparator52, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 50, 310, 20));
+        jPanel12.add(jSeparator53, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 400, 310, 20));
+
+        jButton9.setText("Añadir");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+        jPanel12.add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 430, 180, 40));
+
+        jPanel13.setBackground(new java.awt.Color(0, 0, 51));
+        jPanel13.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel13.add(lblImagen2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 150, 180));
+
+        jPanel12.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 90, 190, 220));
+
+        jLabel49.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel49.setText("Agregar Foto de la enfermera:");
+        jPanel12.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 70, -1, -1));
+
+        jLabel61.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel61.setText("Fecha de contratación:");
+        jPanel12.add(jLabel61, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 360, -1, 20));
+        jPanel12.add(txtFechaContratacion2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 380, 190, 30));
+        jPanel12.add(dateFinContrato2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 440, 190, 30));
+
+        jLabel62.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel62.setText("Fecha de finalización del contrato:");
+        jPanel12.add(jLabel62, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 420, -1, -1));
+
+        cmbCargo2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Oficial", "Guardia" }));
+        jPanel12.add(cmbCargo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 250, 30));
+
+        jLabel63.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel63.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel63.setText("Cargo:");
+        jPanel12.add(jLabel63, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 30, -1, -1));
+
+        cmbTurno2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Diurno", "Nocturno" }));
+        jPanel12.add(cmbTurno2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 370, 240, 30));
+
+        jLabel64.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel64.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel64.setText("Turno:");
+        jPanel12.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 380, -1, -1));
+
+        jLabel65.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel65.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel65.setText("Correo:");
+        jPanel12.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 340, -1, -1));
+
+        txtCorreo2.setBackground(new java.awt.Color(29, 35, 51));
+        txtCorreo2.setBorder(null);
+        txtCorreo2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCorreo2FocusLost(evt);
+            }
+        });
+        txtCorreo2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCorreo2ActionPerformed(evt);
+            }
+        });
+        txtCorreo2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCorreo2KeyTyped(evt);
+            }
+        });
+        jPanel12.add(txtCorreo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 330, 240, 30));
+        jPanel12.add(jSeparator54, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 310, 20));
+
+        jButton10.setText("Seleccionar Imagen");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+        jPanel12.add(jButton10, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 320, -1, -1));
+
+        jLabel66.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel66.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel66.setText("Correo:");
+        jPanel12.add(jLabel66, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 340, -1, -1));
+
+        jLabel67.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel67.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel67.setText("Nacionalidad:");
+        jPanel12.add(jLabel67, new org.netbeans.lib.awtextra.AbsoluteConstraints(57, 300, 90, -1));
+
+        txtNacionalidad2.setBackground(new java.awt.Color(29, 35, 51));
+        txtNacionalidad2.setBorder(null);
+        jPanel12.add(txtNacionalidad2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 210, 30));
+
+        txtSexo2.setEditable(false);
+        txtSexo2.setBackground(new java.awt.Color(29, 35, 51));
+        txtSexo2.setText("Femenino");
+        txtSexo2.setBorder(null);
+        jPanel12.add(txtSexo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 250, 30));
+
+        jLabel68.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel68.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel68.setText("Sexo:");
+        jPanel12.add(jLabel68, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 260, -1, -1));
+
+        jLabel69.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel69.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel69.setText("Cedula:");
+        jPanel12.add(jLabel69, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 210, -1, 30));
+
+        txtCedula2.setBackground(new java.awt.Color(29, 35, 51));
+        txtCedula2.setBorder(null);
+        txtCedula2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCedula2ActionPerformed(evt);
+            }
+        });
+        txtCedula2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCedula2KeyTyped(evt);
+            }
+        });
+        jPanel12.add(txtCedula2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 240, 30));
+
+        txtEdad2.setBackground(new java.awt.Color(29, 35, 51));
+        txtEdad2.setBorder(null);
+        txtEdad2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtEdad2KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEdad2KeyTyped(evt);
+            }
+        });
+        jPanel12.add(txtEdad2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, 250, 30));
+
+        jLabel70.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel70.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel70.setText("Edad:");
+        jPanel12.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 180, -1, -1));
+
+        jLabel71.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel71.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel71.setText("Segundo Apellido:");
+        jPanel12.add(jLabel71, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, -1, 20));
+
+        txtSegundoApellido2.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoApellido2.setBorder(null);
+        jPanel12.add(txtSegundoApellido2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 180, 30));
+
+        txtPrimerApellido2.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerApellido2.setBorder(null);
+        jPanel12.add(txtPrimerApellido2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 190, 30));
+
+        jLabel72.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel72.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel72.setText("Primer Apellido:");
+        jPanel12.add(jLabel72, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 100, -1, 20));
+
+        jLabel73.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel73.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel73.setText("Segundo nombre:");
+        jPanel12.add(jLabel73, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, -1, 30));
+
+        txtSegundoNombre2.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoNombre2.setBorder(null);
+        jPanel12.add(txtSegundoNombre2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 180, 30));
+
+        txtPrimerNombre2.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerNombre2.setBorder(null);
+        jPanel12.add(txtPrimerNombre2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 200, 30));
+
+        jLabel74.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel74.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel74.setText("Primer nombre:");
+        jPanel12.add(jLabel74, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, -1, 20));
+
+        jPanel9.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, 820, 510));
+
+        jTabbedPane1.addTab("AgregarCDA", jPanel9);
+
+        jPanel14.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel14.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel15.setBackground(new java.awt.Color(29, 35, 51));
+        jPanel15.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel15.add(jSeparator55, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 310, 20));
+        jPanel15.add(jSeparator56, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, 310, 20));
+        jPanel15.add(jSeparator57, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, 310, 20));
+        jPanel15.add(jSeparator58, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 310, 20));
+        jPanel15.add(jSeparator59, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 280, 310, 20));
+        jPanel15.add(jSeparator60, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 360, 310, 20));
+        jPanel15.add(jSeparator61, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 310, 20));
+        jPanel15.add(jSeparator62, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 310, 20));
+        jPanel15.add(jSeparator63, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 50, 310, 20));
+        jPanel15.add(jSeparator64, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 400, 310, 20));
+
+        jButton11.setText("Modificar");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+        jPanel15.add(jButton11, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 430, 180, 40));
+
+        jPanel16.setBackground(new java.awt.Color(0, 0, 51));
+        jPanel16.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel16.add(lblImagenMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 150, 180));
+
+        jPanel15.add(jPanel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 90, 190, 220));
+
+        jLabel75.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel75.setText("Agregar Foto del guardia:");
+        jPanel15.add(jLabel75, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, -1, -1));
+
+        jLabel76.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel76.setText("Fecha de contratación:");
+        jPanel15.add(jLabel76, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 360, -1, 20));
+        jPanel15.add(txtFechaContratacionMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 380, 190, 30));
+        jPanel15.add(dateFinContratoMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 440, 190, 30));
+
+        jLabel77.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel77.setText("Fecha de finalización del contrato:");
+        jPanel15.add(jLabel77, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 420, -1, -1));
+
+        txtCargoMod1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Oficial", "Guardia" }));
+        jPanel15.add(txtCargoMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 250, 30));
+
+        jLabel78.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel78.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel78.setText("Cargo:");
+        jPanel15.add(jLabel78, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 30, -1, -1));
+
+        cmbTurnoMod2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Diurno", "Nocturno" }));
+        jPanel15.add(cmbTurnoMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 370, 240, 30));
+
+        jLabel79.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel79.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel79.setText("Turno:");
+        jPanel15.add(jLabel79, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 380, -1, -1));
+
+        jLabel80.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel80.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel80.setText("Correo:");
+        jPanel15.add(jLabel80, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 340, -1, -1));
+
+        txtCorreoMod2.setBackground(new java.awt.Color(29, 35, 51));
+        txtCorreoMod2.setBorder(null);
+        txtCorreoMod2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCorreoMod2FocusLost(evt);
+            }
+        });
+        txtCorreoMod2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCorreoMod2KeyTyped(evt);
+            }
+        });
+        jPanel15.add(txtCorreoMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 330, 240, 30));
+        jPanel15.add(jSeparator65, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 310, 20));
+
+        jButton12.setText("Seleccionar Imagen");
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
+        jPanel15.add(jButton12, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 320, -1, -1));
+
+        jLabel81.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel81.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel81.setText("Correo:");
+        jPanel15.add(jLabel81, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 340, -1, -1));
+
+        jLabel82.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel82.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel82.setText("Nacionalidad:");
+        jPanel15.add(jLabel82, new org.netbeans.lib.awtextra.AbsoluteConstraints(57, 300, 90, -1));
+
+        txtNacionalidadMod2.setBackground(new java.awt.Color(29, 35, 51));
+        txtNacionalidadMod2.setBorder(null);
+        jPanel15.add(txtNacionalidadMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 210, 30));
+
+        txtSexoMod2.setBackground(new java.awt.Color(29, 35, 51));
+        txtSexoMod2.setText("Femenino");
+        txtSexoMod2.setBorder(null);
+        jPanel15.add(txtSexoMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 250, 30));
+
+        jLabel83.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel83.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel83.setText("Sexo:");
+        jPanel15.add(jLabel83, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 260, -1, -1));
+
+        jLabel84.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel84.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel84.setText("Cedula:");
+        jPanel15.add(jLabel84, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 210, -1, 30));
+
+        txtCedulaMod2.setBackground(new java.awt.Color(29, 35, 51));
+        txtCedulaMod2.setBorder(null);
+        txtCedulaMod2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCedulaMod2ActionPerformed(evt);
+            }
+        });
+        txtCedulaMod2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCedulaMod2KeyTyped(evt);
+            }
+        });
+        jPanel15.add(txtCedulaMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 240, 30));
+
+        txtEdadMod2.setBackground(new java.awt.Color(29, 35, 51));
+        txtEdadMod2.setBorder(null);
+        txtEdadMod2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtEdadMod2KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEdadMod2KeyTyped(evt);
+            }
+        });
+        jPanel15.add(txtEdadMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, 250, 30));
+
+        jLabel85.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel85.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel85.setText("Edad:");
+        jPanel15.add(jLabel85, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 180, -1, -1));
+
+        jLabel86.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel86.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel86.setText("Segundo Apellido:");
+        jPanel15.add(jLabel86, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, -1, 20));
+
+        txtSegundoApellidoMod2.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoApellidoMod2.setBorder(null);
+        jPanel15.add(txtSegundoApellidoMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 180, 30));
+
+        txtPrimerApellidoMod2.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerApellidoMod2.setBorder(null);
+        jPanel15.add(txtPrimerApellidoMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 190, 30));
+
+        jLabel87.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel87.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel87.setText("Primer Apellido:");
+        jPanel15.add(jLabel87, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 100, -1, 20));
+
+        jLabel88.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel88.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel88.setText("Segundo nombre:");
+        jPanel15.add(jLabel88, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, -1, 30));
+
+        txtSegundoNombreMod2.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoNombreMod2.setBorder(null);
+        jPanel15.add(txtSegundoNombreMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 180, 30));
+
+        txtPrimerNombreMod2.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerNombreMod2.setBorder(null);
+        jPanel15.add(txtPrimerNombreMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 200, 30));
+
+        jLabel89.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel89.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel89.setText("Primer nombre:");
+        jPanel15.add(jLabel89, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, -1, 20));
+
+        jPanel14.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 790, 490));
+
+        jTabbedPane1.addTab("ModificarCDA", jPanel14);
+
+        jPanel17.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel17.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        tablaCDA.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Foto", "Nombre", "Apellido", "Edad", "Cedula", "Sexo", "Nacionalidad", "Correo", "Turno", "Cargo", "FechaContratacion", "FechaFinContrato"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tablaCDA.setComponentPopupMenu(jPopupMenu1);
+        jScrollPane3.setViewportView(tablaCDA);
+        if (tablaCDA.getColumnModel().getColumnCount() > 0) {
+            tablaCDA.getColumnModel().getColumn(0).setResizable(false);
+            tablaCDA.getColumnModel().getColumn(1).setResizable(false);
+            tablaCDA.getColumnModel().getColumn(2).setResizable(false);
+            tablaCDA.getColumnModel().getColumn(3).setResizable(false);
+            tablaCDA.getColumnModel().getColumn(4).setResizable(false);
+            tablaCDA.getColumnModel().getColumn(5).setResizable(false);
+            tablaCDA.getColumnModel().getColumn(6).setResizable(false);
+            tablaCDA.getColumnModel().getColumn(7).setResizable(false);
+            tablaCDA.getColumnModel().getColumn(8).setResizable(false);
+            tablaCDA.getColumnModel().getColumn(9).setResizable(false);
+            tablaCDA.getColumnModel().getColumn(10).setResizable(false);
+            tablaCDA.getColumnModel().getColumn(11).setResizable(false);
+        }
+
+        jPanel17.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1080, 550));
+
+        jTabbedPane1.addTab("MostrarCDA", jPanel17);
+
         jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 1100, 610));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 640));
@@ -1250,49 +1776,113 @@ public class Director extends javax.swing.JFrame {
         // Ajustar visualización
         ajustarImagenesTabla();
     }
+    
+    
+    
+    private void ajustarColumnasTablaCDA() {
+    // Ajustar anchos de columnas según necesidad
+    TableColumnModel columnModel = tablaCDA.getColumnModel();
+    
+    // Ejemplo de ajustes (personaliza según tus necesidades):
+    columnModel.getColumn(0).setPreferredWidth(60);  // Columna imagen
+    columnModel.getColumn(1).setPreferredWidth(150); // Nombres
+    columnModel.getColumn(2).setPreferredWidth(150); // Apellidos
+    columnModel.getColumn(3).setPreferredWidth(80);  // Cédula
+    columnModel.getColumn(4).setPreferredWidth(80);  // Turno
+    columnModel.getColumn(5).setPreferredWidth(120); // Cargo
+    
+    // Opcional: Ajustar altura de filas para imágenes
+    tablaCDA.setRowHeight(60);
+}
 
     private void cargarDatosEnPanelModificacion(Guardia guardia) {
-        // Campos no editables (solo muestra)
+    if (guardia == null) {
+        JOptionPane.showMessageDialog(this, 
+            "No se proporcionaron datos del guardia", 
+            "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    try {
+        // --- Campos no editables (solo visualización) ---
         txtCedulaMod.setText(guardia.getIdentificacion());
-        txtSexoMod.setText(guardia.getSexo());
-        txtFechaContratacionMod.setText(guardia.getFechaInicioContratoFormateada());
+        txtSexoMod.setText(guardia.getSexo() != null ? guardia.getSexo() : "");
+        txtFechaContratacionMod.setText(
+            guardia.getFechaInicioContratoFormateada() != null ? 
+            guardia.getFechaInicioContratoFormateada() : ""
+        );
 
-        // Campos editables
+        // --- Campos editables ---
         txtPrimerNombreMod.setText(guardia.getPrimerNombre());
-        txtSegundoNombreMod.setText(guardia.getSegundoNombre());
+        txtSegundoNombreMod.setText(
+            guardia.getSegundoNombre() != null ? guardia.getSegundoNombre() : ""
+        );
         txtPrimerApellidoMod.setText(guardia.getPrimerApellido());
-        txtSegundoApellidoMod.setText(guardia.getSegundoApellido());
+        txtSegundoApellidoMod.setText(
+            guardia.getSegundoApellido() != null ? guardia.getSegundoApellido() : ""
+        );
         txtEdadMod.setText(String.valueOf(guardia.getEdad()));
-        txtNacionalidadMod.setText(guardia.getNacionalidad());
-        txtCorreoMod.setText(guardia.getCorreo());
-        cmbTurnoMod.setSelectedItem(guardia.getTurno());
-        txtCargoMod.setSelectedItem(guardia.getCargo());
+        txtNacionalidadMod.setText(
+            guardia.getNacionalidad() != null ? guardia.getNacionalidad() : ""
+        );
+        txtCorreoMod.setText(
+            guardia.getCorreo() != null ? guardia.getCorreo() : ""
+        );
 
-        // Fecha fin contrato
-        if (guardia.getFechaFinContrato() != null) {
-            dateFinContratoMod.setDate(java.sql.Date.valueOf(guardia.getFechaFinContrato()));
+        // --- Comboboxes ---
+        if (guardia.getTurno() != null) {
+            cmbTurnoMod.setSelectedItem(guardia.getTurno());
+        }
+        if (guardia.getCargo() != null) {
+            txtCargoMod.setSelectedItem(guardia.getCargo());
         }
 
-        // Cargar imagen si existe
+        // --- Fecha fin contrato (JDateChooser) ---
+        if (guardia.getFechaFinContrato() != null) {
+            dateFinContratoMod.setDate(
+                Date.from(
+                    guardia.getFechaFinContrato()
+                        .atStartOfDay(ZoneId.systemDefault())
+                        .toInstant()
+                )
+            );
+        } else {
+            dateFinContratoMod.setDate(null);
+        }
+
+        // --- Cargar imagen (desde ruta en JSON) ---
         if (guardia.getRutaImagen() != null && !guardia.getRutaImagen().isEmpty()) {
             try {
-                ImageIcon icon = new ImageIcon(guardia.getRutaImagen());
-                Image img = icon.getImage().getScaledInstance(lblImagenMod.getWidth(), lblImagenMod.getHeight(), Image.SCALE_SMOOTH);
-                lblImagenMod.setIcon(new ImageIcon(img));
+                ImageIcon icono = new ImageIcon(guardia.getRutaImagen());
+                Image imagen = icono.getImage()
+                    .getScaledInstance(
+                        lblImagenMod.getWidth(), 
+                        lblImagenMod.getHeight(), 
+                        Image.SCALE_SMOOTH
+                    );
+                lblImagenMod.setIcon(new ImageIcon(imagen));
             } catch (Exception e) {
                 System.err.println("Error al cargar imagen: " + e.getMessage());
                 lblImagenMod.setIcon(null);
             }
         } else {
             lblImagenMod.setIcon(null);
-
-            // Asignar la cédula actual (IMPORTANTE)
-            this.cedulaActualModificacion = guardia.getIdentificacion(); // <-- Esta línea es crucial
-            this.imagenSeleccionadaMod = null; // Resetear imagen al cargar
-            // Debug: Verifica que la cédula se asignó
-            System.out.println("Cédula asignada: " + this.cedulaActualModificacion);
         }
+
+        
+        this.cedulaActualModificacion = guardia.getIdentificacion();
+        this.imagenSeleccionadaMod = null;
+
+        // Debug: Verificar cédula asignada
+        System.out.println("[DEBUG] Cédula asignada para modificación: " + this.cedulaActualModificacion);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+            "Error al cargar datos del guardia (JSON): " + e.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
     }
+}
 
     private void limpiarFormularioModificacion() {
         txtPrimerNombreMod.setText("");
@@ -2284,6 +2874,74 @@ public class Director extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCorreo1ActionPerformed
 
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void txtCorreo2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreo2FocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreo2FocusLost
+
+    private void txtCorreo2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreo2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreo2ActionPerformed
+
+    private void txtCorreo2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreo2KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreo2KeyTyped
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void txtCedula2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedula2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCedula2ActionPerformed
+
+    private void txtCedula2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedula2KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCedula2KeyTyped
+
+    private void txtEdad2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdad2KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEdad2KeyPressed
+
+    private void txtEdad2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdad2KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEdad2KeyTyped
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void txtCorreoMod2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreoMod2FocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreoMod2FocusLost
+
+    private void txtCorreoMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreoMod2KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreoMod2KeyTyped
+
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton12ActionPerformed
+
+    private void txtCedulaMod2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaMod2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCedulaMod2ActionPerformed
+
+    private void txtCedulaMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaMod2KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCedulaMod2KeyTyped
+
+    private void txtEdadMod2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadMod2KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEdadMod2KeyPressed
+
+    private void txtEdadMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadMod2KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEdadMod2KeyTyped
+
     /**
      * @param args the command line arguments
      */
@@ -2331,14 +2989,22 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JPanel ModificarNurse;
     private javax.swing.JPanel MostrarEnfermeras;
     private javax.swing.JComboBox<String> cmbCargo;
+    private javax.swing.JComboBox<String> cmbCargo2;
     private javax.swing.JComboBox<String> cmbTurno;
     private javax.swing.JComboBox<String> cmbTurno1;
+    private javax.swing.JComboBox<String> cmbTurno2;
     private javax.swing.JComboBox<String> cmbTurnoMod;
     private javax.swing.JComboBox<String> cmbTurnoMod1;
+    private javax.swing.JComboBox<String> cmbTurnoMod2;
     private com.toedter.calendar.JDateChooser dateFinContrato1;
+    private com.toedter.calendar.JDateChooser dateFinContrato2;
     private com.toedter.calendar.JDateChooser dateFinContratoMod;
     private com.toedter.calendar.JDateChooser dateFinContratoMod1;
+    private com.toedter.calendar.JDateChooser dateFinContratoMod2;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -2346,6 +3012,7 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private com.toedter.calendar.JDateChooser jDateChooserFinContrato;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -2374,7 +3041,6 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
-    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
@@ -2390,6 +3056,7 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
@@ -2403,12 +3070,47 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel60;
+    private javax.swing.JLabel jLabel61;
+    private javax.swing.JLabel jLabel62;
+    private javax.swing.JLabel jLabel63;
+    private javax.swing.JLabel jLabel64;
+    private javax.swing.JLabel jLabel65;
+    private javax.swing.JLabel jLabel66;
+    private javax.swing.JLabel jLabel67;
+    private javax.swing.JLabel jLabel68;
+    private javax.swing.JLabel jLabel69;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel70;
+    private javax.swing.JLabel jLabel71;
+    private javax.swing.JLabel jLabel72;
+    private javax.swing.JLabel jLabel73;
+    private javax.swing.JLabel jLabel74;
+    private javax.swing.JLabel jLabel75;
+    private javax.swing.JLabel jLabel76;
+    private javax.swing.JLabel jLabel77;
+    private javax.swing.JLabel jLabel78;
+    private javax.swing.JLabel jLabel79;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel80;
+    private javax.swing.JLabel jLabel81;
+    private javax.swing.JLabel jLabel82;
+    private javax.swing.JLabel jLabel83;
+    private javax.swing.JLabel jLabel84;
+    private javax.swing.JLabel jLabel85;
+    private javax.swing.JLabel jLabel86;
+    private javax.swing.JLabel jLabel87;
+    private javax.swing.JLabel jLabel88;
+    private javax.swing.JLabel jLabel89;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -2416,10 +3118,12 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator11;
@@ -2444,7 +3148,6 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator29;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator30;
-    private javax.swing.JSeparator jSeparator31;
     private javax.swing.JSeparator jSeparator32;
     private javax.swing.JSeparator jSeparator33;
     private javax.swing.JSeparator jSeparator34;
@@ -2456,63 +3159,108 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator40;
     private javax.swing.JSeparator jSeparator41;
+    private javax.swing.JSeparator jSeparator42;
     private javax.swing.JSeparator jSeparator43;
     private javax.swing.JSeparator jSeparator44;
+    private javax.swing.JSeparator jSeparator45;
+    private javax.swing.JSeparator jSeparator46;
+    private javax.swing.JSeparator jSeparator47;
+    private javax.swing.JSeparator jSeparator48;
+    private javax.swing.JSeparator jSeparator49;
     private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator50;
+    private javax.swing.JSeparator jSeparator51;
+    private javax.swing.JSeparator jSeparator52;
+    private javax.swing.JSeparator jSeparator53;
+    private javax.swing.JSeparator jSeparator54;
+    private javax.swing.JSeparator jSeparator55;
+    private javax.swing.JSeparator jSeparator56;
+    private javax.swing.JSeparator jSeparator57;
+    private javax.swing.JSeparator jSeparator58;
+    private javax.swing.JSeparator jSeparator59;
     private javax.swing.JSeparator jSeparator6;
+    private javax.swing.JSeparator jSeparator60;
+    private javax.swing.JSeparator jSeparator61;
+    private javax.swing.JSeparator jSeparator62;
+    private javax.swing.JSeparator jSeparator63;
+    private javax.swing.JSeparator jSeparator64;
+    private javax.swing.JSeparator jSeparator65;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblFoto;
     private javax.swing.JLabel lblImagen1;
+    private javax.swing.JLabel lblImagen2;
     private javax.swing.JLabel lblImagenMod;
     private javax.swing.JLabel lblImagenMod1;
+    private javax.swing.JLabel lblImagenMod2;
+    private javax.swing.JTable tablaCDA;
     private javax.swing.JTable tablaEnfermeras;
     private javax.swing.JTable tablaGuardias;
-    private javax.swing.JComboBox<String> txtCargo1;
     private javax.swing.JComboBox<String> txtCargoMod;
+    private javax.swing.JComboBox<String> txtCargoMod1;
     private javax.swing.JTextField txtCedula;
     private javax.swing.JTextField txtCedula1;
+    private javax.swing.JTextField txtCedula2;
     private javax.swing.JTextField txtCedulaMod;
     private javax.swing.JTextField txtCedulaMod1;
+    private javax.swing.JTextField txtCedulaMod2;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtCorreo1;
+    private javax.swing.JTextField txtCorreo2;
     private javax.swing.JTextField txtCorreo4;
     private javax.swing.JTextField txtCorreoMod;
     private javax.swing.JTextField txtCorreoMod1;
+    private javax.swing.JTextField txtCorreoMod2;
     private javax.swing.JTextField txtEdad;
     private javax.swing.JTextField txtEdad1;
+    private javax.swing.JTextField txtEdad2;
     private javax.swing.JTextField txtEdadMod;
     private javax.swing.JTextField txtEdadMod1;
+    private javax.swing.JTextField txtEdadMod2;
     private javax.swing.JTextField txtFechaContratacion;
     private javax.swing.JTextField txtFechaContratacion1;
+    private javax.swing.JTextField txtFechaContratacion2;
     private javax.swing.JTextField txtFechaContratacionMod;
     private javax.swing.JTextField txtFechaContratacionMod1;
+    private javax.swing.JTextField txtFechaContratacionMod2;
     private javax.swing.JTextField txtNacionalidad;
     private javax.swing.JTextField txtNacionalidad1;
+    private javax.swing.JTextField txtNacionalidad2;
     private javax.swing.JTextField txtNacionalidadMod;
     private javax.swing.JTextField txtNacionalidadMod1;
+    private javax.swing.JTextField txtNacionalidadMod2;
     private javax.swing.JTextField txtPrimerApellido;
     private javax.swing.JTextField txtPrimerApellido1;
+    private javax.swing.JTextField txtPrimerApellido2;
     private javax.swing.JTextField txtPrimerApellidoMod;
     private javax.swing.JTextField txtPrimerApellidoMod1;
+    private javax.swing.JTextField txtPrimerApellidoMod2;
     private javax.swing.JTextField txtPrimerNombre;
     private javax.swing.JTextField txtPrimerNombre1;
+    private javax.swing.JTextField txtPrimerNombre2;
     private javax.swing.JTextField txtPrimerNombreMod;
     private javax.swing.JTextField txtPrimerNombreMod1;
+    private javax.swing.JTextField txtPrimerNombreMod2;
     private javax.swing.JTextField txtSegundoApellido;
     private javax.swing.JTextField txtSegundoApellido1;
+    private javax.swing.JTextField txtSegundoApellido2;
     private javax.swing.JTextField txtSegundoApellidoMod;
     private javax.swing.JTextField txtSegundoApellidoMod1;
+    private javax.swing.JTextField txtSegundoApellidoMod2;
     private javax.swing.JTextField txtSegundoNombre;
     private javax.swing.JTextField txtSegundoNombre1;
+    private javax.swing.JTextField txtSegundoNombre2;
     private javax.swing.JTextField txtSegundoNombreMod;
     private javax.swing.JTextField txtSegundoNombreMod1;
+    private javax.swing.JTextField txtSegundoNombreMod2;
     private javax.swing.JTextField txtSexo;
     private javax.swing.JTextField txtSexo1;
+    private javax.swing.JTextField txtSexo2;
     private javax.swing.JTextField txtSexoMod;
     private javax.swing.JTextField txtSexoMod1;
+    private javax.swing.JTextField txtSexoMod2;
     // End of variables declaration//GEN-END:variables
 
 }
