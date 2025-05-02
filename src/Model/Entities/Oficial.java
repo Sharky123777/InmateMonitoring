@@ -11,19 +11,11 @@ public class Oficial extends Persona {
     private String turno;
     private String fotoPath;
 
-    public Oficial(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
-            int edad, String sexo, String nacionalidad, String identificacion,
-            String placa, String cargo, LocalDate fechaInicioContrato, LocalDate fechaFinContrato,
-            String turno, String fotoPath) {
-        super(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, sexo, nacionalidad, identificacion);
-        this.placa = placa;
-        this.cargo = cargo;
-        this.fechaInicioContrato = fechaInicioContrato;
-        this.fechaFinContrato = fechaFinContrato;
-        this.turno = turno;
-        this.fotoPath = fotoPath;
+    public Oficial(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, LocalDate fechaNacimiento, String sexo, String nacionalidad, String identificacion) {
+        super(primerNombre, segundoNombre, primerApellido, segundoApellido, fechaNacimiento, sexo, nacionalidad, identificacion);
     }
 
+ 
     public String getPlaca() {
         return placa;
     }

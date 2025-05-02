@@ -1,31 +1,30 @@
 package Model.Entities;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
+import Model.Constants.EstadoVisitaEnum;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Visita {
 
     private int id;
-    private LocalDate fechaVisita;
-    private LocalTime horaVisita;
+    private LocalDateTime fechaHoraVisita;
     private String duracionVisitaEnHoras;
     private String tipoVisita;
     private String lugarVisita;
     private Preso preso;
     private List<Visitante> visitantes;
+    private EstadoVisitaEnum estado;
     private static int ultimoId = 0;
 
-    public Visita(int id, LocalDate fechaVisita, LocalTime horaVisita, String duracionVisitaEnHoras, String tipoVisita, String lugarVisita, Preso preso, List<Visitante> visitantes) {
+    public Visita(LocalDateTime fechaHoraVisita, String duracionVisitaEnHoras, String tipoVisita, String lugarVisita, Preso preso, List<Visitante> visitantes) {
         this.id = ++ultimoId;
-        this.fechaVisita = fechaVisita;
-        this.horaVisita = horaVisita;
+        this.fechaHoraVisita = fechaHoraVisita;
         this.duracionVisitaEnHoras = duracionVisitaEnHoras;
         this.tipoVisita = tipoVisita;
         this.lugarVisita = lugarVisita;
         this.preso = preso;
-        this.visitantes = new ArrayList<>();
+        this.visitantes = visitantes;
+        this.estado = EstadoVisitaEnum.EN_PROCESO;
     }
 
     public int getId() {
@@ -34,22 +33,15 @@ public class Visita {
 
     public void setId(int id) {
         this.id = id;
+
     }
 
-    public LocalDate getFechaVisita() {
-        return fechaVisita;
+    public LocalDateTime getFechaHoraVisita() {
+        return fechaHoraVisita;
     }
 
-    public void setFechaVisita(LocalDate fechaVisita) {
-        this.fechaVisita = fechaVisita;
-    }
-
-    public LocalTime getHoraVisita() {
-        return horaVisita;
-    }
-
-    public void setHoraVisita(LocalTime horaVisita) {
-        this.horaVisita = horaVisita;
+    public void setFechaHoraVisita(LocalDateTime fechaHoraVisita) {
+        this.fechaHoraVisita = fechaHoraVisita;
     }
 
     public String getDuracionVisitaEnHoras() {
@@ -92,6 +84,14 @@ public class Visita {
         this.visitantes = visitantes;
     }
 
+    public EstadoVisitaEnum getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoVisitaEnum estado) {
+        this.estado = estado;
+    }
+
     public static int getUltimoId() {
         return ultimoId;
     }
@@ -99,4 +99,5 @@ public class Visita {
     public static void setUltimoId(int ultimoId) {
         Visita.ultimoId = ultimoId;
     }
+
 }

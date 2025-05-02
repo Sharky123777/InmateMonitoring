@@ -1,24 +1,28 @@
 package Model.Entities;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 public class Persona {
+
     private String primerNombre;
     private String segundoNombre;
     private String primerApellido;
     private String segundoApellido;
-    private int edad;
+    private LocalDate fechaNacimiento;
     private String sexo;
     private String nacionalidad;
     private String identificacion;
 
-    public Persona(String primerNombre, String segundoNombre, 
-                 String primerApellido, String segundoApellido,
-                 int edad, String sexo, String nacionalidad, 
-                 String identificacion) {
+    public Persona(String primerNombre, String segundoNombre,
+            String primerApellido, String segundoApellido,
+            LocalDate fechaNacimiento, String sexo, String nacionalidad,
+            String identificacion) {
         this.primerNombre = primerNombre;
         this.segundoNombre = segundoNombre;
         this.primerApellido = primerApellido;
         this.segundoApellido = segundoApellido;
-        this.edad = edad;
+        this.fechaNacimiento = fechaNacimiento;
         this.sexo = sexo;
         this.nacionalidad = nacionalidad;
         this.identificacion = identificacion;
@@ -63,12 +67,22 @@ public class Persona {
         this.segundoApellido = segundoApellido;
     }
 
+    /**
+     * Devuelve la edad calculada a partir de la fecha de nacimiento
+     */
     public int getEdad() {
-        return edad;
+        if (fechaNacimiento == null) {
+            return 0;
+        }
+        return Period.between(fechaNacimiento, LocalDate.now()).getYears();
     }
 
-    public void setEdad(int edad) {
-        this.edad = edad;
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
     }
 
     public String getSexo() {
@@ -97,8 +111,8 @@ public class Persona {
 
     // Métodos combinados mejorados
     /**
-     * Devuelve los nombres combinados (primer + segundo nombre)
-     * Ejemplo: "María José"
+     * Devuelve los nombres combinados (primer + segundo nombre) Ejemplo: "María
+     * José"
      */
     public String getNombresCompletos() {
         String nombres = getPrimerNombre();
@@ -109,8 +123,8 @@ public class Persona {
     }
 
     /**
-     * Devuelve los apellidos combinados (primer + segundo apellido)
-     * Ejemplo: "Pérez López"
+     * Devuelve los apellidos combinados (primer + segundo apellido) Ejemplo:
+     * "Pérez López"
      */
     public String getApellidosCompletos() {
         String apellidos = getPrimerApellido();
@@ -121,17 +135,17 @@ public class Persona {
     }
 
     /**
-     * Devuelve el nombre completo (nombres + apellidos)
-     * Ejemplo: "María José Pérez López"
+     * Devuelve el nombre completo (nombres + apellidos) Ejemplo: "María José
+     * Pérez López"
      */
     public String getNombreCompleto() {
         return (getNombresCompletos() + " " + getApellidosCompletos()).trim();
     }
 
     /**
-     * Versión optimizada para mostrar en tablas JTable
-     * - Omite espacios extras cuando no hay segundo nombre/apellido
-     * - Formato consistente para visualización
+     * Versión optimizada para mostrar en tablas JTable - Omite espacios extras
+     * cuando no hay segundo nombre/apellido - Formato consistente para
+     * visualización
      */
     public String getNombresParaTabla() {
         return getNombresCompletos(); // Ya está optimizado
@@ -142,18 +156,17 @@ public class Persona {
     }
 
     /**
-     * Versión compacta para espacios reducidos
-     * Ejemplo: "M. J. Pérez L."
+     * Versión compacta para espacios reducidos Ejemplo: "M. J. Pérez L."
      */
     public String getNombreCompacto() {
         String primerInicial = getPrimerNombre().isEmpty() ? "" : getPrimerNombre().charAt(0) + ".";
         String segundoInicial = getSegundoNombre().isEmpty() ? "" : getSegundoNombre().charAt(0) + ".";
         String primerApInicial = getPrimerApellido().isEmpty() ? "" : getPrimerApellido().charAt(0) + ".";
         String segundoApInicial = getSegundoApellido().isEmpty() ? "" : getSegundoApellido().charAt(0) + ".";
-        
-        return String.format("%s%s %s%s", 
-               primerInicial, segundoInicial, 
-               primerApInicial, segundoApInicial).trim();
+
+        return String.format("%s%s %s%s",
+                primerInicial, segundoInicial,
+                primerApInicial, segundoApInicial).trim();
     }
 
     @Override

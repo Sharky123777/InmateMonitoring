@@ -1,5 +1,7 @@
 package Model.Entities;
 
+import java.time.LocalDate;
+
 public class Visitante extends Persona {
 
     private String relacionConPreso;
@@ -8,13 +10,10 @@ public class Visitante extends Persona {
     private static int ultimoId = 0;
     private int id;
 
-    public Visitante(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, int edad, String sexo, String nacionalidad, String identificacion, String relacionConPreso, String fotoPath, String email) {
-        super(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, sexo, nacionalidad, identificacion);
-        this.id = ++ultimoId;
-        this.relacionConPreso = relacionConPreso;
-        this.fotoPath = fotoPath;
-        this.email = email;
+    public Visitante(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, LocalDate fechaNacimiento, String sexo, String nacionalidad, String identificacion) {
+        super(primerNombre, segundoNombre, primerApellido, segundoApellido, fechaNacimiento, sexo, nacionalidad, identificacion);
     }
+
 
     public int getId() {
         return this.id;

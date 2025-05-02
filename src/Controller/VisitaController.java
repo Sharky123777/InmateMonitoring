@@ -226,7 +226,7 @@ public class VisitaController {
             mostrarError("La identificación debe tener entre 6 y 10 caracteres.");
             return;
         }
-
+/*
         Visitante visitante = new Visitante(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, sexo,
                 nacionalidad, identificacion, relacion, imagen.getAbsolutePath(), email);
         visitantesTemporales.add(visitante);
@@ -243,7 +243,7 @@ public class VisitaController {
             JOptionPane.showMessageDialog(null,
                     "Visitante añadido (" + visitantesTemporales.size() + " de " + cantidadTotal + ").\nPor favor ingrese el siguiente visitante.",
                     "Información", JOptionPane.INFORMATION_MESSAGE);
-        }
+        }*/
     }
 
     public void registrarVisita(PersonalDeControl view, List<Visitante> visitantes, List<File> imagenes) {
@@ -284,7 +284,7 @@ public class VisitaController {
             return;
         }
 
-        Visita nuevaVisita = new Visita(0, fecha, horaVisita, duracion, tipo, lugar, preso, null);
+        /* Visita nuevaVisita = new Visita(null, duracion, tipo, lugar, preso, null, null);
         nuevaVisita.getVisitantes().addAll(visitantes);
         visitaDAO.guardarVisita(nuevaVisita);
 
@@ -293,7 +293,7 @@ public class VisitaController {
             File imagen = imagenes.get(i);
             visitanteDAO.guardarVisitante(visitante, imagen);
         }
-
+         */
         visitantes.clear();
         imagenes.clear();
         limpiarCamposVisita(view);
@@ -313,8 +313,6 @@ public class VisitaController {
                 modelo.addRow(new Object[]{
                     visita.getId(),
                     visitante.getIdentificacion(),
-                    visita.getFechaVisita(),
-                    visita.getHoraVisita(),
                     visita.getDuracionVisitaEnHoras(),
                     visita.getTipoVisita(),
                     visita.getLugarVisita(),
@@ -714,7 +712,7 @@ public class VisitaController {
         String duracionFinal = nuevaDuracion.equals("< Seleccionar >") ? visitaOriginal.getDuracionVisitaEnHoras() : nuevaDuracion;
         String tipoFinal = nuevoTipo.equals("< Seleccionar >") ? visitaOriginal.getTipoVisita() : nuevoTipo;
         String lugarFinal = nuevoLugar.equals("< Seleccionar >") ? visitaOriginal.getLugarVisita() : nuevoLugar;
-        
+
         if (!hayCambiosVisita(visitaOriginal, nuevaDuracion, nuevoTipo, nuevoLugar)) {
             mostrarError("No hay cambios para guardar.");
             return null;

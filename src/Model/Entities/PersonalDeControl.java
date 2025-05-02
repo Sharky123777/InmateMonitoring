@@ -13,18 +13,8 @@ public class PersonalDeControl extends Persona {
     private String correo;
     private String cargo;
 
-    public PersonalDeControl(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
-            int edad, String sexo, String nacionalidad, String identificacion,
-            String turno, String correo, String cargo,
-            LocalDate fechaInicioContrato, LocalDate fechaFinContrato, String fotoPath) {
-        super(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, sexo, nacionalidad, identificacion);
-        this.id = ++ultimoId;
-        this.turno = turno;
-        this.correo = correo;
-        this.cargo = cargo;
-        this.fechaInicioContrato = fechaInicioContrato;
-        this.fechaFinContrato = fechaFinContrato;
-        this.fotoPath = fotoPath;
+    public PersonalDeControl(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, LocalDate fechaNacimiento, String sexo, String nacionalidad, String identificacion) {
+        super(primerNombre, segundoNombre, primerApellido, segundoApellido, fechaNacimiento, sexo, nacionalidad, identificacion);
     }
 
     public int getId() {
