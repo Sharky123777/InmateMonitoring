@@ -13,93 +13,140 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class GuardiaController {
+    private static GuardiaController instancia;
     private final GuardiaDAO guardiaDAO;
-    private final JTextField txtPrimerNombre;
-    private final JTextField txtSegundoNombre;
-    private final JTextField txtPrimerApellido;
-    private final JTextField txtSegundoApellido;
-    private final JTextField txtEdad;
-    private final JTextField txtCedula;
-    private final JTextField txtNacionalidad;
-    private final JTextField txtCorreo;
-    private final JComboBox<String> cmbTurno;
-    private final JComboBox<String> cmbCargo;
-    private final JDateChooser dateChooserFinContrato;
+    
+    // Componentes de la vista
+    private JTextField txtPrimerNombre;
+    private JTextField txtSegundoNombre;
+    private JTextField txtPrimerApellido;
+    private JTextField txtSegundoApellido;
+    private JTextField txtEdad;
+    private JTextField txtCedula;
+    private JTextField txtNacionalidad;
+    private JTextField txtCorreo;
+    private JComboBox<String> cmbTurno;
+    private JComboBox<String> cmbCargo;
+    private JDateChooser jDateChooserFinContrato;
     private String rutaImagenSeleccionada;
 
-    public GuardiaController(JTextField txtPrimerNombre, JTextField txtSegundoNombre,
-                           JTextField txtPrimerApellido, JTextField txtSegundoApellido,
-                           JTextField txtEdad, JTextField txtCedula,
-                           JTextField txtNacionalidad, JTextField txtCorreo,
-                           JComboBox<String> cmbTurno, JComboBox<String> cmbCargo,
-                           JDateChooser dateChooserFinContrato) {
+    // Constructor privado para Singleton
+    private GuardiaController() {
         this.guardiaDAO = GuardiaDAO.getInstancia();
-        this.txtPrimerNombre = txtPrimerNombre;
-        this.txtSegundoNombre = txtSegundoNombre;
-        this.txtPrimerApellido = txtPrimerApellido;
-        this.txtSegundoApellido = txtSegundoApellido;
-        this.txtEdad = txtEdad;
-        this.txtCedula = txtCedula;
-        this.txtNacionalidad = txtNacionalidad;
-        this.txtCorreo = txtCorreo;
-        this.cmbTurno = cmbTurno;
-        this.cmbCargo = cmbCargo;
-        this.dateChooserFinContrato = dateChooserFinContrato;
     }
 
-    // Método para preparar modificación (nuevo)
-    public Map<String, Object> prepararModificacion(String cedula) {
-        Guardia guardia = obtenerGuardiaPorCedula(cedula);
-        if (guardia == null) {
-            throw new IllegalArgumentException("Guardia no encontrado con cédula: " + cedula);
+    // Método Singleton para obtener instancia
+    public static synchronized GuardiaController getInstancia() {
+        if (instancia == null) {
+            instancia = new GuardiaController();
+        }
+        return instancia;
+    }
+
+ // Establecer componentes de la vista
+public void setComponentes(JTextField txtPrimerNombre, JTextField txtSegundoNombre,
+                     JTextField txtPrimerApellido, JTextField txtSegundoApellido,
+                     JTextField txtEdad, JTextField txtCedula,
+                     JTextField txtNacionalidad, JTextField txtCorreo,
+                     JComboBox<String> cmbTurno, JComboBox<String> cmbCargo,
+                     JDateChooser jDateChooserFinContrato) {
+    this.txtPrimerNombre = txtPrimerNombre;
+    this.txtSegundoNombre = txtSegundoNombre;
+    this.txtPrimerApellido = txtPrimerApellido;
+    this.txtSegundoApellido = txtSegundoApellido;
+    this.txtEdad = txtEdad;
+    this.txtCedula = txtCedula;
+    this.txtNacionalidad = txtNacionalidad;
+    this.txtCorreo = txtCorreo;
+    this.cmbTurno = cmbTurno;
+    this.cmbCargo = cmbCargo;
+    this.jDateChooserFinContrato = jDateChooserFinContrato; // Corregido: mismo nombre que el parámetro
+}
+    // ==================== OPERACIONES CRUD ====================
+
+
+    public boolean agregarGuardia() {
+    try {
+        // 1. Validación de componentes
+        validarComponentes();
+        
+        // 2. Validación de campos obligatorios
+        StringBuilder errores = validarCamposObligatorios();
+        if (errores.length() > 0) {
+            throw new IllegalArgumentException(errores.toString());
         }
 
-        Map<String, Object> datos = new LinkedHashMap<>();
-        datos.put("cedula", guardia.getIdentificacion());
-        datos.put("primerNombre", guardia.getPrimerNombre());
-        datos.put("segundoNombre", guardia.getSegundoNombre());
-        datos.put("primerApellido", guardia.getPrimerApellido());
-        datos.put("segundoApellido", guardia.getSegundoApellido());
-        datos.put("edad", guardia.getEdad());
-        datos.put("nacionalidad", guardia.getNacionalidad());
-        datos.put("correo", guardia.getCorreo());
-        datos.put("turno", guardia.getTurno());
-        datos.put("cargo", guardia.getCargo());
-        datos.put("fechaInicio", guardia.getFechaInicioContrato());
-        datos.put("fechaFin", guardia.getFechaFinContrato());
-        datos.put("sexo", guardia.getSexo());
-        datos.put("rutaImagen", guardia.getRutaImagen());
+        // 3. Obtener y validar datos
+        String primerNombre = txtPrimerNombre.getText().trim();
+        String segundoNombre = txtSegundoNombre.getText().trim();
+        String primerApellido = txtPrimerApellido.getText().trim();
+        String segundoApellido = txtSegundoApellido.getText().trim();
+        int edad = obtenerEdadValida();
+        String cedula = txtCedula.getText().trim();
+        String nacionalidad = txtNacionalidad.getText().trim();
+        String correo = validarCorreo(txtCorreo.getText().trim());
+        String turno = cmbTurno.getSelectedItem().toString();
+        String cargo = cmbCargo.getSelectedItem().toString();
+        LocalDate fechaFinContrato = obtenerFechaValida();
+        
+        // Validación de imagen (opcional si no es obligatoria)
+        File imagen = null;
+        if (rutaImagenSeleccionada != null && !rutaImagenSeleccionada.isEmpty()) {
+            imagen = validarYObtenerImagen();
+        }
 
-        return datos;
+        // 4. Crear y guardar el guardia
+        return guardiaDAO.guardarGuardia(
+            primerNombre,
+            segundoNombre,
+            primerApellido,
+            segundoApellido,
+            edad,
+            cedula,
+            nacionalidad,
+            correo,
+            turno,
+            fechaFinContrato,
+            cargo,
+            imagen
+        );
+        
+    } catch (IllegalArgumentException e) {
+        throw e;
+    } catch (Exception e) {
+        throw new RuntimeException("Error al guardar guardia: " + e.getMessage(), e);
     }
+}
 
-    // Método principal para procesar modificación (nuevo)
-    public boolean procesarModificacion(String cedulaOriginal, 
-                                      Map<String, Object> cambios, 
-                                      File nuevaImagen) {
+    public boolean modificarGuardia(String cedulaOriginal) {
         try {
-            if (!hayCambiosReales(cedulaOriginal, cambios, nuevaImagen)) {
-                throw new IllegalArgumentException("No se detectaron cambios");
-            }
-
-            validarCamposModificacion(cambios);
-            validarEdad((int) cambios.get("edad"));
-            validarFechasContrato((LocalDate) cambios.get("fechaInicio"), 
-                                 (LocalDate) cambios.get("fechaFin"));
+            validarComponentes();
+            
+            // Obtener y validar datos
+            String primerNombre = obtenerValorCampo(txtPrimerNombre, "Primer nombre");
+            String primerApellido = obtenerValorCampo(txtPrimerApellido, "Primer apellido");
+            String segundoApellido = obtenerValorCampo(txtSegundoApellido, "Segundo apellido");
+            int edad = obtenerEdadValida();
+            String nacionalidad = obtenerValorCampo(txtNacionalidad, "Nacionalidad");
+            String correo = obtenerValorCampo(txtCorreo, "Correo");
+            String turno = obtenerValorCombo(cmbTurno, "Turno");
+            String cargo = obtenerValorCombo(cmbCargo, "Cargo");
+            LocalDate fechaFinContrato = obtenerFechaValida();
+            File imagen = rutaImagenSeleccionada != null ? new File(rutaImagenSeleccionada) : null;
 
             return guardiaDAO.modificarGuardia(
                 cedulaOriginal,
-                (String) cambios.get("primerNombre"),
-                (String) cambios.get("segundoNombre"),
-                (String) cambios.get("primerApellido"),
-                (String) cambios.get("segundoApellido"),
-                (int) cambios.get("edad"),
-                (String) cambios.get("nacionalidad"),
-                (String) cambios.get("correo"),
-                (String) cambios.get("turno"),
-                (LocalDate) cambios.get("fechaFin"),
-                (String) cambios.get("cargo"),
-                nuevaImagen
+                primerNombre,
+                txtSegundoNombre.getText().trim(),
+                primerApellido,
+                segundoApellido,
+                edad,
+                nacionalidad,
+                correo,
+                turno,
+                fechaFinContrato,
+                cargo,
+                imagen
             );
         } catch (IllegalArgumentException e) {
             throw e;
@@ -107,332 +154,405 @@ public class GuardiaController {
             throw new RuntimeException("Error al modificar guardia: " + e.getMessage(), e);
         }
     }
-
-    // Métodos de validación (nuevos)
-    private boolean hayCambiosReales(String cedula, Map<String, Object> cambios, File nuevaImagen) {
-        Guardia original = obtenerGuardiaPorCedula(cedula);
-        
-        boolean cambiosEnCampos = !original.getPrimerNombre().equals(cambios.get("primerNombre")) ||
-                                !Objects.equals(original.getSegundoNombre(), cambios.get("segundoNombre")) ||
-                                !original.getPrimerApellido().equals(cambios.get("primerApellido")) ||
-                                !original.getSegundoApellido().equals(cambios.get("segundoApellido")) ||
-                                original.getEdad() != (int) cambios.get("edad") ||
-                                !original.getNacionalidad().equals(cambios.get("nacionalidad")) ||
-                                !original.getCorreo().equals(cambios.get("correo")) ||
-                                !original.getTurno().equals(cambios.get("turno")) ||
-                                !original.getCargo().equals(cambios.get("cargo")) ||
-                                !original.getFechaFinContrato().equals(cambios.get("fechaFin"));
-
-        boolean cambioImagen = nuevaImagen != null && 
-                             (original.getRutaImagen() == null || 
-                             !nuevaImagen.getAbsolutePath().equals(original.getRutaImagen()));
-
-        return cambiosEnCampos || cambioImagen;
-    }
-
-    private void validarCamposModificacion(Map<String, Object> cambios) {
-        StringBuilder errores = new StringBuilder();
-        
-        if (((String) cambios.get("primerNombre")).trim().isEmpty()) {
-            errores.append("- Primer nombre es obligatorio\n");
-        }
-        if (((String) cambios.get("primerApellido")).trim().isEmpty()) {
-            errores.append("- Primer apellido es obligatorio\n");
-        }
-        if (((String) cambios.get("segundoApellido")).trim().isEmpty()) {
-            errores.append("- Segundo apellido es obligatorio\n");
-        }
-        if (((String) cambios.get("nacionalidad")).trim().isEmpty()) {
-            errores.append("- Nacionalidad es obligatoria\n");
-        }
-        if (((String) cambios.get("correo")).trim().isEmpty()) {
-            errores.append("- Correo es obligatorio\n");
-        }
-        
-        if (errores.length() > 0) {
-            throw new IllegalArgumentException(errores.toString());
-        }
-    }
-
-  public boolean agregarGuardia() {
+    
+    public boolean actualizarGuardia(String cedulaOriginal, 
+                               String primerNombre, String segundoNombre,
+                               String primerApellido, String segundoApellido,
+                               int edad, String nacionalidad, String correo,
+                               String turno, LocalDate fechaFinContrato,
+                               String cargo, File nuevaImagen) {
     try {
-        // 1. Validar campos obligatorios del formulario primero
-        StringBuilder camposFaltantes = new StringBuilder();
-        
-        if (txtPrimerNombre.getText().trim().isEmpty()) camposFaltantes.append("- Primer nombre\n");
-        if (txtPrimerApellido.getText().trim().isEmpty()) camposFaltantes.append("- Primer apellido\n");
-        if (txtSegundoApellido.getText().trim().isEmpty()) camposFaltantes.append("- Segundo apellido\n");
-        if (txtEdad.getText().trim().isEmpty()) camposFaltantes.append("- Edad\n");
-        if (txtCedula.getText().trim().isEmpty()) camposFaltantes.append("- Cédula\n");
-        if (txtNacionalidad.getText().trim().isEmpty()) camposFaltantes.append("- Nacionalidad\n");
-        if (txtCorreo.getText().trim().isEmpty()) camposFaltantes.append("- Correo\n");
-        if (cmbTurno.getSelectedItem() == null || cmbTurno.getSelectedItem().toString().trim().isEmpty()) 
-            camposFaltantes.append("- Turno\n");
-        if (cmbCargo.getSelectedItem() == null || cmbCargo.getSelectedItem().toString().trim().isEmpty()) 
-            camposFaltantes.append("- Cargo\n");
-        
-        if (camposFaltantes.length() > 0) {
-            throw new IllegalArgumentException("Los siguientes campos son obligatorios:\n" + camposFaltantes.toString());
+        // Validar campos obligatorios
+        if (primerNombre == null || primerNombre.trim().isEmpty() ||
+            primerApellido == null || primerApellido.trim().isEmpty() ||
+            segundoApellido == null || segundoApellido.trim().isEmpty() ||
+            cedulaOriginal == null || cedulaOriginal.trim().isEmpty()) {
+            throw new IllegalArgumentException("Campos obligatorios no pueden estar vacíos");
         }
 
-        // 2. Validar edad
-        int edad;
+        // Validar edad
+        if (edad < 18 || edad > 70) {
+            throw new IllegalArgumentException("La edad debe estar entre 18 y 70 años");
+        }
+
+        // Validar fecha
+        if (fechaFinContrato == null || !fechaFinContrato.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("Fecha fin de contrato inválida");
+        }
+
+        return guardiaDAO.modificarGuardia(
+            cedulaOriginal,
+            primerNombre,
+            segundoNombre,
+            primerApellido,
+            segundoApellido,
+            edad,
+            nacionalidad,
+            correo,
+            turno,
+            fechaFinContrato,
+            cargo,
+            nuevaImagen
+        );
+    } catch (IllegalArgumentException e) {
+        throw e;
+    } catch (Exception e) {
+        throw new RuntimeException("Error al modificar guardia: " + e.getMessage(), e);
+    }
+}
+
+    public boolean eliminarGuardia(String cedula) {
         try {
-            edad = Integer.parseInt(txtEdad.getText().trim());
+            if (cedula == null || cedula.trim().isEmpty()) {
+                throw new IllegalArgumentException("Cédula es requerida para eliminar");
+            }
+            return guardiaDAO.eliminarGuardia(cedula);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar guardia: " + e.getMessage(), e);
+        }
+    }
+
+    public Guardia obtenerGuardiaPorCedula(String cedula) {
+        try {
+            return guardiaDAO.obtenerGuardiaPorCedula(cedula);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener guardia: " + e.getMessage(), e);
+        }
+    }
+
+    public List<Guardia> obtenerTodosGuardias() {
+        try {
+            return guardiaDAO.obtenerGuardias();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener guardias: " + e.getMessage(), e);
+        }
+    }
+
+    // ==================== MÉTODOS AUXILIARES ====================
+
+    private void validarComponentes() {
+    StringBuilder errores = new StringBuilder();
+    
+    if (txtPrimerNombre == null) errores.append("- txtPrimerNombre no inicializado\n");
+    if (txtPrimerApellido == null) errores.append("- txtPrimerApellido no inicializado\n");
+    if (txtSegundoApellido == null) errores.append("- txtSegundoApellido no inicializado\n");
+    if (txtEdad == null) errores.append("- txtEdad no inicializado\n");
+    if (txtCedula == null) errores.append("- txtCedula no inicializado\n");
+    if (txtNacionalidad == null) errores.append("- txtNacionalidad no inicializado\n");
+    if (txtCorreo == null) errores.append("- txtCorreo no inicializado\n");
+    if (cmbTurno == null) errores.append("- cmbTurno no inicializado\n");
+    if (cmbCargo == null) errores.append("- cmbCargo no inicializado\n");
+    if (jDateChooserFinContrato == null) errores.append("- jDateChooserFinContrato no inicializado\n");
+    
+    if (errores.length() > 0) {
+        // Mensaje detallado para depuración
+        String mensajeError = "Componentes no inicializados correctamente:\n" + errores.toString();
+        System.err.println(mensajeError); // Log en consola
+        throw new IllegalStateException(mensajeError);
+    }
+}
+
+    private StringBuilder validarCamposObligatorios() {
+    StringBuilder errores = new StringBuilder();
+    
+    if (txtPrimerNombre.getText().trim().isEmpty()) 
+        errores.append("- Primer nombre es obligatorio\n");
+    if (txtPrimerApellido.getText().trim().isEmpty()) 
+        errores.append("- Primer apellido es obligatorio\n");
+    if (txtSegundoApellido.getText().trim().isEmpty()) 
+        errores.append("- Segundo apellido es obligatorio\n");
+    if (txtEdad.getText().trim().isEmpty()) 
+        errores.append("- Edad es obligatoria\n");
+    if (txtCedula.getText().trim().isEmpty()) 
+        errores.append("- Cédula es obligatoria\n");
+    if (txtNacionalidad.getText().trim().isEmpty()) 
+        errores.append("- Nacionalidad es obligatoria\n");
+    if (txtCorreo.getText().trim().isEmpty()) 
+        errores.append("- Correo electrónico es obligatorio\n");
+    if (cmbTurno.getSelectedItem() == null) 
+        errores.append("- Turno es obligatorio\n");
+    if (cmbCargo.getSelectedItem() == null) 
+        errores.append("- Cargo es obligatorio\n");
+    if (jDateChooserFinContrato.getDate() == null) 
+        errores.append("- Fecha de fin de contrato es obligatoria\n");
+    
+    return errores;
+}
+
+    private String validarCorreo(String correo) {
+    if (!correo.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+        throw new IllegalArgumentException("El correo electrónico no tiene un formato válido");
+    }
+    return correo;
+}
+    
+    private String obtenerValorCampo(JTextField campo, String nombreCampo) {
+        String valor = campo.getText().trim();
+        if (valor.isEmpty()) {
+            throw new IllegalArgumentException(nombreCampo + " es obligatorio");
+        }
+        return valor;
+    }
+
+    private String obtenerValorCombo(JComboBox<String> combo, String nombreCampo) {
+        Object seleccion = combo.getSelectedItem();
+        if (seleccion == null || seleccion.toString().trim().isEmpty()) {
+            throw new IllegalArgumentException(nombreCampo + " es obligatorio");
+        }
+        return seleccion.toString().trim();
+    }
+
+    private int obtenerEdadValida() {
+        try {
+            int edad = Integer.parseInt(txtEdad.getText().trim());
             if (edad < 18 || edad > 70) {
                 throw new IllegalArgumentException("La edad debe estar entre 18 y 70 años");
             }
+            return edad;
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("La edad debe ser un número válido");
         }
-
-        // 3. Validar fechas con formato consistente (dd/MM/yyyy)
-        if (dateChooserFinContrato.getDate() == null) {
-            throw new IllegalArgumentException("La fecha de fin de contrato es obligatoria");
+    }
+private LocalDate obtenerFechaValida() {
+    try {
+        // Obtener la fecha directamente del JDateChooser
+        Date fechaSeleccionada = jDateChooserFinContrato.getDate();
+        
+        if (fechaSeleccionada == null) {
+            // Intenta obtener la fecha del texto del editor
+            String textoFecha = ((JTextField)jDateChooserFinContrato.getDateEditor().getUiComponent()).getText();
+            if (!textoFecha.isEmpty()) {
+                try {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    return LocalDate.parse(textoFecha, formatter);
+                } catch (Exception e) {
+                    throw new IllegalArgumentException("Formato de fecha inválido. Use DD/MM/AAAA");
+                }
+            }
+            throw new IllegalArgumentException("Debe seleccionar una fecha de fin de contrato");
         }
         
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate fechaFinContrato = dateChooserFinContrato.getDate().toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate fechaHoy = LocalDate.now();
+        return fechaSeleccionada.toInstant()
+               .atZone(ZoneId.systemDefault())
+               .toLocalDate();
         
-        if (!fechaFinContrato.isAfter(fechaHoy)) {
-            throw new IllegalArgumentException(String.format(
-                "La fecha de fin de contrato (%s) debe ser posterior a la fecha actual (%s)",
-                fechaFinContrato.format(formatter),
-                fechaHoy.format(formatter)
-            ));
-        }
+    } catch (Exception e) {
+        throw new IllegalArgumentException("Error al procesar la fecha: " + e.getMessage());
+    }
+}
 
-        // 4. Validar imagen (solo si pasó todas las validaciones anteriores)
+    private File validarYObtenerImagen() {
         if (rutaImagenSeleccionada == null || rutaImagenSeleccionada.trim().isEmpty()) {
-            throw new IllegalArgumentException("Debe seleccionar una imagen del guardia");
+            throw new IllegalArgumentException("Debe seleccionar una imagen");
         }
         
         File imagen = new File(rutaImagenSeleccionada);
         if (!imagen.exists()) {
-            throw new IllegalArgumentException("El archivo de imagen no existe en la ruta especificada");
+            throw new IllegalArgumentException("El archivo de imagen no existe");
         }
         
-        // Validar formato de imagen
-        String nombreImagen = imagen.getName().toLowerCase();
-        if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && 
-            !nombreImagen.endsWith(".png") && !nombreImagen.endsWith(".gif")) {
-            throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, PNG o GIF");
-        }
-
-        // 5. Obtener datos del formulario
-        String primerNombre = txtPrimerNombre.getText().trim();
-        String segundoNombre = txtSegundoNombre.getText().trim();
-        String primerApellido = txtPrimerApellido.getText().trim();
-        String segundoApellido = txtSegundoApellido.getText().trim();
-        String cedula = txtCedula.getText().trim();
-        String nacionalidad = txtNacionalidad.getText().trim();
-        String correo = txtCorreo.getText().trim();
-        String turno = cmbTurno.getSelectedItem().toString();
-        String cargo = cmbCargo.getSelectedItem().toString();
-
-        // 6. Guardar el guardia
-        return guardiaDAO.guardarGuardia(
-            primerNombre, segundoNombre, primerApellido, segundoApellido,
-            edad, cedula, nacionalidad, correo, turno, fechaFinContrato, cargo, imagen
-        );
-    } catch (IllegalArgumentException e) {
-        // Relanzar excepciones de validación para mostrar mensajes específicos
-        throw e;
-    } catch (Exception e) {
-        // Capturar cualquier otro error inesperado
-        throw new RuntimeException("Error inesperado al guardar el guardia: " + e.getMessage(), e);
-    }
-}
-   
-    public boolean actualizarGuardia(String cedulaOriginal, String primerNombre, String segundoNombre, 
-                                   String primerApellido, String segundoApellido, int edad,
-                                   String nacionalidad, String correo, String turno,
-                                   LocalDate fechaFinContrato, String cargo, File nuevaImagen) {
-        
-        // Validar campos obligatorios
-        if (!validarCamposObligatorios(primerNombre, primerApellido, segundoApellido, 
-                                      edad, cedulaOriginal, nacionalidad, correo, turno, cargo)) {
-            return false;
-        }
-        
-        // La imagen puede ser null si no se cambia
-        if (nuevaImagen != null && !validarImagen(nuevaImagen)) {
-            return false;
-        }
-        
-        // Validar fechas
-        if (!validarFechasContrato(LocalDate.now(), fechaFinContrato)) {
-            return false;
-        }
-        
-        return guardiaDAO.modificarGuardia(
-            cedulaOriginal, primerNombre, segundoNombre, primerApellido, segundoApellido,
-            edad, nacionalidad, correo, turno, fechaFinContrato, cargo, nuevaImagen
-        );
-    }
-    
-    // Métodos de lectura
-    public List<Guardia> obtenerTodosGuardias() {
-        return guardiaDAO.obtenerGuardias();
-    }
-    
-    public Guardia obtenerGuardiaPorCedula(String cedula) {
-        return guardiaDAO.obtenerGuardiaPorCedula(cedula);
-    }
-    
-    // Método de eliminación
-    public boolean eliminarGuardia(String cedula) {
-        return guardiaDAO.eliminarGuardia(cedula);
-    }
-    
-    // Validation methods (focused on your requirements)
-    private boolean validarCamposObligatorios(String primerNombre, String primerApellido, 
-                                            String segundoApellido, int edad, String cedula, 
-                                            String nacionalidad, String correo, 
-                                            String turno, String cargo) {
-        StringBuilder camposFaltantes = new StringBuilder();
-        
-        if (primerNombre == null || primerNombre.trim().isEmpty()) {
-            camposFaltantes.append("- Primer nombre\n");
-        }
-        if (primerApellido == null || primerApellido.trim().isEmpty()) {
-            camposFaltantes.append("- Primer apellido\n");
-        }
-        if (segundoApellido == null || segundoApellido.trim().isEmpty()) {
-            camposFaltantes.append("- Segundo apellido\n");
-        }
-        if (cedula == null || cedula.trim().isEmpty()) {
-            camposFaltantes.append("- Cédula\n");
-        }
-        if (nacionalidad == null || nacionalidad.trim().isEmpty()) {
-            camposFaltantes.append("- Nacionalidad\n");
-        }
-        if (correo == null || correo.trim().isEmpty()) {
-            camposFaltantes.append("- Correo\n");
-        }
-        if (turno == null || turno.trim().isEmpty()) {
-            camposFaltantes.append("- Turno\n");
-        }
-        if (cargo == null || cargo.trim().isEmpty()) {
-            camposFaltantes.append("- Cargo\n");
-        }
-        
-        if (camposFaltantes.length() > 0) {
-            throw new IllegalArgumentException("Los siguientes campos son obligatorios:\n" + camposFaltantes.toString());
-        }
-        
-        return true;
-    }
-    
-    private boolean validarImagen(File imagen) {
-        if (imagen == null || !imagen.exists()) {
-            throw new IllegalArgumentException("Debe seleccionar una imagen válida");
-        }
-        
-        // Validar tipos de imagen permitidos
         String nombre = imagen.getName().toLowerCase();
         if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg") && 
             !nombre.endsWith(".png") && !nombre.endsWith(".gif")) {
-            throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, PNG o GIF");
+            throw new IllegalArgumentException("Formato de imagen no válido");
         }
         
-        
-        
-        return true;
-    }
-    
-    private boolean validarFechasContrato(LocalDate inicio, LocalDate fin) {
-        if (fin == null) {
-            throw new IllegalArgumentException("La fecha de fin de contrato no puede estar vacía");
-        }
-        
-        if (!fin.isAfter(inicio)) {
-            throw new IllegalArgumentException("La fecha de fin de contrato debe ser posterior a la fecha de inicio");
-        }
-        
-        return true;
-    }
-    
-    public DefaultTableModel obtenerModeloTablaGuardias() {
-    String[] columnas = {
-        "Foto",
-        "Nombres",
-        "Apellidos",
-        "Edad",
-        "Cédula",
-        "Sexo",
-        "Nacionalidad",
-        "Correo",
-        "Turno",
-        "Cargo",
-        "Fecha Inicio",
-        "Fecha Fin"
-    };
-
-    DefaultTableModel modelo = new DefaultTableModel(columnas, 0) {
-        @Override
-        public Class<?> getColumnClass(int columnIndex) {
-            return columnIndex == 0 ? ImageIcon.class : String.class;
-        }
-        
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false; // Hacer que toda la tabla sea no editable
-        }
-    };
-
-    List<Guardia> guardias = guardiaDAO.obtenerGuardias();
-
-    for (Guardia guardia : guardias) {
-        ImageIcon icono = cargarImagenGuardia(guardia);
-        
-        modelo.addRow(new Object[]{
-            icono,
-            guardia.getNombresCompletos(),
-            guardia.getApellidosCompletos(),
-            String.valueOf(guardia.getEdad()),
-            guardia.getIdentificacion(),
-            guardia.getSexo(),
-            guardia.getNacionalidad(),
-            guardia.getCorreo(),
-            guardia.getTurno(),
-            guardia.getCargo(),
-            guardia.getFechaInicioContratoFormateada(),
-            guardia.getFechaFinContratoFormateada()
-        });
+        return imagen;
     }
 
-    return modelo;
+    public boolean existeGuardia(String cedula) {
+    try {
+        return guardiaDAO.existeGuardia(cedula);
+    } catch (Exception e) {
+        throw new RuntimeException("Error al verificar existencia: " + e.getMessage(), e);
+    }
 }
 
-private ImageIcon cargarImagenGuardia(Guardia guardia) {
-    if (guardia.getRutaImagen() != null && !guardia.getRutaImagen().isEmpty()) {
-        try {
-            File imgFile = new File(guardia.getRutaImagen());
-            if (imgFile.exists()) {
-                ImageIcon original = new ImageIcon(guardia.getRutaImagen());
-                Image imagenEscalada = original.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
-                return new ImageIcon(imagenEscalada);
+    // ==================== MÉTODOS PARA LA VISTA ====================
+
+    public DefaultTableModel obtenerModeloTabla() {
+        String[] columnas = {
+            "Foto", "Nombres", "Apellidos", "Edad", "Cédula", 
+            "Sexo", "Nacionalidad", "Correo", "Turno", "Cargo",
+            "Fecha Inicio", "Fecha Fin"
+        };
+
+        DefaultTableModel modelo = new DefaultTableModel(columnas, 0) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return columnIndex == 0 ? ImageIcon.class : String.class;
             }
-        } catch (Exception e) {
-            System.err.println("Error al cargar imagen: " + e.getMessage());
-        }
-    }
-    return null;
-}
+            
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
-private void validarEdad(int edad) {
-        if (edad < 18 || edad > 70) {
-            throw new IllegalArgumentException("La edad debe estar entre 18 y 70 años");
+        for (Guardia guardia : obtenerTodosGuardias()) {
+            modelo.addRow(new Object[]{
+                obtenerImagenGuardia(guardia),
+                guardia.getPrimerNombre() + " " + guardia.getSegundoNombre(),
+                guardia.getPrimerApellido() + " " + guardia.getSegundoApellido(),
+                guardia.getEdad(),
+                guardia.getIdentificacion(),
+                guardia.getSexo(),
+                guardia.getNacionalidad(),
+                guardia.getCorreo(),
+                guardia.getTurno(),
+                guardia.getCargo(),
+                guardia.getFechaInicioContrato(),
+                guardia.getFechaFinContrato()
+            });
+        }
+
+        return modelo;
+    }
+
+    private ImageIcon obtenerImagenGuardia(Guardia guardia) {
+        if (guardia.getRutaImagen() != null && !guardia.getRutaImagen().isEmpty()) {
+            try {
+                ImageIcon original = new ImageIcon(guardia.getRutaImagen());
+                Image imagen = original.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                return new ImageIcon(imagen);
+            } catch (Exception e) {
+                System.err.println("Error al cargar imagen: " + e.getMessage());
+            }
+        }
+        return null;
+    }
+
+    public void cargarDatosEnFormulario(Guardia guardia) {
+        if (guardia != null) {
+            txtPrimerNombre.setText(guardia.getPrimerNombre());
+            txtSegundoNombre.setText(guardia.getSegundoNombre());
+            txtPrimerApellido.setText(guardia.getPrimerApellido());
+            txtSegundoApellido.setText(guardia.getSegundoApellido());
+            txtEdad.setText(String.valueOf(guardia.getEdad()));
+            txtCedula.setText(guardia.getIdentificacion());
+            txtNacionalidad.setText(guardia.getNacionalidad());
+            txtCorreo.setText(guardia.getCorreo());
+            cmbTurno.setSelectedItem(guardia.getTurno());
+            cmbCargo.setSelectedItem(guardia.getCargo());
+            jDateChooserFinContrato.setDate(java.sql.Date.valueOf(guardia.getFechaFinContrato()));
+            
+            if (guardia.getRutaImagen() != null && !guardia.getRutaImagen().isEmpty()) {
+                rutaImagenSeleccionada = guardia.getRutaImagen();
+                // Aquí puedes cargar la imagen en un JLabel si lo deseas
+            }
         }
     }
+
+    public void limpiarFormulario() {
+        txtPrimerNombre.setText("");
+        txtSegundoNombre.setText("");
+        txtPrimerApellido.setText("");
+        txtSegundoApellido.setText("");
+        txtEdad.setText("");
+        txtCedula.setText("");
+        txtNacionalidad.setText("");
+        txtCorreo.setText("");
+        cmbTurno.setSelectedIndex(0);
+        cmbCargo.setSelectedIndex(0);
+        jDateChooserFinContrato.setDate(null);
+        rutaImagenSeleccionada = null;
+    }
+
+    public JTextField getTxtPrimerNombre() {
+        return txtPrimerNombre;
+    }
+
+    public void setTxtPrimerNombre(JTextField txtPrimerNombre) {
+        this.txtPrimerNombre = txtPrimerNombre;
+    }
+
+    public JTextField getTxtSegundoNombre() {
+        return txtSegundoNombre;
+    }
+
+    public void setTxtSegundoNombre(JTextField txtSegundoNombre) {
+        this.txtSegundoNombre = txtSegundoNombre;
+    }
+
+    public JTextField getTxtPrimerApellido() {
+        return txtPrimerApellido;
+    }
+
+    public void setTxtPrimerApellido(JTextField txtPrimerApellido) {
+        this.txtPrimerApellido = txtPrimerApellido;
+    }
+
+    public JTextField getTxtSegundoApellido() {
+        return txtSegundoApellido;
+    }
+
+    public void setTxtSegundoApellido(JTextField txtSegundoApellido) {
+        this.txtSegundoApellido = txtSegundoApellido;
+    }
+
+    public JTextField getTxtEdad() {
+        return txtEdad;
+    }
+
+    public void setTxtEdad(JTextField txtEdad) {
+        this.txtEdad = txtEdad;
+    }
+
+    public JTextField getTxtCedula() {
+        return txtCedula;
+    }
+
+    public void setTxtCedula(JTextField txtCedula) {
+        this.txtCedula = txtCedula;
+    }
+
+    public JTextField getTxtNacionalidad() {
+        return txtNacionalidad;
+    }
+
+    public void setTxtNacionalidad(JTextField txtNacionalidad) {
+        this.txtNacionalidad = txtNacionalidad;
+    }
+
+    public JTextField getTxtCorreo() {
+        return txtCorreo;
+    }
+
+    public void setTxtCorreo(JTextField txtCorreo) {
+        this.txtCorreo = txtCorreo;
+    }
+
+    public JComboBox<String> getCmbTurno() {
+        return cmbTurno;
+    }
+
+    public void setCmbTurno(JComboBox<String> cmbTurno) {
+        this.cmbTurno = cmbTurno;
+    }
+
+    public JComboBox<String> getCmbCargo() {
+        return cmbCargo;
+    }
+
+    public void setCmbCargo(JComboBox<String> cmbCargo) {
+        this.cmbCargo = cmbCargo;
+    }
+
+    public JDateChooser getDateChooserFinContrato() {
+        return jDateChooserFinContrato;
+    }
+
+    public void setDateChooserFinContrato(JDateChooser dateChooserFinContrato) {
+        this.jDateChooserFinContrato = dateChooserFinContrato;
+    }
+
+    
 
     public void setRutaImagenSeleccionada(String rutaImagenSeleccionada) {
         this.rutaImagenSeleccionada = rutaImagenSeleccionada;
     }
 
-
-
+    public String getRutaImagenSeleccionada() {
+        return rutaImagenSeleccionada;
+    }
 }

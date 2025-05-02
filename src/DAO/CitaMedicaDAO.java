@@ -13,15 +13,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import Model.LocalDateAdapter;
+import java.time.LocalTime;
 
 public class CitaMedicaDAO {
 
-    private static final String JSON_FILE = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\citasMedicas.json";
+    private static final String JSON_FILE = "C:\\Users\\nicol\\OneDrive\\Escritorio\\Copia - 3\\src\\Resources\\DATA\\citasMedicas.json";
     private Gson gson;
 
     public CitaMedicaDAO() {
         gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
                 .setPrettyPrinting()
                 .create();
     }
@@ -40,7 +42,8 @@ public class CitaMedicaDAO {
         }
 
         try (FileReader reader = new FileReader(archivo)) {
-            Type listType = new TypeToken<List<CitaMedica>>(){}.getType();
+            Type listType = new TypeToken<List<CitaMedica>>() {
+            }.getType();
             List<CitaMedica> citas = gson.fromJson(reader, listType);
             return citas != null ? citas : new ArrayList<>();
         } catch (IOException e) {
@@ -91,6 +94,16 @@ public class CitaMedicaDAO {
         for (CitaMedica c : citas) {
             if (c.getId() == id) {
                 return c;
+            }
+        }
+        return null;
+    }
+
+    public CitaMedica buscarCitaPorPresoFechaYHora(String identificacionPreso, LocalDate fecha, LocalTime hora) {
+        List<CitaMedica> citas = cargarTodas();
+        for (CitaMedica cita : citas) {
+            if (cita.getPreso().getIdentificacion().equals(identificacionPreso) && cita.getFecha().equals(fecha) && cita.getHora().equals(hora)) {
+                return cita;
             }
         }
         return null;

@@ -56,16 +56,22 @@ public class SancionDAO {
         }
     }
 
-    public void guardarSancion(Sancion sancion) {
-        List<Sancion> sanciones = cargarTodas();
+    public boolean guardarSancion(Sancion sancion) {
+        try {
+            List<Sancion> sanciones = cargarTodas();
 
-        if (sancion.getId() == 0) {
-            int nuevoId = obtenerProximoId(sanciones);
-            sancion.setId(nuevoId);
+            if (sancion.getId() == 0) {
+                int nuevoId = obtenerProximoId(sanciones);
+                sancion.setId(nuevoId);
+            }
+
+            sanciones.add(sancion);
+            guardarTodas(sanciones);
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error al guardar sanción: " + e.getMessage());
+            return false;
         }
-
-        sanciones.add(sancion);
-        guardarTodas(sanciones);
     }
 
     private int obtenerProximoId(List<Sancion> sanciones) {

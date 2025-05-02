@@ -1,8 +1,16 @@
 package DAO;
 
+import Model.Actividad;
 import Model.Oficial;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
 import javax.swing.JOptionPane;
@@ -14,9 +22,35 @@ import java.util.List;
 
 public class OficialDAO {
 
-    private static final String JSON_FILE = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\oficiales.json";
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\oficiales.json\\";
 
+        private static OficialDAO instancia;
+
+    public static synchronized OficialDAO getInstancia() {
+        if (instancia == null) {
+            instancia = new OficialDAO();
+        }
+        return instancia;
+    }
+    
+    private Gson gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .registerTypeAdapter(LocalDate.class, new OficialDAO.LocalDateAdapter())
+            .create();
+    
+    
+    private static class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
+        @Override
+        public JsonElement serialize(LocalDate date, Type typeOfSrc, JsonSerializationContext context) {
+            return new JsonPrimitive(date.toString());
+        }
+
+        @Override
+        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            return LocalDate.parse(json.getAsString());
+        }
+    }
+    
     public List<Oficial> cargarTodos() {
         File archivo = new File(JSON_FILE);
 
@@ -117,4 +151,46 @@ public class OficialDAO {
         guardarTodos(lista);
         return true;
     }
+   public boolean asignarOficialAActividad(String idActividad, String identificacionOficial) {
+    ActividadDAO actividadDAO = ActividadDAO.getInstancia();
+    Actividad actividad = actividadDAO.buscarActividadPorId(idActividad);
+
+    if (actividad == null) {
+        JOptionPane.showMessageDialog(null, "Actividad no encontrada.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return false;
+    }
+
+    Oficial oficial = this.buscarPorIdentificacion(identificacionOficial); 
+    if (oficial == null) {
+        JOptionPane.showMessageDialog(null, "Oficial no encontrado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return false;
+    }
+
+    actividad.setResponsableOficial(oficial.getIdentificacion());  
+    
+    if (actividadDAO.guardarActividades(actividadDAO.cargarActividades())) {
+        JOptionPane.showMessageDialog(null, "Oficial asignado a la actividad correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
+        return true;
+    } else {
+        return false;
+    }
+
+
+}
+    
+    public List<Actividad> obtenerActividadesPorOficial(String identificacionOficial) {
+    ActividadDAO actividadDAO = ActividadDAO.getInstancia();
+    List<Actividad> todasActividades = actividadDAO.cargarActividades();
+    
+    List<Actividad> actividadesOficial = new ArrayList<>();
+    for (Actividad actividad : todasActividades) {
+        if (actividad.getResponsableOficial() != null && actividad.getResponsableOficial().equals(identificacionOficial)) {
+            actividadesOficial.add(actividad);
+        }
+    }
+    return actividadesOficial;
+}
+
+
+    
 }

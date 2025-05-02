@@ -16,8 +16,17 @@ import javax.swing.JOptionPane;
 
 public class DelitoDAO {
 
+   private static DelitoDAO instancia;
+
     private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\delitos.json";
     private Gson gson;
+    
+     public static synchronized DelitoDAO getInstancia() {
+        if (instancia == null) {
+            instancia = new DelitoDAO();
+        }
+        return instancia;
+    }
 
     public DelitoDAO() {
         this.gson = new GsonBuilder()
@@ -25,6 +34,8 @@ public class DelitoDAO {
                 .setPrettyPrinting()
                 .create();
     }
+    
+    
 
     public List<Delito> cargarTodos() {
         File archivo = new File(JSON_FILE);

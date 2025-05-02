@@ -14,7 +14,7 @@ import java.util.*;
 import javax.swing.JOptionPane;
 
 public class GuardiaDAO {
-    private static final String RUTA_JSON = "C:\\Users\\gameV\\Documents\\NetBeansProjects\\InmateMonitorinG\\src\\Resources\\DATA\\guardias.json";
+    private static final String RUTA_JSON = "C:\\Users\\gameV\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\guardias.json";
     private static final String RUTA_IMAGENES = "src/Resources/imagenes_guardias/";
     private final Gson gson;
     

@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class VisitaDAO {
 
@@ -98,4 +99,76 @@ public class VisitaDAO {
             System.err.println("Error al guardar en archivo JSON: " + e.getMessage());
         }
     }
+
+    public boolean actualizarVisita(int idVisita, Visita visitaActualizada) {
+        List<Visita> visitas = cargarTodas();
+        boolean encontrado = false;
+
+        for (int i = 0; i < visitas.size(); i++) {
+            if (visitas.get(i).getId() == idVisita) {
+                visitas.set(i, visitaActualizada);
+                encontrado = true;
+                break;
+            }
+        }
+
+        if (!encontrado) {
+            JOptionPane.showMessageDialog(null,
+                    "Visita no encontrada con ID: " + idVisita,
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return guardarCambios(visitas);
+    }
+
+    public Visita modificarDatosVisitaYDevolver(int id,
+            String duracion, String tipo, String lugar) {
+
+        List<Visita> visitas = cargarTodas();
+
+        for (Visita visita : visitas) {
+            if (visita.getId() == id) {
+
+                if (duracion != null) {
+                    visita.setDuracionVisitaEnHoras(duracion);
+                }
+                if (tipo != null) {
+                    visita.setTipoVisita(tipo);
+                }
+                if (lugar != null) {
+                    visita.setLugarVisita(lugar);
+                }
+
+                if (guardarCambios(visitas)) {
+                    return visita;
+                }
+                return null;
+            }
+        }
+        return null;
+    }
+
+    private boolean guardarCambios(List<?> lista) {
+        try (Writer writer = new FileWriter(JSON_FILE)) {
+            gson.toJson(lista, writer);
+            return true;
+        } catch (IOException e) {
+            System.err.println("Error al guardar cambios: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public Visita buscarVisitaPorId(int id) {
+        List<Visita> visitas = cargarTodas();
+
+        for (Visita visita : visitas) {
+            if (visita.getId() == id) {
+                return visita;
+            }
+        }
+
+        return null;
+    }
+
 }
