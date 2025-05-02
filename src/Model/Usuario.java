@@ -6,55 +6,56 @@ package Model;
 
 
 public class Usuario {
-    private String email;
+     private String usuario;
     private String contraseña;
     private Rol rol;
     private Persona persona;
 
    
-    public Usuario(String email, String contraseña, Rol rol) {
-        this(email, contraseña, rol, null);
+    public Usuario(String usuario, String contraseña, Rol rol) {
+        this(usuario, contraseña, rol, null);
     }
 
     
-    public Usuario(String email, String contraseña, Rol rol, Persona persona) {
-        this.email = email;
+    public Usuario(String usuario, String contraseña, Rol rol, Persona persona) {
+        this.usuario = usuario;
         this.contraseña = contraseña;
         this.rol = rol;
         this.persona = persona;
     }
 
-    
-    public String getEmail() {
-        return email;
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     public String getContraseña() {
         return contraseña;
     }
 
-    public Rol getRol() {
-        return rol;
-    }
-
-    public Persona getPersona() {
-        return persona;
-    }
-
-    // Setters
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public void setContraseña(String contraseña) {
         this.contraseña = contraseña;
+    }
+
+    public Rol getRol() {
+        return rol;
     }
 
     public void setRol(Rol rol) {
         this.rol = rol;
     }
 
+    public Persona getPersona() {
+        return persona;
+    }
+
     public void setPersona(Persona persona) {
         this.persona = persona;
     }
+
+    
+    
 }

@@ -2,31 +2,45 @@ package Model;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import com.google.gson.annotations.SerializedName;
+
 
 public class Enfermera extends Persona {
+    private String usuario;
+private String contrasena;
     private String turno; // "Diurno" o "Nocturno"
+    
+    @SerializedName("fechaContratacion")
     private LocalDate fechaContratacion;
+    
+    @SerializedName("fechaFinContrato")
     private LocalDate fechaFinContrato;
+    
+    @SerializedName("rutaImagen")
     private String rutaImagen;
+    
+    @SerializedName("correo")
     private String correo;
     
     public Enfermera(String primerNombre, String segundoNombre, 
-                   String primerApellido, String segundoApellido,
-                   int edad, String sexo, String nacionalidad, 
-                   String identificacion, String turno,
-                   LocalDate fechaContratacion, LocalDate fechaFinContrato,
-                   String correo) {
-        super(primerNombre, segundoNombre, primerApellido, segundoApellido, 
-              edad, sexo, nacionalidad, identificacion);
-        this.turno = turno;
-        this.fechaContratacion = fechaContratacion;
-        this.fechaFinContrato = fechaFinContrato;
-        this.correo = correo;
-    }
+               String primerApellido, String segundoApellido,
+               int edad, String sexo, String nacionalidad, 
+               String identificacion, String turno,
+               LocalDate fechaContratacion, LocalDate fechaFinContrato,
+               String correo, String usuario, String contrasena) {
+    super(primerNombre, segundoNombre, primerApellido, segundoApellido, 
+          edad, sexo, nacionalidad, identificacion);
+    this.turno = turno;
+    this.fechaContratacion = fechaContratacion;
+    this.fechaFinContrato = fechaFinContrato;
+    this.correo = correo;
+    this.usuario = usuario;
+    this.contrasena = contrasena;
+}
 
     // Getters y Setters
     public String getTurno() {
-        return turno;
+        return turno != null ? turno : "";
     }
 
     public void setTurno(String turno) {
@@ -60,7 +74,7 @@ public class Enfermera extends Persona {
     }
 
     public String getRutaImagen() {
-        return rutaImagen;
+        return rutaImagen != null ? rutaImagen : "";
     }
 
     public void setRutaImagen(String rutaImagen) {
@@ -75,8 +89,37 @@ public class Enfermera extends Persona {
         this.correo = correo;
     }
 
-    @Override
-    public String toString() {
-        return getNombreCompleto() + " (" + turno + ") - " + correo;
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+    
+    
+ public String getNombresParaTabla() {
+        String nombres = getPrimerNombre();
+        if (!getSegundoNombre().isEmpty()) {
+            nombres += " " + getSegundoNombre();
+        }
+        return nombres.trim();
+    }
+
+    // Método específico para mostrar apellidos en tabla
+    public String getApellidosParaTabla() {
+        String apellidos = getPrimerApellido();
+        if (!getSegundoApellido().isEmpty()) {
+            apellidos += " " + getSegundoApellido();
+        }
+        return apellidos.trim();
     }
 }

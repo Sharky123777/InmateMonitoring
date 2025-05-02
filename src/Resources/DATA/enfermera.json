@@ -1,17 +1,38 @@
-[
-  {
-    "primerNombre": "PRUEBAFINAL",
-    "segundoNombre": "xxxxxxxxxx",
-    "primerApellido": "eeeee",
-    "segundoApellido": "ai",
-    "edad": 45,
-    "sexo": "Femenino",
-    "nacionalidad": "yoysay",
-    "identificacion": "234223232",
-    "turno": "Nocturno",
-    "fechaContratacion": "2025-04-19",
-    "fechaFinContrato": "2025-04-29",
-    "rutaImagen": "src/Resources/imagenes_enfermeras/234223232_1745065426787.jpg",
-    "correo": "@.com"
-  }
-]
+{
+  "enfermeras": [
+    {
+      "usuario": "SharlokAlcazar502*",
+      "contrasena": "CEx*cwE6",
+      "turno": "Diurno",
+      "fechaContratacion": "2025-04-30",
+      "fechaFinContrato": "2025-11-04",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/81372134_enfermera1.jpg",
+      "correo": "sharlok@gmail.com",
+      "primerNombre": "Sharlok",
+      "segundoNombre": "Maia",
+      "primerApellido": "Alcazar",
+      "segundoApellido": "Gutierrez",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Venezolana",
+      "identificacion": "81372134"
+    },
+    {
+      "usuario": "CelinaRestrepo139\u0026",
+      "contrasena": "58fpZS#h",
+      "turno": "Diurno",
+      "fechaContratacion": "2025-04-30",
+      "fechaFinContrato": "2025-09-14",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/73132479_enfermera2.jpeg",
+      "correo": "Celina@hotmail.com",
+      "primerNombre": "Celina",
+      "segundoNombre": "",
+      "primerApellido": "Restrepo",
+      "segundoApellido": "Murillo",
+      "edad": 56,
+      "sexo": "Femenino",
+      "nacionalidad": "Colombiana",
+      "identificacion": "73132479"
+    }
+  ]
+}
