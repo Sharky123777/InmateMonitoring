@@ -1,8 +1,8 @@
 package DAO;
 
-import Model.LocalDateAdapter;
-import Model.LocalTimeAdapter;
-import Model.Visita;
+import Model.Entities.LocalDateAdapter;
+import Model.Entities.LocalTimeAdapter;
+import Model.Entities.Visita;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import java.io.*;

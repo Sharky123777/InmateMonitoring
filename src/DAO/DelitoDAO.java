@@ -1,7 +1,7 @@
 package DAO;
 
-import Model.Delito;
-import Model.LocalDateAdapter;
+import Model.Entities.Delito;
+import Model.Entities.LocalDateAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;

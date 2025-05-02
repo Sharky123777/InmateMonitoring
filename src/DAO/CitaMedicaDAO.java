@@ -1,6 +1,6 @@
 package DAO;
 
-import Model.CitaMedica;
+import Model.Entities.CitaMedica;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import Model.LocalDateAdapter;
+import Model.Entities.LocalDateAdapter;
 import java.time.LocalTime;
 
 public class CitaMedicaDAO {

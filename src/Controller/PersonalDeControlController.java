@@ -2,7 +2,7 @@ package Controller;
 
 import DAO.PersonalDeControlDAO;
 import View.Director;
-import Model.PersonalDeControl;
+import Model.Entities.PersonalDeControl;
 import java.awt.Image;
 import java.io.File;
 import java.time.LocalDate;

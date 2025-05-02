@@ -1,7 +1,7 @@
 package DAO;
 
-import Model.Actividad;
-import Model.Oficial;
+import Model.Entities.Actividad;
+import Model.Entities.Oficial;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;

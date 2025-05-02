@@ -2,10 +2,10 @@ package Controller;
 
 import DAO.DelitoDAO;
 import DAO.PresoDAO;
-import Model.Preso;
-import Model.Delito;
-import Model.ExpedienteJudicial;
-import Model.Sentencia;
+import Model.Entities.Preso;
+import Model.Entities.Delito;
+import Model.Entities.ExpedienteJudicial;
+import Model.Entities.Sentencia;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;

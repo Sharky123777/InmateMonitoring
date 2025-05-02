@@ -3,7 +3,7 @@ package View;
 
 import Controller.ActividadController;
 import DAO.ActividadDAO;
-import Model.Preso;
+import Model.Entities.Preso;
 
 
 public class CambioEstadoPresoActividad extends javax.swing.JDialog {

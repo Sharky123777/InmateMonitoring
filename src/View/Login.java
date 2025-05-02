@@ -5,8 +5,8 @@
 package View;
 
 import DAO.UsuarioDAO;
-import Model.Rol;
-import Model.Usuario;
+import Model.Constants.RolEnum;
+import Model.Entities.Usuario;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
@@ -21,9 +21,9 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
-        
+
         RolCmbBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{
-            "DIRECTOR", "OFICIAL", "PERSONAL_DE_CONTROL", "OFICIAL_DE_REGISTRO", "ENFERMERA","COORDINADOR_DE_ACTIVIDADES,"
+            RolEnum.DIRECTOR.toString(), "OFICIAL", "PERSONAL_DE_CONTROL", "OFICIAL_DE_REGISTRO", "ENFERMERA","COORDINADOR_DE_ACTIVIDADES,"
         }));
 
     }
@@ -143,7 +143,7 @@ public class Login extends javax.swing.JFrame {
         String usuarios = FieldUsuario.getText();
         String contraseña = new String(Password.getPassword());
         String rolTexto = (String) RolCmbBox.getSelectedItem();
-        Rol rolSeleccionado = Rol.valueOf(rolTexto);
+        RolEnum rolSeleccionado = RolEnum.valueOf(rolTexto);
 
         UsuarioDAO usuarioDAO = UsuarioDAO.getInstancia();
         Usuario usuario = usuarioDAO.validarCredenciales(usuarios, contraseña, rolSeleccionado);

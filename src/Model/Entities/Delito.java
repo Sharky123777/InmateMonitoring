@@ -1,5 +1,5 @@
 
-package Model;
+package Model.Entities;
 
 import java.time.LocalDate;
 

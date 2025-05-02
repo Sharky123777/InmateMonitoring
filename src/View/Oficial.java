@@ -3,7 +3,7 @@ package View;
 import Controller.CitaMedicaController;
 import Controller.SancionController;
 import DAO.PresoDAO;
-import Model.Preso;
+import Model.Entities.Preso;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
 import java.awt.Image;

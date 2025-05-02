@@ -14,7 +14,7 @@ import DAO.GuardiaDAO;
 import java.awt.Image;
 import java.io.File;
 import java.time.LocalDate;
-import Model.Guardia;
+import Model.Entities.Guardia;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -24,7 +24,7 @@ import java.awt.Component;
 import java.awt.Image;
 import java.io.File;
 import java.util.List;
-import Model.Enfermera;
+import Model.Entities.Enfermera;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Component;
 import java.awt.image.BufferedImage;
@@ -80,7 +80,7 @@ private CoordinadorDeActividadesController coordinadorController;
     public Director() {
         initComponents();
 
-        // 3. Configuraciones iniciales
+       
         txtFechaContratacion.setEditable(false);
         txtFechaContratacion.setText(LocalDate.now().toString());
         txtFechaContratacion1.setEditable(false);
@@ -106,8 +106,7 @@ private CoordinadorDeActividadesController coordinadorController;
                 jDateChooserFinContrato
         );
 
-        // 6. Crear instancia del controlador de enfermeras
-        enfermeraController = EnfermeraController.getInstancia(
+                enfermeraController = EnfermeraController.getInstancia(
                 txtPrimerNombre1,
                 txtSegundoNombre1,
                 txtPrimerApellido1,
@@ -131,26 +130,26 @@ coordinadorController.setComponentes(
     txtNacionalidad2,
     txtCorreo2,
     cmbTurno2,
-    cmbCargo2,  // Ahora es JComboBox
+    cmbCargo2,  
     dateFinContrato2
 );
 
 
-        // 7. Actualizar tablas (después de tener los controladores inicializados)
+
         actualizarTablaGuardias();
         actualizarTablaEnfermeras();
 
         jDateChooserFinContrato = new JDateChooser();
         jDateChooserFinContrato.setDateFormatString("dd/MM/yyyy");
 
-// Asegúrate de que el editor tenga el formato correcto
+
         jDateChooserFinContrato.getDateEditor().setEnabled(true);
 
-// Configura un manejador de propiedades para debug
+
         jDateChooserFinContrato.addPropertyChangeListener("date", evt -> {
             System.out.println("Evento de cambio de fecha: " + evt.getNewValue());
         });
-// Verifica que no sea null antes de usarlo
+
         if (jDateChooserFinContrato == null) {
             throw new IllegalStateException("JDateChooser no ha sido inicializado");
         }
@@ -1923,34 +1922,33 @@ coordinadorController.setComponentes(
     }//GEN-LAST:event_txtCedulaActionPerformed
 
     private void cargarTablaGuardias() {
-        // Obtener el modelo de tabla desde el controlador
+        
         DefaultTableModel modelo = guardiaController.obtenerModeloTabla();
 
-        // Asignar el modelo a la tabla
+        
         tablaGuardias.setModel(modelo);
 
-        // Configurar el renderizador para la columna de imagen
+        
         tablaGuardias.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
 
-        // Ajustar visualización
+       
         ajustarImagenesTabla();
     }
     
     
     
     private void ajustarColumnasTablaCDA() {
-    // Ajustar anchos de columnas según necesidad
+   
     TableColumnModel columnModel = tablaCDA.getColumnModel();
     
-    // Ejemplo de ajustes (personaliza según tus necesidades):
-    columnModel.getColumn(0).setPreferredWidth(60);  // Columna imagen
-    columnModel.getColumn(1).setPreferredWidth(150); // Nombres
-    columnModel.getColumn(2).setPreferredWidth(150); // Apellidos
-    columnModel.getColumn(3).setPreferredWidth(80);  // Cédula
-    columnModel.getColumn(4).setPreferredWidth(80);  // Turno
-    columnModel.getColumn(5).setPreferredWidth(120); // Cargo
+       columnModel.getColumn(0).setPreferredWidth(60);  
+    columnModel.getColumn(1).setPreferredWidth(150);
+    columnModel.getColumn(2).setPreferredWidth(150); 
+    columnModel.getColumn(3).setPreferredWidth(80);  
+    columnModel.getColumn(4).setPreferredWidth(80);  
+    columnModel.getColumn(5).setPreferredWidth(120);
     
-    // Opcional: Ajustar altura de filas para imágenes
+   
     tablaCDA.setRowHeight(60);
 }
 
@@ -1963,7 +1961,7 @@ coordinadorController.setComponentes(
     }
 
     try {
-        // --- Campos no editables (solo visualización) ---
+        
         txtCedulaMod.setText(guardia.getIdentificacion());
         txtSexoMod.setText(guardia.getSexo() != null ? guardia.getSexo() : "");
         txtFechaContratacionMod.setText(
@@ -1971,7 +1969,7 @@ coordinadorController.setComponentes(
             guardia.getFechaInicioContratoFormateada() : ""
         );
 
-        // --- Campos editables ---
+       
         txtPrimerNombreMod.setText(guardia.getPrimerNombre());
         txtSegundoNombreMod.setText(
             guardia.getSegundoNombre() != null ? guardia.getSegundoNombre() : ""
@@ -1988,7 +1986,7 @@ coordinadorController.setComponentes(
             guardia.getCorreo() != null ? guardia.getCorreo() : ""
         );
 
-        // --- Comboboxes ---
+       
         if (guardia.getTurno() != null) {
             cmbTurnoMod.setSelectedItem(guardia.getTurno());
         }
@@ -1996,7 +1994,7 @@ coordinadorController.setComponentes(
             txtCargoMod.setSelectedItem(guardia.getCargo());
         }
 
-        // --- Fecha fin contrato (JDateChooser) ---
+       
         if (guardia.getFechaFinContrato() != null) {
             dateFinContratoMod.setDate(
                 Date.from(
@@ -2009,7 +2007,7 @@ coordinadorController.setComponentes(
             dateFinContratoMod.setDate(null);
         }
 
-        // --- Cargar imagen (desde ruta en JSON) ---
+        
         if (guardia.getRutaImagen() != null && !guardia.getRutaImagen().isEmpty()) {
             try {
                 ImageIcon icono = new ImageIcon(guardia.getRutaImagen());
@@ -2032,7 +2030,7 @@ coordinadorController.setComponentes(
         this.cedulaActualModificacion = guardia.getIdentificacion();
         this.imagenSeleccionadaMod = null;
 
-        // Debug: Verificar cédula asignada
+       
         System.out.println("[DEBUG] Cédula asignada para modificación: " + this.cedulaActualModificacion);
 
     } catch (Exception e) {
@@ -2067,7 +2065,7 @@ coordinadorController.setComponentes(
             if (value != null && value instanceof String) {
                 String rutaImagen = (String) value;
                 try {
-                    // Escalar la imagen al tamaño deseado
+                    
                     ImageIcon icono = new ImageIcon(rutaImagen);
                     Image img = icono.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
                     setIcon(new ImageIcon(img));
@@ -2080,7 +2078,7 @@ coordinadorController.setComponentes(
                 setText("(Sin imagen)");
             }
 
-            // Centrar la imagen en la celda
+            
             setHorizontalAlignment(JLabel.CENTER);
             setVerticalAlignment(JLabel.CENTER);
 
@@ -2107,7 +2105,7 @@ coordinadorController.setComponentes(
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            // En el método donde ocurre el problema (como jButton1ActionPerformed)
+            
             System.out.println("Referencia del JDateChooser en vista: " + jDateChooserFinContrato.hashCode());
             System.out.println("Referencia del JDateChooser en controlador: " + guardiaController.getDateChooserFinContrato().hashCode());
 
@@ -2127,12 +2125,12 @@ coordinadorController.setComponentes(
                 actualizarTablaGuardias();
             }
         } catch (IllegalArgumentException e) {
-            // Mostrar mensajes de validación específicos
+            
             JOptionPane.showMessageDialog(this,
                     e.getMessage(),
                     "Error de validación", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
-            // Manejar otros errores
+            
             JOptionPane.showMessageDialog(this,
                     "Error inesperado: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -2148,7 +2146,7 @@ coordinadorController.setComponentes(
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         for (Guardia guardia : guardias) {
-            // Obtener imagen como ImageIcon (para mostrar en tabla)
+            
             ImageIcon icono = null;
             if (guardia.getRutaImagen() != null && !guardia.getRutaImagen().isEmpty()) {
                 try {
@@ -2177,7 +2175,7 @@ coordinadorController.setComponentes(
             });
         }
 
-        // Ajustar visualización de imágenes en la tabla
+        
         ajustarImagenesTabla();
     }
 
@@ -2201,7 +2199,7 @@ coordinadorController.setComponentes(
             }
         });
 
-        tablaGuardias.setRowHeight(70); // Altura suficiente para las imágenes
+        tablaGuardias.setRowHeight(70); 
     }
 
     private void limpiarFormulario() {
@@ -2223,12 +2221,12 @@ coordinadorController.setComponentes(
 
     private void eliminarGuardia(String cedula, int filaSeleccionada) {
         try {
-            // Eliminar a través del DAO
+           
             GuardiaDAO dao = new GuardiaDAO();
             boolean eliminado = dao.eliminarGuardia(cedula);
 
             if (eliminado) {
-                // Eliminar de la tabla
+                
                 ((DefaultTableModel) tablaGuardias.getModel()).removeRow(filaSeleccionada);
 
                 JOptionPane.showMessageDialog(this,
@@ -2257,10 +2255,10 @@ coordinadorController.setComponentes(
 
         if (resultado == JFileChooser.APPROVE_OPTION) {
             File archivoSeleccionado = fileChooser.getSelectedFile();
-            // Guardar la ruta ABSOLUTA en el controller
+           
             guardiaController.setRutaImagenSeleccionada(archivoSeleccionado.getAbsolutePath());
 
-            // Mostrar preview (opcional)
+           
             try {
                 ImageIcon icono = new ImageIcon(archivoSeleccionado.getAbsolutePath());
                 Image imagenEscalada = icono.getImage().getScaledInstance(
@@ -2285,9 +2283,8 @@ coordinadorController.setComponentes(
     private void txtEdadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadKeyTyped
         char c = evt.getKeyChar();
         if (!Character.isDigit(c) && c != '\b') {
-            evt.consume(); // no deja que se escriba
-
-            // solo muestra el mensaje si no es backspace
+            evt.consume();
+            
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten números.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -2302,13 +2299,13 @@ coordinadorController.setComponentes(
     private void txtCorreoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreoFocusLost
         String email = txtCorreo.getText().trim();
 
-        // Validación básica de email
+        
         if (!email.isEmpty() && (!email.contains("@") || !email.endsWith(".com"))) {
             JOptionPane.showMessageDialog(this,
                     "Correo inválido!\nDebe contener @ y terminar con .com",
                     "Error", JOptionPane.ERROR_MESSAGE);
 
-            // Regresar el foco al campo
+            
             txtCorreo.requestFocus();
         }
     }//GEN-LAST:event_txtCorreoFocusLost
@@ -2316,9 +2313,9 @@ coordinadorController.setComponentes(
     private void txtCedulaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyTyped
         char c = evt.getKeyChar();
         if (!Character.isDigit(c) && c != '\b') {
-            evt.consume(); // no deja que se escriba
+            evt.consume(); 
 
-            // solo muestra el mensaje si no es backspace
+            
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten números.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -2326,7 +2323,8 @@ coordinadorController.setComponentes(
     }//GEN-LAST:event_txtCedulaKeyTyped
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-// Verificación EXTRA de la cédula
+
+        
         if (cedulaActualModificacion == null || cedulaActualModificacion.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                     "Error interno: No se detectó cédula para modificar",
@@ -2335,9 +2333,9 @@ coordinadorController.setComponentes(
         }
 
         try {
-            // Recoger datos del formulario
+           
             Map<String, Object> cambios = new HashMap<>();
-            // 2. Recoger todos los valores modificados
+            
             String primerNombre = txtPrimerNombreMod.getText().trim();
             String segundoNombre = txtSegundoNombreMod.getText().trim();
             String primerApellido = txtPrimerApellidoMod.getText().trim();
@@ -2350,7 +2348,7 @@ coordinadorController.setComponentes(
             LocalDate fechaFin = dateFinContratoMod.getDate().toInstant()
                     .atZone(ZoneId.systemDefault()).toLocalDate();
 
-            // 3. Procesar la modificación a través del Controller
+           
             boolean exito = guardiaController.actualizarGuardia(
                     cedulaActualModificacion,
                     primerNombre,
@@ -2363,7 +2361,7 @@ coordinadorController.setComponentes(
                     turno,
                     fechaFin,
                     cargo,
-                    imagenSeleccionadaMod // Puede ser null si no se cambió la imagen
+                    imagenSeleccionadaMod
             );
 
             if (exito) {
@@ -2371,7 +2369,7 @@ coordinadorController.setComponentes(
                         "Guardia modificado exitosamente",
                         "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
-                // Limpiar y actualizar
+                
                 limpiarFormularioModificacion();
                 actualizarTablaGuardias();
                 jTabbedPane1.setSelectedComponent(ModificarGuardia);
@@ -2397,13 +2395,13 @@ coordinadorController.setComponentes(
     private void txtCorreoModFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreoModFocusLost
         String email = txtCorreoMod.getText().trim();
 
-        // Validación básica de email
+       
         if (!email.isEmpty() && (!email.contains("@") || !email.endsWith(".com"))) {
             JOptionPane.showMessageDialog(this,
                     "Correo inválido!\nDebe contener @ y terminar con .com",
                     "Error", JOptionPane.ERROR_MESSAGE);
 
-            // Regresar el foco al campo
+            
             txtCorreoMod.requestFocus();
         }
     }//GEN-LAST:event_txtCorreoModFocusLost
@@ -2420,7 +2418,7 @@ coordinadorController.setComponentes(
 
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             imagenSeleccionadaMod = fileChooser.getSelectedFile();
-            // Mostrar previsualización
+           
             ImageIcon icon = new ImageIcon(imagenSeleccionadaMod.getAbsolutePath());
             Image scaled = icon.getImage().getScaledInstance(
                     lblImagenMod.getWidth(),
@@ -2437,9 +2435,9 @@ coordinadorController.setComponentes(
     private void txtCedulaModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaModKeyTyped
         char c = evt.getKeyChar();
         if (!Character.isDigit(c) && c != '\b') {
-            evt.consume(); // no deja que se escriba
+            evt.consume();
 
-            // solo muestra el mensaje si no es backspace
+          
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten números.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -2453,9 +2451,9 @@ coordinadorController.setComponentes(
     private void txtEdadModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadModKeyTyped
         char c = evt.getKeyChar();
         if (!Character.isDigit(c) && c != '\b') {
-            evt.consume(); // no deja que se escriba
+            evt.consume(); 
 
-            // solo muestra el mensaje si no es backspace
+            
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten números.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -2472,11 +2470,11 @@ coordinadorController.setComponentes(
                 return;
             }
 
-            // Obtener cédula directamente de la tabla
+          
             String cedula = tablaGuardias.getValueAt(fila, 4).toString(); // Asume columna 4 es cédula
             this.cedulaActualModificacion = cedula; // <-- ASIGNACIÓN CLAVE
 
-            // Cargar datos usando el controller
+           
             Guardia guardia = guardiaController.obtenerGuardiaPorCedula(cedula);
 
             if (guardia == null) {
@@ -2507,10 +2505,10 @@ coordinadorController.setComponentes(
             return;
         }
 
-        // Obtener la cédula del guardia seleccionado (asumiendo columna 4)
+        
         String cedula = tablaGuardias.getValueAt(filaSeleccionada, 4).toString();
 
-        // Mostrar confirmación
+       
         int respuesta = JOptionPane.showConfirmDialog(
                 Director.this,
                 "¿Está seguro que desea eliminar al guardia con cédula " + cedula + "?\nEsta acción no se puede deshacer.",
@@ -2526,7 +2524,7 @@ coordinadorController.setComponentes(
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         try {
-            // Verificar imagen seleccionada
+           
             if (imagenSeleccionadaMod == null || !imagenSeleccionadaMod.exists()) {
                 JOptionPane.showMessageDialog(this,
                         "Debe seleccionar una imagen válida de la enfermera",
@@ -2534,10 +2532,10 @@ coordinadorController.setComponentes(
                 return;
             }
 
-            // Llamar al controlador para agregar
+           
             Enfermera enfermeraGuardada = enfermeraController.agregarEnfermera();
             if (enfermeraGuardada != null) {
-                // Construir el mensaje con formato usando \n y \t
+               
                 String mensaje = "¡Enfermera registrada con éxito!\n\n"
                         + "Credenciales de acceso:\n\n"
                         + "Usuario: \t" + enfermeraGuardada.getUsuario() + "\n"
@@ -2564,7 +2562,7 @@ coordinadorController.setComponentes(
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    // 3. Método para actualizar la tabla cuando hay cambios
+   
     public void actualizarTabla() {
         cargarTablaGuardias();
     }
@@ -2581,7 +2579,7 @@ coordinadorController.setComponentes(
         cmbTurnoMod1.setSelectedItem(enfermera.getTurno());
         txtFechaContratacionMod1.setText(enfermera.getFechaContratacionFormateada());
 
-        // Configurar JDateChooser
+        
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate fechaFin = LocalDate.parse(enfermera.getFechaFinContratoFormateada(), formatter);
@@ -2590,7 +2588,7 @@ coordinadorController.setComponentes(
             dateFinContratoMod1.setDate(null);
         }
 
-        // Cargar imagen existente
+        
         if (enfermera.getRutaImagen() != null) {
             try {
                 ImageIcon icon = new ImageIcon(enfermera.getRutaImagen());
@@ -2599,7 +2597,7 @@ coordinadorController.setComponentes(
                         lblImagenMod1.getHeight(),
                         Image.SCALE_SMOOTH);
                 lblImagenMod1.setIcon(new ImageIcon(img));
-                // Guardar la ruta actual en el controller
+                
                 enfermeraController.setRutaImagenSeleccionada(enfermera.getRutaImagen());
             } catch (Exception e) {
                 lblImagenMod1.setIcon(null);
@@ -2609,16 +2607,16 @@ coordinadorController.setComponentes(
 
     private void actualizarTablaEnfermeras() {
         try {
-            // Obtener el modelo de tabla desde el controlador
+            
             DefaultTableModel modelo = enfermeraController.obtenerModeloTablaEnfermeras();
 
-            // Asignar el modelo a la tabla
+            
             tablaEnfermeras.setModel(modelo);
 
-            // Configurar el renderizador para la columna de imagen
+            
             tablaEnfermeras.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
 
-            // Ajustar visualización
+            
             ajustarVisualizacionTablaEnfermeras();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
@@ -2629,17 +2627,17 @@ coordinadorController.setComponentes(
     }
 
     private void ajustarVisualizacionTablaEnfermeras() {
-        // Ajustar altura de filas para las imágenes
+        
         tablaEnfermeras.setRowHeight(70);
 
-        // Ajustar anchos de columnas
+        
         TableColumnModel columnModel = tablaEnfermeras.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(80);  // Foto
         columnModel.getColumn(1).setPreferredWidth(150); // Nombres
         columnModel.getColumn(2).setPreferredWidth(150); // Apellidos
         columnModel.getColumn(3).setPreferredWidth(50);  // Edad
         columnModel.getColumn(4).setPreferredWidth(100); // Cédula
-        // Ajustar otras columnas según necesidad
+        
     }
 
     private class ImagenTablaRenderer extends DefaultTableCellRenderer {
@@ -2691,7 +2689,7 @@ coordinadorController.setComponentes(
     }
 
     private void cerrarPanelModificacion() {
-        // Limpiar todos los campos
+        
         txtPrimerNombreMod1.setText("");
         txtSegundoNombreMod1.setText("");
         txtPrimerApellidoMod1.setText("");
@@ -2705,10 +2703,10 @@ coordinadorController.setComponentes(
         dateFinContratoMod1.setDate(null);
         lblImagenMod1.setIcon(null);
 
-        // Ocultar el panel de modificación
+       
         ModificarNurse.setVisible(false);
 
-        // Limpiar la imagen seleccionada
+        
         rutaImagenSeleccionada = null;
     }
 
@@ -2723,10 +2721,10 @@ coordinadorController.setComponentes(
         String correo = txtCorreoMod1.getText().trim();
         String turno = cmbTurnoMod1.getSelectedItem().toString();
 
-        // Fecha de contratación: hoy
+        
         LocalDate fechaContratacion = LocalDate.now();
 
-// Fecha de fin del contrato desde JDateChooser
+
         Date fechaFin = dateFinContratoMod1.getDate();
         if (fechaFin == null) {
             JOptionPane.showMessageDialog(this, "Debes seleccionar una fecha de fin de contrato.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -2746,8 +2744,8 @@ coordinadorController.setComponentes(
                 LocalDate.now(),
                 fechaFinContrato,
                 correo,
-                "", // El DAO generará el usuario
-                "" // El DAO generará la contraseña
+                "", 
+                ""
         );
     }
 
@@ -2770,13 +2768,13 @@ coordinadorController.setComponentes(
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File imagenSeleccionada = fileChooser.getSelectedFile();
 
-            // 1. Guardar la ruta en el controlador
+           
             enfermeraController.setRutaImagenSeleccionada(imagenSeleccionada.getAbsolutePath());
 
-            // 2. Guardar el archivo para usarlo después (opcional pero recomendado)
+            
             this.imagenSeleccionadaMod = imagenSeleccionada;
 
-            // Mostrar vista previa
+            
             try {
                 ImageIcon icon = new ImageIcon(imagenSeleccionada.getAbsolutePath());
                 Image img = icon.getImage().getScaledInstance(
@@ -2813,10 +2811,10 @@ coordinadorController.setComponentes(
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         try {
-            // Obtener la cédula original
+           
             String cedulaOriginal = txtCedulaMod1.getText().trim();
 
-            // Preparar cambios
+            
             Map<String, Object> cambios = new HashMap<>();
             cambios.put("primerNombre", txtPrimerNombreMod1.getText().trim());
             cambios.put("segundoNombre", txtSegundoNombreMod1.getText().trim());
@@ -2829,7 +2827,7 @@ coordinadorController.setComponentes(
             cambios.put("fechaFin", dateFinContratoMod1.getDate().toInstant()
                     .atZone(ZoneId.systemDefault()).toLocalDate());
 
-            // Procesar modificación
+            
             boolean resultado = enfermeraController.procesarModificacion(
                     cedulaOriginal, cambios, imagenSeleccionadaMod);
 
@@ -2863,10 +2861,10 @@ coordinadorController.setComponentes(
             return null;
         }
 
-        // Obtener la cédula de la fila seleccionada (columna 4)
+        
         String cedula = tablaEnfermeras.getValueAt(filaSeleccionada, 4).toString();
 
-        // Obtener la enfermera completa del DAO
+        
         return enfermeraDAO.obtenerEnfermeraPorIdentificacion(cedula);
     }
 
@@ -2934,23 +2932,23 @@ coordinadorController.setComponentes(
         int filaSeleccionada = tablaEnfermeras.getSelectedRow();
 
         if (filaSeleccionada >= 0) {
-            // Obtener la cédula desde la tabla
+           
             String cedula = tablaEnfermeras.getValueAt(filaSeleccionada, 4).toString();
 
-            // Buscar a la enfermera en el DAO
+            
             Enfermera enfermera = enfermeraDAO.obtenerEnfermeraPorIdentificacion(cedula);
 
             if (enfermera != null) {
-                // Resetear la imagen seleccionada
+                
                 imagenSeleccionadaMod = null;
 
-                // Mostrar panel de modificación
+                
                 ModificarNurse.setVisible(true);
 
-                // Cargar datos en el formulario
+                
                 cargarDatosEnfermeraParaModificar(enfermera);
 
-                // Cambiar a la pestaña de modificación
+                
                 jTabbedPane1.setSelectedComponent(ModificarNurse);
             } else {
                 JOptionPane.showMessageDialog(this,
@@ -2974,11 +2972,11 @@ coordinadorController.setComponentes(
             return;
         }
 
-        // Obtener datos de la fila seleccionada
+       
         String nombre = tablaEnfermeras.getValueAt(filaSeleccionada, 1).toString();
         String cedula = tablaEnfermeras.getValueAt(filaSeleccionada, 4).toString();
 
-        // Mostrar confirmación con mensaje detallado
+       
         int respuesta = JOptionPane.showConfirmDialog(
                 this,
                 "¿Está seguro que desea eliminar a la enfermera:\n"
@@ -3104,8 +3102,7 @@ coordinadorController.setComponentes(
     private void txtPrimerNombre1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombre1KeyTyped
         char c = evt.getKeyChar();
     if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -3115,8 +3112,7 @@ coordinadorController.setComponentes(
     private void txtSegundoNombre1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombre1KeyTyped
     char c = evt.getKeyChar();
     if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -3203,8 +3199,7 @@ coordinadorController.setComponentes(
     private void txtNacionalidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadKeyTyped
         char c = evt.getKeyChar();
     if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -3214,8 +3209,8 @@ coordinadorController.setComponentes(
     private void txtPrimerNombreMod1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreMod1KeyTyped
         char c = evt.getKeyChar();
     if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        evt.consume(); 
+        
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }

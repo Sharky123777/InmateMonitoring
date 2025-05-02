@@ -1,7 +1,7 @@
 package Controller;
 
 import DAO.EnfermeraDAO;
-import Model.Enfermera;
+import Model.Entities.Enfermera;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Image;
 import java.io.File;

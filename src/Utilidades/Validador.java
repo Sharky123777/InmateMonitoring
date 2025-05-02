@@ -1,8 +1,8 @@
 package Utilidades;
 
 import DAO.PresoDAO;
-import Model.Oficial;
-import Model.Preso;
+import Model.Entities.Oficial;
+import Model.Entities.Preso;
 import javax.swing.JOptionPane;
 import java.io.File;
 import java.time.LocalDate;

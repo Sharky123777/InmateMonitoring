@@ -1,7 +1,7 @@
 package DAO;
 
-import Model.Rol;
-import Model.Usuario;
+import Model.Constants.RolEnum;
+import Model.Entities.Usuario;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import java.io.*;
@@ -24,7 +24,7 @@ public class UsuarioDAO {
         return instancia;
     }
     
-   public Usuario validarCredenciales(String usuario, String password, Rol rolSeleccionado) {
+   public Usuario validarCredenciales(String usuario, String password, RolEnum rolSeleccionado) {
     try (FileReader reader = new FileReader(JSON_FILE)) {
         JsonElement jsonElement = JsonParser.parseReader(reader);
         
@@ -62,7 +62,7 @@ public class UsuarioDAO {
                               jsonRol + "==" + rolSeleccionado.name());
             
             try {
-                Rol rol = Rol.valueOf(jsonRol);
+                RolEnum rol = RolEnum.valueOf(jsonRol);
                 if (jsonUser.equals(usuario) &&  // Cambiado de equalsIgnoreCase a equals
                     jsonPass.equals(password) && 
                     rol == rolSeleccionado) {
@@ -86,7 +86,7 @@ private String getStringSafe(JsonObject jsonObject, String key) {
 }
     
     public boolean esDirector(Usuario usuario) {
-        return usuario != null && usuario.getRol() == Rol.DIRECTOR;
+        return usuario != null && usuario.getRol() == RolEnum.DIRECTOR;
     }
     
    public List<Usuario> obtenerTodosUsuarios() throws IOException {

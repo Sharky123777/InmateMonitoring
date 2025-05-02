@@ -4,13 +4,13 @@ import Controller.ActividadController;
 import Controller.PresoController;
 import DAO.ActividadDAO;
 import DAO.CeldaDAO;
-import Model.Oficial;
+import Model.Entities.Oficial;
 
 import DAO.DelitoDAO;
 import DAO.OficialDAO;
 import DAO.PresoDAO;
-import Model.Actividad;
-import Model.Preso;
+import Model.Entities.Actividad;
+import Model.Entities.Preso;
 import Utilidades.Validador;
 import java.awt.AlphaComposite;
 import java.awt.Color;

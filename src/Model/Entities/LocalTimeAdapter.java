@@ -1,4 +1,4 @@
-package Model;
+package Model.Entities;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;

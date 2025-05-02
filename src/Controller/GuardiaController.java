@@ -1,7 +1,7 @@
 package Controller;
 
 import DAO.GuardiaDAO;
-import Model.Guardia;
+import Model.Entities.Guardia;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Image;
 import java.io.File;

@@ -1,7 +1,7 @@
 
 package DAO;
 
-import Model.Celda;
+import Model.Entities.Celda;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;

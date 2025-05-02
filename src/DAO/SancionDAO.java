@@ -1,8 +1,8 @@
 package DAO;
 
-import Model.LocalDateAdapter;
-import Model.LocalTimeAdapter;
-import Model.Sancion;
+import Model.Entities.LocalDateAdapter;
+import Model.Entities.LocalTimeAdapter;
+import Model.Entities.Sancion;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 

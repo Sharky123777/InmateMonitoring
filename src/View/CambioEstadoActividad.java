@@ -3,8 +3,8 @@ package View;
 
 import Controller.ActividadController;
 import DAO.OficialDAO;
-import Model.Actividad;
-import Model.Oficial;
+import Model.Entities.Actividad;
+import Model.Entities.Oficial;
 import javax.swing.JOptionPane;
 
 
@@ -107,7 +107,7 @@ public class CambioEstadoActividad extends javax.swing.JDialog {
     
     if ("ACTIVA".equalsIgnoreCase(nuevoEstado) && 
         "CANCELADA".equalsIgnoreCase(actividadSeleccionada.getEstado())) {
-        Model.Oficial responsable = oficialDAO.buscarPorIdentificacion(actividadSeleccionada.getResponsableOficial());
+        Model.Entities.Oficial responsable = oficialDAO.buscarPorIdentificacion(actividadSeleccionada.getResponsableOficial());
         
         if (responsable != null) {
             if (!actividadController.puedeAgregarActividad(responsable)) {

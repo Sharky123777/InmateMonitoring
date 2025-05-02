@@ -1,7 +1,7 @@
 package DAO;
 
-import Model.Visita;
-import Model.Visitante;
+import Model.Entities.Visita;
+import Model.Entities.Visitante;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;

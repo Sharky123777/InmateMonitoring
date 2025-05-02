@@ -2,13 +2,12 @@ package DAO;
 
 import DAO.DelitoDAO;
 import DAO.CeldaDAO;
-import Model.Actividad;
-import Model.Celda;
-import Model.ExpedienteJudicial;
-
-import Model.Delito;
-import Model.Preso;
-import Model.Sentencia;
+import Model.Entities.Actividad;
+import Model.Entities.Celda;
+import Model.Entities.ExpedienteJudicial;
+import Model.Entities.Delito;
+import Model.Entities.Preso;
+import Model.Entities.Sentencia;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;

@@ -1,16 +1,18 @@
-package Model;
+package Model.Entities;
+
+import Model.Constants.RolEnum;
 
 public class Usuario {
     private String usuario;
     private String password; // Cambiado a password para consistencia
-    private Rol rol;
+    private RolEnum rol;
     private Persona persona;
 
-    public Usuario(String usuario, String password, Rol rol) {
+    public Usuario(String usuario, String password, RolEnum rol) {
         this(usuario, password, rol, null);
     }
 
-    public Usuario(String usuario, String password, Rol rol, Persona persona) {
+    public Usuario(String usuario, String password, RolEnum rol, Persona persona) {
         this.usuario = usuario;
         this.password = password;
         this.rol = rol;
@@ -33,11 +35,11 @@ public class Usuario {
         this.password = password;
     }
 
-    public Rol getRol() {
+    public RolEnum getRol() {
         return rol;
     }
 
-    public void setRol(Rol rol) {
+    public void setRol(RolEnum rol) {
         this.rol = rol;
     }
 

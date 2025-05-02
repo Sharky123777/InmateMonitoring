@@ -50,6 +50,23 @@
       "sexo": "Femenino",
       "nacionalidad": "Peruana",
       "identificacion": "9823731"
+    },
+    {
+      "usuario": "JhoanaArrieta357*",
+      "contrasena": "EbFJSo3w",
+      "turno": "Nocturno",
+      "fechaContratacion": "2025-05-02",
+      "fechaFinContrato": "2025-05-27",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/9887613_enfermera3.jpg",
+      "correo": "JArrieta@gmail.com",
+      "primerNombre": "Jhoana",
+      "segundoNombre": "",
+      "primerApellido": "Arrieta",
+      "segundoApellido": "Gomez",
+      "edad": 56,
+      "sexo": "Femenino",
+      "nacionalidad": "Peruano",
+      "identificacion": "9887613"
     }
   ]
 }

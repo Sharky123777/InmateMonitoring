@@ -1,6 +1,6 @@
 package DAO;
 
-import Model.CoordinadorDeActividades;
+import Model.Entities.CoordinadorDeActividades;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;

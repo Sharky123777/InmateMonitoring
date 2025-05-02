@@ -1,6 +1,8 @@
 
 package inmatemonitoring;
 
+import Model.Constants.RolEnum;
+
 
 public class InmateMonitorinG {
 
@@ -8,6 +10,7 @@ public class InmateMonitorinG {
     public static void main(String[] args) {
 
         System.out.println("De conflicto en conflicto");
+       
 
     }
     

@@ -1,8 +1,8 @@
 package DAO;
 
-import Model.Actividad;
-import Model.Oficial;
-import Model.Preso;
+import Model.Entities.Actividad;
+import Model.Entities.Oficial;
+import Model.Entities.Preso;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import java.io.*;

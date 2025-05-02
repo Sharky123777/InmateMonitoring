@@ -1,6 +1,6 @@
-package Model;
+package Model.Constants;
 
-public enum Rol {
+public enum RolEnum {
     DIRECTOR,
     OFICIAL,
     OFICIAL_DE_REGISTRO,

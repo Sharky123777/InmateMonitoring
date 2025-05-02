@@ -1,7 +1,7 @@
 package View;
 
 import Controller.ActividadController;
-import Model.Preso;
+import Model.Entities.Preso;
 import javax.swing.JOptionPane;
 
 public class AsignacionActividad extends javax.swing.JDialog {

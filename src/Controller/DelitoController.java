@@ -2,9 +2,9 @@ package Controller;
 
 import DAO.DelitoDAO;
 import DAO.PresoDAO;
-import Model.Delito;
-import Model.Preso;
-import Model.Sentencia;
+import Model.Entities.Delito;
+import Model.Entities.Preso;
+import Model.Entities.Sentencia;
 import Utilidades.Validador;
 import java.time.LocalDate;
 import java.time.ZoneId;

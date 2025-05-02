@@ -1,9 +1,9 @@
 package DAO;
 
-import Model.Enfermera;
-import Model.Guardia;
-import Model.Rol;
-import Model.Usuario;
+import Model.Entities.Enfermera;
+import Model.Entities.Guardia;
+import Model.Constants.RolEnum;
+import Model.Entities.Usuario;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
@@ -180,7 +180,7 @@ public class EnfermeraDAO {
             String contrasena = generarContrasena();
             
             // Crear y guardar usuario
-            Usuario nuevoUsuario = new Usuario(usuario, contrasena, Rol.ENFERMERA);
+            Usuario nuevoUsuario = new Usuario(usuario, contrasena, RolEnum.ENFERMERA);
             guardarUsuario(nuevoUsuario);
             
             // Asignar credenciales a la enfermera

@@ -1,7 +1,7 @@
 package Controller;
 
 import DAO.CoordinadorDeActividadesDAO;
-import Model.CoordinadorDeActividades;
+import Model.Entities.CoordinadorDeActividades;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Image;
 import java.io.File;

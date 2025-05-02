@@ -1,8 +1,8 @@
 
 package DAO;
 
-import Model.OficialDeRegistro;
-import Model.Preso;
+import Model.Entities.OficialDeRegistro;
+import Model.Entities.Preso;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.File;
