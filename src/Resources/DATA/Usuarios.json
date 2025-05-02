@@ -9,6 +9,26 @@
       "usuario": "CelinaRestrepo139&",
       "password": "58fpZS#h",
       "rol": "ENFERMERA"
+    },
+    {
+      "usuario": "MaritzaQuintana35&",
+      "password": "Mquidd654@",
+      "rol": "DIRECTOR"
+    },
+    {
+      "usuario": "CarlosLopez21#",
+      "password": "C4rl0s@Admn",
+      "rol": "OFICIAL_DE_REGISTRO"
+    },
+    {
+      "usuario": "JuliaRios_Tecnico",
+      "password": "J7l1aTech*",
+      "rol": "PERSONAL_DE_CONTROL"
+    },
+    {
+      "usuario": "LauraGomez_Auxiliar",
+      "password": "L4uAux12#",
+      "rol": "COORDINADOR_DE_ACTIVIDADES"
     }
   ]
 }

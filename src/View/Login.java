@@ -146,7 +146,7 @@ public class Login extends javax.swing.JFrame {
         Rol rolSeleccionado = Rol.valueOf(rolTexto);
 
         UsuarioDAO usuarioDAO = UsuarioDAO.getInstancia();
-        Usuario usuario = usuarioDAO.validarCredenciales(email, contraseña, rolSeleccionado);
+        Usuario usuario = usuarioDAO.validarCredenciales(usuarios, contraseña, rolSeleccionado);
 
         if (usuario != null) {
             
