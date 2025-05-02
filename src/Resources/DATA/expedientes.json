@@ -1,3 +1,209 @@
 [
-
+  {
+    "codigoExpediente": "EXP-3UB6-XQ01",
+    "numeroRegistro": "REG-2025-2559",
+    "fechaApertura": "2025-05-02",
+    "estado": "ABIERTO",
+    "delitos": [
+      {
+        "id": 1,
+        "presoId": "001122334",
+        "codigo": 221,
+        "nombre": "Calumnia",
+        "articuloLey": "Artículo 221",
+        "gravedad": "Baja",
+        "descripcion": "La interna fue condenada por calumniar públicamente a una docente universitaria\n acusándola falsamente de haber cometido abuso de poder y actos indebidos con estudiantes. \nEstas acusaciones fueron difundidas en redes sociales y durante una asamblea estudiantil,\n causando un daño considerable a la reputación profesional de la docente. \nLas investigaciones demostraron que la presa actuó movida por conflictos personales\n y sin ningún tipo de prueba, lo que llevó a su condena por el delito de calumnia, agravado por el impacto público del caso y la afectación psicológica de la víctima.",
+        "fechaComision": "2025-04-03",
+        "sentencia": {
+          "años": 2,
+          "meses": 0,
+          "fechaIngreso": "2025-04-25",
+          "fechaSalidaCalculada": "2027-04-25"
+        }
+      },
+      {
+        "id": 2,
+        "presoId": "001122334",
+        "codigo": 287,
+        "nombre": "Falsedad en documento público",
+        "articuloLey": "Artículo 287",
+        "gravedad": "Baja",
+        "descripcion": "La interna fue condenada por falsedad de documento después de ser arrestada por presentar un título universitario falsificado con el fin de obtener un empleo en una empresa privada. El documento fue alterado digitalmente para simular la autenticidad de una licenciatura que no había sido obtenida por ella. La falsificación fue descubierta cuando el empleador verificó la validez del título en la universidad correspondiente. La condena se basó en el uso de documentos falsificados con el propósito de engañar a terceros, lo que conllevó a la pérdida de confianza de la víctima y una pena de prisión.",
+        "fechaComision": "2025-04-03",
+        "sentencia": {
+          "años": 4,
+          "meses": 3,
+          "fechaIngreso": "2025-04-25",
+          "fechaSalidaCalculada": "2029-07-25"
+        }
+      }
+    ],
+    "totalVisitas": 0,
+    "nivelAdaptacion": "Por evaluar",
+    "actividades": [],
+    "observacionesConducta": "Ninguna",
+    "nivelRiesgo": "Riesgo bajo",
+    "preso": {
+      "estatura": 1.7,
+      "peso": 89.0,
+      "delitos": [
+        {
+          "id": 1,
+          "presoId": "001122334",
+          "codigo": 221,
+          "nombre": "Calumnia",
+          "articuloLey": "Artículo 221",
+          "gravedad": "Baja",
+          "descripcion": "La interna fue condenada por calumniar públicamente a una docente universitaria\n acusándola falsamente de haber cometido abuso de poder y actos indebidos con estudiantes. \nEstas acusaciones fueron difundidas en redes sociales y durante una asamblea estudiantil,\n causando un daño considerable a la reputación profesional de la docente. \nLas investigaciones demostraron que la presa actuó movida por conflictos personales\n y sin ningún tipo de prueba, lo que llevó a su condena por el delito de calumnia, agravado por el impacto público del caso y la afectación psicológica de la víctima.",
+          "fechaComision": "2025-04-03",
+          "sentencia": {
+            "años": 2,
+            "meses": 0,
+            "fechaIngreso": "2025-04-25",
+            "fechaSalidaCalculada": "2027-04-25"
+          }
+        },
+        {
+          "id": 2,
+          "presoId": "001122334",
+          "codigo": 287,
+          "nombre": "Falsedad en documento público",
+          "articuloLey": "Artículo 287",
+          "gravedad": "Baja",
+          "descripcion": "La interna fue condenada por falsedad de documento después de ser arrestada por presentar un título universitario falsificado con el fin de obtener un empleo en una empresa privada. El documento fue alterado digitalmente para simular la autenticidad de una licenciatura que no había sido obtenida por ella. La falsificación fue descubierta cuando el empleador verificó la validez del título en la universidad correspondiente. La condena se basó en el uso de documentos falsificados con el propósito de engañar a terceros, lo que conllevó a la pérdida de confianza de la víctima y una pena de prisión.",
+          "fechaComision": "2025-04-03",
+          "sentencia": {
+            "años": 4,
+            "meses": 3,
+            "fechaIngreso": "2025-04-25",
+            "fechaSalidaCalculada": "2029-07-25"
+          }
+        }
+      ],
+      "nivelDeSeguridad": "Baja",
+      "seccionAsignada": "Sección C",
+      "condicion": "En espera",
+      "celdaAsignada": "CELD-52",
+      "enAislamiento": false,
+      "nivelDeRiesgo": "Riesgo bajo",
+      "numeroDeVisitas": 0,
+      "grupoSanguineo": "\u003cSeleccione\u003e",
+      "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_1.jpg",
+      "estado": "ACTIVO",
+      "id": 1,
+      "actividadesAsignadasIds": [],
+      "primerNombre": "Luz",
+      "segundoNombre": "Dari",
+      "primerApellido": "Crespo",
+      "segundoApellido": "Gomez",
+      "edad": 18,
+      "sexo": "F",
+      "nacionalidad": "Austriaca",
+      "identificacion": "001122334"
+    }
+  },
+  {
+    "codigoExpediente": "EXP-SWSJ-G6C9",
+    "numeroRegistro": "REG-2025-8529",
+    "fechaApertura": "2025-05-02",
+    "estado": "ABIERTO",
+    "delitos": [
+      {
+        "id": 12,
+        "presoId": "091234567",
+        "codigo": 265,
+        "nombre": "Daño en bien ajeno",
+        "articuloLey": "Artículo 265",
+        "gravedad": "Media",
+        "descripcion": "Dañaba los bienes ajenos, de manera \nincorrecta",
+        "fechaComision": "2025-05-01",
+        "sentencia": {
+          "años": 4,
+          "meses": 2,
+          "fechaIngreso": "2025-05-02",
+          "fechaSalidaCalculada": "2029-07-02"
+        }
+      },
+      {
+        "id": 13,
+        "presoId": "091234567",
+        "codigo": 404,
+        "nombre": "Concusión",
+        "articuloLey": "Artículo 404",
+        "gravedad": "Media",
+        "descripcion": "Concusionaba de manera\naleatoria sin intentarlo progresivamente",
+        "fechaComision": "2024-05-10",
+        "sentencia": {
+          "años": 3,
+          "meses": 1,
+          "fechaIngreso": "2025-05-02",
+          "fechaSalidaCalculada": "2028-06-02"
+        }
+      }
+    ],
+    "totalVisitas": 0,
+    "nivelAdaptacion": "Por evaluar",
+    "actividades": [],
+    "observacionesConducta": "Ninguna",
+    "nivelRiesgo": "Riesgo medio",
+    "preso": {
+      "estatura": 1.9,
+      "peso": 87.0,
+      "delitos": [
+        {
+          "id": 12,
+          "presoId": "091234567",
+          "codigo": 265,
+          "nombre": "Daño en bien ajeno",
+          "articuloLey": "Artículo 265",
+          "gravedad": "Media",
+          "descripcion": "Dañaba los bienes ajenos, de manera \nincorrecta",
+          "fechaComision": "2025-05-01",
+          "sentencia": {
+            "años": 4,
+            "meses": 2,
+            "fechaIngreso": "2025-05-02",
+            "fechaSalidaCalculada": "2029-07-02"
+          }
+        },
+        {
+          "id": 13,
+          "presoId": "091234567",
+          "codigo": 404,
+          "nombre": "Concusión",
+          "articuloLey": "Artículo 404",
+          "gravedad": "Media",
+          "descripcion": "Concusionaba de manera\naleatoria sin intentarlo progresivamente",
+          "fechaComision": "2024-05-10",
+          "sentencia": {
+            "años": 3,
+            "meses": 1,
+            "fechaIngreso": "2025-05-02",
+            "fechaSalidaCalculada": "2028-06-02"
+          }
+        }
+      ],
+      "nivelDeSeguridad": "Bajo",
+      "seccionAsignada": "Sección A",
+      "condicion": "En espera",
+      "celdaAsignada": "CELD-37",
+      "enAislamiento": false,
+      "nivelDeRiesgo": "Riesgo medio",
+      "numeroDeVisitas": 0,
+      "grupoSanguineo": "O+",
+      "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_7.jpg",
+      "estado": "ACTIVO",
+      "id": 7,
+      "actividadesAsignadasIds": [],
+      "actividadesCanceladasIds": [],
+      "primerNombre": "Laracia",
+      "segundoNombre": "Antonela",
+      "primerApellido": "Cilgado",
+      "segundoApellido": "Perez",
+      "edad": 45,
+      "sexo": "F",
+      "nacionalidad": "Libia",
+      "identificacion": "091234567"
+    }
+  }
 ]

@@ -1,5 +1,6 @@
 package Model.Entities;
 
+import Model.Constants.EstadoPresoEnum;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,6 @@ public class Preso extends Persona {
     private float estatura;
     private float peso;
     private List<Delito> delitos = new ArrayList<>();
-    private ExpedienteJudicial expediente;
     private String nivelDeSeguridad;
     private String seccionAsignada;
     private String condicion;
@@ -19,14 +19,13 @@ public class Preso extends Persona {
     private int numeroDeVisitas = 0;
     private String grupoSanguineo;
     private String fotoPath;
-    private String estado = "ACTIVO"; 
+    private EstadoPresoEnum estado = EstadoPresoEnum.ACTIVO;
     private int id = 0;
-    private List<String> actividadesAsignadasIds; 
-    private List<String> actividadesCanceladasIds; 
-        private LocalDate fechaDefuncion;
+    private List<String> actividadesAsignadasIds = new ArrayList<>();
+    private List<String> actividadesCanceladasIds = new ArrayList<>();
+    private LocalDate fechaDefuncion;
 
     
-
     public Preso(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
             int edad, String sexo, String nacionalidad, String identificacion,
             float estatura, float peso, List<Delito> delitos,
@@ -35,7 +34,6 @@ public class Preso extends Persona {
             int numeroDeVisitas, String grupoSanguineo, String fotoPath, int id) {
 
         super(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, sexo, nacionalidad, identificacion);
-
         this.estatura = estatura;
         this.peso = peso;
         this.delitos = delitos != null ? delitos : new ArrayList<>();
@@ -49,113 +47,9 @@ public class Preso extends Persona {
         this.grupoSanguineo = grupoSanguineo;
         this.fotoPath = fotoPath;
         this.id = id;
-
-        this.expediente = crearExpedienteBasico();
     }
 
-    public LocalDate getFechaDefuncion() {
-        return fechaDefuncion;
-    }
-
-    public void setFechaDefuncion(LocalDate fechaDefuncion) {
-        this.fechaDefuncion = fechaDefuncion;
-    }
-
-    
-    
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public boolean puedeSerAsignadoAActividad() {
-        return "ACTIVO".equals(estado) && !enAislamiento;
-    }
-
-    public List<String> getActividadesAsignadasIds() {
-        if (actividadesAsignadasIds == null) {
-            actividadesAsignadasIds = new ArrayList<>();
-        }
-        return actividadesAsignadasIds;
-    }
-    
-    public void setActividadesAsignadasIds(List<String> actividadesAsignadasIds) {
-        this.actividadesAsignadasIds = actividadesAsignadasIds;
-    }
-    
-    public List<String> getActividadesCanceladasIds() {
-        if (actividadesCanceladasIds == null) {
-            actividadesCanceladasIds = new ArrayList<>();
-        }
-        return actividadesCanceladasIds;
-    }
-    
-    public void setActividadesCanceladasIds(List<String> actividadesCanceladasIds) {
-        this.actividadesCanceladasIds = actividadesCanceladasIds;
-    }
-    
-    public void agregarActividadAsignada(String idActividad) {
-        if (puedeSerAsignadoAActividad()) {
-            getActividadesAsignadasIds().add(idActividad);
-        } else {
-            throw new IllegalStateException("El preso no puede ser asignado a actividades en su estado actual");
-        }
-    }
-    
-    public void marcarActividadCancelada(String idActividad) {
-        if (getActividadesAsignadasIds().remove(idActividad)) {
-            getActividadesCanceladasIds().add(idActividad);
-        }
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    private ExpedienteJudicial crearExpedienteBasico() {
-        ExpedienteJudicial expediente = new ExpedienteJudicial();
-        expediente.setCodigoExpediente(GeneradorDeCodigos.generarCodigoExpediente());
-        expediente.setNumeroRegistro(GeneradorDeCodigos.generarNumeroRegistro());
-        expediente.setFechaApertura(LocalDate.now());
-        expediente.setDelitos(this.delitos);
-        expediente.setJuzgado("Juzgado de Ejecución Penal");
-        expediente.setNivelRiesgo(this.nivelDeRiesgo);
-        return expediente;
-    }
-
-    private void actualizarExpediente() {
-        if (this.expediente != null) {
-            this.expediente.setDelitos(this.delitos);
-        }
-    }
-
-    public Sentencia getSentenciaTotal() {
-        int totalAños = 0;
-        int totalMeses = 0;
-        LocalDate fechaIngreso = null;
-
-        if (!delitos.isEmpty()) {
-            fechaIngreso = delitos.get(0).getSentencia().getFechaIngreso();
-
-            for (Delito delito : delitos) {
-                totalAños += delito.getSentencia().getAños();
-                totalMeses += delito.getSentencia().getMeses();
-            }
-
-            totalAños += totalMeses / 12;
-            totalMeses = totalMeses % 12;
-        }
-
-        return new Sentencia(totalAños, totalMeses, fechaIngreso);
-    }
-
+    // Getters y Setters
     public float getEstatura() {
         return estatura;
     }
@@ -178,30 +72,6 @@ public class Preso extends Persona {
 
     public void setDelitos(List<Delito> delitos) {
         this.delitos = delitos != null ? delitos : new ArrayList<>();
-        actualizarExpediente();
-    }
-
-    public void agregarDelito(Delito delito) {
-        if (delito != null) {
-            this.delitos.add(delito);
-            actualizarExpediente();
-        }
-    }
-
-    public boolean eliminarDelito(Delito delito) {
-        boolean eliminado = this.delitos.remove(delito);
-        if (eliminado) {
-            actualizarExpediente();
-        }
-        return eliminado;
-    }
-
-    public ExpedienteJudicial getExpediente() {
-        return expediente;
-    }
-
-    public void setExpediente(ExpedienteJudicial expediente) {
-        this.expediente = expediente;
     }
 
     public String getNivelDeSeguridad() {
@@ -250,9 +120,6 @@ public class Preso extends Persona {
 
     public void setNivelDeRiesgo(String nivelDeRiesgo) {
         this.nivelDeRiesgo = nivelDeRiesgo;
-        if (this.expediente != null) {
-            this.expediente.setNivelRiesgo(nivelDeRiesgo);
-        }
     }
 
     public int getNumeroDeVisitas() {
@@ -261,9 +128,6 @@ public class Preso extends Persona {
 
     public void setNumeroDeVisitas(int numeroDeVisitas) {
         this.numeroDeVisitas = numeroDeVisitas;
-        if (this.expediente != null) {
-            this.expediente.setTotalVisitas(numeroDeVisitas);
-        }
     }
 
     public String getGrupoSanguineo() {
@@ -282,35 +146,101 @@ public class Preso extends Persona {
         this.fotoPath = fotoPath;
     }
 
-    public String getNumeroRegistro() {
-        return expediente.getNumeroRegistro();
+    public EstadoPresoEnum getEstado() {
+        return estado;
     }
 
-    public String getCodigoExpediente() {
-        return expediente.getCodigoExpediente();
+    public void setEstado(EstadoPresoEnum estado) {
+        this.estado = estado;
     }
 
-    public String getDatosExpedienteBasico() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Registro: ").append(getNumeroRegistro())
-                .append("\nExpediente: ").append(getCodigoExpediente())
-                .append("\nDelitos:");
-        for (Delito delito : delitos) {
-            sb.append("\n- ").append(delito.getNombre())
-                    .append(" (Código: ").append(delito.getCodigo())
-                    .append(", Gravedad: ").append(delito.getGravedad())
-                    .append(", Fecha: ").append(delito.getFechaComision())
-                    .append(")");
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<String> getActividadesAsignadasIds() {
+        return actividadesAsignadasIds;
+    }
+
+    public void setActividadesAsignadasIds(List<String> actividadesAsignadasIds) {
+        this.actividadesAsignadasIds = actividadesAsignadasIds != null ? actividadesAsignadasIds : new ArrayList<>();
+    }
+
+    public List<String> getActividadesCanceladasIds() {
+        return actividadesCanceladasIds;
+    }
+
+    public void setActividadesCanceladasIds(List<String> actividadesCanceladasIds) {
+        this.actividadesCanceladasIds = actividadesCanceladasIds != null ? actividadesCanceladasIds : new ArrayList<>();
+    }
+
+    public LocalDate getFechaDefuncion() {
+        return fechaDefuncion;
+    }
+
+    public void setFechaDefuncion(LocalDate fechaDefuncion) {
+        this.fechaDefuncion = fechaDefuncion;
+    }
+
+    // Métodos de comportamiento
+    public boolean puedeSerAsignadoAActividad() {
+        return estado == EstadoPresoEnum.ACTIVO && !enAislamiento;
+    }
+
+    public void agregarActividadAsignada(String idActividad) {
+        if (puedeSerAsignadoAActividad()) {
+            actividadesAsignadasIds.add(idActividad);
+        } else {
+            throw new IllegalStateException("El preso no puede ser asignado a actividades en su estado actual");
         }
-        return sb.toString();
+    }
+
+    public void marcarActividadCancelada(String idActividad) {
+        if (actividadesAsignadasIds.remove(idActividad)) {
+            actividadesCanceladasIds.add(idActividad);
+        }
+    }
+
+    public void agregarDelito(Delito delito) {
+        if (delito != null) {
+            delitos.add(delito);
+        }
+    }
+
+    public boolean eliminarDelito(Delito delito) {
+        return delitos.remove(delito);
+    }
+
+    public Sentencia getSentenciaTotal() {
+        int totalAños = 0;
+        int totalMeses = 0;
+        LocalDate fechaIngreso = null;
+
+        if (!delitos.isEmpty()) {
+            fechaIngreso = delitos.get(0).getSentencia().getFechaIngreso();
+
+            for (Delito delito : delitos) {
+                totalAños += delito.getSentencia().getAños();
+                totalMeses += delito.getSentencia().getMeses();
+            }
+
+            totalAños += totalMeses / 12;
+            totalMeses = totalMeses % 12;
+        }
+
+        return new Sentencia(totalAños, totalMeses, fechaIngreso);
     }
 
     @Override
     public String toString() {
         return "Preso{"
-                + "nombreCompleto='" + getNombreCompleto() + '\''
+                + "id=" + id
+                + ", nombreCompleto='" + getNombreCompleto() + '\''
                 + ", identificacion='" + getIdentificacion() + '\''
-                + ", delitos=" + delitos.size()
                 + ", estado=" + estado
                 + '}';
     }

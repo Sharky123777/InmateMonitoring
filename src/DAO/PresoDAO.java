@@ -2,6 +2,7 @@ package DAO;
 
 import DAO.DelitoDAO;
 import DAO.CeldaDAO;
+import Model.Constants.EstadoPresoEnum;
 import Model.Entities.Actividad;
 import Model.Entities.Celda;
 import Model.Entities.ExpedienteJudicial;
@@ -337,31 +338,6 @@ List<Delito> delitos =delitoDAO.obtenerDelitosPorPreso(preso.getIdentificacion()
         }
     }
 
-    public boolean agregarDelitosAExpediente(Preso preso, List<Delito> nuevosDelitos) {
-        ExpedienteJudicial expediente = preso.getExpediente();
-        if (expediente == null) {
-            expediente = new ExpedienteJudicial();
-            preso.setExpediente(expediente);
-        }
-
-        expediente.getDelitos().addAll(nuevosDelitos);
-        preso.getDelitos().addAll(nuevosDelitos);
-
-        DelitoDAO delitoDAO = new DelitoDAO();
-        for (Delito delito : nuevosDelitos) {
-            delitoDAO.guardarDelito(delito);
-        }
-
-        List<Preso> presos = cargarTodos();
-        for (int i = 0; i < presos.size(); i++) {
-            if (presos.get(i).getIdentificacion().equals(preso.getIdentificacion())) {
-                presos.set(i, preso);
-                return guardarCambios(presos);
-            }
-        }
-
-        return false;
-    }
 
     private boolean guardarCambios(List<Preso> presos) {
         try {
@@ -383,44 +359,20 @@ List<Delito> delitos =delitoDAO.obtenerDelitosPorPreso(preso.getIdentificacion()
         return false;
     }
 
-    public List<Preso> buscarPorSeccion(String seccion) {
+    
+public List<Preso> buscarPorSeccion(String seccion) {
     List<Preso> todos = cargarTodos();
     List<Preso> filtrados = new ArrayList<>();
 
     for (Preso preso : todos) {
-        if (preso.getSeccionAsignada().equalsIgnoreCase(seccion)
-                && "ACTIVO".equalsIgnoreCase(preso.getEstado())) {
+        if (seccion != null && seccion.equalsIgnoreCase(preso.getSeccionAsignada())
+                && preso.getEstado() == EstadoPresoEnum.ACTIVO) {
             filtrados.add(preso);
         }
     }
     return filtrados;
 }
-    
-public boolean actualizarPreso(Preso preso) {
-    List<Preso> presos = cargarTodos();
-    
-    try {
-        boolean encontrado = false;
-        for (int i = 0; i < presos.size(); i++) {
-            if (presos.get(i).getIdentificacion().equals(preso.getIdentificacion())) {
-                presos.set(i, preso);
-                encontrado = true;
-                break;
-            }
-        }
-        
-        if (!encontrado) {
-            return false;
-        }
-        
-        guardarTodos(presos);
-        return true;
-        
-    } catch (RuntimeException e) {
-        System.err.println("Error al actualizar preso: " + e.getMessage());
-        return false;
-    }
-}
+
 
 public boolean agregarActividadAsignada(String idPreso, String idActividad) {
     List<Preso> presos = cargarTodos();
@@ -458,7 +410,7 @@ public boolean marcarActividadCancelada(String idPreso, String idActividad) {
     }
 }
 
- public boolean cambiarEstadoPreso(String identificacion, String nuevoEstado) {
+ public boolean cambiarEstadoPreso(String identificacion, EstadoPresoEnum nuevoEstado) {
     List<Preso> presos = cargarTodos();
     
     for (Preso preso : presos) {
@@ -473,19 +425,43 @@ public boolean marcarActividadCancelada(String idPreso, String idActividad) {
 
   
  public boolean eliminarPresoL(String numeroIdentificacion) {
-        return cambiarEstadoPreso(numeroIdentificacion, "LIBERADO");
+        return cambiarEstadoPreso(numeroIdentificacion, EstadoPresoEnum.LIBERADO);
   }
  
- public List<Preso> buscarPorEstado(String estado) {
-        List<Preso> todos = cargarTodos();
-        List<Preso> filtrados = new ArrayList<>();
-        
-        for (Preso preso : todos) {
-            if (preso.getEstado() != null && preso.getEstado().equalsIgnoreCase(estado)) {
-                filtrados.add(preso);
+public List<Preso> buscarPorEstado(EstadoPresoEnum estado) {
+    List<Preso> todos = cargarTodos();
+    List<Preso> filtrados = new ArrayList<>();
+    
+    for (Preso preso : todos) {
+        if (preso.getEstado() == estado) {
+            filtrados.add(preso);
+        }
+    }
+    return filtrados;
+}
+public boolean actualizarPreso(Preso preso) {
+    List<Preso> presos = cargarTodos();
+    
+    try {
+        boolean encontrado = false;
+        for (int i = 0; i < presos.size(); i++) {
+            if (presos.get(i).getIdentificacion().equals(preso.getIdentificacion())) {
+                presos.set(i, preso);
+                encontrado = true;
+                break;
             }
         }
-        return filtrados;
+        
+        if (!encontrado) {
+            return false;
+        }
+        
+        guardarTodos(presos);
+        return true;
+        
+    } catch (RuntimeException e) {
+        System.err.println("Error al actualizar preso: " + e.getMessage());
+        return false;
     }
-
+}
 }

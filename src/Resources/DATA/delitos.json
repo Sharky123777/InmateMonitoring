@@ -174,5 +174,37 @@
       "fechaIngreso": "2025-05-01",
       "fechaSalidaCalculada": "2027-09-01"
     }
+  },
+  {
+    "id": 12,
+    "presoId": "091234567",
+    "codigo": 265,
+    "nombre": "Daño en bien ajeno",
+    "articuloLey": "Artículo 265",
+    "gravedad": "Media",
+    "descripcion": "Dañaba los bienes ajenos, de manera \nincorrecta",
+    "fechaComision": "2025-05-01",
+    "sentencia": {
+      "años": 4,
+      "meses": 2,
+      "fechaIngreso": "2025-05-02",
+      "fechaSalidaCalculada": "2029-07-02"
+    }
+  },
+  {
+    "id": 13,
+    "presoId": "091234567",
+    "codigo": 404,
+    "nombre": "Concusión",
+    "articuloLey": "Artículo 404",
+    "gravedad": "Media",
+    "descripcion": "Concusionaba de manera\naleatoria sin intentarlo progresivamente",
+    "fechaComision": "2024-05-10",
+    "sentencia": {
+      "años": 3,
+      "meses": 1,
+      "fechaIngreso": "2025-05-02",
+      "fechaSalidaCalculada": "2028-06-02"
+    }
   }
 ]

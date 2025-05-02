@@ -1,11 +1,12 @@
 package View;
 
-import Controller.DelitoController;
 import Controller.PresoController;
 import Controller.ExpedienteController;
 import DAO.CeldaDAO;
 import DAO.DelitoDAO;
+import DAO.ExpedienteDAO;
 import DAO.PresoDAO;
+import Model.Constants.EstadoPresoEnum;
 import Model.Entities.Delito;
 import Model.Entities.ExpedienteJudicial;
 import Model.Entities.Preso;
@@ -67,15 +68,14 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     private HashMap<String, String[]> datosDelitos;
 
     private List<Delito> delitosTemporales = new ArrayList<>();
-    private final PresoDAO presoDAO;
 
-    private final DelitoDAO delitoDAO;
     private Preso presoOriginal;
     CeldaDAO celda = new CeldaDAO();
     private int delitoActual = 1;
     private int totalDelitos = 1;
     private BufferedImage originalImage;
     private File selectedImageFile;
+    private ExpedienteDAO expedienteDAO;
 
     private final ExpedienteController expedienteController;
     private final PresoController presoController;
@@ -83,10 +83,9 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     private final CeldaDAO celdaDAO;
 
     public OficialDeRegistro() {
-        this.presoDAO = PresoDAO.getInstancia();
-        this.delitoDAO = DelitoDAO.getInstancia();
         this.celdaDAO = CeldaDAO.getInstancia();
 
+        this.expedienteDAO = ExpedienteDAO.getInstancia();
         this.presoController = PresoController.getInstancia();
         this.expedienteController = ExpedienteController.getInstancia();
         this.validador = Validador.getInstancia();
@@ -104,9 +103,9 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         actualizarProgreso();
         cargarPresosInactivos();
 
-        celda.generarCeldas("Sección A", 10, 2);
-        celda.generarCeldas("Sección B", 10, 2);
-        celda.generarCeldas("Sección C", 10, 2);
+        celda.generarCeldas("Sección A", 20, 2);
+        celda.generarCeldas("Sección B", 20, 2);
+        celda.generarCeldas("Sección C", 20, 2);
 
         cantidadDelitos.addActionListener(e -> {
             actualizarProgreso();
@@ -216,20 +215,36 @@ public class OficialDeRegistro extends javax.swing.JFrame {
                     throw new IllegalArgumentException("Seleccione un preso primero");
                 }
 
-                Preso preso = presoController.obtenerPresoConDelitos(
-                        TablaPresos.getValueAt(filaSeleccionada, 5).toString()
-                );
+                String identificacion = TablaPresos.getValueAt(filaSeleccionada, 5).toString();
 
                 expedienteController.cargarExpedienteCompleto(
-                        preso,
-                        RegistroNum, CodExpe, FechaAper, Estado, Juzgado, nivelRiesgExp,
-                        nom, ape, edad, identi, naciona, fotoPresoExpediente, tablaExpediente, sentenciaTotaal
+                        identificacion,
+                        RegistroNum,
+                        CodExpe,
+                        FechaAper,
+                        Estado,
+                        Juzgado,
+                        nivelRiesgExp,
+                        nom,
+                        ape,
+                        edad,
+                        identi,
+                        naciona,
+                        fotoPresoExpediente,
+                        tablaExpediente,
+                        sentenciaTotaal
                 );
 
                 OficialDeRegistroView.setSelectedIndex(2);
+
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(this,
+                        ex.getMessage(),
+                        "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,
-                        "Error al cargar expediente: " + ex.getMessage(),
+                        "Error técnico al cargar expediente: " + ex.getMessage(),
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
@@ -356,7 +371,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
 
                 Preso preso = presoController.obtenerPresoDesdeTabla(filaSeleccionada, TablaPresos);
 
-                Object[] opciones = {"Liberación", "Defunción", "Cancelar"};
+                Object[] opciones = {"Liberación", "Falleció", "Cancelar"};
                 int opcion = JOptionPane.showOptionDialog(null,
                         "Seleccione el motivo de salida:",
                         "Motivo de salida",
@@ -366,17 +381,18 @@ public class OficialDeRegistro extends javax.swing.JFrame {
                         opciones,
                         opciones[0]);
 
-                if (opcion == 2) {
+                if (opcion == 2 || opcion == JOptionPane.CLOSED_OPTION) {
                     return;
                 }
-                String motivo = (opcion == 0) ? "LIBERADO" : "DEFUNCION";
+
+                EstadoPresoEnum motivo = (opcion == 0) ? EstadoPresoEnum.LIBERADO : EstadoPresoEnum.FALLECIDO;
 
                 ValidarFechaDialog dialogo = new ValidarFechaDialog(null, true);
-                dialogo.setTitle(motivo.equals("LIBERADO") ? "Fecha de liberación" : "Fecha de defunción");
+                dialogo.setTitle(motivo == EstadoPresoEnum.LIBERADO ? "Fecha de liberación" : "Fecha de defunción");
                 dialogo.setVisible(true);
 
                 if (dialogo.isAceptado() && dialogo.getFechaSeleccionada() != null) {
-                    if (motivo.equals("LIBERADO")
+                    if (motivo == EstadoPresoEnum.LIBERADO
                             && !presoController.validarLiberacionPreso(preso, dialogo.getFechaSeleccionada())) {
                         return;
                     }
@@ -3631,13 +3647,11 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     private void finalizarDelitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finalizarDelitoActionPerformed
 
         try {
-            if (registroNum == null || codExpe == null || presoOriginal == null) {
+            if (presoOriginal == null) {
                 throw new IllegalStateException("Datos del preso no están inicializados correctamente");
             }
 
-            PresoController presoController = PresoController.getInstancia();
-
-            boolean delitoAgregado = presoController.agregarDelitoAPreso(
+            boolean delitoAgregado = PresoController.getInstancia().agregarDelitoAPreso(
                     presoOriginal,
                     cod.getText(),
                     art.getText(),
@@ -3649,56 +3663,55 @@ public class OficialDeRegistro extends javax.swing.JFrame {
                     String.valueOf(Meses.getValue())
             );
 
-            if (delitoAgregado) {
-                presoOriginal = presoController.obtenerPresoConDelitos(presoOriginal.getIdentificacion());
-
-                if (presoOriginal.getExpediente() == null) {
-                    JOptionPane.showMessageDialog(this,
-                            "El expediente del preso es nulo. No se pueden cargar los delitos.",
-                            "Error al cargar expediente",
-                            JOptionPane.ERROR_MESSAGE);
-                    return;
-                } else if (presoOriginal.getExpediente().getDelitos().isEmpty()) {
-                    JOptionPane.showMessageDialog(this,
-                            "El expediente del preso no tiene delitos registrados.",
-                            "Expediente vacío",
-                            JOptionPane.WARNING_MESSAGE);
-                    return;
-                } else {
-                    JOptionPane.showMessageDialog(this,
-                            "Delitos cargados correctamente: " + presoOriginal.getExpediente().getDelitos().size(),
-                            "Delitos recuperados",
-                            JOptionPane.INFORMATION_MESSAGE);
-                }
-
-                presoController.cargarTablaDelitos(presoOriginal, tablaExpediente);
-
-                Sentencia sentenciaTotal = presoController.calcularSentenciaTotal(presoOriginal.getExpediente().getDelitos());
-                SentenciaTotal.setText(sentenciaTotal.getSentenciaFormateada());
-
-                JOptionPane.showMessageDialog(this,
-                        "Delito registrado exitosamente\n"
-                        + "Nueva sentencia total: " + sentenciaTotal.getSentenciaFormateada(),
-                        "Operación Exitosa",
-                        JOptionPane.INFORMATION_MESSAGE);
-
-                limpiarCamposDelitoNuevo();
-                OficialDeRegistroView.setSelectedIndex(4);
-
+            if (!delitoAgregado) {
+                throw new IllegalStateException("No se pudo agregar el delito");
             }
+
+            ExpedienteJudicial expediente = ExpedienteController.getInstancia()
+                    .actualizarExpedienteConDelitos(presoOriginal.getIdentificacion());
+
+            if (expediente == null || expediente.getDelitos().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "No se encontraron delitos registrados en el expediente.",
+                        "Expediente vacío",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            ExpedienteController.getInstancia().cargarTablaDelitos(expediente.getDelitos(), tablaExpediente);
+
+            Sentencia sentenciaTotal = expedienteDAO.calcularSentenciaTotal(expediente.getDelitos());
+
+            SentenciaTotal.setText(sentenciaTotal.getSentenciaFormateada());
+
+            JOptionPane.showMessageDialog(this,
+                    "Delito registrado exitosamente\n"
+                    + "Nueva sentencia total: " + sentenciaTotal.getSentenciaFormateada() + "\n"
+                    + "Total delitos registrados: " + expediente.getDelitos().size(),
+                    "Operación Exitosa",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            limpiarCamposDelitoNuevo();
+            OficialDeRegistroView.setSelectedIndex(4);
 
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this,
                     "Error en datos: " + e.getMessage(),
                     "Error de Validación",
                     JOptionPane.WARNING_MESSAGE);
+        } catch (IllegalStateException e) {
+            JOptionPane.showMessageDialog(this,
+                    e.getMessage(),
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
-                    "Error crítico: " + e.getMessage(),
+                    "Error crítico al procesar delito: " + e.getMessage(),
                     "Error del Sistema",
                     JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+
     }//GEN-LAST:event_finalizarDelitoActionPerformed
 
 
@@ -3748,13 +3761,8 @@ public class OficialDeRegistro extends javax.swing.JFrame {
             String nvApellido = primerNuevoApellido.getText();
             String nvSApellido = segundoNuevoApellido1.getText();
             int nvedad = Integer.parseInt(nuevaEdad.getText());
-            Object  nvNacionalidad = cbxNacionalidad.getSelectedItem();
-            
-            
-            
-            
-            
-            
+            Object nvNacionalidad = cbxNacionalidad.getSelectedItem();
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al intentar actualizar");
         }

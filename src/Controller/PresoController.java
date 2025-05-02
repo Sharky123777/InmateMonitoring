@@ -2,7 +2,9 @@ package Controller;
 
 import DAO.CeldaDAO;
 import DAO.DelitoDAO;
+import DAO.ExpedienteDAO;
 import DAO.PresoDAO;
+import Model.Constants.EstadoPresoEnum;
 import Model.Entities.Celda;
 import Model.Entities.Delito;
 import Model.Entities.ExpedienteJudicial;
@@ -36,6 +38,7 @@ public class PresoController {
 
     private static PresoController instancia;
 
+    private final ExpedienteDAO expedienteDAO = ExpedienteDAO.getInstancia();
     private final PresoDAO presoDAO;
     private final CeldaDAO celdaDAO;
     private final DelitoDAO delitoDAO;
@@ -269,12 +272,12 @@ public class PresoController {
     }
 
     public boolean agregarDelitoAPreso(Preso preso, String codigoStr, String articulo,
-            String nombreDelito, String gravedad,
-            String descripcion, Date fechaComision,
-            String añosStr, String mesesStr) {
+            String nombreDelito, String gravedad, String descripcion,
+            Date fechaComision, String añosStr, String mesesStr) {
         try {
             if (preso == null) {
-                throw new IllegalArgumentException("Preso no puede ser nulo");
+                Validador.mostrarError("Preso no puede ser nulo");
+                return false;
             }
 
             Validador.validarCampoObligatorio("código del delito", codigoStr);
@@ -293,50 +296,49 @@ public class PresoController {
             LocalDate fechaComisionLocal = fechaComision.toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate();
-
             Validador.validarFechaNoFutura(fechaComisionLocal, "comisión del delito");
 
             LocalDate fechaIngreso = preso.getDelitos().isEmpty()
                     ? LocalDate.now()
                     : preso.getDelitos().get(0).getSentencia().getFechaIngreso();
 
-            Sentencia sentenciaDelito = new Sentencia(años, meses, fechaIngreso);
-
+            Sentencia sentencia = new Sentencia(años, meses, fechaIngreso);
             Delito nuevoDelito = new Delito(
                     0,
                     preso.getIdentificacion(),
                     codigo,
-                    nombreDelito,
+                    nombreDelito.trim(),
                     articulo.trim(),
                     gravedad,
                     descripcion.trim(),
                     fechaComisionLocal,
-                    sentenciaDelito
+                    sentencia
             );
 
-            int idGenerado = delitoDAO.guardarDelito(nuevoDelito);
+            int idGenerado = DelitoDAO.getInstancia().guardarDelito(nuevoDelito);
             nuevoDelito.setId(idGenerado);
 
-            List<Delito> delitosActualizados = delitoDAO.obtenerDelitosPorPreso(preso.getIdentificacion());
-            preso.getDelitos().clear();
-            preso.getDelitos().addAll(delitosActualizados);
+            preso.getDelitos().add(nuevoDelito);
+            PresoDAO.getInstancia().actualizarPreso(preso);
 
-            if (preso.getExpediente() == null) {
-                ExpedienteJudicial expediente = new ExpedienteJudicial();
-                expediente.setDelitos(delitosActualizados);
-                preso.setExpediente(expediente);
-            } else {
-                preso.getExpediente().setDelitos(delitosActualizados);
+            ExpedienteJudicial expediente = ExpedienteDAO.getInstancia().buscarPorPreso(preso.getIdentificacion());
+            if (expediente == null) {
+                expediente = new ExpedienteJudicial(preso);
             }
+            expediente.getDelitos().add(nuevoDelito);
+            ExpedienteDAO.getInstancia().guardarExpediente(expediente);
 
             Validador.mostrarInfo("Delito agregado correctamente");
             return true;
 
+        } catch (NumberFormatException exe) {
+            Validador.mostrarError("Formato numérico inválido: " + exe.getMessage());
+            return false;
         } catch (IllegalArgumentException e) {
             Validador.mostrarError(e.getMessage());
             return false;
         } catch (Exception e) {
-            Validador.mostrarError("Error inesperado al agregar delito: " + e.getMessage());
+            Validador.mostrarError("Error inesperado: " + e.getMessage());
             return false;
         }
     }
@@ -351,29 +353,19 @@ public class PresoController {
                 throw new IllegalArgumentException("La tabla de presos no puede ser nula");
             }
 
+            // Obtener identificación
             String identificacion = tablaPresos.getValueAt(filaSeleccionada, 5).toString();
             Validador.validarFormatoIdentificacion(identificacion);
 
             Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
-
             if (preso == null) {
                 throw new IllegalStateException("No se encontró el preso con identificación: " + identificacion);
             }
 
-            if (preso != null) {
-                List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(identificacion);
-                preso.setDelitos(delitos);
-            }
-
             List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(identificacion);
+            preso.setDelitos(delitos);
 
-            if (preso.getExpediente() == null) {
-                ExpedienteJudicial expediente = new ExpedienteJudicial();
-                expediente.setDelitos(delitos);
-                preso.setExpediente(expediente);
-            } else {
-                preso.getExpediente().setDelitos(delitos);
-            }
+            ExpedienteJudicial expediente = expedienteDAO.actualizarExpedienteConDelitos(preso, delitos);
 
             return preso;
 
@@ -483,6 +475,7 @@ public class PresoController {
 
     public void cargarTablaDelitos(Preso preso, JTable tabla) {
         try {
+            // 1. Validaciones iniciales
             if (preso == null) {
                 throw new IllegalArgumentException("Preso no puede ser nulo");
             }
@@ -492,32 +485,23 @@ public class PresoController {
             }
 
             DefaultTableModel model = (DefaultTableModel) tabla.getModel();
-            model.setRowCount(0);
+            model.setRowCount(0); // Limpiar tabla
 
-            if (preso.getExpediente() == null || preso.getExpediente().getDelitos().isEmpty()) {
+            // 2. Obtener delitos directamente del preso (no del expediente)
+            List<Delito> delitos = preso.getDelitos();
+
+            if (delitos == null || delitos.isEmpty()) {
                 model.addRow(new Object[]{"No hay delitos registrados"});
                 return;
             }
 
-            Sentencia sentenciaTotal = new Sentencia(0, 0,
-                    preso.getExpediente().getDelitos().get(0).getSentencia().getFechaIngreso());
-
-            for (Delito delito : preso.getExpediente().getDelitos()) {
-                sentenciaTotal.sumarSentencia(delito.getSentencia());
-            }
-
+            // 3. Calcular sentencia total
+            Sentencia sentenciaTotal = expedienteDAO.calcularSentenciaTotal(delitos);
             LocalDate fechaSalidaComun = sentenciaTotal.getFechaSalidaCalculada();
 
-            for (Delito delito : preso.getExpediente().getDelitos()) {
-                model.addRow(new Object[]{
-                    delito.getNombre(),
-                    delito.getId(),
-                    delito.getSentencia().getFechaIngreso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                    delito.getSentencia().getSentenciaFormateada(),
-                    delito.getGravedad(),
-                    delito.getFechaComision().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                    fechaSalidaComun.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                });
+            // 4. Llenar tabla
+            for (Delito delito : delitos) {
+                model.addRow(crearFilaDelito(delito, fechaSalidaComun));
             }
 
         } catch (IllegalArgumentException e) {
@@ -527,54 +511,57 @@ public class PresoController {
         }
     }
 
+// Métodos auxiliares privados
+    private Object[] crearFilaDelito(Delito delito, LocalDate fechaSalidaComun) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        return new Object[]{
+            delito.getNombre(),
+            delito.getId(),
+            delito.getSentencia().getFechaIngreso().format(formatter),
+            delito.getSentencia().getSentenciaFormateada(),
+            delito.getGravedad(),
+            delito.getFechaComision().format(formatter),
+            fechaSalidaComun.format(formatter)
+        };
+    }
+
     public Preso obtenerPresoConDelitos(String identificacion) {
         try {
+            // 1. Validar identificación
             Validador.validarFormatoIdentificacion(identificacion);
 
+            // 2. Buscar preso
             Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
             if (preso == null) {
                 throw new IllegalStateException("No se encontró el preso con identificación: " + identificacion);
             }
 
+            // 3. Obtener delitos asociados
             List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(identificacion);
+            preso.setDelitos(delitos);
 
-            if (preso.getExpediente() == null) {
-                ExpedienteJudicial expediente = new ExpedienteJudicial();
+            // 4. Buscar expediente judicial si existe
+            ExpedienteJudicial expediente = expedienteDAO.buscarPorPreso(identificacion);
+
+            if (expediente != null) {
+                // Actualizar delitos en el expediente existente
                 expediente.setDelitos(delitos);
-                preso.setExpediente(expediente);
+                expedienteDAO.actualizarExpediente(expediente);
             } else {
-                preso.getExpediente().setDelitos(delitos);
+                // Crear nuevo expediente si no existe
+                expediente = new ExpedienteJudicial(preso); // Usa el constructor que recibe Preso
+                expediente.setDelitos(delitos);
+                expedienteDAO.guardarExpediente(expediente);
             }
 
             return preso;
+
         } catch (IllegalArgumentException | IllegalStateException e) {
             Validador.mostrarError(e.getMessage());
             return null;
         } catch (Exception e) {
             Validador.mostrarError("Error al obtener preso: " + e.getMessage());
-            return null;
-        }
-    }
-
-    public Sentencia calcularSentenciaTotal(List<Delito> delitos) {
-        try {
-            Validador.validarListaNoVacia("delitos", delitos);
-
-            LocalDate fechaIngreso = delitos.get(0).getSentencia().getFechaIngreso();
-
-            Sentencia sentenciaTotal = new Sentencia(0, 0, fechaIngreso);
-
-            for (Delito delito : delitos) {
-                sentenciaTotal.sumarSentencia(delito.getSentencia());
-            }
-
-            return sentenciaTotal;
-
-        } catch (IllegalArgumentException e) {
-            Validador.mostrarError(e.getMessage());
-            return null;
-        } catch (Exception e) {
-            Validador.mostrarError("Error al calcular sentencia total: " + e.getMessage());
             return null;
         }
     }
@@ -601,7 +588,7 @@ public class PresoController {
 
     public List<Object[]> obtenerPresosPorSeccion(String seccion) {
         List<Preso> presos = presoDAO.buscarPorSeccion(seccion);
-    
+
         List<Object[]> filas = new ArrayList<>();
 
         for (Preso preso : presos) {
@@ -623,16 +610,16 @@ public class PresoController {
         return filas;
     }
 
-   public List<Object[]> obtenerTodosLosPresosParaTabla() {
-        List<Preso> presos = presoDAO.buscarPorEstado("ACTIVO");
+    public List<Object[]> obtenerTodosLosPresosParaTabla() {
+        List<Preso> presos = presoDAO.buscarPorEstado(EstadoPresoEnum.ACTIVO);
         List<Object[]> filas = new ArrayList<>();
-        
+
         for (Preso preso : presos) {
             ImageIcon foto = obtenerFotoPreso(preso);
-            
+
             List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(preso.getIdentificacion());
             preso.setDelitos(delitos);
-            
+
             filas.add(new Object[]{
                 foto,
                 preso.getId(),
@@ -645,118 +632,114 @@ public class PresoController {
                 preso.getCeldaAsignada()
             });
         }
-        
+
         return filas;
     }
-   
-public List<Object[]> obtenerPresosInactivosParaTabla() {
-     List<Preso> liberados = presoDAO.buscarPorEstado("LIBERADO");
-    List<Preso> fallecidos = presoDAO.buscarPorEstado("DEFUNCION");
-    
-    List<Object[]> filas = new ArrayList<>();
-    
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    
-    for (Preso preso : liberados) {
- ImageIcon foto = (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty()) 
-            ? cargarImagenPreso(preso.getFotoPath())
-            : new ImageIcon(getClass().getResource("/images/default_profile.png"));
-        
-        filas.add(new Object[]{
-            foto,
-            preso.getId(),
-            preso.getNombresCompletos(),
-            preso.getApellidosCompletos(),
-            preso.getEdad(),
-            preso.getIdentificacion(),
-            preso.getNacionalidad(),
-            "LIBERADO",
-        });
+
+    public List<Object[]> obtenerPresosInactivosParaTabla() {
+        List<Preso> liberados = presoDAO.buscarPorEstado(EstadoPresoEnum.LIBERADO);
+        List<Preso> fallecidos = presoDAO.buscarPorEstado(EstadoPresoEnum.FALLECIDO);
+
+        List<Object[]> filas = new ArrayList<>();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        for (Preso preso : liberados) {
+            ImageIcon foto = (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty())
+                    ? cargarImagenPreso(preso.getFotoPath())
+                    : new ImageIcon(getClass().getResource("/images/default_profile.png"));
+
+            filas.add(new Object[]{
+                foto,
+                preso.getId(),
+                preso.getNombresCompletos(),
+                preso.getApellidosCompletos(),
+                preso.getEdad(),
+                preso.getIdentificacion(),
+                preso.getNacionalidad(),
+                EstadoPresoEnum.LIBERADO,});
+        }
+
+        for (Preso preso : fallecidos) {
+            ImageIcon foto = obtenerFotoPreso(preso);
+            filas.add(new Object[]{
+                foto,
+                preso.getId(),
+                preso.getNombresCompletos(),
+                preso.getApellidosCompletos(),
+                preso.getEdad(),
+                preso.getIdentificacion(),
+                preso.getNacionalidad(),
+                EstadoPresoEnum.FALLECIDO,});
+        }
+
+        return filas;
     }
-    
-    
-    for (Preso preso : fallecidos) {
-        ImageIcon foto = obtenerFotoPreso(preso);
-        filas.add(new Object[]{
-            foto,
-            preso.getId(),
-            preso.getNombresCompletos(),
-            preso.getApellidosCompletos(),
-            preso.getEdad(),
-            preso.getIdentificacion(),
-            preso.getNacionalidad(),
-            "DEFUNCION",
-        });
-    }
-    
-    return filas;
-}
 
-public boolean liberarPreso(String identificacion, Date fechaValidacion, String motivo) {
-    try {
-        Validador.validarFormatoIdentificacion(identificacion);
+    public boolean liberarPreso(String identificacion, Date fechaValidacion, EstadoPresoEnum motivo) {
+        try {
+            Validador.validarFormatoIdentificacion(identificacion);
 
-        Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
-        if (preso == null) {
-            throw new IllegalArgumentException("No se encontró el preso con identificación: " + identificacion);
-        }
-
-        if (motivo.equals("LIBERADO") && !validarLiberacionPreso(preso, fechaValidacion)) {
-            return false;
-        }
-
-        if (motivo.equals("DEFUNCION")) {
-            preso.setFechaDefuncion(fechaValidacion.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate());
-        }
-
-        boolean estadoCambiado = presoDAO.cambiarEstadoPreso(identificacion, motivo);
-        
-        if (estadoCambiado) {
-            Validador.mostrarInfo("Preso marcado como " + motivo + " correctamente");
-            return true;
-        } else {
-            Validador.mostrarError("No se pudo cambiar el estado del preso");
-            return false;
-        }
-
-    } catch (IllegalArgumentException e) {
-        Validador.mostrarError(e.getMessage());
-        return false;
-    } catch (Exception e) {
-        Validador.mostrarError("Error inesperado al cambiar estado del preso: " + e.getMessage());
-        return false;
-    }
-}
-
-public void configurarTablaImagenes(JTable tabla) {
-    tabla.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column) {
-
-            JLabel label = (JLabel) super.getTableCellRendererComponent(table, value,
-                    isSelected, hasFocus, row, column);
-
-            if (column == 0 && value instanceof ImageIcon) {
-                ImageIcon originalIcon = (ImageIcon) value;
-                Image img = originalIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-                ImageIcon roundedIcon = new ImageIcon(createRoundedImage(img));
-                label.setIcon(roundedIcon);
-                label.setText("");
-            } else {
-                label.setIcon(null);
+            Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
+            if (preso == null) {
+                throw new IllegalArgumentException("No se encontró el preso con identificación: " + identificacion);
             }
-            label.setHorizontalAlignment(JLabel.CENTER);
-            return label;
+
+            if (motivo.equals("LIBERADO") && !validarLiberacionPreso(preso, fechaValidacion)) {
+                return false;
+            }
+
+            if (motivo.equals("FALLECIDO")) {
+                preso.setFechaDefuncion(fechaValidacion.toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate());
+            }
+
+            boolean estadoCambiado = presoDAO.cambiarEstadoPreso(identificacion, motivo);
+
+            if (estadoCambiado) {
+                Validador.mostrarInfo("Preso marcado como " + motivo + " correctamente");
+                return true;
+            } else {
+                Validador.mostrarError("No se pudo cambiar el estado del preso");
+                return false;
+            }
+
+        } catch (IllegalArgumentException e) {
+            Validador.mostrarError(e.getMessage());
+            return false;
+        } catch (Exception e) {
+            Validador.mostrarError("Error inesperado al cambiar estado del preso: " + e.getMessage());
+            return false;
         }
-    });
+    }
 
-    tabla.setRowHeight(65);
-    tabla.getColumnModel().getColumn(0).setPreferredWidth(70);
-}
+    public void configurarTablaImagenes(JTable tabla) {
+        tabla.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
 
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value,
+                        isSelected, hasFocus, row, column);
+
+                if (column == 0 && value instanceof ImageIcon) {
+                    ImageIcon originalIcon = (ImageIcon) value;
+                    Image img = originalIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                    ImageIcon roundedIcon = new ImageIcon(createRoundedImage(img));
+                    label.setIcon(roundedIcon);
+                    label.setText("");
+                } else {
+                    label.setIcon(null);
+                }
+                label.setHorizontalAlignment(JLabel.CENTER);
+                return label;
+            }
+        });
+
+        tabla.setRowHeight(65);
+        tabla.getColumnModel().getColumn(0).setPreferredWidth(70);
+    }
 
     private Image createRoundedImage(Image image) {
         int width = image.getWidth(null);
@@ -777,7 +760,5 @@ public void configurarTablaImagenes(JTable tabla) {
 
         return output;
     }
-
-
 
 }
