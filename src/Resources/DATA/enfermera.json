@@ -22,7 +22,7 @@
       "contrasena": "58fpZS#h",
       "turno": "Diurno",
       "fechaContratacion": "2025-04-30",
-      "fechaFinContrato": "2025-09-14",
+      "fechaFinContrato": "2025-09-30",
       "rutaImagen": "src/Resources/imagenes_enfermeras/73132479_enfermera2.jpeg",
       "correo": "Celina@hotmail.com",
       "primerNombre": "Celina",
@@ -33,6 +33,23 @@
       "sexo": "Femenino",
       "nacionalidad": "Colombiana",
       "identificacion": "73132479"
+    },
+    {
+      "usuario": "RonaldaCano17$",
+      "contrasena": "GdNY3cs\u0026",
+      "turno": "Nocturno",
+      "fechaContratacion": "2025-05-02",
+      "fechaFinContrato": "2025-05-28",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/9823731_enfermera4.jpeg",
+      "correo": "RCano@gmail.com",
+      "primerNombre": "Ronalda",
+      "segundoNombre": "",
+      "primerApellido": "Cano",
+      "segundoApellido": "Morales",
+      "edad": 45,
+      "sexo": "Femenino",
+      "nacionalidad": "Peruana",
+      "identificacion": "9823731"
     }
   ]
 }

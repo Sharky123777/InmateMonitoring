@@ -6,12 +6,12 @@
       "rol": "ENFERMERA"
     },
     {
-      "usuario": "CelinaRestrepo139&",
+      "usuario": "CelinaRestrepo139\u0026",
       "password": "58fpZS#h",
       "rol": "ENFERMERA"
     },
     {
-      "usuario": "MaritzaQuintana35&",
+      "usuario": "MaritzaQuintana35\u0026",
       "password": "Mquidd654@",
       "rol": "DIRECTOR"
     },
@@ -29,6 +29,11 @@
       "usuario": "LauraGomez_Auxiliar",
       "password": "L4uAux12#",
       "rol": "COORDINADOR_DE_ACTIVIDADES"
+    },
+    {
+      "usuario": "RonaldaCano17$",
+      "password": "GdNY3cs\u0026",
+      "rol": "ENFERMERA"
     }
   ]
 }

@@ -448,6 +448,7 @@ coordinadorController.setComponentes(
         jPanel17 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaCDA = new javax.swing.JTable();
+        jButton13 = new javax.swing.JButton();
 
         Modificar.setText("Modificar");
         Modificar.addActionListener(new java.awt.event.ActionListener() {
@@ -629,6 +630,11 @@ coordinadorController.setComponentes(
 
         txtNacionalidad1.setBackground(new java.awt.Color(29, 35, 51));
         txtNacionalidad1.setBorder(null);
+        txtNacionalidad1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNacionalidad1KeyTyped(evt);
+            }
+        });
         jPanel7.add(txtNacionalidad1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 210, 30));
 
         txtSexo1.setEditable(false);
@@ -685,10 +691,20 @@ coordinadorController.setComponentes(
 
         txtSegundoApellido1.setBackground(new java.awt.Color(29, 35, 51));
         txtSegundoApellido1.setBorder(null);
+        txtSegundoApellido1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoApellido1KeyTyped(evt);
+            }
+        });
         jPanel7.add(txtSegundoApellido1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 180, 30));
 
         txtPrimerApellido1.setBackground(new java.awt.Color(29, 35, 51));
         txtPrimerApellido1.setBorder(null);
+        txtPrimerApellido1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerApellido1KeyTyped(evt);
+            }
+        });
         jPanel7.add(txtPrimerApellido1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 190, 30));
 
         jLabel43.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -703,10 +719,20 @@ coordinadorController.setComponentes(
 
         txtSegundoNombre1.setBackground(new java.awt.Color(29, 35, 51));
         txtSegundoNombre1.setBorder(null);
+        txtSegundoNombre1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoNombre1KeyTyped(evt);
+            }
+        });
         jPanel7.add(txtSegundoNombre1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 180, 30));
 
         txtPrimerNombre1.setBackground(new java.awt.Color(29, 35, 51));
         txtPrimerNombre1.setBorder(null);
+        txtPrimerNombre1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerNombre1KeyTyped(evt);
+            }
+        });
         jPanel7.add(txtPrimerNombre1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 200, 30));
 
         jLabel45.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -763,18 +789,38 @@ coordinadorController.setComponentes(
 
         txtPrimerApellido.setBackground(new java.awt.Color(29, 35, 51));
         txtPrimerApellido.setBorder(null);
+        txtPrimerApellido.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerApellidoKeyTyped(evt);
+            }
+        });
         AñadirGuardia.add(txtPrimerApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 100, 200, 30));
 
         txtPrimerNombre.setBackground(new java.awt.Color(29, 35, 51));
         txtPrimerNombre.setBorder(null);
+        txtPrimerNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerNombreKeyTyped(evt);
+            }
+        });
         AñadirGuardia.add(txtPrimerNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 210, 30));
 
         txtSegundoNombre.setBackground(new java.awt.Color(29, 35, 51));
         txtSegundoNombre.setBorder(null);
+        txtSegundoNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoNombreKeyTyped(evt);
+            }
+        });
         AñadirGuardia.add(txtSegundoNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 60, 190, 30));
 
         txtSegundoApellido.setBackground(new java.awt.Color(29, 35, 51));
         txtSegundoApellido.setBorder(null);
+        txtSegundoApellido.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoApellidoKeyTyped(evt);
+            }
+        });
         AñadirGuardia.add(txtSegundoApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 140, 190, 30));
 
         txtEdad.setBackground(new java.awt.Color(29, 35, 51));
@@ -791,6 +837,11 @@ coordinadorController.setComponentes(
 
         txtNacionalidad.setBackground(new java.awt.Color(29, 35, 51));
         txtNacionalidad.setBorder(null);
+        txtNacionalidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNacionalidadKeyTyped(evt);
+            }
+        });
         AñadirGuardia.add(txtNacionalidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 300, 210, 30));
 
         txtCedula.setBackground(new java.awt.Color(29, 35, 51));
@@ -1051,6 +1102,11 @@ coordinadorController.setComponentes(
 
         txtNacionalidadMod1.setBackground(new java.awt.Color(29, 35, 51));
         txtNacionalidadMod1.setBorder(null);
+        txtNacionalidadMod1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNacionalidadMod1KeyTyped(evt);
+            }
+        });
         jPanel10.add(txtNacionalidadMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 210, 30));
 
         txtSexoMod1.setBackground(new java.awt.Color(29, 35, 51));
@@ -1106,10 +1162,20 @@ coordinadorController.setComponentes(
 
         txtSegundoApellidoMod1.setBackground(new java.awt.Color(29, 35, 51));
         txtSegundoApellidoMod1.setBorder(null);
+        txtSegundoApellidoMod1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoApellidoMod1KeyTyped(evt);
+            }
+        });
         jPanel10.add(txtSegundoApellidoMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 180, 30));
 
         txtPrimerApellidoMod1.setBackground(new java.awt.Color(29, 35, 51));
         txtPrimerApellidoMod1.setBorder(null);
+        txtPrimerApellidoMod1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerApellidoMod1KeyTyped(evt);
+            }
+        });
         jPanel10.add(txtPrimerApellidoMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 190, 30));
 
         jLabel58.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -1124,10 +1190,20 @@ coordinadorController.setComponentes(
 
         txtSegundoNombreMod1.setBackground(new java.awt.Color(29, 35, 51));
         txtSegundoNombreMod1.setBorder(null);
+        txtSegundoNombreMod1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoNombreMod1KeyTyped(evt);
+            }
+        });
         jPanel10.add(txtSegundoNombreMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 180, 30));
 
         txtPrimerNombreMod1.setBackground(new java.awt.Color(29, 35, 51));
         txtPrimerNombreMod1.setBorder(null);
+        txtPrimerNombreMod1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerNombreMod1KeyTyped(evt);
+            }
+        });
         jPanel10.add(txtPrimerNombreMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 200, 30));
 
         jLabel60.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -1239,6 +1315,11 @@ coordinadorController.setComponentes(
 
         txtNacionalidadMod.setBackground(new java.awt.Color(29, 35, 51));
         txtNacionalidadMod.setBorder(null);
+        txtNacionalidadMod.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNacionalidadModKeyTyped(evt);
+            }
+        });
         jPanel4.add(txtNacionalidadMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 210, 30));
 
         txtSexoMod.setBackground(new java.awt.Color(29, 35, 51));
@@ -1294,10 +1375,20 @@ coordinadorController.setComponentes(
 
         txtSegundoApellidoMod.setBackground(new java.awt.Color(29, 35, 51));
         txtSegundoApellidoMod.setBorder(null);
+        txtSegundoApellidoMod.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoApellidoModKeyTyped(evt);
+            }
+        });
         jPanel4.add(txtSegundoApellidoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 180, 30));
 
         txtPrimerApellidoMod.setBackground(new java.awt.Color(29, 35, 51));
         txtPrimerApellidoMod.setBorder(null);
+        txtPrimerApellidoMod.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerApellidoModKeyTyped(evt);
+            }
+        });
         jPanel4.add(txtPrimerApellidoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 190, 30));
 
         jLabel27.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -1312,10 +1403,20 @@ coordinadorController.setComponentes(
 
         txtSegundoNombreMod.setBackground(new java.awt.Color(29, 35, 51));
         txtSegundoNombreMod.setBorder(null);
+        txtSegundoNombreMod.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoNombreModKeyTyped(evt);
+            }
+        });
         jPanel4.add(txtSegundoNombreMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 180, 30));
 
         txtPrimerNombreMod.setBackground(new java.awt.Color(29, 35, 51));
         txtPrimerNombreMod.setBorder(null);
+        txtPrimerNombreMod.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerNombreModKeyTyped(evt);
+            }
+        });
         jPanel4.add(txtPrimerNombreMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 200, 30));
 
         jLabel29.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -1432,6 +1533,11 @@ coordinadorController.setComponentes(
 
         txtNacionalidad2.setBackground(new java.awt.Color(29, 35, 51));
         txtNacionalidad2.setBorder(null);
+        txtNacionalidad2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNacionalidad2KeyTyped(evt);
+            }
+        });
         jPanel12.add(txtNacionalidad2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 210, 30));
 
         txtSexo2.setEditable(false);
@@ -1488,10 +1594,20 @@ coordinadorController.setComponentes(
 
         txtSegundoApellido2.setBackground(new java.awt.Color(29, 35, 51));
         txtSegundoApellido2.setBorder(null);
+        txtSegundoApellido2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoApellido2KeyTyped(evt);
+            }
+        });
         jPanel12.add(txtSegundoApellido2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 180, 30));
 
         txtPrimerApellido2.setBackground(new java.awt.Color(29, 35, 51));
         txtPrimerApellido2.setBorder(null);
+        txtPrimerApellido2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerApellido2KeyTyped(evt);
+            }
+        });
         jPanel12.add(txtPrimerApellido2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 190, 30));
 
         jLabel72.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -1506,10 +1622,20 @@ coordinadorController.setComponentes(
 
         txtSegundoNombre2.setBackground(new java.awt.Color(29, 35, 51));
         txtSegundoNombre2.setBorder(null);
+        txtSegundoNombre2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoNombre2KeyTyped(evt);
+            }
+        });
         jPanel12.add(txtSegundoNombre2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 180, 30));
 
         txtPrimerNombre2.setBackground(new java.awt.Color(29, 35, 51));
         txtPrimerNombre2.setBorder(null);
+        txtPrimerNombre2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerNombre2KeyTyped(evt);
+            }
+        });
         jPanel12.add(txtPrimerNombre2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 200, 30));
 
         jLabel74.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -1621,6 +1747,11 @@ coordinadorController.setComponentes(
 
         txtNacionalidadMod2.setBackground(new java.awt.Color(29, 35, 51));
         txtNacionalidadMod2.setBorder(null);
+        txtNacionalidadMod2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNacionalidadMod2KeyTyped(evt);
+            }
+        });
         jPanel15.add(txtNacionalidadMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 210, 30));
 
         txtSexoMod2.setBackground(new java.awt.Color(29, 35, 51));
@@ -1676,10 +1807,20 @@ coordinadorController.setComponentes(
 
         txtSegundoApellidoMod2.setBackground(new java.awt.Color(29, 35, 51));
         txtSegundoApellidoMod2.setBorder(null);
+        txtSegundoApellidoMod2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoApellidoMod2KeyTyped(evt);
+            }
+        });
         jPanel15.add(txtSegundoApellidoMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 180, 30));
 
         txtPrimerApellidoMod2.setBackground(new java.awt.Color(29, 35, 51));
         txtPrimerApellidoMod2.setBorder(null);
+        txtPrimerApellidoMod2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerApellidoMod2KeyTyped(evt);
+            }
+        });
         jPanel15.add(txtPrimerApellidoMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 190, 30));
 
         jLabel87.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -1694,10 +1835,20 @@ coordinadorController.setComponentes(
 
         txtSegundoNombreMod2.setBackground(new java.awt.Color(29, 35, 51));
         txtSegundoNombreMod2.setBorder(null);
+        txtSegundoNombreMod2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoNombreMod2KeyTyped(evt);
+            }
+        });
         jPanel15.add(txtSegundoNombreMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 180, 30));
 
         txtPrimerNombreMod2.setBackground(new java.awt.Color(29, 35, 51));
         txtPrimerNombreMod2.setBorder(null);
+        txtPrimerNombreMod2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerNombreMod2KeyTyped(evt);
+            }
+        });
         jPanel15.add(txtPrimerNombreMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 200, 30));
 
         jLabel89.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -1752,7 +1903,15 @@ coordinadorController.setComponentes(
 
         jTabbedPane1.addTab("MostrarCDA", jPanel17);
 
-        jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 1100, 610));
+        jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1100, 590));
+
+        jButton13.setText("SALIR");
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton13, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 10, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 640));
 
@@ -2942,6 +3101,342 @@ coordinadorController.setComponentes(
         // TODO add your handling code here:
     }//GEN-LAST:event_txtEdadMod2KeyTyped
 
+    private void txtPrimerNombre1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombre1KeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtPrimerNombre1KeyTyped
+
+    private void txtSegundoNombre1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombre1KeyTyped
+    char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtSegundoNombre1KeyTyped
+
+    private void txtPrimerApellido1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellido1KeyTyped
+    char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtPrimerApellido1KeyTyped
+
+    private void txtSegundoApellido1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellido1KeyTyped
+      char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtSegundoApellido1KeyTyped
+
+    private void txtNacionalidad1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidad1KeyTyped
+       char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtNacionalidad1KeyTyped
+
+    private void txtPrimerNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreKeyTyped
+       char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtPrimerNombreKeyTyped
+
+    private void txtSegundoNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombreKeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtSegundoNombreKeyTyped
+
+    private void txtPrimerApellidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellidoKeyTyped
+       char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtPrimerApellidoKeyTyped
+
+    private void txtSegundoApellidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellidoKeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtSegundoApellidoKeyTyped
+
+    private void txtNacionalidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadKeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtNacionalidadKeyTyped
+
+    private void txtPrimerNombreMod1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreMod1KeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtPrimerNombreMod1KeyTyped
+
+    private void txtSegundoNombreMod1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombreMod1KeyTyped
+       char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtSegundoNombreMod1KeyTyped
+
+    private void txtPrimerApellidoMod1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellidoMod1KeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtPrimerApellidoMod1KeyTyped
+
+    private void txtSegundoApellidoMod1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellidoMod1KeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtSegundoApellidoMod1KeyTyped
+
+    private void txtNacionalidadMod1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadMod1KeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtNacionalidadMod1KeyTyped
+
+    private void txtPrimerNombreModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreModKeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtPrimerNombreModKeyTyped
+
+    private void txtSegundoNombreModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombreModKeyTyped
+       char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtSegundoNombreModKeyTyped
+
+    private void txtPrimerApellidoModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellidoModKeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtPrimerApellidoModKeyTyped
+
+    private void txtSegundoApellidoModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellidoModKeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtSegundoApellidoModKeyTyped
+
+    private void txtNacionalidadModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadModKeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtNacionalidadModKeyTyped
+
+    private void txtPrimerNombre2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombre2KeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtPrimerNombre2KeyTyped
+
+    private void txtSegundoNombre2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombre2KeyTyped
+       char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtSegundoNombre2KeyTyped
+
+    private void txtPrimerApellido2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellido2KeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtPrimerApellido2KeyTyped
+
+    private void txtSegundoApellido2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellido2KeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtSegundoApellido2KeyTyped
+
+    private void txtNacionalidad2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidad2KeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtNacionalidad2KeyTyped
+
+    private void txtPrimerNombreMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreMod2KeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtPrimerNombreMod2KeyTyped
+
+    private void txtSegundoNombreMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombreMod2KeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtSegundoNombreMod2KeyTyped
+
+    private void txtPrimerApellidoMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellidoMod2KeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtPrimerApellidoMod2KeyTyped
+
+    private void txtSegundoApellidoMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellidoMod2KeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtSegundoApellidoMod2KeyTyped
+
+    private void txtNacionalidadMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadMod2KeyTyped
+        char c = evt.getKeyChar();
+    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+        evt.consume(); // no permite que el carácter se escriba
+         // solo muestra el mensaje si no es backspace
+            if (c != '\b') {
+                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+            }
+    }
+    }//GEN-LAST:event_txtNacionalidadMod2KeyTyped
+
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+        Login otro = new Login();
+    otro.setVisible(true); // Mostrar el nuevo JFrame
+    this.dispose(); 
+    }//GEN-LAST:event_jButton13ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -3005,6 +3500,7 @@ coordinadorController.setComponentes(
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;

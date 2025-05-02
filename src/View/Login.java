@@ -23,7 +23,7 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         
         RolCmbBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{
-            "DIRECTOR", "OFICIAL", "PERSONAL_DE_CONTROL", "OFICIAL_DE_REGISTRO", "ENFERMERA"
+            "DIRECTOR", "OFICIAL", "PERSONAL_DE_CONTROL", "OFICIAL_DE_REGISTRO", "ENFERMERA","COORDINADOR_DE_ACTIVIDADES,"
         }));
 
     }
