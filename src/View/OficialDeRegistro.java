@@ -99,8 +99,10 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         OficialDeRegistroView.setSelectedIndex(1);
 
         cargarTodosLosPresos();
-        configurarTablaImagenes();
+        presoController.configurarTablaImagenes(TablaPresos);
+        presoController.configurarTablaImagenes(tablaInactivos);
         actualizarProgreso();
+        cargarPresosInactivos();
 
         celda.generarCeldas("Sección A", 10, 2);
         celda.generarCeldas("Sección B", 10, 2);
@@ -182,12 +184,19 @@ public class OficialDeRegistro extends javax.swing.JFrame {
 
     }
 
+    private void cargarPresosInactivos() {
+        List<Object[]> presosInactivos = presoController.obtenerPresosInactivosParaTabla();
+        DefaultTableModel model = (DefaultTableModel) tablaInactivos.getModel();
+        model.setRowCount(0);
+
+        for (Object[] fila : presosInactivos) {
+            model.addRow(fila);
+        }
+    }
+
     public void inicializarMenuPresos() {
         JMenuItem Expediente = new JMenuItem("Expediente");
-        JMenuItem Eliminar = new JMenuItem("Eliminar");
-        JMenuItem Sanciones = new JMenuItem("Sanciones");
-        JMenuItem historialMedico = new JMenuItem("Historial Medico");
-        JMenuItem historialVisita = new JMenuItem("Historial Visitas");
+        JMenuItem Eliminar = new JMenuItem("Conceder la libertad");
         JMenuItem Informacion = new JMenuItem("Informacion General");
         JMenuItem Actualizar = new JMenuItem("Actualizar Información");
         JMenuItem AñadirDelito = new JMenuItem("Añadir Delito");
@@ -197,9 +206,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         ppMenuTablaPresos.add(AñadirDelito);
         ppMenuTablaPresos.add(Eliminar);
         ppMenuTablaPresos.add(Actualizar);
-        ppMenuTablaPresos.add(Sanciones);
-        ppMenuTablaPresos.add(historialVisita);
-        ppMenuTablaPresos.add(historialMedico);
 
         TablaPresos.setComponentPopupMenu(ppMenuTablaPresos);
 
@@ -260,51 +266,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
             }
         });
 
-        Sanciones.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int filaSeleccionada = TablaPresos.getSelectedRow();
-                if (filaSeleccionada == -1) {
-                    JOptionPane.showMessageDialog(null,
-                            "Seleccione un preso primero",
-                            "Advertencia",
-                            JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-
-                String identificacion = (String) TablaPresos.getValueAt(filaSeleccionada, 5);
-                PresoDAO presoDAO = new PresoDAO();
-                Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
-
-                if (preso == null) {
-                    JOptionPane.showMessageDialog(null,
-                            "Preso no encontrado",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                nombreS.setText(preso.getPrimerNombre());
-                apellidoS.setText(preso.getPrimerApellido());
-
-                String aislamiento = "";
-
-                if (preso.isEnAislamiento() == false) {
-                    aislamiento = "No";
-                }
-
-                if (preso.isEnAislamiento() == true) {
-                    aislamiento = "Sí";
-
-                }
-
-                aislamientoS.setText(aislamiento);
-                nivelseguridadS.setText(preso.getNivelDeSeguridad());
-                OficialDeRegistroView.setSelectedIndex(6);
-
-            }
-        }
-        );
         Actualizar.addActionListener(e -> {
             int fila = TablaPresos.getSelectedRow();
             if (fila == -1) {
@@ -387,32 +348,52 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         Eliminar.addActionListener(e -> {
             try {
                 int filaSeleccionada = TablaPresos.getSelectedRow();
+                if (filaSeleccionada == -1) {
+                    JOptionPane.showMessageDialog(null, "Debe seleccionar un preso de la tabla",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 Preso preso = presoController.obtenerPresoDesdeTabla(filaSeleccionada, TablaPresos);
 
-                JOptionPane.showMessageDialog(null, "Delitos: " + (preso.getDelitos() == null ? "null" : preso.getDelitos().size()) + "Preso ID: " + preso.getIdentificacion());
-                
-              
-                
-                
+                Object[] opciones = {"Liberación", "Defunción", "Cancelar"};
+                int opcion = JOptionPane.showOptionDialog(null,
+                        "Seleccione el motivo de salida:",
+                        "Motivo de salida",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        opciones,
+                        opciones[0]);
+
+                if (opcion == 2) {
+                    return;
+                }
+                String motivo = (opcion == 0) ? "LIBERADO" : "DEFUNCION";
+
                 ValidarFechaDialog dialogo = new ValidarFechaDialog(null, true);
+                dialogo.setTitle(motivo.equals("LIBERADO") ? "Fecha de liberación" : "Fecha de defunción");
                 dialogo.setVisible(true);
 
                 if (dialogo.isAceptado() && dialogo.getFechaSeleccionada() != null) {
-                    if (!presoController.validarEliminacionPreso(preso, dialogo.getFechaSeleccionada())) {
-                        JOptionPane.showMessageDialog(null,
-                                "No se puede eliminar: El preso no ha completado su condena.",
-                                "Error", JOptionPane.ERROR_MESSAGE);
+                    if (motivo.equals("LIBERADO")
+                            && !presoController.validarLiberacionPreso(preso, dialogo.getFechaSeleccionada())) {
                         return;
                     }
 
                     int confirmacion = JOptionPane.showConfirmDialog(null,
-                            "¿Está seguro de eliminar al preso " + preso.getIdentificacion() + "?",
+                            "¿Está seguro de marcar al preso " + preso.getIdentificacion() + " como " + motivo + "?",
                             "Confirmar", JOptionPane.YES_NO_OPTION);
 
-                    if (confirmacion == JOptionPane.YES_OPTION
-                            && presoController.eliminarPreso(preso.getIdentificacion())) {
-                        JOptionPane.showMessageDialog(null, "Preso eliminado correctamente");
-                        cargarTodosLosPresos();
+                    if (confirmacion == JOptionPane.YES_OPTION) {
+                        if (presoController.liberarPreso(
+                                preso.getIdentificacion(),
+                                dialogo.getFechaSeleccionada(),
+                                motivo)) {
+                            JOptionPane.showMessageDialog(null, "Preso marcado como " + motivo + " correctamente");
+                            cargarTodosLosPresos();
+                            cargarPresosInactivos();
+                        }
                     }
                 }
             } catch (Exception ex) {
@@ -421,26 +402,27 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         });
     }
 
-private void calcularFechaSalida() {
-    try {
-        if (delitosTemporales.isEmpty()) {
-            lblFechaSalidaCalculada.setText("Ingrese al menos un delito");
-            return;
+    private void calcularFechaSalida() {
+        try {
+            if (delitosTemporales.isEmpty()) {
+                lblFechaSalidaCalculada.setText("Ingrese al menos un delito");
+                return;
+            }
+
+            PresoController presoController = PresoController.getInstancia();
+
+            LocalDate fechaSalida = presoController.calcularFechaSalidaPreso(delitosTemporales);
+
+            lblFechaSalidaCalculada.setText(
+                    fechaSalida.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+            );
+
+        } catch (Exception ex) {
+            lblFechaSalidaCalculada.setText("Error calculando fecha");
+            ex.printStackTrace();
         }
-
-        PresoController presoController = PresoController.getInstancia();
-        
-        LocalDate fechaSalida = presoController.calcularFechaSalidaPreso(delitosTemporales);
-
-        lblFechaSalidaCalculada.setText(
-                fechaSalida.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-        );
-
-    } catch (Exception ex) {
-        lblFechaSalidaCalculada.setText("Error calculando fecha");
-        ex.printStackTrace();
     }
-}
+
     private void cargarDatosPresoEnFormularioActualizacion(Preso preso) {
         this.presoOriginal = preso;
         this.delitosTemporales = new ArrayList<>();
@@ -570,53 +552,6 @@ private void calcularFechaSalida() {
             AñadirPreso.setBackground(null);
             AñadirPreso.setForeground(null);
         }
-    }
-
-    private void configurarTablaImagenes() {
-        TablaPresos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value,
-                    boolean isSelected, boolean hasFocus, int row, int column) {
-
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value,
-                        isSelected, hasFocus, row, column);
-
-                if (column == 0 && value instanceof ImageIcon) {
-                    ImageIcon originalIcon = (ImageIcon) value;
-                    Image img = originalIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-                    ImageIcon roundedIcon = new ImageIcon(createRoundedImage(img));
-                    label.setIcon(roundedIcon);
-                    label.setText("");
-                } else {
-                    label.setIcon(null);
-                }
-                label.setHorizontalAlignment(JLabel.CENTER);
-                return label;
-            }
-        });
-
-        TablaPresos.setRowHeight(65);
-        TablaPresos.getColumnModel().getColumn(0).setPreferredWidth(70);
-    }
-
-    private Image createRoundedImage(Image image) {
-        int width = image.getWidth(null);
-        int height = image.getHeight(null);
-
-        BufferedImage output = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = output.createGraphics();
-
-        output = g2.getDeviceConfiguration().createCompatibleImage(width, height, Transparency.TRANSLUCENT);
-        g2.dispose();
-        g2 = output.createGraphics();
-
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.fillRoundRect(0, 0, width, height, 20, 20);
-        g2.setComposite(AlphaComposite.SrcIn);
-        g2.drawImage(image, 0, 0, null);
-        g2.dispose();
-
-        return output;
     }
 
     private void actualizarProgreso() {
@@ -1018,6 +953,7 @@ private void calcularFechaSalida() {
         jLabel2 = new javax.swing.JLabel();
         SelectorSeccion = new javax.swing.JComboBox<>();
         btnRestaurarTabla = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         identificacionB = new javax.swing.JTextField();
         btnBuscarIdentificacion = new javax.swing.JButton();
         ActualizarODR = new javax.swing.JPanel();
@@ -1036,12 +972,8 @@ private void calcularFechaSalida() {
         nuevaIdenti = new javax.swing.JTextField();
         jLabel96 = new javax.swing.JLabel();
         jSeparator72 = new javax.swing.JSeparator();
-        nuevaNacio = new javax.swing.JTextField();
         jLabel95 = new javax.swing.JLabel();
         jSeparator73 = new javax.swing.JSeparator();
-        jLabel97 = new javax.swing.JLabel();
-        jSeparator74 = new javax.swing.JSeparator();
-        nuevoSexoOdr = new javax.swing.JComboBox<>();
         jLabel104 = new javax.swing.JLabel();
         jLabel102 = new javax.swing.JLabel();
         nuevoCorreo = new javax.swing.JTextField();
@@ -1062,8 +994,9 @@ private void calcularFechaSalida() {
         jSeparator85 = new javax.swing.JSeparator();
         segundoNuevoApellido1 = new javax.swing.JTextField();
         nuevoSegundoNombre = new javax.swing.JTextField();
+        cbxNacionalidad = new javax.swing.JComboBox<>();
         jLabel94 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnActualilzarODR = new javax.swing.JButton();
         sanciones = new javax.swing.JPanel();
         jPanel34 = new javax.swing.JPanel();
         jPanel33 = new javax.swing.JPanel();
@@ -1109,6 +1042,11 @@ private void calcularFechaSalida() {
         jLabel124 = new javax.swing.JLabel();
         jLabel128 = new javax.swing.JLabel();
         finalizarDelito = new javax.swing.JButton();
+        presosInactivos = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tablaInactivos = new javax.swing.JTable();
+        jLabel79 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
         jPanel22.setLayout(jPanel22Layout);
@@ -2467,7 +2405,7 @@ private void calcularFechaSalida() {
         jLabel2.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Sección");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 90, 30));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 90, 30));
 
         SelectorSeccion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sección A", "Sección B", "Sección C" }));
         SelectorSeccion.addActionListener(new java.awt.event.ActionListener() {
@@ -2475,9 +2413,9 @@ private void calcularFechaSalida() {
                 SelectorSeccionActionPerformed(evt);
             }
         });
-        jPanel2.add(SelectorSeccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, 90, 30));
+        jPanel2.add(SelectorSeccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, 90, 30));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 330, 70));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 330, 80));
 
         btnRestaurarTabla.setBackground(new java.awt.Color(29, 35, 51));
         btnRestaurarTabla.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -2488,9 +2426,20 @@ private void calcularFechaSalida() {
                 btnRestaurarTablaActionPerformed(evt);
             }
         });
-        jPanel1.add(btnRestaurarTabla, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 20, 130, 30));
+        jPanel1.add(btnRestaurarTabla, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 10, 150, 30));
 
-        PanelTablaPresoBase.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, 1010, 70));
+        jButton3.setBackground(new java.awt.Color(0, 0, 0));
+        jButton3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(255, 255, 255));
+        jButton3.setText("Ver presos inactivos");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 40, 150, 30));
+
+        PanelTablaPresoBase.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, 1010, 80));
         PanelTablaPresoBase.add(identificacionB, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, 590, 40));
 
         btnBuscarIdentificacion.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -2582,11 +2531,6 @@ private void calcularFechaSalida() {
         jSeparator72.setForeground(new java.awt.Color(0, 0, 0));
         jPanel27.add(jSeparator72, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, 350, 10));
 
-        nuevaNacio.setBackground(new java.awt.Color(204, 204, 204));
-        nuevaNacio.setForeground(new java.awt.Color(0, 0, 0));
-        nuevaNacio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel27.add(nuevaNacio, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 320, 230, 30));
-
         jLabel95.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel95.setForeground(new java.awt.Color(0, 0, 0));
         jLabel95.setText("Nacionalidad: ");
@@ -2594,22 +2538,6 @@ private void calcularFechaSalida() {
 
         jSeparator73.setForeground(new java.awt.Color(0, 0, 0));
         jPanel27.add(jSeparator73, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 350, 350, 10));
-
-        jLabel97.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel97.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel97.setText("Sexo:");
-        jPanel27.add(jLabel97, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 370, -1, -1));
-
-        jSeparator74.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel27.add(jSeparator74, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 390, 40, 10));
-
-        nuevoSexoOdr.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "F", "M" }));
-        nuevoSexoOdr.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nuevoSexoOdrActionPerformed(evt);
-            }
-        });
-        jPanel27.add(nuevoSexoOdr, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 360, 130, 30));
 
         jLabel104.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel104.setForeground(new java.awt.Color(0, 0, 0));
@@ -2621,9 +2549,9 @@ private void calcularFechaSalida() {
         jLabel102.setText("Correo Electronico:");
         jPanel27.add(jLabel102, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 110, -1, -1));
 
-        nuevoCorreo.setBackground(new java.awt.Color(180, 180, 195));
+        nuevoCorreo.setBackground(new java.awt.Color(204, 204, 204));
         nuevoCorreo.setForeground(new java.awt.Color(0, 0, 0));
-        nuevoCorreo.setBorder(null);
+        nuevoCorreo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         nuevoCorreo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nuevoCorreoActionPerformed(evt);
@@ -2642,9 +2570,9 @@ private void calcularFechaSalida() {
         jSeparator76.setForeground(new java.awt.Color(0, 0, 0));
         jPanel27.add(jSeparator76, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 180, 380, 10));
 
-        nuevaContra.setBackground(new java.awt.Color(180, 180, 195));
+        nuevaContra.setBackground(new java.awt.Color(204, 204, 204));
         nuevaContra.setForeground(new java.awt.Color(0, 0, 0));
-        nuevaContra.setBorder(null);
+        nuevaContra.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         nuevaContra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nuevaContraActionPerformed(evt);
@@ -2769,6 +2697,9 @@ private void calcularFechaSalida() {
         });
         jPanel27.add(nuevoSegundoNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, 230, 30));
 
+        cbxNacionalidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccione>", "Afgana", "Alemana", "Americana", "Andorrana", "Angoleña", "Antiguana", "Árabe Saudita", "Argelina", "Argentina", "Armenia", "Arubeña", "Australiana", "Austriaca", "Azerbaiyana", "Bahameña", "Bahreiní", "Bangladesí", "Barbadense", "Belga", "Beliceña", "Beninesa", "Bermudeña", "Bielorrusa", "Birmana", "Boliviana", "Bosnia", "Botsuana", "Brasileña", "Británica", "Bruneana", "Búlgara", "Burkinesa", "Burundesa", "Butanesa", "Cabo Verdiana", "Camboyana", "Camerunesa", "Canadiense", "Catari", "Centroafricana", "Chadiana", "Checa", "Chilena", "China", "Chipriota", "Colombiana", "Comorense", "Congoleña", "Costarricense", "Croata", "Cubana", "Danesa", "Dominicana", "Ecuatoriana", "Egipcia", "Emiratí", "Eritrea", "Eslovaca", "Eslovena", "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa", "Fiyiana", "Francesa", "Gabonesa", "Galesa", "Gambiana", "Georgiana", "Ghanesa", "Gibraltareña", "Granadina", "Griega", "Guatemalteca", "Guineana", "Guineana-Bisáu", "Guineana Ecuatorial", "Guyanesa", "Haitiana", "Hondureña", "Hongkonesa", "Húngara", "India", "Indonesa", "Iraní", "Iraquí", "Irlandesa", "Islandesa", "Israelí", "Italiana", "Jamaicana", "Japonesa", "Jordana", "Kazaja", "Keniata", "Kirguisa", "Kiribatiana", "Kuwaití", "Laosiana", "Lesotense", "Letona", "Libanesa", "Liberiana", "Libia", "Liechtensteiniana", "Lituana", "Luxemburguesa", "Macedonia", "Malasia", "Malauí", "Maldiva", "Malgache", "Maliense", "Maltesa", "Marfileña", "Marroquí", "Marshallesa", "Mauriciana", "Mauritana", "Mexicana", "Micronesia", "Moldava", "Monegasca", "Mongola", "Montenegrina", "Mozambiqueña", "Namibia", "Nauruana", "Nepalí", "Nicaragüense", "Nigeriana", "Nigerina", "Norcoreana", "Noruega", "Neozelandesa", "Omana", "Neerlandesa (Holandesa)", "Paquistaní", "Palaosiana", "Panameña", "Papú", "Paraguaya", "Peruana", "Polaca", "Portuguesa", "Puertorriqueña", "Ruandesa", "Rumana", "Rusa", "Saharaui", "Salomonense", "Salvadoreña", "Samoana", "Sanmarinense", "Santotomense", "Saudí", "Senegalesa", "Serbia", "Seychellense", "Sierraleonesa", "Singapurense", "Siria", "Somalí", "Sri Lanka", "Sudafricana", "Sudanesa", "Sueca", "Suiza", "Surcoreana", "Surinamense", "Suazi", "Tailandesa", "Taiwanesa", "Tayika", "Tanzana", "Timorense", "Togolesa", "Tongana", "Trinitense", "Tunecina", "Turca", "Turkmena", "Tuvaluana", "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeca", "Vanuatuense", "Venezolana", "Vietnamita", "Yemení", "Yibutiana", "Zambiana", "Zimbabuense" }));
+        jPanel27.add(cbxNacionalidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 320, 240, 30));
+
         ActualizarODR.add(jPanel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 960, 450));
 
         jLabel94.setBackground(new java.awt.Color(0, 0, 0));
@@ -2777,16 +2708,16 @@ private void calcularFechaSalida() {
         jLabel94.setText("Los campos que no desee modificar déjelos en blanco*");
         ActualizarODR.add(jLabel94, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, 290, -1));
 
-        jButton2.setBackground(new java.awt.Color(29, 35, 51));
-        jButton2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Actualizar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnActualilzarODR.setBackground(new java.awt.Color(29, 35, 51));
+        btnActualilzarODR.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        btnActualilzarODR.setForeground(new java.awt.Color(255, 255, 255));
+        btnActualilzarODR.setText("Actualizar");
+        btnActualilzarODR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnActualilzarODRActionPerformed(evt);
             }
         });
-        ActualizarODR.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 520, 150, 40));
+        ActualizarODR.add(btnActualilzarODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 520, 150, 40));
 
         OficialDeRegistroView.addTab("ActualizarInfoODR", ActualizarODR);
 
@@ -3017,6 +2948,51 @@ private void calcularFechaSalida() {
 
         OficialDeRegistroView.addTab("Añadir Delito", AñadirDelito);
 
+        presosInactivos.setBackground(new java.awt.Color(255, 255, 255));
+        presosInactivos.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        tablaInactivos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Foto", "Id", "Nombres", "Apellidos", "Edad", "Identificación", "Nacionalidad", "Estado"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tablaInactivos.setRowHeight(50);
+        jScrollPane3.setViewportView(tablaInactivos);
+
+        presosInactivos.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 980, -1));
+
+        jLabel79.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        jLabel79.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel79.setText("Presos en libertad o inactivos");
+        presosInactivos.add(jLabel79, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 50, -1, -1));
+
+        jButton1.setBackground(new java.awt.Color(0, 0, 0));
+        jButton1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Volver");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        presosInactivos.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 30, 100, 30));
+
+        OficialDeRegistroView.addTab("Presos  inactivos", presosInactivos);
+
         PRINCIPAL.add(OficialDeRegistroView, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 1100, 620));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -3079,7 +3055,7 @@ private void calcularFechaSalida() {
                 ppMenuTablaPresos.setVisible(false);
             }
 
-                 PresoController controller = PresoController.getInstancia();
+            PresoController controller = PresoController.getInstancia();
 
             boolean actualizado = controller.actualizarPreso(
                     presoOriginal,
@@ -3143,10 +3119,6 @@ private void calcularFechaSalida() {
         // TODO add your handling code here:
     }//GEN-LAST:event_primerNuevoApellidoActionPerformed
 
-    private void nuevoSexoOdrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoSexoOdrActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nuevoSexoOdrActionPerformed
-
     private void nuevaContraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevaContraActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_nuevaContraActionPerformed
@@ -3205,9 +3177,8 @@ private void calcularFechaSalida() {
 
         try {
             String idBuscado = identificacionB.getText().trim();
-            if (idBuscado.isEmpty()) {
-                return;
-            }
+
+            Validador.validarFormatoIdentificacion(idBuscado);
 
             Preso preso = presoController.buscarPreso(idBuscado);
 
@@ -3389,7 +3360,7 @@ private void calcularFechaSalida() {
                 throw new IllegalArgumentException("Debe seleccionar una foto del preso");
             }
 
-                 PresoController controller = PresoController.getInstancia();
+            PresoController controller = PresoController.getInstancia();
 
             LocalDate fechaIngreso = datePickerFechaIngreso.getDate()
                     .toInstant()
@@ -3664,7 +3635,7 @@ private void calcularFechaSalida() {
                 throw new IllegalStateException("Datos del preso no están inicializados correctamente");
             }
 
-        PresoController presoController = PresoController.getInstancia();
+            PresoController presoController = PresoController.getInstancia();
 
             boolean delitoAgregado = presoController.agregarDelitoAPreso(
                     presoOriginal,
@@ -3769,9 +3740,35 @@ private void calcularFechaSalida() {
         TabbedAñadirInformacionGeneral.setSelectedIndex(1);
     }//GEN-LAST:event_btnRegresarAJudicialActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btnActualilzarODRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualilzarODRActionPerformed
+        try {
+
+            String nvNombre = nuevoPrimerNombre.getText();
+            String nvSNombre = nuevoSegundoNombre.getText();
+            String nvApellido = primerNuevoApellido.getText();
+            String nvSApellido = segundoNuevoApellido1.getText();
+            int nvedad = Integer.parseInt(nuevaEdad.getText());
+            Object  nvNacionalidad = cbxNacionalidad.getSelectedItem();
+            
+            
+            
+            
+            
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al intentar actualizar");
+        }
+    }//GEN-LAST:event_btnActualilzarODRActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        OficialDeRegistroView.setSelectedIndex(4);
+
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        OficialDeRegistroView.setSelectedIndex(8);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -3875,6 +3872,7 @@ private void calcularFechaSalida() {
     private javax.swing.JLabel apellido;
     private javax.swing.JLabel apellidoS;
     private javax.swing.JLabel art;
+    private javax.swing.JButton btnActualilzarODR;
     private javax.swing.JButton btnActualizarInfoODR;
     private javax.swing.JButton btnBuscarIdentificacion;
     private javax.swing.JButton btnIngresarFoto;
@@ -3884,6 +3882,7 @@ private void calcularFechaSalida() {
     private javax.swing.JButton cancelarD;
     private javax.swing.JButton cancelarD2;
     private javax.swing.JComboBox<String> cantidadDelitos;
+    private javax.swing.JComboBox<String> cbxNacionalidad;
     private javax.swing.JButton cerrarSesionODR;
     private javax.swing.JLabel cod;
     private javax.swing.JComboBox<String> condicionComb;
@@ -3900,7 +3899,8 @@ private void calcularFechaSalida() {
     private javax.swing.JLabel identi;
     private javax.swing.JLabel identi1;
     private javax.swing.JTextField identificacionB;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel100;
@@ -3995,6 +3995,7 @@ private void calcularFechaSalida() {
     private javax.swing.JLabel jLabel76;
     private javax.swing.JLabel jLabel77;
     private javax.swing.JLabel jLabel78;
+    private javax.swing.JLabel jLabel79;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel80;
     private javax.swing.JLabel jLabel82;
@@ -4010,7 +4011,6 @@ private void calcularFechaSalida() {
     private javax.swing.JLabel jLabel94;
     private javax.swing.JLabel jLabel95;
     private javax.swing.JLabel jLabel96;
-    private javax.swing.JLabel jLabel97;
     private javax.swing.JLabel jLabel98;
     private javax.swing.JLabel jLabel99;
     private javax.swing.JPanel jPanel1;
@@ -4051,6 +4051,7 @@ private void calcularFechaSalida() {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane7;
@@ -4116,7 +4117,6 @@ private void calcularFechaSalida() {
     private javax.swing.JSeparator jSeparator71;
     private javax.swing.JSeparator jSeparator72;
     private javax.swing.JSeparator jSeparator73;
-    private javax.swing.JSeparator jSeparator74;
     private javax.swing.JSeparator jSeparator75;
     private javax.swing.JSeparator jSeparator76;
     private javax.swing.JSeparator jSeparator77;
@@ -4151,7 +4151,6 @@ private void calcularFechaSalida() {
     private javax.swing.JTextField nuevaEstaturaField;
     private javax.swing.JLabel nuevaFoto;
     private javax.swing.JTextField nuevaIdenti;
-    private javax.swing.JTextField nuevaNacio;
     private javax.swing.JComboBox<String> nuevaNacionalidadField;
     private javax.swing.JComboBox<String> nuevoAislamientoCombo;
     private javax.swing.JTextField nuevoCorreo;
@@ -4165,10 +4164,10 @@ private void calcularFechaSalida() {
     private javax.swing.JTextField nuevoSegundoApellidoField;
     private javax.swing.JTextField nuevoSegundoNombre;
     private javax.swing.JTextField nuevoSegundoNombreField;
-    private javax.swing.JComboBox<String> nuevoSexoOdr;
     private javax.swing.JLabel peso;
     private javax.swing.JPopupMenu ppMenuDelito;
     private javax.swing.JPopupMenu ppMenuTablaPresos;
+    private javax.swing.JPanel presosInactivos;
     private javax.swing.JTextField primerNuevoApellido;
     private javax.swing.JButton regresar;
     private javax.swing.JComboBox<String> riesgo;
@@ -4180,6 +4179,7 @@ private void calcularFechaSalida() {
     private javax.swing.JLabel sentenciaTotaal;
     private javax.swing.JLabel sexo;
     private javax.swing.JTable tablaExpediente;
+    private javax.swing.JTable tablaInactivos;
     private javax.swing.JTable tablaSancion;
     private javax.swing.JTextArea textAreaDescripcion1;
     // End of variables declaration//GEN-END:variables

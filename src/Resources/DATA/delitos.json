@@ -126,5 +126,53 @@
       "fechaIngreso": "2025-04-26",
       "fechaSalidaCalculada": "2026-04-26"
     }
+  },
+  {
+    "id": 9,
+    "presoId": "667788990",
+    "codigo": 221,
+    "nombre": "Calumnia",
+    "articuloLey": "Artículo 221",
+    "gravedad": "Baja",
+    "descripcion": "Calumniabia contra el indigente",
+    "fechaComision": "2024-04-02",
+    "sentencia": {
+      "años": 1,
+      "meses": 2,
+      "fechaIngreso": "2025-04-30",
+      "fechaSalidaCalculada": "2026-06-30"
+    }
+  },
+  {
+    "id": 10,
+    "presoId": "230909098",
+    "codigo": 265,
+    "nombre": "Daño en bien ajeno",
+    "articuloLey": "Artículo 265",
+    "gravedad": "Baja",
+    "descripcion": "El individuo ha sido acusado de causar\n de manera intencional daños materiales\n a bienes muebles e inmuebles que no le\n pertenecen, afectando su estructura, \nfuncionalidad o valor económico. \nEstos actos se realizaron sin el consentimiento del propietario\n y con plena conciencia de las consecuencias de su conducta. \nEl daño ocasionado generó perjuicios a terceros, ya sea por la destrucción parcial o total del bien, \npor el deterioro significativo del mismo o por la afectación de su uso legítimo.\n Este tipo de conducta se enmarca dentro de las infracciones contra la propiedad \ny puede implicar responsabilidad civil\n y penal, dependiendo del alcance\n del perjuicio causado.",
+    "fechaComision": "2024-05-10",
+    "sentencia": {
+      "años": 3,
+      "meses": 0,
+      "fechaIngreso": "2025-05-01",
+      "fechaSalidaCalculada": "2028-05-01"
+    }
+  },
+  {
+    "id": 11,
+    "presoId": "230909098",
+    "codigo": 244,
+    "nombre": "Extorsión",
+    "articuloLey": "Artículo 244 - Extorsión",
+    "gravedad": "Baja",
+    "descripcion": "\"El individuo ha sido imputado por el delito\n de extorsión, al haber ejercido presión \nsobre una o más personas mediante \namenazas, intimidaciones o coacción\n psicológica con el fin de obtener, \nde manera ilegítima, beneficios económicos,\n bienes materiales, favores personales\n o la realización de actos en contra de la\n voluntad de la víctima. Estas amenazas\n podían implicar el daño físico, la afectación\n de la integridad moral o familiar de la\n persona, o la divulgación de información\n perjudicial. La conducta fue ejecutada con total\nconocimiento de su ilegalidad, vulnerando \nlos derechos fundamentales de la víctima\n y alterando su libertad de decisión.\n Este delito representa una grave\n transgresión al orden jurídico y a la\n seguridad de los ciudadanos, \nsiendo tipificado en la legislación penal \npor atentar contra la autonomía y el \npatrimonio de los afectados",
+    "fechaComision": "2023-05-05",
+    "sentencia": {
+      "años": 2,
+      "meses": 4,
+      "fechaIngreso": "2025-05-01",
+      "fechaSalidaCalculada": "2027-09-01"
+    }
   }
 ]

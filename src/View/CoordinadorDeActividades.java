@@ -1476,7 +1476,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
 
     private void btnActualizarInfoCoorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarInfoCoorActionPerformed
 
-
+CoordinadorDeActividades.setSelectedIndex(3);
     }//GEN-LAST:event_btnActualizarInfoCoorActionPerformed
 
     private void nuevoPrimerNombreCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoPrimerNombreCActionPerformed

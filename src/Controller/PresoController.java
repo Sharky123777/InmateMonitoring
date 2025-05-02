@@ -9,7 +9,13 @@ import Model.ExpedienteJudicial;
 import Model.Preso;
 import Model.Sentencia;
 import Utilidades.Validador;
+import java.awt.AlphaComposite;
+import java.awt.Component;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.Transparency;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -20,8 +26,10 @@ import java.util.List;
 import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class PresoController {
@@ -378,7 +386,7 @@ public class PresoController {
         }
     }
 
-    public boolean validarEliminacionPreso(Preso preso, Date fechaValidacion) {
+    public boolean validarLiberacionPreso(Preso preso, Date fechaValidacion) {
         try {
             if (preso == null) {
                 throw new IllegalArgumentException("El preso no puede ser nulo");
@@ -400,7 +408,7 @@ public class PresoController {
             }
 
             if (fechaActual.isBefore(fechaSalida)) {
-                throw new IllegalArgumentException("No se puede eliminar: El preso no ha completado su condena.\n"
+                throw new IllegalArgumentException("No se puede liberar: El preso no ha completado su condena.\n"
                         + "Fecha de liberación: " + fechaSalida.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             }
             return true;
@@ -420,16 +428,16 @@ public class PresoController {
                 throw new IllegalArgumentException("No se encontró el preso con identificación: " + identificacion);
             }
 
-            if (!validarEliminacionPreso(preso, new Date())) {
+            if (!validarLiberacionPreso(preso, new Date())) {
                 return false;
             }
 
             boolean eliminado = presoDAO.eliminarPreso(identificacion);
             if (eliminado) {
-                Validador.mostrarInfo("Preso eliminado correctamente");
+                Validador.mostrarInfo("Preso LIBERADO correctamente");
                 return true;
             } else {
-                Validador.mostrarError("No se pudo eliminar el preso");
+                Validador.mostrarError("No se pudo Liberar el preso");
                 return false;
             }
 
@@ -437,7 +445,7 @@ public class PresoController {
             Validador.mostrarError(e.getMessage());
             return false;
         } catch (Exception e) {
-            Validador.mostrarError("Error inesperado al eliminar preso: " + e.getMessage());
+            Validador.mostrarError("Error inesperado al liberar preso: " + e.getMessage());
             return false;
         }
     }
@@ -593,6 +601,7 @@ public class PresoController {
 
     public List<Object[]> obtenerPresosPorSeccion(String seccion) {
         List<Preso> presos = presoDAO.buscarPorSeccion(seccion);
+    
         List<Object[]> filas = new ArrayList<>();
 
         for (Preso preso : presos) {
@@ -614,16 +623,16 @@ public class PresoController {
         return filas;
     }
 
-    public List<Object[]> obtenerTodosLosPresosParaTabla() {
-        List<Preso> presos = presoDAO.cargarTodos();
+   public List<Object[]> obtenerTodosLosPresosParaTabla() {
+        List<Preso> presos = presoDAO.buscarPorEstado("ACTIVO");
         List<Object[]> filas = new ArrayList<>();
-
+        
         for (Preso preso : presos) {
             ImageIcon foto = obtenerFotoPreso(preso);
-
+            
             List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(preso.getIdentificacion());
             preso.setDelitos(delitos);
-
+            
             filas.add(new Object[]{
                 foto,
                 preso.getId(),
@@ -636,8 +645,139 @@ public class PresoController {
                 preso.getCeldaAsignada()
             });
         }
-
+        
         return filas;
     }
+   
+public List<Object[]> obtenerPresosInactivosParaTabla() {
+     List<Preso> liberados = presoDAO.buscarPorEstado("LIBERADO");
+    List<Preso> fallecidos = presoDAO.buscarPorEstado("DEFUNCION");
+    
+    List<Object[]> filas = new ArrayList<>();
+    
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    
+    for (Preso preso : liberados) {
+ ImageIcon foto = (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty()) 
+            ? cargarImagenPreso(preso.getFotoPath())
+            : new ImageIcon(getClass().getResource("/images/default_profile.png"));
+        
+        filas.add(new Object[]{
+            foto,
+            preso.getId(),
+            preso.getNombresCompletos(),
+            preso.getApellidosCompletos(),
+            preso.getEdad(),
+            preso.getIdentificacion(),
+            preso.getNacionalidad(),
+            "LIBERADO",
+        });
+    }
+    
+    
+    for (Preso preso : fallecidos) {
+        ImageIcon foto = obtenerFotoPreso(preso);
+        filas.add(new Object[]{
+            foto,
+            preso.getId(),
+            preso.getNombresCompletos(),
+            preso.getApellidosCompletos(),
+            preso.getEdad(),
+            preso.getIdentificacion(),
+            preso.getNacionalidad(),
+            "DEFUNCION",
+        });
+    }
+    
+    return filas;
+}
+
+public boolean liberarPreso(String identificacion, Date fechaValidacion, String motivo) {
+    try {
+        Validador.validarFormatoIdentificacion(identificacion);
+
+        Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
+        if (preso == null) {
+            throw new IllegalArgumentException("No se encontró el preso con identificación: " + identificacion);
+        }
+
+        if (motivo.equals("LIBERADO") && !validarLiberacionPreso(preso, fechaValidacion)) {
+            return false;
+        }
+
+        if (motivo.equals("DEFUNCION")) {
+            preso.setFechaDefuncion(fechaValidacion.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate());
+        }
+
+        boolean estadoCambiado = presoDAO.cambiarEstadoPreso(identificacion, motivo);
+        
+        if (estadoCambiado) {
+            Validador.mostrarInfo("Preso marcado como " + motivo + " correctamente");
+            return true;
+        } else {
+            Validador.mostrarError("No se pudo cambiar el estado del preso");
+            return false;
+        }
+
+    } catch (IllegalArgumentException e) {
+        Validador.mostrarError(e.getMessage());
+        return false;
+    } catch (Exception e) {
+        Validador.mostrarError("Error inesperado al cambiar estado del preso: " + e.getMessage());
+        return false;
+    }
+}
+
+public void configurarTablaImagenes(JTable tabla) {
+    tabla.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+
+            JLabel label = (JLabel) super.getTableCellRendererComponent(table, value,
+                    isSelected, hasFocus, row, column);
+
+            if (column == 0 && value instanceof ImageIcon) {
+                ImageIcon originalIcon = (ImageIcon) value;
+                Image img = originalIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                ImageIcon roundedIcon = new ImageIcon(createRoundedImage(img));
+                label.setIcon(roundedIcon);
+                label.setText("");
+            } else {
+                label.setIcon(null);
+            }
+            label.setHorizontalAlignment(JLabel.CENTER);
+            return label;
+        }
+    });
+
+    tabla.setRowHeight(65);
+    tabla.getColumnModel().getColumn(0).setPreferredWidth(70);
+}
+
+
+    private Image createRoundedImage(Image image) {
+        int width = image.getWidth(null);
+        int height = image.getHeight(null);
+
+        BufferedImage output = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = output.createGraphics();
+
+        output = g2.getDeviceConfiguration().createCompatibleImage(width, height, Transparency.TRANSLUCENT);
+        g2.dispose();
+        g2 = output.createGraphics();
+
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.fillRoundRect(0, 0, width, height, 20, 20);
+        g2.setComposite(AlphaComposite.SrcIn);
+        g2.drawImage(image, 0, 0, null);
+        g2.dispose();
+
+        return output;
+    }
+
+
 
 }

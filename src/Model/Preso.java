@@ -19,9 +19,12 @@ public class Preso extends Persona {
     private int numeroDeVisitas = 0;
     private String grupoSanguineo;
     private String fotoPath;
+    private String estado = "ACTIVO"; 
     private int id = 0;
-     private List<String> actividadesAsignadasIds; 
+    private List<String> actividadesAsignadasIds; 
     private List<String> actividadesCanceladasIds; 
+        private LocalDate fechaDefuncion;
+
     
 
     public Preso(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
@@ -49,8 +52,30 @@ public class Preso extends Persona {
 
         this.expediente = crearExpedienteBasico();
     }
+
+    public LocalDate getFechaDefuncion() {
+        return fechaDefuncion;
+    }
+
+    public void setFechaDefuncion(LocalDate fechaDefuncion) {
+        this.fechaDefuncion = fechaDefuncion;
+    }
+
     
-     public List<String> getActividadesAsignadasIds() {
+    
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public boolean puedeSerAsignadoAActividad() {
+        return "ACTIVO".equals(estado) && !enAislamiento;
+    }
+
+    public List<String> getActividadesAsignadasIds() {
         if (actividadesAsignadasIds == null) {
             actividadesAsignadasIds = new ArrayList<>();
         }
@@ -73,7 +98,11 @@ public class Preso extends Persona {
     }
     
     public void agregarActividadAsignada(String idActividad) {
-        getActividadesAsignadasIds().add(idActividad);
+        if (puedeSerAsignadoAActividad()) {
+            getActividadesAsignadasIds().add(idActividad);
+        } else {
+            throw new IllegalStateException("El preso no puede ser asignado a actividades en su estado actual");
+        }
     }
     
     public void marcarActividadCancelada(String idActividad) {
@@ -81,7 +110,6 @@ public class Preso extends Persona {
             getActividadesCanceladasIds().add(idActividad);
         }
     }
-    
 
     public int getId() {
         return id;
@@ -283,6 +311,7 @@ public class Preso extends Persona {
                 + "nombreCompleto='" + getNombreCompleto() + '\''
                 + ", identificacion='" + getIdentificacion() + '\''
                 + ", delitos=" + delitos.size()
+                + ", estado=" + estado
                 + '}';
     }
 }

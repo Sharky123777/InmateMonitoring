@@ -11,6 +11,8 @@ public class AsignacionActividad extends javax.swing.JDialog {
     public AsignacionActividad(java.awt.Frame parent, boolean modal, Preso preso) {
         super(parent, modal);
         initComponents();
+                setLocationRelativeTo(parent);
+
             controller.cargarActividadesDisponiblesEnTabla(actividadesAsignacionTabla, preso.getIdentificacion());
         identiPreso.setText(preso.getIdentificacion());
         nombreApePreso.setText(preso.getNombresCompletos() + " " + preso.getApellidosCompletos());

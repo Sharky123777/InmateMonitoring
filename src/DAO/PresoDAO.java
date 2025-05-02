@@ -35,6 +35,7 @@ import javax.swing.JOptionPane;
 
 public class PresoDAO {
 
+    private static  DelitoDAO delitoDAO = DelitoDAO.getInstancia();
     private static PresoDAO instancia;
 
     private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\presos.json\\";
@@ -181,8 +182,9 @@ public class PresoDAO {
         List<Preso> presos = cargarTodos();
         for (Preso preso : presos) {
             if (preso.getIdentificacion().equals(identificacion)) {
-                return preso;
-            }
+List<Delito> delitos =delitoDAO.obtenerDelitosPorPreso(preso.getIdentificacion());
+            preso.setDelitos(delitos); 
+            return preso;            }
         }
         return null;
 
@@ -383,16 +385,17 @@ public class PresoDAO {
     }
 
     public List<Preso> buscarPorSeccion(String seccion) {
-        List<Preso> todos = cargarTodos();
-        List<Preso> filtrados = new ArrayList<>();
+    List<Preso> todos = cargarTodos();
+    List<Preso> filtrados = new ArrayList<>();
 
-        for (Preso preso : todos) {
-            if (preso.getSeccionAsignada().equalsIgnoreCase(seccion)) {
-                filtrados.add(preso);
-            }
+    for (Preso preso : todos) {
+        if (preso.getSeccionAsignada().equalsIgnoreCase(seccion)
+                && "ACTIVO".equalsIgnoreCase(preso.getEstado())) {
+            filtrados.add(preso);
         }
-        return filtrados;
     }
+    return filtrados;
+}
     
 public boolean actualizarPreso(Preso preso) {
     List<Preso> presos = cargarTodos();
@@ -455,5 +458,35 @@ public boolean marcarActividadCancelada(String idPreso, String idActividad) {
         return false;
     }
 }
+
+ public boolean cambiarEstadoPreso(String identificacion, String nuevoEstado) {
+    List<Preso> presos = cargarTodos();
+    
+    for (Preso preso : presos) {
+        if (preso.getIdentificacion().equals(identificacion)) {
+            preso.setEstado(nuevoEstado);
+            return guardarCambios(presos);
+        }
+    }
+    return false;
+}
+  
+
+  
+ public boolean eliminarPresoL(String numeroIdentificacion) {
+        return cambiarEstadoPreso(numeroIdentificacion, "LIBERADO");
+  }
+ 
+ public List<Preso> buscarPorEstado(String estado) {
+        List<Preso> todos = cargarTodos();
+        List<Preso> filtrados = new ArrayList<>();
+        
+        for (Preso preso : todos) {
+            if (preso.getEstado() != null && preso.getEstado().equalsIgnoreCase(estado)) {
+                filtrados.add(preso);
+            }
+        }
+        return filtrados;
+    }
 
 }
