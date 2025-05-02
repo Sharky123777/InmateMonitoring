@@ -1,28 +1,37 @@
 {
   "usuarios": [
     {
-      "email": "director@institucion.com",
-      "password": "director123",
+      "usuario": "director",
       "rol": "DIRECTOR"
     },
     {
-      "email": "oficial@institucion.com",
-      "password": "oficial123",
+      "usuario": "oficial",
       "rol": "OFICIAL"
     },
     {
-      "email": "control@institucion.com",
-      "password": "control123",
+      "usuario": "control",
       "rol": "PERSONAL_DE_CONTROL"
     },
     {
-      "email": "registro@institucion.com",
-      "password": "registro123",
+      "usuario": "registro",
       "rol": "OFICIAL_DE_REGISTRO"
     },
     {
-      "email": "enfermera@institucion.com",
-      "password": "enfermera123",
+      "usuario": "enfermera",
+      "rol": "ENFERMERA"
+    },
+    {
+      "usuario": "coordinador",
+      "rol": "COORDINADOR"
+    },
+    {
+      "usuario": "SharlokAlcazar502*",
+      "contraseña": "CEx*cwE6",
+      "rol": "ENFERMERA"
+    },
+    {
+      "usuario": "CelinaRestrepo139\u0026",
+      "contraseña": "58fpZS#h",
       "rol": "ENFERMERA"
     }
   ]

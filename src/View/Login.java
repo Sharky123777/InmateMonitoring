@@ -21,6 +21,7 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        
         RolCmbBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{
             "DIRECTOR", "OFICIAL", "PERSONAL_DE_CONTROL", "OFICIAL_DE_REGISTRO", "ENFERMERA"
         }));
@@ -144,7 +145,7 @@ public class Login extends javax.swing.JFrame {
         String rolTexto = (String) RolCmbBox.getSelectedItem();
         Rol rolSeleccionado = Rol.valueOf(rolTexto);
 
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        UsuarioDAO usuarioDAO = UsuarioDAO.getInstancia();
         Usuario usuario = usuarioDAO.validarCredenciales(email, contraseña, rolSeleccionado);
 
         if (usuario != null) {
