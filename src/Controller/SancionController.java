@@ -1,11 +1,14 @@
 package Controller;
 
+import DAO.GuardiaDAO;
 import DAO.PresoDAO;
 import DAO.SancionDAO;
+import Model.Guardia;
 import Model.Preso;
 import Model.Sancion;
 import View.Oficial;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -40,14 +43,27 @@ public class SancionController {
         String motivoSancion = view.getMotivoSancion().getText().trim();
         String tipoSancion = view.getTipoSancion().getSelectedItem().toString();
         Date fechaSeleccionada = view.getFechaSancion().getDate();
+        String duracion = view.getDuracionSancion().getSelectedItem().toString();
+        String horaStr = view.getHoraSancion().getSelectedItem().toString();
+        String identificacionGuardia = view.getIdentificacionGuardiaSancion().getText().trim();
 
-        if (!identificacionPreso.matches("\\d+")) {
-            mostrarError("La identificación del preso debe contener solo números");
+        if (!identificacionPreso.matches("\\d{6,10}")) {
+            mostrarError("La identificación del preso debe tener entre 6 y 10 dígitos numéricos.");
             return false;
         }
 
-        if (!identificacionPreso.matches("\\d{6,10}")) {
-            mostrarError("La identificación debe contener entre 6 y 10 dígitos numéricos.");
+        if (!identificacionGuardia.matches("\\d{6,10}")) {
+            mostrarError("La identificación del guardia debe tener entre 6 y 10 dígitos numéricos.");
+            return false;
+        }
+
+        if (duracion.equals("< Seleccionar >")) {
+            mostrarError("Debe seleccionar una duración para la sanción.");
+            return false;
+        }
+
+        if (horaStr.equals("< Seleccionar >")) {
+            mostrarError("Debe seleccionar una hora para la sanción.");
             return false;
         }
 
@@ -56,25 +72,37 @@ public class SancionController {
                 .toLocalDate();
 
         if (fecha.isAfter(LocalDate.now())) {
-            mostrarError("La fecha de la sanción no puede ser futura.\nEste formulario es para registrar sanciones ya aplicadas.");
+            mostrarError("La fecha de la sanción no puede ser futura.");
             return false;
         }
 
         try {
             Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
             if (preso == null) {
-                mostrarError("No se encontró ningún preso con esa identificación");
+                mostrarError("No se encontró ningún preso con esa identificación.");
                 return false;
             }
-            Sancion nuevaSancion = new Sancion(0, motivoSancion, fecha, tipoSancion, preso);
+
+            Guardia guardia = new GuardiaDAO().obtenerGuardiaPorCedula(identificacionGuardia);
+            if (guardia == null) {
+                mostrarError("No se encontró ningún guardia con esa identificación.");
+                return false;
+            }
+
+            LocalTime hora = LocalTime.parse(horaStr);
+
+            Sancion nuevaSancion = new Sancion(
+                    0, motivoSancion, fecha, hora, duracion, tipoSancion, preso, guardia
+            );
+
             boolean exito = sancionDAO.guardarSancion(nuevaSancion);
 
             if (exito) {
-                mostrarExito("La sanción se registró con éxito");
+                mostrarExito("La sanción se registró con éxito.");
                 limpiarCamposSancion(view);
                 return true;
             } else {
-                mostrarError("No se pudo guardar la sanción");
+                mostrarError("No se pudo guardar la sanción.");
                 return false;
             }
 
@@ -86,22 +114,37 @@ public class SancionController {
 
     private boolean validarCamposSancion(Oficial view) {
         if (view.getIdentificacionPresoSancion().getText().trim().isEmpty()) {
-            mostrarError("Debe ingresar la identificación del preso");
+            mostrarError("La identificación del preso es obligatoria.");
             return false;
         }
 
         if (view.getMotivoSancion().getText().trim().isEmpty()) {
-            mostrarError("Debe especificar el motivo de la sanción");
+            mostrarError("El motivo de la sanción es obligatorio.");
             return false;
         }
 
-        if (view.getTipoSancion().getSelectedItem().toString().equals("< Seleccionar >")) {
-            mostrarError("Debe seleccionar un tipo de sanción");
+        if (view.getTipoSancion().getSelectedIndex() == 0) {
+            mostrarError("Debe seleccionar un tipo de sanción.");
             return false;
         }
 
         if (view.getFechaSancion().getDate() == null) {
-            mostrarError("Debe seleccionar la fecha de la sanción");
+            mostrarError("Debe seleccionar una fecha.");
+            return false;
+        }
+
+        if (view.getDuracionSancion().getSelectedIndex() == 0) {
+            mostrarError("Debe seleccionar una duración.");
+            return false;
+        }
+
+        if (view.getHoraSancion().getSelectedIndex() == 0) {
+            mostrarError("Debe seleccionar una hora.");
+            return false;
+        }
+
+        if (view.getIdentificacionGuardiaSancion().getText().trim().isEmpty()) {
+            mostrarError("La identificación del guardia es obligatoria.");
             return false;
         }
 
@@ -113,6 +156,9 @@ public class SancionController {
         view.getMotivoSancion().setText("");
         view.getTipoSancion().setSelectedIndex(0);
         view.getFechaSancion().setDate(null);
+        view.getDuracionSancion().setSelectedIndex(0);
+        view.getHoraSancion().setSelectedIndex(0);
+        view.getIdentificacionGuardiaSancion().setText("");
     }
 
     public void cargarHistorialSanciones(String identificacionPreso, JTable tabla) {
@@ -126,8 +172,11 @@ public class SancionController {
                 sancion.getId(),
                 sancion.getTipoSancion(),
                 sancion.getFechaSancion(),
+                sancion.getHora(),
+                sancion.getDuracionEnHoras(),
                 sancion.getPreso().getIdentificacion(),
-                sancion.getMotivo()
+                sancion.getMotivo(),
+                sancion.getGuardia().getIdentificacion()
             });
         }
     }
@@ -149,23 +198,12 @@ public class SancionController {
                 sancion.getId(),
                 sancion.getTipoSancion(),
                 sancion.getFechaSancion(),
+                sancion.getHora(),
+                sancion.getDuracionEnHoras(),
                 sancion.getPreso().getIdentificacion(),
-                sancion.getMotivo()
+                sancion.getMotivo(),
+                sancion.getGuardia().getIdentificacion()
             });
-        }
-
-    }
-
-    public void filtrarSanciones(String identificacionPreso, String tipoSeleccionado, JTable tabla) {
-        if (identificacionPreso == null || identificacionPreso.trim().isEmpty()) {
-            mostrarError("No se ha seleccionado un preso.");
-            return;
-        }
-
-        if (tipoSeleccionado == null || tipoSeleccionado.equals("< Seleccionar >")) {
-            cargarHistorialSanciones(identificacionPreso, tabla);
-        } else {
-            cargarHistorialSancionesFiltrado(identificacionPreso, tipoSeleccionado, tabla);
         }
     }
 
@@ -186,8 +224,11 @@ public class SancionController {
                 sancion.getId(),
                 sancion.getTipoSancion(),
                 sancion.getFechaSancion(),
+                sancion.getHora(),
+                sancion.getDuracionEnHoras(),
                 sancion.getPreso().getIdentificacion(),
-                sancion.getMotivo()
+                sancion.getMotivo(),
+                sancion.getGuardia().getIdentificacion()
             });
         }
     }

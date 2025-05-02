@@ -718,7 +718,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel30.setText("Hora de la visita:");
         PanelGuardarVisita.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 200, -1, -1));
 
-        DuracionVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "1", "2 " }));
+        DuracionVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "1", "2" }));
         PanelGuardarVisita.add(DuracionVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 230, 180, 30));
 
         jLabel31.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
