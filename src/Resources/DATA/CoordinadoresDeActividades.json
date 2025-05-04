@@ -1,0 +1,46 @@
+{
+  "coordinadores": [
+    {
+      "primerNombre": "adnhawgydh",
+      "segundoNombre": "mawjdhgyad",
+      "primerApellido": "akwdnuagy",
+      "segundoApellido": "huawdmnh",
+      "edad": 34,
+      "identificacion": "28732634",
+      "nacionalidad": "ndbhgwytd",
+      "correo": "asas@gmail.com",
+      "turno": "Diurno",
+      "fechaFinContrato": "2025-05-19",
+      "rutaImagen": "src/Resources/imagenes_CDA/28732634_Captura de pantalla 2025-04-17 133614.png",
+      "cargo": "Oficial"
+    },
+    {
+      "primerNombre": "dnbahwgdyhd",
+      "segundoNombre": "PRUEBABABABABDBABA",
+      "primerApellido": "andawhdy",
+      "segundoApellido": "awdnjahdy",
+      "edad": 67,
+      "identificacion": "09876533",
+      "nacionalidad": "Aleman",
+      "correo": "dnb@gmail.com",
+      "turno": "Diurno",
+      "fechaFinContrato": "2025-05-14",
+      "rutaImagen": "src/Resources/imagenes_CDA/09876533_Captura de pantalla 2024-03-03 160808.png",
+      "cargo": "Oficial"
+    },
+    {
+      "primerNombre": "awdawdwa",
+      "segundoNombre": "awdawdawd",
+      "primerApellido": "dawdawd",
+      "segundoApellido": "awdawdwaad",
+      "edad": 83,
+      "identificacion": "987123713",
+      "nacionalidad": "ahbdgawyd",
+      "correo": "ss@gmail.com",
+      "turno": "Diurno",
+      "fechaFinContrato": "2025-05-21",
+      "rutaImagen": "src/Resources/imagenes_CDA/987123713_Captura de pantalla 2025-04-06 134603.png",
+      "cargo": "Oficial"
+    }
+  ]
+}

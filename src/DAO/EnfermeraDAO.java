@@ -160,53 +160,55 @@ public class EnfermeraDAO {
     
     
     public boolean guardarEnfermera(Enfermera enfermera, File imagen) {
-        try {
-            // Validaciones existentes...
-            if (enfermera.getIdentificacion() == null || enfermera.getIdentificacion().trim().isEmpty()) {
-                throw new IllegalArgumentException("La cédula no puede estar vacía");
-            }
-            
-            if (!puedeAgregarEnfermera(enfermera.getTurno())) {
-                throw new IllegalArgumentException("No se puede agregar más enfermeras. Límite alcanzado.");
-            }
-            
-            if (existeEnfermeraConCedula(enfermera.getIdentificacion())) {
-                throw new IllegalArgumentException("Ya existe una enfermera con esta cédula: " + enfermera.getIdentificacion());
-            }
-
-            // Generar credenciales
-            List<Usuario> usuariosExistentes = obtenerTodosUsuarios();
-            String usuario = generarUsuarioUnico(enfermera.getPrimerNombre(), enfermera.getPrimerApellido(), usuariosExistentes);
-            String contrasena = generarContrasena();
-            
-            // Crear y guardar usuario
-            Usuario nuevoUsuario = new Usuario(usuario, contrasena, RolEnum.ENFERMERA);
-            guardarUsuario(nuevoUsuario);
-            
-            // Asignar credenciales a la enfermera
-            enfermera.setUsuario(usuario);
-            enfermera.setContrasena(contrasena);
-
-            // Manejar la imagen
-            if (imagen != null && imagen.exists()) {
-                String nombreImagen = enfermera.getIdentificacion() + "_" + imagen.getName();
-                String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-                Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
-                enfermera.setRutaImagen(rutaImagenFinal);
-            }
-
-            List<Enfermera> enfermeras = obtenerEnfermeras();
-            enfermeras.add(enfermera);
-            guardarListaEnfermeras(enfermeras);
-
-            return true;
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error al guardar la enfermera: " + e.getMessage(), 
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+    try {
+        // Validar cédula única
+        if (existeEnfermeraConCedula(enfermera.getIdentificacion())) {
+            throw new IllegalArgumentException("Ya existe una enfermera con esta cédula");
         }
-    
+
+        // Validar límites
+        if (!puedeAgregarEnfermera(enfermera.getTurno())) {
+            throw new IllegalArgumentException("No se puede agregar más enfermeras. Límite alcanzado.");
+        }
+
+        // Generar credenciales
+        List<Usuario> usuariosExistentes = obtenerTodosUsuarios();
+        String usuario = generarUsuarioUnico(enfermera.getPrimerNombre(), enfermera.getPrimerApellido(), usuariosExistentes);
+        String contrasena = generarContrasena();
+        
+        // Crear y guardar usuario
+        Usuario nuevoUsuario = new Usuario(usuario, contrasena, RolEnum.ENFERMERA);
+        guardarUsuario(nuevoUsuario);
+        
+        // Asignar credenciales
+        enfermera.setUsuario(usuario);
+        enfermera.setContrasena(contrasena);
+
+        // Manejar imagen
+        if (imagen != null && imagen.exists()) {
+            String nombreImagen = enfermera.getIdentificacion() + "_" + imagen.getName();
+            String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+            Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+            enfermera.setRutaImagen(rutaImagenFinal);
+        } else {
+            enfermera.setRutaImagen(""); // O ruta a imagen por defecto
+        }
+
+        // Guardar enfermera
+        List<Enfermera> enfermeras = obtenerEnfermeras();
+        enfermeras.add(enfermera);
+        guardarListaEnfermeras(enfermeras);
+
+        return true;
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error al guardar la enfermera: " + e.getMessage(), 
+            "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
+    } catch (IllegalArgumentException e) {
+        throw e; // Re-lanzar para que el controller lo maneje
     }
+}
     
    public List<Enfermera> obtenerEnfermeras() {
     List<Enfermera> enfermeras = new ArrayList<>();
@@ -244,10 +246,37 @@ public class EnfermeraDAO {
 }
     
     private void guardarListaEnfermeras(List<Enfermera> enfermeras) throws IOException {
-        try (Writer writer = new FileWriter(RUTA_JSON)) {
-            gson.toJson(Collections.singletonMap("enfermeras", enfermeras), writer);
-        }
+    JsonObject jsonObject = new JsonObject();
+    JsonArray enfermerasArray = new JsonArray();
+    
+    for (Enfermera enfermera : enfermeras) {
+        JsonObject enfermeraJson = new JsonObject();
+        // Agregar todos los campos de manera organizada
+        enfermeraJson.addProperty("usuario", enfermera.getUsuario());
+        enfermeraJson.addProperty("contrasena", enfermera.getContrasena());
+        enfermeraJson.addProperty("turno", enfermera.getTurno());
+        enfermeraJson.addProperty("fechaContratacion", enfermera.getFechaContratacion().toString());
+        enfermeraJson.addProperty("fechaFinContrato", enfermera.getFechaFinContrato().toString());
+        enfermeraJson.addProperty("rutaImagen", enfermera.getRutaImagen());
+        enfermeraJson.addProperty("correo", enfermera.getCorreo());
+        enfermeraJson.addProperty("primerNombre", enfermera.getPrimerNombre());
+        enfermeraJson.addProperty("segundoNombre", enfermera.getSegundoNombre());
+        enfermeraJson.addProperty("primerApellido", enfermera.getPrimerApellido());
+        enfermeraJson.addProperty("segundoApellido", enfermera.getSegundoApellido());
+        enfermeraJson.addProperty("edad", enfermera.getEdad());
+        enfermeraJson.addProperty("sexo", enfermera.getSexo());
+        enfermeraJson.addProperty("nacionalidad", enfermera.getNacionalidad());
+        enfermeraJson.addProperty("identificacion", enfermera.getIdentificacion());
+        
+        enfermerasArray.add(enfermeraJson);
     }
+    
+    jsonObject.add("enfermeras", enfermerasArray);
+    
+    try (Writer writer = new FileWriter(RUTA_JSON)) {
+        gson.toJson(jsonObject, writer);
+    }
+}
     
    public boolean puedeAgregarEnfermera(String turno) {
     List<Enfermera> enfermeras = obtenerEnfermeras();
@@ -300,39 +329,41 @@ public class EnfermeraDAO {
         }
     }
     
-    // Nuevo método para modificar recibiendo objeto Enfermera
-    public boolean modificarEnfermera(String cedulaOriginal, Enfermera enfermeraModificada, File nuevaImagen) {
-        try {
-            List<Enfermera> enfermeras = obtenerEnfermeras();
-            
-            for (int i = 0; i < enfermeras.size(); i++) {
-                Enfermera e = enfermeras.get(i);
-                if (e.getIdentificacion().equals(cedulaOriginal)) {
-                    // Actualizar la enfermera
-                    enfermeras.set(i, enfermeraModificada);
+   public boolean modificarEnfermera(String cedulaOriginal, Enfermera enfermeraModificada, File nuevaImagen) {
+    try {
+        List<Enfermera> enfermeras = obtenerEnfermeras();
+        
+        for (int i = 0; i < enfermeras.size(); i++) {
+            Enfermera e = enfermeras.get(i);
+            if (e.getIdentificacion().equals(cedulaOriginal)) {
+                // Manejo seguro de la imagen
+                String rutaImagenFinal = e.getRutaImagen(); // Mantener la misma por defecto
+                
+                if (nuevaImagen != null && nuevaImagen.exists()) {
+                    // Generar nombre único para la nueva imagen
+                    String nombreImagen = enfermeraModificada.getIdentificacion() + "_" + nuevaImagen.getName();
+                    rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
                     
-                    // Manejar imagen
-                    if (nuevaImagen != null && nuevaImagen.exists()) {
-                        String nombreImagen = enfermeraModificada.getIdentificacion() + "_" + nuevaImagen.getName();
-                        String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-                        Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
-                        enfermeraModificada.setRutaImagen(rutaImagenFinal);
-                    }
-                    
-                    guardarListaEnfermeras(enfermeras);
-                    return true;
+                    // Copiar la nueva imagen
+                    Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
                 }
+                
+                // Actualizar datos
+                enfermeraModificada.setRutaImagen(rutaImagenFinal);
+                enfermeras.set(i, enfermeraModificada);
+                
+                guardarListaEnfermeras(enfermeras);
+                return true;
             }
-            
-            JOptionPane.showMessageDialog(null, "No se encontró la enfermera con cédula: " + cedulaOriginal, 
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error al modificar enfermera: " + e.getMessage(), 
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
         }
+        
+        return false;
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(null, "Error al modificar enfermera: " + e.getMessage(), 
+            "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
     }
+}
     
     public Enfermera obtenerEnfermeraPorCedula(String cedula) {
         return obtenerEnfermeras().stream()
