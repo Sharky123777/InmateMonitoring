@@ -119,5 +119,33 @@ public class ExpedienteController {
         return delitoDAO.obtenerDescripcionDelito(idDelito);
     }
     
+    private void validarCorreo(String correo) {
+    if (correo == null || correo.trim().isEmpty()) {
+        throw new IllegalArgumentException("El correo electrónico es obligatorio");
+    }
+    
+    // Expresión regular para validar formato básico de correo
+    String regex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+    if (!correo.matches(regex)) {
+        throw new IllegalArgumentException("El correo electrónico no tiene un formato válido");
+    }
+    
+    // Opcional: Verificar dominio (ejemplo básico)
+    String[] dominiosPermitidos = {"gmail.com", "hotmail.com", "yahoo.com", "outlook.com", "unicolombo.edu.co"};
+    String dominio = correo.substring(correo.indexOf("@") + 1);
+    boolean dominioValido = false;
+    
+    for (String dom : dominiosPermitidos) {
+        if (dominio.equalsIgnoreCase(dom)) {
+            dominioValido = true;
+            break;
+        }
+    }
+    
+    if (!dominioValido) {
+        throw new IllegalArgumentException("El dominio del correo no está permitido");
+    }
+}
+    
 
 }

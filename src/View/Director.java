@@ -9,8 +9,14 @@ import Controller.EnfermeraController;
 import Controller.GuardiaController;
 import Controller.PersonalDeControlController;
 import DAO.CoordinadorDeActividadesDAO;
+import javax.swing.SwingWorker;
+import javax.swing.SwingUtilities;
+import Model.Constants.RolEnum;
+
 import DAO.EnfermeraDAO;
 import DAO.GuardiaDAO;
+import Model.Constants.RolEnum;
+import Model.Entities.EmailSender;
 import java.awt.Image;
 import java.io.File;
 import java.time.LocalDate;
@@ -37,6 +43,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,6 +60,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.ToolTipManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -71,10 +80,10 @@ public class Director extends javax.swing.JFrame {
     /**
      * Creates new form Director
      */
-    
-private CoordinadorDeActividadesController coordinadorController;
+    private CoordinadorDeActividadesController coordinadorController;
     private GuardiaController guardiaController;
     private String rutaImagenSeleccionada = "";
+
     private File imagenSeleccionadaMod;
     private File rutaImagenEnfermera;
     private PersonalDeControlController controller;
@@ -84,66 +93,36 @@ private CoordinadorDeActividadesController coordinadorController;
     public Director() {
         initComponents();
 
-    // Configuración inicial de componentes
-    txtFechaContratacion.setEditable(false);
-    txtFechaContratacion.setText(LocalDate.now().toString());
-    txtFechaContratacion1.setEditable(false);
-    txtFechaContratacionMod1.setEditable(false);
-    txtSexo.setEditable(false);
-    txtSexo.setText("Femenino");
-    txtFechaContratacion1.setText(LocalDate.now().toString());
-    ToolTipManager.sharedInstance().setInitialDelay(10);
+        // Configuración inicial de componentes
+        txtFechaContratacion.setEditable(false);
+        txtFechaContratacion.setText(LocalDate.now().toString());
+        txtFechaContratacion1.setEditable(false);
+        txtFechaContratacionMod1.setEditable(false);
+        txtSexo.setEditable(false);
+        txtSexo.setText("Femenino");
+        txtFechaContratacion1.setText(LocalDate.now().toString());
+        ToolTipManager.sharedInstance().setInitialDelay(10);
 
-    // Inicialización de controladores (nuevo enfoque)
-    guardiaController = GuardiaController.getInstancia();
-    enfermeraController = EnfermeraController.getInstancia(); // Nueva forma
-    coordinadorController = CoordinadorDeActividadesController.getInstancia();
+        // Inicialización de controladores
+        guardiaController = GuardiaController.getInstancia();
+        enfermeraController = EnfermeraController.getInstancia();
+        coordinadorController = CoordinadorDeActividadesController.getInstancia();
 
-    // Configuración de componentes para GuardiaController (mantenido)
-    guardiaController.setComponentes(
-            txtPrimerNombre,
-            txtSegundoNombre,
-            txtPrimerApellido,
-            txtSegundoApellido,
-            txtEdad,
-            txtCedula,
-            txtNacionalidad,
-            txtCorreo,
-            cmbTurno,
-            cmbCargo,
-            jDateChooserFinContrato
-    );
+        // Configurar el JDateChooser
+        jDateChooserFinContrato = new JDateChooser();
+        jDateChooserFinContrato.setDateFormatString("dd/MM/yyyy");
+        txtFechaContratacion.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        jDateChooserFinContrato.setDateFormatString("/MM/yyyy");
 
-    // Configuración de componentes para CoordinadorController (mantenido)
-    coordinadorController.setComponentes(
-        txtPrimerNombre2,
-        txtSegundoNombre2,
-        txtPrimerApellido2,
-        txtSegundoApellido2,
-        txtEdad2,
-        txtCedula2,
-        txtNacionalidad2,
-        txtCorreo2,
-        cmbTurno2,
-        cmbCargo2,  
-        dateFinContrato2
-    );
+        jDateChooserFinContrato = new JDateChooser();
+        jDateChooserFinContrato.getDateEditor().setEnabled(true);
+        jDateChooserFinContrato.getDateEditor().setDate(new Date()); // Establece fecha actual
+        System.out.println("Fecha después de forzar: " + jDateChooserFinContrato.getDate());
 
-    // Configuración del JDateChooser
-    jDateChooserFinContrato = new JDateChooser();
-    jDateChooserFinContrato.setDateFormatString("dd/MM/yyyy");
-    jDateChooserFinContrato.getDateEditor().setEnabled(true);
-    jDateChooserFinContrato.addPropertyChangeListener("date", evt -> {
-        System.out.println("Evento de cambio de fecha: " + evt.getNewValue());
-    });
+        // Actualización de tablas
+        actualizarTablaGuardias();
+        actualizarTablaEnfermeras();
 
-    if (jDateChooserFinContrato == null) {
-        throw new IllegalStateException("JDateChooser no ha sido inicializado");
-    }
-
-    // Actualización de tablas
-    actualizarTablaGuardias();
-    actualizarTablaEnfermeras();
     }
 
     /**
@@ -1912,125 +1891,118 @@ private CoordinadorDeActividadesController coordinadorController;
 
     }//GEN-LAST:event_txtCedulaActionPerformed
 
+    private void verificarFecha() {
+        System.out.println("Fecha seleccionada: " + jDateChooserFinContrato.getDate());
+        System.out.println("Componente null? " + (jDateChooserFinContrato == null));
+        System.out.println("Editor null? " + (jDateChooserFinContrato.getDateEditor() == null));
+    }
+
     private void cargarTablaGuardias() {
-        
         DefaultTableModel modelo = guardiaController.obtenerModeloTabla();
-
-        
         tablaGuardias.setModel(modelo);
-
-        
         tablaGuardias.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
-
-       
         ajustarImagenesTabla();
     }
-    
-    
-    
+
     private void ajustarColumnasTablaCDA() {
-   
-    TableColumnModel columnModel = tablaCDA.getColumnModel();
-    
-       columnModel.getColumn(0).setPreferredWidth(60);  
-    columnModel.getColumn(1).setPreferredWidth(150);
-    columnModel.getColumn(2).setPreferredWidth(150); 
-    columnModel.getColumn(3).setPreferredWidth(80);  
-    columnModel.getColumn(4).setPreferredWidth(80);  
-    columnModel.getColumn(5).setPreferredWidth(120);
-    
-   
-    tablaCDA.setRowHeight(60);
-}
+
+        TableColumnModel columnModel = tablaCDA.getColumnModel();
+
+        columnModel.getColumn(0).setPreferredWidth(60);
+        columnModel.getColumn(1).setPreferredWidth(150);
+        columnModel.getColumn(2).setPreferredWidth(150);
+        columnModel.getColumn(3).setPreferredWidth(80);
+        columnModel.getColumn(4).setPreferredWidth(80);
+        columnModel.getColumn(5).setPreferredWidth(120);
+
+        tablaCDA.setRowHeight(60);
+    }
 
     private void cargarDatosEnPanelModificacion(Guardia guardia) {
-    if (guardia == null) {
-        JOptionPane.showMessageDialog(this, 
-            "No se proporcionaron datos del guardia", 
-            "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    try {
-        
-        txtCedulaMod.setText(guardia.getIdentificacion());
-        txtSexoMod.setText(guardia.getSexo() != null ? guardia.getSexo() : "");
-        txtFechaContratacionMod.setText(
-            guardia.getFechaInicioContratoFormateada() != null ? 
-            guardia.getFechaInicioContratoFormateada() : ""
-        );
-
-       
-        txtPrimerNombreMod.setText(guardia.getPrimerNombre());
-        txtSegundoNombreMod.setText(
-            guardia.getSegundoNombre() != null ? guardia.getSegundoNombre() : ""
-        );
-        txtPrimerApellidoMod.setText(guardia.getPrimerApellido());
-        txtSegundoApellidoMod.setText(
-            guardia.getSegundoApellido() != null ? guardia.getSegundoApellido() : ""
-        );
-        txtEdadMod.setText(String.valueOf(guardia.getEdad()));
-        txtNacionalidadMod.setText(
-            guardia.getNacionalidad() != null ? guardia.getNacionalidad() : ""
-        );
-        txtCorreoMod.setText(
-            guardia.getCorreo() != null ? guardia.getCorreo() : ""
-        );
-
-       
-        if (guardia.getTurno() != null) {
-            cmbTurnoMod.setSelectedItem(guardia.getTurno());
-        }
-        if (guardia.getCargo() != null) {
-            txtCargoMod.setSelectedItem(guardia.getCargo());
+        if (guardia == null) {
+            JOptionPane.showMessageDialog(this,
+                    "No se proporcionaron datos del guardia",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
-       
-        if (guardia.getFechaFinContrato() != null) {
-            dateFinContratoMod.setDate(
-                Date.from(
-                    guardia.getFechaFinContrato()
-                        .atStartOfDay(ZoneId.systemDefault())
-                        .toInstant()
-                )
+        try {
+            // Datos básicos
+            txtCedulaMod.setText(guardia.getIdentificacion());
+            txtSexoMod.setText(guardia.getSexo() != null ? guardia.getSexo() : "");
+            txtFechaContratacionMod.setText(
+                    guardia.getFechaInicioContratoFormateada() != null
+                    ? guardia.getFechaInicioContratoFormateada() : ""
             );
-        } else {
-            dateFinContratoMod.setDate(null);
-        }
 
-        
-        if (guardia.getRutaImagen() != null && !guardia.getRutaImagen().isEmpty()) {
-            try {
-                ImageIcon icono = new ImageIcon(guardia.getRutaImagen());
-                Image imagen = icono.getImage()
-                    .getScaledInstance(
-                        lblImagenMod.getWidth(), 
-                        lblImagenMod.getHeight(), 
-                        Image.SCALE_SMOOTH
-                    );
-                lblImagenMod.setIcon(new ImageIcon(imagen));
-            } catch (Exception e) {
-                System.err.println("Error al cargar imagen: " + e.getMessage());
+            // Datos personales
+            txtPrimerNombreMod.setText(guardia.getPrimerNombre());
+            txtSegundoNombreMod.setText(
+                    guardia.getSegundoNombre() != null ? guardia.getSegundoNombre() : ""
+            );
+            txtPrimerApellidoMod.setText(guardia.getPrimerApellido());
+            txtSegundoApellidoMod.setText(
+                    guardia.getSegundoApellido() != null ? guardia.getSegundoApellido() : ""
+            );
+            txtEdadMod.setText(String.valueOf(guardia.getEdad()));
+            txtNacionalidadMod.setText(
+                    guardia.getNacionalidad() != null ? guardia.getNacionalidad() : ""
+            );
+            txtCorreoMod.setText(
+                    guardia.getCorreo() != null ? guardia.getCorreo() : ""
+            );
+
+            // Datos laborales
+            if (guardia.getTurno() != null) {
+                cmbTurnoMod.setSelectedItem(guardia.getTurno());
+            }
+            if (guardia.getCargo() != null) {
+                txtCargoMod.setSelectedItem(guardia.getCargo());
+            }
+
+            // Fechas
+            if (guardia.getFechaFinContrato() != null) {
+                dateFinContratoMod.setDate(
+                        Date.from(
+                                guardia.getFechaFinContrato()
+                                        .atStartOfDay(ZoneId.systemDefault())
+                                        .toInstant()
+                        )
+                );
+            } else {
+                dateFinContratoMod.setDate(null);
+            }
+
+            // Imagen
+            if (guardia.getRutaImagen() != null && !guardia.getRutaImagen().isEmpty()) {
+                try {
+                    ImageIcon icono = new ImageIcon(guardia.getRutaImagen());
+                    Image imagen = icono.getImage()
+                            .getScaledInstance(
+                                    lblImagenMod.getWidth(),
+                                    lblImagenMod.getHeight(),
+                                    Image.SCALE_SMOOTH
+                            );
+                    lblImagenMod.setIcon(new ImageIcon(imagen));
+                } catch (Exception e) {
+                    System.err.println("Error al cargar imagen: " + e.getMessage());
+                    lblImagenMod.setIcon(null);
+                }
+            } else {
                 lblImagenMod.setIcon(null);
             }
-        } else {
-            lblImagenMod.setIcon(null);
+
+            // Guardar cédula para referencia en modificación
+            this.cedulaActualModificacion = guardia.getIdentificacion();
+            this.imagenSeleccionadaMod = null;
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar datos del guardia: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-
-        
-        this.cedulaActualModificacion = guardia.getIdentificacion();
-        this.imagenSeleccionadaMod = null;
-
-       
-        System.out.println("[DEBUG] Cédula asignada para modificación: " + this.cedulaActualModificacion);
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this,
-            "Error al cargar datos del guardia (JSON): " + e.getMessage(),
-            "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
     }
-}
 
     private void limpiarFormularioModificacion() {
         txtPrimerNombreMod.setText("");
@@ -2056,7 +2028,7 @@ private CoordinadorDeActividadesController coordinadorController;
             if (value != null && value instanceof String) {
                 String rutaImagen = (String) value;
                 try {
-                    
+
                     ImageIcon icono = new ImageIcon(rutaImagen);
                     Image img = icono.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
                     setIcon(new ImageIcon(img));
@@ -2069,7 +2041,6 @@ private CoordinadorDeActividadesController coordinadorController;
                 setText("(Sin imagen)");
             }
 
-            
             setHorizontalAlignment(JLabel.CENTER);
             setVerticalAlignment(JLabel.CENTER);
 
@@ -2095,18 +2066,45 @@ private CoordinadorDeActividadesController coordinadorController;
 
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        if (!validarFechasContrato()) {
+            return; // Detener si la validación falla
+        }
+
+        System.out.println("Componente visible: " + jDateChooserFinContrato.isVisible());
+        System.out.println("Componente habilitado: " + jDateChooserFinContrato.isEnabled());
+
+        verificarFecha();
         try {
-            
-            System.out.println("Referencia del JDateChooser en vista: " + jDateChooserFinContrato.hashCode());
-            System.out.println("Referencia del JDateChooser en controlador: " + guardiaController.getDateChooserFinContrato().hashCode());
+            // Validar que se haya seleccionado una fecha
+            if (jDateChooserFinContrato.getDate() == null) {
+                JOptionPane.showMessageDialog(this,
+                        "Debe seleccionar una fecha de fin de contrato",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-            System.out.println("Estado del JDateChooser:");
-            System.out.println("Componente null? " + (jDateChooserFinContrato == null));
-            System.out.println("Fecha seleccionada: " + jDateChooserFinContrato.getDate());
-            System.out.println("Componente visible? " + jDateChooserFinContrato.isVisible());
-            System.out.println("Componente habilitado? " + jDateChooserFinContrato.isEnabled());
+            // Obtener los datos del formulario
+            String primerNombre = txtPrimerNombre.getText().trim();
+            String segundoNombre = txtSegundoNombre.getText().trim();
+            String primerApellido = txtPrimerApellido.getText().trim();
+            String segundoApellido = txtSegundoApellido.getText().trim();
+            int edad = Integer.parseInt(txtEdad.getText());
+            String cedula = txtCedula.getText().trim();
+            String nacionalidad = txtNacionalidad.getText().trim();
+            String correo = txtCorreo.getText().trim();
+            String turno = cmbTurno.getSelectedItem().toString();
+            String cargo = cmbCargo.getSelectedItem().toString();
+            LocalDate fechaFin = jDateChooserFinContrato.getDate().toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate();
+            File imagen = rutaImagenSeleccionada != null ? new File(rutaImagenSeleccionada) : null;
 
-            boolean resultado = guardiaController.agregarGuardia();
+            // Llamar al método del controlador
+            boolean resultado = guardiaController.agregarGuardia(
+                    primerNombre, segundoNombre, primerApellido, segundoApellido,
+                    edad, cedula, nacionalidad, correo, turno, cargo,
+                    fechaFin, imagen
+            );
 
             if (resultado) {
                 JOptionPane.showMessageDialog(this,
@@ -2115,13 +2113,15 @@ private CoordinadorDeActividadesController coordinadorController;
                 limpiarFormulario();
                 actualizarTablaGuardias();
             }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "La edad debe ser un número válido",
+                    "Error", JOptionPane.ERROR_MESSAGE);
         } catch (IllegalArgumentException e) {
-            
             JOptionPane.showMessageDialog(this,
                     e.getMessage(),
                     "Error de validación", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
-            
             JOptionPane.showMessageDialog(this,
                     "Error inesperado: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -2137,7 +2137,6 @@ private CoordinadorDeActividadesController coordinadorController;
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         for (Guardia guardia : guardias) {
-            
             ImageIcon icono = null;
             if (guardia.getRutaImagen() != null && !guardia.getRutaImagen().isEmpty()) {
                 try {
@@ -2161,12 +2160,10 @@ private CoordinadorDeActividadesController coordinadorController;
                 guardia.getTurno(),
                 guardia.getCargo(),
                 guardia.getFechaInicioContrato().format(dateFormatter),
-                guardia.getFechaFinContrato() != null
-                ? guardia.getFechaFinContrato().format(dateFormatter) : ""
+                guardia.getFechaFinContrato() != null ? guardia.getFechaFinContrato().format(dateFormatter) : ""
             });
         }
 
-        
         ajustarImagenesTabla();
     }
 
@@ -2190,7 +2187,7 @@ private CoordinadorDeActividadesController coordinadorController;
             }
         });
 
-        tablaGuardias.setRowHeight(70); 
+        tablaGuardias.setRowHeight(70);
     }
 
     private void limpiarFormulario() {
@@ -2212,12 +2209,12 @@ private CoordinadorDeActividadesController coordinadorController;
 
     private void eliminarGuardia(String cedula, int filaSeleccionada) {
         try {
-           
+
             GuardiaDAO dao = new GuardiaDAO();
             boolean eliminado = dao.eliminarGuardia(cedula);
 
             if (eliminado) {
-                
+
                 ((DefaultTableModel) tablaGuardias.getModel()).removeRow(filaSeleccionada);
 
                 JOptionPane.showMessageDialog(this,
@@ -2242,16 +2239,16 @@ private CoordinadorDeActividadesController coordinadorController;
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         JFileChooser fileChooser = new JFileChooser();
-        int resultado = fileChooser.showOpenDialog(this);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Imágenes", "jpg", "png", "jpeg");
+        fileChooser.setFileFilter(filter);
 
-        if (resultado == JFileChooser.APPROVE_OPTION) {
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File archivoSeleccionado = fileChooser.getSelectedFile();
-           
-            guardiaController.setRutaImagenSeleccionada(archivoSeleccionado.getAbsolutePath());
+            rutaImagenSeleccionada = archivoSeleccionado.getAbsolutePath();
 
-           
             try {
-                ImageIcon icono = new ImageIcon(archivoSeleccionado.getAbsolutePath());
+                ImageIcon icono = new ImageIcon(rutaImagenSeleccionada);
                 Image imagenEscalada = icono.getImage().getScaledInstance(
                         lblFoto.getWidth(),
                         lblFoto.getHeight(),
@@ -2264,7 +2261,6 @@ private CoordinadorDeActividadesController coordinadorController;
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void txtEdadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadKeyPressed
@@ -2275,7 +2271,7 @@ private CoordinadorDeActividadesController coordinadorController;
         char c = evt.getKeyChar();
         if (!Character.isDigit(c) && c != '\b') {
             evt.consume();
-            
+
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten números.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -2290,13 +2286,11 @@ private CoordinadorDeActividadesController coordinadorController;
     private void txtCorreoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreoFocusLost
         String email = txtCorreo.getText().trim();
 
-        
         if (!email.isEmpty() && (!email.contains("@") || !email.endsWith(".com"))) {
             JOptionPane.showMessageDialog(this,
                     "Correo inválido!\nDebe contener @ y terminar con .com",
                     "Error", JOptionPane.ERROR_MESSAGE);
 
-            
             txtCorreo.requestFocus();
         }
     }//GEN-LAST:event_txtCorreoFocusLost
@@ -2304,9 +2298,8 @@ private CoordinadorDeActividadesController coordinadorController;
     private void txtCedulaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyTyped
         char c = evt.getKeyChar();
         if (!Character.isDigit(c) && c != '\b') {
-            evt.consume(); 
+            evt.consume();
 
-            
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten números.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -2314,8 +2307,6 @@ private CoordinadorDeActividadesController coordinadorController;
     }//GEN-LAST:event_txtCedulaKeyTyped
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
-        
         if (cedulaActualModificacion == null || cedulaActualModificacion.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                     "Error interno: No se detectó cédula para modificar",
@@ -2324,9 +2315,15 @@ private CoordinadorDeActividadesController coordinadorController;
         }
 
         try {
-           
-            Map<String, Object> cambios = new HashMap<>();
-            
+            // Validar fecha de fin de contrato
+            if (dateFinContratoMod.getDate() == null) {
+                JOptionPane.showMessageDialog(this,
+                        "Debe seleccionar una fecha de fin de contrato",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Obtener datos del formulario
             String primerNombre = txtPrimerNombreMod.getText().trim();
             String segundoNombre = txtSegundoNombreMod.getText().trim();
             String primerApellido = txtPrimerApellidoMod.getText().trim();
@@ -2338,9 +2335,10 @@ private CoordinadorDeActividadesController coordinadorController;
             String cargo = txtCargoMod.getSelectedItem().toString();
             LocalDate fechaFin = dateFinContratoMod.getDate().toInstant()
                     .atZone(ZoneId.systemDefault()).toLocalDate();
+            File nuevaImagen = imagenSeleccionadaMod;
 
-           
-            boolean exito = guardiaController.actualizarGuardia(
+            // Llamar al método del controlador
+            boolean exito = guardiaController.modificarGuardia(
                     cedulaActualModificacion,
                     primerNombre,
                     segundoNombre,
@@ -2352,20 +2350,17 @@ private CoordinadorDeActividadesController coordinadorController;
                     turno,
                     fechaFin,
                     cargo,
-                    imagenSeleccionadaMod
+                    nuevaImagen
             );
 
             if (exito) {
                 JOptionPane.showMessageDialog(this,
                         "Guardia modificado exitosamente",
                         "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-                
                 limpiarFormularioModificacion();
                 actualizarTablaGuardias();
                 jTabbedPane1.setSelectedComponent(ModificarGuardia);
             }
-
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this,
                     "La edad debe ser un número válido",
@@ -2379,20 +2374,17 @@ private CoordinadorDeActividadesController coordinadorController;
                     "Error al modificar: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
-
     }//GEN-LAST:event_jButton3ActionPerformed
 
 
     private void txtCorreoModFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreoModFocusLost
         String email = txtCorreoMod.getText().trim();
 
-       
         if (!email.isEmpty() && (!email.contains("@") || !email.endsWith(".com"))) {
             JOptionPane.showMessageDialog(this,
                     "Correo inválido!\nDebe contener @ y terminar con .com",
                     "Error", JOptionPane.ERROR_MESSAGE);
 
-            
             txtCorreoMod.requestFocus();
         }
     }//GEN-LAST:event_txtCorreoModFocusLost
@@ -2409,7 +2401,7 @@ private CoordinadorDeActividadesController coordinadorController;
 
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             imagenSeleccionadaMod = fileChooser.getSelectedFile();
-           
+
             ImageIcon icon = new ImageIcon(imagenSeleccionadaMod.getAbsolutePath());
             Image scaled = icon.getImage().getScaledInstance(
                     lblImagenMod.getWidth(),
@@ -2428,7 +2420,6 @@ private CoordinadorDeActividadesController coordinadorController;
         if (!Character.isDigit(c) && c != '\b') {
             evt.consume();
 
-          
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten números.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -2442,9 +2433,8 @@ private CoordinadorDeActividadesController coordinadorController;
     private void txtEdadModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadModKeyTyped
         char c = evt.getKeyChar();
         if (!Character.isDigit(c) && c != '\b') {
-            evt.consume(); 
+            evt.consume();
 
-            
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten números.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -2461,11 +2451,9 @@ private CoordinadorDeActividadesController coordinadorController;
                 return;
             }
 
-          
             String cedula = tablaGuardias.getValueAt(fila, 4).toString(); // Asume columna 4 es cédula
             this.cedulaActualModificacion = cedula; // <-- ASIGNACIÓN CLAVE
 
-           
             Guardia guardia = guardiaController.obtenerGuardiaPorCedula(cedula);
 
             if (guardia == null) {
@@ -2496,10 +2484,8 @@ private CoordinadorDeActividadesController coordinadorController;
             return;
         }
 
-        
         String cedula = tablaGuardias.getValueAt(filaSeleccionada, 4).toString();
 
-       
         int respuesta = JOptionPane.showConfirmDialog(
                 Director.this,
                 "¿Está seguro que desea eliminar al guardia con cédula " + cedula + "?\nEsta acción no se puede deshacer.",
@@ -2508,13 +2494,34 @@ private CoordinadorDeActividadesController coordinadorController;
                 JOptionPane.WARNING_MESSAGE);
 
         if (respuesta == JOptionPane.YES_OPTION) {
-            eliminarGuardia(cedula, filaSeleccionada);
+            try {
+                boolean eliminado = guardiaController.eliminarGuardia(cedula);
+
+                if (eliminado) {
+                    ((DefaultTableModel) tablaGuardias.getModel()).removeRow(filaSeleccionada);
+                    JOptionPane.showMessageDialog(this,
+                            "Guardia eliminado exitosamente",
+                            "Éxito",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "No se pudo eliminar el guardia",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al eliminar: " + ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
         }
 
     }//GEN-LAST:event_EliminarActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-       try {
+     try {
         // Obtener datos del formulario
         String primerNombre = txtPrimerNombre1.getText().trim();
         String segundoNombre = txtSegundoNombre1.getText().trim();
@@ -2549,19 +2556,10 @@ private CoordinadorDeActividadesController coordinadorController;
             correo, 
             turno, 
             fechaFin,
-            imagenSeleccionadaMod // File directamente, no la ruta
+            imagenSeleccionadaMod
         );
         
         if (nuevaEnfermera != null) {
-            // Mostrar credenciales solo una vez
-            String mensaje = "Enfermera registrada con éxito.\n" +
-                            "Usuario: " + nuevaEnfermera.getUsuario() + "\n" +
-                            "Contraseña: " + nuevaEnfermera.getContrasena();
-            
-            JOptionPane.showMessageDialog(this, 
-                mensaje,
-                "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            
             // Limpiar y actualizar
             limpiarFormularioEnfermera();
             actualizarTablaEnfermeras();
@@ -2579,195 +2577,197 @@ private CoordinadorDeActividadesController coordinadorController;
             "Error inesperado: " + e.getMessage(), 
             "Error", JOptionPane.ERROR_MESSAGE);
         e.printStackTrace();
-    }
+    } 
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
-   
     public void actualizarTabla() {
         cargarTablaGuardias();
     }
 
     private void cargarDatosEnfermeraParaModificar(Enfermera enfermera) {
-    if (enfermera == null) return;
-    
-    txtPrimerNombreMod1.setText(enfermera.getPrimerNombre());
-    txtSegundoNombreMod1.setText(enfermera.getSegundoNombre() != null ? enfermera.getSegundoNombre() : "");
-    txtPrimerApellidoMod1.setText(enfermera.getPrimerApellido());
-    txtSegundoApellidoMod1.setText(enfermera.getSegundoApellido());
-    txtEdadMod1.setText(String.valueOf(enfermera.getEdad()));
-    txtCedulaMod1.setText(enfermera.getIdentificacion());
-    txtNacionalidadMod1.setText(enfermera.getNacionalidad());
-    txtCorreoMod1.setText(enfermera.getCorreo());
-    cmbTurnoMod1.setSelectedItem(enfermera.getTurno());
-    txtFechaContratacionMod1.setText(enfermera.getFechaContratacion().toString());
-    
-    try {
-        dateFinContratoMod1.setDate(
-            Date.from(enfermera.getFechaFinContrato().atStartOfDay(ZoneId.systemDefault()).toInstant())
-        );
-    } catch (Exception e) {
-        dateFinContratoMod1.setDate(null);
+        if (enfermera == null) {
+            return;
+        }
+
+        txtPrimerNombreMod1.setText(enfermera.getPrimerNombre());
+        txtSegundoNombreMod1.setText(enfermera.getSegundoNombre() != null ? enfermera.getSegundoNombre() : "");
+        txtPrimerApellidoMod1.setText(enfermera.getPrimerApellido());
+        txtSegundoApellidoMod1.setText(enfermera.getSegundoApellido());
+        txtEdadMod1.setText(String.valueOf(enfermera.getEdad()));
+        txtCedulaMod1.setText(enfermera.getIdentificacion());
+        txtNacionalidadMod1.setText(enfermera.getNacionalidad());
+        txtCorreoMod1.setText(enfermera.getCorreo());
+        cmbTurnoMod1.setSelectedItem(enfermera.getTurno());
+        txtFechaContratacionMod1.setText(enfermera.getFechaContratacion().toString());
+
+        try {
+            dateFinContratoMod1.setDate(
+                    Date.from(enfermera.getFechaFinContrato().atStartOfDay(ZoneId.systemDefault()).toInstant())
+            );
+        } catch (Exception e) {
+            dateFinContratoMod1.setDate(null);
+        }
+
+        // Manejo seguro de la imagen
+        cargarImagenEnfermera(enfermera.getRutaImagen());
     }
-    
-    // Manejo seguro de la imagen
-    cargarImagenEnfermera(enfermera.getRutaImagen());
-}
-    
+
     private void cargarImagenEnfermera(String rutaImagen) {
-    try {
-        if (rutaImagen != null && !rutaImagen.isEmpty()) {
-            File file = new File(rutaImagen);
-            if (file.exists()) {
-                ImageIcon icon = new ImageIcon(rutaImagen);
-                Image img = icon.getImage().getScaledInstance(
-                    lblImagenMod1.getWidth(),
-                    lblImagenMod1.getHeight(),
-                    Image.SCALE_SMOOTH
-                );
-                lblImagenMod1.setIcon(new ImageIcon(img));
-                imagenSeleccionadaMod = file;
-                return;
-            }
-        }
-        // Imagen por defecto si no hay imagen o no se puede cargar
-        lblImagenMod1.setIcon(new ImageIcon(getClass().getResource("/Resources/default_nurse.png")));
-        imagenSeleccionadaMod = null;
-    } catch (Exception e) {
-        System.err.println("Error al cargar imagen: " + e.getMessage());
-        lblImagenMod1.setIcon(new ImageIcon(getClass().getResource("/Resources/default_nurse.png")));
-        imagenSeleccionadaMod = null;
-    }
-}
-
-  private void actualizarTablaEnfermeras() {
-    DefaultTableModel modelo = new DefaultTableModel() {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-        
-        @Override
-        public Class<?> getColumnClass(int columnIndex) {
-            return columnIndex == 0 ? ImageIcon.class : Object.class;
-        }
-    };
-    
-    modelo.setColumnIdentifiers(new String[]{
-        "Foto", "Nombre", "Apellido", "Edad", "Cédula", 
-        "Nacionalidad", "Correo", "Turno", "Fin Contrato"
-    });
-    
-    List<Enfermera> enfermeras = enfermeraController.obtenerTodasEnfermeras();
-    
-    // Crear una imagen por defecto segura
-    ImageIcon iconoPorDefecto = crearIconoPorDefecto();
-    
-    for (Enfermera e : enfermeras) {
-        ImageIcon icono = iconoPorDefecto; // Usar el icono por defecto como valor inicial
-        
-        if (e.getRutaImagen() != null && !e.getRutaImagen().isEmpty()) {
-            try {
-                File file = new File(e.getRutaImagen());
+        try {
+            if (rutaImagen != null && !rutaImagen.isEmpty()) {
+                File file = new File(rutaImagen);
                 if (file.exists()) {
-                    Image img = new ImageIcon(e.getRutaImagen()).getImage()
-                        .getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-                    icono = new ImageIcon(img);
+                    ImageIcon icon = new ImageIcon(rutaImagen);
+                    Image img = icon.getImage().getScaledInstance(
+                            lblImagenMod1.getWidth(),
+                            lblImagenMod1.getHeight(),
+                            Image.SCALE_SMOOTH
+                    );
+                    lblImagenMod1.setIcon(new ImageIcon(img));
+                    imagenSeleccionadaMod = file;
+                    return;
                 }
-            } catch (Exception ex) {
-                System.err.println("Error cargando imagen: " + ex.getMessage());
             }
+            // Imagen por defecto si no hay imagen o no se puede cargar
+            lblImagenMod1.setIcon(new ImageIcon(getClass().getResource("/Resources/default_nurse.png")));
+            imagenSeleccionadaMod = null;
+        } catch (Exception e) {
+            System.err.println("Error al cargar imagen: " + e.getMessage());
+            lblImagenMod1.setIcon(new ImageIcon(getClass().getResource("/Resources/default_nurse.png")));
+            imagenSeleccionadaMod = null;
         }
-        
-        modelo.addRow(new Object[]{
-            icono,
-            e.getPrimerNombre() + " " + (e.getSegundoNombre() != null ? e.getSegundoNombre() : ""),
-            e.getPrimerApellido() + " " + e.getSegundoApellido(),
-            e.getEdad(),
-            e.getIdentificacion(),
-            e.getNacionalidad(),
-            e.getCorreo(),
-            e.getTurno(),
-            e.getFechaFinContratoFormateada()
-        });
     }
-    
-    tablaEnfermeras.setModel(modelo);
-    tablaEnfermeras.setRowHeight(85);
-    tablaEnfermeras.getColumnModel().getColumn(0).setPreferredWidth(85);
-    tablaEnfermeras.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
-}
 
-private ImageIcon crearIconoPorDefecto() {
-    // Crear una imagen simple por defecto programáticamente
-    BufferedImage img = new BufferedImage(80, 80, BufferedImage.TYPE_INT_ARGB);
-    Graphics2D g2d = img.createGraphics();
-    
-    // Dibujar un fondo
-    g2d.setColor(new Color(240, 240, 240));
-    g2d.fillRect(0, 0, 80, 80);
-    
-    // Dibujar un icono simple
-    g2d.setColor(Color.GRAY);
-    g2d.setStroke(new BasicStroke(2));
-    g2d.drawOval(10, 10, 60, 60);
-    g2d.drawLine(25, 50, 55, 50); // Boca
-    g2d.fillOval(20, 25, 10, 10); // Ojo izquierdo
-    g2d.fillOval(50, 25, 10, 10); // Ojo derecho
-    
-    g2d.dispose();
-    
-    return new ImageIcon(img);
-}
-    
+    private void actualizarTablaEnfermeras() {
+        DefaultTableModel modelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
 
-    private static class ImagenTablaRenderer extends DefaultTableCellRenderer {
-    private final ImageIcon iconoPorDefecto;
-    
-    public ImagenTablaRenderer() {
-        // Crear imagen por defecto
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return columnIndex == 0 ? ImageIcon.class : Object.class;
+            }
+        };
+
+        modelo.setColumnIdentifiers(new String[]{
+            "Foto", "Nombre", "Apellido", "Edad", "Cédula",
+            "Nacionalidad", "Correo", "Turno", "Fin Contrato"
+        });
+
+        List<Enfermera> enfermeras = enfermeraController.obtenerTodasEnfermeras();
+
+        // Crear una imagen por defecto segura
+        ImageIcon iconoPorDefecto = crearIconoPorDefecto();
+
+        for (Enfermera e : enfermeras) {
+            ImageIcon icono = iconoPorDefecto; // Usar el icono por defecto como valor inicial
+
+            if (e.getRutaImagen() != null && !e.getRutaImagen().isEmpty()) {
+                try {
+                    File file = new File(e.getRutaImagen());
+                    if (file.exists()) {
+                        Image img = new ImageIcon(e.getRutaImagen()).getImage()
+                                .getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                        icono = new ImageIcon(img);
+                    }
+                } catch (Exception ex) {
+                    System.err.println("Error cargando imagen: " + ex.getMessage());
+                }
+            }
+
+            modelo.addRow(new Object[]{
+                icono,
+                e.getPrimerNombre() + " " + (e.getSegundoNombre() != null ? e.getSegundoNombre() : ""),
+                e.getPrimerApellido() + " " + e.getSegundoApellido(),
+                e.getEdad(),
+                e.getIdentificacion(),
+                e.getNacionalidad(),
+                e.getCorreo(),
+                e.getTurno(),
+                e.getFechaFinContratoFormateada()
+            });
+        }
+
+        tablaEnfermeras.setModel(modelo);
+        tablaEnfermeras.setRowHeight(85);
+        tablaEnfermeras.getColumnModel().getColumn(0).setPreferredWidth(85);
+        tablaEnfermeras.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
+    }
+
+    private ImageIcon crearIconoPorDefecto() {
+        // Crear una imagen simple por defecto programáticamente
         BufferedImage img = new BufferedImage(80, 80, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = img.createGraphics();
+
+        // Dibujar un fondo
         g2d.setColor(new Color(240, 240, 240));
         g2d.fillRect(0, 0, 80, 80);
+
+        // Dibujar un icono simple
         g2d.setColor(Color.GRAY);
         g2d.setStroke(new BasicStroke(2));
         g2d.drawOval(10, 10, 60, 60);
-        g2d.drawLine(25, 50, 55, 50);
-        g2d.fillOval(20, 25, 10, 10);
-        g2d.fillOval(50, 25, 10, 10);
+        g2d.drawLine(25, 50, 55, 50); // Boca
+        g2d.fillOval(20, 25, 10, 10); // Ojo izquierdo
+        g2d.fillOval(50, 25, 10, 10); // Ojo derecho
+
         g2d.dispose();
-        this.iconoPorDefecto = new ImageIcon(img);
+
+        return new ImageIcon(img);
     }
-    
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value,
-            boolean isSelected, boolean hasFocus, int row, int column) {
-        
-        JLabel label = new JLabel();
-        label.setHorizontalAlignment(SwingConstants.CENTER);
-        
-        if (value instanceof ImageIcon) {
-            label.setIcon((ImageIcon) value);
-        } else if (value instanceof String) {
-            try {
-                File file = new File((String) value);
-                if (file.exists()) {
-                    Image img = new ImageIcon((String) value).getImage()
-                        .getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-                    label.setIcon(new ImageIcon(img));
-                } else {
+
+    private static class ImagenTablaRenderer extends DefaultTableCellRenderer {
+
+        private final ImageIcon iconoPorDefecto;
+
+        public ImagenTablaRenderer() {
+            // Crear imagen por defecto
+            BufferedImage img = new BufferedImage(80, 80, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = img.createGraphics();
+            g2d.setColor(new Color(240, 240, 240));
+            g2d.fillRect(0, 0, 80, 80);
+            g2d.setColor(Color.GRAY);
+            g2d.setStroke(new BasicStroke(2));
+            g2d.drawOval(10, 10, 60, 60);
+            g2d.drawLine(25, 50, 55, 50);
+            g2d.fillOval(20, 25, 10, 10);
+            g2d.fillOval(50, 25, 10, 10);
+            g2d.dispose();
+            this.iconoPorDefecto = new ImageIcon(img);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+
+            JLabel label = new JLabel();
+            label.setHorizontalAlignment(SwingConstants.CENTER);
+
+            if (value instanceof ImageIcon) {
+                label.setIcon((ImageIcon) value);
+            } else if (value instanceof String) {
+                try {
+                    File file = new File((String) value);
+                    if (file.exists()) {
+                        Image img = new ImageIcon((String) value).getImage()
+                                .getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                        label.setIcon(new ImageIcon(img));
+                    } else {
+                        label.setIcon(iconoPorDefecto);
+                    }
+                } catch (Exception e) {
                     label.setIcon(iconoPorDefecto);
                 }
-            } catch (Exception e) {
+            } else {
                 label.setIcon(iconoPorDefecto);
             }
-        } else {
-            label.setIcon(iconoPorDefecto);
+            return label;
         }
-        return label;
     }
-}
-    
+
     private void validarFechaFinContrato() {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -2797,7 +2797,7 @@ private ImageIcon crearIconoPorDefecto() {
     }
 
     private void cerrarPanelModificacion() {
-        
+
         txtPrimerNombreMod1.setText("");
         txtSegundoNombreMod1.setText("");
         txtPrimerApellidoMod1.setText("");
@@ -2811,10 +2811,8 @@ private ImageIcon crearIconoPorDefecto() {
         dateFinContratoMod1.setDate(null);
         lblImagenMod1.setIcon(null);
 
-       
         ModificarNurse.setVisible(false);
 
-        
         rutaImagenSeleccionada = null;
     }
 
@@ -2829,9 +2827,7 @@ private ImageIcon crearIconoPorDefecto() {
         String correo = txtCorreoMod1.getText().trim();
         String turno = cmbTurnoMod1.getSelectedItem().toString();
 
-        
         LocalDate fechaContratacion = LocalDate.now();
-
 
         Date fechaFin = dateFinContratoMod1.getDate();
         if (fechaFin == null) {
@@ -2852,7 +2848,7 @@ private ImageIcon crearIconoPorDefecto() {
                 LocalDate.now(),
                 fechaFinContrato,
                 correo,
-                "", 
+                "",
                 ""
         );
     }
@@ -2867,47 +2863,47 @@ private ImageIcon crearIconoPorDefecto() {
     }//GEN-LAST:event_txtCorreo1KeyTyped
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-    JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle("Seleccionar imagen de la enfermera");
-    
-    // Filtrar solo imágenes
-    FileNameExtensionFilter filter = new FileNameExtensionFilter(
-        "Imágenes (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif");
-    fileChooser.setFileFilter(filter);
-    
-    int resultado = fileChooser.showOpenDialog(this);
-    
-    if (resultado == JFileChooser.APPROVE_OPTION) {
-        imagenSeleccionadaMod = fileChooser.getSelectedFile();
-        
-        try {
-            // Validar tamaño (max 2MB)
-            if (imagenSeleccionadaMod.length() > 2 * 1024 * 1024) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Seleccionar imagen de la enfermera");
+
+        // Filtrar solo imágenes
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Imágenes (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif");
+        fileChooser.setFileFilter(filter);
+
+        int resultado = fileChooser.showOpenDialog(this);
+
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            imagenSeleccionadaMod = fileChooser.getSelectedFile();
+
+            try {
+                // Validar tamaño (max 2MB)
+                if (imagenSeleccionadaMod.length() > 2 * 1024 * 1024) {
+                    JOptionPane.showMessageDialog(this,
+                            "La imagen no debe superar los 2MB",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    imagenSeleccionadaMod = null;
+                    return;
+                }
+
+                // Mostrar previsualización
+                ImageIcon icono = new ImageIcon(imagenSeleccionadaMod.getAbsolutePath());
+                Image imagenEscalada = icono.getImage()
+                        .getScaledInstance(
+                                lblImagen1.getWidth(),
+                                lblImagen1.getHeight(),
+                                Image.SCALE_SMOOTH
+                        );
+                lblImagen1.setIcon(new ImageIcon(imagenEscalada));
+
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(this,
-                    "La imagen no debe superar los 2MB",
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                        "Error al cargar la imagen: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
                 imagenSeleccionadaMod = null;
-                return;
+                lblImagen1.setIcon(null);
             }
-            
-            // Mostrar previsualización
-            ImageIcon icono = new ImageIcon(imagenSeleccionadaMod.getAbsolutePath());
-            Image imagenEscalada = icono.getImage()
-                .getScaledInstance(
-                    lblImagen1.getWidth(),
-                    lblImagen1.getHeight(),
-                    Image.SCALE_SMOOTH
-                );
-            lblImagen1.setIcon(new ImageIcon(imagenEscalada));
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                "Error al cargar la imagen: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-            imagenSeleccionadaMod = null;
-            lblImagen1.setIcon(null);
         }
-    }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void txtCedula1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedula1ActionPerformed
@@ -2928,39 +2924,39 @@ private ImageIcon crearIconoPorDefecto() {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         try {
-        String cedulaOriginal = txtCedulaMod1.getText().trim();
-        
-        Map<String, Object> cambios = new HashMap<>();
-        cambios.put("primerNombre", txtPrimerNombreMod1.getText().trim());
-        cambios.put("segundoNombre", txtSegundoNombreMod1.getText().trim());
-        cambios.put("primerApellido", txtPrimerApellidoMod1.getText().trim());
-        cambios.put("segundoApellido", txtSegundoApellidoMod1.getText().trim());
-        cambios.put("edad", Integer.parseInt(txtEdadMod1.getText().trim()));
-        cambios.put("nacionalidad", txtNacionalidadMod1.getText().trim());
-        cambios.put("correo", txtCorreoMod1.getText().trim());
-        cambios.put("turno", cmbTurnoMod1.getSelectedItem().toString());
-        cambios.put("fechaFin", dateFinContratoMod1.getDate().toInstant()
-                          .atZone(ZoneId.systemDefault()).toLocalDate());
-        
-        boolean resultado = enfermeraController.modificarEnfermera(
-            cedulaOriginal, cambios, imagenSeleccionadaMod
-        );
-        
-        if (resultado) {
+            String cedulaOriginal = txtCedulaMod1.getText().trim();
+
+            Map<String, Object> cambios = new HashMap<>();
+            cambios.put("primerNombre", txtPrimerNombreMod1.getText().trim());
+            cambios.put("segundoNombre", txtSegundoNombreMod1.getText().trim());
+            cambios.put("primerApellido", txtPrimerApellidoMod1.getText().trim());
+            cambios.put("segundoApellido", txtSegundoApellidoMod1.getText().trim());
+            cambios.put("edad", Integer.parseInt(txtEdadMod1.getText().trim()));
+            cambios.put("nacionalidad", txtNacionalidadMod1.getText().trim());
+            cambios.put("correo", txtCorreoMod1.getText().trim());
+            cambios.put("turno", cmbTurnoMod1.getSelectedItem().toString());
+            cambios.put("fechaFin", dateFinContratoMod1.getDate().toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate());
+
+            boolean resultado = enfermeraController.modificarEnfermera(
+                    cedulaOriginal, cambios, imagenSeleccionadaMod
+            );
+
+            if (resultado) {
+                JOptionPane.showMessageDialog(this,
+                        "Enfermera modificada con éxito",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                actualizarTablaEnfermeras();
+                jTabbedPane1.setSelectedComponent(MostrarEnfermeras);
+            }
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
-                "Enfermera modificada con éxito",
-                "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            actualizarTablaEnfermeras();
-            jTabbedPane1.setSelectedComponent(MostrarEnfermeras);
+                    "Error al modificar: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-    } catch (IllegalArgumentException e) {
-        JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this,
-            "Error al modificar: " + e.getMessage(),
-            "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
 
     }//GEN-LAST:event_jButton7ActionPerformed
 
@@ -2974,10 +2970,8 @@ private ImageIcon crearIconoPorDefecto() {
             return null;
         }
 
-        
         String cedula = tablaEnfermeras.getValueAt(filaSeleccionada, 4).toString();
 
-        
         return enfermeraDAO.obtenerEnfermeraPorIdentificacion(cedula);
     }
 
@@ -2990,46 +2984,46 @@ private ImageIcon crearIconoPorDefecto() {
     }//GEN-LAST:event_txtCorreoMod1KeyTyped
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-   JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle("Seleccionar nueva imagen");
-    fileChooser.setFileFilter(new FileNameExtensionFilter(
-        "Imágenes", "jpg", "jpeg", "png", "gif"));
-    
-    int resultado = fileChooser.showOpenDialog(this);
-    
-    if (resultado == JFileChooser.APPROVE_OPTION) {
-        File nuevaImagen = fileChooser.getSelectedFile();
-        
-        try {
-            // Validar tamaño máximo (2MB)
-            long sizeInMB = nuevaImagen.length() / (1024 * 1024);
-            if (sizeInMB > 2) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Seleccionar nueva imagen");
+        fileChooser.setFileFilter(new FileNameExtensionFilter(
+                "Imágenes", "jpg", "jpeg", "png", "gif"));
+
+        int resultado = fileChooser.showOpenDialog(this);
+
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File nuevaImagen = fileChooser.getSelectedFile();
+
+            try {
+                // Validar tamaño máximo (2MB)
+                long sizeInMB = nuevaImagen.length() / (1024 * 1024);
+                if (sizeInMB > 2) {
+                    JOptionPane.showMessageDialog(this,
+                            "La imagen no debe superar los 2MB",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Mostrar previsualización
+                ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
+                Image imagenEscalada = icono.getImage()
+                        .getScaledInstance(
+                                lblImagenMod1.getWidth(),
+                                lblImagenMod1.getHeight(),
+                                Image.SCALE_SMOOTH
+                        );
+                lblImagenMod1.setIcon(new ImageIcon(imagenEscalada));
+
+                // Guardar referencia al nuevo archivo
+                imagenSeleccionadaMod = nuevaImagen;
+
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(this,
-                    "La imagen no debe superar los 2MB",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-                return;
+                        "Error al cargar la imagen: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                imagenSeleccionadaMod = null;
             }
-            
-            // Mostrar previsualización
-            ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
-            Image imagenEscalada = icono.getImage()
-                .getScaledInstance(
-                    lblImagenMod1.getWidth(),
-                    lblImagenMod1.getHeight(),
-                    Image.SCALE_SMOOTH
-                );
-            lblImagenMod1.setIcon(new ImageIcon(imagenEscalada));
-            
-            // Guardar referencia al nuevo archivo
-            imagenSeleccionadaMod = nuevaImagen;
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                "Error al cargar la imagen: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-            imagenSeleccionadaMod = null;
         }
-    }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void txtCorreo4FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreo4FocusLost
@@ -3057,63 +3051,63 @@ private ImageIcon crearIconoPorDefecto() {
     }//GEN-LAST:event_txtEdadMod1KeyTyped
 
     private void ModificarEnfermeraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModificarEnfermeraActionPerformed
-         int fila = tablaEnfermeras.getSelectedRow();
-    
-    if (fila < 0) {
-        JOptionPane.showMessageDialog(this,
-            "Seleccione una enfermera primero",
-            "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-    
-    String cedula = tablaEnfermeras.getValueAt(fila, 4).toString();
-    
-    try {
-        Enfermera enfermera = enfermeraController.obtenerEnfermeraPorCedula(cedula);
-        
-        if (enfermera != null) {
-            cargarDatosEnfermeraParaModificar(enfermera);
-            jTabbedPane1.setSelectedComponent(ModificarNurse);
+        int fila = tablaEnfermeras.getSelectedRow();
+
+        if (fila < 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Seleccione una enfermera primero",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this,
-            "Error al cargar datos: " + e.getMessage(),
-            "Error", JOptionPane.ERROR_MESSAGE);
-    }
+
+        String cedula = tablaEnfermeras.getValueAt(fila, 4).toString();
+
+        try {
+            Enfermera enfermera = enfermeraController.obtenerEnfermeraPorCedula(cedula);
+
+            if (enfermera != null) {
+                cargarDatosEnfermeraParaModificar(enfermera);
+                jTabbedPane1.setSelectedComponent(ModificarNurse);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar datos: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_ModificarEnfermeraActionPerformed
 
     private void EliminarEnfermeraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarEnfermeraActionPerformed
         int filaSeleccionada = tablaEnfermeras.getSelectedRow();
-    
-    if (filaSeleccionada == -1) {
-        JOptionPane.showMessageDialog(this,
-            "Seleccione una enfermera primero",
-            "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-    
-    String cedula = tablaEnfermeras.getValueAt(filaSeleccionada, 4).toString();
-    
-    int confirmacion = JOptionPane.showConfirmDialog(this,
-        "¿Está seguro de eliminar a la enfermera con cédula " + cedula + "?",
-        "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
-    
-    if (confirmacion == JOptionPane.YES_OPTION) {
-        try {
-            boolean eliminado = enfermeraController.eliminarEnfermera(cedula);
-            
-            if (eliminado) {
-                JOptionPane.showMessageDialog(this,
-                    "Enfermera eliminada con éxito",
-                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                actualizarTablaEnfermeras();
-            }
-        } catch (Exception e) {
+
+        if (filaSeleccionada == -1) {
             JOptionPane.showMessageDialog(this,
-                "Error al eliminar: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
+                    "Seleccione una enfermera primero",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
-    }
+
+        String cedula = tablaEnfermeras.getValueAt(filaSeleccionada, 4).toString();
+
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de eliminar a la enfermera con cédula " + cedula + "?",
+                "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            try {
+                boolean eliminado = enfermeraController.eliminarEnfermera(cedula);
+
+                if (eliminado) {
+                    JOptionPane.showMessageDialog(this,
+                            "Enfermera eliminada con éxito",
+                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    actualizarTablaEnfermeras();
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al eliminar: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_EliminarEnfermeraActionPerformed
 
     private void txtPrimerApellidoPDCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrimerApellidoPDCActionPerformed
@@ -3129,9 +3123,9 @@ private ImageIcon crearIconoPorDefecto() {
     }//GEN-LAST:event_cmbNacionalidadPDCActionPerformed
 
     private void BotonContratarPDCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonContratarPDCActionPerformed
-       /* PersonalDeControlController controller = new PersonalDeControlController();
+        /* PersonalDeControlController controller = new PersonalDeControlController();
         controller.contratarPersonalDeControl(this);
-*/
+         */
 
     }//GEN-LAST:event_BotonContratarPDCActionPerformed
 
@@ -3213,335 +3207,335 @@ private ImageIcon crearIconoPorDefecto() {
 
     private void txtPrimerNombre1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombre1KeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); 
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume();
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtPrimerNombre1KeyTyped
 
     private void txtSegundoNombre1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombre1KeyTyped
-    char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); 
+        char c = evt.getKeyChar();
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume();
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtSegundoNombre1KeyTyped
 
     private void txtPrimerApellido1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellido1KeyTyped
-    char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        char c = evt.getKeyChar();
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtPrimerApellido1KeyTyped
 
     private void txtSegundoApellido1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellido1KeyTyped
-      char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        char c = evt.getKeyChar();
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtSegundoApellido1KeyTyped
 
     private void txtNacionalidad1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidad1KeyTyped
-       char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        char c = evt.getKeyChar();
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtNacionalidad1KeyTyped
 
     private void txtPrimerNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreKeyTyped
-       char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        char c = evt.getKeyChar();
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtPrimerNombreKeyTyped
 
     private void txtSegundoNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombreKeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtSegundoNombreKeyTyped
 
     private void txtPrimerApellidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellidoKeyTyped
-       char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        char c = evt.getKeyChar();
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtPrimerApellidoKeyTyped
 
     private void txtSegundoApellidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellidoKeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtSegundoApellidoKeyTyped
 
     private void txtNacionalidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadKeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); 
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume();
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtNacionalidadKeyTyped
 
     private void txtPrimerNombreMod1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreMod1KeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); 
-        
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume();
+
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtPrimerNombreMod1KeyTyped
 
     private void txtSegundoNombreMod1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombreMod1KeyTyped
-       char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        char c = evt.getKeyChar();
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtSegundoNombreMod1KeyTyped
 
     private void txtPrimerApellidoMod1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellidoMod1KeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtPrimerApellidoMod1KeyTyped
 
     private void txtSegundoApellidoMod1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellidoMod1KeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtSegundoApellidoMod1KeyTyped
 
     private void txtNacionalidadMod1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadMod1KeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtNacionalidadMod1KeyTyped
 
     private void txtPrimerNombreModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreModKeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtPrimerNombreModKeyTyped
 
     private void txtSegundoNombreModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombreModKeyTyped
-       char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        char c = evt.getKeyChar();
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtSegundoNombreModKeyTyped
 
     private void txtPrimerApellidoModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellidoModKeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtPrimerApellidoModKeyTyped
 
     private void txtSegundoApellidoModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellidoModKeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtSegundoApellidoModKeyTyped
 
     private void txtNacionalidadModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadModKeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtNacionalidadModKeyTyped
 
     private void txtPrimerNombre2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombre2KeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtPrimerNombre2KeyTyped
 
     private void txtSegundoNombre2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombre2KeyTyped
-       char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        char c = evt.getKeyChar();
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtSegundoNombre2KeyTyped
 
     private void txtPrimerApellido2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellido2KeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtPrimerApellido2KeyTyped
 
     private void txtSegundoApellido2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellido2KeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtSegundoApellido2KeyTyped
 
     private void txtNacionalidad2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidad2KeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtNacionalidad2KeyTyped
 
     private void txtPrimerNombreMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreMod2KeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtPrimerNombreMod2KeyTyped
 
     private void txtSegundoNombreMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombreMod2KeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtSegundoNombreMod2KeyTyped
 
     private void txtPrimerApellidoMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellidoMod2KeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtPrimerApellidoMod2KeyTyped
 
     private void txtSegundoApellidoMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellidoMod2KeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtSegundoApellidoMod2KeyTyped
 
     private void txtNacionalidadMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadMod2KeyTyped
         char c = evt.getKeyChar();
-    if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-        evt.consume(); // no permite que el carácter se escriba
-         // solo muestra el mensaje si no es backspace
+        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+            evt.consume(); // no permite que el carácter se escriba
+            // solo muestra el mensaje si no es backspace
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
-    }
+        }
     }//GEN-LAST:event_txtNacionalidadMod2KeyTyped
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         Login otro = new Login();
-    otro.setVisible(true); // Mostrar el nuevo JFrame
-    this.dispose(); 
+        otro.setVisible(true); // Mostrar el nuevo JFrame
+        this.dispose();
     }//GEN-LAST:event_jButton13ActionPerformed
 
     /**
@@ -3866,4 +3860,48 @@ private ImageIcon crearIconoPorDefecto() {
     private javax.swing.JTextField txtSexoMod2;
     // End of variables declaration//GEN-END:variables
 
+    private boolean validarFechasContrato() {
+        try {
+            // Formato consistente en toda la aplicación
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            // Parsear fecha de inicio
+            LocalDate fechaInicio = LocalDate.parse(txtFechaContratacion.getText(), formatter);
+
+            // Obtener fecha fin del JDateChooser
+            if (jDateChooserFinContrato.getDate() == null) {
+                JOptionPane.showMessageDialog(this,
+                        "Debe seleccionar una fecha de fin de contrato",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            // Convertir a LocalDate usando la misma zona horaria
+            LocalDate fechaFin = jDateChooserFinContrato.getDate().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+
+            // Validación flexible (puede ser el mismo día)
+            if (fechaFin.isBefore(fechaInicio)) {
+                JOptionPane.showMessageDialog(this,
+                        String.format("La fecha de fin (%s) debe ser igual o posterior a la fecha de inicio (%s)",
+                                fechaFin.format(formatter),
+                                fechaInicio.format(formatter)),
+                        "Error de fechas", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            return true;
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Formato de fecha inválido. Use dd/MM/yyyy",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al validar fechas: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
 }

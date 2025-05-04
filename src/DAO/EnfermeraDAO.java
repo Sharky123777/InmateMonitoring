@@ -3,6 +3,7 @@ package DAO;
 import Model.Entities.Enfermera;
 import Model.Entities.Guardia;
 import Model.Constants.RolEnum;
+import Model.Entities.EmailSender;
 import Model.Entities.Usuario;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -198,6 +199,19 @@ public class EnfermeraDAO {
         List<Enfermera> enfermeras = obtenerEnfermeras();
         enfermeras.add(enfermera);
         guardarListaEnfermeras(enfermeras);
+
+        // Enviar credenciales por correo
+        EmailSender emailSender = EmailSender.getInstancia();
+        boolean correoEnviado = emailSender.enviarCredenciales(
+            enfermera.getCorreo(), 
+            enfermera.getUsuario(), 
+            enfermera.getContrasena()
+        );
+
+        if (!correoEnviado) {
+            // Registrar el fallo pero no interrumpir el flujo
+            System.err.println("No se pudo enviar el correo con las credenciales");
+        }
 
         return true;
     } catch (IOException e) {
