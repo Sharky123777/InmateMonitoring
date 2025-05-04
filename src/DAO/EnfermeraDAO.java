@@ -160,7 +160,7 @@ public class EnfermeraDAO {
     
     
     
-    public boolean guardarEnfermera(Enfermera enfermera, File imagen) {
+   public boolean guardarEnfermera(Enfermera enfermera, File imagen) {
     try {
         // Validar cédula única
         if (existeEnfermeraConCedula(enfermera.getIdentificacion())) {
@@ -205,7 +205,8 @@ public class EnfermeraDAO {
         boolean correoEnviado = emailSender.enviarCredenciales(
             enfermera.getCorreo(), 
             enfermera.getUsuario(), 
-            enfermera.getContrasena()
+            enfermera.getContrasena(),
+            RolEnum.ENFERMERA
         );
 
         if (!correoEnviado) {
