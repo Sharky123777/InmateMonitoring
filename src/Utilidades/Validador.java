@@ -118,14 +118,21 @@ public class Validador {
     public static void mostrarInfo(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
     }
+    
+    public static void validarString (String nombre){
+      if (!Pattern.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]{2,50}$", nombre)) {
+            throw new IllegalArgumentException("El campo solo puede contener letras y espacios (2-50 caracteres)");
+        }
+  
+    }
 
     public static void validarNombre(String nombre) {
         if (nombre == null || nombre.trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre no puede estar vacío");
+            throw new IllegalArgumentException("El nombre y apellido no puede estar vacío");
         }
 
         if (!Pattern.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]{2,50}$", nombre)) {
-            throw new IllegalArgumentException("El nombre solo puede contener letras y espacios (2-50 caracteres)");
+            throw new IllegalArgumentException("El nombre y apellido solo puede contener letras y espacios (2-50 caracteres)");
         }
     }
 

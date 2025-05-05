@@ -206,5 +206,37 @@
       "fechaIngreso": "2025-05-02",
       "fechaSalidaCalculada": "2028-06-02"
     }
+  },
+  {
+    "id": 14,
+    "presoId": "123456000",
+    "codigo": 189,
+    "nombre": "Violación de habitación ajena",
+    "articuloLey": "Artículo 189",
+    "gravedad": "Baja",
+    "descripcion": "ñññññññññññññññ",
+    "fechaComision": "2025-05-01",
+    "sentencia": {
+      "años": 1,
+      "meses": 0,
+      "fechaIngreso": "2025-05-04",
+      "fechaSalidaCalculada": "2026-05-04"
+    }
+  },
+  {
+    "id": 15,
+    "presoId": "123456000",
+    "codigo": 233,
+    "nombre": "Inasistencia alimentaria",
+    "articuloLey": "Artículo 233",
+    "gravedad": "Baja",
+    "descripcion": "ll",
+    "fechaComision": "2024-05-10",
+    "sentencia": {
+      "años": 1,
+      "meses": 1,
+      "fechaIngreso": "2025-05-04",
+      "fechaSalidaCalculada": "2026-06-04"
+    }
   }
 ]

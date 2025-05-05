@@ -475,7 +475,6 @@ public class PresoController {
 
     public void cargarTablaDelitos(Preso preso, JTable tabla) {
         try {
-            // 1. Validaciones iniciales
             if (preso == null) {
                 throw new IllegalArgumentException("Preso no puede ser nulo");
             }
@@ -485,9 +484,8 @@ public class PresoController {
             }
 
             DefaultTableModel model = (DefaultTableModel) tabla.getModel();
-            model.setRowCount(0); // Limpiar tabla
+            model.setRowCount(0);
 
-            // 2. Obtener delitos directamente del preso (no del expediente)
             List<Delito> delitos = preso.getDelitos();
 
             if (delitos == null || delitos.isEmpty()) {
@@ -495,11 +493,9 @@ public class PresoController {
                 return;
             }
 
-            // 3. Calcular sentencia total
             Sentencia sentenciaTotal = expedienteDAO.calcularSentenciaTotal(delitos);
             LocalDate fechaSalidaComun = sentenciaTotal.getFechaSalidaCalculada();
 
-            // 4. Llenar tabla
             for (Delito delito : delitos) {
                 model.addRow(crearFilaDelito(delito, fechaSalidaComun));
             }
@@ -511,7 +507,6 @@ public class PresoController {
         }
     }
 
-// Métodos auxiliares privados
     private Object[] crearFilaDelito(Delito delito, LocalDate fechaSalidaComun) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -528,29 +523,23 @@ public class PresoController {
 
     public Preso obtenerPresoConDelitos(String identificacion) {
         try {
-            // 1. Validar identificación
             Validador.validarFormatoIdentificacion(identificacion);
 
-            // 2. Buscar preso
             Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
             if (preso == null) {
                 throw new IllegalStateException("No se encontró el preso con identificación: " + identificacion);
             }
 
-            // 3. Obtener delitos asociados
             List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(identificacion);
             preso.setDelitos(delitos);
 
-            // 4. Buscar expediente judicial si existe
             ExpedienteJudicial expediente = expedienteDAO.buscarPorPreso(identificacion);
 
             if (expediente != null) {
-                // Actualizar delitos en el expediente existente
                 expediente.setDelitos(delitos);
                 expedienteDAO.actualizarExpediente(expediente);
             } else {
-                // Crear nuevo expediente si no existe
-                expediente = new ExpedienteJudicial(preso); // Usa el constructor que recibe Preso
+                expediente = new ExpedienteJudicial(preso);
                 expediente.setDelitos(delitos);
                 expedienteDAO.guardarExpediente(expediente);
             }
@@ -603,38 +592,46 @@ public class PresoController {
                 preso.getNacionalidad(),
                 preso.getIdentificacion(),
                 preso.getCeldaAsignada(),
-                preso.getSeccionAsignada()
-            });
-        }
-
-        return filas;
-    }
-
-    public List<Object[]> obtenerTodosLosPresosParaTabla() {
-        List<Preso> presos = presoDAO.buscarPorEstado(EstadoPresoEnum.ACTIVO);
-        List<Object[]> filas = new ArrayList<>();
-
-        for (Preso preso : presos) {
-            ImageIcon foto = obtenerFotoPreso(preso);
-
-            List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(preso.getIdentificacion());
-            preso.setDelitos(delitos);
-
-            filas.add(new Object[]{
-                foto,
-                preso.getId(),
-                preso.getNombresCompletos(),
-                preso.getApellidosCompletos(),
-                preso.getEdad(),
-                preso.getIdentificacion(),
-                preso.getNacionalidad(),
                 preso.getSeccionAsignada(),
-                preso.getCeldaAsignada()
+                preso.getEstado()
             });
         }
 
         return filas;
     }
+
+public List<Object[]> obtenerTodosLosPresosParaTabla() {
+    List<Preso> presosActivos = presoDAO.buscarPorEstado(EstadoPresoEnum.ACTIVO);
+    List<Preso> presosFugados = presoDAO.buscarPorEstado(EstadoPresoEnum.FUGADO);
+
+    List<Preso> todosLosPresos = new ArrayList<>();
+    todosLosPresos.addAll(presosActivos);
+    todosLosPresos.addAll(presosFugados);
+
+    List<Object[]> filas = new ArrayList<>();
+
+    for (Preso preso : todosLosPresos) {
+        ImageIcon foto = obtenerFotoPreso(preso);
+
+        List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(preso.getIdentificacion());
+        preso.setDelitos(delitos);
+
+        filas.add(new Object[]{
+            foto,
+            preso.getId(),
+            preso.getNombresCompletos(),
+            preso.getApellidosCompletos(),
+            preso.getEdad(),
+            preso.getIdentificacion(),
+            preso.getNacionalidad(),
+            preso.getSeccionAsignada(),
+            preso.getCeldaAsignada(),
+            preso.getEstado()
+        });
+    }
+
+    return filas;
+}
 
     public List<Object[]> obtenerPresosInactivosParaTabla() {
         List<Preso> liberados = presoDAO.buscarPorEstado(EstadoPresoEnum.LIBERADO);
@@ -685,17 +682,19 @@ public class PresoController {
                 throw new IllegalArgumentException("No se encontró el preso con identificación: " + identificacion);
             }
 
-            if (motivo.equals("LIBERADO") && !validarLiberacionPreso(preso, fechaValidacion)) {
+            LocalDate fechaLocal = fechaValidacion.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+
+            if (motivo == EstadoPresoEnum.LIBERADO && !validarLiberacionPreso(preso, fechaValidacion)) {
                 return false;
             }
 
-            if (motivo.equals("FALLECIDO")) {
-                preso.setFechaDefuncion(fechaValidacion.toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate());
+            if (motivo == EstadoPresoEnum.FALLECIDO) {
+                preso.setFechaDefuncion(fechaLocal);
             }
 
-            boolean estadoCambiado = presoDAO.cambiarEstadoPreso(identificacion, motivo);
+            boolean estadoCambiado = presoDAO.cambiarEstadoPreso(identificacion, motivo, fechaLocal);
 
             if (estadoCambiado) {
                 Validador.mostrarInfo("Preso marcado como " + motivo + " correctamente");
@@ -759,6 +758,35 @@ public class PresoController {
         g2.dispose();
 
         return output;
+    }
+
+    
+    public boolean cambiarEstadoPreso(String identificacion, EstadoPresoEnum nuevoEstado, LocalDate fechaCambio)
+            throws IllegalArgumentException, IllegalStateException {
+
+        if (identificacion == null || identificacion.trim().isEmpty()) {
+            throw new IllegalArgumentException("Identificación requerida");
+        }
+
+        if (nuevoEstado == null) {
+            throw new IllegalArgumentException("Estado requerido");
+        }
+
+        if (fechaCambio == null) {
+            throw new IllegalArgumentException("Fecha requerida");
+        }
+
+        if (fechaCambio.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("Fecha no puede ser futura");
+        }
+
+        boolean resultado = presoDAO.cambiarEstadoPreso(identificacion, nuevoEstado, fechaCambio);
+
+        if (!resultado) {
+            throw new IllegalStateException("No se pudo actualizar el estado");
+        }
+
+        return true;
     }
 
 }

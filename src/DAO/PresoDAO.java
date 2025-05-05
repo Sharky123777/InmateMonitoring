@@ -410,35 +410,64 @@ public boolean marcarActividadCancelada(String idPreso, String idActividad) {
     }
 }
 
- public boolean cambiarEstadoPreso(String identificacion, EstadoPresoEnum nuevoEstado) {
-    List<Preso> presos = cargarTodos();
-    
-    for (Preso preso : presos) {
-        if (preso.getIdentificacion().equals(identificacion)) {
-            preso.setEstado(nuevoEstado);
-            return guardarCambios(presos);
+public boolean cambiarEstadoPreso(String identificacion, EstadoPresoEnum nuevoEstado, LocalDate fechaCambio) {
+        List<Preso> presos = cargarTodos();
+        
+        for (Preso preso : presos) {
+            if (preso.getIdentificacion().equals(identificacion)) {
+                preso.setEstado(nuevoEstado);
+                
+                switch(nuevoEstado) {
+                    case LIBERADO:
+                        preso.setFechaLiberacion(fechaCambio);
+                        break;
+                    case FALLECIDO:
+                        preso.setFechaDefuncion(fechaCambio);
+                        break;
+                    case FUGADO:
+                        preso.setFechaFuga(fechaCambio);
+                        break;
+                    case ACTIVO:
+                        preso.setFechaLiberacion(null);
+                        preso.setFechaDefuncion(null);
+                        preso.setFechaFuga(null);
+                        break;
+                }
+                
+                return guardarCambios(presos);
+            }
         }
+        return false;
     }
-    return false;
-}
-  
 
-  
- public boolean eliminarPresoL(String numeroIdentificacion) {
-        return cambiarEstadoPreso(numeroIdentificacion, EstadoPresoEnum.LIBERADO);
-  }
- 
-public List<Preso> buscarPorEstado(EstadoPresoEnum estado) {
-    List<Preso> todos = cargarTodos();
-    List<Preso> filtrados = new ArrayList<>();
-    
-    for (Preso preso : todos) {
-        if (preso.getEstado() == estado) {
-            filtrados.add(preso);
-        }
+    public boolean cambiarEstadoPreso(String identificacion, EstadoPresoEnum nuevoEstado) {
+        return cambiarEstadoPreso(identificacion, nuevoEstado, LocalDate.now());
     }
-    return filtrados;
-}
+
+    public boolean eliminarPresoL(String numeroIdentificacion) {
+        return cambiarEstadoPreso(numeroIdentificacion, EstadoPresoEnum.LIBERADO, LocalDate.now());
+    }
+    
+    public boolean marcarComoFallecido(String numeroIdentificacion, LocalDate fechaDefuncion) {
+        return cambiarEstadoPreso(numeroIdentificacion, EstadoPresoEnum.FALLECIDO, fechaDefuncion);
+    }
+    
+    public boolean marcarComoFugado(String numeroIdentificacion, LocalDate fechaFuga) {
+        return cambiarEstadoPreso(numeroIdentificacion, EstadoPresoEnum.FUGADO, fechaFuga);
+    }
+
+    public List<Preso> buscarPorEstado(EstadoPresoEnum estado) {
+        List<Preso> todos = cargarTodos();
+        List<Preso> filtrados = new ArrayList<>();
+        
+        for (Preso preso : todos) {
+            if (preso.getEstado() == estado) {
+                filtrados.add(preso);
+            }
+        }
+        return filtrados;
+    }
+    
 public boolean actualizarPreso(Preso preso) {
     List<Preso> presos = cargarTodos();
     

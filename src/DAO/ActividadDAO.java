@@ -1,5 +1,7 @@
 package DAO;
 
+import Model.Constants.EstadoActividadesEnum;
+import Model.Constants.EstadoActividadesPresoEnum;
 import Model.Entities.Actividad;
 import Model.Entities.Oficial;
 import Model.Entities.Preso;
@@ -269,7 +271,7 @@ public class ActividadDAO {
         List<Actividad> actividades = cargarActividades();
         for (Actividad act : actividades) {
             if (act.getIdActividad().equals(idActividad)) {
-                act.setEstado("Cancelada");
+                act.setEstado(EstadoActividadesEnum.CANCELADA);
                 if (guardarActividades(actividades)) {
                     JOptionPane.showMessageDialog(null, "Actividad cancelada correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
                     return true;
@@ -280,11 +282,11 @@ public class ActividadDAO {
         return false;
     }
 
-    public List<Actividad> buscarActividadesPorEstado(String estado) {
+    public List<Actividad> buscarActividadesPorEstado(EstadoActividadesEnum estado) {
         List<Actividad> todas = cargarActividades();
         List<Actividad> filtradas = new ArrayList<>();
         for (Actividad actividad : todas) {
-            if (actividad.getEstado().equalsIgnoreCase(estado)) {
+            if (actividad.getEstado()== (estado)) {
                 filtradas.add(actividad);
             }
         }
@@ -294,7 +296,7 @@ public class ActividadDAO {
     public List<Actividad> buscarActividadesDisponiblesParaPreso(String identificacionP) {
         List<Actividad> todas = cargarActividades()
                 .stream()
-                .filter(a -> a.getEstado().equalsIgnoreCase("ACTIVA"))
+                .filter(a -> a.getEstado()== (EstadoActividadesEnum.ACTIVA))
                 .collect(Collectors.toList());
 
         List<String> idsAsignadas = buscarActividadesPorPreso(identificacionP)
@@ -340,8 +342,8 @@ public class ActividadDAO {
 
         for (Actividad actividad : actividades) {
             if (actividad.getPresosAsignadosIds().contains(presoId)
-                    && !actividad.getEstado().equalsIgnoreCase("Cancelada")
-                    && !actividad.getEstado().equalsIgnoreCase("Terminada")) {
+                    && !actividad.getEstado().equals(EstadoActividadesEnum.CANCELADA)
+                    && !actividad.getEstado().equals(EstadoActividadesPresoEnum.FINALIZADA)) {
                 count++;
             }
         }
@@ -369,7 +371,7 @@ public class ActividadDAO {
         return "ACT-" + (maxId + 1);
     }
 
-    public boolean actualizarEstadoActividad(String idActividad, String nuevoEstado) {
+    public boolean actualizarEstadoActividad(String idActividad, EstadoActividadesEnum nuevoEstado) {
         List<Actividad> actividades = cargarActividades();
         boolean encontrado = false;
 
@@ -388,41 +390,48 @@ public class ActividadDAO {
         return guardarActividades(actividades);
     }
 
-    public void actualizarEstadoPresosActividad(String idActividad, String estado) {
-        List<Actividad> actividades = cargarActividades();
-        PresoDAO presoDAO = PresoDAO.getInstancia();
+   public void actualizarEstadoPresosActividad(String idActividad, EstadoActividadesEnum nuevoEstado) {
+    List<Actividad> actividades = cargarActividades();
+    PresoDAO presoDAO = PresoDAO.getInstancia();
 
-        for (Actividad actividad : actividades) {
-            if (actividad.getIdActividad().equals(idActividad)) {
-                if (estado.equalsIgnoreCase("CANCELADA")) {
-                    for (String idPreso : actividad.getPresosAsignadosIds()) {
-                        Preso preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
-
-                        if (preso != null) {
-                            preso.marcarActividadCancelada(idActividad);
-
-                            presoDAO.actualizarPreso(preso);
-                        }
+    for (Actividad actividad : actividades) {
+        if (actividad.getIdActividad().equals(idActividad)) {
+            if (nuevoEstado == EstadoActividadesEnum.CANCELADA) {
+                for (String idPreso : actividad.getPresosAsignadosIds()) {
+                    Preso preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
+                    if (preso != null) {
+                        preso.marcarActividadCancelada(idActividad);
+                        presoDAO.actualizarPreso(preso);
                     }
                 }
-                break;
             }
-        }
-
-        for (Actividad actividad : actividades) {
-            if (actividad.getIdActividad().equals(idActividad)) {
-                actividad.setEstado(estado);
-                break;
+            
+            actividad.setEstado(nuevoEstado);
+            
+            if (nuevoEstado == EstadoActividadesEnum.CANCELADA || 
+                nuevoEstado == EstadoActividadesEnum.FINALIZADA) {
+                
+                EstadoActividadesPresoEnum estadoPreso = nuevoEstado == EstadoActividadesEnum.CANCELADA ? 
+                    EstadoActividadesPresoEnum.CANCELADA : 
+                    EstadoActividadesPresoEnum.FINALIZADA;
+                
+                for (String idPreso : actividad.getPresosAsignadosIds()) {
+                    actividad.setEstadoPreso(idPreso, estadoPreso);
+                }
             }
+            
+            break; 
         }
-
-        guardarActividades(actividades);
     }
 
+    guardarActividades(actividades);
+}
+   
+   
     public boolean tieneActividadEnMismoHorarioPreso(String idPreso, Object dia, Object horario) {
         List<Actividad> actividades = cargarActividades();
         for (Actividad actividad : actividades) {
-            if (!actividad.getEstado().equalsIgnoreCase("ACTIVA")) {
+            if (!actividad.getEstado().equals("ACTIVA")) {
                 continue;
             }
 

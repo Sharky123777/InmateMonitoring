@@ -23,7 +23,9 @@ public class Preso extends Persona {
     private int id = 0;
     private List<String> actividadesAsignadasIds = new ArrayList<>();
     private List<String> actividadesCanceladasIds = new ArrayList<>();
-    private LocalDate fechaDefuncion;
+    private LocalDate fechaLiberacion;
+private LocalDate fechaDefuncion;
+private LocalDate fechaFuga;
 
     
     public Preso(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
@@ -47,9 +49,28 @@ public class Preso extends Persona {
         this.grupoSanguineo = grupoSanguineo;
         this.fotoPath = fotoPath;
         this.id = id;
+        this.estado = EstadoPresoEnum.ACTIVO;
     }
 
-    // Getters y Setters
+    public LocalDate getFechaLiberacion() {
+        return fechaLiberacion;
+    }
+
+    public void setFechaLiberacion(LocalDate fechaLiberacion) {
+        this.fechaLiberacion = fechaLiberacion;
+    }
+
+    public LocalDate getFechaFuga() {
+        return fechaFuga;
+    }
+
+    public void setFechaFuga(LocalDate fechaFuga) {
+        this.fechaFuga = fechaFuga;
+    }
+
+    
+    
+    
     public float getEstatura() {
         return estatura;
     }
@@ -186,7 +207,6 @@ public class Preso extends Persona {
         this.fechaDefuncion = fechaDefuncion;
     }
 
-    // Métodos de comportamiento
     public boolean puedeSerAsignadoAActividad() {
         return estado == EstadoPresoEnum.ACTIVO && !enAislamiento;
     }
@@ -213,26 +233,6 @@ public class Preso extends Persona {
 
     public boolean eliminarDelito(Delito delito) {
         return delitos.remove(delito);
-    }
-
-    public Sentencia getSentenciaTotal() {
-        int totalAños = 0;
-        int totalMeses = 0;
-        LocalDate fechaIngreso = null;
-
-        if (!delitos.isEmpty()) {
-            fechaIngreso = delitos.get(0).getSentencia().getFechaIngreso();
-
-            for (Delito delito : delitos) {
-                totalAños += delito.getSentencia().getAños();
-                totalMeses += delito.getSentencia().getMeses();
-            }
-
-            totalAños += totalMeses / 12;
-            totalMeses = totalMeses % 12;
-        }
-
-        return new Sentencia(totalAños, totalMeses, fechaIngreso);
     }
 
     @Override

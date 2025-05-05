@@ -5,6 +5,7 @@ import Model.Entities.Delito;
 import Model.Entities.ExpedienteJudicial;
 import Model.Entities.Preso;
 import Model.Entities.Sentencia;
+import Model.Entities.LocalDateAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -40,14 +41,12 @@ public class ExpedienteDAO {
     public boolean guardarExpediente(ExpedienteJudicial expediente) {
         List<ExpedienteJudicial> expedientes = cargarTodos();
 
-        // Verificar si el expediente ya existe
         boolean existe = expedientes.stream()
                 .anyMatch(e -> e.getCodigoExpediente().equals(expediente.getCodigoExpediente()));
 
         if (!existe) {
             expedientes.add(expediente);
         } else {
-            // Actualizar el existente
             expedientes = expedientes.stream()
                     .map(e -> e.getCodigoExpediente().equals(expediente.getCodigoExpediente()) ? expediente : e)
                     .collect(Collectors.toList());
@@ -57,7 +56,7 @@ public class ExpedienteDAO {
     }
 
     public boolean actualizarExpediente(ExpedienteJudicial expediente) {
-        return guardarExpediente(expediente); // Reutilizamos el método guardar
+        return guardarExpediente(expediente); 
     }
 
     public ExpedienteJudicial buscarPorCodigo(String codigoExpediente) {
@@ -149,21 +148,17 @@ public class ExpedienteDAO {
     }
 
     public ExpedienteJudicial actualizarExpedienteConDelitos(Preso preso, List<Delito> delitos) {
-        // Buscar expediente existente
         ExpedienteJudicial expediente = buscarPorPreso(preso.getIdentificacion());
 
         if (expediente == null) {
-            // Usar el constructor que requiere Preso
             expediente = new ExpedienteJudicial(preso);
 
-            // Configurar valores adicionales
             expediente.setCodigoExpediente(generarCodigoUnico());
             expediente.setDelitos(new ArrayList<>());
             expediente.setFechaApertura(LocalDate.now());
             expediente.setEstado(EstadoExpedienteEnum.ABIERTO);
         }
 
-        // Actualizar delitos (eliminar duplicados si es necesario)
         List<Delito> delitosActualizados = new ArrayList<>(expediente.getDelitos());
         for (Delito nuevoDelito : delitos) {
             if (delitosActualizados.stream().noneMatch(d -> d.getId() == nuevoDelito.getId())) {
@@ -173,7 +168,6 @@ public class ExpedienteDAO {
 
         expediente.setDelitos(delitosActualizados);
 
-        // Guardar cambios
         guardarExpediente(expediente);
 
         return expediente;
