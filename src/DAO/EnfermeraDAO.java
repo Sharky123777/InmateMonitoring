@@ -9,6 +9,7 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.*;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 public class EnfermeraDAO {
@@ -158,71 +160,47 @@ public class EnfermeraDAO {
         return sb.toString();
     }
     
+    private String guardarImagenDesdeCamara(BufferedImage imagen, String identificacion) throws IOException {
+    String nombreImagen = identificacion + "_foto.jpg";
+    String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+    
+    File outputFile = new File(rutaImagenFinal);
+    ImageIO.write(imagen, "jpg", outputFile);
+    
+    return rutaImagenFinal;
+}
     
     
-   public boolean guardarEnfermera(Enfermera enfermera, File imagen) {
-    try {
-        // Validar cédula única
-        if (existeEnfermeraConCedula(enfermera.getIdentificacion())) {
-            throw new IllegalArgumentException("Ya existe una enfermera con esta cédula");
-        }
+    
+   public boolean guardarEnfermera(Enfermera enfermera, File imagen) throws IOException {
+    // Validar que la imagen existe (ya validado en controller)
+    String nombreImagen = enfermera.getIdentificacion() + "_" + 
+                        System.currentTimeMillis() + 
+                        imagen.getName().substring(imagen.getName().lastIndexOf("."));
+    
+    String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+    
+    // Crear directorio si no existe
+    Files.createDirectories(Paths.get(RUTA_IMAGENES));
+    
+    // Copiar la imagen
+    Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+    enfermera.setRutaImagen(rutaImagenFinal);
 
-        // Validar límites
-        if (!puedeAgregarEnfermera(enfermera.getTurno())) {
-            throw new IllegalArgumentException("No se puede agregar más enfermeras. Límite alcanzado.");
-        }
+    // Guardar datos
+    List<Enfermera> enfermeras = obtenerEnfermeras();
+    enfermeras.add(enfermera);
+    guardarListaEnfermeras(enfermeras);
 
-        // Generar credenciales
-        List<Usuario> usuariosExistentes = obtenerTodosUsuarios();
-        String usuario = generarUsuarioUnico(enfermera.getPrimerNombre(), enfermera.getPrimerApellido(), usuariosExistentes);
-        String contrasena = generarContrasena();
-        
-        // Crear y guardar usuario
-        Usuario nuevoUsuario = new Usuario(usuario, contrasena, RolEnum.ENFERMERA);
-        guardarUsuario(nuevoUsuario);
-        
-        // Asignar credenciales
-        enfermera.setUsuario(usuario);
-        enfermera.setContrasena(contrasena);
+    // Enviar credenciales
+    EmailSender.getInstancia().enviarCredenciales(
+        enfermera.getCorreo(), 
+        enfermera.getUsuario(), 
+        enfermera.getContrasena(),
+        RolEnum.ENFERMERA
+    );
 
-        // Manejar imagen
-        if (imagen != null && imagen.exists()) {
-            String nombreImagen = enfermera.getIdentificacion() + "_" + imagen.getName();
-            String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-            Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
-            enfermera.setRutaImagen(rutaImagenFinal);
-        } else {
-            enfermera.setRutaImagen(""); // O ruta a imagen por defecto
-        }
-
-        // Guardar enfermera
-        List<Enfermera> enfermeras = obtenerEnfermeras();
-        enfermeras.add(enfermera);
-        guardarListaEnfermeras(enfermeras);
-
-        // Enviar credenciales por correo
-        EmailSender emailSender = EmailSender.getInstancia();
-        boolean correoEnviado = emailSender.enviarCredenciales(
-            enfermera.getCorreo(), 
-            enfermera.getUsuario(), 
-            enfermera.getContrasena(),
-            RolEnum.ENFERMERA
-        );
-
-        if (!correoEnviado) {
-            // Registrar el fallo pero no interrumpir el flujo
-            System.err.println("No se pudo enviar el correo con las credenciales");
-        }
-
-        return true;
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(null, 
-            "Error al guardar la enfermera: " + e.getMessage(), 
-            "Error", JOptionPane.ERROR_MESSAGE);
-        return false;
-    } catch (IllegalArgumentException e) {
-        throw e; // Re-lanzar para que el controller lo maneje
-    }
+    return true;
 }
     
    public List<Enfermera> obtenerEnfermeras() {
@@ -351,20 +329,24 @@ public class EnfermeraDAO {
         for (int i = 0; i < enfermeras.size(); i++) {
             Enfermera e = enfermeras.get(i);
             if (e.getIdentificacion().equals(cedulaOriginal)) {
-                // Manejo seguro de la imagen
-                String rutaImagenFinal = e.getRutaImagen(); // Mantener la misma por defecto
+                // Manejo de la imagen
+                String rutaImagenFinal = e.getRutaImagen(); // Mantener la original por defecto
                 
                 if (nuevaImagen != null && nuevaImagen.exists()) {
                     // Generar nombre único para la nueva imagen
-                    String nombreImagen = enfermeraModificada.getIdentificacion() + "_" + nuevaImagen.getName();
+                    String nombreImagen = enfermeraModificada.getIdentificacion() + "_" + System.currentTimeMillis() + 
+                                       nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
                     rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
                     
                     // Copiar la nueva imagen
                     Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
                 }
                 
-                // Actualizar datos
+                // Actualizar datos manteniendo usuario y contraseña
+                enfermeraModificada.setUsuario(e.getUsuario());
+                enfermeraModificada.setContrasena(e.getContrasena());
                 enfermeraModificada.setRutaImagen(rutaImagenFinal);
+                
                 enfermeras.set(i, enfermeraModificada);
                 
                 guardarListaEnfermeras(enfermeras);

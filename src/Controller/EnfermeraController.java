@@ -2,13 +2,20 @@ package Controller;
 
 import DAO.EnfermeraDAO;
 import Model.Entities.Enfermera;
+import View.FrmCamara;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class EnfermeraController {
     private static EnfermeraController instancia;
     private final EnfermeraDAO enfermeraDAO;
+    private FrmCamara ventanaCamara;
 
     private EnfermeraController() {
         this.enfermeraDAO = EnfermeraDAO.getInstancia();
@@ -20,51 +27,116 @@ public class EnfermeraController {
         }
         return instancia;
     }
-
-    public Enfermera registrarEnfermera(String primerNombre, String segundoNombre,
-        String primerApellido, String segundoApellido, int edad, String cedula,
-        String nacionalidad, String correo, String turno, LocalDate fechaFinContrato,
-        File imagen) {
     
-    try {
-        // Validaciones
-        validarCamposObligatorios(primerNombre, primerApellido, segundoApellido, 
-                edad, cedula, nacionalidad, correo, turno);
-        validarEdad(edad);
-        validarFechasContrato(LocalDate.now(), fechaFinContrato);
-        validarLimiteEnfermerasPorTurno(turno, null);
-
-        // Crear nueva enfermera
-        Enfermera nuevaEnfermera = new Enfermera(
-            primerNombre, segundoNombre, primerApellido, segundoApellido,
-            edad, "Femenino", nacionalidad, cedula, turno, 
-            LocalDate.now(), fechaFinContrato, correo, "", "" // Usuario y contraseña se generan en el DAO
-        );
-
-        // Guardar a través del DAO
-        boolean guardado = enfermeraDAO.guardarEnfermera(nuevaEnfermera, imagen);
-        
-        if (guardado) {
-            return enfermeraDAO.obtenerEnfermeraPorCedula(cedula);
+    public File capturarImagenEnfermera() {
+    FrmCamara ventanaCamara = new FrmCamara();
+    ventanaCamara.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    
+    // Mostrar como diálogo modal
+    JDialog dialog = new JDialog();
+    dialog.setModal(true);
+    dialog.setContentPane(ventanaCamara.getContentPane());
+    dialog.pack();
+    dialog.setLocationRelativeTo(null);
+    dialog.setVisible(true);
+    
+    // Esperar hasta que se cierre
+    while (dialog.isVisible()) {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return null;
         }
-        return null;
-        
-    } catch (IllegalArgumentException e) {
-        throw e; // Re-lanzar validaciones
-    } catch (Exception e) {
-        throw new RuntimeException("Error al registrar enfermera: " + e.getMessage(), e);
     }
+    
+    return ventanaCamara.getImagenCapturada();
 }
 
-    public boolean modificarEnfermera(String cedulaOriginal, Map<String, Object> cambios, File imagen) {
-        try {
-            return procesarModificacion(cedulaOriginal, cambios, imagen);
-        } catch (IllegalArgumentException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Error al modificar enfermera: " + e.getMessage(), e);
-        }
+   public Enfermera registrarEnfermera(String primerNombre, String segundoNombre,
+    String primerApellido, String segundoApellido, int edad, String cedula,
+    String nacionalidad, String correo, String turno, LocalDate fechaFinContrato,
+    File imagen) throws IOException {
+    
+    // Validaciones (todas las reglas de negocio aquí)
+    validarCamposObligatorios(primerNombre, primerApellido, segundoApellido, 
+            edad, cedula, nacionalidad, correo, turno);
+    validarEdad(edad);
+    validarFechasContrato(LocalDate.now(), fechaFinContrato);
+    validarLimiteEnfermerasPorTurno(turno, null);
+    validarImagen(imagen);
+
+    // Crear nueva enfermera
+    Enfermera nuevaEnfermera = new Enfermera(
+        primerNombre, segundoNombre, primerApellido, segundoApellido,
+        edad, "Femenino", nacionalidad, cedula, turno, 
+        LocalDate.now(), fechaFinContrato, correo, "", ""
+    );
+
+    // Guardar a través del DAO (Singleton)
+    boolean guardado = EnfermeraDAO.getInstancia().guardarEnfermera(nuevaEnfermera, imagen);
+    
+    if (guardado) {
+        return EnfermeraDAO.getInstancia().obtenerEnfermeraPorCedula(cedula);
     }
+    throw new RuntimeException("No se pudo guardar la enfermera");
+}
+
+private void validarImagen(File imagen) {
+    if (imagen == null || !imagen.exists()) {
+        throw new IllegalArgumentException("Debe proporcionar una imagen válida de la enfermera");
+    }
+    
+    // Validar extensión del archivo
+    String nombre = imagen.getName().toLowerCase();
+    if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg") && !nombre.endsWith(".png")) {
+        throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG");
+    }
+}
+    
+    public boolean modificarEnfermera(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
+    try {
+        Enfermera original = obtenerEnfermeraPorCedula(cedulaOriginal);
+        if (original == null) {
+            throw new IllegalArgumentException("Enfermera no encontrada con cédula: " + cedulaOriginal);
+        }
+
+        // Validar campos
+        validarCamposModificacion(cambios);
+        validarEdad((int) cambios.get("edad"));
+        validarFechasContrato(original.getFechaContratacion(), (LocalDate) cambios.get("fechaFin"));
+        validarLimiteEnfermerasPorTurno((String) cambios.get("turno"), cedulaOriginal);
+
+        // Construir enfermera modificada manteniendo credenciales
+        Enfermera enfermeraModificada = new Enfermera(
+            (String) cambios.get("primerNombre"),
+            (String) cambios.get("segundoNombre"),
+            (String) cambios.get("primerApellido"),
+            (String) cambios.get("segundoApellido"),
+            (int) cambios.get("edad"),
+            "Femenino",
+            (String) cambios.get("nacionalidad"),
+            cedulaOriginal, // Mantener la cédula original
+            (String) cambios.get("turno"),
+            original.getFechaContratacion(), // Mantener fecha original
+            (LocalDate) cambios.get("fechaFin"),
+            (String) cambios.get("correo"),
+            original.getUsuario(), // Mantener usuario
+            original.getContrasena() // Mantener contraseña
+        );
+
+        // Pasar la nueva imagen si existe, sino mantener la original
+        File imagenFinal = (nuevaImagen != null) ? nuevaImagen : 
+                         (original.getRutaImagen() != null && !original.getRutaImagen().isEmpty()) ? 
+                         new File(original.getRutaImagen()) : null;
+
+        return enfermeraDAO.modificarEnfermera(cedulaOriginal, enfermeraModificada, imagenFinal);
+    } catch (IllegalArgumentException e) {
+        throw e;
+    } catch (Exception e) {
+        throw new RuntimeException("Error al modificar enfermera: " + e.getMessage(), e);
+    }
+}
 
     private boolean procesarModificacion(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
         Enfermera original = obtenerEnfermeraPorCedula(cedulaOriginal);
@@ -204,17 +276,7 @@ public class EnfermeraController {
         }
     }
 
-    private void validarImagen(File imagen) {
-        if (imagen == null || !imagen.exists()) {
-            throw new IllegalArgumentException("El archivo de imagen no existe");
-        }
-
-        String nombre = imagen.getName().toLowerCase();
-        if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg")
-                && !nombre.endsWith(".png") && !nombre.endsWith(".gif")) {
-            throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, PNG o GIF");
-        }
-    }
+   
 
     private void validarFechasContrato(LocalDate inicio, LocalDate fin) {
         if (fin == null) {

@@ -12,7 +12,7 @@ import DAO.CoordinadorDeActividadesDAO;
 import javax.swing.SwingWorker;
 import javax.swing.SwingUtilities;
 import Model.Constants.RolEnum;
-
+import View.FrmCamara;
 import DAO.EnfermeraDAO;
 import DAO.GuardiaDAO;
 import Model.Constants.RolEnum;
@@ -36,6 +36,8 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -77,9 +79,7 @@ public class Director extends javax.swing.JFrame {
     EnfermeraDAO enfermeraDAO = new EnfermeraDAO();
     private EnfermeraController enfermeraController;
 
-    /**
-     * Creates new form Director
-     */
+    private BufferedImage imagenCapturadaModificacion;
     private CoordinadorDeActividadesController coordinadorController;
     private GuardiaController guardiaController;
     private String rutaImagenSeleccionada = "";
@@ -2521,8 +2521,11 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_EliminarActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-     try {
-        // Obtener datos del formulario
+    try {
+        // Obtener instancia Singleton del controller
+        EnfermeraController controller = EnfermeraController.getInstancia();
+        
+        // Obtener datos del formulario (solo obtención, sin validación)
         String primerNombre = txtPrimerNombre1.getText().trim();
         String segundoNombre = txtSegundoNombre1.getText().trim();
         String primerApellido = txtPrimerApellido1.getText().trim();
@@ -2532,41 +2535,26 @@ public class Director extends javax.swing.JFrame {
         String nacionalidad = txtNacionalidad1.getText().trim();
         String correo = txtCorreo1.getText().trim();
         String turno = cmbTurno1.getSelectedItem().toString();
-        
-        // Validar fecha
-        if (dateFinContrato1.getDate() == null) {
-            JOptionPane.showMessageDialog(this, 
-                "Debe seleccionar una fecha de fin de contrato",
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
         LocalDate fechaFin = dateFinContrato1.getDate().toInstant()
                            .atZone(ZoneId.systemDefault()).toLocalDate();
-
-        // Llamar al controller
-        Enfermera nuevaEnfermera = enfermeraController.registrarEnfermera(
-            primerNombre, 
-            segundoNombre, 
-            primerApellido, 
-            segundoApellido,
-            edad, 
-            cedula, 
-            nacionalidad, 
-            correo, 
-            turno, 
-            fechaFin,
-            imagenSeleccionadaMod
+        
+        // Llamar al controller (todas las validaciones están ahí)
+        Enfermera nuevaEnfermera = controller.registrarEnfermera(
+            primerNombre, segundoNombre, primerApellido, segundoApellido,
+            edad, cedula, nacionalidad, correo, turno, fechaFin,
+            imagenSeleccionadaMod // Archivo de imagen
         );
         
-        if (nuevaEnfermera != null) {
-            // Limpiar y actualizar
-            limpiarFormularioEnfermera();
-            actualizarTablaEnfermeras();
-        }
+        // Si llegamos aquí, todo salió bien
+        limpiarFormularioEnfermera();
+        actualizarTablaEnfermeras();
+        JOptionPane.showMessageDialog(this,
+            "Enfermera registrada exitosamente!",
+            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(this, 
-            "La edad debe ser un número válido",
+            "La edad debe ser un número válido", 
             "Error", JOptionPane.ERROR_MESSAGE);
     } catch (IllegalArgumentException e) {
         JOptionPane.showMessageDialog(this, 
@@ -2577,8 +2565,7 @@ public class Director extends javax.swing.JFrame {
             "Error inesperado: " + e.getMessage(), 
             "Error", JOptionPane.ERROR_MESSAGE);
         e.printStackTrace();
-    } 
-
+    }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     public void actualizarTabla() {
@@ -2863,47 +2850,47 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCorreo1KeyTyped
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Seleccionar imagen de la enfermera");
+    // Mostrar opciones al usuario
+    Object[] options = {"Tomar Foto", "Seleccionar Archivo"};
+    int opcion = JOptionPane.showOptionDialog(
+        this,
+        "Seleccione cómo obtener la imagen:",
+        "Imagen de la enfermera",
+        JOptionPane.DEFAULT_OPTION,
+        JOptionPane.QUESTION_MESSAGE,
+        null,
+        options,
+        options[0]
+    );
 
-        // Filtrar solo imágenes
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "Imágenes (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif");
-        fileChooser.setFileFilter(filter);
+    try {
+        File imagen = null;
+        if (opcion == 0) { // Tomar Foto
+            imagen = EnfermeraController.getInstancia().capturarImagenEnfermera();
+        } else { // Seleccionar Archivo
+            JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Imágenes", "jpg", "jpeg", "png");
+            fileChooser.setFileFilter(filter);
 
-        int resultado = fileChooser.showOpenDialog(this);
-
-        if (resultado == JFileChooser.APPROVE_OPTION) {
-            imagenSeleccionadaMod = fileChooser.getSelectedFile();
-
-            try {
-                // Validar tamaño (max 2MB)
-                if (imagenSeleccionadaMod.length() > 2 * 1024 * 1024) {
-                    JOptionPane.showMessageDialog(this,
-                            "La imagen no debe superar los 2MB",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                    imagenSeleccionadaMod = null;
-                    return;
-                }
-
-                // Mostrar previsualización
-                ImageIcon icono = new ImageIcon(imagenSeleccionadaMod.getAbsolutePath());
-                Image imagenEscalada = icono.getImage()
-                        .getScaledInstance(
-                                lblImagen1.getWidth(),
-                                lblImagen1.getHeight(),
-                                Image.SCALE_SMOOTH
-                        );
-                lblImagen1.setIcon(new ImageIcon(imagenEscalada));
-
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this,
-                        "Error al cargar la imagen: " + e.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                imagenSeleccionadaMod = null;
-                lblImagen1.setIcon(null);
+            if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                imagen = fileChooser.getSelectedFile();
             }
         }
+
+        // Mostrar previsualización
+        if (imagen != null) {
+            ImageIcon icono = new ImageIcon(imagen.getAbsolutePath());
+            Image img = icono.getImage()
+                    .getScaledInstance(lblImagen1.getWidth(), lblImagen1.getHeight(), Image.SCALE_SMOOTH);
+            lblImagen1.setIcon(new ImageIcon(img));
+            imagenSeleccionadaMod = imagen;
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+            "Error al obtener imagen: " + e.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void txtCedula1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedula1ActionPerformed
@@ -2924,40 +2911,53 @@ public class Director extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         try {
-            String cedulaOriginal = txtCedulaMod1.getText().trim();
+        String cedulaOriginal = txtCedulaMod1.getText().trim();
 
-            Map<String, Object> cambios = new HashMap<>();
-            cambios.put("primerNombre", txtPrimerNombreMod1.getText().trim());
-            cambios.put("segundoNombre", txtSegundoNombreMod1.getText().trim());
-            cambios.put("primerApellido", txtPrimerApellidoMod1.getText().trim());
-            cambios.put("segundoApellido", txtSegundoApellidoMod1.getText().trim());
-            cambios.put("edad", Integer.parseInt(txtEdadMod1.getText().trim()));
-            cambios.put("nacionalidad", txtNacionalidadMod1.getText().trim());
-            cambios.put("correo", txtCorreoMod1.getText().trim());
-            cambios.put("turno", cmbTurnoMod1.getSelectedItem().toString());
-            cambios.put("fechaFin", dateFinContratoMod1.getDate().toInstant()
-                    .atZone(ZoneId.systemDefault()).toLocalDate());
-
-            boolean resultado = enfermeraController.modificarEnfermera(
-                    cedulaOriginal, cambios, imagenSeleccionadaMod
-            );
-
-            if (resultado) {
-                JOptionPane.showMessageDialog(this,
-                        "Enfermera modificada con éxito",
-                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                actualizarTablaEnfermeras();
-                jTabbedPane1.setSelectedComponent(MostrarEnfermeras);
-            }
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
+        // Validar fecha de fin de contrato
+        if (dateFinContratoMod1.getDate() == null) {
             JOptionPane.showMessageDialog(this,
-                    "Error al modificar: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+                "Debe seleccionar una fecha de fin de contrato",
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
+        Map<String, Object> cambios = new HashMap<>();
+        cambios.put("primerNombre", txtPrimerNombreMod1.getText().trim());
+        cambios.put("segundoNombre", txtSegundoNombreMod1.getText().trim());
+        cambios.put("primerApellido", txtPrimerApellidoMod1.getText().trim());
+        cambios.put("segundoApellido", txtSegundoApellidoMod1.getText().trim());
+        cambios.put("edad", Integer.parseInt(txtEdadMod1.getText().trim()));
+        cambios.put("nacionalidad", txtNacionalidadMod1.getText().trim());
+        cambios.put("correo", txtCorreoMod1.getText().trim());
+        cambios.put("turno", cmbTurnoMod1.getSelectedItem().toString());
+        cambios.put("fechaFin", dateFinContratoMod1.getDate().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDate());
+
+        // Usar la imagen seleccionada (puede ser null si no se cambió)
+        boolean resultado = enfermeraController.modificarEnfermera(
+            cedulaOriginal, 
+            cambios, 
+            imagenSeleccionadaMod // Este es el File de la imagen capturada/previamente seleccionada
+        );
+
+        if (resultado) {
+            JOptionPane.showMessageDialog(this,
+                "Enfermera modificada con éxito",
+                "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            actualizarTablaEnfermeras();
+            jTabbedPane1.setSelectedComponent(MostrarEnfermeras);
+            
+            // Limpiar la imagen seleccionada después de modificar
+            imagenSeleccionadaMod = null;
+        }
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+            "Error al modificar: " + e.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
     }//GEN-LAST:event_jButton7ActionPerformed
 
     public Enfermera obtenerDatosSeleccionados() {
@@ -2984,46 +2984,50 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCorreoMod1KeyTyped
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Seleccionar nueva imagen");
-        fileChooser.setFileFilter(new FileNameExtensionFilter(
-                "Imágenes", "jpg", "jpeg", "png", "gif"));
+   // Mostrar opciones al usuario (cámara o selección de archivo)
+    Object[] options = {"Usar Cámara", "Seleccionar Archivo", "Cancelar"};
+    int opcion = JOptionPane.showOptionDialog(this,
+        "¿Cómo desea obtener la imagen?",
+        "Seleccionar Imagen",
+        JOptionPane.YES_NO_CANCEL_OPTION,
+        JOptionPane.QUESTION_MESSAGE,
+        null,
+        options,
+        options[0]);
 
-        int resultado = fileChooser.showOpenDialog(this);
+    try {
+        File nuevaImagen = null;
+        
+        if (opcion == 0) { // Usar cámara
+            nuevaImagen = enfermeraController.capturarImagenEnfermera();
+        } else if (opcion == 1) { // Seleccionar archivo
+            JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Imágenes", "jpg", "png", "jpeg");
+            fileChooser.setFileFilter(filter);
 
-        if (resultado == JFileChooser.APPROVE_OPTION) {
-            File nuevaImagen = fileChooser.getSelectedFile();
-
-            try {
-                // Validar tamaño máximo (2MB)
-                long sizeInMB = nuevaImagen.length() / (1024 * 1024);
-                if (sizeInMB > 2) {
-                    JOptionPane.showMessageDialog(this,
-                            "La imagen no debe superar los 2MB",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                // Mostrar previsualización
-                ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
-                Image imagenEscalada = icono.getImage()
-                        .getScaledInstance(
-                                lblImagenMod1.getWidth(),
-                                lblImagenMod1.getHeight(),
-                                Image.SCALE_SMOOTH
-                        );
-                lblImagenMod1.setIcon(new ImageIcon(imagenEscalada));
-
-                // Guardar referencia al nuevo archivo
-                imagenSeleccionadaMod = nuevaImagen;
-
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this,
-                        "Error al cargar la imagen: " + e.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                imagenSeleccionadaMod = null;
+            if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                nuevaImagen = fileChooser.getSelectedFile();
             }
         }
+        
+        if (nuevaImagen != null) {
+            // Mostrar previsualización
+            ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
+            Image imagenEscalada = icono.getImage()
+                    .getScaledInstance(
+                            lblImagenMod1.getWidth(),
+                            lblImagenMod1.getHeight(),
+                            Image.SCALE_SMOOTH
+                    );
+            lblImagenMod1.setIcon(new ImageIcon(imagenEscalada));
+            imagenSeleccionadaMod = nuevaImagen;
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+                "Error al obtener imagen: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void txtCorreo4FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreo4FocusLost
