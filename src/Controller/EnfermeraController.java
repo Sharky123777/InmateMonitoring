@@ -291,6 +291,8 @@ private void validarImagen(File imagen) {
     private void validarEdad(int edad) {
         if (edad < 18 || edad > 70) {
             throw new IllegalArgumentException("La edad debe estar entre 18 y 70 años");
+        } if (edad < 0) {
+            throw new IllegalArgumentException("La edad debe ser un número valido");
         }
     }
     
