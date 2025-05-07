@@ -58,7 +58,7 @@ public class EnfermeraController {
     String nacionalidad, String correo, String turno, LocalDate fechaFinContrato,
     File imagen) throws IOException {
     
-    // Validaciones (todas las reglas de negocio aquí)
+    
     validarCamposObligatorios(primerNombre, primerApellido, segundoApellido, 
             edad, cedula, nacionalidad, correo, turno);
     validarEdad(edad);

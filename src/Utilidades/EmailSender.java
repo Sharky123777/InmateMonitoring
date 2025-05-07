@@ -1,27 +1,32 @@
-package Model.Entities;
+package Utilidades;
 
 import Model.Constants.RolEnum;
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.util.Properties;
+import java.io.File;
 
 public class EmailSender {
     private static EmailSender instancia;
     private final String username;
     private final String password;
     private final Properties props;
-    private final String logoPath = "C:\\Users\\gameV\\Documents\\NetBeansProjects\\InmateMonitorinG\\src\\Pictures\\inpecLooooogo.png"; // Ruta al logo de la institución
+    private final String logoPath;
 
     private EmailSender() {
         // Configuración del servidor de correo (ajusta estos valores)
         this.username = "imsharlok@gmail.com";
         this.password = "aydondnxwjrjhagz"; // sin espacios
         
+        // Usa rutas relativas o corrige las barras invertidas
+        this.logoPath = System.getProperty("user.dir") + "/src/Pictures/inpecLooooogo.png";
+        
         this.props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
     }
 
     public static synchronized EmailSender getInstancia() {
@@ -32,6 +37,13 @@ public class EmailSender {
     }
 
     public boolean enviarCredenciales(String destinatario, String usuario, String contrasena, RolEnum rol) {
+        if (destinatario == null || destinatario.isEmpty() || 
+            usuario == null || usuario.isEmpty() || 
+            contrasena == null || contrasena.isEmpty()) {
+            System.err.println("Error: Datos de correo inválidos");
+            return false;
+        }
+
         try {
             Session session = Session.getInstance(props,
                 new Authenticator() {
@@ -46,7 +58,7 @@ public class EmailSender {
             message.setSubject("Credenciales de Acceso - Sistema de Monitoreo de Reclusos");
 
             // Crear parte multipart para texto e imagen
-            Multipart multipart = new MimeMultipart();
+            Multipart multipart = new MimeMultipart("related");
 
             // Parte HTML del mensaje
             MimeBodyPart htmlPart = new MimeBodyPart();
@@ -56,21 +68,41 @@ public class EmailSender {
 
             // Parte de la imagen (logo)
             try {
-                MimeBodyPart imagePart = new MimeBodyPart();
-                imagePart.attachFile(logoPath);
-                imagePart.setContentID("<logo>");
-                imagePart.setDisposition(MimeBodyPart.INLINE);
-                multipart.addBodyPart(imagePart);
+                File logoFile = new File(logoPath);
+                if (logoFile.exists()) {
+                    MimeBodyPart imagePart = new MimeBodyPart();
+                    imagePart.attachFile(logoFile);
+                    imagePart.setContentID("<logo>");
+                    imagePart.setDisposition(MimeBodyPart.INLINE);
+                    imagePart.setHeader("Content-Type", "image/png");
+                    multipart.addBodyPart(imagePart);
+                } else {
+                    System.err.println("El archivo de logo no existe en: " + logoPath);
+                }
             } catch (Exception e) {
-                System.err.println("No se pudo adjuntar el logo: " + e.getMessage());
+                System.err.println("Error al adjuntar el logo: " + e.getMessage());
                 // Continuar sin la imagen si hay error
             }
 
             message.setContent(multipart);
             Transport.send(message);
+            System.out.println("Correo enviado exitosamente a: " + destinatario);
             return true;
         } catch (MessagingException e) {
             System.err.println("Error al enviar correo: " + e.getMessage());
+            if (e instanceof SendFailedException) {
+                SendFailedException sfe = (SendFailedException) e;
+                Address[] invalid = sfe.getInvalidAddresses();
+                if (invalid != null) {
+                    System.err.println("Direcciones inválidas:");
+                    for (Address a : invalid) {
+                        System.err.println(a.toString());
+                    }
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            System.err.println("Error inesperado al enviar correo: " + e.getMessage());
             return false;
         }
     }
@@ -116,6 +148,8 @@ public class EmailSender {
     }
 
     private String obtenerSaludoPorRol(RolEnum rol) {
+        if (rol == null) return "Estimado Usuario";
+        
         switch (rol) {
             case DIRECTOR:
                 return "Estimado Director";
@@ -133,17 +167,19 @@ public class EmailSender {
     }
 
     private String formatearRol(RolEnum rol) {
-    String[] palabras = rol.toString().split("_");
-    StringBuilder resultado = new StringBuilder();
-    
-    for (String palabra : palabras) {
-        if (!palabra.isEmpty()) {
-            resultado.append(Character.toUpperCase(palabra.charAt(0)))
-                   .append(palabra.substring(1).toLowerCase())
-                   .append(" ");
+        if (rol == null) return "Usuario";
+        
+        String[] palabras = rol.toString().split("_");
+        StringBuilder resultado = new StringBuilder();
+
+        for (String palabra : palabras) {
+            if (!palabra.isEmpty()) {
+                resultado.append(Character.toUpperCase(palabra.charAt(0)))
+                       .append(palabra.substring(1).toLowerCase())
+                       .append(" ");
+            }
         }
+
+        return resultado.toString().trim();
     }
-    
-    return resultado.toString().trim();
-}
 }

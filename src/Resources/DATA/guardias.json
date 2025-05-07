@@ -63,6 +63,22 @@
       "sexo": "Femenino",
       "nacionalidad": "adaw",
       "identificacion": "271371231"
+    },
+    {
+      "cargo": "Guardia jefe",
+      "turno": "Diurno",
+      "fechaInicioContrato": "2025-05-07",
+      "fechaFinContrato": "2025-06-08",
+      "rutaImagen": "src/Resources/imagenes_guardias/2173817831_1746648194125.jpg",
+      "correo": "haider32108@gmail.com",
+      "primerNombre": "Ana",
+      "segundoNombre": "",
+      "primerApellido": "Mejia",
+      "segundoApellido": "Pabon",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "papaAsada",
+      "identificacion": "2173817831"
     }
   ]
 }

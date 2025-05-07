@@ -2,7 +2,7 @@ package DAO;
 
 import Model.Entities.Enfermera;
 import Model.Constants.RolEnum;
-import Model.Entities.EmailSender;
+import Utilidades.EmailSender;
 import Model.Entities.Usuario;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -172,17 +172,21 @@ public class EnfermeraDAO {
     
     
    public boolean guardarEnfermera(Enfermera enfermera, File imagen) throws IOException {
-    // Validar que la imagen existe (ya validado en controller)
+    // Generar y asignar credenciales
+    List<Usuario> usuarios = obtenerTodosUsuarios();
+    String usuario = generarUsuarioUnico(enfermera.getPrimerNombre(), enfermera.getPrimerApellido(), usuarios);
+    String contrasena = generarContrasena();
+    
+    enfermera.setUsuario(usuario);
+    enfermera.setContrasena(contrasena);
+
+    // Guardar imagen
     String nombreImagen = enfermera.getIdentificacion() + "_" + 
-                        System.currentTimeMillis() + 
-                        imagen.getName().substring(imagen.getName().lastIndexOf("."));
+            System.currentTimeMillis() + 
+            imagen.getName().substring(imagen.getName().lastIndexOf("."));
     
     String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-    
-    // Crear directorio si no existe
     Files.createDirectories(Paths.get(RUTA_IMAGENES));
-    
-    // Copiar la imagen
     Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
     enfermera.setRutaImagen(rutaImagenFinal);
 
@@ -191,15 +195,17 @@ public class EnfermeraDAO {
     enfermeras.add(enfermera);
     guardarListaEnfermeras(enfermeras);
 
+    // Guardar usuario
+    Usuario nuevoUsuario = new Usuario(usuario, contrasena, RolEnum.ENFERMERA);
+    guardarUsuario(nuevoUsuario);
+
     // Enviar credenciales
-    EmailSender.getInstancia().enviarCredenciales(
+    return EmailSender.getInstancia().enviarCredenciales(
         enfermera.getCorreo(), 
-        enfermera.getUsuario(), 
-        enfermera.getContrasena(),
+        usuario, 
+        contrasena,
         RolEnum.ENFERMERA
     );
-
-    return true;
 }
     
    public List<Enfermera> obtenerEnfermeras() {
