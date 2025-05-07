@@ -1,7 +1,6 @@
 package DAO;
 
 import Model.Entities.Enfermera;
-import Model.Entities.Guardia;
 import Model.Constants.RolEnum;
 import Model.Entities.EmailSender;
 import Model.Entities.Usuario;
