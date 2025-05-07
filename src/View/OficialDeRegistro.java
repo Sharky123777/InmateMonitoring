@@ -41,6 +41,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -194,211 +195,189 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         }
     }
 
-public void inicializarMenuPresos() {
-    JMenuItem Expediente = new JMenuItem("Expediente");
-    JMenuItem Informacion = new JMenuItem("Información General");
-    JMenuItem Actualizar = new JMenuItem("Actualizar Información");
-    JMenuItem AñadirDelito = new JMenuItem("Añadir Delito");
-    JMenu cambiarEstadoMenu = new JMenu("Cambiar Estado");
+    public void inicializarMenuPresos() {
+        JMenu cambiarEstadoMenu = new JMenu("Cambiar Estado");
+        JMenuItem Expediente = new JMenuItem("Expediente");
+        JMenuItem Informacion = new JMenuItem("Información General");
+        JMenuItem Actualizar = new JMenuItem("Actualizar Información");
+        JMenuItem AñadirDelito = new JMenuItem("Añadir Delito");
 
-    JMenuItem fugadoItem = new JMenuItem("Marcar como Fugado");
-    JMenuItem liberarItem = new JMenuItem("Liberar Preso");
-    JMenuItem fallecidoItem = new JMenuItem("Marcar como Fallecido");
+        JMenuItem ActivoItem = new JMenuItem("Marcar como Activo");
+        JMenuItem fugadoItem = new JMenuItem("Marcar como Fugado");
+        JMenuItem liberarItem = new JMenuItem("Liberar Preso");
+        JMenuItem fallecidoItem = new JMenuItem("Marcar como Fallecido");
 
-    cambiarEstadoMenu.add(fugadoItem);
-    cambiarEstadoMenu.add(liberarItem);
-    cambiarEstadoMenu.add(fallecidoItem);
+        cambiarEstadoMenu.add(ActivoItem);
+        cambiarEstadoMenu.add(fugadoItem);
+        cambiarEstadoMenu.add(liberarItem);
+        cambiarEstadoMenu.add(fallecidoItem);
 
-    ppMenuTablaPresos.add(Expediente);
-    ppMenuTablaPresos.add(Informacion);
-    ppMenuTablaPresos.add(AñadirDelito);
-    ppMenuTablaPresos.add(Actualizar);
-    ppMenuTablaPresos.addSeparator();
-    ppMenuTablaPresos.add(cambiarEstadoMenu);
+        ppMenuTablaPresos.add(Expediente);
+        ppMenuTablaPresos.add(Informacion);
+        ppMenuTablaPresos.add(AñadirDelito);
+        ppMenuTablaPresos.add(Actualizar);
+        ppMenuTablaPresos.addSeparator();
+        ppMenuTablaPresos.add(cambiarEstadoMenu);
 
-    TablaPresos.setComponentPopupMenu(ppMenuTablaPresos);
+        TablaPresos.setComponentPopupMenu(ppMenuTablaPresos);
 
-    Expediente.addActionListener(e -> {
-        try {
+        Expediente.addActionListener(e -> {
+            try {
+                int fila = TablaPresos.getSelectedRow();
+                if (fila == -1) {
+                    throw new IllegalArgumentException("Seleccione un preso primero");
+                }
+
+                String identificacion = TablaPresos.getValueAt(fila, 5).toString();
+                expedienteController.cargarExpedienteCompleto(
+                        identificacion, lblFechaSalida, RegistroNum, CodExpe, FechaAper, Estado, Juzgado,
+                        nivelRiesgExp, nom, ape, edad, identi, naciona, fotoPresoExpediente,
+                        tablaExpediente, sentenciaTotaal
+                );
+                OficialDeRegistroView.setSelectedIndex(2);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }
+        });
+
+        AñadirDelito.addActionListener(e -> {
             int fila = TablaPresos.getSelectedRow();
-            if (fila == -1) throw new IllegalArgumentException("Seleccione un preso primero");
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(null, "Seleccione un preso primero", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-            String identificacion = TablaPresos.getValueAt(fila, 5).toString();
-            expedienteController.cargarExpedienteCompleto(
-                identificacion, lblFechaSalida, RegistroNum, CodExpe, FechaAper, Estado, Juzgado,
-                nivelRiesgExp, nom, ape, edad, identi, naciona, fotoPresoExpediente,
-                tablaExpediente, sentenciaTotaal
-            );
-            OficialDeRegistroView.setSelectedIndex(2);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
-        }
-    });
-
-    AñadirDelito.addActionListener(e -> {
-        int fila = TablaPresos.getSelectedRow();
-        if (fila == -1) {
-            JOptionPane.showMessageDialog(null, "Seleccione un preso primero", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        String identificacion = TablaPresos.getValueAt(fila, 5).toString();
-        Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
-
-        if (preso == null) {
-            JOptionPane.showMessageDialog(null, "Preso no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        presoOriginal = preso;
-        OficialDeRegistroView.setSelectedIndex(7);
-    });
-
-    Actualizar.addActionListener(e -> {
-        int fila = TablaPresos.getSelectedRow();
-        if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un preso", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        String id = TablaPresos.getValueAt(fila, 5).toString();
-        Preso preso = new PresoDAO().buscarPresoPorIdentificacion(id);
-
-        if (preso != null) {
-            cargarDatosPresoEnFormularioActualizacion(preso);
-            OficialDeRegistroView.setSelectedIndex(0);
-            TabbedAñadirInformacionGeneral.setSelectedIndex(3);
-        } else {
-            JOptionPane.showMessageDialog(this, "Preso no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    });
-
-    Informacion.addActionListener(e -> {
-        int fila = TablaPresos.getSelectedRow();
-        if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "¡Seleccione un preso primero!", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        try {
             String identificacion = TablaPresos.getValueAt(fila, 5).toString();
             Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
 
             if (preso == null) {
-                JOptionPane.showMessageDialog(this, "No se encontró el preso", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Preso no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            nombre.setText(preso.getNombresCompletos());
-            apellido.setText(preso.getApellidosCompletos());
-            edad1.setText(String.valueOf(preso.getEdad()));
-            nacionali.setText(preso.getNacionalidad());
-            sexo.setText(preso.getSexo());
-            identi.setText(preso.getIdentificacion());
-            estatura.setText(String.valueOf(preso.getEstatura()));
-            peso.setText(String.valueOf(preso.getPeso()));
-            sangre.setText(preso.getGrupoSanguineo());
+            presoOriginal = preso;
+            OficialDeRegistroView.setSelectedIndex(7);
+        });
 
-            ImageIcon icon = new ImageIcon(preso.getFotoPath());
-            Image img = icon.getImage().getScaledInstance(ImagenPresoInformacion.getWidth(), ImagenPresoInformacion.getHeight(), Image.SCALE_SMOOTH);
-            ImagenPresoInformacion.setIcon(new ImageIcon(img));
-
-            OficialDeRegistroView.setSelectedIndex(3);
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error al cargar información: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    });
-
-    fugadoItem.addActionListener(e -> manejarCambioEstado(EstadoPresoEnum.FUGADO));
-    liberarItem.addActionListener(e -> manejarCambioEstado(EstadoPresoEnum.LIBERADO));
-    fallecidoItem.addActionListener(e -> manejarCambioEstado(EstadoPresoEnum.FALLECIDO));
-}
-
-private void manejarCambioEstado(EstadoPresoEnum nuevoEstado) {
-    try {
-        int filaSeleccionada = TablaPresos.getSelectedRow();
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(null, 
-                "Debe seleccionar un preso de la tabla",
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        Preso preso = presoController.obtenerPresoDesdeTabla(filaSeleccionada, TablaPresos);
-        String tituloDialogo = "";
-        LocalDate fechaCambio;
-
-        switch(nuevoEstado) {
-            case FUGADO:
-                tituloDialogo = "Fecha de fuga";
-                fechaCambio = LocalDate.now();
-                break;
-            case LIBERADO:
-                tituloDialogo = "Fecha de liberación";
-                ValidarFechaDialog dialogoLiberacion = new ValidarFechaDialog(null, true);
-                dialogoLiberacion.setTitle(tituloDialogo);
-                dialogoLiberacion.setVisible(true);
-                if (!dialogoLiberacion.isAceptado() || dialogoLiberacion.getFechaSeleccionada() == null) return;
-                fechaCambio = dialogoLiberacion.getFechaSeleccionada().toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate();
-                break;
-            case FALLECIDO:
-                tituloDialogo = "Fecha de defunción";
-                ValidarFechaDialog dialogoDefuncion = new ValidarFechaDialog(null, true);
-                dialogoDefuncion.setTitle(tituloDialogo);
-                dialogoDefuncion.setVisible(true);
-                if (!dialogoDefuncion.isAceptado() || dialogoDefuncion.getFechaSeleccionada() == null) return;
-                fechaCambio = dialogoDefuncion.getFechaSeleccionada().toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate();
-                break;
-            default:
+        Actualizar.addActionListener(e -> {
+            int fila = TablaPresos.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this, "Seleccione un preso", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
-        }
+            }
 
-        int confirmacion = JOptionPane.showConfirmDialog(null,
-            "<html>¿Confirmar cambio de estado a <b>" + nuevoEstado + "</b>?<br><br>" +
-            "Preso: " + preso.getNombresCompletos() + "<br>" +
-            "Identificación: " + preso.getIdentificacion() + "<br>" +
-            "Fecha: " + fechaCambio.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "</html>",
-            "Confirmar cambio",
-            JOptionPane.YES_NO_OPTION);
+            String id = TablaPresos.getValueAt(fila, 5).toString();
+            Preso preso = new PresoDAO().buscarPresoPorIdentificacion(id);
 
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            boolean exito = presoController.cambiarEstadoPreso(
-                preso.getIdentificacion(),
-                nuevoEstado,
-                fechaCambio);
+            if (preso != null) {
+                cargarDatosPresoEnFormularioActualizacion(preso);
+                OficialDeRegistroView.setSelectedIndex(0);
+                TabbedAñadirInformacionGeneral.setSelectedIndex(3);
+            } else {
+                JOptionPane.showMessageDialog(this, "Preso no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
-            if (exito) {
-                JOptionPane.showMessageDialog(null,
-                    "Estado actualizado correctamente a: " + nuevoEstado,
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
-                
+        Informacion.addActionListener(e -> {
+            int fila = TablaPresos.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this, "¡Seleccione un preso primero!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try {
+                String identificacion = TablaPresos.getValueAt(fila, 5).toString();
+                Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
+
+                if (preso == null) {
+                    JOptionPane.showMessageDialog(this, "No se encontró el preso", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                nombre.setText(preso.getNombresCompletos());
+                apellido.setText(preso.getApellidosCompletos());
+                edad1.setText(String.valueOf(preso.getEdad()));
+                nacionali.setText(preso.getNacionalidad());
+                sexo.setText(preso.getSexo());
+                identi.setText(preso.getIdentificacion());
+                estatura.setText(String.valueOf(preso.getEstatura()));
+                peso.setText(String.valueOf(preso.getPeso()));
+                sangre.setText(preso.getGrupoSanguineo());
+
+                ImageIcon icon = new ImageIcon(preso.getFotoPath());
+                Image img = icon.getImage().getScaledInstance(ImagenPresoInformacion.getWidth(), ImagenPresoInformacion.getHeight(), Image.SCALE_SMOOTH);
+                ImagenPresoInformacion.setIcon(new ImageIcon(img));
+
+                OficialDeRegistroView.setSelectedIndex(3);
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error al cargar información: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        fugadoItem.addActionListener(e -> manejarCambioEstado(EstadoPresoEnum.FUGADO));
+        liberarItem.addActionListener(e -> manejarCambioEstado(EstadoPresoEnum.LIBERADO));
+        fallecidoItem.addActionListener(e -> manejarCambioEstado(EstadoPresoEnum.FALLECIDO));
+        ActivoItem.addActionListener(e -> manejarCambioEstado(EstadoPresoEnum.ACTIVO));
+    }
+
+    private void manejarCambioEstado(EstadoPresoEnum nuevoEstado) {
+        try {
+            int filaSeleccionada = TablaPresos.getSelectedRow();
+            if (filaSeleccionada == -1) {
+                JOptionPane.showMessageDialog(null, "Seleccione un preso", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String identificacion = TablaPresos.getValueAt(filaSeleccionada, 5).toString();
+            Preso preso = presoController.obtenerPresoDesdeTabla(filaSeleccionada, TablaPresos);
+            LocalDate fechaCambio;
+
+            if (nuevoEstado == EstadoPresoEnum.FUGADO) {
+                fechaCambio = LocalDate.now();
+            } else {
+                ValidarFechaDialog dialogo = new ValidarFechaDialog(null, true);
+                dialogo.setTitle("Fecha para " + nuevoEstado.toString().toLowerCase());
+                dialogo.setVisible(true);
+
+                if (!dialogo.isAceptado() || dialogo.getFechaSeleccionada() == null) {
+                    return;
+                }
+
+                fechaCambio = dialogo.getFechaSeleccionada().toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate();
+            }
+
+            String mensaje = String.format(
+                    "¿Confirmar cambio de estado?\n\n"
+                    + "Preso: %s %s\n"
+                    + "ID: %s\n"
+                    + "Nuevo estado: %s\n"
+                    + "Fecha: %s",
+                    preso.getPrimerNombre(), preso.getPrimerApellido(),
+                    identificacion,
+                    nuevoEstado,
+                    fechaCambio.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+            );
+
+            int confirmacion = JOptionPane.showConfirmDialog(
+                    null, mensaje, "Confirmar", JOptionPane.YES_NO_OPTION);
+
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                presoController.cambiarEstadoPreso(identificacion, nuevoEstado, fechaCambio);
+                JOptionPane.showMessageDialog(null, "Estado actualizado", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
                 cargarTodosLosPresos();
                 cargarPresosInactivos();
-            } else {
-                JOptionPane.showMessageDialog(null,
-                    "No se pudo actualizar el estado del preso.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
             }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(null,
-            "Error: " + ex.getMessage(),
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
-        ex.printStackTrace();
     }
-}
-
-
-
 
     private void cargarDatosPresoEnFormularioActualizacion(Preso preso) {
         this.presoOriginal = preso;
@@ -870,6 +849,7 @@ private void manejarCambioEstado(EstadoPresoEnum nuevoEstado) {
         sentenciaTotaal = new javax.swing.JLabel();
         jLabel81 = new javax.swing.JLabel();
         lblFechaSalida = new javax.swing.JLabel();
+        btnVerIntentosFuga = new javax.swing.JButton();
         DatosPersonalesPreso = new javax.swing.JPanel();
         jLabel68 = new javax.swing.JLabel();
         jLabel69 = new javax.swing.JLabel();
@@ -2173,6 +2153,14 @@ private void manejarCambioEstado(EstadoPresoEnum nuevoEstado) {
         jPanel5.add(lblFechaSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 40, 170, 30));
 
         Expediente.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 240, 650, 80));
+
+        btnVerIntentosFuga.setText("Ver intento de fugas");
+        btnVerIntentosFuga.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerIntentosFugaActionPerformed(evt);
+            }
+        });
+        Expediente.add(btnVerIntentosFuga, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 300, 190, -1));
 
         OficialDeRegistroView.addTab("Expediente", Expediente);
 
@@ -3727,6 +3715,31 @@ private void manejarCambioEstado(EstadoPresoEnum nuevoEstado) {
         // TODO add your handling code here:
     }//GEN-LAST:event_cantidadDelitosActionPerformed
 
+    private void btnVerIntentosFugaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerIntentosFugaActionPerformed
+        try {
+            int filaSeleccionada = TablaPresos.getSelectedRow();
+            if (filaSeleccionada == -1) {
+                throw new IllegalStateException("No hay preso seleccionado");
+            }
+
+            String identificacion = TablaPresos.getValueAt(filaSeleccionada, 5).toString();
+
+            IntentosFuga dialog = new IntentosFuga(
+                    (JFrame) SwingUtilities.getWindowAncestor(this),
+                    true,
+                    presoController,
+                    identificacion
+            );
+            dialog.setVisible(true);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al mostrar intentos de fuga: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnVerIntentosFugaActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -3836,6 +3849,7 @@ private void manejarCambioEstado(EstadoPresoEnum nuevoEstado) {
     private javax.swing.JButton btnRegresarAInfoGeneral;
     private javax.swing.JButton btnRegresarAJudicial;
     private javax.swing.JButton btnRestaurarTabla;
+    private javax.swing.JButton btnVerIntentosFuga;
     private javax.swing.JButton cancelarD;
     private javax.swing.JButton cancelarD2;
     private javax.swing.JComboBox<String> cantidadDelitos;

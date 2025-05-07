@@ -3,11 +3,13 @@ package Controller;
 import DAO.CeldaDAO;
 import DAO.DelitoDAO;
 import DAO.ExpedienteDAO;
+import DAO.IntentoFugaDAO;
 import DAO.PresoDAO;
 import Model.Constants.EstadoPresoEnum;
 import Model.Entities.Celda;
 import Model.Entities.Delito;
 import Model.Entities.ExpedienteJudicial;
+import Model.Entities.IntentoFuga;
 import Model.Entities.Preso;
 import Model.Entities.Sentencia;
 import Utilidades.Validador;
@@ -19,6 +21,7 @@ import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -38,6 +41,7 @@ public class PresoController {
 
     private static PresoController instancia;
 
+    private final IntentoFugaDAO intentoFugaDAO = IntentoFugaDAO.getInstancia();
     private final ExpedienteDAO expedienteDAO = ExpedienteDAO.getInstancia();
     private final PresoDAO presoDAO;
     private final CeldaDAO celdaDAO;
@@ -353,7 +357,6 @@ public class PresoController {
                 throw new IllegalArgumentException("La tabla de presos no puede ser nula");
             }
 
-            // Obtener identificación
             String identificacion = tablaPresos.getValueAt(filaSeleccionada, 5).toString();
             Validador.validarFormatoIdentificacion(identificacion);
 
@@ -375,70 +378,6 @@ public class PresoController {
         } catch (Exception e) {
             Validador.mostrarError("Error al obtener preso: " + e.getMessage());
             return null;
-        }
-    }
-
-    public boolean validarLiberacionPreso(Preso preso, Date fechaValidacion) {
-        try {
-            if (preso == null) {
-                throw new IllegalArgumentException("El preso no puede ser nulo");
-            }
-
-            if (fechaValidacion == null) {
-                throw new IllegalArgumentException("La fecha de validación no puede ser nula");
-            }
-
-            LocalDate fechaActual = fechaValidacion.toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate();
-
-            LocalDate fechaSalida;
-            try {
-                fechaSalida = calcularFechaSalidaPreso(preso.getDelitos());
-            } catch (RuntimeException e) {
-                throw new IllegalArgumentException("No se pudo calcular la fecha de salida: " + e.getMessage());
-            }
-
-            if (fechaActual.isBefore(fechaSalida)) {
-                throw new IllegalArgumentException("No se puede liberar: El preso no ha completado su condena.\n"
-                        + "Fecha de liberación: " + fechaSalida.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-            }
-            return true;
-
-        } catch (IllegalArgumentException e) {
-            Validador.mostrarError(e.getMessage());
-            return false;
-        }
-    }
-
-    public boolean eliminarPreso(String identificacion) {
-        try {
-            Validador.validarFormatoIdentificacion(identificacion);
-
-            Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
-            if (preso == null) {
-                throw new IllegalArgumentException("No se encontró el preso con identificación: " + identificacion);
-            }
-
-            if (!validarLiberacionPreso(preso, new Date())) {
-                return false;
-            }
-
-            boolean eliminado = presoDAO.eliminarPreso(identificacion);
-            if (eliminado) {
-                Validador.mostrarInfo("Preso LIBERADO correctamente");
-                return true;
-            } else {
-                Validador.mostrarError("No se pudo Liberar el preso");
-                return false;
-            }
-
-        } catch (IllegalArgumentException e) {
-            Validador.mostrarError(e.getMessage());
-            return false;
-        } catch (Exception e) {
-            Validador.mostrarError("Error inesperado al liberar preso: " + e.getMessage());
-            return false;
         }
     }
 
@@ -600,38 +539,38 @@ public class PresoController {
         return filas;
     }
 
-public List<Object[]> obtenerTodosLosPresosParaTabla() {
-    List<Preso> presosActivos = presoDAO.buscarPorEstado(EstadoPresoEnum.ACTIVO);
-    List<Preso> presosFugados = presoDAO.buscarPorEstado(EstadoPresoEnum.FUGADO);
+    public List<Object[]> obtenerTodosLosPresosParaTabla() {
+        List<Preso> presosActivos = presoDAO.buscarPorEstado(EstadoPresoEnum.ACTIVO);
+        List<Preso> presosFugados = presoDAO.buscarPorEstado(EstadoPresoEnum.FUGADO);
 
-    List<Preso> todosLosPresos = new ArrayList<>();
-    todosLosPresos.addAll(presosActivos);
-    todosLosPresos.addAll(presosFugados);
+        List<Preso> todosLosPresos = new ArrayList<>();
+        todosLosPresos.addAll(presosActivos);
+        todosLosPresos.addAll(presosFugados);
 
-    List<Object[]> filas = new ArrayList<>();
+        List<Object[]> filas = new ArrayList<>();
 
-    for (Preso preso : todosLosPresos) {
-        ImageIcon foto = obtenerFotoPreso(preso);
+        for (Preso preso : todosLosPresos) {
+            ImageIcon foto = obtenerFotoPreso(preso);
 
-        List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(preso.getIdentificacion());
-        preso.setDelitos(delitos);
+            List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(preso.getIdentificacion());
+            preso.setDelitos(delitos);
 
-        filas.add(new Object[]{
-            foto,
-            preso.getId(),
-            preso.getNombresCompletos(),
-            preso.getApellidosCompletos(),
-            preso.getEdad(),
-            preso.getIdentificacion(),
-            preso.getNacionalidad(),
-            preso.getSeccionAsignada(),
-            preso.getCeldaAsignada(),
-            preso.getEstado()
-        });
+            filas.add(new Object[]{
+                foto,
+                preso.getId(),
+                preso.getNombresCompletos(),
+                preso.getApellidosCompletos(),
+                preso.getEdad(),
+                preso.getIdentificacion(),
+                preso.getNacionalidad(),
+                preso.getSeccionAsignada(),
+                preso.getCeldaAsignada(),
+                preso.getEstado()
+            });
+        }
+
+        return filas;
     }
-
-    return filas;
-}
 
     public List<Object[]> obtenerPresosInactivosParaTabla() {
         List<Preso> liberados = presoDAO.buscarPorEstado(EstadoPresoEnum.LIBERADO);
@@ -671,46 +610,6 @@ public List<Object[]> obtenerTodosLosPresosParaTabla() {
         }
 
         return filas;
-    }
-
-    public boolean liberarPreso(String identificacion, Date fechaValidacion, EstadoPresoEnum motivo) {
-        try {
-            Validador.validarFormatoIdentificacion(identificacion);
-
-            Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
-            if (preso == null) {
-                throw new IllegalArgumentException("No se encontró el preso con identificación: " + identificacion);
-            }
-
-            LocalDate fechaLocal = fechaValidacion.toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate();
-
-            if (motivo == EstadoPresoEnum.LIBERADO && !validarLiberacionPreso(preso, fechaValidacion)) {
-                return false;
-            }
-
-            if (motivo == EstadoPresoEnum.FALLECIDO) {
-                preso.setFechaDefuncion(fechaLocal);
-            }
-
-            boolean estadoCambiado = presoDAO.cambiarEstadoPreso(identificacion, motivo, fechaLocal);
-
-            if (estadoCambiado) {
-                Validador.mostrarInfo("Preso marcado como " + motivo + " correctamente");
-                return true;
-            } else {
-                Validador.mostrarError("No se pudo cambiar el estado del preso");
-                return false;
-            }
-
-        } catch (IllegalArgumentException e) {
-            Validador.mostrarError(e.getMessage());
-            return false;
-        } catch (Exception e) {
-            Validador.mostrarError("Error inesperado al cambiar estado del preso: " + e.getMessage());
-            return false;
-        }
     }
 
     public void configurarTablaImagenes(JTable tabla) {
@@ -760,7 +659,6 @@ public List<Object[]> obtenerTodosLosPresosParaTabla() {
         return output;
     }
 
-    
     public boolean cambiarEstadoPreso(String identificacion, EstadoPresoEnum nuevoEstado, LocalDate fechaCambio)
             throws IllegalArgumentException, IllegalStateException {
 
@@ -772,21 +670,61 @@ public List<Object[]> obtenerTodosLosPresosParaTabla() {
             throw new IllegalArgumentException("Estado requerido");
         }
 
-        if (fechaCambio == null) {
-            throw new IllegalArgumentException("Fecha requerida");
+        if (fechaCambio == null || fechaCambio.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("Fecha no válida (nula o futura)");
         }
 
-        if (fechaCambio.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("Fecha no puede ser futura");
+        Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
+        if (preso == null) {
+            throw new IllegalStateException("Preso no encontrado");
         }
 
-        boolean resultado = presoDAO.cambiarEstadoPreso(identificacion, nuevoEstado, fechaCambio);
-
-        if (!resultado) {
-            throw new IllegalStateException("No se pudo actualizar el estado");
+        if (preso.getEstado() == EstadoPresoEnum.FUGADO && nuevoEstado != EstadoPresoEnum.ACTIVO) {
+            throw new IllegalStateException("No se puede liberar/fallecer a un preso fugado. Primero debe ser recapturado (cambiar a ACTIVO)");
         }
 
-        return true;
+        // Validaciones específicas por estado
+        switch (nuevoEstado) {
+            case FUGADO:
+                if (intentoFugaDAO.tieneFugaActiva(identificacion)) {
+                    throw new IllegalStateException("El preso ya tiene una fuga activa sin reingreso");
+                }
+                break;
+
+            case ACTIVO:
+                if (preso.getEstado() == EstadoPresoEnum.FUGADO && !intentoFugaDAO.tieneFugaActiva(identificacion)) {
+                    throw new IllegalStateException("No existe una fuga activa para registrar reingreso");
+                }
+                break;
+
+            case LIBERADO:
+                validarLiberacionCompleta(preso, fechaCambio);
+                break;
+
+            case FALLECIDO:
+                break;
+        }
+
+        return presoDAO.cambiarEstadoPreso(identificacion, nuevoEstado, fechaCambio);
+    }
+
+    private void validarLiberacionCompleta(Preso preso, LocalDate fechaLiberacion) {
+        if (preso.getEstado() == EstadoPresoEnum.FUGADO) {
+            throw new IllegalStateException("No se puede liberar un preso fugado");
+        }
+
+        LocalDate finCondena = calcularFechaSalidaPreso(preso.getDelitos());
+        if (fechaLiberacion.isBefore(finCondena)) {
+            throw new IllegalArgumentException(String.format("No puede ser liberado antes de cumplir su condena.%nFin de condena: %s", finCondena.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+        }
+
+        if (preso.getEstado() == EstadoPresoEnum.LIBERADO) {
+            throw new IllegalStateException("El preso ya está liberado");
+        }
+    }
+
+    public List<IntentoFuga> obtenerIntentosFuga(String identificacionPreso) {
+        return intentoFugaDAO.obtenerPorPreso(identificacionPreso);
     }
 
 }

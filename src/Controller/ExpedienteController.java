@@ -2,10 +2,12 @@ package Controller;
 
 import DAO.DelitoDAO;
 import DAO.ExpedienteDAO;
+import DAO.IntentoFugaDAO;
 import DAO.PresoDAO;
 import Model.Entities.Preso;
 import Model.Entities.Delito;
 import Model.Entities.ExpedienteJudicial;
+import Model.Entities.IntentoFuga;
 import Model.Entities.Sentencia;
 import Utilidades.Validador;
 import javax.swing.ImageIcon;
@@ -20,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
 public class ExpedienteController {
     
     private static ExpedienteController instancia;
+    private final IntentoFugaDAO intentoFugaDAO = IntentoFugaDAO.getInstancia();
     private final ExpedienteDAO expedienteDAO = ExpedienteDAO.getInstancia();
     private final PresoDAO presoDAO;
     private final DelitoDAO delitoDAO;
@@ -215,5 +218,13 @@ private void cargarTablaDelitosUI(List<Delito> delitos, JTable tabla) {
             });
         }
     }
+    
+    public List<IntentoFuga> obtenerIntentosFuga(String identificacionPreso) throws IllegalStateException {
+    try {
+        return intentoFugaDAO.obtenerPorPreso(identificacionPreso);
+    } catch (Exception e) {
+        throw new IllegalStateException("Error al obtener intentos de fuga: " + e.getMessage());
+    }
+}
     
 }
