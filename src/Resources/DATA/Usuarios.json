@@ -1,39 +1,56 @@
 {
   "usuarios": [
     {
-      "usuario": "SharlokAlcazar502*",
-      "password": "CEx*cwE6",
-      "rol": "ENFERMERA"
-    },
-    {
-      "usuario": "CelinaRestrepo139\u0026",
-      "password": "58fpZS#h",
-      "rol": "ENFERMERA"
-    },
-    {
       "usuario": "MaritzaQuintana35\u0026",
       "password": "Mquidd654@",
-      "rol": "DIRECTOR"
+      "rol": "DIRECTOR",
+      "primerNombre": "Maritza",
+      "segundoNombre": "",
+      "primerApellido": "Quintana",
+      "segundoApellido": "Lopez",
+      "edad": 42,
+      "sexo": "Femenino",
+      "nacionalidad": "Colombiana",
+      "identificacion": "987654321"
     },
     {
-      "usuario": "CarlosLopez21#",
-      "password": "C4rl0s@Admn",
-      "rol": "OFICIAL_DE_REGISTRO"
+      "usuario": "wq478*",
+      "password": "HG@9K\u0026T6",
+      "rol": "ENFERMERA",
+      "primerNombre": "w",
+      "segundoNombre": "w",
+      "primerApellido": "q",
+      "segundoApellido": "q",
+      "edad": 64,
+      "sexo": "Femenino",
+      "nacionalidad": "po",
+      "identificacion": "91873819"
     },
     {
-      "usuario": "JuliaRios_Tecnico",
-      "password": "J7l1aTech*",
-      "rol": "PERSONAL_DE_CONTROL"
+      "usuario": "yqR¡!6dm5G",
+      "password": "29917c9bc2384f39d40e5d3a05341393a624c8a9666592ce121722d1ded0fe13",
+      "rol": "COORDINADOR_DE_ACTIVIDADES",
+      "primerNombre": "q",
+      "segundoNombre": "q",
+      "primerApellido": "s",
+      "segundoApellido": "q",
+      "edad": 45,
+      "sexo": "Femenino",
+      "nacionalidad": "a",
+      "identificacion": "9812398193"
     },
     {
-      "usuario": "LauraGomez_Auxiliar",
-      "password": "L4uAux12#",
-      "rol": "COORDINADOR_DE_ACTIVIDADES"
-    },
-    {
-      "usuario": "asdaqqqq204!",
-      "password": "1oB8sAiM",
-      "rol": "ENFERMERA"
+      "usuario": "%lm#¿3RZ",
+      "password": "6df1e495e1f0861bd9a059aeec0d519d9576e737ee35542237e7946ad76bf79e",
+      "rol": "COORDINADOR_DE_ACTIVIDADES",
+      "primerNombre": "q",
+      "segundoNombre": "w",
+      "primerApellido": "w",
+      "segundoApellido": "q",
+      "edad": 54,
+      "sexo": "Femenino",
+      "nacionalidad": "bebe",
+      "identificacion": "023483113"
     }
   ]
 }

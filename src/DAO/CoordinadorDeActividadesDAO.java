@@ -1,5 +1,6 @@
 package DAO;
 
+import Controller.UsuarioController;
 import Model.Entities.CoordinadorDeActividades;
 import Model.Constants.RolEnum;
 import Utilidades.EmailSender;
@@ -18,6 +19,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 public class CoordinadorDeActividadesDAO {
+
     private static final String RUTA_JSON = "C:\\Users\\gameV\\Documents\\NetBeansProjects\\InmateMonitorinG\\src\\Resources\\DATA\\CDA.json";
     private static final String RUTA_IMAGENES = "src/Resources/imagenes_CDA/";
     private static final String RUTA_USUARIOS = "src/Resources/DATA/usuarios.json";
@@ -26,10 +28,10 @@ public class CoordinadorDeActividadesDAO {
 
     public CoordinadorDeActividadesDAO() {
         this.gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-            .create();
-        
+                .setPrettyPrinting()
+                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                .create();
+
         crearDirectoriosSiNoExisten();
     }
 
@@ -45,44 +47,25 @@ public class CoordinadorDeActividadesDAO {
             Files.createDirectories(Paths.get(RUTA_IMAGENES));
             Files.createDirectories(Paths.get(RUTA_JSON).getParent());
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, 
-                "Error al crear directorios: " + e.getMessage(), 
-                "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                    "Error al crear directorios: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private static class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
+
         private final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
-        
+
         @Override
         public JsonElement serialize(LocalDate date, Type typeOfSrc, JsonSerializationContext context) {
             return new JsonPrimitive(date.format(formatter));
         }
-        
-        @Override
-        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) 
-            throws JsonParseException {
-            return LocalDate.parse(json.getAsString(), formatter);
-        }
-    }
 
-    private String generarUsuarioUnico(String primerNombre, String primerApellido, List<Usuario> usuariosExistentes) {
-        Random random = new Random();
-        String usuarioBase = primerNombre + primerApellido;
-        String caracteresEspeciales = "!@#$%^&*";
-        
-        while (true) {
-            int numeroRandom = random.nextInt(1000) + 1;
-            char caracterEspecial = caracteresEspeciales.charAt(random.nextInt(caracteresEspeciales.length()));
-            
-            String usuarioGenerado = usuarioBase + numeroRandom + caracterEspecial;
-            
-            boolean existe = usuariosExistentes.stream()
-                .anyMatch(u -> u.getUsuario().equalsIgnoreCase(usuarioGenerado));
-                
-            if (!existe) {
-                return usuarioGenerado;
-            }
+        @Override
+        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
+            return LocalDate.parse(json.getAsString(), formatter);
         }
     }
 
@@ -90,7 +73,7 @@ public class CoordinadorDeActividadesDAO {
         List<Usuario> usuarios = obtenerTodosUsuarios();
         usuarios.removeIf(u -> u.getUsuario().equals(usuario.getUsuario()));
         usuarios.add(usuario);
-        
+
         try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
             JsonObject jsonObject = new JsonObject();
             JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
@@ -109,16 +92,17 @@ public class CoordinadorDeActividadesDAO {
 
     private List<Usuario> obtenerTodosUsuarios() throws IOException {
         File archivo = new File(RUTA_USUARIOS);
-        
+
         if (!archivo.exists() || archivo.length() == 0) {
             return new ArrayList<>();
         }
-        
+
         try (FileReader reader = new FileReader(archivo)) {
             JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
             JsonArray usuariosArray = jsonObject.getAsJsonArray("usuarios");
-            
-            Type tipoLista = new TypeToken<List<Usuario>>() {}.getType();
+
+            Type tipoLista = new TypeToken<List<Usuario>>() {
+            }.getType();
             return gson.fromJson(usuariosArray, tipoLista);
         }
     }
@@ -126,7 +110,7 @@ public class CoordinadorDeActividadesDAO {
     private void eliminarUsuario(String usuario) throws IOException {
         List<Usuario> usuarios = obtenerTodosUsuarios();
         usuarios.removeIf(u -> u.getUsuario().equals(usuario));
-        
+
         try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
             JsonObject jsonObject = new JsonObject();
             JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
@@ -139,11 +123,11 @@ public class CoordinadorDeActividadesDAO {
         String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
         Random random = new Random();
         StringBuilder sb = new StringBuilder(8);
-        
+
         for (int i = 0; i < 8; i++) {
             sb.append(caracteres.charAt(random.nextInt(caracteres.length())));
         }
-        
+
         return sb.toString();
     }
 
@@ -158,34 +142,77 @@ public class CoordinadorDeActividadesDAO {
     }
 
     public boolean guardarCoordinador(CoordinadorDeActividades coordinador, File imagen) throws IOException {
-        String nombreImagen = coordinador.getIdentificacion() + "_" +
-                System.currentTimeMillis() +
-                imagen.getName().substring(imagen.getName().lastIndexOf("."));
+        // 1. Generar credenciales
+        UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
+        String usuario = credenciales.usuario;
+        String contrasena = credenciales.contrasena;
+        String contrasenaEncriptada = UsuarioController.getInstancia().encriptarContrasena(contrasena);
+
+
+        // 3. Asignar credenciales
+        coordinador.setUsuario(usuario);
+        coordinador.setContrasena(contrasena); // Solo para referencia
+
+        // 4. Guardar imagen
+        String nombreImagen = coordinador.getIdentificacion() + "_"
+                + System.currentTimeMillis()
+                + imagen.getName().substring(imagen.getName().lastIndexOf("."));
 
         String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-
         Files.createDirectories(Paths.get(RUTA_IMAGENES));
         Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
         coordinador.setRutaImagen(rutaImagenFinal);
 
+        // 5. Guardar coordinador
         List<CoordinadorDeActividades> coordinadores = obtenerCoordinadores();
         coordinadores.add(coordinador);
         guardarListaCoordinadores(coordinadores);
 
-        EmailSender.getInstancia().enviarCredenciales(
-            coordinador.getCorreo(),
-            coordinador.getUsuario(),
-            coordinador.getContrasena(),
-            RolEnum.COORDINADOR_DE_ACTIVIDADES
+        // 6. Guardar usuario (CON CONTRASEÑA ENCRIPTADA)
+        Usuario nuevoUsuario = new Usuario(
+                coordinador.getPrimerNombre(),
+                coordinador.getSegundoNombre(),
+                coordinador.getPrimerApellido(),
+                coordinador.getSegundoApellido(),
+                coordinador.getEdad(),
+                coordinador.getSexo(),
+                coordinador.getNacionalidad(),
+                coordinador.getIdentificacion(),
+                usuario,
+                contrasenaEncriptada, // <- ENCRIPTADA EN JSON
+                RolEnum.COORDINADOR_DE_ACTIVIDADES
         );
+
+        guardarUsuario(nuevoUsuario);
+
+        // 7. Enviar correo (CON CONTRASEÑA SIN ENCRIPTAR)
+        boolean correoEnviado = EmailSender.getInstancia().enviarCredenciales(
+                coordinador.getCorreo(),
+                usuario,
+                contrasena, // <- SIN ENCRIPTAR EN CORREO
+                RolEnum.COORDINADOR_DE_ACTIVIDADES
+        );
+
+        if (correoEnviado) {
+            JOptionPane.showMessageDialog(null,
+                    "Coordinador registrado exitosamente y credenciales enviadas al correo.",
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "Coordinador registrado pero hubo un error al enviar las credenciales por correo.",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
+        }
 
         return true;
     }
 
+
     public List<CoordinadorDeActividades> obtenerCoordinadores() {
         List<CoordinadorDeActividades> coordinadores = new ArrayList<>();
         File archivo = new File(RUTA_JSON);
-        
+
         try {
             if (!archivo.exists() || archivo.length() == 0) {
                 guardarListaCoordinadores(new ArrayList<>());
@@ -193,7 +220,7 @@ public class CoordinadorDeActividadesDAO {
             }
 
             String contenido = new String(Files.readAllBytes(archivo.toPath()));
-            
+
             if (contenido.trim().isEmpty()) {
                 guardarListaCoordinadores(new ArrayList<>());
                 return coordinadores;
@@ -202,17 +229,18 @@ public class CoordinadorDeActividadesDAO {
             try {
                 JsonObject jsonObject = JsonParser.parseString(contenido).getAsJsonObject();
                 JsonArray coordinadoresArray = jsonObject.getAsJsonArray("coordinadores");
-                
-                Type tipoLista = new TypeToken<List<CoordinadorDeActividades>>() {}.getType();
+
+                Type tipoLista = new TypeToken<List<CoordinadorDeActividades>>() {
+                }.getType();
                 return gson.fromJson(coordinadoresArray, tipoLista);
             } catch (JsonSyntaxException e) {
                 System.err.println("Formato JSON inválido. Creando nuevo archivo.");
                 guardarListaCoordinadores(new ArrayList<>());
             }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, 
-                "Error al leer/escribir archivo: " + e.getMessage(), 
-                "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                    "Error al leer/escribir archivo: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
         return coordinadores;
     }
@@ -239,7 +267,7 @@ public class CoordinadorDeActividadesDAO {
             coordinadorJson.addProperty("sexo", coordinador.getSexo());
             coordinadorJson.addProperty("nacionalidad", coordinador.getNacionalidad());
             coordinadorJson.addProperty("identificacion", coordinador.getIdentificacion());
-            
+
             coordinadoresArray.add(coordinadorJson);
         }
 
@@ -267,9 +295,9 @@ public class CoordinadorDeActividadesDAO {
         try {
             List<CoordinadorDeActividades> coordinadores = obtenerCoordinadores();
             Optional<CoordinadorDeActividades> coordinadorAEliminar = coordinadores.stream()
-                .filter(c -> c.getIdentificacion().equals(cedula))
-                .findFirst();
-            
+                    .filter(c -> c.getIdentificacion().equals(cedula))
+                    .findFirst();
+
             if (coordinadorAEliminar.isPresent()) {
                 eliminarUsuario(coordinadorAEliminar.get().getUsuario());
                 coordinadores.removeIf(c -> c.getIdentificacion().equals(cedula));
@@ -278,8 +306,8 @@ public class CoordinadorDeActividadesDAO {
             }
             return false;
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error al eliminar el coordinador: " + e.getMessage(), 
-                "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al eliminar el coordinador: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
@@ -292,28 +320,28 @@ public class CoordinadorDeActividadesDAO {
                 CoordinadorDeActividades c = coordinadores.get(i);
                 if (c.getIdentificacion().equals(cedulaOriginal)) {
                     String rutaImagenFinal = c.getRutaImagen();
-                    
+
                     if (nuevaImagen != null && nuevaImagen.exists()) {
-                        String nombreImagen = coordinadorModificado.getIdentificacion() + "_" + System.currentTimeMillis() + 
-                                           nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
+                        String nombreImagen = coordinadorModificado.getIdentificacion() + "_" + System.currentTimeMillis()
+                                + nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
                         rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
                         Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
                     }
-                    
+
                     coordinadorModificado.setUsuario(c.getUsuario());
                     coordinadorModificado.setContrasena(c.getContrasena());
                     coordinadorModificado.setRutaImagen(rutaImagenFinal);
-                    
+
                     coordinadores.set(i, coordinadorModificado);
                     guardarListaCoordinadores(coordinadores);
                     return true;
                 }
             }
-            
+
             return false;
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error al modificar coordinador: " + e.getMessage(), 
-                "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al modificar coordinador: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
@@ -332,18 +360,18 @@ public class CoordinadorDeActividadesDAO {
     public List<Object[]> obtenerDatosCoordinadoresParaTabla() {
         return obtenerCoordinadores().stream()
                 .map(c -> new Object[]{
-                    c.getPrimerNombre(),
-                    c.getSegundoNombre(),
-                    c.getPrimerApellido(),
-                    c.getSegundoApellido(),
-                    c.getEdad(),
-                    c.getIdentificacion(),
-                    c.getNacionalidad(),
-                    c.getCorreo(),
-                    c.getCargo(),
-                    c.getTurno(),
-                    c.getFechaFinContrato()
-                })
+            c.getPrimerNombre(),
+            c.getSegundoNombre(),
+            c.getPrimerApellido(),
+            c.getSegundoApellido(),
+            c.getEdad(),
+            c.getIdentificacion(),
+            c.getNacionalidad(),
+            c.getCorreo(),
+            c.getCargo(),
+            c.getTurno(),
+            c.getFechaFinContrato()
+        })
                 .collect(Collectors.toList());
     }
 

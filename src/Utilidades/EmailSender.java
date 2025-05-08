@@ -5,6 +5,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import java.util.Properties;
 import java.io.File;
+import javax.swing.JOptionPane;
 
 public class EmailSender {
     private static EmailSender instancia;
@@ -37,75 +38,76 @@ public class EmailSender {
     }
 
     public boolean enviarCredenciales(String destinatario, String usuario, String contrasena, RolEnum rol) {
-        if (destinatario == null || destinatario.isEmpty() || 
-            usuario == null || usuario.isEmpty() || 
-            contrasena == null || contrasena.isEmpty()) {
-            System.err.println("Error: Datos de correo inválidos");
-            return false;
-        }
-
-        try {
-            Session session = Session.getInstance(props,
-                new Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
-                    }
-                });
-
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(username));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
-            message.setSubject("Credenciales de Acceso - Sistema de Monitoreo de Reclusos");
-
-            // Crear parte multipart para texto e imagen
-            Multipart multipart = new MimeMultipart("related");
-
-            // Parte HTML del mensaje
-            MimeBodyPart htmlPart = new MimeBodyPart();
-            String htmlContent = construirMensajeHTML(usuario, contrasena, rol);
-            htmlPart.setContent(htmlContent, "text/html; charset=utf-8");
-            multipart.addBodyPart(htmlPart);
-
-            // Parte de la imagen (logo)
-            try {
-                File logoFile = new File(logoPath);
-                if (logoFile.exists()) {
-                    MimeBodyPart imagePart = new MimeBodyPart();
-                    imagePart.attachFile(logoFile);
-                    imagePart.setContentID("<logo>");
-                    imagePart.setDisposition(MimeBodyPart.INLINE);
-                    imagePart.setHeader("Content-Type", "image/png");
-                    multipart.addBodyPart(imagePart);
-                } else {
-                    System.err.println("El archivo de logo no existe en: " + logoPath);
-                }
-            } catch (Exception e) {
-                System.err.println("Error al adjuntar el logo: " + e.getMessage());
-                // Continuar sin la imagen si hay error
-            }
-
-            message.setContent(multipart);
-            Transport.send(message);
-            System.out.println("Correo enviado exitosamente a: " + destinatario);
-            return true;
-        } catch (MessagingException e) {
-            System.err.println("Error al enviar correo: " + e.getMessage());
-            if (e instanceof SendFailedException) {
-                SendFailedException sfe = (SendFailedException) e;
-                Address[] invalid = sfe.getInvalidAddresses();
-                if (invalid != null) {
-                    System.err.println("Direcciones inválidas:");
-                    for (Address a : invalid) {
-                        System.err.println(a.toString());
-                    }
-                }
-            }
-            return false;
-        } catch (Exception e) {
-            System.err.println("Error inesperado al enviar correo: " + e.getMessage());
-            return false;
-        }
+    // Validación de campos obligatorios
+    if (destinatario == null || destinatario.isEmpty() || 
+        usuario == null || usuario.isEmpty() || 
+        contrasena == null || contrasena.isEmpty() || 
+        rol == null) {
+        System.err.println("Error: Todos los campos son obligatorios");
+        JOptionPane.showMessageDialog(null, "Error: Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
     }
+
+    // Validación de formato de correo
+    if (!destinatario.contains("@") || !destinatario.endsWith(".com")) {
+        System.err.println("Error: Formato de correo inválido");
+        JOptionPane.showMessageDialog(null, "Error: Formato de correo inválido", "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+
+    try {
+        Session session = Session.getInstance(props,
+            new Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(username, password);
+                }
+            });
+
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(username));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
+        message.setSubject("Credenciales de Acceso - Sistema de Monitoreo de Reclusos");
+
+        Multipart multipart = new MimeMultipart("related");
+
+        // Parte HTML del mensaje
+        MimeBodyPart htmlPart = new MimeBodyPart();
+        String htmlContent = construirMensajeHTML(usuario, contrasena, rol);
+        htmlPart.setContent(htmlContent, "text/html; charset=utf-8");
+        multipart.addBodyPart(htmlPart);
+
+        // Parte de la imagen (logo)
+        try {
+            File logoFile = new File(logoPath);
+            if (logoFile.exists()) {
+                MimeBodyPart imagePart = new MimeBodyPart();
+                imagePart.attachFile(logoFile);
+                imagePart.setContentID("<logo>");
+                imagePart.setDisposition(MimeBodyPart.INLINE);
+                imagePart.setHeader("Content-Type", "image/png");
+                multipart.addBodyPart(imagePart);
+            } else {
+                System.err.println("Advertencia: El archivo de logo no existe en: " + logoPath);
+            }
+        } catch (Exception e) {
+            System.err.println("Advertencia: Error al adjuntar el logo: " + e.getMessage());
+        }
+
+        message.setContent(multipart);
+        Transport.send(message);
+        System.out.println("Correo enviado exitosamente a: " + destinatario);
+        JOptionPane.showMessageDialog(null, "Correo enviado exitosamente a: " + destinatario);
+        return true;
+    } catch (MessagingException e) {
+        System.err.println("Error al enviar correo: " + e.getMessage());
+        JOptionPane.showMessageDialog(null, "Error al enviar correo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
+    } catch (Exception e) {
+        System.err.println("Error inesperado al enviar correo: " + e.getMessage());
+        JOptionPane.showMessageDialog(null, "Error inesperado al enviar correo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+}
 
     private String construirMensajeHTML(String usuario, String contrasena, RolEnum rol) {
         String saludo = obtenerSaludoPorRol(rol);
@@ -147,8 +149,10 @@ public class EmailSender {
                "</html>";
     }
 
+    
+
     private String obtenerSaludoPorRol(RolEnum rol) {
-        if (rol == null) return "Estimado Usuario";
+        if (rol == null) return "Estimado/a Usuario";
         
         switch (rol) {
             case DIRECTOR:

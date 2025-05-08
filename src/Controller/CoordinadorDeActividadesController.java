@@ -5,10 +5,12 @@ import Model.Entities.CoordinadorDeActividades;
 import Model.Entities.Usuario;
 import Model.Constants.RolEnum;
 import View.FrmCamara;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import javax.imageio.ImageIO;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -30,49 +32,105 @@ public class CoordinadorDeActividadesController {
     }
     
     public File capturarImagenCoordinador() {
-        FrmCamara ventanaCamara = new FrmCamara();
-        ventanaCamara.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        JDialog dialog = new JDialog();
-        dialog.setModal(true);
-        dialog.setContentPane(ventanaCamara.getContentPane());
-        dialog.pack();
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
-        
-        while (dialog.isVisible()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                return null;
-            }
+    FrmCamara ventanaCamara = new FrmCamara();
+    ventanaCamara.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    
+    JDialog dialog = new JDialog();
+    dialog.setModal(true);
+    dialog.setContentPane(ventanaCamara.getContentPane());
+    dialog.pack();
+    dialog.setLocationRelativeTo(null);
+    dialog.setVisible(true);
+    
+    while (dialog.isVisible()) {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            JOptionPane.showMessageDialog(null, 
+                "Error al capturar imagen: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
-        
-        return ventanaCamara.getImagenCapturada();
     }
+    
+    // Obtener la imagen capturada
+    File imagen = ventanaCamara.getImagenCapturada();
+    
+    // Validar la imagen obtenida
+    if (imagen == null) {
+        JOptionPane.showMessageDialog(null, 
+            "No se capturó ninguna imagen",
+            "Error", JOptionPane.ERROR_MESSAGE);
+        return null;
+    }
+    
+    if (!imagen.exists()) {
+        JOptionPane.showMessageDialog(null, 
+            "El archivo de imagen no existe",
+            "Error", JOptionPane.ERROR_MESSAGE);
+        return null;
+    }
+    
+    // Verificar que sea una imagen válida
+    try {
+        BufferedImage img = ImageIO.read(imagen);
+        if (img == null) {
+            JOptionPane.showMessageDialog(null, 
+                "El archivo no es una imagen válida",
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error al leer la imagen: " + e.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
+        return null;
+    }
+    
+    return imagen;
+}
 
     public void registrarCoordinador(String primerNombre, String segundoNombre,
-            String primerApellido, String segundoApellido, int edad, String cedula,
-            String nacionalidad, String correo, String turno, String cargo,
-            LocalDate fechaFinContrato, File imagenSeleccionadaCDA) throws IOException {
-        
-        validarCamposObligatorios(primerNombre, primerApellido, segundoApellido, 
-                edad, cedula, nacionalidad, correo, turno, cargo);
-        validarEdad(edad);
-        validarFechasContrato(LocalDate.now(), fechaFinContrato);
-        validarImagen(imagenSeleccionadaCDA);
-
-        CoordinadorDeActividades nuevoCoordinador = new CoordinadorDeActividades(
-            primerNombre, segundoNombre, primerApellido, segundoApellido,
-            edad, "Femenino", nacionalidad, cedula, correo, turno,
-            LocalDate.now(), fechaFinContrato, "", "", cargo
-        );
-
-        if (!coordinadorDAO.guardarCoordinador(nuevoCoordinador, imagenSeleccionadaCDA)) {
-            throw new RuntimeException("No se pudo guardar el coordinador");
-        }
+        String primerApellido, String segundoApellido, int edad, String cedula,
+        String nacionalidad, String correo, String turno, String cargo,
+        LocalDate fechaFinContrato, File imagenSeleccionadaCDA) throws IOException {
+    
+    // Validación de campos obligatorios
+    validarCamposObligatorios(primerNombre, primerApellido, segundoApellido, 
+            edad, cedula, nacionalidad, correo, turno, cargo);
+    validarEdad(edad);
+    validarFechasContrato(LocalDate.now(), fechaFinContrato);
+    
+    // Validación de imagen obligatoria
+    if (imagenSeleccionadaCDA == null) {
+        throw new IllegalArgumentException("Debe proporcionar una imagen del coordinador");
     }
+    
+    if (!imagenSeleccionadaCDA.exists()) {
+        throw new IllegalArgumentException("El archivo de imagen no existe: " + imagenSeleccionadaCDA.getAbsolutePath());
+    }
+    
+    // Verificar que sea una imagen válida
+    try {
+        BufferedImage img = ImageIO.read(imagenSeleccionadaCDA);
+        if (img == null) {
+            throw new IllegalArgumentException("El archivo no es una imagen válida");
+        }
+    } catch (IOException e) {
+        throw new IllegalArgumentException("Error al leer la imagen: " + e.getMessage());
+    }
+
+    CoordinadorDeActividades nuevoCoordinador = new CoordinadorDeActividades(
+        primerNombre, segundoNombre, primerApellido, segundoApellido,
+        edad, "Femenino", nacionalidad, cedula, correo, turno,
+        LocalDate.now(), fechaFinContrato, "", "", cargo
+    );
+
+    if (!coordinadorDAO.guardarCoordinador(nuevoCoordinador, imagenSeleccionadaCDA)) {
+        throw new RuntimeException("No se pudo guardar el coordinador");
+    }
+}
 
     public boolean modificarCoordinador(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
         try {
@@ -213,14 +271,35 @@ public class CoordinadorDeActividadesController {
         }
     }
 
-    private void validarImagen(File imagen) {
-        if (imagen == null || !imagen.exists()) {
-            throw new IllegalArgumentException("Debe proporcionar una imagen válida del coordinador");
-        }
-        
-        String nombre = imagen.getName().toLowerCase();
-        if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg") && !nombre.endsWith(".png")) {
-            throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG");
-        }
+   private void validarImagen(File imagen) {
+    if (imagen == null) {
+        throw new IllegalArgumentException("Debe proporcionar una imagen del coordinador");
     }
+    
+    if (!imagen.exists()) {
+        throw new IllegalArgumentException("El archivo de imagen no existe: " + imagen.getAbsolutePath());
+    }
+    
+    // Verificar que sea un archivo de imagen válido
+    try {
+        BufferedImage img = ImageIO.read(imagen);
+        if (img == null) {
+            throw new IllegalArgumentException("El archivo no es una imagen válida");
+        }
+    } catch (IOException e) {
+        throw new IllegalArgumentException("Error al leer la imagen: " + e.getMessage());
+    }
+    
+    // Verificar extensión del archivo
+    String nombre = imagen.getName().toLowerCase();
+    if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg") && !nombre.endsWith(".png")) {
+        throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG");
+    }
+    
+    // Verificar tamaño máximo (opcional)
+    long maxSize = 5 * 1024 * 1024; // 5MB
+    if (imagen.length() > maxSize) {
+        throw new IllegalArgumentException("La imagen es demasiado grande (máximo 5MB)");
+    }
+}
 }

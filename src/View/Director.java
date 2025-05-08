@@ -99,10 +99,18 @@ public class Director extends javax.swing.JFrame {
         // Configuración inicial de componentes
         txtFechaContratacion.setEditable(false);
         txtFechaContratacion.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        txtFechaContratacion2.setEditable(false);
+        txtFechaContratacion2.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         txtFechaContratacion1.setEditable(false);
         txtFechaContratacionMod1.setEditable(false);
         txtSexo.setEditable(false);
         txtSexo.setText("Femenino");
+        txtSexoMod.setEditable(false);
+        txtSexoMod.setText("Femenino");
+        txtSexo2.setEditable(false);
+        txtSexo2.setText("Femenino");
+        txtSexoMod2.setEditable(false);
+        txtSexoMod2.setText("Femenino");
         txtFechaContratacion1.setText(LocalDate.now().toString());
         ToolTipManager.sharedInstance().setInitialDelay(10);
 
@@ -2990,7 +2998,7 @@ public class Director extends javax.swing.JFrame {
         int opcion = JOptionPane.showOptionDialog(
                 this,
                 "Seleccione cómo obtener la imagen:",
-                "Imagen del guardia",
+                "Imagen de la enfermera",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
@@ -3001,7 +3009,7 @@ public class Director extends javax.swing.JFrame {
         try {
             File imagen = null;
             if (opcion == 0) { // Tomar Foto
-                imagen = guardiaController.capturarImagenGuardia();
+                imagen = enfermeraController.capturarImagenEnfermera();
             } else { // Seleccionar Archivo
                 JFileChooser fileChooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -3278,6 +3286,30 @@ public class Director extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
     try {
+        // Validación de imagen - debe ser obligatoria
+        if (imagenSeleccionadaCDA == null || !imagenSeleccionadaCDA.exists()) {
+            JOptionPane.showMessageDialog(this, 
+                "Debe seleccionar o capturar una foto del coordinador", 
+                "Foto requerida", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Validar que sea una imagen válida
+        try {
+            BufferedImage img = ImageIO.read(imagenSeleccionadaCDA);
+            if (img == null) {
+                JOptionPane.showMessageDialog(this, 
+                    "El archivo seleccionado no es una imagen válida", 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error al leer la imagen: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         CoordinadorDeActividadesController controller = CoordinadorDeActividadesController.getInstancia();
 
         // Obtener datos del formulario
@@ -3290,16 +3322,24 @@ public class Director extends javax.swing.JFrame {
         String nacionalidad = txtNacionalidad2.getText().trim();
         String correo = txtCorreo2.getText().trim();
         String turno = cmbTurno2.getSelectedItem().toString();
-        String cargo = cmbCargo2.getSelectedItem().toString(); // ComboBox para cargo
-        LocalDate fechaFin = dateFinContrato2.getDate().toInstant()
-                .atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+        String cargo = cmbCargo2.getSelectedItem().toString();
         
-        File imagen = imagenSeleccionadaCDA; // Variable correcta
+        // Validar fecha
+        if (dateFinContrato2.getDate() == null) {
+            JOptionPane.showMessageDialog(this, 
+                "Debe seleccionar una fecha de fin de contrato", 
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        LocalDate fechaFin = dateFinContrato2.getDate().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDate();
 
         // Registrar coordinador
         controller.registrarCoordinador(
             primerNombre, segundoNombre, primerApellido, segundoApellido,
-            edad, cedula, nacionalidad, correo, turno, cargo, fechaFin, imagen
+            edad, cedula, nacionalidad, correo, turno, cargo,
+            fechaFin, imagenSeleccionadaCDA
         );
 
         JOptionPane.showMessageDialog(this,
@@ -3310,9 +3350,13 @@ public class Director extends javax.swing.JFrame {
         actualizarTablaCDA();
 
     } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "La edad debe ser un número válido", "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (IllegalArgumentException | NullPointerException e) {
-        JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, 
+            "La edad debe ser un número válido", 
+            "Error", JOptionPane.ERROR_MESSAGE);
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this, 
+            e.getMessage(), 
+            "Error", JOptionPane.ERROR_MESSAGE);
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, 
             "Error al registrar coordinador: " + e.getMessage(), 
@@ -3334,7 +3378,80 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCorreo2KeyTyped
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        // TODO add your handling code here:
+   // Mostrar opciones al usuario (cámara o selección de archivo)
+    Object[] options = {"Tomar Foto", "Seleccionar Archivo", "Cancelar"};
+    int opcion = JOptionPane.showOptionDialog(
+            this,
+            "¿Cómo desea obtener la imagen del coordinador?",
+            "Seleccionar Imagen",
+            JOptionPane.YES_NO_CANCEL_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            options[0]
+    );
+
+    try {
+        if (opcion == 0) { // Tomar Foto con cámara
+            imagenSeleccionadaCDA = coordinadorController.capturarImagenCoordinador();
+            if (imagenSeleccionadaCDA == null) {
+                JOptionPane.showMessageDialog(this, 
+                    "No se pudo capturar la imagen", 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } else if (opcion == 1) { // Seleccionar archivo del sistema
+            JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                    "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");
+            fileChooser.setFileFilter(filter);
+            fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+
+            int resultado = fileChooser.showOpenDialog(this);
+            if (resultado == JFileChooser.APPROVE_OPTION) {
+                imagenSeleccionadaCDA = fileChooser.getSelectedFile();
+                
+                // Validar extensión del archivo
+                String nombreArchivo = imagenSeleccionadaCDA.getName().toLowerCase();
+                if (!nombreArchivo.endsWith(".jpg") && 
+                    !nombreArchivo.endsWith(".jpeg") && 
+                    !nombreArchivo.endsWith(".png")) {
+                    JOptionPane.showMessageDialog(this,
+                            "Formato de imagen no válido. Use JPG, JPEG o PNG.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    imagenSeleccionadaCDA = null;
+                    return;
+                }
+            }
+        }
+
+        // Mostrar previsualización si se seleccionó una imagen
+        if (imagenSeleccionadaCDA != null && imagenSeleccionadaCDA.exists()) {
+            ImageIcon icono = new ImageIcon(imagenSeleccionadaCDA.getAbsolutePath());
+            Image img = icono.getImage()
+                    .getScaledInstance(
+                            lblImagen2.getWidth(),
+                            lblImagen2.getHeight(),
+                            Image.SCALE_SMOOTH
+                    );
+            lblImagen2.setIcon(new ImageIcon(img));
+            lblImagen2.setToolTipText("Imagen seleccionada: " + imagenSeleccionadaCDA.getAbsolutePath());
+            
+            // Debug: Verificar imagen
+            System.out.println("Imagen seleccionada: " + imagenSeleccionadaCDA.getAbsolutePath());
+            System.out.println("Existe: " + imagenSeleccionadaCDA.exists());
+            System.out.println("Tamaño: " + imagenSeleccionadaCDA.length() + " bytes");
+        } else {
+            lblImagen2.setIcon(null);
+            lblImagen2.setToolTipText(null);
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+                "Error al obtener imagen: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void txtCedula2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedula2ActionPerformed
@@ -4040,48 +4157,4 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JTextField txtSexoMod2;
     // End of variables declaration//GEN-END:variables
 
-    private boolean validarFechasContrato() {
-        try {
-            // Formato consistente en toda la aplicación
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-            // Parsear fecha de inicio
-            LocalDate fechaInicio = LocalDate.parse(txtFechaContratacion.getText(), formatter);
-
-            // Obtener fecha fin del JDateChooser
-            if (jDateChooserFinContrato.getDate() == null) {
-                JOptionPane.showMessageDialog(this,
-                        "Debe seleccionar una fecha de fin de contrato",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-
-            // Convertir a LocalDate usando la misma zona horaria
-            LocalDate fechaFin = jDateChooserFinContrato.getDate().toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate();
-
-            // Validación flexible (puede ser el mismo día)
-            if (fechaFin.isBefore(fechaInicio)) {
-                JOptionPane.showMessageDialog(this,
-                        String.format("La fecha de fin (%s) debe ser igual o posterior a la fecha de inicio (%s)",
-                                fechaFin.format(formatter),
-                                fechaInicio.format(formatter)),
-                        "Error de fechas", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-
-            return true;
-        } catch (DateTimeParseException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Formato de fecha inválido. Use dd/MM/yyyy",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al validar fechas: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-    }
 }
