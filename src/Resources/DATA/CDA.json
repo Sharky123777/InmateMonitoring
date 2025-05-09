@@ -55,24 +55,6 @@
       "identificacion": "090831928"
     },
     {
-      "usuario": "yqR¡!6dm5G",
-      "contrasena": "@1l\u0026%$FAItoc",
-      "turno": "Diurno",
-      "cargo": "Oficial",
-      "fechaInicioContrato": "2025-05-08",
-      "fechaFinContrato": "2025-05-22",
-      "rutaImagen": "src/Resources/imagenes_CDA/9812398193_1746736186655.jpg",
-      "correo": "thejh0nl3n0n@gmail.com",
-      "primerNombre": "q",
-      "segundoNombre": "q",
-      "primerApellido": "s",
-      "segundoApellido": "q",
-      "edad": 45,
-      "sexo": "Femenino",
-      "nacionalidad": "a",
-      "identificacion": "9812398193"
-    },
-    {
       "usuario": "%lm#¿3RZ",
       "contrasena": "XI1?E6togP$",
       "turno": "Diurno",
@@ -89,6 +71,42 @@
       "sexo": "Femenino",
       "nacionalidad": "bebe",
       "identificacion": "023483113"
+    },
+    {
+      "usuario": "5xÑ4pYoñ\u0026",
+      "contrasena": "#U@Ud¿E¡%L$Ñ79t",
+      "turno": "Diurno",
+      "cargo": "Oficial",
+      "fechaInicioContrato": "2025-05-09",
+      "fechaFinContrato": "2025-05-22",
+      "rutaImagen": "src/Resources/imagenes_CDA/1313131131_1746835432897.png",
+      "correo": "lisamaryshelley@gmail.com",
+      "primerNombre": "q",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "sd",
+      "identificacion": "1313131131"
+    },
+    {
+      "usuario": "!r8ñ@CzMD",
+      "contrasena": "ogP9v4FQ%O0ne$",
+      "turno": "Diurno",
+      "cargo": "Oficial",
+      "fechaInicioContrato": "2025-05-09",
+      "fechaFinContrato": "2025-05-29",
+      "rutaImagen": "src/Resources/imagenes_CDA/54678979654_1746836325995.png",
+      "correo": "lisamaryshelley16@gmail.com",
+      "primerNombre": "m",
+      "segundoNombre": "m",
+      "primerApellido": "m",
+      "segundoApellido": "m",
+      "edad": 54,
+      "sexo": "Femenino",
+      "nacionalidad": "po",
+      "identificacion": "54678979654"
     }
   ]
 }

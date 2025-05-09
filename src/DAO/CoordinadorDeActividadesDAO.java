@@ -141,6 +141,7 @@ public class CoordinadorDeActividadesDAO {
         return rutaImagenFinal;
     }
 
+    // En el DAO (solo lógica de datos)
     public boolean guardarCoordinador(CoordinadorDeActividades coordinador, File imagen) throws IOException {
         // 1. Generar credenciales
         UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
@@ -148,10 +149,9 @@ public class CoordinadorDeActividadesDAO {
         String contrasena = credenciales.contrasena;
         String contrasenaEncriptada = UsuarioController.getInstancia().encriptarContrasena(contrasena);
 
-
         // 3. Asignar credenciales
         coordinador.setUsuario(usuario);
-        coordinador.setContrasena(contrasena); // Solo para referencia
+        coordinador.setContrasena(contrasena);
 
         // 4. Guardar imagen
         String nombreImagen = coordinador.getIdentificacion() + "_"
@@ -179,35 +179,20 @@ public class CoordinadorDeActividadesDAO {
                 coordinador.getNacionalidad(),
                 coordinador.getIdentificacion(),
                 usuario,
-                contrasenaEncriptada, // <- ENCRIPTADA EN JSON
+                contrasenaEncriptada,
                 RolEnum.COORDINADOR_DE_ACTIVIDADES
         );
 
         guardarUsuario(nuevoUsuario);
 
         // 7. Enviar correo (CON CONTRASEÑA SIN ENCRIPTAR)
-        boolean correoEnviado = EmailSender.getInstancia().enviarCredenciales(
+        return EmailSender.getInstancia().enviarCredenciales(
                 coordinador.getCorreo(),
                 usuario,
-                contrasena, // <- SIN ENCRIPTAR EN CORREO
+                contrasena,
                 RolEnum.COORDINADOR_DE_ACTIVIDADES
         );
-
-        if (correoEnviado) {
-            JOptionPane.showMessageDialog(null,
-                    "Coordinador registrado exitosamente y credenciales enviadas al correo.",
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    "Coordinador registrado pero hubo un error al enviar las credenciales por correo.",
-                    "Advertencia",
-                    JOptionPane.WARNING_MESSAGE);
-        }
-
-        return true;
     }
-
 
     public List<CoordinadorDeActividades> obtenerCoordinadores() {
         List<CoordinadorDeActividades> coordinadores = new ArrayList<>();
@@ -327,6 +312,9 @@ public class CoordinadorDeActividadesDAO {
                         rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
                         Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
                     }
+
+                    // Mantener la fecha de inicio original
+                    coordinadorModificado.setFechaInicioContrato(c.getFechaInicioContrato());
 
                     coordinadorModificado.setUsuario(c.getUsuario());
                     coordinadorModificado.setContrasena(c.getContrasena());

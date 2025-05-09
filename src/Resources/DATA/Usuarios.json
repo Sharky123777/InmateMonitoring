@@ -27,19 +27,6 @@
       "identificacion": "91873819"
     },
     {
-      "usuario": "yqR¡!6dm5G",
-      "password": "29917c9bc2384f39d40e5d3a05341393a624c8a9666592ce121722d1ded0fe13",
-      "rol": "COORDINADOR_DE_ACTIVIDADES",
-      "primerNombre": "q",
-      "segundoNombre": "q",
-      "primerApellido": "s",
-      "segundoApellido": "q",
-      "edad": 45,
-      "sexo": "Femenino",
-      "nacionalidad": "a",
-      "identificacion": "9812398193"
-    },
-    {
       "usuario": "%lm#¿3RZ",
       "password": "6df1e495e1f0861bd9a059aeec0d519d9576e737ee35542237e7946ad76bf79e",
       "rol": "COORDINADOR_DE_ACTIVIDADES",
@@ -51,6 +38,32 @@
       "sexo": "Femenino",
       "nacionalidad": "bebe",
       "identificacion": "023483113"
+    },
+    {
+      "usuario": "5xÑ4pYoñ\u0026",
+      "password": "56b2c625548977db5127ad3440ac39eb7f0a7a12f0ff6f230ab0aa6d6233eb71",
+      "rol": "COORDINADOR_DE_ACTIVIDADES",
+      "primerNombre": "q",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "sd",
+      "identificacion": "1313131131"
+    },
+    {
+      "usuario": "!r8ñ@CzMD",
+      "password": "efb2be36f7d86d54336b0748c4ef919244792f6b6ac316fe933862a5b6cdd89f",
+      "rol": "COORDINADOR_DE_ACTIVIDADES",
+      "primerNombre": "m",
+      "segundoNombre": "m",
+      "primerApellido": "m",
+      "segundoApellido": "m",
+      "edad": 54,
+      "sexo": "Femenino",
+      "nacionalidad": "po",
+      "identificacion": "54678979654"
     }
   ]
 }
