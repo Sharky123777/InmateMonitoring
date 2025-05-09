@@ -877,6 +877,12 @@ public class Director extends javax.swing.JFrame {
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setText("Fecha de contratación:");
         jPanel3.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 360, -1, 20));
+
+        txtFechaContratacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFechaContratacionActionPerformed(evt);
+            }
+        });
         jPanel3.add(txtFechaContratacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 380, 190, 30));
         jPanel3.add(jDateChooserFinContrato, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 440, 190, 30));
 
@@ -2061,49 +2067,73 @@ public class Director extends javax.swing.JFrame {
 
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-         try {
-        // 1. Validar fecha seleccionada
-        if (jDateChooserFinContrato.getDate() == null) {
-            JOptionPane.showMessageDialog(this, 
-                "Debe seleccionar una fecha de fin de contrato válida", 
-                "Error", JOptionPane.ERROR_MESSAGE);
-            jDateChooserFinContrato.requestFocus();
-            return;
+      try {
+        // Obtener valores del formulario
+        String primerNombre = txtPrimerNombre.getText().trim();
+        String segundoNombre = txtSegundoNombre.getText().trim();
+        String primerApellido = txtPrimerApellido.getText().trim();
+        String segundoApellido = txtSegundoApellido.getText().trim();
+        String cedula = txtCedula.getText().trim();
+        String nacionalidad = txtNacionalidad.getText().trim();
+        String correo = txtCorreo.getText().trim();
+        String turno = cmbTurno.getSelectedItem().toString();
+        String cargo = cmbCargo.getSelectedItem().toString();
+        
+        // Validar edad
+        int edad;
+        try {
+            edad = Integer.parseInt(txtEdad.getText().trim());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("La edad debe ser un número válido.");
         }
         
-        // 2. Debug adicional para verificar la fecha
-        System.out.println("Fecha seleccionada en JDateChooser: " + jDateChooserFinContrato.getDate());
-        
-        // 3. Conversión de fechas
-        LocalDate fechaInicio = LocalDate.now();
+        // Validar fecha fin
+        if (jDateChooserFinContrato.getDate() == null) {
+            throw new IllegalArgumentException("Seleccione una fecha de fin de contrato.");
+        }
         LocalDate fechaFin = jDateChooserFinContrato.getDate().toInstant()
-                           .atZone(ZoneId.systemDefault())
-                           .toLocalDate();
-        
-        // 4. Llamada al controller
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate();
+
+        // Validar imagen (similar a EnfermeraController)
+        if (imagenSeleccionadaMod == null || !imagenSeleccionadaMod.exists()) {
+            throw new IllegalArgumentException("Debe seleccionar una imagen válida del guardia.");
+        }
+
+        // Validar formato de imagen
+        String nombreImagen = imagenSeleccionadaMod.getName().toLowerCase();
+        if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
+            throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
+        }
+
+        // Llamar al Controller (centraliza validaciones adicionales)
         Guardia nuevoGuardia = guardiaController.registrarGuardia(
-            txtPrimerNombre.getText().trim(),
-            txtSegundoNombre.getText().trim(),
-            txtPrimerApellido.getText().trim(),
-            txtSegundoApellido.getText().trim(),
-            Integer.parseInt(txtEdad.getText().trim()),
-            txtCedula.getText().trim(),
-            txtNacionalidad.getText().trim(),
-            txtCorreo.getText().trim(),
-            cmbTurno.getSelectedItem().toString(),
-            fechaInicio, // Asegúrate que es LocalDate.now()
-            fechaFin,    // Fecha del JDateChooser convertida
-            cmbCargo.getSelectedItem().toString(),
+            primerNombre,
+            segundoNombre,
+            primerApellido,
+            segundoApellido,
+            edad,
+            cedula,
+            nacionalidad,
+            correo,
+            turno,
+            fechaFin,
+            cargo,
             imagenSeleccionadaMod
         );
         
-        // 5. Feedback y limpieza
+        // Éxito
         limpiarFormulario();
         actualizarTablaGuardias();
-        JOptionPane.showMessageDialog(this, "Guardia registrado!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        
+        JOptionPane.showMessageDialog(this, "Guardia registrado exitosamente.", 
+            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this, e.getMessage(), 
+            "Error de validación", JOptionPane.ERROR_MESSAGE);
     } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(), 
+            "Error", JOptionPane.ERROR_MESSAGE);
         e.printStackTrace();
     }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -2378,46 +2408,78 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCedulaKeyTyped
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-      try {
-        // Obtener cédula original (no modificable)
+       try {
+        // Obtener valores del formulario
         String cedulaOriginal = txtCedulaMod.getText().trim();
+        String primerNombre = txtPrimerNombreMod.getText().trim();
+        String segundoNombre = txtSegundoNombreMod.getText().trim();
+        String primerApellido = txtPrimerApellidoMod.getText().trim();
+        String segundoApellido = txtSegundoApellidoMod.getText().trim();
+        String nacionalidad = txtNacionalidadMod.getText().trim();
+        String correo = txtCorreoMod.getText().trim();
+        String turno = cmbTurnoMod.getSelectedItem().toString();
+        String cargo = txtCargoMod.getSelectedItem().toString();
         
-        // Crear mapa con todos los cambios
-        Map<String, Object> cambios = new HashMap<>();
-        cambios.put("primerNombre", txtPrimerNombreMod.getText().trim());
-        cambios.put("segundoNombre", txtSegundoNombreMod.getText().trim());
-        cambios.put("primerApellido", txtPrimerApellidoMod.getText().trim());
-        cambios.put("segundoApellido", txtSegundoApellidoMod.getText().trim());
-        cambios.put("edad", Integer.parseInt(txtEdadMod.getText().trim()));
-        cambios.put("nacionalidad", txtNacionalidadMod.getText().trim());
-        cambios.put("correo", txtCorreoMod.getText().trim());
-        cambios.put("turno", cmbTurnoMod.getSelectedItem().toString());
-        cambios.put("cargo", txtCargoMod.getSelectedItem().toString());
-        cambios.put("fechaFin", dateFinContratoMod.getDate().toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalDate());
-
-        // Llamar al controller para modificar (la imagen puede ser null)
-        boolean resultado = guardiaController.modificarGuardia(
-                cedulaOriginal,
-                cambios,
-                imagenSeleccionadaMod // File o null
-        );
-
-        // Feedback al usuario
-        if (resultado) {
-            JOptionPane.showMessageDialog(this,
-                    "Guardia modificado con éxito",
-                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            actualizarTablaGuardias();
-            jTabbedPane1.setSelectedComponent(ListaDeGuardias);
-            
-            // Resetear imagen seleccionada después de modificar
-            imagenSeleccionadaMod = null;
+        // Validar edad
+        int edad;
+        try {
+            edad = Integer.parseInt(txtEdadMod.getText().trim());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("La edad debe ser un número válido.");
         }
+        
+        // Validar fecha fin
+        if (dateFinContratoMod.getDate() == null) {
+            throw new IllegalArgumentException("Seleccione una fecha de fin de contrato.");
+        }
+        LocalDate fechaFin = dateFinContratoMod.getDate().toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate();
+
+        // Validar imagen (si se seleccionó una nueva)
+        if (imagenSeleccionadaMod != null) {
+            if (!imagenSeleccionadaMod.exists()) {
+                throw new IllegalArgumentException("La imagen seleccionada no existe.");
+            }
+            String nombreImagen = imagenSeleccionadaMod.getName().toLowerCase();
+            if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
+                throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
+            }
+        }
+
+        // Preparar cambios
+        Map<String, Object> cambios = new HashMap<>();
+        cambios.put("primerNombre", primerNombre);
+        cambios.put("segundoNombre", segundoNombre);
+        cambios.put("primerApellido", primerApellido);
+        cambios.put("segundoApellido", segundoApellido);
+        cambios.put("edad", edad);
+        cambios.put("nacionalidad", nacionalidad);
+        cambios.put("correo", correo);
+        cambios.put("turno", turno);
+        cambios.put("cargo", cargo);
+        cambios.put("fechaFin", fechaFin);
+        
+        // Llamar al Controller
+        boolean modificado = guardiaController.modificarGuardia(
+            cedulaOriginal,
+            cambios,
+            imagenSeleccionadaMod // Puede ser null
+        );
+        
+        if (modificado) {
+            limpiarFormularioModificacion();
+            actualizarTablaGuardias();
+            JOptionPane.showMessageDialog(this, "Guardia modificado exitosamente.", 
+                "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        }
+            
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this, e.getMessage(), 
+            "Error de validación", JOptionPane.ERROR_MESSAGE);
     } catch (Exception e) {
-        JOptionPane.showMessageDialog(this,
-                "Error al modificar: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(), 
+            "Error", JOptionPane.ERROR_MESSAGE);
         e.printStackTrace();
     }
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -3834,6 +3896,10 @@ public class Director extends javax.swing.JFrame {
         otro.setVisible(true); // Mostrar el nuevo JFrame
         this.dispose();
     }//GEN-LAST:event_jButton13ActionPerformed
+
+    private void txtFechaContratacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaContratacionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFechaContratacionActionPerformed
 
     /**
      * @param args the command line arguments
