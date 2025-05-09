@@ -132,44 +132,134 @@ public class CoordinadorDeActividadesController {
     }
 }
 
-    public boolean modificarCoordinador(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
-        try {
-            CoordinadorDeActividades original = obtenerCoordinadorPorCedula(cedulaOriginal);
-            if (original == null) {
-                throw new IllegalArgumentException("Coordinador no encontrado con cédula: " + cedulaOriginal);
-            }
-
-            validarCamposModificacion(cambios);
-            validarEdad((int) cambios.get("edad"));
-            validarFechasContrato(original.getFechaInicioContrato(), (LocalDate) cambios.get("fechaFin"));
-
-            CoordinadorDeActividades coordinadorModificado = new CoordinadorDeActividades(
-                (String) cambios.get("primerNombre"),
-                (String) cambios.get("segundoNombre"),
-                (String) cambios.get("primerApellido"),
-                (String) cambios.get("segundoApellido"),
-                (int) cambios.get("edad"),
-                "Femenino",
-                (String) cambios.get("nacionalidad"),
-                cedulaOriginal,
-                (String) cambios.get("correo"),
-                (String) cambios.get("turno"),
-                original.getFechaInicioContrato(),
-                (LocalDate) cambios.get("fechaFin"),
-                original.getUsuario(),
-                original.getContrasena(),
-                (String) cambios.get("cargo")
-            );
-
-            File imagenFinal = (nuevaImagen != null) ? nuevaImagen : 
-                             (original.getRutaImagen() != null && !original.getRutaImagen().isEmpty()) ? 
-                             new File(original.getRutaImagen()) : null;
-
-            return coordinadorDAO.modificarCoordinador(cedulaOriginal, coordinadorModificado, imagenFinal);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al modificar coordinador: " + e.getMessage(), e);
+    // Método modificado para modificar coordinador con mejores validaciones
+public boolean modificarCoordinador(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
+    try {
+        // 1. Validar existencia del coordinador original
+        CoordinadorDeActividades original = validarYObternerOriginal(cedulaOriginal);
+        
+        // 2. Validar campos básicos
+        validarCamposModificados(cambios);
+        
+        // 3. Validar edad
+        int edad = validarEdad((int) cambios.get("edad"));
+        
+        // 4. Validar fechas
+        LocalDate fechaFin = validarFechas(original.getFechaInicioContrato(), (LocalDate) cambios.get("fechaFin"));
+        
+        // 5. Validar imagen si se proporciona una nueva
+        if (nuevaImagen != null) {
+            validarImagen(nuevaImagen);
         }
+        
+        // 6. Crear objeto modificado
+        CoordinadorDeActividades coordinadorModificado = crearCoordinadorModificado(
+            original, cambios, edad, fechaFin);
+        
+        // 7. Determinar qué imagen usar
+        File imagenFinal = determinarImagenFinal(original, nuevaImagen);
+        
+        // 8. Ejecutar modificación en DAO
+        return coordinadorDAO.modificarCoordinador(cedulaOriginal, coordinadorModificado, imagenFinal);
+        
+    } catch (IllegalArgumentException e) {
+        throw e; // Relanzar excepciones de validación
+    } catch (Exception e) {
+        throw new RuntimeException("Error al modificar coordinador: " + e.getMessage(), e);
     }
+}
+
+// Métodos auxiliares de validación mejorados
+private CoordinadorDeActividades validarYObternerOriginal(String cedula) {
+    CoordinadorDeActividades original = obtenerCoordinadorPorCedula(cedula);
+    if (original == null) {
+        throw new IllegalArgumentException("Coordinador no encontrado con cédula: " + cedula);
+    }
+    return original;
+}
+
+private void validarCamposModificados(Map<String, Object> cambios) {
+    StringBuilder errores = new StringBuilder();
+    
+    // Validar que los campos obligatorios no estén vacíos
+    validarCampoObligatorio(cambios, "primerNombre", "Primer nombre", errores);
+    validarCampoObligatorio(cambios, "primerApellido", "Primer apellido", errores);
+    validarCampoObligatorio(cambios, "segundoApellido", "Segundo apellido", errores);
+    validarCampoObligatorio(cambios, "nacionalidad", "Nacionalidad", errores);
+    validarCampoObligatorio(cambios, "correo", "Correo electrónico", errores);
+    validarCampoObligatorio(cambios, "cargo", "Cargo", errores);
+    
+    // Validación específica para correo electrónico
+    if (cambios.containsKey("correo") && !((String)cambios.get("correo")).contains("@")) {
+        errores.append("- El correo electrónico debe tener un formato válido\n");
+    }
+    
+    if (errores.length() > 0) {
+        throw new IllegalArgumentException(errores.toString());
+    }
+}
+
+private void validarCampoObligatorio(Map<String, Object> cambios, String campo, String nombreCampo, StringBuilder errores) {
+    if (!cambios.containsKey(campo)) {
+        errores.append("- ").append(nombreCampo).append(" es un campo requerido\n");
+    } else if (cambios.get(campo) instanceof String && ((String)cambios.get(campo)).trim().isEmpty()) {
+        errores.append("- ").append(nombreCampo).append(" es obligatorio\n");
+    } else if (cambios.get(campo) == null) {
+        errores.append("- ").append(nombreCampo).append(" no puede ser nulo\n");
+    }
+}
+
+private int validarEdad(int edad) {
+    if (edad < 0) {
+        throw new IllegalArgumentException("La edad debe ser un número positivo");
+    }
+    if (edad < 18 || edad > 70) {
+        throw new IllegalArgumentException("La edad debe estar entre 18 y 70 años");
+    }
+    return edad;
+}
+
+private LocalDate validarFechas(LocalDate inicio, LocalDate fin) {
+    if (fin == null) {
+        throw new IllegalArgumentException("La fecha de fin de contrato es obligatoria");
+    }
+    if (!fin.isAfter(inicio)) {
+        throw new IllegalArgumentException("La fecha de fin debe ser posterior a la fecha de inicio");
+    }
+    return fin;
+}
+
+private CoordinadorDeActividades crearCoordinadorModificado(CoordinadorDeActividades original, 
+    Map<String, Object> cambios, int edad, LocalDate fechaFin) {
+    
+    return new CoordinadorDeActividades(
+        (String) cambios.get("primerNombre"),
+        (String) cambios.getOrDefault("segundoNombre", original.getSegundoNombre()),
+        (String) cambios.get("primerApellido"),
+        (String) cambios.get("segundoApellido"),
+        edad,
+        original.getSexo(), // Mantener el valor original
+        (String) cambios.get("nacionalidad"),
+        original.getIdentificacion(), // Mantener la misma cédula
+        (String) cambios.get("correo"),
+        (String) cambios.get("turno"),
+        original.getFechaInicioContrato(), // Mantener fecha original
+        fechaFin,
+        original.getUsuario(), // Credenciales originales
+        original.getContrasena(),
+        (String) cambios.get("cargo")
+    );
+}
+
+private File determinarImagenFinal(CoordinadorDeActividades original, File nuevaImagen) {
+    if (nuevaImagen != null) {
+        return nuevaImagen;
+    }
+    if (original.getRutaImagen() != null && !original.getRutaImagen().isEmpty()) {
+        return new File(original.getRutaImagen());
+    }
+    return null;
+}
 
 
     // Métodos de consulta
@@ -263,13 +353,7 @@ public class CoordinadorDeActividadesController {
         }
     }
 
-    private void validarEdad(int edad) {
-        if (edad < 18 || edad > 70) {
-            throw new IllegalArgumentException("La edad debe estar entre 18 y 70 años");
-        } if (edad < 0) {
-            throw new IllegalArgumentException("La edad debe ser un número válido");
-        }
-    }
+    
 
    private void validarImagen(File imagen) {
     if (imagen == null) {

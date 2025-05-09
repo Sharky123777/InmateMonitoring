@@ -5,6 +5,7 @@
 package View;
 
 import Controller.CoordinadorDeActividadesController;
+import Model.Entities.CoordinadorDeActividades;
 import Controller.EnfermeraController;
 import Controller.GuardiaController;
 import Controller.PersonalDeControlController;
@@ -113,6 +114,8 @@ public class Director extends javax.swing.JFrame {
         txtSexoMod2.setText("Femenino");
         txtFechaContratacion1.setText(LocalDate.now().toString());
         ToolTipManager.sharedInstance().setInitialDelay(10);
+        txtFechaContratacionMod2.setText(LocalDate.now().toString());
+        ToolTipManager.sharedInstance().setInitialDelay(10);
 
         // Inicialización de controladores
         guardiaController = GuardiaController.getInstancia();
@@ -120,27 +123,25 @@ public class Director extends javax.swing.JFrame {
         coordinadorController = CoordinadorDeActividadesController.getInstancia();
 
         // Configuración MEJORADA del JDateChooser
-    jDateChooserFinContrato = new JDateChooser();
-    jDateChooserFinContrato.setDateFormatString("dd/MM/yyyy");
-    
-    // Establecer fecha mínima (mañana)
-    Calendar calendario = Calendar.getInstance();
-    calendario.add(Calendar.DAY_OF_MONTH, 1); // Fecha mínima = mañana
-    jDateChooserFinContrato.setMinSelectableDate(calendario.getTime());
-    
-    // Establecer fecha por defecto (opcional: 1 mes después de hoy)
-    calendario.add(Calendar.MONTH, 1);
-    jDateChooserFinContrato.setDate(calendario.getTime());
-    
-   
-    
+        jDateChooserFinContrato = new JDateChooser();
+        jDateChooserFinContrato.setDateFormatString("dd/MM/yyyy");
+
+        // Establecer fecha mínima (mañana)
+        Calendar calendario = Calendar.getInstance();
+        calendario.add(Calendar.DAY_OF_MONTH, 1); // Fecha mínima = mañana
+        jDateChooserFinContrato.setMinSelectableDate(calendario.getTime());
+
+        // Establecer fecha por defecto (opcional: 1 mes después de hoy)
+        calendario.add(Calendar.MONTH, 1);
+        jDateChooserFinContrato.setDate(calendario.getTime());
+
         // Actualización de tablas
         actualizarTablaGuardias();
         actualizarTablaEnfermeras();
+        actualizarTablaCDA();
 
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -151,6 +152,9 @@ public class Director extends javax.swing.JFrame {
         jPopupMenu2 = new javax.swing.JPopupMenu();
         ModificarEnfermera = new javax.swing.JMenuItem();
         EliminarEnfermera = new javax.swing.JMenuItem();
+        jPopupMenu4 = new javax.swing.JPopupMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         Director = new javax.swing.JPanel();
@@ -380,7 +384,7 @@ public class Director extends javax.swing.JFrame {
         txtSegundoNombre2 = new javax.swing.JTextField();
         txtPrimerNombre2 = new javax.swing.JTextField();
         jLabel74 = new javax.swing.JLabel();
-        jPanel14 = new javax.swing.JPanel();
+        ModificarCoordinador = new javax.swing.JPanel();
         jPanel15 = new RoundedPanel(30);
         jSeparator55 = new javax.swing.JSeparator();
         jSeparator56 = new javax.swing.JSeparator();
@@ -425,7 +429,7 @@ public class Director extends javax.swing.JFrame {
         txtSegundoNombreMod2 = new javax.swing.JTextField();
         txtPrimerNombreMod2 = new javax.swing.JTextField();
         jLabel89 = new javax.swing.JLabel();
-        jPanel17 = new javax.swing.JPanel();
+        mostrarCoordinadora = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaCoordinadores = new javax.swing.JTable();
         jButton13 = new javax.swing.JButton();
@@ -461,6 +465,22 @@ public class Director extends javax.swing.JFrame {
             }
         });
         jPopupMenu2.add(EliminarEnfermera);
+
+        jMenuItem3.setText("jMenuItem3");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jPopupMenu4.add(jMenuItem3);
+
+        jMenuItem4.setText("jMenuItem4");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jPopupMenu4.add(jMenuItem4);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1633,8 +1653,8 @@ public class Director extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("AgregarCDA", jPanel9);
 
-        jPanel14.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel14.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        ModificarCoordinador.setBackground(new java.awt.Color(255, 255, 255));
+        ModificarCoordinador.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel15.setBackground(new java.awt.Color(29, 35, 51));
         jPanel15.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1842,12 +1862,12 @@ public class Director extends javax.swing.JFrame {
         jLabel89.setText("Primer nombre:");
         jPanel15.add(jLabel89, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, -1, 20));
 
-        jPanel14.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 790, 490));
+        ModificarCoordinador.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 790, 490));
 
-        jTabbedPane1.addTab("ModificarCDA", jPanel14);
+        jTabbedPane1.addTab("ModificarCDA", ModificarCoordinador);
 
-        jPanel17.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel17.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        mostrarCoordinadora.setBackground(new java.awt.Color(255, 255, 255));
+        mostrarCoordinadora.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tablaCoordinadores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1868,7 +1888,7 @@ public class Director extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tablaCoordinadores.setComponentPopupMenu(jPopupMenu1);
+        tablaCoordinadores.setComponentPopupMenu(jPopupMenu4);
         jScrollPane3.setViewportView(tablaCoordinadores);
         if (tablaCoordinadores.getColumnModel().getColumnCount() > 0) {
             tablaCoordinadores.getColumnModel().getColumn(0).setResizable(false);
@@ -1885,9 +1905,9 @@ public class Director extends javax.swing.JFrame {
             tablaCoordinadores.getColumnModel().getColumn(11).setResizable(false);
         }
 
-        jPanel17.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1080, 550));
+        mostrarCoordinadora.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1080, 550));
 
-        jTabbedPane1.addTab("MostrarCDA", jPanel17);
+        jTabbedPane1.addTab("MostrarCDA", mostrarCoordinadora);
 
         jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1100, 590));
 
@@ -2005,8 +2025,8 @@ public class Director extends javax.swing.JFrame {
         lblImagenMod.setIcon(null);
         rutaImagenSeleccionada = null;
     }
-    
-     private void limpiarFormularioCDA() {
+
+    private void limpiarFormularioCDA() {
         txtPrimerNombre2.setText("");
         txtSegundoNombre2.setText("");
         txtPrimerApellido2.setText("");
@@ -2067,75 +2087,75 @@ public class Director extends javax.swing.JFrame {
 
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      try {
-        // Obtener valores del formulario
-        String primerNombre = txtPrimerNombre.getText().trim();
-        String segundoNombre = txtSegundoNombre.getText().trim();
-        String primerApellido = txtPrimerApellido.getText().trim();
-        String segundoApellido = txtSegundoApellido.getText().trim();
-        String cedula = txtCedula.getText().trim();
-        String nacionalidad = txtNacionalidad.getText().trim();
-        String correo = txtCorreo.getText().trim();
-        String turno = cmbTurno.getSelectedItem().toString();
-        String cargo = cmbCargo.getSelectedItem().toString();
-        
-        // Validar edad
-        int edad;
         try {
-            edad = Integer.parseInt(txtEdad.getText().trim());
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("La edad debe ser un número válido.");
-        }
-        
-        // Validar fecha fin
-        if (jDateChooserFinContrato.getDate() == null) {
-            throw new IllegalArgumentException("Seleccione una fecha de fin de contrato.");
-        }
-        LocalDate fechaFin = jDateChooserFinContrato.getDate().toInstant()
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate();
+            // Obtener valores del formulario
+            String primerNombre = txtPrimerNombre.getText().trim();
+            String segundoNombre = txtSegundoNombre.getText().trim();
+            String primerApellido = txtPrimerApellido.getText().trim();
+            String segundoApellido = txtSegundoApellido.getText().trim();
+            String cedula = txtCedula.getText().trim();
+            String nacionalidad = txtNacionalidad.getText().trim();
+            String correo = txtCorreo.getText().trim();
+            String turno = cmbTurno.getSelectedItem().toString();
+            String cargo = cmbCargo.getSelectedItem().toString();
 
-        // Validar imagen (similar a EnfermeraController)
-        if (imagenSeleccionadaMod == null || !imagenSeleccionadaMod.exists()) {
-            throw new IllegalArgumentException("Debe seleccionar una imagen válida del guardia.");
-        }
+            // Validar edad
+            int edad;
+            try {
+                edad = Integer.parseInt(txtEdad.getText().trim());
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("La edad debe ser un número válido.");
+            }
 
-        // Validar formato de imagen
-        String nombreImagen = imagenSeleccionadaMod.getName().toLowerCase();
-        if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
-            throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
-        }
+            // Validar fecha fin
+            if (jDateChooserFinContrato.getDate() == null) {
+                throw new IllegalArgumentException("Seleccione una fecha de fin de contrato.");
+            }
+            LocalDate fechaFin = jDateChooserFinContrato.getDate().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
 
-        // Llamar al Controller (centraliza validaciones adicionales)
-        Guardia nuevoGuardia = guardiaController.registrarGuardia(
-            primerNombre,
-            segundoNombre,
-            primerApellido,
-            segundoApellido,
-            edad,
-            cedula,
-            nacionalidad,
-            correo,
-            turno,
-            fechaFin,
-            cargo,
-            imagenSeleccionadaMod
-        );
-        
-        // Éxito
-        limpiarFormulario();
-        actualizarTablaGuardias();
-        JOptionPane.showMessageDialog(this, "Guardia registrado exitosamente.", 
-            "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            
-    } catch (IllegalArgumentException e) {
-        JOptionPane.showMessageDialog(this, e.getMessage(), 
-            "Error de validación", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(), 
-            "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
+            // Validar imagen (similar a EnfermeraController)
+            if (imagenSeleccionadaMod == null || !imagenSeleccionadaMod.exists()) {
+                throw new IllegalArgumentException("Debe seleccionar una imagen válida del guardia.");
+            }
+
+            // Validar formato de imagen
+            String nombreImagen = imagenSeleccionadaMod.getName().toLowerCase();
+            if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
+                throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
+            }
+
+            // Llamar al Controller (centraliza validaciones adicionales)
+            Guardia nuevoGuardia = guardiaController.registrarGuardia(
+                    primerNombre,
+                    segundoNombre,
+                    primerApellido,
+                    segundoApellido,
+                    edad,
+                    cedula,
+                    nacionalidad,
+                    correo,
+                    turno,
+                    fechaFin,
+                    cargo,
+                    imagenSeleccionadaMod
+            );
+
+            // Éxito
+            limpiarFormulario();
+            actualizarTablaGuardias();
+            JOptionPane.showMessageDialog(this, "Guardia registrado exitosamente.",
+                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Error de validación", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void actualizarTablaGuardias() {
@@ -2408,80 +2428,80 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCedulaKeyTyped
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       try {
-        // Obtener valores del formulario
-        String cedulaOriginal = txtCedulaMod.getText().trim();
-        String primerNombre = txtPrimerNombreMod.getText().trim();
-        String segundoNombre = txtSegundoNombreMod.getText().trim();
-        String primerApellido = txtPrimerApellidoMod.getText().trim();
-        String segundoApellido = txtSegundoApellidoMod.getText().trim();
-        String nacionalidad = txtNacionalidadMod.getText().trim();
-        String correo = txtCorreoMod.getText().trim();
-        String turno = cmbTurnoMod.getSelectedItem().toString();
-        String cargo = txtCargoMod.getSelectedItem().toString();
-        
-        // Validar edad
-        int edad;
         try {
-            edad = Integer.parseInt(txtEdadMod.getText().trim());
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("La edad debe ser un número válido.");
-        }
-        
-        // Validar fecha fin
-        if (dateFinContratoMod.getDate() == null) {
-            throw new IllegalArgumentException("Seleccione una fecha de fin de contrato.");
-        }
-        LocalDate fechaFin = dateFinContratoMod.getDate().toInstant()
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate();
+            // Obtener valores del formulario
+            String cedulaOriginal = txtCedulaMod.getText().trim();
+            String primerNombre = txtPrimerNombreMod.getText().trim();
+            String segundoNombre = txtSegundoNombreMod.getText().trim();
+            String primerApellido = txtPrimerApellidoMod.getText().trim();
+            String segundoApellido = txtSegundoApellidoMod.getText().trim();
+            String nacionalidad = txtNacionalidadMod.getText().trim();
+            String correo = txtCorreoMod.getText().trim();
+            String turno = cmbTurnoMod.getSelectedItem().toString();
+            String cargo = txtCargoMod.getSelectedItem().toString();
 
-        // Validar imagen (si se seleccionó una nueva)
-        if (imagenSeleccionadaMod != null) {
-            if (!imagenSeleccionadaMod.exists()) {
-                throw new IllegalArgumentException("La imagen seleccionada no existe.");
+            // Validar edad
+            int edad;
+            try {
+                edad = Integer.parseInt(txtEdadMod.getText().trim());
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("La edad debe ser un número válido.");
             }
-            String nombreImagen = imagenSeleccionadaMod.getName().toLowerCase();
-            if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
-                throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
-            }
-        }
 
-        // Preparar cambios
-        Map<String, Object> cambios = new HashMap<>();
-        cambios.put("primerNombre", primerNombre);
-        cambios.put("segundoNombre", segundoNombre);
-        cambios.put("primerApellido", primerApellido);
-        cambios.put("segundoApellido", segundoApellido);
-        cambios.put("edad", edad);
-        cambios.put("nacionalidad", nacionalidad);
-        cambios.put("correo", correo);
-        cambios.put("turno", turno);
-        cambios.put("cargo", cargo);
-        cambios.put("fechaFin", fechaFin);
-        
-        // Llamar al Controller
-        boolean modificado = guardiaController.modificarGuardia(
-            cedulaOriginal,
-            cambios,
-            imagenSeleccionadaMod // Puede ser null
-        );
-        
-        if (modificado) {
-            limpiarFormularioModificacion();
-            actualizarTablaGuardias();
-            JOptionPane.showMessageDialog(this, "Guardia modificado exitosamente.", 
-                "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            // Validar fecha fin
+            if (dateFinContratoMod.getDate() == null) {
+                throw new IllegalArgumentException("Seleccione una fecha de fin de contrato.");
+            }
+            LocalDate fechaFin = dateFinContratoMod.getDate().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+
+            // Validar imagen (si se seleccionó una nueva)
+            if (imagenSeleccionadaMod != null) {
+                if (!imagenSeleccionadaMod.exists()) {
+                    throw new IllegalArgumentException("La imagen seleccionada no existe.");
+                }
+                String nombreImagen = imagenSeleccionadaMod.getName().toLowerCase();
+                if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
+                    throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
+                }
+            }
+
+            // Preparar cambios
+            Map<String, Object> cambios = new HashMap<>();
+            cambios.put("primerNombre", primerNombre);
+            cambios.put("segundoNombre", segundoNombre);
+            cambios.put("primerApellido", primerApellido);
+            cambios.put("segundoApellido", segundoApellido);
+            cambios.put("edad", edad);
+            cambios.put("nacionalidad", nacionalidad);
+            cambios.put("correo", correo);
+            cambios.put("turno", turno);
+            cambios.put("cargo", cargo);
+            cambios.put("fechaFin", fechaFin);
+
+            // Llamar al Controller
+            boolean modificado = guardiaController.modificarGuardia(
+                    cedulaOriginal,
+                    cambios,
+                    imagenSeleccionadaMod // Puede ser null
+            );
+
+            if (modificado) {
+                limpiarFormularioModificacion();
+                actualizarTablaGuardias();
+                JOptionPane.showMessageDialog(this, "Guardia modificado exitosamente.",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Error de validación", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-            
-    } catch (IllegalArgumentException e) {
-        JOptionPane.showMessageDialog(this, e.getMessage(), 
-            "Error de validación", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(), 
-            "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
     }//GEN-LAST:event_jButton3ActionPerformed
 
 
@@ -2503,78 +2523,78 @@ public class Director extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // Opciones para el diálogo
-    Object[] options = {"Tomar Foto", "Seleccionar Archivo", "Cancelar"};
-    int opcion = JOptionPane.showOptionDialog(
-            this,
-            "¿Cómo desea obtener la imagen del guardia?",
-            "Seleccionar Imagen",
-            JOptionPane.YES_NO_CANCEL_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            options,
-            options[0]
-    );
+        Object[] options = {"Tomar Foto", "Seleccionar Archivo", "Cancelar"};
+        int opcion = JOptionPane.showOptionDialog(
+                this,
+                "¿Cómo desea obtener la imagen del guardia?",
+                "Seleccionar Imagen",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
 
-    try {
-        File nuevaImagen = null;
+        try {
+            File nuevaImagen = null;
 
-        if (opcion == 0) { // Tomar Foto con cámara
-            nuevaImagen = guardiaController.capturarImagenGuardia();
-        } else if (opcion == 1) { // Seleccionar archivo del sistema
-            JFileChooser fileChooser = new JFileChooser();
-            FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                    "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");
-            fileChooser.setFileFilter(filter);
-            fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+            if (opcion == 0) { // Tomar Foto con cámara
+                nuevaImagen = guardiaController.capturarImagenGuardia();
+            } else if (opcion == 1) { // Seleccionar archivo del sistema
+                JFileChooser fileChooser = new JFileChooser();
+                FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                        "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");
+                fileChooser.setFileFilter(filter);
+                fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 
-            int resultado = fileChooser.showOpenDialog(this);
+                int resultado = fileChooser.showOpenDialog(this);
 
-            if (resultado == JFileChooser.APPROVE_OPTION) {
-                nuevaImagen = fileChooser.getSelectedFile();
+                if (resultado == JFileChooser.APPROVE_OPTION) {
+                    nuevaImagen = fileChooser.getSelectedFile();
 
-                // Validar extensión del archivo
-                String nombreArchivo = nuevaImagen.getName().toLowerCase();
-                if (!nombreArchivo.endsWith(".jpg") && 
-                    !nombreArchivo.endsWith(".jpeg") && 
-                    !nombreArchivo.endsWith(".png")) {
-                    JOptionPane.showMessageDialog(this,
-                            "Formato de imagen no válido. Use JPG, JPEG o PNG.",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    // Validar extensión del archivo
+                    String nombreArchivo = nuevaImagen.getName().toLowerCase();
+                    if (!nombreArchivo.endsWith(".jpg")
+                            && !nombreArchivo.endsWith(".jpeg")
+                            && !nombreArchivo.endsWith(".png")) {
+                        JOptionPane.showMessageDialog(this,
+                                "Formato de imagen no válido. Use JPG, JPEG o PNG.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
                 }
             }
+
+            // Mostrar previsualización si se seleccionó una imagen
+            if (nuevaImagen != null && nuevaImagen.exists()) {
+                // Escalar la imagen para el JLabel
+                ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
+                Image imagenEscalada = icono.getImage()
+                        .getScaledInstance(
+                                lblImagenMod.getWidth(),
+                                lblImagenMod.getHeight(),
+                                Image.SCALE_SMOOTH
+                        );
+
+                // Mostrar en el JLabel
+                lblImagenMod.setIcon(new ImageIcon(imagenEscalada));
+
+                // Guardar referencia al archivo para cuando se guarde
+                imagenSeleccionadaMod = nuevaImagen;
+
+                // Mostrar tooltip con la ruta
+                lblImagenMod.setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
+
+                // Actualizar inmediatamente en el JSON (opcional)
+                // actualizarImagenEnJSON(nuevaImagen);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al obtener imagen: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-
-        // Mostrar previsualización si se seleccionó una imagen
-        if (nuevaImagen != null && nuevaImagen.exists()) {
-            // Escalar la imagen para el JLabel
-            ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
-            Image imagenEscalada = icono.getImage()
-                    .getScaledInstance(
-                            lblImagenMod.getWidth(),
-                            lblImagenMod.getHeight(),
-                            Image.SCALE_SMOOTH
-                    );
-
-            // Mostrar en el JLabel
-            lblImagenMod.setIcon(new ImageIcon(imagenEscalada));
-
-            // Guardar referencia al archivo para cuando se guarde
-            imagenSeleccionadaMod = nuevaImagen;
-
-            // Mostrar tooltip con la ruta
-            lblImagenMod.setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
-            
-            // Actualizar inmediatamente en el JSON (opcional)
-            // actualizarImagenEnJSON(nuevaImagen);
-        }
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this,
-                "Error al obtener imagen: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void txtCedulaModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaModActionPerformed
@@ -2727,6 +2747,49 @@ public class Director extends javax.swing.JFrame {
         cargarTablaGuardias();
     }
 
+    private void cargarDatosCoordinadorParaModificar(CoordinadorDeActividades coordinador) {
+    try {
+        // Cargar datos en los campos de modificación
+        txtCedulaMod2.setText(coordinador.getIdentificacion());
+        txtPrimerNombreMod2.setText(coordinador.getPrimerNombre());
+        txtSegundoNombreMod2.setText(coordinador.getSegundoNombre());
+        txtPrimerApellidoMod2.setText(coordinador.getPrimerApellido());
+        txtSegundoApellidoMod2.setText(coordinador.getSegundoApellido());
+        txtEdadMod2.setText(String.valueOf(coordinador.getEdad()));
+        txtNacionalidadMod2.setText(coordinador.getNacionalidad());
+        txtCorreoMod2.setText(coordinador.getCorreo());
+        cmbTurnoMod2.setSelectedItem(coordinador.getTurno());
+        txtCargoMod1.setSelectedItem(coordinador.getCargo());
+        
+        // Cargar fecha de fin de contrato
+        if (coordinador.getFechaFinContrato() != null) {
+            Date fechaFin = Date.from(coordinador.getFechaFinContrato()
+                    .atStartOfDay(ZoneId.systemDefault()).toInstant());
+            dateFinContratoMod2.setDate(fechaFin);
+        }
+        
+        // Cargar imagen si existe
+        if (coordinador.getRutaImagen() != null && !coordinador.getRutaImagen().isEmpty()) {
+            File imagenFile = new File(coordinador.getRutaImagen());
+            if (imagenFile.exists()) {
+                ImageIcon icon = new ImageIcon(imagenFile.getAbsolutePath());
+                Image img = icon.getImage().getScaledInstance(
+                        lblImagenMod2.getWidth(), 
+                        lblImagenMod2.getHeight(), 
+                        Image.SCALE_SMOOTH);
+                lblImagenMod2.setIcon(new ImageIcon(img));
+                imagenSeleccionadaCDA = imagenFile;
+            }
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+                "Error al cargar datos: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+
+    
     private void cargarDatosEnfermeraParaModificar(Enfermera enfermera) {
         if (enfermera == null) {
             return;
@@ -2782,75 +2845,75 @@ public class Director extends javax.swing.JFrame {
     }
 
     private void actualizarTablaCDA() {
-    DefaultTableModel modelo = new DefaultTableModel() {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-
-        @Override
-        public Class<?> getColumnClass(int columnIndex) {
-            return columnIndex == 0 ? ImageIcon.class : Object.class;
-        }
-    };
-
-    modelo.setColumnIdentifiers(new String[]{
-        "Foto", 
-        "Nombre", 
-        "Apellido", 
-        "Edad", 
-        "Cédula",
-        "Nacionalidad", 
-        "Correo", 
-        "Cargo",
-        "Turno", 
-        "Fin Contrato"
-    });
-
-    // Asegúrate de importar Model.Entities.CoordinadorDeActividades
-    List<Model.Entities.CoordinadorDeActividades> coordinadores = 
-        CoordinadorDeActividadesController.getInstancia().obtenerTodosCoordinadores();
-
-    // Crear una imagen por defecto segura
-    ImageIcon iconoPorDefecto = crearIconoPorDefecto();
-
-    for (Model.Entities.CoordinadorDeActividades c : coordinadores) {
-        ImageIcon icono = iconoPorDefecto;
-
-        if (c.getRutaImagen() != null && !c.getRutaImagen().isEmpty()) {
-            try {
-                File file = new File(c.getRutaImagen());
-                if (file.exists()) {
-                    Image img = new ImageIcon(c.getRutaImagen()).getImage()
-                            .getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-                    icono = new ImageIcon(img);
-                }
-            } catch (Exception ex) {
-                System.err.println("Error cargando imagen: " + ex.getMessage());
+        DefaultTableModel modelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
             }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return columnIndex == 0 ? ImageIcon.class : Object.class;
+            }
+        };
+
+        modelo.setColumnIdentifiers(new String[]{
+            "Foto",
+            "Nombre",
+            "Apellido",
+            "Edad",
+            "Cédula",
+            "Nacionalidad",
+            "Correo",
+            "Cargo",
+            "Turno",
+            "Fin Contrato"
+        });
+
+        // Asegúrate de importar Model.Entities.CoordinadorDeActividades
+        List<Model.Entities.CoordinadorDeActividades> coordinadores
+                = CoordinadorDeActividadesController.getInstancia().obtenerTodosCoordinadores();
+
+        // Crear una imagen por defecto segura
+        ImageIcon iconoPorDefecto = crearIconoPorDefecto();
+
+        for (Model.Entities.CoordinadorDeActividades c : coordinadores) {
+            ImageIcon icono = iconoPorDefecto;
+
+            if (c.getRutaImagen() != null && !c.getRutaImagen().isEmpty()) {
+                try {
+                    File file = new File(c.getRutaImagen());
+                    if (file.exists()) {
+                        Image img = new ImageIcon(c.getRutaImagen()).getImage()
+                                .getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                        icono = new ImageIcon(img);
+                    }
+                } catch (Exception ex) {
+                    System.err.println("Error cargando imagen: " + ex.getMessage());
+                }
+            }
+
+            modelo.addRow(new Object[]{
+                icono,
+                c.getPrimerNombre() + " " + (c.getSegundoNombre() != null ? c.getSegundoNombre() : ""),
+                c.getPrimerApellido() + " " + c.getSegundoApellido(),
+                c.getEdad(),
+                c.getIdentificacion(),
+                c.getNacionalidad(),
+                c.getCorreo(),
+                c.getCargo(),
+                c.getTurno(),
+                c.getFechaFinContrato() != null
+                ? c.getFechaFinContrato().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : ""
+            });
         }
 
-        modelo.addRow(new Object[]{
-            icono,
-            c.getPrimerNombre() + " " + (c.getSegundoNombre() != null ? c.getSegundoNombre() : ""),
-            c.getPrimerApellido() + " " + c.getSegundoApellido(),
-            c.getEdad(),
-            c.getIdentificacion(),
-            c.getNacionalidad(),
-            c.getCorreo(),
-            c.getCargo(),
-            c.getTurno(),
-            c.getFechaFinContrato() != null ? 
-                c.getFechaFinContrato().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : ""
-        });
+        tablaCoordinadores.setModel(modelo);
+        tablaCoordinadores.setRowHeight(85);
+        tablaCoordinadores.getColumnModel().getColumn(0).setPreferredWidth(85);
+        tablaCoordinadores.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
     }
 
-    tablaCoordinadores.setModel(modelo);
-    tablaCoordinadores.setRowHeight(85);
-    tablaCoordinadores.getColumnModel().getColumn(0).setPreferredWidth(85);
-    tablaCoordinadores.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
-}
-    
     private void actualizarTablaEnfermeras() {
         DefaultTableModel modelo = new DefaultTableModel() {
             @Override
@@ -3009,19 +3072,19 @@ public class Director extends javax.swing.JFrame {
     }
 
     private Enfermera obtenerDatosModificados() {
-        String primerNombre = txtPrimerNombreMod1.getText().trim();
-        String segundoNombre = txtSegundoNombreMod1.getText().trim();
-        String primerApellido = txtPrimerApellidoMod1.getText().trim();
-        String segundoApellido = txtSegundoApellidoMod1.getText().trim();
-        int edad = Integer.parseInt(txtEdadMod1.getText().trim());
-        String cedula = txtCedulaMod1.getText().trim();
-        String nacionalidad = txtNacionalidadMod1.getText().trim();
-        String correo = txtCorreoMod1.getText().trim();
-        String turno = cmbTurnoMod1.getSelectedItem().toString();
+        String primerNombre = txtPrimerNombreMod2.getText().trim();
+        String segundoNombre = txtSegundoNombreMod2.getText().trim();
+        String primerApellido = txtPrimerApellidoMod2.getText().trim();
+        String segundoApellido = txtSegundoApellidoMod2.getText().trim();
+        int edad = Integer.parseInt(txtEdadMod2.getText().trim());
+        String cedula = txtCedulaMod2.getText().trim();
+        String nacionalidad = txtNacionalidadMod2.getText().trim();
+        String correo = txtCorreoMod2.getText().trim();
+        String turno = cmbTurnoMod2.getSelectedItem().toString();
 
         LocalDate fechaContratacion = LocalDate.now();
 
-        Date fechaFin = dateFinContratoMod1.getDate();
+        Date fechaFin = dateFinContratoMod2.getDate();
         if (fechaFin == null) {
             JOptionPane.showMessageDialog(this, "Debes seleccionar una fecha de fin de contrato.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -3347,84 +3410,84 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCorreo1ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-    try {
-        // Validación de imagen - debe ser obligatoria
-        if (imagenSeleccionadaCDA == null || !imagenSeleccionadaCDA.exists()) {
-            JOptionPane.showMessageDialog(this, 
-                "Debe seleccionar o capturar una foto del coordinador", 
-                "Foto requerida", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        // Validar que sea una imagen válida
         try {
-            BufferedImage img = ImageIO.read(imagenSeleccionadaCDA);
-            if (img == null) {
-                JOptionPane.showMessageDialog(this, 
-                    "El archivo seleccionado no es una imagen válida", 
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            // Validación de imagen - debe ser obligatoria
+            if (imagenSeleccionadaCDA == null || !imagenSeleccionadaCDA.exists()) {
+                JOptionPane.showMessageDialog(this,
+                        "Debe seleccionar o capturar una foto del coordinador",
+                        "Foto requerida", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error al leer la imagen: " + e.getMessage(), 
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+
+            // Validar que sea una imagen válida
+            try {
+                BufferedImage img = ImageIO.read(imagenSeleccionadaCDA);
+                if (img == null) {
+                    JOptionPane.showMessageDialog(this,
+                            "El archivo seleccionado no es una imagen válida",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al leer la imagen: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            CoordinadorDeActividadesController controller = CoordinadorDeActividadesController.getInstancia();
+
+            // Obtener datos del formulario
+            String primerNombre = txtPrimerNombre2.getText().trim();
+            String segundoNombre = txtSegundoNombre2.getText().trim();
+            String primerApellido = txtPrimerApellido2.getText().trim();
+            String segundoApellido = txtSegundoApellido2.getText().trim();
+            int edad = Integer.parseInt(txtEdad2.getText().trim());
+            String cedula = txtCedula2.getText().trim();
+            String nacionalidad = txtNacionalidad2.getText().trim();
+            String correo = txtCorreo2.getText().trim();
+            String turno = cmbTurno2.getSelectedItem().toString();
+            String cargo = cmbCargo2.getSelectedItem().toString();
+
+            // Validar fecha
+            if (dateFinContrato2.getDate() == null) {
+                JOptionPane.showMessageDialog(this,
+                        "Debe seleccionar una fecha de fin de contrato",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            LocalDate fechaFin = dateFinContrato2.getDate().toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate();
+
+            // Registrar coordinador
+            controller.registrarCoordinador(
+                    primerNombre, segundoNombre, primerApellido, segundoApellido,
+                    edad, cedula, nacionalidad, correo, turno, cargo,
+                    fechaFin, imagenSeleccionadaCDA
+            );
+
+            JOptionPane.showMessageDialog(this,
+                    "Coordinador registrado exitosamente!\nLas credenciales fueron enviadas al correo.",
+                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            limpiarFormularioCDA();
+            actualizarTablaCDA();
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "La edad debe ser un número válido",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this,
+                    e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al registrar coordinador: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-
-        CoordinadorDeActividadesController controller = CoordinadorDeActividadesController.getInstancia();
-
-        // Obtener datos del formulario
-        String primerNombre = txtPrimerNombre2.getText().trim();
-        String segundoNombre = txtSegundoNombre2.getText().trim();
-        String primerApellido = txtPrimerApellido2.getText().trim();
-        String segundoApellido = txtSegundoApellido2.getText().trim();
-        int edad = Integer.parseInt(txtEdad2.getText().trim());
-        String cedula = txtCedula2.getText().trim();
-        String nacionalidad = txtNacionalidad2.getText().trim();
-        String correo = txtCorreo2.getText().trim();
-        String turno = cmbTurno2.getSelectedItem().toString();
-        String cargo = cmbCargo2.getSelectedItem().toString();
-        
-        // Validar fecha
-        if (dateFinContrato2.getDate() == null) {
-            JOptionPane.showMessageDialog(this, 
-                "Debe seleccionar una fecha de fin de contrato", 
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        LocalDate fechaFin = dateFinContrato2.getDate().toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalDate();
-
-        // Registrar coordinador
-        controller.registrarCoordinador(
-            primerNombre, segundoNombre, primerApellido, segundoApellido,
-            edad, cedula, nacionalidad, correo, turno, cargo,
-            fechaFin, imagenSeleccionadaCDA
-        );
-
-        JOptionPane.showMessageDialog(this,
-            "Coordinador registrado exitosamente!\nLas credenciales fueron enviadas al correo.",
-            "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-        limpiarFormularioCDA();
-        actualizarTablaCDA();
-
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, 
-            "La edad debe ser un número válido", 
-            "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (IllegalArgumentException e) {
-        JOptionPane.showMessageDialog(this, 
-            e.getMessage(), 
-            "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, 
-            "Error al registrar coordinador: " + e.getMessage(), 
-            "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void txtCorreo2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreo2FocusLost
@@ -3440,80 +3503,80 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCorreo2KeyTyped
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-   // Mostrar opciones al usuario (cámara o selección de archivo)
-    Object[] options = {"Tomar Foto", "Seleccionar Archivo", "Cancelar"};
-    int opcion = JOptionPane.showOptionDialog(
-            this,
-            "¿Cómo desea obtener la imagen del coordinador?",
-            "Seleccionar Imagen",
-            JOptionPane.YES_NO_CANCEL_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            options,
-            options[0]
-    );
+        // Mostrar opciones al usuario (cámara o selección de archivo)
+        Object[] options = {"Tomar Foto", "Seleccionar Archivo", "Cancelar"};
+        int opcion = JOptionPane.showOptionDialog(
+                this,
+                "¿Cómo desea obtener la imagen del coordinador?",
+                "Seleccionar Imagen",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
 
-    try {
-        if (opcion == 0) { // Tomar Foto con cámara
-            imagenSeleccionadaCDA = coordinadorController.capturarImagenCoordinador();
-            if (imagenSeleccionadaCDA == null) {
-                JOptionPane.showMessageDialog(this, 
-                    "No se pudo capturar la imagen", 
-                    "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        } else if (opcion == 1) { // Seleccionar archivo del sistema
-            JFileChooser fileChooser = new JFileChooser();
-            FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                    "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");
-            fileChooser.setFileFilter(filter);
-            fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-
-            int resultado = fileChooser.showOpenDialog(this);
-            if (resultado == JFileChooser.APPROVE_OPTION) {
-                imagenSeleccionadaCDA = fileChooser.getSelectedFile();
-                
-                // Validar extensión del archivo
-                String nombreArchivo = imagenSeleccionadaCDA.getName().toLowerCase();
-                if (!nombreArchivo.endsWith(".jpg") && 
-                    !nombreArchivo.endsWith(".jpeg") && 
-                    !nombreArchivo.endsWith(".png")) {
+        try {
+            if (opcion == 0) { // Tomar Foto con cámara
+                imagenSeleccionadaCDA = coordinadorController.capturarImagenCoordinador();
+                if (imagenSeleccionadaCDA == null) {
                     JOptionPane.showMessageDialog(this,
-                            "Formato de imagen no válido. Use JPG, JPEG o PNG.",
+                            "No se pudo capturar la imagen",
                             "Error", JOptionPane.ERROR_MESSAGE);
-                    imagenSeleccionadaCDA = null;
                     return;
                 }
+            } else if (opcion == 1) { // Seleccionar archivo del sistema
+                JFileChooser fileChooser = new JFileChooser();
+                FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                        "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");
+                fileChooser.setFileFilter(filter);
+                fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+
+                int resultado = fileChooser.showOpenDialog(this);
+                if (resultado == JFileChooser.APPROVE_OPTION) {
+                    imagenSeleccionadaCDA = fileChooser.getSelectedFile();
+
+                    // Validar extensión del archivo
+                    String nombreArchivo = imagenSeleccionadaCDA.getName().toLowerCase();
+                    if (!nombreArchivo.endsWith(".jpg")
+                            && !nombreArchivo.endsWith(".jpeg")
+                            && !nombreArchivo.endsWith(".png")) {
+                        JOptionPane.showMessageDialog(this,
+                                "Formato de imagen no válido. Use JPG, JPEG o PNG.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                        imagenSeleccionadaCDA = null;
+                        return;
+                    }
+                }
             }
-        }
 
-        // Mostrar previsualización si se seleccionó una imagen
-        if (imagenSeleccionadaCDA != null && imagenSeleccionadaCDA.exists()) {
-            ImageIcon icono = new ImageIcon(imagenSeleccionadaCDA.getAbsolutePath());
-            Image img = icono.getImage()
-                    .getScaledInstance(
-                            lblImagen2.getWidth(),
-                            lblImagen2.getHeight(),
-                            Image.SCALE_SMOOTH
-                    );
-            lblImagen2.setIcon(new ImageIcon(img));
-            lblImagen2.setToolTipText("Imagen seleccionada: " + imagenSeleccionadaCDA.getAbsolutePath());
-            
-            // Debug: Verificar imagen
-            System.out.println("Imagen seleccionada: " + imagenSeleccionadaCDA.getAbsolutePath());
-            System.out.println("Existe: " + imagenSeleccionadaCDA.exists());
-            System.out.println("Tamaño: " + imagenSeleccionadaCDA.length() + " bytes");
-        } else {
-            lblImagen2.setIcon(null);
-            lblImagen2.setToolTipText(null);
-        }
+            // Mostrar previsualización si se seleccionó una imagen
+            if (imagenSeleccionadaCDA != null && imagenSeleccionadaCDA.exists()) {
+                ImageIcon icono = new ImageIcon(imagenSeleccionadaCDA.getAbsolutePath());
+                Image img = icono.getImage()
+                        .getScaledInstance(
+                                lblImagen2.getWidth(),
+                                lblImagen2.getHeight(),
+                                Image.SCALE_SMOOTH
+                        );
+                lblImagen2.setIcon(new ImageIcon(img));
+                lblImagen2.setToolTipText("Imagen seleccionada: " + imagenSeleccionadaCDA.getAbsolutePath());
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this,
-                "Error al obtener imagen: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
+                // Debug: Verificar imagen
+                System.out.println("Imagen seleccionada: " + imagenSeleccionadaCDA.getAbsolutePath());
+                System.out.println("Existe: " + imagenSeleccionadaCDA.exists());
+                System.out.println("Tamaño: " + imagenSeleccionadaCDA.length() + " bytes");
+            } else {
+                lblImagen2.setIcon(null);
+                lblImagen2.setToolTipText(null);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al obtener imagen: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void txtCedula2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedula2ActionPerformed
@@ -3533,7 +3596,61 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtEdad2KeyTyped
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        // TODO add your handling code here:
+       try {
+        String cedulaOriginal = txtCedulaMod2.getText().trim();
+
+        // Validar fecha de fin de contrato
+        if (dateFinContratoMod2.getDate() == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Debe seleccionar una fecha de fin de contrato",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Preparar mapa de cambios
+        Map<String, Object> cambios = new HashMap<>();
+        cambios.put("primerNombre", txtPrimerNombreMod2.getText().trim());
+        cambios.put("segundoNombre", txtSegundoNombreMod2.getText().trim());
+        cambios.put("primerApellido", txtPrimerApellidoMod2.getText().trim());
+        cambios.put("segundoApellido", txtSegundoApellidoMod2.getText().trim());
+        cambios.put("edad", Integer.parseInt(txtEdadMod2.getText().trim()));
+        cambios.put("nacionalidad", txtNacionalidadMod2.getText().trim());
+        cambios.put("correo", txtCorreoMod2.getText().trim());
+        cambios.put("turno", cmbTurnoMod2.getSelectedItem().toString());
+        cambios.put("cargo", txtCargoMod1.getSelectedItem().toString());
+        cambios.put("fechaFin", dateFinContratoMod2.getDate().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDate());
+
+        // Usar la imagen seleccionada (puede ser null si no se cambió)
+        boolean resultado = CoordinadorDeActividadesController.getInstancia().modificarCoordinador(
+                cedulaOriginal,
+                cambios,
+                imagenSeleccionadaCDA // File de la imagen capturada/seleccionada
+        );
+
+        if (resultado) {
+            JOptionPane.showMessageDialog(this,
+                    "Coordinadora modificada con éxito",
+                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            actualizarTablaCDA();
+            jTabbedPane1.setSelectedComponent(mostrarCoordinadora);
+
+            // Limpiar la imagen seleccionada después de modificar
+            imagenSeleccionadaCDA = null;
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this,
+                "La edad debe ser un número válido",
+                "Error", JOptionPane.ERROR_MESSAGE);
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+                "Error al modificar: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void txtCorreoMod2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreoMod2FocusLost
@@ -3901,6 +4018,83 @@ public class Director extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFechaContratacionActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        int fila = tablaCoordinadores.getSelectedRow();
+
+    if (fila < 0) {
+        JOptionPane.showMessageDialog(this,
+                "Seleccione un coordinador primero",
+                "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Obtener la cédula de la columna correcta (ajusta el índice según tu tabla)
+    String cedula = tablaCoordinadores.getValueAt(fila, 4).toString(); // Cambia 4 por el índice correcto
+
+    try {
+        // Obtener el coordinador completo desde el controlador
+        CoordinadorDeActividades coordinador = CoordinadorDeActividadesController.getInstancia()
+                .obtenerCoordinadorPorCedula(cedula);
+
+        if (coordinador != null) {
+            // Cargar datos en el formulario de modificación
+            cargarDatosCoordinadorParaModificar(coordinador);
+            
+            // Cambiar al panel de modificación (asegúrate que el nombre sea correcto)
+            jTabbedPane1.setSelectedComponent(ModificarCoordinador);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "No se encontró el coordinador con cédula: " + cedula,
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+                "Error al cargar datos: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        int fila = tablaCoordinadores.getSelectedRow();
+
+    if (fila < 0) {
+        JOptionPane.showMessageDialog(this,
+                "Seleccione un coordinador primero",
+                "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    String cedula = tablaCoordinadores.getValueAt(fila, 4).toString(); // Asumiendo que la cédula está en la columna 5
+
+    int confirmacion = JOptionPane.showConfirmDialog(this,
+            "¿Está seguro que desea eliminar este coordinador?",
+            "Confirmar eliminación",
+            JOptionPane.YES_NO_OPTION);
+
+    if (confirmacion == JOptionPane.YES_OPTION) {
+        try {
+            boolean eliminado = CoordinadorDeActividadesController.getInstancia()
+                    .eliminarCoordinador(cedula);
+
+            if (eliminado) {
+                JOptionPane.showMessageDialog(this,
+                        "Coordinador eliminado con éxito",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                actualizarTablaCDA();
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "No se pudo eliminar el coordinador",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al eliminar: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -3943,6 +4137,7 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JMenuItem EliminarEnfermera;
     private javax.swing.JPanel ListaDeGuardias;
     private javax.swing.JMenuItem Modificar;
+    private javax.swing.JPanel ModificarCoordinador;
     private javax.swing.JMenuItem ModificarEnfermera;
     private javax.swing.JPanel ModificarGuardia;
     private javax.swing.JPanel ModificarNurse;
@@ -4062,15 +4257,15 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel88;
     private javax.swing.JLabel jLabel89;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
-    private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -4081,6 +4276,7 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
+    private javax.swing.JPopupMenu jPopupMenu4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -4155,6 +4351,7 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JLabel lblImagenMod;
     private javax.swing.JLabel lblImagenMod1;
     private javax.swing.JLabel lblImagenMod2;
+    private javax.swing.JPanel mostrarCoordinadora;
     private javax.swing.JTable tablaCoordinadores;
     private javax.swing.JTable tablaEnfermeras;
     private javax.swing.JTable tablaGuardias;
