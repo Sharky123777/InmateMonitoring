@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class CoordinadorDeActividadesController {
+
     private static CoordinadorDeActividadesController instancia;
     private final CoordinadorDeActividadesDAO coordinadorDAO;
     private FrmCamara ventanaCamara;
@@ -30,237 +31,373 @@ public class CoordinadorDeActividadesController {
         }
         return instancia;
     }
-    
+
     public File capturarImagenCoordinador() {
-    FrmCamara ventanaCamara = new FrmCamara();
-    ventanaCamara.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    
-    JDialog dialog = new JDialog();
-    dialog.setModal(true);
-    dialog.setContentPane(ventanaCamara.getContentPane());
-    dialog.pack();
-    dialog.setLocationRelativeTo(null);
-    dialog.setVisible(true);
-    
-    while (dialog.isVisible()) {
+        FrmCamara ventanaCamara = new FrmCamara();
+        ventanaCamara.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JDialog dialog = new JDialog();
+        dialog.setModal(true);
+        dialog.setContentPane(ventanaCamara.getContentPane());
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+
+        while (dialog.isVisible()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                JOptionPane.showMessageDialog(null,
+                        "Error al capturar imagen: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        }
+
+        // Obtener la imagen capturada
+        File imagen = ventanaCamara.getImagenCapturada();
+
+        // Validar la imagen obtenida
+        if (imagen == null) {
+            JOptionPane.showMessageDialog(null,
+                    "No se capturó ninguna imagen",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        if (!imagen.exists()) {
+            JOptionPane.showMessageDialog(null,
+                    "El archivo de imagen no existe",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        // Verificar que sea una imagen válida
         try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            JOptionPane.showMessageDialog(null, 
-                "Error al capturar imagen: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
+            BufferedImage img = ImageIO.read(imagen);
+            if (img == null) {
+                JOptionPane.showMessageDialog(null,
+                        "El archivo no es una imagen válida",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null,
+                    "Error al leer la imagen: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return null;
         }
+
+        return imagen;
     }
-    
-    // Obtener la imagen capturada
-    File imagen = ventanaCamara.getImagenCapturada();
-    
-    // Validar la imagen obtenida
-    if (imagen == null) {
-        JOptionPane.showMessageDialog(null, 
-            "No se capturó ninguna imagen",
-            "Error", JOptionPane.ERROR_MESSAGE);
-        return null;
-    }
-    
-    if (!imagen.exists()) {
-        JOptionPane.showMessageDialog(null, 
-            "El archivo de imagen no existe",
-            "Error", JOptionPane.ERROR_MESSAGE);
-        return null;
-    }
-    
-    // Verificar que sea una imagen válida
-    try {
-        BufferedImage img = ImageIO.read(imagen);
-        if (img == null) {
-            JOptionPane.showMessageDialog(null, 
-                "El archivo no es una imagen válida",
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(null, 
-            "Error al leer la imagen: " + e.getMessage(),
-            "Error", JOptionPane.ERROR_MESSAGE);
-        return null;
-    }
-    
-    return imagen;
-}
 
     public void registrarCoordinador(String primerNombre, String segundoNombre,
-        String primerApellido, String segundoApellido, int edad, String cedula,
-        String nacionalidad, String correo, String turno, String cargo,
-        LocalDate fechaFinContrato, File imagenSeleccionadaCDA) throws IOException {
-    
-    // Validación de campos obligatorios
-    validarCamposObligatorios(primerNombre, primerApellido, segundoApellido, 
-            edad, cedula, nacionalidad, correo, turno, cargo);
-    validarEdad(edad);
-    validarFechasContrato(LocalDate.now(), fechaFinContrato);
-    
-    // Validación de imagen obligatoria
-    if (imagenSeleccionadaCDA == null) {
-        throw new IllegalArgumentException("Debe proporcionar una imagen del coordinador");
-    }
-    
-    if (!imagenSeleccionadaCDA.exists()) {
-        throw new IllegalArgumentException("El archivo de imagen no existe: " + imagenSeleccionadaCDA.getAbsolutePath());
-    }
-    
-    // Verificar que sea una imagen válida
-    try {
-        BufferedImage img = ImageIO.read(imagenSeleccionadaCDA);
-        if (img == null) {
-            throw new IllegalArgumentException("El archivo no es una imagen válida");
+            String primerApellido, String segundoApellido, int edad, String cedula,
+            String nacionalidad, String correo, String turno, String cargo,
+            LocalDate fechaFinContrato, File imagenSeleccionadaCDA) throws IOException {
+
+        // Validación de campos obligatorios
+        validarCamposObligatorios(primerNombre, primerApellido, segundoApellido,
+                edad, cedula, nacionalidad, correo, turno, cargo);
+        validarEdad(edad);
+        validarFechasContrato(LocalDate.now(), fechaFinContrato);
+
+        // Validación de imagen obligatoria
+        if (imagenSeleccionadaCDA == null) {
+            throw new IllegalArgumentException("Debe proporcionar una imagen del coordinador");
         }
-    } catch (IOException e) {
-        throw new IllegalArgumentException("Error al leer la imagen: " + e.getMessage());
-    }
 
-    CoordinadorDeActividades nuevoCoordinador = new CoordinadorDeActividades(
-        primerNombre, segundoNombre, primerApellido, segundoApellido,
-        edad, "Femenino", nacionalidad, cedula, correo, turno,
-        LocalDate.now(), fechaFinContrato, "", "", cargo
-    );
-
-    if (!coordinadorDAO.guardarCoordinador(nuevoCoordinador, imagenSeleccionadaCDA)) {
-        throw new RuntimeException("No se pudo guardar el coordinador");
-    }
-}
-
-    // Método modificado para modificar coordinador con mejores validaciones
-public boolean modificarCoordinador(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
-    try {
-        // 1. Validar existencia del coordinador original
-        CoordinadorDeActividades original = validarYObternerOriginal(cedulaOriginal);
-        
-        // 2. Validar campos básicos
-        validarCamposModificados(cambios);
-        
-        // 3. Validar edad
-        int edad = validarEdad((int) cambios.get("edad"));
-        
-        // 4. Validar fechas
-        LocalDate fechaFin = validarFechas(original.getFechaInicioContrato(), (LocalDate) cambios.get("fechaFin"));
-        
-        // 5. Validar imagen si se proporciona una nueva
-        if (nuevaImagen != null) {
-            validarImagen(nuevaImagen);
+        if (!imagenSeleccionadaCDA.exists()) {
+            throw new IllegalArgumentException("El archivo de imagen no existe: " + imagenSeleccionadaCDA.getAbsolutePath());
         }
+
+        // Verificar que sea una imagen válida
+        try {
+            BufferedImage img = ImageIO.read(imagenSeleccionadaCDA);
+            if (img == null) {
+                throw new IllegalArgumentException("El archivo no es una imagen válida");
+            }
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Error al leer la imagen: " + e.getMessage());
+        }
+
+        CoordinadorDeActividades nuevoCoordinador = new CoordinadorDeActividades(
+                primerNombre, segundoNombre, primerApellido, segundoApellido,
+                edad, "Femenino", nacionalidad, cedula, correo, turno,
+                LocalDate.now(), fechaFinContrato, "", "", cargo
+        );
+
+        if (!coordinadorDAO.guardarCoordinador(nuevoCoordinador, imagenSeleccionadaCDA)) {
+            throw new RuntimeException("No se pudo guardar el coordinador");
+        }
+    }
+
+    /**
+     * Modifica un coordinador de actividades
+     * @param cedulaOriginal La cédula del coordinador a modificar
+     * @param cambios Mapa con los campos a modificar
+     * @param nuevaImagen Archivo de nueva imagen (puede ser null si no se cambia)
+     * @return Estado: true si se realizaron cambios, false si no hubo cambios
+     * @throws CancelarModificacionException Si el usuario decide continuar editando
+     * @throws IllegalArgumentException Si hay errores de validación
+     * @throws RuntimeException Si hay un error en la operación
+     */
+    public boolean modificarCoordinador(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
+        System.out.println("Iniciando proceso de modificación para cédula: " + cedulaOriginal);
         
-        // 6. Crear objeto modificado
-        CoordinadorDeActividades coordinadorModificado = crearCoordinadorModificado(
-            original, cambios, edad, fechaFin);
-        
-        // 7. Determinar qué imagen usar
-        File imagenFinal = determinarImagenFinal(original, nuevaImagen);
-        
-        // 8. Ejecutar modificación en DAO
-        return coordinadorDAO.modificarCoordinador(cedulaOriginal, coordinadorModificado, imagenFinal);
-        
-    } catch (IllegalArgumentException e) {
-        throw e; // Relanzar excepciones de validación
-    } catch (Exception e) {
-        throw new RuntimeException("Error al modificar coordinador: " + e.getMessage(), e);
-    }
-}
+        try {
+            // 1. Validar existencia del coordinador original
+            CoordinadorDeActividades original = validarYObternerOriginal(cedulaOriginal);
+            System.out.println("Coordinador original encontrado: " + original.getPrimerNombre());
+            
+            // 2. Verificar que todos los campos requeridos estén presentes
+            validarCamposModificados(cambios);
+            System.out.println("Validación de campos completada");
 
-// Métodos auxiliares de validación mejorados
-private CoordinadorDeActividades validarYObternerOriginal(String cedula) {
-    CoordinadorDeActividades original = obtenerCoordinadorPorCedula(cedula);
-    if (original == null) {
-        throw new IllegalArgumentException("Coordinador no encontrado con cédula: " + cedula);
-    }
-    return original;
-}
+            // 3. Verificar si hay cambios reales - PUNTO CRÍTICO
+            boolean hayCambios = verificarCambios(original, cambios, nuevaImagen);
+            System.out.println("Resultado de verificación de cambios: " + hayCambios);
 
-private void validarCamposModificados(Map<String, Object> cambios) {
-    StringBuilder errores = new StringBuilder();
+            if (!hayCambios) {
+                System.out.println("No se detectaron cambios. Mostrando diálogo de confirmación.");
+                // Mostrar diálogo de confirmación
+                int opcion = JOptionPane.showConfirmDialog(null,
+                        "¿Está segura que no desea realizar cambios?",
+                        "Sin cambios detectados",
+                        JOptionPane.YES_NO_OPTION);
+                
+                System.out.println("Opción seleccionada: " + (opcion == JOptionPane.YES_OPTION ? "SI" : "NO"));
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    // Retornar false para indicar que no se realizaron cambios
+                    System.out.println("Usuario confirmó no realizar cambios");
+                    return false;
+                } else {
+                    // El usuario quiere seguir editando
+                    System.out.println("Usuario decidió seguir editando");
+                    throw new CancelarModificacionException();
+                }
+            }
+
+            System.out.println("Hay cambios, procediendo con la validación y modificación");
+            
+            // 4. Validar edad
+            int edad = validarEdad((int) cambios.get("edad"));
+
+            // 5. Validar fechas
+            LocalDate fechaFin = validarFechas(original.getFechaInicioContrato(), (LocalDate) cambios.get("fechaFin"));
+
+            // 6. Validar imagen si se proporciona una nueva
+            if (nuevaImagen != null) {
+                validarImagen(nuevaImagen);
+            }
+
+            // 7. Crear objeto modificado
+            CoordinadorDeActividades coordinadorModificado = crearCoordinadorModificado(
+                    original, cambios, edad, fechaFin);
+
+            // 8. Determinar qué imagen usar
+            File imagenFinal = determinarImagenFinal(original, nuevaImagen);
+
+            // 9. Ejecutar modificación en DAO
+            boolean resultado = coordinadorDAO.modificarCoordinador(cedulaOriginal, coordinadorModificado, imagenFinal);
+            
+            if (resultado) {
+                // Mostrar mensaje de éxito
+                System.out.println("Modificación exitosa, mostrando mensaje");
+                JOptionPane.showMessageDialog(null,
+                        "COORDINADORA MODIFICADA EXITOSAMENTE",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            }
+            
+            return resultado;
+
+        } catch (CancelarModificacionException e) {
+            // El usuario decidió seguir editando
+            throw e;
+        } catch (IllegalArgumentException e) {
+            // Relanzar excepciones de validación
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+            throw e;
+        } catch (Exception e) {
+            // Capturar cualquier otro error
+            JOptionPane.showMessageDialog(null, 
+                    "Error al modificar coordinador: " + e.getMessage(), 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException("Error al modificar coordinador: " + e.getMessage(), e);
+        }
+    }
+
+    private boolean verificarCambios(CoordinadorDeActividades original, Map<String, Object> cambios, File nuevaImagen) {
+    System.out.println("Verificando cambios:");
     
-    // Validar que los campos obligatorios no estén vacíos
-    validarCampoObligatorio(cambios, "primerNombre", "Primer nombre", errores);
-    validarCampoObligatorio(cambios, "primerApellido", "Primer apellido", errores);
-    validarCampoObligatorio(cambios, "segundoApellido", "Segundo apellido", errores);
-    validarCampoObligatorio(cambios, "nacionalidad", "Nacionalidad", errores);
-    validarCampoObligatorio(cambios, "correo", "Correo electrónico", errores);
-    validarCampoObligatorio(cambios, "cargo", "Cargo", errores);
-    
-    // Validación específica para correo electrónico
-    if (cambios.containsKey("correo") && !((String)cambios.get("correo")).contains("@")) {
-        errores.append("- El correo electrónico debe tener un formato válido\n");
+    // Verificar cambios en campos básicos
+    if (!original.getPrimerNombre().trim().equals(((String)cambios.get("primerNombre")).trim())) {
+        System.out.println("Cambio detectado en primer nombre");
+        return true;
     }
     
-    if (errores.length() > 0) {
-        throw new IllegalArgumentException(errores.toString());
+    String segundoNombreOriginal = original.getSegundoNombre() != null ? original.getSegundoNombre().trim() : "";
+    String segundoNombreNuevo = cambios.getOrDefault("segundoNombre", "").toString().trim();
+    if (!segundoNombreOriginal.equals(segundoNombreNuevo)) {
+        System.out.println("Cambio detectado en segundo nombre");
+        return true;
     }
-}
-
-private void validarCampoObligatorio(Map<String, Object> cambios, String campo, String nombreCampo, StringBuilder errores) {
-    if (!cambios.containsKey(campo)) {
-        errores.append("- ").append(nombreCampo).append(" es un campo requerido\n");
-    } else if (cambios.get(campo) instanceof String && ((String)cambios.get(campo)).trim().isEmpty()) {
-        errores.append("- ").append(nombreCampo).append(" es obligatorio\n");
-    } else if (cambios.get(campo) == null) {
-        errores.append("- ").append(nombreCampo).append(" no puede ser nulo\n");
-    }
-}
-
-private int validarEdad(int edad) {
-    if (edad < 0) {
-        throw new IllegalArgumentException("La edad debe ser un número positivo");
-    }
-    if (edad < 18 || edad > 70) {
-        throw new IllegalArgumentException("La edad debe estar entre 18 y 70 años");
-    }
-    return edad;
-}
-
-private LocalDate validarFechas(LocalDate inicio, LocalDate fin) {
-    if (fin == null) {
-        throw new IllegalArgumentException("La fecha de fin de contrato es obligatoria");
-    }
-    if (!fin.isAfter(inicio)) {
-        throw new IllegalArgumentException("La fecha de fin debe ser posterior a la fecha de inicio");
-    }
-    return fin;
-}
-
-private CoordinadorDeActividades crearCoordinadorModificado(CoordinadorDeActividades original, 
-    Map<String, Object> cambios, int edad, LocalDate fechaFin) {
     
-    return new CoordinadorDeActividades(
-        (String) cambios.get("primerNombre"),
-        (String) cambios.getOrDefault("segundoNombre", original.getSegundoNombre()),
-        (String) cambios.get("primerApellido"),
-        (String) cambios.get("segundoApellido"),
-        edad,
-        original.getSexo(), // Mantener el valor original
-        (String) cambios.get("nacionalidad"),
-        original.getIdentificacion(), // Mantener la misma cédula
-        (String) cambios.get("correo"),
-        (String) cambios.get("turno"),
-        original.getFechaInicioContrato(), // Mantener fecha original
-        fechaFin,
-        original.getUsuario(), // Credenciales originales
-        original.getContrasena(),
-        (String) cambios.get("cargo")
-    );
-}
+    if (!original.getPrimerApellido().trim().equals(((String)cambios.get("primerApellido")).trim())) {
+        System.out.println("Cambio detectado en primer apellido");
+        return true;
+    }
+    
+    if (!original.getSegundoApellido().trim().equals(((String)cambios.get("segundoApellido")).trim())) {
+        System.out.println("Cambio detectado en segundo apellido");
+        return true;
+    }
+    
+    if (original.getEdad() != (int) cambios.get("edad")) {
+        System.out.println("Cambio detectado en edad");
+        return true;
+    }
+    
+    if (!original.getNacionalidad().trim().equals(((String)cambios.get("nacionalidad")).trim())) {
+        System.out.println("Cambio detectado en nacionalidad");
+        return true;
+    }
 
-private File determinarImagenFinal(CoordinadorDeActividades original, File nuevaImagen) {
+    if (!original.getCorreo().trim().equals(((String)cambios.get("correo")).trim())) {
+        System.out.println("Cambio detectado en correo");
+        return true;
+    }
+    
+    if (!original.getTurno().trim().equals(((String)cambios.get("turno")).trim())) {
+        System.out.println("Cambio detectado en turno");
+        return true;
+    }
+    
+    if (!original.getCargo().trim().equals(((String)cambios.get("cargo")).trim())) {
+        System.out.println("Cambio detectado en cargo");
+        return true;
+    }
+    
+    LocalDate fechaFinOriginal = original.getFechaFinContrato();
+    LocalDate fechaFinNueva = (LocalDate) cambios.get("fechaFin");
+    if (!fechaFinOriginal.equals(fechaFinNueva)) {
+        System.out.println("Cambio detectado en fecha fin");
+        return true;
+    }
+
+    // Verificar si se cambió la imagen (solo si se proporciona una nueva)
     if (nuevaImagen != null) {
-        return nuevaImagen;
+        System.out.println("Cambio detectado: nueva imagen proporcionada");
+        return true;
     }
-    if (original.getRutaImagen() != null && !original.getRutaImagen().isEmpty()) {
-        return new File(original.getRutaImagen());
-    }
-    return null;
-}
 
+    System.out.println("No se detectaron cambios");
+    return false;
+}
+    
+    // Excepción personalizada para cuando el usuario cancela la modificación
+    public class CancelarModificacionException extends RuntimeException {
+        public CancelarModificacionException() {
+            super("El usuario decidió continuar editando");
+        }
+    }
+
+    // Métodos auxiliares de validación mejorados
+    private CoordinadorDeActividades validarYObternerOriginal(String cedula) {
+        CoordinadorDeActividades original = obtenerCoordinadorPorCedula(cedula);
+        if (original == null) {
+            throw new IllegalArgumentException("Coordinador no encontrado con cédula: " + cedula);
+        }
+        return original;
+    }
+
+    private void validarCamposModificados(Map<String, Object> cambios) {
+        StringBuilder errores = new StringBuilder();
+
+        // Validar que los campos obligatorios no estén vacíos
+        validarCampoObligatorio(cambios, "primerNombre", "Primer nombre", errores);
+        validarCampoObligatorio(cambios, "primerApellido", "Primer apellido", errores);
+        validarCampoObligatorio(cambios, "segundoApellido", "Segundo apellido", errores);
+        validarCampoObligatorio(cambios, "nacionalidad", "Nacionalidad", errores);
+        validarCampoObligatorio(cambios, "correo", "Correo electrónico", errores);
+        validarCampoObligatorio(cambios, "turno", "Turno", errores);
+        validarCampoObligatorio(cambios, "cargo", "Cargo", errores);
+        validarCampoObligatorio(cambios, "edad", "Edad", errores);
+        validarCampoObligatorio(cambios, "fechaFin", "Fecha fin contrato", errores);
+
+        // Validación específica para correo electrónico
+        if (cambios.containsKey("correo") && !((String) cambios.get("correo")).contains("@")) {
+            errores.append("- El correo electrónico debe tener un formato válido\n");
+        }
+
+        if (errores.length() > 0) {
+            throw new IllegalArgumentException("Campos obligatorios faltantes:\n" + errores.toString());
+        }
+    }
+
+    private void validarCampoObligatorio(Map<String, Object> cambios, String campo, String nombreCampo, StringBuilder errores) {
+        if (!cambios.containsKey(campo)) {
+            errores.append("- ").append(nombreCampo).append(" es un campo requerido\n");
+        } else if (cambios.get(campo) == null) {
+            errores.append("- ").append(nombreCampo).append(" no puede ser nulo\n");
+        } else if (cambios.get(campo) instanceof String && ((String) cambios.get(campo)).trim().isEmpty()) {
+            errores.append("- ").append(nombreCampo).append(" es obligatorio\n");
+        }
+    }
+
+    private int validarEdad(int edad) {
+        if (edad < 0) {
+            throw new IllegalArgumentException("La edad debe ser un número positivo");
+        }
+        if (edad < 18 || edad > 70) {
+            throw new IllegalArgumentException("La edad debe estar entre 18 y 70 años");
+        }
+        return edad;
+    }
+
+    private LocalDate validarFechas(LocalDate inicio, LocalDate fin) {
+        if (fin == null) {
+            throw new IllegalArgumentException("La fecha de fin de contrato es obligatoria");
+        }
+        if (!fin.isAfter(inicio)) {
+            throw new IllegalArgumentException("La fecha de fin debe ser posterior a la fecha de inicio");
+        }
+        return fin;
+    }
+
+    private CoordinadorDeActividades crearCoordinadorModificado(CoordinadorDeActividades original,
+            Map<String, Object> cambios, int edad, LocalDate fechaFin) {
+
+        return new CoordinadorDeActividades(
+                (String) cambios.get("primerNombre"),
+                (String) cambios.getOrDefault("segundoNombre", original.getSegundoNombre()),
+                (String) cambios.get("primerApellido"),
+                (String) cambios.get("segundoApellido"),
+                edad,
+                original.getSexo(), // Mantener el valor original
+                (String) cambios.get("nacionalidad"),
+                original.getIdentificacion(), // Mantener la misma cédula
+                (String) cambios.get("correo"),
+                (String) cambios.get("turno"),
+                original.getFechaInicioContrato(), // Mantener fecha original
+                fechaFin,
+                original.getUsuario(), // Credenciales originales
+                original.getContrasena(),
+                (String) cambios.get("cargo")
+        );
+    }
+
+    private File determinarImagenFinal(CoordinadorDeActividades original, File nuevaImagen) {
+        if (nuevaImagen != null) {
+            return nuevaImagen;
+        }
+        if (original.getRutaImagen() != null && !original.getRutaImagen().isEmpty()) {
+            return new File(original.getRutaImagen());
+        }
+        return null;
+    }
 
     // Métodos de consulta
     public List<CoordinadorDeActividades> obtenerTodosCoordinadores() {
@@ -280,37 +417,10 @@ private File determinarImagenFinal(CoordinadorDeActividades original, File nueva
     }
 
     // Métodos de validación
-    private void validarCamposModificacion(Map<String, Object> cambios) {
-        StringBuilder errores = new StringBuilder();
-
-        if (((String) cambios.get("primerNombre")).trim().isEmpty()) {
-            errores.append("- Primer nombre es obligatorio\n");
-        }
-        if (((String) cambios.get("primerApellido")).trim().isEmpty()) {
-            errores.append("- Primer apellido es obligatorio\n");
-        }
-        if (((String) cambios.get("segundoApellido")).trim().isEmpty()) {
-            errores.append("- Segundo apellido es obligatorio\n");
-        }
-        if (((String) cambios.get("nacionalidad")).trim().isEmpty()) {
-            errores.append("- Nacionalidad es obligatoria\n");
-        }
-        if (((String) cambios.get("correo")).trim().isEmpty()) {
-            errores.append("- Correo es obligatorio\n");
-        }
-        if (((String) cambios.get("cargo")).trim().isEmpty()) {
-            errores.append("- Cargo es obligatorio\n");
-        }
-
-        if (errores.length() > 0) {
-            throw new IllegalArgumentException(errores.toString());
-        }
-    }
-
     private void validarCamposObligatorios(String primerNombre, String primerApellido,
             String segundoApellido, int edad, String cedula,
             String nacionalidad, String correo, String turno, String cargo) {
-        
+
         StringBuilder camposFaltantes = new StringBuilder();
 
         if (primerNombre == null || primerNombre.trim().isEmpty()) {
@@ -353,37 +463,35 @@ private File determinarImagenFinal(CoordinadorDeActividades original, File nueva
         }
     }
 
-    
-
-   private void validarImagen(File imagen) {
-    if (imagen == null) {
-        throw new IllegalArgumentException("Debe proporcionar una imagen del coordinador");
-    }
-    
-    if (!imagen.exists()) {
-        throw new IllegalArgumentException("El archivo de imagen no existe: " + imagen.getAbsolutePath());
-    }
-    
-    // Verificar que sea un archivo de imagen válido
-    try {
-        BufferedImage img = ImageIO.read(imagen);
-        if (img == null) {
-            throw new IllegalArgumentException("El archivo no es una imagen válida");
+    private void validarImagen(File imagen) {
+        if (imagen == null) {
+            throw new IllegalArgumentException("Debe proporcionar una imagen del coordinador");
         }
-    } catch (IOException e) {
-        throw new IllegalArgumentException("Error al leer la imagen: " + e.getMessage());
+
+        if (!imagen.exists()) {
+            throw new IllegalArgumentException("El archivo de imagen no existe: " + imagen.getAbsolutePath());
+        }
+
+        // Verificar que sea un archivo de imagen válido
+        try {
+            BufferedImage img = ImageIO.read(imagen);
+            if (img == null) {
+                throw new IllegalArgumentException("El archivo no es una imagen válida");
+            }
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Error al leer la imagen: " + e.getMessage());
+        }
+
+        // Verificar extensión del archivo
+        String nombre = imagen.getName().toLowerCase();
+        if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg") && !nombre.endsWith(".png")) {
+            throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG");
+        }
+
+        // Verificar tamaño máximo (opcional)
+        long maxSize = 5 * 1024 * 1024; // 5MB
+        if (imagen.length() > maxSize) {
+            throw new IllegalArgumentException("La imagen es demasiado grande (máximo 5MB)");
+        }
     }
-    
-    // Verificar extensión del archivo
-    String nombre = imagen.getName().toLowerCase();
-    if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg") && !nombre.endsWith(".png")) {
-        throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG");
-    }
-    
-    // Verificar tamaño máximo (opcional)
-    long maxSize = 5 * 1024 * 1024; // 5MB
-    if (imagen.length() > maxSize) {
-        throw new IllegalArgumentException("La imagen es demasiado grande (máximo 5MB)");
-    }
-}
 }

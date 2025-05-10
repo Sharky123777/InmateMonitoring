@@ -51,19 +51,6 @@
       "sexo": "Femenino",
       "nacionalidad": "sd",
       "identificacion": "1313131131"
-    },
-    {
-      "usuario": "!r8ñ@CzMD",
-      "password": "efb2be36f7d86d54336b0748c4ef919244792f6b6ac316fe933862a5b6cdd89f",
-      "rol": "COORDINADOR_DE_ACTIVIDADES",
-      "primerNombre": "m",
-      "segundoNombre": "m",
-      "primerApellido": "m",
-      "segundoApellido": "m",
-      "edad": 54,
-      "sexo": "Femenino",
-      "nacionalidad": "po",
-      "identificacion": "54678979654"
     }
   ]
 }

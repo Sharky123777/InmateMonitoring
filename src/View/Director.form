@@ -429,6 +429,9 @@
                       </Constraints>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtFechaContratacion1">
+                      <Properties>
+                        <Property name="editable" type="boolean" value="false"/>
+                      </Properties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                           <AbsoluteConstraints x="500" y="350" width="190" height="30"/>
@@ -1114,6 +1117,7 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtSexo">
                   <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="33" green="23" red="1d" type="rgb"/>
                     </Property>
@@ -1282,6 +1286,9 @@
                       </Constraints>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtFechaContratacion">
+                      <Properties>
+                        <Property name="editable" type="boolean" value="false"/>
+                      </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtFechaContratacionActionPerformed"/>
                       </Events>
@@ -1740,6 +1747,9 @@
                       </Constraints>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtFechaContratacionMod1">
+                      <Properties>
+                        <Property name="editable" type="boolean" value="false"/>
+                      </Properties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                           <AbsoluteConstraints x="500" y="340" width="190" height="30"/>
@@ -1966,6 +1976,7 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtCedulaMod1">
                       <Properties>
+                        <Property name="editable" type="boolean" value="false"/>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="33" green="23" red="1d" type="rgb"/>
                         </Property>
@@ -2330,6 +2341,9 @@
                       </Constraints>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtFechaContratacionMod">
+                      <Properties>
+                        <Property name="editable" type="boolean" value="false"/>
+                      </Properties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                           <AbsoluteConstraints x="500" y="380" width="190" height="30"/>
@@ -2531,6 +2545,7 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtSexoMod">
                       <Properties>
+                        <Property name="editable" type="boolean" value="false"/>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="33" green="23" red="1d" type="rgb"/>
                         </Property>
@@ -2579,6 +2594,7 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtCedulaMod">
                       <Properties>
+                        <Property name="editable" type="boolean" value="false"/>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="33" green="23" red="1d" type="rgb"/>
                         </Property>
@@ -2943,6 +2959,9 @@
                       </Constraints>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtFechaContratacion2">
+                      <Properties>
+                        <Property name="editable" type="boolean" value="false"/>
+                      </Properties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                           <AbsoluteConstraints x="500" y="380" width="190" height="30"/>
@@ -3558,6 +3577,9 @@
                       </Constraints>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtFechaContratacionMod2">
+                      <Properties>
+                        <Property name="editable" type="boolean" value="false"/>
+                      </Properties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                           <AbsoluteConstraints x="500" y="380" width="190" height="30"/>
@@ -3759,6 +3781,7 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtSexoMod2">
                       <Properties>
+                        <Property name="editable" type="boolean" value="false"/>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="33" green="23" red="1d" type="rgb"/>
                         </Property>
@@ -3807,6 +3830,7 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtCedulaMod2">
                       <Properties>
+                        <Property name="editable" type="boolean" value="false"/>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="33" green="23" red="1d" type="rgb"/>
                         </Property>
