@@ -249,7 +249,6 @@ public class VisitaController {
         visitantesTemporales.add(visitante);
         imagenesTemporales.add(imagen);
 
-
         limpiarCamposVisitante(view);
         view.setImagenVisitanteSeleccionada(null);
 
@@ -316,30 +315,30 @@ public class VisitaController {
     }
 
     public void guardarVisitaFinal(List<Visitante> visitantes, List<File> imagenes) {
-    if (visitaTemporal == null) {
-        mostrarError("Primero debe ingresar los datos de la visita.");
-        return;
+        if (visitaTemporal == null) {
+            mostrarError("Primero debe ingresar los datos de la visita.");
+            return;
+        }
+
+        if (visitantes == null || visitantes.isEmpty()) {
+            mostrarError("Debe ingresar al menos un visitante.");
+            return;
+        }
+
+        visitaTemporal.getVisitantes().addAll(visitantes);
+
+        visitaDAO.guardarVisita(visitaTemporal);
+
+        for (int i = 0; i < visitantes.size(); i++) {
+            visitanteDAO.guardarVisitante(visitantes.get(i), imagenes.get(i));
+        }
+
+        visitaTemporal = null;
+        visitantes.clear();
+        imagenes.clear();
+
+        JOptionPane.showMessageDialog(null, "¡Visita y visitantes registrados exitosamente!");
     }
-
-    if (visitantes == null || visitantes.isEmpty()) {
-        mostrarError("Debe ingresar al menos un visitante.");
-        return;
-    }
-
-    visitaTemporal.getVisitantes().addAll(visitantes);
-
-    visitaDAO.guardarVisita(visitaTemporal);
-
-    for (int i = 0; i < visitantes.size(); i++) {
-        visitanteDAO.guardarVisitante(visitantes.get(i), imagenes.get(i));
-    }
-
-    visitaTemporal = null;
-    visitantes.clear();
-    imagenes.clear();
-
-    JOptionPane.showMessageDialog(null, "¡Visita y visitantes registrados exitosamente!");
-}
 
     public void cargarHistorialVisitas(String identificacionPreso, JTable tabla) {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
@@ -458,6 +457,7 @@ public class VisitaController {
                 preso.getId(),
                 preso.getNombresCompletos(),
                 preso.getApellidosCompletos(),
+                preso.getApellidosCompletos(),
                 preso.getEdad(),
                 preso.getIdentificacion(),
                 preso.getNacionalidad(),
@@ -556,7 +556,8 @@ public class VisitaController {
                 modelo.addRow(new Object[]{
                     foto,
                     preso.getId(),
-                    preso.getNombreCompleto(),
+                    preso.getNombresCompletos(),
+                    preso.getApellidosCompletos(),
                     preso.getEdad(),
                     preso.getIdentificacion(),
                     preso.getNacionalidad(),
@@ -588,35 +589,41 @@ public class VisitaController {
             String relacion,
             File imagen) {
 
-        if (!primerNombre.trim().isEmpty() && !primerNombre.equals(visitanteOriginal.getPrimerNombre())) {
+        if (!primerNombre.equals(visitanteOriginal.getPrimerNombre())) {
             return true;
         }
-        if (!segundoNombre.trim().isEmpty() && !segundoNombre.equals(visitanteOriginal.getSegundoNombre())) {
+        if (!segundoNombre.equals(visitanteOriginal.getSegundoNombre())) {
+            return true;
+        }
+        if (!primerApellido.equals(visitanteOriginal.getPrimerApellido())) {
+            return true;
+        }
+        if (!segundoApellido.equals(visitanteOriginal.getSegundoApellido())) {
             return true;
         }
 
-        if (!primerApellido.trim().isEmpty() && !primerApellido.equals(visitanteOriginal.getPrimerApellido())) {
-            return true;
-        }
-
-        if (!segundoApellido.trim().isEmpty() && !segundoApellido.equals(visitanteOriginal.getSegundoApellido())) {
-            return true;
-        }
-
-        if (!edad.trim().isEmpty() && Integer.parseInt(edad.trim()) != visitanteOriginal.getEdad()) {
+        try {
+            if (!edad.isEmpty() && Integer.parseInt(edad) != visitanteOriginal.getEdad()) {
+                return true;
+            }
+        } catch (NumberFormatException e) {
             return true;
         }
 
         if (!sexo.equals("< Seleccionar >") && !sexo.equals(visitanteOriginal.getSexo())) {
             return true;
         }
-
         if (!relacion.equals("< Seleccionar >") && !relacion.equals(visitanteOriginal.getRelacionConPreso())) {
             return true;
         }
 
-        if (imagen != null && !imagen.equals(new File(visitanteOriginal.getFotoPath()))) {
-            return true;
+        if (imagen != null) {
+            try {
+                File originalFile = new File(visitanteOriginal.getFotoPath());
+                return !imagen.getCanonicalPath().equals(originalFile.getCanonicalPath());
+            } catch (IOException e) {
+                return true;
+            }
         }
 
         return false;

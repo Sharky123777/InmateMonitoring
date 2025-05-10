@@ -4,7 +4,7 @@
     "fechaVisita": "2025-05-11",
     "horaVisita": "08:00",
     "duracionVisitaEnHoras": "1",
-    "tipoVisita": "Visita regular",
+    "tipoVisita": "Familiar",
     "lugarVisita": "Sala de visitas",
     "preso": {
       "estatura": 1.7,
