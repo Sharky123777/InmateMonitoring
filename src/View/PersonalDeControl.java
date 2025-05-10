@@ -129,9 +129,11 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
     public void inicializarMenuHistorialVisitas() {
         JMenuItem actualizarInfo = new JMenuItem("Actualizar visita");
-        ppMenuTablaVisitas.add(actualizarInfo);
-        TablaHistorialVisitas.setComponentPopupMenu(ppMenuTablaVisitas);
+        JMenuItem cambiarEstado = new JMenuItem("Cambiar estado visita");
 
+        ppMenuTablaVisitas.add(actualizarInfo);
+        ppMenuTablaVisitas.add(cambiarEstado);
+        TablaHistorialVisitas.setComponentPopupMenu(ppMenuTablaVisitas);
         actualizarInfo.addActionListener(e -> {
             int fila = TablaHistorialVisitas.getSelectedRow();
             if (fila == -1) {
@@ -155,6 +157,46 @@ public class PersonalDeControl extends javax.swing.JFrame {
                             TablaHistorialVisitas,
                             identificacionPreso
                     );
+                    dialog.setLocationRelativeTo(this);
+                    dialog.setVisible(true);
+
+                    controller.cargarHistorialVisitas(identificacionPreso, TablaHistorialVisitas);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "Visita no encontrada",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "ID de visita inválido",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        cambiarEstado.addActionListener(e -> {
+            int fila = TablaHistorialVisitas.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this,
+                        "Seleccione una visita",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try {
+                int idVisita = Integer.parseInt(TablaHistorialVisitas.getValueAt(fila, 0).toString());
+                String identificacionPreso = TablaHistorialVisitas.getValueAt(fila, 1).toString();
+
+                Visita visita = new VisitaDAO().buscarVisitaPorId(idVisita);
+
+                if (visita != null) {
+                    CambioEstadoVisita dialog = new CambioEstadoVisita(
+                            this,
+                            true,
+                            visita,
+                            identificacionPreso,
+                            TablaHistorialVisitas
+                    );
+
                     dialog.setLocationRelativeTo(this);
                     dialog.setVisible(true);
 
@@ -278,6 +320,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         HoraVisita = new javax.swing.JComboBox<>();
         jLabel51 = new javax.swing.JLabel();
         GuardarVisitaFinal = new javax.swing.JButton();
+        botonCancelarProceso = new javax.swing.JButton();
         PanelActualizarInformacion = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
         jLabel36 = new javax.swing.JLabel();
@@ -700,7 +743,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel18.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(0, 0, 0));
         jLabel18.setText("Guardar Visita final:");
-        PanelGuardarVisita.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 510, 140, -1));
+        PanelGuardarVisita.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 420, 140, -1));
 
         jLabel29.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel29.setForeground(new java.awt.Color(0, 0, 0));
@@ -758,7 +801,17 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 GuardarVisitaFinalActionPerformed(evt);
             }
         });
-        PanelGuardarVisita.add(GuardarVisitaFinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 500, 130, 30));
+        PanelGuardarVisita.add(GuardarVisitaFinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 410, 130, 30));
+
+        botonCancelarProceso.setBackground(new java.awt.Color(29, 35, 51));
+        botonCancelarProceso.setForeground(new java.awt.Color(255, 255, 255));
+        botonCancelarProceso.setText("CANCELAR PROCESO");
+        botonCancelarProceso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonCancelarProcesoActionPerformed(evt);
+            }
+        });
+        PanelGuardarVisita.add(botonCancelarProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 530, 180, 40));
 
         TabbedPDC.addTab("GUARDAR VISITA", PanelGuardarVisita);
 
@@ -1034,8 +1087,29 @@ public class PersonalDeControl extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel15MouseExited
 
     private void GuardarVisitaFinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarVisitaFinalActionPerformed
-        controller.guardarVisitaFinal(visitantesTemporales, imagenesTemporales);
+        controller.guardarVisitaFinal(this, visitantesTemporales, imagenesTemporales);
     }//GEN-LAST:event_GuardarVisitaFinalActionPerformed
+
+    private void botonCancelarProcesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCancelarProcesoActionPerformed
+        if (!controller.existeVisitaTemporal()) {
+            JOptionPane.showMessageDialog(this,
+                    "No hay ninguna visita en proceso para cancelar",
+                    "Información",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro que desea cancelar la visita en proceso?\nSe perderán todos los datos no guardados.",
+                "Confirmar cancelación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            controller.cancelarProcesoVisita(this, visitantesTemporales, imagenesTemporales);
+        }    }//GEN-LAST:event_botonCancelarProcesoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1131,6 +1205,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JLabel TurnoPDC;
     private javax.swing.JLabel VistaPreviaNuevaFoto;
     private javax.swing.JLabel VistaPreviaVisitante;
+    private javax.swing.JButton botonCancelarProceso;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

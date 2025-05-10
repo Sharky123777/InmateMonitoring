@@ -68,6 +68,10 @@ public class VisitaController {
         view.getHoraVisita().setSelectedIndex(0);
     }
 
+    public boolean existeVisitaTemporal() {
+        return visitaTemporal != null;
+    }
+
     public boolean validarCamposVisitante(PersonalDeControl view, File imagen, int cantidadTotal, List<Visitante> visitantesTemporales) {
         if (view.getCantidadDeVisitantesCombo().getSelectedIndex() == 0) {
             mostrarError("Primero seleccione la cantidad de visitantes");
@@ -75,31 +79,16 @@ public class VisitaController {
         }
 
         int cantidadSeleccionada = Integer.parseInt(view.getCantidadDeVisitantesCombo().getSelectedItem().toString());
-        int edadVisitante;
-
-        try {
-            edadVisitante = Integer.parseInt(view.getEdadVisitante().getText().trim());
-        } catch (NumberFormatException e) {
-            mostrarError("La edad debe ser un número válido");
-            return false;
-        }
-
-        boolean esMenorEnGrupoDe2 = (cantidadSeleccionada == 2 && edadVisitante < 18 && !visitantesTemporales.isEmpty());
 
         if (view.getPrimerNombreVisitante().getText().trim().isEmpty()
                 || view.getPrimerApellidoVisitante().getText().trim().isEmpty()
                 || view.getSegundoApellidoVisitante().getText().trim().isEmpty()
                 || view.getEdadVisitante().getText().trim().isEmpty()
                 || view.getIdentificacionVisitante().getText().trim().isEmpty()
-                || (view.getEmailVisitante().getText().trim().isEmpty() && !esMenorEnGrupoDe2)) {
-            mostrarError("Por favor complete todos los campos del formulario");
-            return false;
-        }
-
-        if (view.getSexoVisitante().getSelectedIndex() == 0
+                || view.getSexoVisitante().getSelectedIndex() == 0
                 || view.getRelacionConPresoVisitante().getSelectedIndex() == 0
                 || view.getNacionalidadVisitante().getSelectedIndex() == 0) {
-            mostrarError("Seleccione una opción válida en todos los desplegables");
+            mostrarError("Por favor complete todos los campos del formulario");
             return false;
         }
 
@@ -117,24 +106,62 @@ public class VisitaController {
         }
 
         String identificacion = view.getIdentificacionVisitante().getText().trim();
-        if (!identificacion.matches("\\d{6,10}")) {
-            mostrarError("La identificación debe contener entre 6 y 10 dígitos numéricos.");
+        try {
+            long identificacionNum = Long.parseLong(identificacion);
+            if (identificacionNum < 0) {
+                mostrarError("La identificación no puede ser un número negativo.");
+                return false;
+            }
+            if (identificacion.length() < 6 || identificacion.length() > 10) {
+                mostrarError("La identificación debe contener entre 6 y 10 dígitos.");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            mostrarError("La identificación debe contener solo números.");
             return false;
         }
 
+        int edadVisitante;
+        try {
+            edadVisitante = Integer.parseInt(view.getEdadVisitante().getText().trim());
+            if (edadVisitante < 1 || edadVisitante > 120) {
+                mostrarError("La edad debe estar entre 1 y 120 años");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            mostrarError("La edad debe ser un número válido");
+            return false;
+        }
+
+        boolean esMenorEnGrupoDe2 = (cantidadSeleccionada == 2 && edadVisitante < 18 && !visitantesTemporales.isEmpty());
         if (!esMenorEnGrupoDe2) {
             String email = view.getEmailVisitante().getText().trim();
+            if (email.isEmpty()) {
+                mostrarError("Por favor ingrese un correo electrónico");
+                return false;
+            }
             if (!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$")) {
                 mostrarError("Por favor ingrese un correo electrónico válido.");
                 return false;
             }
         }
 
-        if (edadVisitante < 1 || edadVisitante > 120) {
-            mostrarError("La edad debe estar entre 1 y 120 años");
-            return false;
+        for (Visitante v : visitantesTemporales) {
+            if (v.getIdentificacion().equals(identificacion)) {
+                mostrarError("Ya existe un visitante con esta identificación en el grupo actual");
+                return false;
+            }
         }
 
+        if (!esMenorEnGrupoDe2) {
+            String email = view.getEmailVisitante().getText().trim();
+            for (Visitante v : visitantesTemporales) {
+                if (v.getEmail() != null && v.getEmail().equalsIgnoreCase(email)) {
+                    mostrarError("Ya existe un visitante con este email en el grupo actual");
+                    return false;
+                }
+            }
+        }
         if (cantidadSeleccionada == 1) {
             if (edadVisitante < 18) {
                 mostrarError("Un solo visitante debe tener al menos 18 años");
@@ -199,10 +226,6 @@ public class VisitaController {
             return;
         }
 
-        if (!validarCamposVisitante(view, imagen, 0, visitantesTemporales)) {
-            return;
-        }
-
         try {
             cantidadTotal = Integer.parseInt(view.getCantidadDeVisitantesCombo().getSelectedItem().toString());
         } catch (NumberFormatException e) {
@@ -210,44 +233,68 @@ public class VisitaController {
             return;
         }
 
-        String primerNombre = view.getPrimerNombreVisitante().getText().trim();
-        String segundoNombre = view.getSegundoNombreVisitante().getText().trim();
-        String primerApellido = view.getPrimerApellidoVisitante().getText().trim();
-        String segundoApellido = view.getSegundoApellidoVisitante().getText().trim();
+        if (visitantesTemporales.size() >= cantidadTotal) {
+            mostrarError("Ya ha registrado el máximo de " + cantidadTotal + " visitantes para esta visita.");
+            return;
+        }
+
         String identificacion = view.getIdentificacionVisitante().getText().trim();
-        int edad = Integer.parseInt(view.getEdadVisitante().getText().trim());
-        String sexo = view.getSexoVisitante().getSelectedItem().toString();
-        String nacionalidad = view.getNacionalidadVisitante().getSelectedItem().toString();
-        String relacion = view.getRelacionConPresoVisitante().getSelectedItem().toString();
-        String email = view.getEmailVisitante().getText().trim();
 
-        for (Visitante v : visitantesTemporales) {
-            if (v.getIdentificacion().equals(identificacion)) {
-                mostrarError("Ya se ha ingresado un visitante con esta identificación");
+        Visitante visitanteExistente = visitanteDAO.buscarVisitantePorIdentificacion(identificacion);
+
+        if (visitanteExistente != null) {
+            if (!validarDatosCoincidentes(view, visitanteExistente)) {
+                mostrarError("Los datos no coinciden con el visitante registrado previamente");
                 return;
             }
-            if (v.getEmail().equals(email)) {
-                mostrarError("Ya se ha registrado un visitante con este correo electrónico");
+
+            for (Visitante v : visitantesTemporales) {
+                if (v.getIdentificacion().equals(identificacion)) {
+                    mostrarError("Ya se ha ingresado un visitante con esta identificación");
+                    return;
+                }
+            }
+
+            if (visitaDAO.tieneVisitaEnFecha(identificacion, visitaTemporal.getFechaVisita())) {
+                mostrarError("Este visitante ya tiene una visita programada para el "
+                        + visitaTemporal.getFechaVisita() + ".\n"
+                        + "Solo se permite UNA visita por día por visitante.");
                 return;
             }
+
+            Preso presoVisitante = PresoDAO.getInstancia().buscarPresoPorIdentificacion(identificacion);
+            if (presoVisitante != null) {
+                mostrarError("Los presos no pueden ser visitantes. \n"
+                        + "La identificación " + identificacion + " pertenece al preso: \n"
+                        + presoVisitante.getNombresCompletos() + " " + presoVisitante.getApellidosCompletos() + "\n"
+                        + "Celda: " + presoVisitante.getCeldaAsignada());
+                return;
+            }
+
+            visitantesTemporales.add(visitanteExistente);
+            imagenesTemporales.add(new File(visitanteExistente.getFotoPath()));
+        } else {
+            if (!validarCamposVisitante(view, imagen, 0, visitantesTemporales)) {
+                return;
+            }
+
+            String primerNombre = view.getPrimerNombreVisitante().getText().trim();
+            String segundoNombre = view.getSegundoNombreVisitante().getText().trim();
+            String primerApellido = view.getPrimerApellidoVisitante().getText().trim();
+            String segundoApellido = view.getSegundoApellidoVisitante().getText().trim();
+            int edad = Integer.parseInt(view.getEdadVisitante().getText().trim());
+            String sexo = view.getSexoVisitante().getSelectedItem().toString();
+            String nacionalidad = view.getNacionalidadVisitante().getSelectedItem().toString();
+            String relacion = view.getRelacionConPresoVisitante().getSelectedItem().toString();
+            String email = view.getEmailVisitante().getText().trim();
+
+            Visitante nuevoVisitante = new Visitante(primerNombre, segundoNombre, primerApellido,
+                    segundoApellido, edad, sexo, nacionalidad, identificacion,
+                    relacion, imagen.getAbsolutePath(), email);
+
+            visitantesTemporales.add(nuevoVisitante);
+            imagenesTemporales.add(imagen);
         }
-
-        Preso presoEncontrado = PresoDAO.getInstancia().buscarPresoPorIdentificacion(identificacion);
-
-        if (presoEncontrado != null && presoEncontrado.getIdentificacion().equals(identificacion)) {
-            mostrarError("El preso no se puede visitar a sí mismo");
-            return;
-        }
-
-        if (identificacion.length() < 6 || identificacion.length() > 10) {
-            mostrarError("La identificación debe tener entre 6 y 10 caracteres.");
-            return;
-        }
-
-        Visitante visitante = new Visitante(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, sexo,
-                nacionalidad, identificacion, relacion, imagen.getAbsolutePath(), email);
-        visitantesTemporales.add(visitante);
-        imagenesTemporales.add(imagen);
 
         limpiarCamposVisitante(view);
         view.setImagenVisitanteSeleccionada(null);
@@ -261,7 +308,70 @@ public class VisitaController {
                     "Visitante añadido (" + visitantesTemporales.size() + " de " + cantidadTotal + ").",
                     "Información", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
 
+    public void cancelarProcesoVisita(PersonalDeControl view, List<Visitante> visitantesTemporales, List<File> imagenesTemporales) {
+        limpiarCamposVisitante(view);
+        limpiarCamposVisita(view);
+
+        if (visitantesTemporales != null) {
+            visitantesTemporales.clear();
+        }
+
+        if (imagenesTemporales != null) {
+            imagenesTemporales.clear();
+        }
+
+        visitaTemporal = null;
+
+        view.getCantidadDeVisitantesCombo().setSelectedIndex(0);
+        view.setImagenVisitanteSeleccionada(null);
+
+        JOptionPane.showMessageDialog(view,
+                "Por favor, inicie el proceso de registro de visita nuevamente.",
+                "Proceso cancelado",
+                JOptionPane.WARNING_MESSAGE);
+    }
+
+    private boolean validarDatosCoincidentes(PersonalDeControl view, Visitante visitanteExistente) {
+        if (!view.getPrimerNombreVisitante().getText().trim().equalsIgnoreCase(visitanteExistente.getPrimerNombre())) {
+            return false;
+        }
+        if (!view.getSegundoNombreVisitante().getText().trim().equalsIgnoreCase(visitanteExistente.getSegundoNombre())) {
+            return false;
+        }
+        if (!view.getPrimerApellidoVisitante().getText().trim().equalsIgnoreCase(visitanteExistente.getPrimerApellido())) {
+            return false;
+        }
+        if (!view.getSegundoApellidoVisitante().getText().trim().equalsIgnoreCase(visitanteExistente.getSegundoApellido())) {
+            return false;
+        }
+
+        try {
+            int edadIngresada = Integer.parseInt(view.getEdadVisitante().getText().trim());
+            if (edadIngresada != visitanteExistente.getEdad()) {
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+        if (!view.getSexoVisitante().getSelectedItem().toString().equals(visitanteExistente.getSexo())) {
+            return false;
+        }
+        if (!view.getNacionalidadVisitante().getSelectedItem().toString().equals(visitanteExistente.getNacionalidad())) {
+            return false;
+        }
+        if (!view.getRelacionConPresoVisitante().getSelectedItem().toString().equals(visitanteExistente.getRelacionConPreso())) {
+            return false;
+        }
+
+        if (visitanteExistente.getEdad() >= 18
+                && !view.getEmailVisitante().getText().trim().equalsIgnoreCase(visitanteExistente.getEmail())) {
+            return false;
+        }
+
+        return true;
     }
 
     public boolean guardarVisitaTemporal(PersonalDeControl view) {
@@ -269,8 +379,48 @@ public class VisitaController {
             return false;
         }
 
+        if (visitaTemporal != null && visitaTemporal.getEstado() == EstadoVisitaEnum.EN_PROCESO) {
+            mostrarError("Ya tienes una visita en proceso. Debes completar esta visita (guardar visita final)");
+            limpiarCamposVisita(view);
+            return false;
+        }
+
         try {
             String identificacionPreso = view.getIdentificacionPresoVisita().getText().trim();
+            Preso preso = PresoDAO.getInstancia().buscarPresoPorIdentificacion(identificacionPreso);
+
+            if (preso == null) {
+                mostrarError("No se encontró ningún preso con la identificación: " + identificacionPreso);
+                return false;
+            }
+
+            if (!preso.getEstado().equalsIgnoreCase("ACTIVO")) {
+                mostrarError("El preso " + preso.getNombresCompletos() + " no puede recibir visitas.\n"
+                        + "Motivo: Estado actual = " + preso.getEstado() + "\n"
+                        + "Solo permitido: Presos en estado ACTIVO");
+                return false;
+            }
+
+            if (preso.isEnAislamiento()) {
+                mostrarError("El preso " + preso.getNombresCompletos() + " está en aislamiento.\n"
+                        + "Celda: " + preso.getCeldaAsignada() + "\n"
+                        + "No puede recibir visitas hasta que termine el período de aislamiento");
+                return false;
+            }
+
+            String nivelSeguridad = preso.getNivelDeSeguridad();
+            if (!nivelSeguridad.equalsIgnoreCase("Baja") && !nivelSeguridad.equalsIgnoreCase("Media")) {
+                mostrarError("El preso " + preso.getNombresCompletos() + " tiene nivel de seguridad " + nivelSeguridad + ".\n"
+                        + "Solo puede recibir visitas con nivel de seguridad Baja o Media");
+                return false;
+            }
+
+            if (preso.getExpediente() != null && preso.getExpediente().getNivelRiesgo().equalsIgnoreCase("Riesgo alto")) {
+                mostrarError("El preso " + preso.getNombresCompletos() + " tiene nivel de riesgo ALTO.\n"
+                        + "No puede recibir visitas por motivos de seguridad");
+                return false;
+            }
+
             String tipo = view.getTipoVisita().getSelectedItem().toString();
             String lugar = view.getLugarVisita().getSelectedItem().toString();
             String horaSeleccionada = view.getHoraVisita().getSelectedItem().toString();
@@ -280,13 +430,22 @@ public class VisitaController {
             LocalTime horaVisita = LocalTime.parse(horaSeleccionada);
 
             if (!fecha.isAfter(LocalDate.now())) {
-                mostrarError("La fecha debe ser después de hoy.");
+                mostrarError("La fecha debe ser posterior al día actual.\n"
+                        + "Fecha seleccionada: " + fecha + "\n"
+                        + "Fecha actual: " + LocalDate.now());
                 return false;
             }
 
-            Preso preso = PresoDAO.getInstancia().buscarPresoPorIdentificacion(identificacionPreso);
-            if (preso == null) {
-                mostrarError("No se encontró ningún preso con esa identificación");
+            List<Visita> visitasExistentes = visitaDAO.cargarPorIdentificacionPresoFechaYHora(
+                    identificacionPreso, fecha, horaVisita);
+
+            if (!visitasExistentes.isEmpty()) {
+                Visita visitaExistente = visitasExistentes.get(0);
+                mostrarError("El preso ya tiene una visita programada para esta fecha y hora:\n\n"
+                        + "Fecha: " + visitaExistente.getFechaVisita() + "\n"
+                        + "Hora: " + visitaExistente.getHoraVisita() + "\n"
+                        + "Tipo: " + visitaExistente.getTipoVisita() + "\n"
+                        + "Estado: " + visitaExistente.getEstado());
                 return false;
             }
 
@@ -306,6 +465,8 @@ public class VisitaController {
                     "Visita guardada temporalmente. Ahora ingrese los visitantes.",
                     "Información", JOptionPane.INFORMATION_MESSAGE);
 
+            limpiarCamposVisita(view);
+
             return true;
 
         } catch (Exception e) {
@@ -314,14 +475,29 @@ public class VisitaController {
         }
     }
 
-    public void guardarVisitaFinal(List<Visitante> visitantes, List<File> imagenes) {
+    public void guardarVisitaFinal(PersonalDeControl view, List<Visitante> visitantes, List<File> imagenes) {
         if (visitaTemporal == null) {
             mostrarError("Primero debe ingresar los datos de la visita.");
             return;
         }
 
-        if (visitantes == null || visitantes.isEmpty()) {
-            mostrarError("Debe ingresar al menos un visitante.");
+        int cantidadEsperada;
+        try {
+            cantidadEsperada = Integer.parseInt(view.getCantidadDeVisitantesCombo().getSelectedItem().toString());
+        } catch (NumberFormatException e) {
+            mostrarError("Cantidad de visitantes no válida");
+            return;
+        }
+
+        if (visitantes == null || visitantes.size() < cantidadEsperada) {
+            mostrarError("Debe registrar todos los visitantes antes de guardar.\n"
+                    + "Visitantes registrados: " + (visitantes != null ? visitantes.size() : 0) + "\n"
+                    + "Visitantes requeridos: " + cantidadEsperada);
+            return;
+        }
+
+        if (imagenes == null || imagenes.size() != visitantes.size()) {
+            mostrarError("Error en las imágenes de los visitantes");
             return;
         }
 
@@ -336,8 +512,12 @@ public class VisitaController {
         visitaTemporal = null;
         visitantes.clear();
         imagenes.clear();
+        view.getCantidadDeVisitantesCombo().setSelectedIndex(0);
 
-        JOptionPane.showMessageDialog(null, "¡Visita y visitantes registrados exitosamente!");
+        JOptionPane.showMessageDialog(null,
+                "¡Visita y " + cantidadEsperada + " visitantes registrados exitosamente!",
+                "Registro completado",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void cargarHistorialVisitas(String identificacionPreso, JTable tabla) {
@@ -368,39 +548,40 @@ public class VisitaController {
 
         List<Visita> visitas = visitaDAO.cargarPorIdentificacionPreso(identificacionPreso);
 
+        Map<String, Object[]> visitantesMap = new LinkedHashMap<>();
         Map<String, Integer> contadorVisitas = new HashMap<>();
-        Map<String, Visitante> infoVisitantes = new LinkedHashMap<>();
 
         for (Visita visita : visitas) {
             for (Visitante visitante : visita.getVisitantes()) {
                 String idVisitante = visitante.getIdentificacion();
+
                 contadorVisitas.put(idVisitante, contadorVisitas.getOrDefault(idVisitante, 0) + 1);
-                infoVisitantes.putIfAbsent(idVisitante, visitante);
+
+                if (!visitantesMap.containsKey(idVisitante)) {
+                    ImageIcon foto = cargarImagen(visitante.getFotoPath());
+                    visitantesMap.put(idVisitante, new Object[]{
+                        foto,
+                        visitante.getId(),
+                        visitante.getNombresCompletos(),
+                        visitante.getApellidosCompletos(),
+                        visitante.getEmail(),
+                        visitante.getEdad(),
+                        visitante.getIdentificacion(),
+                        visitante.getSexo(),
+                        visitante.getNacionalidad(),
+                        visitante.getRelacionConPreso(),
+                        contadorVisitas.get(idVisitante),
+                        identificacionPreso
+                    });
+                } else {
+                    Object[] datos = visitantesMap.get(idVisitante);
+                    datos[10] = contadorVisitas.get(idVisitante);
+                }
             }
         }
 
-        for (Map.Entry<String, Visitante> entry : infoVisitantes.entrySet()) {
-            Visitante visitante = entry.getValue();
-
-            visitante = visitanteDAO.buscarVisitantePorIdentificacion(visitante.getIdentificacion());
-
-            int totalVisitas = contadorVisitas.get(visitante.getIdentificacion());
-            ImageIcon foto = cargarImagen(visitante.getFotoPath());
-
-            modelo.addRow(new Object[]{
-                foto,
-                visitante.getId(),
-                visitante.getNombresCompletos(),
-                visitante.getApellidosCompletos(),
-                visitante.getEmail(),
-                visitante.getEdad(),
-                visitante.getIdentificacion(),
-                visitante.getSexo(),
-                visitante.getNacionalidad(),
-                visitante.getRelacionConPreso(),
-                totalVisitas,
-                identificacionPreso
-            });
+        for (Object[] datos : visitantesMap.values()) {
+            modelo.addRow(datos);
         }
     }
 

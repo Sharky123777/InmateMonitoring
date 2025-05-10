@@ -21,6 +21,25 @@ public class ModificarVisita extends javax.swing.JDialog {
         this.identificacionPreso = identificacionPreso;
         cargarDatosVisita();
         setLocationRelativeTo(parent);
+
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                regresarATabla1();
+            }
+
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                regresarATabla1();
+            }
+        });
+    }
+
+    private void regresarATabla1() {
+        if (this.getParent() instanceof PersonalDeControl) {
+            PersonalDeControl padre = (PersonalDeControl) this.getParent();
+            padre.getTabbedPDC().setSelectedIndex(1); 
+        }
     }
 
     private void cargarDatosVisita() {
@@ -124,8 +143,7 @@ public class ModificarVisita extends javax.swing.JDialog {
             if (visitaActualizada != null) {
                 controller.cargarHistorialVisitas(identificacionPreso, tablaVisitas);
 
-                PersonalDeControl padre = (PersonalDeControl) this.getParent();
-                padre.getTabbedPDC().setSelectedIndex(1);
+                regresarATabla1();
 
                 dispose();
             }

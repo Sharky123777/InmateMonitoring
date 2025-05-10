@@ -4,6 +4,7 @@ import Model.Constants.EstadoVisitaEnum;
 import Model.Entities.LocalDateAdapter;
 import Model.Entities.LocalTimeAdapter;
 import Model.Entities.Visita;
+import Model.Entities.Visitante;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import java.io.*;
@@ -191,6 +192,39 @@ public class VisitaDAO {
         }
 
         return null;
+    }
+
+    public List<Visita> cargarPorIdentificacionPresoFechaYHora(String identificacionPreso, LocalDate fecha, LocalTime hora) {
+        List<Visita> todasVisitas = cargarTodas();
+        List<Visita> visitasFiltradas = new ArrayList<>();
+
+        for (Visita visita : todasVisitas) {
+            if (visita.getPreso() != null
+                    && visita.getPreso().getIdentificacion().equals(identificacionPreso)
+                    && visita.getFechaVisita().equals(fecha)
+                    && visita.getHoraVisita().equals(hora)
+                    && visita.getEstado() != EstadoVisitaEnum.CANCELADA) {
+                visitasFiltradas.add(visita);
+            }
+        }
+
+        return visitasFiltradas;
+    }
+
+    public boolean tieneVisitaEnFecha(String identificacionVisitante, LocalDate fecha) {
+        List<Visita> todasVisitas = cargarTodas();
+
+        for (Visita visita : todasVisitas) {
+            if (visita.getEstado() != EstadoVisitaEnum.CANCELADA
+                    && visita.getFechaVisita().equals(fecha)) {
+                for (Visitante visitante : visita.getVisitantes()) {
+                    if (visitante.getIdentificacion().equals(identificacionVisitante)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 }
