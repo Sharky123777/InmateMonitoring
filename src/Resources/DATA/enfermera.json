@@ -18,23 +18,6 @@
       "identificacion": "83712731"
     },
     {
-      "usuario": "qq808^",
-      "contrasena": "Z!H^4O8w",
-      "turno": "Diurno",
-      "fechaContratacion": "2025-05-08",
-      "fechaFinContrato": "2025-05-14",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/091831212_1746729093769.jpg",
-      "correo": "thejh0nl3n0n@gmail.com",
-      "primerNombre": "q",
-      "segundoNombre": "q",
-      "primerApellido": "q",
-      "segundoApellido": "s",
-      "edad": 34,
-      "sexo": "Femenino",
-      "nacionalidad": "po",
-      "identificacion": "091831212"
-    },
-    {
       "usuario": "wq478*",
       "contrasena": "HG@9K\u0026T6",
       "turno": "Diurno",
@@ -42,7 +25,7 @@
       "fechaFinContrato": "2025-05-27",
       "rutaImagen": "src/Resources/imagenes_enfermeras/91873819_1746733085386.jpg",
       "correo": "thejh0nl3n0n@gmail.com",
-      "primerNombre": "w",
+      "primerNombre": "wo",
       "segundoNombre": "w",
       "primerApellido": "q",
       "segundoApellido": "q",
@@ -52,21 +35,21 @@
       "identificacion": "91873819"
     },
     {
-      "usuario": "o$MLaW#0e",
-      "contrasena": "a2RZ$!#hRNE#",
-      "turno": "Nocturno",
+      "usuario": "4LvSW22#G%%Ñ",
+      "contrasena": "%2vRñSPRnSkiaq¿9",
+      "turno": "Diurno",
       "fechaContratacion": "2025-05-10",
-      "fechaFinContrato": "2025-05-30",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/091831212_1746916227688.jpg",
+      "fechaFinContrato": "2025-05-16",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/3131313_1746917382093.png",
       "correo": "thejh0nl3n0n@gmail.com",
-      "primerNombre": "w",
-      "segundoNombre": "w",
-      "primerApellido": "w",
-      "segundoApellido": "w",
-      "edad": 34,
+      "primerNombre": "sas",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 45,
       "sexo": "Femenino",
-      "nacionalidad": "pqoepqeq",
-      "identificacion": "091831212"
+      "nacionalidad": "w",
+      "identificacion": "3131313"
     }
   ]
 }

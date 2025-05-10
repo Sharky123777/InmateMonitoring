@@ -99,48 +99,50 @@ private void validarImagen(File imagen) {
     }
 }
     
-    public boolean modificarEnfermera(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
+    public int modificarEnfermera(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
     try {
         Enfermera original = obtenerEnfermeraPorCedula(cedulaOriginal);
         if (original == null) {
-            throw new IllegalArgumentException("Enfermera no encontrada con cédula: " + cedulaOriginal);
+            throw new IllegalArgumentException("Enfermera no encontrada");
         }
 
-        // Validar campos
+        // Verificar si hay cambios reales
+        if (!verificarCambios(original, cambios, nuevaImagen)) {
+            return 0; // Código 0 = No hay cambios
+        }
+
+        // Validaciones
         validarCamposModificacion(cambios);
         validarEdad((int) cambios.get("edad"));
         validarFechasContrato(original.getFechaContratacion(), (LocalDate) cambios.get("fechaFin"));
         validarLimiteEnfermerasPorTurno((String) cambios.get("turno"), cedulaOriginal);
 
-        // Construir enfermera modificada manteniendo credenciales
-        Enfermera enfermeraModificada = new Enfermera(
-            (String) cambios.get("primerNombre"),
-            (String) cambios.get("segundoNombre"),
-            (String) cambios.get("primerApellido"),
-            (String) cambios.get("segundoApellido"),
-            (int) cambios.get("edad"),
-            "Femenino",
-            (String) cambios.get("nacionalidad"),
-            cedulaOriginal, // Mantener la cédula original
-            (String) cambios.get("turno"),
-            original.getFechaContratacion(), // Mantener fecha original
-            (LocalDate) cambios.get("fechaFin"),
-            (String) cambios.get("correo"),
-            original.getUsuario(), // Mantener usuario
-            original.getContrasena() // Mantener contraseña
-        );
-
-        // Pasar la nueva imagen si existe, sino mantener la original
-        File imagenFinal = (nuevaImagen != null) ? nuevaImagen : 
-                         (original.getRutaImagen() != null && !original.getRutaImagen().isEmpty()) ? 
-                         new File(original.getRutaImagen()) : null;
-
-        return enfermeraDAO.modificarEnfermera(cedulaOriginal, enfermeraModificada, imagenFinal);
+        // Construir y modificar
+        Enfermera enfermeraModificada = construirEnfermeraModificada(cedulaOriginal, cambios, original);
+        boolean resultado = enfermeraDAO.modificarEnfermera(cedulaOriginal, enfermeraModificada, nuevaImagen);
+        
+        return resultado ? 1 : -1; // 1=Éxito, -1=Error
     } catch (IllegalArgumentException e) {
         throw e;
     } catch (Exception e) {
-        throw new RuntimeException("Error al modificar enfermera: " + e.getMessage(), e);
+        throw new RuntimeException("Error al modificar: " + e.getMessage());
     }
+}
+
+private boolean verificarCambios(Enfermera original, Map<String, Object> cambios, File nuevaImagen) {
+    // Verificar cambios en campos básicos
+    if (!original.getPrimerNombre().equals(cambios.get("primerNombre"))) return true;
+    if (!Objects.equals(original.getSegundoNombre(), cambios.get("segundoNombre"))) return true;
+    if (!original.getPrimerApellido().equals(cambios.get("primerApellido"))) return true;
+    if (!original.getSegundoApellido().equals(cambios.get("segundoApellido"))) return true;
+    if (original.getEdad() != (int) cambios.get("edad")) return true;
+    if (!original.getNacionalidad().equals(cambios.get("nacionalidad"))) return true;
+    if (!original.getCorreo().equals(cambios.get("correo"))) return true;
+    if (!original.getTurno().equals(cambios.get("turno"))) return true;
+    if (!original.getFechaFinContrato().equals(cambios.get("fechaFin"))) return true;
+    
+    // Verificar si se cambió la imagen
+    return nuevaImagen != null;
 }
 
     private boolean procesarModificacion(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {

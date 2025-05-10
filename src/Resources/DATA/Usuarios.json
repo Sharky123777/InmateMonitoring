@@ -103,6 +103,19 @@
       "sexo": "Femenino",
       "nacionalidad": "pqoepqeq",
       "identificacion": "091831212"
+    },
+    {
+      "usuario": "4LvSW22#G%%Ñ",
+      "password": "0ba2b8faf7331246ea35eaa5646e673b84ab823fb9af4ec3453810f1e69f19a4",
+      "rol": "ENFERMERA",
+      "primerNombre": "sas",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 45,
+      "sexo": "Femenino",
+      "nacionalidad": "w",
+      "identificacion": "3131313"
     }
   ]
 }
