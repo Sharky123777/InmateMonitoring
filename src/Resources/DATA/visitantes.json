@@ -1,3 +1,16 @@
 [
-
+  {
+    "relacionConPreso": "Hermano/Hermana",
+    "fotoPath": "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\Images\\visitante_1.jpg",
+    "email": "eruh@gmail.com",
+    "id": 1,
+    "primerNombre": "wedrfgyhjk",
+    "segundoNombre": "dcfvbnj",
+    "primerApellido": "szxdcfjbxcvgbh",
+    "segundoApellido": "eecvgbhj",
+    "edad": 23,
+    "sexo": "Masculino",
+    "nacionalidad": "Arabia Saudita  ",
+    "identificacion": "34232353"
+  }
 ]

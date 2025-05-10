@@ -1,3 +1,65 @@
 [
- 
+  {
+    "id": 1,
+    "fechaVisita": "2025-05-11",
+    "horaVisita": "08:00",
+    "duracionVisitaEnHoras": "1",
+    "tipoVisita": "Visita regular",
+    "lugarVisita": "Sala de visitas",
+    "preso": {
+      "estatura": 1.7,
+      "peso": 89.0,
+      "delitos": [],
+      "expediente": {
+        "codigoExpediente": "EXP-QSLY-HPC0",
+        "numeroRegistro": "REG-2025-5274",
+        "fechaApertura": "2025-04-25",
+        "estado": "Activo",
+        "delitos": [],
+        "juzgado": "Juzgado de Ejecución Penal",
+        "totalVisitas": 0,
+        "nivelAdaptacion": "Por evaluar",
+        "actividades": [],
+        "observacionesConducta": "Ninguna",
+        "nivelRiesgo": "Riesgo bajo"
+      },
+      "nivelDeSeguridad": "Baja",
+      "seccionAsignada": "Sección C",
+      "condicion": "En espera",
+      "celdaAsignada": "CELD-52",
+      "enAislamiento": false,
+      "nivelDeRiesgo": "Riesgo bajo",
+      "numeroDeVisitas": 0,
+      "grupoSanguineo": "\u003cSeleccione\u003e",
+      "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_1.jpg",
+      "estado": "ACTIVO",
+      "id": 1,
+      "actividadesAsignadasIds": [],
+      "primerNombre": "Luz",
+      "segundoNombre": "Dari",
+      "primerApellido": "Crespo",
+      "segundoApellido": "Gomez",
+      "edad": 18,
+      "sexo": "F",
+      "nacionalidad": "Austriaca",
+      "identificacion": "001122334"
+    },
+    "visitantes": [
+      {
+        "relacionConPreso": "Hermano/Hermana",
+        "fotoPath": "C:\\Users\\nicol\\Downloads\\visitante_1.jpg",
+        "email": "eruh@gmail.com",
+        "id": 1,
+        "primerNombre": "wedrfgyhjk",
+        "segundoNombre": "dcfvbnj",
+        "primerApellido": "szxdcfjbxcvgbh",
+        "segundoApellido": "eecvgbhj",
+        "edad": 23,
+        "sexo": "Masculino",
+        "nacionalidad": "Arabia Saudita  ",
+        "identificacion": "34232353"
+      }
+    ],
+    "estado": "EN_PROCESO"
+  }
 ]

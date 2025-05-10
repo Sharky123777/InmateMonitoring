@@ -34,7 +34,7 @@ import javax.swing.JOptionPane;
 
 public class PresoDAO {
 
-    private static  DelitoDAO delitoDAO = DelitoDAO.getInstancia();
+    private static DelitoDAO delitoDAO = DelitoDAO.getInstancia();
     private static PresoDAO instancia;
 
     private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\presos.json\\";
@@ -181,9 +181,10 @@ public class PresoDAO {
         List<Preso> presos = cargarTodos();
         for (Preso preso : presos) {
             if (preso.getIdentificacion().equals(identificacion)) {
-List<Delito> delitos =delitoDAO.obtenerDelitosPorPreso(preso.getIdentificacion());
-            preso.setDelitos(delitos); 
-            return preso;            }
+                List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(preso.getIdentificacion());
+                preso.setDelitos(delitos);
+                return preso;
+            }
         }
         return null;
 
@@ -384,102 +385,100 @@ List<Delito> delitos =delitoDAO.obtenerDelitosPorPreso(preso.getIdentificacion()
     }
 
     public List<Preso> buscarPorSeccion(String seccion) {
-    List<Preso> todos = cargarTodos();
-    List<Preso> filtrados = new ArrayList<>();
-
-    for (Preso preso : todos) {
-        if (preso.getSeccionAsignada().equalsIgnoreCase(seccion)
-                && "ACTIVO".equalsIgnoreCase(preso.getEstado())) {
-            filtrados.add(preso);
-        }
-    }
-    return filtrados;
-}
-    
-public boolean actualizarPreso(Preso preso) {
-    List<Preso> presos = cargarTodos();
-    
-    try {
-        boolean encontrado = false;
-        for (int i = 0; i < presos.size(); i++) {
-            if (presos.get(i).getIdentificacion().equals(preso.getIdentificacion())) {
-                presos.set(i, preso);
-                encontrado = true;
-                break;
-            }
-        }
-        
-        if (!encontrado) {
-            return false;
-        }
-        
-        guardarTodos(presos);
-        return true;
-        
-    } catch (RuntimeException e) {
-        System.err.println("Error al actualizar preso: " + e.getMessage());
-        return false;
-    }
-}
-
-public boolean agregarActividadAsignada(String idPreso, String idActividad) {
-    List<Preso> presos = cargarTodos();
-    
-    try {
-        for (Preso preso : presos) {
-            if (preso.getIdentificacion().equals(idPreso)) {
-                preso.agregarActividadAsignada(idActividad);
-                guardarTodos(presos);
-                return true;
-            }
-        }
-        return false;
-    } catch (RuntimeException e) {
-        System.err.println("Error al agregar actividad: " + e.getMessage());
-        return false;
-    }
-}
-
-public boolean marcarActividadCancelada(String idPreso, String idActividad) {
-    List<Preso> presos = cargarTodos();
-    
-    try {
-        for (Preso preso : presos) {
-            if (preso.getIdentificacion().equals(idPreso)) {
-                preso.marcarActividadCancelada(idActividad);
-                guardarTodos(presos);
-                return true;
-            }
-        }
-        return false;
-    } catch (RuntimeException e) {
-        System.err.println("Error al marcar actividad como cancelada: " + e.getMessage());
-        return false;
-    }
-}
-
- public boolean cambiarEstadoPreso(String identificacion, String nuevoEstado) {
-    List<Preso> presos = cargarTodos();
-    
-    for (Preso preso : presos) {
-        if (preso.getIdentificacion().equals(identificacion)) {
-            preso.setEstado(nuevoEstado);
-            return guardarCambios(presos);
-        }
-    }
-    return false;
-}
-  
-
-  
- public boolean eliminarPresoL(String numeroIdentificacion) {
-        return cambiarEstadoPreso(numeroIdentificacion, "LIBERADO");
-  }
- 
- public List<Preso> buscarPorEstado(String estado) {
         List<Preso> todos = cargarTodos();
         List<Preso> filtrados = new ArrayList<>();
-        
+
+        for (Preso preso : todos) {
+            if (preso.getSeccionAsignada().equalsIgnoreCase(seccion)
+                    && "ACTIVO".equalsIgnoreCase(preso.getEstado())) {
+                filtrados.add(preso);
+            }
+        }
+        return filtrados;
+    }
+
+    public boolean actualizarPreso(Preso preso) {
+        List<Preso> presos = cargarTodos();
+
+        try {
+            boolean encontrado = false;
+            for (int i = 0; i < presos.size(); i++) {
+                if (presos.get(i).getIdentificacion().equals(preso.getIdentificacion())) {
+                    presos.set(i, preso);
+                    encontrado = true;
+                    break;
+                }
+            }
+
+            if (!encontrado) {
+                return false;
+            }
+
+            guardarTodos(presos);
+            return true;
+
+        } catch (RuntimeException e) {
+            System.err.println("Error al actualizar preso: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean agregarActividadAsignada(String idPreso, String idActividad) {
+        List<Preso> presos = cargarTodos();
+
+        try {
+            for (Preso preso : presos) {
+                if (preso.getIdentificacion().equals(idPreso)) {
+                    preso.agregarActividadAsignada(idActividad);
+                    guardarTodos(presos);
+                    return true;
+                }
+            }
+            return false;
+        } catch (RuntimeException e) {
+            System.err.println("Error al agregar actividad: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean marcarActividadCancelada(String idPreso, String idActividad) {
+        List<Preso> presos = cargarTodos();
+
+        try {
+            for (Preso preso : presos) {
+                if (preso.getIdentificacion().equals(idPreso)) {
+                    preso.marcarActividadCancelada(idActividad);
+                    guardarTodos(presos);
+                    return true;
+                }
+            }
+            return false;
+        } catch (RuntimeException e) {
+            System.err.println("Error al marcar actividad como cancelada: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean cambiarEstadoPreso(String identificacion, String nuevoEstado) {
+        List<Preso> presos = cargarTodos();
+
+        for (Preso preso : presos) {
+            if (preso.getIdentificacion().equals(identificacion)) {
+                preso.setEstado(nuevoEstado);
+                return guardarCambios(presos);
+            }
+        }
+        return false;
+    }
+
+    public boolean eliminarPresoL(String numeroIdentificacion) {
+        return cambiarEstadoPreso(numeroIdentificacion, "LIBERADO");
+    }
+
+    public List<Preso> buscarPorEstado(String estado) {
+        List<Preso> todos = cargarTodos();
+        List<Preso> filtrados = new ArrayList<>();
+
         for (Preso preso : todos) {
             if (preso.getEstado() != null && preso.getEstado().equalsIgnoreCase(estado)) {
                 filtrados.add(preso);

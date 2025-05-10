@@ -7,6 +7,7 @@ import DAO.VisitanteDAO;
 import Model.Entities.Preso;
 import Model.Entities.Visita;
 import Model.Entities.Visitante;
+import Model.Constants.EstadoVisitaEnum;
 import View.PersonalDeControl;
 import java.awt.AlphaComposite;
 import java.awt.Component;
@@ -15,12 +16,12 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,15 +30,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class VisitaController {
 
-    private VisitaDAO visitaDAO = new VisitaDAO();
-    private VisitanteDAO visitanteDAO = new VisitanteDAO();
-    private PersonalDeControlDAO personalDeControlDAO = new PersonalDeControlDAO();
+    private VisitaDAO visitaDAO = VisitaDAO.getInstancia();
+    private VisitanteDAO visitanteDAO = VisitanteDAO.getInstancia();
+    private PersonalDeControlDAO personalDeControlDAO = PersonalDeControlDAO.getInstancia();
+    private Visita visitaTemporal = null;
 
     public void limpiarCamposVisitante(PersonalDeControl view) {
         view.getPrimerNombreVisitante().setText("");
@@ -56,7 +63,6 @@ public class VisitaController {
     public void limpiarCamposVisita(PersonalDeControl view) {
         view.getIdentificacionPresoVisita().setText("");
         view.getFechaVisita().setDate(null);
-        view.getDuracionVisita().setSelectedIndex(0);
         view.getTipoVisita().setSelectedIndex(0);
         view.getLugarVisita().setSelectedIndex(0);
         view.getHoraVisita().setSelectedIndex(0);
@@ -170,8 +176,7 @@ public class VisitaController {
             return false;
         }
 
-        if (view.getDuracionVisita().getSelectedIndex() == 0
-                || view.getTipoVisita().getSelectedIndex() == 0
+        if (view.getTipoVisita().getSelectedIndex() == 0
                 || view.getLugarVisita().getSelectedIndex() == 0) {
             mostrarError("Complete todos los campos requeridos para la visita");
             return false;
@@ -188,6 +193,11 @@ public class VisitaController {
     public void registrarVisitante(PersonalDeControl view, List<Visitante> visitantesTemporales, List<File> imagenesTemporales) {
         int cantidadTotal;
         File imagen = view.getImagenVisitanteSeleccionada();
+
+        if (visitaTemporal == null) {
+            mostrarError("Primero debe ingresar los datos de la visita antes de añadir visitantes.");
+            return;
+        }
 
         if (!validarCamposVisitante(view, imagen, 0, visitantesTemporales)) {
             return;
@@ -222,6 +232,13 @@ public class VisitaController {
             }
         }
 
+        Preso presoEncontrado = PresoDAO.getInstancia().buscarPresoPorIdentificacion(identificacion);
+
+        if (presoEncontrado != null && presoEncontrado.getIdentificacion().equals(identificacion)) {
+            mostrarError("El preso no se puede visitar a sí mismo");
+            return;
+        }
+
         if (identificacion.length() < 6 || identificacion.length() > 10) {
             mostrarError("La identificación debe tener entre 6 y 10 caracteres.");
             return;
@@ -232,76 +249,97 @@ public class VisitaController {
         visitantesTemporales.add(visitante);
         imagenesTemporales.add(imagen);
 
+
         limpiarCamposVisitante(view);
         view.setImagenVisitanteSeleccionada(null);
 
         if (visitantesTemporales.size() >= cantidadTotal) {
             JOptionPane.showMessageDialog(null,
-                    "Ya se añadieron todos los visitantes. Ahora complete los datos de la visita.",
+                    "Ya se añadieron todos los visitantes. Ahora puede registrar la visita final.",
                     "Información", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(null,
-                    "Visitante añadido (" + visitantesTemporales.size() + " de " + cantidadTotal + ").\nPor favor ingrese el siguiente visitante.",
+                    "Visitante añadido (" + visitantesTemporales.size() + " de " + cantidadTotal + ").",
                     "Información", JOptionPane.INFORMATION_MESSAGE);
         }
+
     }
 
-    public void registrarVisita(PersonalDeControl view, List<Visitante> visitantes, List<File> imagenes) {
-        int cantidadTotal;
+    public boolean guardarVisitaTemporal(PersonalDeControl view) {
+        if (!validarCamposVisita(view)) {
+            return false;
+        }
 
         try {
-            cantidadTotal = Integer.parseInt(view.getCantidadDeVisitantesCombo().getSelectedItem().toString());
-        } catch (NumberFormatException e) {
-            mostrarError("Cantidad de visitantes no válida");
-            return;
+            String identificacionPreso = view.getIdentificacionPresoVisita().getText().trim();
+            String tipo = view.getTipoVisita().getSelectedItem().toString();
+            String lugar = view.getLugarVisita().getSelectedItem().toString();
+            String horaSeleccionada = view.getHoraVisita().getSelectedItem().toString();
+
+            Date fechaSeleccionada = view.getFechaVisita().getDate();
+            LocalDate fecha = fechaSeleccionada.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalTime horaVisita = LocalTime.parse(horaSeleccionada);
+
+            if (!fecha.isAfter(LocalDate.now())) {
+                mostrarError("La fecha debe ser después de hoy.");
+                return false;
+            }
+
+            Preso preso = PresoDAO.getInstancia().buscarPresoPorIdentificacion(identificacionPreso);
+            if (preso == null) {
+                mostrarError("No se encontró ningún preso con esa identificación");
+                return false;
+            }
+
+            visitaTemporal = new Visita(
+                    0,
+                    fecha,
+                    horaVisita,
+                    tipo,
+                    lugar,
+                    preso,
+                    new ArrayList<>()
+            );
+
+            visitaTemporal.setEstado(EstadoVisitaEnum.EN_PROCESO);
+
+            JOptionPane.showMessageDialog(null,
+                    "Visita guardada temporalmente. Ahora ingrese los visitantes.",
+                    "Información", JOptionPane.INFORMATION_MESSAGE);
+
+            return true;
+
+        } catch (Exception e) {
+            mostrarError("Error al guardar visita temporal: " + e.getMessage());
+            return false;
         }
-
-        if (cantidadTotal <= 0) {
-            mostrarError("Debe seleccionar y añadir al menos un visitante.");
-            return;
-        }
-        if (!validarCamposVisita(view)) {
-            return;
-        }
-
-        String identificacionPreso = view.getIdentificacionPresoVisita().getText().trim();
-        String duracion = view.getDuracionVisita().getSelectedItem().toString();
-        String tipo = view.getTipoVisita().getSelectedItem().toString();
-        String lugar = view.getLugarVisita().getSelectedItem().toString();
-        String horaSeleccionada = view.getHoraVisita().getSelectedItem().toString();
-        LocalTime horaVisita = LocalTime.parse(horaSeleccionada);
-        Date fechaSeleccionada = view.getFechaVisita().getDate();
-
-        LocalDate fecha = fechaSeleccionada.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        if (fecha.isAfter(LocalDate.now())) {
-            mostrarError("La fecha de la visita no puede ser en el futuro.\nEste formulario es para guardar visitas ya realizadas");
-            return;
-        }
-
-        Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacionPreso);
-        if (preso == null) {
-            mostrarError("No se encontró ningún preso con esa identificación");
-            return;
-        }
-
-        Visita nuevaVisita = new Visita(0, fecha, horaVisita, duracion, tipo, lugar, preso, null);
-        nuevaVisita.getVisitantes().addAll(visitantes);
-        visitaDAO.guardarVisita(nuevaVisita);
-
-        for (int i = 0; i < nuevaVisita.getVisitantes().size(); i++) {
-            Visitante visitante = nuevaVisita.getVisitantes().get(i);
-            File imagen = imagenes.get(i);
-            visitanteDAO.guardarVisitante(visitante, imagen);
-        }
-
-        visitantes.clear();
-        imagenes.clear();
-        limpiarCamposVisita(view);
-
-        JOptionPane.showMessageDialog(null,
-                "\u00a1Visita registrada exitosamente!",
-                "Éxito", JOptionPane.INFORMATION_MESSAGE);
     }
+
+    public void guardarVisitaFinal(List<Visitante> visitantes, List<File> imagenes) {
+    if (visitaTemporal == null) {
+        mostrarError("Primero debe ingresar los datos de la visita.");
+        return;
+    }
+
+    if (visitantes == null || visitantes.isEmpty()) {
+        mostrarError("Debe ingresar al menos un visitante.");
+        return;
+    }
+
+    visitaTemporal.getVisitantes().addAll(visitantes);
+
+    visitaDAO.guardarVisita(visitaTemporal);
+
+    for (int i = 0; i < visitantes.size(); i++) {
+        visitanteDAO.guardarVisitante(visitantes.get(i), imagenes.get(i));
+    }
+
+    visitaTemporal = null;
+    visitantes.clear();
+    imagenes.clear();
+
+    JOptionPane.showMessageDialog(null, "¡Visita y visitantes registrados exitosamente!");
+}
 
     public void cargarHistorialVisitas(String identificacionPreso, JTable tabla) {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
@@ -318,7 +356,8 @@ public class VisitaController {
                     visita.getDuracionVisitaEnHoras(),
                     visita.getTipoVisita(),
                     visita.getLugarVisita(),
-                    identificacionPreso
+                    identificacionPreso,
+                    visita.getEstado()
                 });
             }
         }
@@ -352,7 +391,8 @@ public class VisitaController {
             modelo.addRow(new Object[]{
                 foto,
                 visitante.getId(),
-                visitante.getNombreCompleto(),
+                visitante.getNombresCompletos(),
+                visitante.getApellidosCompletos(),
                 visitante.getEmail(),
                 visitante.getEdad(),
                 visitante.getIdentificacion(),
@@ -382,7 +422,7 @@ public class VisitaController {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
         modelo.setRowCount(0);
 
-        PresoDAO presoDAO = new PresoDAO();
+        PresoDAO presoDAO = PresoDAO.getInstancia();
         List<Preso> presos = presoDAO.cargarTodos();
 
         for (Preso preso : presos) {
@@ -390,7 +430,8 @@ public class VisitaController {
             modelo.addRow(new Object[]{
                 foto,
                 preso.getId(),
-                preso.getNombreCompleto(),
+                preso.getNombresCompletos(),
+                preso.getApellidosCompletos(),
                 preso.getEdad(),
                 preso.getIdentificacion(),
                 preso.getNacionalidad(),
@@ -409,13 +450,14 @@ public class VisitaController {
             return;
         }
 
-        Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
+        Preso preso = PresoDAO.getInstancia().buscarPresoPorIdentificacion(identificacion);
         if (preso != null) {
             ImageIcon foto = cargarImagen(preso.getFotoPath());
             modelo.addRow(new Object[]{
                 foto,
                 preso.getId(),
-                preso.getNombreCompleto(),
+                preso.getNombresCompletos(),
+                preso.getApellidosCompletos(),
                 preso.getEdad(),
                 preso.getIdentificacion(),
                 preso.getNacionalidad(),
@@ -501,7 +543,7 @@ public class VisitaController {
         DefaultTableModel modelo = (DefaultTableModel) tablaPresos.getModel();
         modelo.setRowCount(0);
 
-        PresoDAO presoDAO = new PresoDAO();
+        PresoDAO presoDAO = PresoDAO.getInstancia();
         List<Preso> presos = presoDAO.cargarTodos();
 
         for (Preso preso : presos) {
@@ -533,7 +575,7 @@ public class VisitaController {
     }
 
     public Preso buscarPresoPorIdentificacion(String identificacion) {
-        return new PresoDAO().buscarPresoPorIdentificacion(identificacion);
+        return PresoDAO.getInstancia().buscarPresoPorIdentificacion(identificacion);
     }
 
     private boolean hayCambiosVisitante(Visitante visitanteOriginal,
@@ -681,26 +723,12 @@ public class VisitaController {
         }
     }
 
-    private boolean hayCambiosVisita(Visita visitaOriginal,
-            String duracion,
-            String tipo,
-            String lugar) {
-
-        if (duracion != null && duracion.equals(visitaOriginal.getDuracionVisitaEnHoras())) {
-            return false;
-        }
-        if (tipo != null && tipo.equals(visitaOriginal.getTipoVisita())) {
-            return false;
-        }
-        if (lugar != null && lugar.equals(visitaOriginal.getLugarVisita())) {
-            return false;
-        }
-
-        return true;
+    private boolean hayCambiosVisita(Visita visitaOriginal, String tipo, String lugar) {
+        return (!tipo.equals(visitaOriginal.getTipoVisita()))
+                || (!lugar.equals(visitaOriginal.getLugarVisita()));
     }
 
     public Visita actualizarVisita(int idVisita,
-            String nuevaDuracion,
             String nuevoTipo,
             String nuevoLugar) {
 
@@ -711,17 +739,16 @@ public class VisitaController {
             return null;
         }
 
-        String duracionFinal = nuevaDuracion.equals("< Seleccionar >") ? visitaOriginal.getDuracionVisitaEnHoras() : nuevaDuracion;
         String tipoFinal = nuevoTipo.equals("< Seleccionar >") ? visitaOriginal.getTipoVisita() : nuevoTipo;
         String lugarFinal = nuevoLugar.equals("< Seleccionar >") ? visitaOriginal.getLugarVisita() : nuevoLugar;
-        
-        if (!hayCambiosVisita(visitaOriginal, nuevaDuracion, nuevoTipo, nuevoLugar)) {
+
+        if (!hayCambiosVisita(visitaOriginal, tipoFinal, lugarFinal)) {
             mostrarError("No hay cambios para guardar.");
             return null;
         }
+
         Visita visitaActualizada = visitaDAO.modificarDatosVisitaYDevolver(
                 idVisita,
-                duracionFinal,
                 tipoFinal,
                 lugarFinal
         );
@@ -746,4 +773,48 @@ public class VisitaController {
             return null;
         }
     }
+
+    public Visita cambiarEstadoVisita(int idVisita, EstadoVisitaEnum nuevoEstado) {
+        if (nuevoEstado == null) {
+            mostrarError("Debe seleccionar un estado válido");
+            return null;
+        }
+
+        Visita visita = visitaDAO.buscarVisitaPorId(idVisita);
+        if (visita == null) {
+            mostrarError("No se encontró la visita con ID: " + idVisita);
+            return null;
+        }
+
+        if (visita.getEstado() == nuevoEstado) {
+            mostrarError("La visita ya tiene el estado: " + nuevoEstado.toString());
+            return null;
+        }
+
+        if (nuevoEstado == EstadoVisitaEnum.FINALIZADA) {
+            LocalDate fechaActual = LocalDate.now();
+            LocalDate fechaVisita = visita.getFechaVisita();
+
+            if (!fechaActual.isAfter(fechaVisita)) {
+                mostrarError("No puede finalizar una visita el mismo día o antes.\n"
+                        + "Fecha de la visita: " + fechaVisita + "\n"
+                        + "Puede finalizar a partir de: " + fechaVisita.plusDays(1));
+                return null;
+            }
+        }
+
+        Visita visitaActualizada = visitaDAO.modificarEstadoVisitaYDevolver(idVisita, nuevoEstado);
+
+        if (visitaActualizada != null) {
+            JOptionPane.showMessageDialog(null,
+                    "Estado de visita actualizado correctamente a: " + nuevoEstado.toString(),
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return visitaActualizada;
+        } else {
+            mostrarError("Error al guardar el cambio de estado");
+            return null;
+        }
+    }
+
 }

@@ -20,10 +20,18 @@ import javax.swing.JOptionPane;
 
 public class VisitanteDAO {
 
+    private static VisitanteDAO instancia;
     private static final String JSON_FILE = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\visitantes.json";
     private static final String IMAGES_DIR = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\Images\\";
 
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    public static synchronized VisitanteDAO getInstancia() {
+        if (instancia == null) {
+            instancia = new VisitanteDAO();
+        }
+        return instancia;
+    }
 
     public List<Visitante> cargarTodos() {
         File archivo = new File(JSON_FILE);
@@ -265,7 +273,6 @@ public class VisitanteDAO {
 
         for (Visitante visitante : visitantes) {
             if (visitante.getIdentificacion().equals(identificacion)) {
-                // Actualizar campos
                 if (primerNombre != null) {
                     visitante.setPrimerNombre(primerNombre);
                 }

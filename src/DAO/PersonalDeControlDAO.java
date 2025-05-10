@@ -17,6 +17,7 @@ import java.util.List;
 
 public class PersonalDeControlDAO {
 
+    private static PersonalDeControlDAO instancia;
     private static final String JSON_FILE = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\personalDeControl.json";
     private static final String IMAGES_DIR = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\Images\\";
     private Gson gson;
@@ -26,6 +27,13 @@ public class PersonalDeControlDAO {
                 .setPrettyPrinting()
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .create();
+    }
+
+    public static synchronized PersonalDeControlDAO getInstancia() {
+        if (instancia == null) {
+            instancia = new PersonalDeControlDAO();
+        }
+        return instancia;
     }
 
     public List<PersonalDeControl> cargarTodos() {
