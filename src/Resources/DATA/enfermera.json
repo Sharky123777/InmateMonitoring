@@ -1,8 +1,6 @@
 {
   "enfermeras": [
     {
-      "usuario": "",
-      "contrasena": "",
       "turno": "Nocturno",
       "fechaContratacion": "2025-05-07",
       "fechaFinContrato": "2025-05-21",
@@ -18,8 +16,6 @@
       "identificacion": "83712731"
     },
     {
-      "usuario": "wq478*",
-      "contrasena": "HG@9K\u0026T6",
       "turno": "Diurno",
       "fechaContratacion": "2025-05-08",
       "fechaFinContrato": "2025-05-27",
@@ -35,8 +31,6 @@
       "identificacion": "91873819"
     },
     {
-      "usuario": "4LvSW22#G%%Ñ",
-      "contrasena": "%2vRñSPRnSkiaq¿9",
       "turno": "Diurno",
       "fechaContratacion": "2025-05-10",
       "fechaFinContrato": "2025-05-16",
@@ -50,6 +44,21 @@
       "sexo": "Femenino",
       "nacionalidad": "w",
       "identificacion": "3131313"
+    },
+    {
+      "turno": "Nocturno",
+      "fechaContratacion": "2025-05-10",
+      "fechaFinContrato": "2025-05-29",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/1387831_1746919393659.png",
+      "correo": "imshar@gmail.com",
+      "primerNombre": "pepE",
+      "segundoNombre": "w",
+      "primerApellido": "w",
+      "segundoApellido": "w",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "wqeq",
+      "identificacion": "1387831"
     }
   ]
 }

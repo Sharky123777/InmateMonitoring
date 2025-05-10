@@ -116,6 +116,32 @@
       "sexo": "Femenino",
       "nacionalidad": "w",
       "identificacion": "3131313"
+    },
+    {
+      "usuario": "IMñ1dlxl@",
+      "password": "a966efb604f606cceef7d6608358e85ab085916262c1905118a902b5bd3b3360",
+      "rol": "ENFERMERA",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "p",
+      "identificacion": "313131313"
+    },
+    {
+      "usuario": "ÑxYVwVN3eZN@",
+      "password": "80aeaaabb344eba156896316efeefde3a6125e6d4668cee0f2f3a84f6a537809",
+      "rol": "ENFERMERA",
+      "primerNombre": "pepE",
+      "segundoNombre": "w",
+      "primerApellido": "w",
+      "segundoApellido": "w",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "wqeq",
+      "identificacion": "1387831"
     }
   ]
 }

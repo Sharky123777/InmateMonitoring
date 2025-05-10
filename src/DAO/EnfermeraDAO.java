@@ -173,18 +173,17 @@ public class EnfermeraDAO {
     }
 
     public boolean guardarEnfermera(Enfermera enfermera, File imagen) throws IOException {
-    // 1. Generar credenciales
+    // 1. Generar credenciales (sin encriptar para el correo)
     UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
     String usuario = credenciales.usuario;
     String contrasena = credenciales.contrasena;
     String contrasenaEncriptada = UsuarioController.getInstancia().encriptarContrasena(contrasena);
 
-
-    // 3. Asignar credenciales a la enfermera (para mostrar en UI si es necesario)
+    // 2. Asignar credenciales a la enfermera (para mostrar en UI si es necesario)
     enfermera.setUsuario(usuario);
-    enfermera.setContrasena(contrasena); // Solo para referencia, no se guarda así en JSON
+    enfermera.setContrasena(contrasenaEncriptada); // Guardamos la ENCRIPTADA
 
-    // 4. Guardar imagen
+    // 3. Guardar imagen
     String nombreImagen = enfermera.getIdentificacion() + "_"
             + System.currentTimeMillis()
             + imagen.getName().substring(imagen.getName().lastIndexOf("."));
@@ -194,12 +193,12 @@ public class EnfermeraDAO {
     Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
     enfermera.setRutaImagen(rutaImagenFinal);
 
-    // 5. Guardar datos de enfermera
+    // 4. Guardar datos de enfermera
     List<Enfermera> enfermeras = obtenerEnfermeras();
     enfermeras.add(enfermera);
     guardarListaEnfermeras(enfermeras);
 
-    // 6. Guardar usuario (CON CONTRASEÑA ENCRIPTADA)
+    // 5. Guardar usuario en usuarios.json (CON CONTRASEÑA ENCRIPTADA)
     Usuario nuevoUsuario = new Usuario(
             enfermera.getPrimerNombre(),
             enfermera.getSegundoNombre(),
@@ -216,7 +215,7 @@ public class EnfermeraDAO {
 
     guardarUsuario(nuevoUsuario);
 
-    // 7. Enviar correo (CON CONTRASEÑA SIN ENCRIPTAR)
+    // 6. Enviar correo (CON CONTRASEÑA SIN ENCRIPTAR)
     boolean correoEnviado = EmailSender.getInstancia().enviarCredenciales(
             enfermera.getCorreo(),
             usuario,
@@ -276,38 +275,36 @@ public class EnfermeraDAO {
         return enfermeras;
     }
 
-    private void guardarListaEnfermeras(List<Enfermera> enfermeras) throws IOException {
-        JsonObject jsonObject = new JsonObject();
-        JsonArray enfermerasArray = new JsonArray();
+   private void guardarListaEnfermeras(List<Enfermera> enfermeras) throws IOException {
+    JsonObject jsonObject = new JsonObject();
+    JsonArray enfermerasArray = new JsonArray();
 
-        for (Enfermera enfermera : enfermeras) {
-            JsonObject enfermeraJson = new JsonObject();
-            // Agregar todos los campos de manera organizada
-            enfermeraJson.addProperty("usuario", enfermera.getUsuario());
-            enfermeraJson.addProperty("contrasena", enfermera.getContrasena());
-            enfermeraJson.addProperty("turno", enfermera.getTurno());
-            enfermeraJson.addProperty("fechaContratacion", enfermera.getFechaContratacion().toString());
-            enfermeraJson.addProperty("fechaFinContrato", enfermera.getFechaFinContrato().toString());
-            enfermeraJson.addProperty("rutaImagen", enfermera.getRutaImagen());
-            enfermeraJson.addProperty("correo", enfermera.getCorreo());
-            enfermeraJson.addProperty("primerNombre", enfermera.getPrimerNombre());
-            enfermeraJson.addProperty("segundoNombre", enfermera.getSegundoNombre());
-            enfermeraJson.addProperty("primerApellido", enfermera.getPrimerApellido());
-            enfermeraJson.addProperty("segundoApellido", enfermera.getSegundoApellido());
-            enfermeraJson.addProperty("edad", enfermera.getEdad());
-            enfermeraJson.addProperty("sexo", enfermera.getSexo());
-            enfermeraJson.addProperty("nacionalidad", enfermera.getNacionalidad());
-            enfermeraJson.addProperty("identificacion", enfermera.getIdentificacion());
+    for (Enfermera enfermera : enfermeras) {
+        JsonObject enfermeraJson = new JsonObject();
+        // Solo guardamos datos básicos, no credenciales en este JSON
+        enfermeraJson.addProperty("turno", enfermera.getTurno());
+        enfermeraJson.addProperty("fechaContratacion", enfermera.getFechaContratacion().toString());
+        enfermeraJson.addProperty("fechaFinContrato", enfermera.getFechaFinContrato().toString());
+        enfermeraJson.addProperty("rutaImagen", enfermera.getRutaImagen());
+        enfermeraJson.addProperty("correo", enfermera.getCorreo());
+        enfermeraJson.addProperty("primerNombre", enfermera.getPrimerNombre());
+        enfermeraJson.addProperty("segundoNombre", enfermera.getSegundoNombre());
+        enfermeraJson.addProperty("primerApellido", enfermera.getPrimerApellido());
+        enfermeraJson.addProperty("segundoApellido", enfermera.getSegundoApellido());
+        enfermeraJson.addProperty("edad", enfermera.getEdad());
+        enfermeraJson.addProperty("sexo", enfermera.getSexo());
+        enfermeraJson.addProperty("nacionalidad", enfermera.getNacionalidad());
+        enfermeraJson.addProperty("identificacion", enfermera.getIdentificacion());
 
-            enfermerasArray.add(enfermeraJson);
-        }
-
-        jsonObject.add("enfermeras", enfermerasArray);
-
-        try (Writer writer = new FileWriter(RUTA_JSON)) {
-            gson.toJson(jsonObject, writer);
-        }
+        enfermerasArray.add(enfermeraJson);
     }
+
+    jsonObject.add("enfermeras", enfermerasArray);
+
+    try (Writer writer = new FileWriter(RUTA_JSON)) {
+        gson.toJson(jsonObject, writer);
+    }
+}
 
     public boolean puedeAgregarEnfermera(String turno) {
         List<Enfermera> enfermeras = obtenerEnfermeras();

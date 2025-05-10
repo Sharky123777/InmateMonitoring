@@ -2795,10 +2795,11 @@ private void limpiarFormularioCDA() {
         );
 
         limpiarFormularioEnfermera();
-        actualizarTablaEnfermeras();
+        
         JOptionPane.showMessageDialog(this,
                 "Enfermera registrada exitosamente!",
                 "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        actualizarTablaEnfermeras();
 
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(this,
