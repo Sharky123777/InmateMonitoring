@@ -69,6 +69,12 @@ public class GuardiaController {
     File imagen) throws IOException {
 
     try {
+        
+        
+    // Validación de cédula única (agregar al inicio)
+    if (guardiaDAO.existeGuardia(cedula)) {
+        throw new IllegalArgumentException("Ya existe una guardia con la cédula " + cedula);
+    }
         // Validaciones básicas
         validarCamposObligatorios(primerNombre, primerApellido, segundoApellido,
                 edad, cedula, nacionalidad, correo, turno, cargo);
@@ -96,13 +102,13 @@ public class GuardiaController {
         if (guardado) {
             return guardiaDAO.obtenerGuardiaPorCedula(cedula);
         }
-        throw new RuntimeException("No se pudo guardar el guardia en la base de datos");
+        throw new RuntimeException("No se pudo guardar la guardia en la base de datos");
         
     } catch (IllegalArgumentException e) {
         JOptionPane.showMessageDialog(null, e.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
         throw e;
     } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error inesperado al registrar guardia: " + e.getMessage(), 
+        JOptionPane.showMessageDialog(null, "Error inesperado al registrar la guardia: " + e.getMessage(), 
             "Error", JOptionPane.ERROR_MESSAGE);
         throw e;
     }
@@ -118,12 +124,12 @@ public class GuardiaController {
         // Obtener guardia original
         Guardia original = guardiaDAO.obtenerGuardiaPorCedula(cedulaOriginal);
         if (original == null) {
-            throw new IllegalArgumentException("No se encontró un guardia con la cédula: " + cedulaOriginal);
+            throw new IllegalArgumentException("No se encontró una guardia con la cédula: " + cedulaOriginal);
         }
 
         // Validar que se proporcione una imagen (nueva o mantener la existente)
         if (nuevaImagen == null && original.getRutaImagen() == null) {
-            throw new IllegalArgumentException("Debe seleccionar una imagen del guardia");
+            throw new IllegalArgumentException("Debe seleccionar una imagen de la guardia");
         }
 
         // Validar campos modificados
@@ -176,7 +182,7 @@ public class GuardiaController {
 
 private void validarImagen(File imagen) {
     if (imagen == null) {
-        throw new IllegalArgumentException("Debe seleccionar una imagen del guardia");
+        throw new IllegalArgumentException("Debe seleccionar una imagen de la guardia");
     }
     
     if (!imagen.exists()) {

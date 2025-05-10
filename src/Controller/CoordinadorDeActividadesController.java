@@ -97,6 +97,11 @@ public class CoordinadorDeActividadesController {
             String nacionalidad, String correo, String turno, String cargo,
             LocalDate fechaFinContrato, File imagenSeleccionadaCDA) throws IOException {
 
+        // Validación de cédula única (agregar al inicio)
+    if (coordinadorDAO.existeCoordinadorConCedula(cedula)) {
+        throw new IllegalArgumentException("Ya existe una coordinadora con la cédula " + cedula);
+    }
+    
         // Validación de campos obligatorios
         validarCamposObligatorios(primerNombre, primerApellido, segundoApellido,
                 edad, cedula, nacionalidad, correo, turno, cargo);
@@ -133,16 +138,6 @@ public class CoordinadorDeActividadesController {
         }
     }
 
-    /**
-     * Modifica un coordinador de actividades
-     * @param cedulaOriginal La cédula del coordinador a modificar
-     * @param cambios Mapa con los campos a modificar
-     * @param nuevaImagen Archivo de nueva imagen (puede ser null si no se cambia)
-     * @return Estado: true si se realizaron cambios, false si no hubo cambios
-     * @throws CancelarModificacionException Si el usuario decide continuar editando
-     * @throws IllegalArgumentException Si hay errores de validación
-     * @throws RuntimeException Si hay un error en la operación
-     */
     public boolean modificarCoordinador(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
         System.out.println("Iniciando proceso de modificación para cédula: " + cedulaOriginal);
         

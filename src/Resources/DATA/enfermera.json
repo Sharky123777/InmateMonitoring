@@ -50,6 +50,23 @@
       "sexo": "Femenino",
       "nacionalidad": "po",
       "identificacion": "91873819"
+    },
+    {
+      "usuario": "o$MLaW#0e",
+      "contrasena": "a2RZ$!#hRNE#",
+      "turno": "Nocturno",
+      "fechaContratacion": "2025-05-10",
+      "fechaFinContrato": "2025-05-30",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/091831212_1746916227688.jpg",
+      "correo": "thejh0nl3n0n@gmail.com",
+      "primerNombre": "w",
+      "segundoNombre": "w",
+      "primerApellido": "w",
+      "segundoApellido": "w",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "pqoepqeq",
+      "identificacion": "091831212"
     }
   ]
 }

@@ -141,7 +141,7 @@ public class CoordinadorDeActividadesDAO {
         return rutaImagenFinal;
     }
 
-    // En el DAO (solo lógica de datos)
+   // En CoordinadorDeActividadesDAO.java
 public boolean guardarCoordinador(CoordinadorDeActividades coordinador, File imagen) throws IOException {
     // 1. Generar credenciales
     UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
@@ -151,7 +151,7 @@ public boolean guardarCoordinador(CoordinadorDeActividades coordinador, File ima
 
     // 3. Asignar credenciales
     coordinador.setUsuario(usuario);
-    coordinador.setContrasena(contrasena);
+    coordinador.setContrasena(contrasenaEncriptada); // AQUÍ GUARDAMOS LA CONTRASEÑA ENCRIPTADA
 
     // 4. Guardar imagen
     String nombreImagen = coordinador.getIdentificacion() + "_"
@@ -189,7 +189,7 @@ public boolean guardarCoordinador(CoordinadorDeActividades coordinador, File ima
     return EmailSender.getInstancia().enviarCredenciales(
             coordinador.getCorreo(),
             usuario,
-            contrasena,
+            contrasena, // Usamos la contraseña original sin encriptar
             RolEnum.COORDINADOR_DE_ACTIVIDADES
     );
 }

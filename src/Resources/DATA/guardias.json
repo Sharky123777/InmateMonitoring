@@ -111,6 +111,22 @@
       "sexo": "Femenino",
       "nacionalidad": "wq",
       "identificacion": "1837137813"
+    },
+    {
+      "cargo": "Guardia jefe",
+      "turno": "Diurno",
+      "fechaInicioContrato": "2025-05-10",
+      "fechaFinContrato": "2025-06-11",
+      "rutaImagen": "src/Resources/imagenes_guardias/2173817831_1746916318874.png",
+      "correo": "@.com",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 31,
+      "sexo": "Femenino",
+      "nacionalidad": "poep",
+      "identificacion": "2173817831"
     }
   ]
 }

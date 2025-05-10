@@ -58,6 +58,11 @@ public class EnfermeraController {
     String nacionalidad, String correo, String turno, LocalDate fechaFinContrato,
     File imagen) throws IOException {
     
+       
+    // Validación de cédula única (agregar al inicio)
+    if (enfermeraDAO.existeEnfermeraConCedula(cedula)) {
+        throw new IllegalArgumentException("Ya existe una enfermera con la cédula " + cedula);
+    }
     
     validarCamposObligatorios(primerNombre, primerApellido, segundoApellido, 
             edad, cedula, nacionalidad, correo, turno);

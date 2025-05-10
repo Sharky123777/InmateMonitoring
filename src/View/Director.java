@@ -94,6 +94,7 @@ public class Director extends javax.swing.JFrame {
     private PersonalDeControlController controller;
     private File imagenPDCSeleccionada;
     private String cedulaActualModificacion;
+    
 
     public Director() {
         initComponents();

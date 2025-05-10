@@ -51,6 +51,58 @@
       "sexo": "Femenino",
       "nacionalidad": "sd",
       "identificacion": "1313131131"
+    },
+    {
+      "usuario": "a#7$NoU2",
+      "password": "bab3b87479fbd637afc8bb91d58c62b5c6c06919b5481f41bef50db166bc6cd0",
+      "rol": "COORDINADOR_DE_ACTIVIDADES",
+      "primerNombre": "papanata",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "s",
+      "identificacion": "178317831"
+    },
+    {
+      "usuario": "l?6oiLÑ¿$b",
+      "password": "b6597d425bff3f1c4cee9199b00d8f0de80007772af5d6b475912b2881eaf0a4",
+      "rol": "COORDINADOR_DE_ACTIVIDADES",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "pqpq",
+      "identificacion": "183717831"
+    },
+    {
+      "usuario": "\u0026U4#s$\u0026d91",
+      "password": "0f9a3f3a7858ccbaccd24ec36e36d1b73b801290d30398089fcc91185a668355",
+      "rol": "COORDINADOR_DE_ACTIVIDADES",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 45,
+      "sexo": "Femenino",
+      "nacionalidad": "qeq",
+      "identificacion": "389123812"
+    },
+    {
+      "usuario": "o$MLaW#0e",
+      "password": "c958b509b38afcddc1d064213366115824b016b8ab15045bc78169d82c581129",
+      "rol": "ENFERMERA",
+      "primerNombre": "w",
+      "segundoNombre": "w",
+      "primerApellido": "w",
+      "segundoApellido": "w",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "pqoepqeq",
+      "identificacion": "091831212"
     }
   ]
 }
