@@ -1,5 +1,6 @@
 package DAO;
 
+import Model.Constants.EstadoVisitanteEnum;
 import Model.Entities.Visita;
 import Model.Entities.Visitante;
 import com.google.gson.Gson;
@@ -76,6 +77,16 @@ public class VisitanteDAO {
         if (visitante.getId() == 0) {
             int nuevoId = obtenerProximoId(visitantes);
             visitante.setId(nuevoId);
+            visitante.setEstado(EstadoVisitanteEnum.HABILITADO);
+        } else {
+            Visitante existente = visitantes.stream()
+                    .filter(v -> v.getId() == visitante.getId())
+                    .findFirst()
+                    .orElse(null);
+
+            if (existente != null && visitante.getEstado() == null) {
+                visitante.setEstado(existente.getEstado());
+            }
         }
 
         if (imagenSeleccionada != null) {
@@ -320,6 +331,22 @@ public class VisitanteDAO {
             System.err.println("Error al guardar imagen del visitante: " + e.getMessage());
             return null;
         }
+    }
+
+    public Visitante modificarEstadoVisitanteYDevolver(String identificacion, EstadoVisitanteEnum nuevoEstado) {
+        List<Visitante> visitantes = cargarTodos();
+
+        for (Visitante visitante : visitantes) {
+            if (visitante.getIdentificacion().equals(identificacion)) {
+                visitante.setEstado(nuevoEstado);
+
+                if (guardarCambios(visitantes)) {
+                    return visitante;
+                }
+                return null;
+            }
+        }
+        return null;
     }
 
     private boolean guardarCambios(List<?> lista) {

@@ -8,6 +8,7 @@ import Model.Entities.Preso;
 import Model.Entities.Visita;
 import Model.Entities.Visitante;
 import Model.Constants.EstadoVisitaEnum;
+import Model.Constants.EstadoVisitanteEnum;
 import View.PersonalDeControl;
 import java.awt.AlphaComposite;
 import java.awt.Component;
@@ -239,10 +240,14 @@ public class VisitaController {
         }
 
         String identificacion = view.getIdentificacionVisitante().getText().trim();
-
         Visitante visitanteExistente = visitanteDAO.buscarVisitantePorIdentificacion(identificacion);
 
         if (visitanteExistente != null) {
+            if (visitanteExistente.getEstado() == EstadoVisitanteEnum.DESHABILITADO) {
+                mostrarError("Este visitante está DESHABILITADO y no puede realizar visitas.");
+                return;
+            }
+
             if (!validarDatosCoincidentes(view, visitanteExistente)) {
                 mostrarError("Los datos no coinciden con el visitante registrado previamente");
                 return;
@@ -571,11 +576,13 @@ public class VisitaController {
                         visitante.getNacionalidad(),
                         visitante.getRelacionConPreso(),
                         contadorVisitas.get(idVisitante),
-                        identificacionPreso
+                        identificacionPreso,
+                        visitante.getEstado().toString()
                     });
                 } else {
                     Object[] datos = visitantesMap.get(idVisitante);
                     datos[10] = contadorVisitas.get(idVisitante);
+                    datos[12] = visitante.getEstado().toString();
                 }
             }
         }
@@ -1005,4 +1012,38 @@ public class VisitaController {
         }
     }
 
+    public Visitante cambiarEstadoVisitante(String identificacion, EstadoVisitanteEnum nuevoEstado, String identificacionPreso, JTable tablaVisitantes) {
+        if (nuevoEstado == null) {
+            mostrarError("Debe seleccionar un estado válido");
+            return null;
+        }
+
+        Visitante visitante = visitanteDAO.buscarVisitantePorIdentificacion(identificacion);
+        if (visitante == null) {
+            mostrarError("No se encontró el visitante con identificación: " + identificacion);
+            return null;
+        }
+
+        if (visitante.getEstado() == nuevoEstado) {
+            mostrarError("El visitante ya tiene el estado: " + nuevoEstado.toString());
+            return null;
+        }
+
+        Visitante visitanteActualizado = visitanteDAO.modificarEstadoVisitanteYDevolver(identificacion, nuevoEstado);
+
+        if (visitanteActualizado != null) {
+            if (identificacionPreso != null && tablaVisitantes != null) {
+                cargarHistorialVisitantes(identificacionPreso, tablaVisitantes);
+            }
+
+            JOptionPane.showMessageDialog(null,
+                    "Estado del visitante actualizado correctamente a: " + nuevoEstado.toString(),
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return visitanteActualizado;
+        } else {
+            mostrarError("Error al cambiar el estado del visitante");
+            return null;
+        }
+    }
 }

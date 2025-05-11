@@ -1,5 +1,7 @@
 package Model.Entities;
 
+import Model.Constants.EstadoVisitanteEnum;
+
 public class Visitante extends Persona {
 
     private String relacionConPreso;
@@ -7,13 +9,17 @@ public class Visitante extends Persona {
     private String email;
     private static int ultimoId = 0;
     private int id;
+    private EstadoVisitanteEnum estado;
 
-    public Visitante(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, int edad, String sexo, String nacionalidad, String identificacion, String relacionConPreso, String fotoPath, String email) {
+    public Visitante(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
+            int edad, String sexo, String nacionalidad, String identificacion,
+            String relacionConPreso, String fotoPath, String email) {
         super(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, sexo, nacionalidad, identificacion);
         this.id = ++ultimoId;
         this.relacionConPreso = relacionConPreso;
         this.fotoPath = fotoPath;
         this.email = email;
+        this.estado = EstadoVisitanteEnum.HABILITADO;
     }
 
     public int getId() {
@@ -54,5 +60,13 @@ public class Visitante extends Persona {
 
     public static void setUltimoId(int ultimoId) {
         Visitante.ultimoId = ultimoId;
+    }
+
+    public EstadoVisitanteEnum getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoVisitanteEnum estado) {
+        this.estado = estado;
     }
 }

@@ -97,18 +97,24 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
     public void inicializarMenuHistorialVisitantes() {
         JMenuItem actualizarInfo = new JMenuItem("Actualizar visitante");
+        JMenuItem cambiarEstado = new JMenuItem("Cambiar estado visitante");
 
         ppMenuTablaVisitantes.add(actualizarInfo);
+        ppMenuTablaVisitantes.add(cambiarEstado);
         TablaHistorialVisitantes.setComponentPopupMenu(ppMenuTablaVisitantes);
 
         actualizarInfo.addActionListener(e -> {
             int fila = TablaHistorialVisitantes.getSelectedRow();
             if (fila == -1) {
-                JOptionPane.showMessageDialog(this, "Seleccione un visitante", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "Seleccione un visitante",
+                        "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             String identificacion = TablaHistorialVisitantes.getValueAt(fila, 6).toString();
+            String identificacionPreso = TablaHistorialVisitantes.getValueAt(fila, 11).toString(); // Asumiendo que la columna 11 es la ID del preso
+
             Visitante visitante = new VisitanteDAO().buscarVisitantePorIdentificacion(identificacion);
 
             if (visitante != null) {
@@ -117,12 +123,49 @@ public class PersonalDeControl extends javax.swing.JFrame {
                         true,
                         visitante,
                         TablaHistorialVisitantes,
-                        identificacion
+                        identificacionPreso
                 );
                 dialog.setLocationRelativeTo(this);
                 dialog.setVisible(true);
+
+                controller.cargarHistorialVisitantes(identificacionPreso, TablaHistorialVisitantes);
             } else {
-                JOptionPane.showMessageDialog(this, "Visitante no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "Visitante no encontrado",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        cambiarEstado.addActionListener(e -> {
+            int fila = TablaHistorialVisitantes.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this,
+                        "Seleccione un visitante",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String identificacion = TablaHistorialVisitantes.getValueAt(fila, 6).toString();
+            String identificacionPreso = TablaHistorialVisitantes.getValueAt(fila, 11).toString(); // Asumiendo que la columna 11 es la ID del preso
+
+            Visitante visitante = new VisitanteDAO().buscarVisitantePorIdentificacion(identificacion);
+
+            if (visitante != null) {
+                CambioEstadoVisitante dialog = new CambioEstadoVisitante(
+                        this,
+                        true,
+                        visitante,
+                        identificacionPreso,
+                        TablaHistorialVisitantes
+                );
+                dialog.setLocationRelativeTo(this);
+                dialog.setVisible(true);
+
+                controller.cargarHistorialVisitantes(identificacionPreso, TablaHistorialVisitantes);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Visitante no encontrado",
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
     }
@@ -955,20 +998,20 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         TablaHistorialVisitantes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Foto", "Id", "Nombres", "Apellidos", "Email", "Edad", "Identificación", "Sexo", "Nacionalidad", "Relación", "Cantidad visitas", "Visitado"
+                "Foto", "Id", "Nombres", "Apellidos", "Email", "Edad", "Identificación", "Sexo", "Nacionalidad", "Relación", "Cantidad", "Visitado", "Estado"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true, false, false, false, false, false, false, true, false
+                false, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -980,6 +1023,21 @@ public class PersonalDeControl extends javax.swing.JFrame {
             }
         });
         jScrollPane3.setViewportView(TablaHistorialVisitantes);
+        if (TablaHistorialVisitantes.getColumnModel().getColumnCount() > 0) {
+            TablaHistorialVisitantes.getColumnModel().getColumn(0).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(1).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(2).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(3).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(4).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(5).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(6).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(7).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(8).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(9).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(10).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(11).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(12).setResizable(false);
+        }
 
         PanelHistorialVisitantes.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 1040, 490));
 

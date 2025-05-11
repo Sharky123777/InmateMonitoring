@@ -1,3 +1,17 @@
 [
- 
+  {
+    "relacionConPreso": "Esposa/Esposo",
+    "fotoPath": "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\Images\\visitante_1.jpg",
+    "email": "qqq@gmail.com",
+    "id": 1,
+    "estado": "DESHABILITADO",
+    "primerNombre": "qqq",
+    "segundoNombre": "qqq",
+    "primerApellido": "qqq",
+    "segundoApellido": "qqq",
+    "edad": 20,
+    "sexo": "Masculino",
+    "nacionalidad": "Afganistán  ",
+    "identificacion": "56453346"
+  }
 ]
