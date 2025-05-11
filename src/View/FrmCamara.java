@@ -91,7 +91,7 @@ public class FrmCamara extends javax.swing.JFrame {
     public void textoBotonesCuandoCargoCamara() {
         btnApagar.setText("APAGAR CAMARA");
         TomarFoto.setText("TOMAR FOTO");
-        btnGuardarFoto.setText("GUARDAR FOTO");
+        btnGuardarFoto.setText("SELECCIONAR FOTO");
         btnPrender.setText("INICIAR CAMARA");
     }
     
@@ -148,13 +148,14 @@ public class FrmCamara extends javax.swing.JFrame {
 
         jPanel1.add(mostrarCamara, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 640, 360));
 
+        TomarFoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/icons8-camera-55.png"))); // NOI18N
         TomarFoto.setText("Tomar foto");
         TomarFoto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TomarFotoActionPerformed(evt);
             }
         });
-        jPanel1.add(TomarFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, 110, 60));
+        jPanel1.add(TomarFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 390, 200, 60));
 
         btnPrender.setText("INICIAR CAMARA");
         btnPrender.addActionListener(new java.awt.event.ActionListener() {
@@ -162,7 +163,7 @@ public class FrmCamara extends javax.swing.JFrame {
                 btnPrenderActionPerformed(evt);
             }
         });
-        jPanel1.add(btnPrender, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 390, 150, 60));
+        jPanel1.add(btnPrender, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 20, 150, 50));
 
         btnApagar.setText("APAGAR CAMARA");
         btnApagar.addActionListener(new java.awt.event.ActionListener() {
@@ -170,30 +171,35 @@ public class FrmCamara extends javax.swing.JFrame {
                 btnApagarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnApagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 390, 150, 50));
+        jPanel1.add(btnApagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 20, 150, 50));
 
-        btnGuardarFoto.setText("guardar");
+        btnGuardarFoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/icons8-checkmark-40.png"))); // NOI18N
+        btnGuardarFoto.setText("SELECCIONAR ESTA FOTO");
         btnGuardarFoto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarFotoActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardarFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 410, -1, -1));
+        jPanel1.add(btnGuardarFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 320, 240, 50));
 
         txtFoto.setForeground(new java.awt.Color(0, 0, 0));
-        txtFoto.setText("FOTO TOMADA: ");
-        jPanel1.add(txtFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 40, -1, -1));
+        txtFoto.setText("Previsualización de la foto");
+        jPanel1.add(txtFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 100, -1, -1));
 
+        jPanel2.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel2.add(lblFotoTomada, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 170, 230));
+        jPanel2.add(lblFotoTomada, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 270, 180));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 60, 210, 250));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 120, 270, 180));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1015, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1083, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

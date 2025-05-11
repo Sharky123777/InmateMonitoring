@@ -17,21 +17,6 @@
     },
     {
       "turno": "Diurno",
-      "fechaContratacion": "2025-05-08",
-      "fechaFinContrato": "2025-05-27",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/91873819_1746970998383.jpg",
-      "correo": "jorgeycelina29@gmail.com",
-      "primerNombre": "wo",
-      "segundoNombre": "w",
-      "primerApellido": "q",
-      "segundoApellido": "q",
-      "edad": 64,
-      "sexo": "Femenino",
-      "nacionalidad": "po",
-      "identificacion": "91873819"
-    },
-    {
-      "turno": "Diurno",
       "fechaContratacion": "2025-05-10",
       "fechaFinContrato": "2025-05-16",
       "rutaImagen": "src/Resources/imagenes_enfermeras/3131313_1746917382093.png",

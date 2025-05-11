@@ -156,8 +156,8 @@ public class Director extends javax.swing.JFrame {
         ModificarEnfermera = new javax.swing.JMenuItem();
         EliminarEnfermera = new javax.swing.JMenuItem();
         jPopupMenu4 = new javax.swing.JPopupMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        ModificarCDA = new javax.swing.JMenuItem();
+        EliminarCDA = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         Director = new javax.swing.JPanel();
@@ -477,21 +477,21 @@ public class Director extends javax.swing.JFrame {
         });
         jPopupMenu2.add(EliminarEnfermera);
 
-        jMenuItem3.setText("jMenuItem3");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        ModificarCDA.setText("Modificar");
+        ModificarCDA.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                ModificarCDAActionPerformed(evt);
             }
         });
-        jPopupMenu4.add(jMenuItem3);
+        jPopupMenu4.add(ModificarCDA);
 
-        jMenuItem4.setText("jMenuItem4");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        EliminarCDA.setText("Eliminar");
+        EliminarCDA.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                EliminarCDAActionPerformed(evt);
             }
         });
-        jPopupMenu4.add(jMenuItem4);
+        jPopupMenu4.add(EliminarCDA);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -4351,7 +4351,7 @@ public class Director extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFechaContratacionActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void ModificarCDAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModificarCDAActionPerformed
         int fila = tablaCoordinadores.getSelectedRow();
 
         if (fila < 0) {
@@ -4386,9 +4386,9 @@ public class Director extends javax.swing.JFrame {
                     "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    }//GEN-LAST:event_ModificarCDAActionPerformed
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+    private void EliminarCDAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarCDAActionPerformed
         int fila = tablaCoordinadores.getSelectedRow();
 
         if (fila < 0) {
@@ -4426,7 +4426,7 @@ public class Director extends javax.swing.JFrame {
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+    }//GEN-LAST:event_EliminarCDAActionPerformed
 
     /**
      * @param args the command line arguments
@@ -4467,9 +4467,11 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JPanel AñadirGuardia;
     private javax.swing.JPanel Director;
     private javax.swing.JMenuItem Eliminar;
+    private javax.swing.JMenuItem EliminarCDA;
     private javax.swing.JMenuItem EliminarEnfermera;
     private javax.swing.JPanel ListaDeGuardias;
     private javax.swing.JMenuItem Modificar;
+    private javax.swing.JMenuItem ModificarCDA;
     private javax.swing.JPanel ModificarCoordinador;
     private javax.swing.JMenuItem ModificarEnfermera;
     private javax.swing.JPanel ModificarGuardia;
@@ -4593,8 +4595,6 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel91;
     private javax.swing.JLabel jLabel94;
     private javax.swing.JLabel jLabel95;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;

@@ -227,21 +227,7 @@ private boolean verificarCambios(Enfermera original, Map<String, Object> cambios
     return nuevaImagen != null;
 }
 
-    private boolean procesarModificacion(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
-        Enfermera original = obtenerEnfermeraPorCedula(cedulaOriginal);
-        if (original == null) {
-            throw new IllegalArgumentException("Enfermera no encontrada con cédula: " + cedulaOriginal);
-        }
-
-        validarCamposModificacion(cambios);
-        validarEdad((int) cambios.get("edad"));
-        validarFechasContrato(original.getFechaContratacion(), (LocalDate) cambios.get("fechaFin"));
-        validarLimiteEnfermerasPorTurno((String) cambios.get("turno"), cedulaOriginal);
-
-        Enfermera enfermeraModificada = construirEnfermeraModificada(cedulaOriginal, cambios, original);
-        
-        return enfermeraDAO.modificarEnfermera(cedulaOriginal, enfermeraModificada, nuevaImagen);
-    }
+   
     
     private Enfermera construirEnfermeraModificada(String cedulaOriginal, 
             Map<String, Object> cambios, Enfermera original) {
