@@ -3,7 +3,7 @@
     {
       "cargo": "Guardia jefe",
       "turno": "Diurno",
-      "fechaInicioContrato": "2025-05-10",
+      "fechaInicioContrato": "2025-05-11",
       "fechaFinContrato": "2025-06-25",
       "rutaImagen": "src/Resources/imagenes_guardias/271371231_1746558348565.jpg",
       "correo": "s@gmail.com",
