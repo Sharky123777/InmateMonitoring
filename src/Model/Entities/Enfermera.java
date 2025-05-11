@@ -51,10 +51,7 @@ private String contrasena;
         return fechaContratacion;
     }
 
-    public String getFechaContratacionFormateada() {
-        return fechaContratacion != null ? 
-               fechaContratacion.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
-    }
+    
 
     public void setFechaContratacion(LocalDate fechaContratacion) {
         this.fechaContratacion = fechaContratacion;
@@ -64,10 +61,15 @@ private String contrasena;
         return fechaFinContrato;
     }
 
-    public String getFechaFinContratoFormateada() {
-        return fechaFinContrato != null ? 
-               fechaFinContrato.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
-    }
+    public String getFechaContratacionFormateada() {
+    return fechaContratacion != null ? 
+           fechaContratacion.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
+}
+
+public String getFechaFinContratoFormateada() {
+    return fechaFinContrato != null ? 
+           fechaFinContrato.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
+}
 
     public void setFechaFinContrato(LocalDate fechaFinContrato) {
         this.fechaFinContrato = fechaFinContrato;
@@ -113,6 +115,8 @@ private String contrasena;
         }
         return nombres.trim();
     }
+ 
+ 
 
     // Método específico para mostrar apellidos en tabla
     public String getApellidosParaTabla() {

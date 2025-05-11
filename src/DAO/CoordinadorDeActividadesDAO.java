@@ -141,58 +141,58 @@ public class CoordinadorDeActividadesDAO {
         return rutaImagenFinal;
     }
 
-   // En CoordinadorDeActividadesDAO.java
-public boolean guardarCoordinador(CoordinadorDeActividades coordinador, File imagen) throws IOException {
-    // 1. Generar credenciales
-    UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
-    String usuario = credenciales.usuario;
-    String contrasena = credenciales.contrasena;
-    String contrasenaEncriptada = UsuarioController.getInstancia().encriptarContrasena(contrasena);
+    // En CoordinadorDeActividadesDAO.java
+    public boolean guardarCoordinador(CoordinadorDeActividades coordinador, File imagen) throws IOException {
+        // 1. Generar credenciales
+        UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
+        String usuario = credenciales.usuario;
+        String contrasena = credenciales.contrasena;
+        String contrasenaEncriptada = UsuarioController.getInstancia().encriptarContrasena(contrasena);
 
-    // 3. Asignar credenciales
-    coordinador.setUsuario(usuario);
-    coordinador.setContrasena(contrasenaEncriptada); // AQUÍ GUARDAMOS LA CONTRASEÑA ENCRIPTADA
+        // 3. Asignar credenciales
+        coordinador.setUsuario(usuario);
+        coordinador.setContrasena(contrasenaEncriptada); // AQUÍ GUARDAMOS LA CONTRASEÑA ENCRIPTADA
 
-    // 4. Guardar imagen
-    String nombreImagen = coordinador.getIdentificacion() + "_"
-            + System.currentTimeMillis()
-            + imagen.getName().substring(imagen.getName().lastIndexOf("."));
+        // 4. Guardar imagen
+        String nombreImagen = coordinador.getIdentificacion() + "_"
+                + System.currentTimeMillis()
+                + imagen.getName().substring(imagen.getName().lastIndexOf("."));
 
-    String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-    Files.createDirectories(Paths.get(RUTA_IMAGENES));
-    Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
-    coordinador.setRutaImagen(rutaImagenFinal);
+        String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+        Files.createDirectories(Paths.get(RUTA_IMAGENES));
+        Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+        coordinador.setRutaImagen(rutaImagenFinal);
 
-    // 5. Guardar coordinador
-    List<CoordinadorDeActividades> coordinadores = obtenerCoordinadores();
-    coordinadores.add(coordinador);
-    guardarListaCoordinadores(coordinadores);
+        // 5. Guardar coordinador
+        List<CoordinadorDeActividades> coordinadores = obtenerCoordinadores();
+        coordinadores.add(coordinador);
+        guardarListaCoordinadores(coordinadores);
 
-    // 6. Guardar usuario (CON CONTRASEÑA ENCRIPTADA)
-    Usuario nuevoUsuario = new Usuario(
-            coordinador.getPrimerNombre(),
-            coordinador.getSegundoNombre(),
-            coordinador.getPrimerApellido(),
-            coordinador.getSegundoApellido(),
-            coordinador.getEdad(),
-            coordinador.getSexo(),
-            coordinador.getNacionalidad(),
-            coordinador.getIdentificacion(),
-            usuario,
-            contrasenaEncriptada,
-            RolEnum.COORDINADOR_DE_ACTIVIDADES
-    );
+        // 6. Guardar usuario (CON CONTRASEÑA ENCRIPTADA)
+        Usuario nuevoUsuario = new Usuario(
+                coordinador.getPrimerNombre(),
+                coordinador.getSegundoNombre(),
+                coordinador.getPrimerApellido(),
+                coordinador.getSegundoApellido(),
+                coordinador.getEdad(),
+                coordinador.getSexo(),
+                coordinador.getNacionalidad(),
+                coordinador.getIdentificacion(),
+                usuario,
+                contrasenaEncriptada,
+                RolEnum.COORDINADOR_DE_ACTIVIDADES
+        );
 
-    guardarUsuario(nuevoUsuario);
+        guardarUsuario(nuevoUsuario);
 
-    // 7. Enviar correo (CON CONTRASEÑA SIN ENCRIPTAR)
-    return EmailSender.getInstancia().enviarCredenciales(
-            coordinador.getCorreo(),
-            usuario,
-            contrasena, // Usamos la contraseña original sin encriptar
-            RolEnum.COORDINADOR_DE_ACTIVIDADES
-    );
-}
+        // 7. Enviar correo (CON CONTRASEÑA SIN ENCRIPTAR)
+        return EmailSender.getInstancia().enviarCredenciales(
+                coordinador.getCorreo(),
+                usuario,
+                contrasena, // Usamos la contraseña original sin encriptar
+                RolEnum.COORDINADOR_DE_ACTIVIDADES
+        );
+    }
 
     public List<CoordinadorDeActividades> obtenerCoordinadores() {
         List<CoordinadorDeActividades> coordinadores = new ArrayList<>();
@@ -298,39 +298,39 @@ public boolean guardarCoordinador(CoordinadorDeActividades coordinador, File ima
     }
 
     public boolean modificarCoordinador(String cedulaOriginal, CoordinadorDeActividades coordinadorModificado, File nuevaImagen) {
-    try {
-        List<CoordinadorDeActividades> coordinadores = obtenerCoordinadores();
+        try {
+            List<CoordinadorDeActividades> coordinadores = obtenerCoordinadores();
 
-        for (int i = 0; i < coordinadores.size(); i++) {
-            CoordinadorDeActividades c = coordinadores.get(i);
-            if (c.getIdentificacion().equals(cedulaOriginal)) {
-                String rutaImagenFinal = c.getRutaImagen();
+            for (int i = 0; i < coordinadores.size(); i++) {
+                CoordinadorDeActividades c = coordinadores.get(i);
+                if (c.getIdentificacion().equals(cedulaOriginal)) {
+                    String rutaImagenFinal = c.getRutaImagen();
 
-                // Solo actualizar la imagen si se proporciona una nueva
-                if (nuevaImagen != null && nuevaImagen.exists()) {
-                    String nombreImagen = coordinadorModificado.getIdentificacion() + "_" + System.currentTimeMillis()
-                            + nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
-                    rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-                    Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+                    // Solo actualizar la imagen si se proporciona una nueva
+                    if (nuevaImagen != null && nuevaImagen.exists()) {
+                        String nombreImagen = coordinadorModificado.getIdentificacion() + "_" + System.currentTimeMillis()
+                                + nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
+                        rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+                        Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+                    }
+
+                    coordinadorModificado.setFechaInicioContrato(c.getFechaInicioContrato());
+                    coordinadorModificado.setUsuario(c.getUsuario());
+                    coordinadorModificado.setContrasena(c.getContrasena());
+                    coordinadorModificado.setRutaImagen(rutaImagenFinal);
+
+                    coordinadores.set(i, coordinadorModificado);
+                    guardarListaCoordinadores(coordinadores);
+                    return true;
                 }
-
-                coordinadorModificado.setFechaInicioContrato(c.getFechaInicioContrato());
-                coordinadorModificado.setUsuario(c.getUsuario());
-                coordinadorModificado.setContrasena(c.getContrasena());
-                coordinadorModificado.setRutaImagen(rutaImagenFinal);
-
-                coordinadores.set(i, coordinadorModificado);
-                guardarListaCoordinadores(coordinadores);
-                return true;
             }
+            return false;
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al modificar coordinador: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
-        return false;
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(null, "Error al modificar coordinador: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-        return false;
     }
-}
 
     public CoordinadorDeActividades obtenerCoordinadorPorCedula(String cedula) {
         return obtenerCoordinadores().stream()
@@ -356,6 +356,7 @@ public boolean guardarCoordinador(CoordinadorDeActividades coordinador, File ima
             c.getCorreo(),
             c.getCargo(),
             c.getTurno(),
+            c.getFechaInicioContrato(),
             c.getFechaFinContrato()
         })
                 .collect(Collectors.toList());
@@ -371,8 +372,9 @@ public boolean guardarCoordinador(CoordinadorDeActividades coordinador, File ima
             "Cédula",
             "Nacionalidad",
             "Correo",
-            "Cargo",
             "Turno",
+            "Cargo",
+            "Fecha inicio contrato",
             "Fin de Contrato"
         };
     }
@@ -388,8 +390,8 @@ public boolean guardarCoordinador(CoordinadorDeActividades coordinador, File ima
             String.class,
             String.class,
             String.class,
-            String.class,
-            String.class
+            String.class, // Tipo para fecha inicio
+            String.class // Tipo para fecha fin
         };
     }
 }

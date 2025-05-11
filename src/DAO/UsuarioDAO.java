@@ -26,6 +26,14 @@ public class UsuarioDAO {
         return instancia;
     }
 
+    public Usuario obtenerUsuarioPorUsername(String username) throws IOException {
+    List<Usuario> usuarios = obtenerTodosUsuarios();
+    return usuarios.stream()
+            .filter(u -> u.getUsuario().equals(username))
+            .findFirst()
+            .orElse(null);
+}
+    
     public Usuario validarCredenciales(String usuario, String password, RolEnum rolSeleccionado) {
     try (FileReader reader = new FileReader(JSON_FILE)) {
         JsonElement jsonElement = JsonParser.parseReader(reader);

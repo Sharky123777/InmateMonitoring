@@ -35,6 +35,8 @@ public class UsuarioController {
         return null;
     }
     
+    
+    
     public boolean esDirector(Usuario usuario) {
         return usuarioDAO.esDirector(usuario);
     }

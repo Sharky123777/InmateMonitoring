@@ -99,7 +99,7 @@ public class GeneradorCredenciales {
         return resultado.toString();
     }
     
-    // Método para verificar si una contraseña coincide con su versión encriptada
+    
     public static boolean verificarContrasena(String contrasenaIngresada, String contrasenaEncriptada) {
         return encriptarContrasena(contrasenaIngresada).equals(contrasenaEncriptada);
     }

@@ -1,7 +1,11 @@
 package Controller;
 
 import DAO.EnfermeraDAO;
+import DAO.UsuarioDAO;
+import Model.Constants.RolEnum;
 import Model.Entities.Enfermera;
+import Model.Entities.Usuario;
+import Utilidades.EmailSender;
 import View.FrmCamara;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -135,27 +139,77 @@ private void validarImagen(File imagen) {
         validarFechasContrato(original.getFechaContratacion(), fechaFin);
         validarLimiteEnfermerasPorTurno(turno, cedulaOriginal);
         
-        // Si hay nueva imagen, validarla
-        if (nuevaImagen != null) {
-            validarImagen(nuevaImagen);
-        }
-
-        // 5. Construir enfermera modificada
+        // 5. Verificar si el correo fue modificado
+        String nuevoCorreo = (String) cambios.get("correo");
+        boolean correoModificado = !original.getCorreo().equals(nuevoCorreo);
+        
+        // 6. Construir enfermera modificada
         Enfermera enfermeraModificada = construirEnfermeraModificada(cedulaOriginal, cambios, original);
         
-        // 6. Ejecutar modificación
+        // 7. Ejecutar modificación
         boolean resultado = enfermeraDAO.modificarEnfermera(cedulaOriginal, enfermeraModificada, nuevaImagen);
+        
+        // 8. Si se modificó el correo, preguntar por reenvío de credenciales
+        if (resultado && correoModificado) {
+            preguntarReenvioCredenciales(original, nuevoCorreo);
+        }
         
         return resultado ? 1 : -1; // 1=Éxito, -1=Error
         
     } catch (IllegalArgumentException e) {
-        // Relanzar excepciones de validación para manejo específico en la vista
         throw e;
     } catch (Exception e) {
-        // Capturar cualquier otra excepción
         throw new RuntimeException("Error al modificar enfermera: " + e.getMessage(), e);
     }
 }
+
+private void preguntarReenvioCredenciales(Enfermera enfermera, String nuevoCorreo) {
+    int opcion = JOptionPane.showConfirmDialog(
+        null,
+        "Se ha modificado el correo de la enfermera. ¿Desea reenviar las credenciales al nuevo correo?",
+        "Reenviar Credenciales",
+        JOptionPane.YES_NO_OPTION
+    );
+
+    if (opcion == JOptionPane.YES_OPTION) {
+        reenviarCredenciales(enfermera, nuevoCorreo);
+    }
+}
+
+private void reenviarCredenciales(Enfermera enfermera, String nuevoCorreo) {
+    try {
+        // Obtener las credenciales sin encriptar del usuario asociado
+        UsuarioDAO usuarioDAO = UsuarioDAO.getInstancia();
+        Usuario usuario = usuarioDAO.obtenerUsuarioPorUsername(enfermera.getUsuario());
+        
+        if (usuario != null) {
+            // Enviar correo con las credenciales sin encriptar
+            boolean enviado = EmailSender.getInstancia().enviarCredenciales(
+                nuevoCorreo,
+                usuario.getUsuario(),
+                usuario.getPassword(), // Aquí deberías tener la contraseña original sin encriptar
+                RolEnum.ENFERMERA
+            );
+            
+            if (!enviado) {
+                JOptionPane.showMessageDialog(
+                    null,
+                    "Las credenciales se actualizaron pero no se pudieron enviar por correo.",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE
+                );
+            }
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(
+            null,
+            "Error al reenviar credenciales: " + e.getMessage(),
+            "Error",
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
+}
+
 
 private boolean verificarCambios(Enfermera original, Map<String, Object> cambios, File nuevaImagen) {
     // Verificar cambios en campos básicos

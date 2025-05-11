@@ -355,44 +355,41 @@ public class EnfermeraDAO {
     }
 
     public boolean modificarEnfermera(String cedulaOriginal, Enfermera enfermeraModificada, File nuevaImagen) {
-        try {
-            List<Enfermera> enfermeras = obtenerEnfermeras();
+    try {
+        List<Enfermera> enfermeras = obtenerEnfermeras();
 
-            for (int i = 0; i < enfermeras.size(); i++) {
-                Enfermera e = enfermeras.get(i);
-                if (e.getIdentificacion().equals(cedulaOriginal)) {
-                    // Manejo de la imagen
-                    String rutaImagenFinal = e.getRutaImagen(); // Mantener la original por defecto
+        for (int i = 0; i < enfermeras.size(); i++) {
+            Enfermera e = enfermeras.get(i);
+            if (e.getIdentificacion().equals(cedulaOriginal)) {
+                // Manejo de la imagen
+                String rutaImagenFinal = e.getRutaImagen();
 
-                    if (nuevaImagen != null && nuevaImagen.exists()) {
-                        // Generar nombre único para la nueva imagen
-                        String nombreImagen = enfermeraModificada.getIdentificacion() + "_" + System.currentTimeMillis()
-                                + nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
-                        rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-
-                        // Copiar la nueva imagen
-                        Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
-                    }
-
-                    // Actualizar datos manteniendo usuario y contraseña
-                    enfermeraModificada.setUsuario(e.getUsuario());
-                    enfermeraModificada.setContrasena(e.getContrasena());
-                    enfermeraModificada.setRutaImagen(rutaImagenFinal);
-
-                    enfermeras.set(i, enfermeraModificada);
-
-                    guardarListaEnfermeras(enfermeras);
-                    return true;
+                if (nuevaImagen != null && nuevaImagen.exists()) {
+                    String nombreImagen = enfermeraModificada.getIdentificacion() + "_" + System.currentTimeMillis()
+                            + nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
+                    rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+                    Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
                 }
-            }
 
-            return false;
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error al modificar enfermera: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+                // Mantener las credenciales originales
+                enfermeraModificada.setUsuario(e.getUsuario());
+                enfermeraModificada.setContrasena(e.getContrasena());
+                enfermeraModificada.setRutaImagen(rutaImagenFinal);
+
+                enfermeras.set(i, enfermeraModificada);
+
+                guardarListaEnfermeras(enfermeras);
+                return true;
+            }
         }
+
+        return false;
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(null, "Error al modificar enfermera: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
     }
+}
 
     public Enfermera obtenerEnfermeraPorCedula(String cedula) {
         return obtenerEnfermeras().stream()
@@ -413,49 +410,52 @@ public class EnfermeraDAO {
     }
 
     public List<Object[]> obtenerDatosEnfermerasParaTabla() {
-        return obtenerEnfermeras().stream()
-                .map(e -> new Object[]{
-            e.getPrimerNombre(),
-            e.getSegundoNombre(),
-            e.getPrimerApellido(),
-            e.getSegundoApellido(),
-            e.getEdad(),
-            e.getIdentificacion(),
-            e.getNacionalidad(),
-            e.getCorreo(),
-            e.getTurno(),
-            e.getFechaFinContrato()
-        })
-                .collect(Collectors.toList());
-    }
+    return obtenerEnfermeras().stream()
+            .map(e -> new Object[]{
+                e.getPrimerNombre(),
+                e.getSegundoNombre(),
+                e.getPrimerApellido(),
+                e.getSegundoApellido(),
+                e.getEdad(),
+                e.getIdentificacion(),
+                e.getNacionalidad(),
+                e.getCorreo(),
+                e.getTurno(),
+                e.getFechaContratacionFormateada(), // Añadir fecha de inicio
+                e.getFechaFinContratoFormateada() // Cambiar a método formateado
+            })
+            .collect(Collectors.toList());
+}
 
     public String[] getNombresColumnas() {
-        return new String[]{
-            "Primer Nombre",
-            "Segundo Nombre",
-            "Primer Apellido",
-            "Segundo Apellido",
-            "Edad",
-            "Cédula",
-            "Nacionalidad",
-            "Correo",
-            "Turno",
-            "Fin de Contrato"
-        };
-    }
+    return new String[]{
+        "Primer Nombre",
+        "Segundo Nombre",
+        "Primer Apellido",
+        "Segundo Apellido",
+        "Edad",
+        "Cédula",
+        "Nacionalidad",
+        "Correo",
+        "Turno",
+        "Inicio Contrato", // Nueva columna
+        "Fin de Contrato"
+    };
+}
 
-    public Class<?>[] getTiposColumnas() {
-        return new Class<?>[]{
-            String.class,
-            String.class,
-            String.class,
-            String.class,
-            Integer.class,
-            String.class,
-            String.class,
-            String.class,
-            String.class,
-            String.class
-        };
-    }
+   public Class<?>[] getTiposColumnas() {
+    return new Class<?>[]{
+        String.class,
+        String.class,
+        String.class,
+        String.class,
+        Integer.class,
+        String.class,
+        String.class,
+        String.class,
+        String.class,
+        String.class, // Tipo para fecha inicio
+        String.class  // Tipo para fecha fin
+    };
+}
 }
