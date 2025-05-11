@@ -142,6 +142,19 @@
       "sexo": "Femenino",
       "nacionalidad": "wqeq",
       "identificacion": "1387831"
+    },
+    {
+      "usuario": "%@ñ6ueSñW",
+      "password": "55827e09094dea4710e97f4b6bfa57135b822cad4164116bb1abf4d871eeedc2",
+      "rol": "ENFERMERA",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 45,
+      "sexo": "Femenino",
+      "nacionalidad": "pepe",
+      "identificacion": "3331313"
     }
   ]
 }

@@ -48,17 +48,17 @@
     {
       "turno": "Nocturno",
       "fechaContratacion": "2025-05-10",
-      "fechaFinContrato": "2025-05-29",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/1387831_1746919393659.png",
-      "correo": "imshar@gmail.com",
-      "primerNombre": "pepE",
-      "segundoNombre": "w",
-      "primerApellido": "w",
-      "segundoApellido": "w",
-      "edad": 34,
+      "fechaFinContrato": "2025-05-30",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/3331313_1746926095898.png",
+      "correo": "thejh0nl3n0n@gmail.com",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 45,
       "sexo": "Femenino",
-      "nacionalidad": "wqeq",
-      "identificacion": "1387831"
+      "nacionalidad": "pepe",
+      "identificacion": "3331313"
     }
   ]
 }

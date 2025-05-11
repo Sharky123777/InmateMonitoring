@@ -127,6 +127,22 @@
       "sexo": "Femenino",
       "nacionalidad": "poep",
       "identificacion": "2173817831"
+    },
+    {
+      "cargo": "Guardia jefe",
+      "turno": "Diurno",
+      "fechaInicioContrato": "2025-05-10",
+      "fechaFinContrato": "2025-06-11",
+      "rutaImagen": "src/Resources/imagenes_guardias/1313313138_1746926250365.png",
+      "correo": "@.com",
+      "primerNombre": "e",
+      "segundoNombre": "e",
+      "primerApellido": "e",
+      "segundoApellido": "e",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "po",
+      "identificacion": "1313313138"
     }
   ]
 }

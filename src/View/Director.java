@@ -2772,46 +2772,61 @@ private void limpiarFormularioCDA() {
     }//GEN-LAST:event_EliminarActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-       try {
-        EnfermeraController controller = EnfermeraController.getInstancia();
-
+      try {
+        // Obtener valores del formulario
         String primerNombre = txtPrimerNombre1.getText().trim();
         String segundoNombre = txtSegundoNombre1.getText().trim();
         String primerApellido = txtPrimerApellido1.getText().trim();
         String segundoApellido = txtSegundoApellido1.getText().trim();
-        int edad = Integer.parseInt(txtEdad1.getText().trim());
         String cedula = txtCedula1.getText().trim();
         String nacionalidad = txtNacionalidad1.getText().trim();
         String correo = txtCorreo1.getText().trim();
         String turno = cmbTurno1.getSelectedItem().toString();
+        
+        // Validar y convertir edad
+        int edad;
+        try {
+            edad = Integer.parseInt(txtEdad1.getText().trim());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("La edad debe ser un número válido");
+        }
+        
+        // Validar fecha
+        if (dateFinContrato1.getDate() == null) {
+            throw new IllegalArgumentException("Seleccione una fecha de fin de contrato");
+        }
         LocalDate fechaFin = dateFinContrato1.getDate().toInstant()
                 .atZone(ZoneId.systemDefault()).toLocalDate();
+        
+        // Validar imagen
+        if (rutaImagenEnfermera == null) {
+            throw new IllegalArgumentException("Debe seleccionar una imagen de la enfermera");
+        }
 
-        // Usar rutaImagenEnfermera para registro
-        Enfermera nuevaEnfermera = controller.registrarEnfermera(
+        // Llamar al controller para registrar
+        Enfermera nuevaEnfermera = enfermeraController.registrarEnfermera(
                 primerNombre, segundoNombre, primerApellido, segundoApellido,
                 edad, cedula, nacionalidad, correo, turno, fechaFin,
-                rutaImagenEnfermera // Archivo de imagen para registro
+                rutaImagenEnfermera
         );
 
+        // Éxito - limpiar y actualizar
         limpiarFormularioEnfermera();
+        actualizarTablaEnfermeras();
         
         JOptionPane.showMessageDialog(this,
                 "Enfermera registrada exitosamente!",
                 "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        actualizarTablaEnfermeras();
 
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this,
-                "La edad debe ser un número válido",
-                "Error", JOptionPane.ERROR_MESSAGE);
     } catch (IllegalArgumentException e) {
+        // Mostrar mensajes de error de validación
         JOptionPane.showMessageDialog(this,
                 e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
+                "Error de validación", JOptionPane.ERROR_MESSAGE);
     } catch (Exception e) {
+        // Mostrar errores inesperados
         JOptionPane.showMessageDialog(this,
-                "Error inesperado: " + e.getMessage(),
+                "Error al registrar enfermera: " + e.getMessage(),
                 "Error", JOptionPane.ERROR_MESSAGE);
         e.printStackTrace();
     }
@@ -3215,66 +3230,74 @@ private void limpiarFormularioCDA() {
     }//GEN-LAST:event_txtEdad1KeyTyped
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        try {
+      try {
         // 1. Recoger datos del formulario
         Map<String, Object> cambios = new HashMap<>();
         cambios.put("primerNombre", txtPrimerNombreMod1.getText().trim());
         cambios.put("segundoNombre", txtSegundoNombreMod1.getText().trim());
         cambios.put("primerApellido", txtPrimerApellidoMod1.getText().trim());
         cambios.put("segundoApellido", txtSegundoApellidoMod1.getText().trim());
-        cambios.put("edad", Integer.parseInt(txtEdadMod1.getText().trim()));
+        
+        // Validar y convertir edad
+        try {
+            cambios.put("edad", Integer.parseInt(txtEdadMod1.getText().trim()));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("La edad debe ser un número válido");
+        }
+        
         cambios.put("nacionalidad", txtNacionalidadMod1.getText().trim());
         cambios.put("correo", txtCorreoMod1.getText().trim());
         cambios.put("turno", cmbTurnoMod1.getSelectedItem().toString());
+        
+        // Validar fecha
+        if (dateFinContratoMod1.getDate() == null) {
+            throw new IllegalArgumentException("Seleccione una fecha de fin de contrato");
+        }
         cambios.put("fechaFin", dateFinContratoMod1.getDate().toInstant()
                 .atZone(ZoneId.systemDefault()).toLocalDate());
 
-        // 2. Llamar al controller
+        // 2. Obtener cédula original (no editable)
+        String cedulaOriginal = txtCedulaMod1.getText().trim();
+        
+        // 3. Llamar al controller
         int resultado = enfermeraController.modificarEnfermera(
-                txtCedulaMod1.getText().trim(),
+                cedulaOriginal,
                 cambios,
-                rutaImagenEnfermeraMod
+                rutaImagenEnfermeraMod // Puede ser null si no se cambió la imagen
         );
 
-        // 3. Manejar resultados
+        // 4. Manejar resultados
         switch (resultado) {
-            case 0: // No hay cambios
-                int respuesta = JOptionPane.showConfirmDialog(
-                    this,
-                    "¿Está seguro que no desea realizar cambios?",
-                    "Confirmar",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-                
-                if (respuesta == JOptionPane.YES_OPTION) {
-                    // Ir a la tabla
-                    jTabbedPane1.setSelectedComponent(MostrarEnfermeras);
-                    actualizarTablaEnfermeras();
-                }
-                // Si es NO, no hacer nada (quedarse en el panel)
-                break;
-                
-            case 1: // Modificación exitosa
+            case 1: // Éxito
                 JOptionPane.showMessageDialog(this,
-                    "ENFERMERA MODIFICADA EXITOSAMENTE",
+                    "Enfermera modificada exitosamente",
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 jTabbedPane1.setSelectedComponent(MostrarEnfermeras);
                 actualizarTablaEnfermeras();
-                rutaImagenEnfermeraMod = null;
                 break;
                 
-            case -1: // Error
-                // El controller ya lanzó excepción, este caso no debería ocurrir
+            case 0: // No hay cambios
+                int opcion = JOptionPane.showConfirmDialog(this,
+                    "No se detectaron cambios. ¿Desea cancelar la modificación?",
+                    "Sin cambios",
+                    JOptionPane.YES_NO_OPTION);
+                
+                if (opcion == JOptionPane.YES_OPTION) {
+                    jTabbedPane1.setSelectedComponent(MostrarEnfermeras);
+                }
                 break;
+                
+            case -1: // Error (debería haber lanzado excepción)
+                throw new RuntimeException("Error desconocido al modificar enfermera");
         }
         
     } catch (IllegalArgumentException e) {
         JOptionPane.showMessageDialog(this, 
             e.getMessage(), 
-            "Error", JOptionPane.ERROR_MESSAGE);
+            "Error de validación", JOptionPane.ERROR_MESSAGE);
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this,
-            "Error inesperado: " + e.getMessage(),
+            "Error al modificar enfermera: " + e.getMessage(),
             "Error", JOptionPane.ERROR_MESSAGE);
         e.printStackTrace();
     }

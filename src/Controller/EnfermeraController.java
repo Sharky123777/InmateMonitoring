@@ -53,38 +53,49 @@ public class EnfermeraController {
     return ventanaCamara.getImagenCapturada();
 }
 
-   public Enfermera registrarEnfermera(String primerNombre, String segundoNombre,
+  public Enfermera registrarEnfermera(String primerNombre, String segundoNombre,
     String primerApellido, String segundoApellido, int edad, String cedula,
     String nacionalidad, String correo, String turno, LocalDate fechaFinContrato,
     File imagen) throws IOException {
     
-       
-    // Validación de cédula única (agregar al inicio)
-    if (enfermeraDAO.existeEnfermeraConCedula(cedula)) {
-        throw new IllegalArgumentException("Ya existe una enfermera con la cédula " + cedula);
-    }
-    
-    validarCamposObligatorios(primerNombre, primerApellido, segundoApellido, 
-            edad, cedula, nacionalidad, correo, turno);
-    validarEdad(edad);
-    validarFechasContrato(LocalDate.now(), fechaFinContrato);
-    validarLimiteEnfermerasPorTurno(turno, null);
-    validarImagen(imagen);
+    try {
+        // Validación de cédula única
+        if (enfermeraDAO.existeEnfermeraConCedula(cedula)) {
+            throw new IllegalArgumentException("Ya existe una enfermera con la cédula " + cedula);
+        }
+        
+        // Validar campos obligatorios
+        validarCamposObligatorios(primerNombre, primerApellido, segundoApellido, 
+                edad, cedula, nacionalidad, correo, turno);
+        
+        // Validaciones adicionales
+        validarEdad(edad);
+        validarFechasContrato(LocalDate.now(), fechaFinContrato);
+        validarLimiteEnfermerasPorTurno(turno, null);
+        validarImagen(imagen);
 
-    // Crear nueva enfermera
-    Enfermera nuevaEnfermera = new Enfermera(
-        primerNombre, segundoNombre, primerApellido, segundoApellido,
-        edad, "Femenino", nacionalidad, cedula, turno, 
-        LocalDate.now(), fechaFinContrato, correo, "", ""
-    );
+        // Crear nueva enfermera
+        Enfermera nuevaEnfermera = new Enfermera(
+            primerNombre, segundoNombre, primerApellido, segundoApellido,
+            edad, "Femenino", nacionalidad, cedula, turno, 
+            LocalDate.now(), fechaFinContrato, correo, "", ""
+        );
 
-    // Guardar a través del DAO (Singleton)
-    boolean guardado = EnfermeraDAO.getInstancia().guardarEnfermera(nuevaEnfermera, imagen);
-    
-    if (guardado) {
-        return EnfermeraDAO.getInstancia().obtenerEnfermeraPorCedula(cedula);
+        // Guardar a través del DAO
+        boolean guardado = EnfermeraDAO.getInstancia().guardarEnfermera(nuevaEnfermera, imagen);
+        
+        if (guardado) {
+            return EnfermeraDAO.getInstancia().obtenerEnfermeraPorCedula(cedula);
+        }
+        throw new RuntimeException("No se pudo guardar la enfermera en la base de datos");
+        
+    } catch (IllegalArgumentException e) {
+        // Relanzar excepciones de validación
+        throw e;
+    } catch (Exception e) {
+        // Capturar cualquier otra excepción y lanzarla como RuntimeException
+        throw new RuntimeException("Error al registrar enfermera: " + e.getMessage(), e);
     }
-    throw new RuntimeException("No se pudo guardar la enfermera");
 }
 
 private void validarImagen(File imagen) {
@@ -101,31 +112,48 @@ private void validarImagen(File imagen) {
     
     public int modificarEnfermera(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
     try {
+        // 1. Verificar existencia de la enfermera
         Enfermera original = obtenerEnfermeraPorCedula(cedulaOriginal);
         if (original == null) {
-            throw new IllegalArgumentException("Enfermera no encontrada");
+            throw new IllegalArgumentException("Enfermera no encontrada con cédula: " + cedulaOriginal);
         }
 
-        // Verificar si hay cambios reales
+        // 2. Verificar si hay cambios reales
         if (!verificarCambios(original, cambios, nuevaImagen)) {
             return 0; // Código 0 = No hay cambios
         }
 
-        // Validaciones
+        // 3. Validar campos modificados
         validarCamposModificacion(cambios);
-        validarEdad((int) cambios.get("edad"));
-        validarFechasContrato(original.getFechaContratacion(), (LocalDate) cambios.get("fechaFin"));
-        validarLimiteEnfermerasPorTurno((String) cambios.get("turno"), cedulaOriginal);
+        
+        // 4. Extraer y validar datos
+        int edad = (int) cambios.get("edad");
+        LocalDate fechaFin = (LocalDate) cambios.get("fechaFin");
+        String turno = (String) cambios.get("turno");
+        
+        validarEdad(edad);
+        validarFechasContrato(original.getFechaContratacion(), fechaFin);
+        validarLimiteEnfermerasPorTurno(turno, cedulaOriginal);
+        
+        // Si hay nueva imagen, validarla
+        if (nuevaImagen != null) {
+            validarImagen(nuevaImagen);
+        }
 
-        // Construir y modificar
+        // 5. Construir enfermera modificada
         Enfermera enfermeraModificada = construirEnfermeraModificada(cedulaOriginal, cambios, original);
+        
+        // 6. Ejecutar modificación
         boolean resultado = enfermeraDAO.modificarEnfermera(cedulaOriginal, enfermeraModificada, nuevaImagen);
         
         return resultado ? 1 : -1; // 1=Éxito, -1=Error
+        
     } catch (IllegalArgumentException e) {
+        // Relanzar excepciones de validación para manejo específico en la vista
         throw e;
     } catch (Exception e) {
-        throw new RuntimeException("Error al modificar: " + e.getMessage());
+        // Capturar cualquier otra excepción
+        throw new RuntimeException("Error al modificar enfermera: " + e.getMessage(), e);
     }
 }
 
@@ -251,37 +279,43 @@ private boolean verificarCambios(Enfermera original, Map<String, Object> cambios
     }
 
     private void validarCamposObligatorios(String primerNombre, String primerApellido,
-            String segundoApellido, int edad, String cedula,
-            String nacionalidad, String correo, String turno) {
-        
-        StringBuilder camposFaltantes = new StringBuilder();
+        String segundoApellido, int edad, String cedula,
+        String nacionalidad, String correo, String turno) {
+    
+    List<String> errores = new ArrayList<>();
 
-        if (primerNombre == null || primerNombre.trim().isEmpty()) {
-            camposFaltantes.append("- Primer nombre\n");
-        }
-        if (primerApellido == null || primerApellido.trim().isEmpty()) {
-            camposFaltantes.append("- Primer apellido\n");
-        }
-        if (segundoApellido == null || segundoApellido.trim().isEmpty()) {
-            camposFaltantes.append("- Segundo apellido\n");
-        }
-        if (cedula == null || cedula.trim().isEmpty()) {
-            camposFaltantes.append("- Cédula\n");
-        }
-        if (nacionalidad == null || nacionalidad.trim().isEmpty()) {
-            camposFaltantes.append("- Nacionalidad\n");
-        }
-        if (correo == null || correo.trim().isEmpty()) {
-            camposFaltantes.append("- Correo\n");
-        }
-        if (turno == null || turno.trim().isEmpty()) {
-            camposFaltantes.append("- Turno\n");
-        }
-
-        if (camposFaltantes.length() > 0) {
-            throw new IllegalArgumentException("Campos obligatorios faltantes:\n" + camposFaltantes);
-        }
+    if (primerNombre == null || primerNombre.trim().isEmpty()) {
+        errores.add("Primer nombre es obligatorio");
     }
+    if (primerApellido == null || primerApellido.trim().isEmpty()) {
+        errores.add("Primer apellido es obligatorio");
+    }
+    if (segundoApellido == null || segundoApellido.trim().isEmpty()) {
+        errores.add("Segundo apellido es obligatorio");
+    }
+    if (cedula == null || cedula.trim().isEmpty()) {
+        errores.add("Cédula es obligatoria");
+    }
+    if (nacionalidad == null || nacionalidad.trim().isEmpty()) {
+        errores.add("Nacionalidad es obligatoria");
+    }
+    if (correo == null || correo.trim().isEmpty()) {
+        errores.add("Correo es obligatorio");
+    } else if (!correo.matches("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)*(\\.[a-zA-Z]{2,})$")) {
+        errores.add("Correo electrónico no válido");
+    }
+    if (turno == null || turno.trim().isEmpty()) {
+        errores.add("Turno es obligatorio");
+    }
+    if (edad <= 0) {
+        errores.add("Edad debe ser un número positivo");
+    }
+
+    if (!errores.isEmpty()) {
+        throw new IllegalArgumentException("Errores de validación:\n- " + 
+            String.join("\n- ", errores));
+    }
+}
 
    
 
