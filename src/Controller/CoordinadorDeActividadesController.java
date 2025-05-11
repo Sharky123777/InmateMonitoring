@@ -2,40 +2,29 @@ package Controller;
 
 import DAO.CoordinadorDeActividadesDAO;
 import Model.Entities.CoordinadorDeActividades;
-import com.toedter.calendar.JDateChooser;
-import java.awt.Image;
+import Model.Entities.Usuario;
+import Model.Constants.RolEnum;
+import View.FrmCamara;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import javax.imageio.ImageIO;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class CoordinadorDeActividadesController {
+
     private static CoordinadorDeActividadesController instancia;
     private final CoordinadorDeActividadesDAO coordinadorDAO;
-    
-    // Componentes de la vista
-    private JTextField txtPrimerNombre2;
-    private JTextField txtSegundoNombre2;
-    private JTextField txtPrimerApellido2;
-    private JTextField txtSegundoApellido2;
-    private JTextField txtEdad2;
-    private JTextField txtCedula2;
-    private JTextField txtNacionalidad2;
-    private JTextField txtCorreo2;
-    private JComboBox<String> cmbTurno2;
-    private JComboBox<String> cmbCargo2;
-    private JDateChooser dateFinContrato2;
-    private String rutaImagenSeleccionada2;
+    private FrmCamara ventanaCamara;
 
-    // Constructor privado para Singleton
     private CoordinadorDeActividadesController() {
         this.coordinadorDAO = CoordinadorDeActividadesDAO.getInstancia();
     }
 
-    // Método Singleton para obtener instancia
     public static synchronized CoordinadorDeActividadesController getInstancia() {
         if (instancia == null) {
             instancia = new CoordinadorDeActividadesController();
@@ -43,526 +32,461 @@ public class CoordinadorDeActividadesController {
         return instancia;
     }
 
-    // Establecer componentes de la vista
-    public void setComponentes(
-        JTextField txtPrimerNombre2, 
-        JTextField txtSegundoNombre2,
-        JTextField txtPrimerApellido2, 
-        JTextField txtSegundoApellido2,
-        JTextField txtEdad2, 
-        JTextField txtCedula2,
-        JTextField txtNacionalidad2, 
-        JTextField txtCorreo2,
-        JComboBox<String> cmbTurno2, 
-        JComboBox<String> cmbCargo2,
-        JDateChooser dateFinContrato2
-    ) {
-        this.txtPrimerNombre2 = txtPrimerNombre2;
-        this.txtSegundoNombre2 = txtSegundoNombre2;
-        this.txtPrimerApellido2 = txtPrimerApellido2;
-        this.txtSegundoApellido2 = txtSegundoApellido2;
-        this.txtEdad2 = txtEdad2;
-        this.txtCedula2 = txtCedula2;
-        this.txtNacionalidad2 = txtNacionalidad2;
-        this.txtCorreo2 = txtCorreo2;
-        this.cmbTurno2 = cmbTurno2;
-        this.cmbCargo2 = cmbCargo2;
-        this.dateFinContrato2 = dateFinContrato2;
-    }
+    public File capturarImagenCoordinador() {
+        FrmCamara ventanaCamara = new FrmCamara();
+        ventanaCamara.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-    // ==================== OPERACIONES CRUD ====================
+        JDialog dialog = new JDialog();
+        dialog.setModal(true);
+        dialog.setContentPane(ventanaCamara.getContentPane());
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
 
-    public boolean agregarCoordinador() {
-        try {
-            validarComponentes();
-            
-            StringBuilder errores = validarCamposObligatorios();
-            if (errores.length() > 0) {
-                throw new IllegalArgumentException(errores.toString());
+        while (dialog.isVisible()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                JOptionPane.showMessageDialog(null,
+                        "Error al capturar imagen: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return null;
             }
-
-            String primerNombre = txtPrimerNombre2.getText().trim();
-            String segundoNombre = txtSegundoNombre2.getText().trim();
-            String primerApellido = txtPrimerApellido2.getText().trim();
-            String segundoApellido = txtSegundoApellido2.getText().trim();
-            int edad = obtenerEdadValida();
-            String cedula = txtCedula2.getText().trim();
-            String nacionalidad = txtNacionalidad2.getText().trim();
-            String correo = validarCorreo(txtCorreo2.getText().trim());
-            String turno = cmbTurno2.getSelectedItem().toString();
-            String cargo = cmbCargo2.getSelectedItem().toString();
-            LocalDate fechaFinContrato = obtenerFechaValida();
-            
-            File imagen = null;
-            if (rutaImagenSeleccionada2 != null && !rutaImagenSeleccionada2.isEmpty()) {
-                imagen = validarYObtenerImagen();
-            }
-
-            return coordinadorDAO.guardarCDA(
-                primerNombre,
-                segundoNombre,
-                primerApellido,
-                segundoApellido,
-                edad,
-                cedula,
-                nacionalidad,
-                correo,
-                turno,
-                fechaFinContrato,
-                cargo,
-                imagen
-            );
-            
-        } catch (IllegalArgumentException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Error al guardar coordinador: " + e.getMessage(), e);
         }
-    }
 
-    public boolean modificarCoordinador(String cedulaOriginal) {
-        try {
-            validarComponentes();
-            
-            String primerNombre = obtenerValorCampo(txtPrimerNombre2, "Primer nombre");
-            String primerApellido = obtenerValorCampo(txtPrimerApellido2, "Primer apellido");
-            String segundoApellido = obtenerValorCampo(txtSegundoApellido2, "Segundo apellido");
-            int edad = obtenerEdadValida();
-            String nacionalidad = obtenerValorCampo(txtNacionalidad2, "Nacionalidad");
-            String correo = obtenerValorCampo(txtCorreo2, "Correo");
-            String turno = obtenerValorCombo(cmbTurno2, "Turno");
-            String cargo = obtenerValorCombo(cmbCargo2, "Cargo");
-            LocalDate fechaFinContrato = obtenerFechaValida();
-            File imagen = rutaImagenSeleccionada2 != null ? new File(rutaImagenSeleccionada2) : null;
+        // Obtener la imagen capturada
+        File imagen = ventanaCamara.getImagenCapturada();
 
-            return coordinadorDAO.modificarCoordinador(
-                cedulaOriginal,
-                primerNombre,
-                txtSegundoNombre2.getText().trim(),
-                primerApellido,
-                segundoApellido,
-                edad,
-                nacionalidad,
-                correo,
-                turno,
-                fechaFinContrato,
-                cargo,
-                imagen
-            );
-        } catch (IllegalArgumentException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Error al modificar coordinador: " + e.getMessage(), e);
+        // Validar la imagen obtenida
+        if (imagen == null) {
+            JOptionPane.showMessageDialog(null,
+                    "No se capturó ninguna imagen",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
-    }
-    
-    public boolean actualizarCoordinador(
-        String cedulaOriginal, 
-        String primerNombre, 
-        String segundoNombre,
-        String primerApellido, 
-        String segundoApellido,
-        int edad, 
-        String nacionalidad, 
-        String correo,
-        String turno, 
-        LocalDate fechaFinContrato,
-        String cargo, 
-        File nuevaImagen
-    ) {
-        try {
-            if (primerNombre == null || primerNombre.trim().isEmpty() ||
-                primerApellido == null || primerApellido.trim().isEmpty() ||
-                segundoApellido == null || segundoApellido.trim().isEmpty() ||
-                cedulaOriginal == null || cedulaOriginal.trim().isEmpty()) {
-                throw new IllegalArgumentException("Campos obligatorios no pueden estar vacíos");
-            }
 
-            if (edad < 18 || edad > 70) {
-                throw new IllegalArgumentException("La edad debe estar entre 18 y 70 años");
-            }
-
-            if (fechaFinContrato == null || !fechaFinContrato.isAfter(LocalDate.now())) {
-                throw new IllegalArgumentException("Fecha fin de contrato inválida");
-            }
-
-            return coordinadorDAO.modificarCoordinador(
-                cedulaOriginal,
-                primerNombre,
-                segundoNombre,
-                primerApellido,
-                segundoApellido,
-                edad,
-                nacionalidad,
-                correo,
-                turno,
-                fechaFinContrato,
-                cargo,
-                nuevaImagen
-            );
-        } catch (IllegalArgumentException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Error al modificar coordinador: " + e.getMessage(), e);
-        }
-    }
-
-    public boolean eliminarCoordinador(String cedula) {
-        try {
-            if (cedula == null || cedula.trim().isEmpty()) {
-                throw new IllegalArgumentException("Cédula es requerida para eliminar");
-            }
-            return coordinadorDAO.eliminarCoordinador(cedula);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al eliminar coordinador: " + e.getMessage(), e);
-        }
-    }
-
-    public CoordinadorDeActividades obtenerCoordinadorPorCedula(String cedula) {
-        try {
-            return coordinadorDAO.obtenerCoordinadorPorCedula(cedula);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al obtener coordinador: " + e.getMessage(), e);
-        }
-    }
-
-    public List<CoordinadorDeActividades> obtenerTodosCoordinadores() {
-        try {
-            return coordinadorDAO.obtenerCDAS();
-        } catch (Exception e) {
-            throw new RuntimeException("Error al obtener coordinadores: " + e.getMessage(), e);
-        }
-    }
-
-    // ==================== MÉTODOS AUXILIARES ====================
-
-    private void validarComponentes() {
-        StringBuilder errores = new StringBuilder();
-        
-        if (txtPrimerNombre2 == null) errores.append("- txtPrimerNombre2 no inicializado\n");
-        if (txtPrimerApellido2 == null) errores.append("- txtPrimerApellido2 no inicializado\n");
-        if (txtSegundoApellido2 == null) errores.append("- txtSegundoApellido2 no inicializado\n");
-        if (txtEdad2 == null) errores.append("- txtEdad2 no inicializado\n");
-        if (txtCedula2 == null) errores.append("- txtCedula2 no inicializado\n");
-        if (txtNacionalidad2 == null) errores.append("- txtNacionalidad2 no inicializado\n");
-        if (txtCorreo2 == null) errores.append("- txtCorreo2 no inicializado\n");
-        if (cmbTurno2 == null) errores.append("- cmbTurno2 no inicializado\n");
-        if (cmbCargo2 == null) errores.append("- cmbCargo2 no inicializado\n");
-        if (dateFinContrato2 == null) errores.append("- dateFinContrato2 no inicializado\n");
-        
-        if (errores.length() > 0) {
-            String mensajeError = "Componentes no inicializados correctamente:\n" + errores.toString();
-            System.err.println(mensajeError);
-            throw new IllegalStateException(mensajeError);
-        }
-    }
-
-    private StringBuilder validarCamposObligatorios() {
-        StringBuilder errores = new StringBuilder();
-        
-        if (txtPrimerNombre2.getText().trim().isEmpty()) 
-            errores.append("- Primer nombre es obligatorio\n");
-        if (txtPrimerApellido2.getText().trim().isEmpty()) 
-            errores.append("- Primer apellido es obligatorio\n");
-        if (txtSegundoApellido2.getText().trim().isEmpty()) 
-            errores.append("- Segundo apellido es obligatorio\n");
-        if (txtEdad2.getText().trim().isEmpty()) 
-            errores.append("- Edad es obligatoria\n");
-        if (txtCedula2.getText().trim().isEmpty()) 
-            errores.append("- Cédula es obligatoria\n");
-        if (txtNacionalidad2.getText().trim().isEmpty()) 
-            errores.append("- Nacionalidad es obligatoria\n");
-        if (txtCorreo2.getText().trim().isEmpty()) 
-            errores.append("- Correo electrónico es obligatorio\n");
-        if (cmbTurno2.getSelectedItem() == null) 
-            errores.append("- Turno es obligatorio\n");
-        if (cmbCargo2.getSelectedItem() == null) 
-            errores.append("- Cargo es obligatorio\n");
-        if (dateFinContrato2.getDate() == null) 
-            errores.append("- Fecha de fin de contrato es obligatoria\n");
-        
-        return errores;
-    }
-
-    private String validarCorreo(String correo) {
-        if (!correo.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-            throw new IllegalArgumentException("El correo electrónico no tiene un formato válido");
-        }
-        return correo;
-    }
-    
-    private String obtenerValorCampo(JTextField campo, String nombreCampo) {
-        String valor = campo.getText().trim();
-        if (valor.isEmpty()) {
-            throw new IllegalArgumentException(nombreCampo + " es obligatorio");
-        }
-        return valor;
-    }
-
-    private String obtenerValorCombo(JComboBox<String> combo, String nombreCampo) {
-        Object seleccion = combo.getSelectedItem();
-        if (seleccion == null || seleccion.toString().trim().isEmpty()) {
-            throw new IllegalArgumentException(nombreCampo + " es obligatorio");
-        }
-        return seleccion.toString().trim();
-    }
-
-    private int obtenerEdadValida() {
-        try {
-            int edad = Integer.parseInt(txtEdad2.getText().trim());
-            if (edad < 18 || edad > 70) {
-                throw new IllegalArgumentException("La edad debe estar entre 18 y 70 años");
-            }
-            return edad;
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("La edad debe ser un número válido");
-        }
-    }
-
-    private LocalDate obtenerFechaValida() {
-        try {
-            Date fechaSeleccionada = dateFinContrato2.getDate();
-            
-            if (fechaSeleccionada == null) {
-                String textoFecha = ((JTextField)dateFinContrato2.getDateEditor().getUiComponent()).getText();
-                if (!textoFecha.isEmpty()) {
-                    try {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                        return LocalDate.parse(textoFecha, formatter);
-                    } catch (Exception e) {
-                        throw new IllegalArgumentException("Formato de fecha inválido. Use DD/MM/AAAA");
-                    }
-                }
-                throw new IllegalArgumentException("Debe seleccionar una fecha de fin de contrato");
-            }
-            
-            return fechaSeleccionada.toInstant()
-                   .atZone(ZoneId.systemDefault())
-                   .toLocalDate();
-            
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Error al procesar la fecha: " + e.getMessage());
-        }
-    }
-
-    private File validarYObtenerImagen() {
-        if (rutaImagenSeleccionada2 == null || rutaImagenSeleccionada2.trim().isEmpty()) {
-            throw new IllegalArgumentException("Debe seleccionar una imagen");
-        }
-        
-        File imagen = new File(rutaImagenSeleccionada2);
         if (!imagen.exists()) {
-            throw new IllegalArgumentException("El archivo de imagen no existe");
+            JOptionPane.showMessageDialog(null,
+                    "El archivo de imagen no existe",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
-        
-        String nombre = imagen.getName().toLowerCase();
-        if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg") && 
-            !nombre.endsWith(".png") && !nombre.endsWith(".gif")) {
-            throw new IllegalArgumentException("Formato de imagen no válido");
+
+        // Verificar que sea una imagen válida
+        try {
+            BufferedImage img = ImageIO.read(imagen);
+            if (img == null) {
+                JOptionPane.showMessageDialog(null,
+                        "El archivo no es una imagen válida",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null,
+                    "Error al leer la imagen: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
-        
+
         return imagen;
     }
 
-    public boolean existeCoordinador(String cedula) {
+    public void registrarCoordinador(String primerNombre, String segundoNombre,
+            String primerApellido, String segundoApellido, int edad, String cedula,
+            String nacionalidad, String correo, String turno, String cargo,
+            LocalDate fechaFinContrato, File imagenSeleccionadaCDA) throws IOException {
+
+        // Validación de cédula única (agregar al inicio)
+    if (coordinadorDAO.existeCoordinadorConCedula(cedula)) {
+        throw new IllegalArgumentException("Ya existe una coordinadora con la cédula " + cedula);
+    }
+    
+        // Validación de campos obligatorios
+        validarCamposObligatorios(primerNombre, primerApellido, segundoApellido,
+                edad, cedula, nacionalidad, correo, turno, cargo);
+        validarEdad(edad);
+        validarFechasContrato(LocalDate.now(), fechaFinContrato);
+
+        // Validación de imagen obligatoria
+        if (imagenSeleccionadaCDA == null) {
+            throw new IllegalArgumentException("Debe proporcionar una imagen del coordinador");
+        }
+
+        if (!imagenSeleccionadaCDA.exists()) {
+            throw new IllegalArgumentException("El archivo de imagen no existe: " + imagenSeleccionadaCDA.getAbsolutePath());
+        }
+
+        // Verificar que sea una imagen válida
         try {
-            return coordinadorDAO.existeCoordinador(cedula);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al verificar existencia: " + e.getMessage(), e);
+            BufferedImage img = ImageIO.read(imagenSeleccionadaCDA);
+            if (img == null) {
+                throw new IllegalArgumentException("El archivo no es una imagen válida");
+            }
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Error al leer la imagen: " + e.getMessage());
+        }
+
+        CoordinadorDeActividades nuevoCoordinador = new CoordinadorDeActividades(
+                primerNombre, segundoNombre, primerApellido, segundoApellido,
+                edad, "Femenino", nacionalidad, cedula, correo, turno,
+                LocalDate.now(), fechaFinContrato, "", "", cargo
+        );
+
+        if (!coordinadorDAO.guardarCoordinador(nuevoCoordinador, imagenSeleccionadaCDA)) {
+            throw new RuntimeException("No se pudo guardar el coordinador");
         }
     }
 
-    // ==================== MÉTODOS PARA LA VISTA ====================
+    public boolean modificarCoordinador(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
+        System.out.println("Iniciando proceso de modificación para cédula: " + cedulaOriginal);
+        
+        try {
+            // 1. Validar existencia del coordinador original
+            CoordinadorDeActividades original = validarYObternerOriginal(cedulaOriginal);
+            System.out.println("Coordinador original encontrado: " + original.getPrimerNombre());
+            
+            // 2. Verificar que todos los campos requeridos estén presentes
+            validarCamposModificados(cambios);
+            System.out.println("Validación de campos completada");
 
-    public DefaultTableModel obtenerModeloTabla() {
-        String[] columnas = {
-            "Foto", "Nombres", "Apellidos", "Edad", "Cédula", 
-            "Nacionalidad", "Correo", "Turno", "Cargo",
-            "Fecha Inicio", "Fecha Fin"
-        };
+            // 3. Verificar si hay cambios reales - PUNTO CRÍTICO
+            boolean hayCambios = verificarCambios(original, cambios, nuevaImagen);
+            System.out.println("Resultado de verificación de cambios: " + hayCambios);
 
-        DefaultTableModel modelo = new DefaultTableModel(columnas, 0) {
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                return columnIndex == 0 ? ImageIcon.class : String.class;
+            if (!hayCambios) {
+                System.out.println("No se detectaron cambios. Mostrando diálogo de confirmación.");
+                // Mostrar diálogo de confirmación
+                int opcion = JOptionPane.showConfirmDialog(null,
+                        "¿Está segura que no desea realizar cambios?",
+                        "Sin cambios detectados",
+                        JOptionPane.YES_NO_OPTION);
+                
+                System.out.println("Opción seleccionada: " + (opcion == JOptionPane.YES_OPTION ? "SI" : "NO"));
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    // Retornar false para indicar que no se realizaron cambios
+                    System.out.println("Usuario confirmó no realizar cambios");
+                    return false;
+                } else {
+                    // El usuario quiere seguir editando
+                    System.out.println("Usuario decidió seguir editando");
+                    throw new CancelarModificacionException();
+                }
+            }
+
+            System.out.println("Hay cambios, procediendo con la validación y modificación");
+            
+            // 4. Validar edad
+            int edad = validarEdad((int) cambios.get("edad"));
+
+            // 5. Validar fechas
+            LocalDate fechaFin = validarFechas(original.getFechaInicioContrato(), (LocalDate) cambios.get("fechaFin"));
+
+            // 6. Validar imagen si se proporciona una nueva
+            if (nuevaImagen != null) {
+                validarImagen(nuevaImagen);
+            }
+
+            // 7. Crear objeto modificado
+            CoordinadorDeActividades coordinadorModificado = crearCoordinadorModificado(
+                    original, cambios, edad, fechaFin);
+
+            // 8. Determinar qué imagen usar
+            File imagenFinal = determinarImagenFinal(original, nuevaImagen);
+
+            // 9. Ejecutar modificación en DAO
+            boolean resultado = coordinadorDAO.modificarCoordinador(cedulaOriginal, coordinadorModificado, imagenFinal);
+            
+            if (resultado) {
+                // Mostrar mensaje de éxito
+                System.out.println("Modificación exitosa, mostrando mensaje");
+                JOptionPane.showMessageDialog(null,
+                        "COORDINADORA MODIFICADA EXITOSAMENTE",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
             }
             
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+            return resultado;
 
-        for (CoordinadorDeActividades coordinador : obtenerTodosCoordinadores()) {
-            modelo.addRow(new Object[]{
-                obtenerImagenCoordinador(coordinador),
-                coordinador.getPrimerNombre() + " " + coordinador.getSegundoNombre(),
-                coordinador.getPrimerApellido() + " " + coordinador.getSegundoApellido(),
-                coordinador.getEdad(),
-                coordinador.getIdentificacion(),
-                coordinador.getNacionalidad(),
-                coordinador.getCorreo(),
-                coordinador.getTurno(),
-                coordinador.getCargo(),
-                coordinador.getFechaInicioContrato() != null ? 
-                    coordinador.getFechaInicioContrato().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "",
-                coordinador.getFechaFinContrato() != null ? 
-                    coordinador.getFechaFinContrato().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : ""
-            });
+        } catch (CancelarModificacionException e) {
+            // El usuario decidió seguir editando
+            throw e;
+        } catch (IllegalArgumentException e) {
+            // Relanzar excepciones de validación
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+            throw e;
+        } catch (Exception e) {
+            // Capturar cualquier otro error
+            JOptionPane.showMessageDialog(null, 
+                    "Error al modificar coordinador: " + e.getMessage(), 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException("Error al modificar coordinador: " + e.getMessage(), e);
         }
-
-        return modelo;
     }
 
-    private ImageIcon obtenerImagenCoordinador(CoordinadorDeActividades coordinador) {
-        if (coordinador.getRutaImagen() != null && !coordinador.getRutaImagen().isEmpty()) {
-            try {
-                ImageIcon original = new ImageIcon(coordinador.getRutaImagen());
-                Image imagen = original.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-                return new ImageIcon(imagen);
-            } catch (Exception e) {
-                System.err.println("Error al cargar imagen: " + e.getMessage());
-            }
+    private boolean verificarCambios(CoordinadorDeActividades original, Map<String, Object> cambios, File nuevaImagen) {
+    System.out.println("Verificando cambios:");
+    
+    // Verificar cambios en campos básicos
+    if (!original.getPrimerNombre().trim().equals(((String)cambios.get("primerNombre")).trim())) {
+        System.out.println("Cambio detectado en primer nombre");
+        return true;
+    }
+    
+    String segundoNombreOriginal = original.getSegundoNombre() != null ? original.getSegundoNombre().trim() : "";
+    String segundoNombreNuevo = cambios.getOrDefault("segundoNombre", "").toString().trim();
+    if (!segundoNombreOriginal.equals(segundoNombreNuevo)) {
+        System.out.println("Cambio detectado en segundo nombre");
+        return true;
+    }
+    
+    if (!original.getPrimerApellido().trim().equals(((String)cambios.get("primerApellido")).trim())) {
+        System.out.println("Cambio detectado en primer apellido");
+        return true;
+    }
+    
+    if (!original.getSegundoApellido().trim().equals(((String)cambios.get("segundoApellido")).trim())) {
+        System.out.println("Cambio detectado en segundo apellido");
+        return true;
+    }
+    
+    if (original.getEdad() != (int) cambios.get("edad")) {
+        System.out.println("Cambio detectado en edad");
+        return true;
+    }
+    
+    if (!original.getNacionalidad().trim().equals(((String)cambios.get("nacionalidad")).trim())) {
+        System.out.println("Cambio detectado en nacionalidad");
+        return true;
+    }
+
+    if (!original.getCorreo().trim().equals(((String)cambios.get("correo")).trim())) {
+        System.out.println("Cambio detectado en correo");
+        return true;
+    }
+    
+    if (!original.getTurno().trim().equals(((String)cambios.get("turno")).trim())) {
+        System.out.println("Cambio detectado en turno");
+        return true;
+    }
+    
+    if (!original.getCargo().trim().equals(((String)cambios.get("cargo")).trim())) {
+        System.out.println("Cambio detectado en cargo");
+        return true;
+    }
+    
+    LocalDate fechaFinOriginal = original.getFechaFinContrato();
+    LocalDate fechaFinNueva = (LocalDate) cambios.get("fechaFin");
+    if (!fechaFinOriginal.equals(fechaFinNueva)) {
+        System.out.println("Cambio detectado en fecha fin");
+        return true;
+    }
+
+    // Verificar si se cambió la imagen (solo si se proporciona una nueva)
+    if (nuevaImagen != null) {
+        System.out.println("Cambio detectado: nueva imagen proporcionada");
+        return true;
+    }
+
+    System.out.println("No se detectaron cambios");
+    return false;
+}
+    
+    // Excepción personalizada para cuando el usuario cancela la modificación
+    public class CancelarModificacionException extends RuntimeException {
+        public CancelarModificacionException() {
+            super("El usuario decidió continuar editando");
+        }
+    }
+
+    // Métodos auxiliares de validación mejorados
+    private CoordinadorDeActividades validarYObternerOriginal(String cedula) {
+        CoordinadorDeActividades original = obtenerCoordinadorPorCedula(cedula);
+        if (original == null) {
+            throw new IllegalArgumentException("Coordinador no encontrado con cédula: " + cedula);
+        }
+        return original;
+    }
+
+    private void validarCamposModificados(Map<String, Object> cambios) {
+        StringBuilder errores = new StringBuilder();
+
+        // Validar que los campos obligatorios no estén vacíos
+        validarCampoObligatorio(cambios, "primerNombre", "Primer nombre", errores);
+        validarCampoObligatorio(cambios, "primerApellido", "Primer apellido", errores);
+        validarCampoObligatorio(cambios, "segundoApellido", "Segundo apellido", errores);
+        validarCampoObligatorio(cambios, "nacionalidad", "Nacionalidad", errores);
+        validarCampoObligatorio(cambios, "correo", "Correo electrónico", errores);
+        validarCampoObligatorio(cambios, "turno", "Turno", errores);
+        validarCampoObligatorio(cambios, "cargo", "Cargo", errores);
+        validarCampoObligatorio(cambios, "edad", "Edad", errores);
+        validarCampoObligatorio(cambios, "fechaFin", "Fecha fin contrato", errores);
+
+        // Validación específica para correo electrónico
+        if (cambios.containsKey("correo") && !((String) cambios.get("correo")).contains("@")) {
+            errores.append("- El correo electrónico debe tener un formato válido\n");
+        }
+
+        if (errores.length() > 0) {
+            throw new IllegalArgumentException("Campos obligatorios faltantes:\n" + errores.toString());
+        }
+    }
+
+    private void validarCampoObligatorio(Map<String, Object> cambios, String campo, String nombreCampo, StringBuilder errores) {
+        if (!cambios.containsKey(campo)) {
+            errores.append("- ").append(nombreCampo).append(" es un campo requerido\n");
+        } else if (cambios.get(campo) == null) {
+            errores.append("- ").append(nombreCampo).append(" no puede ser nulo\n");
+        } else if (cambios.get(campo) instanceof String && ((String) cambios.get(campo)).trim().isEmpty()) {
+            errores.append("- ").append(nombreCampo).append(" es obligatorio\n");
+        }
+    }
+
+    private int validarEdad(int edad) {
+        if (edad < 0) {
+            throw new IllegalArgumentException("La edad debe ser un número positivo");
+        }
+        if (edad < 18 || edad > 70) {
+            throw new IllegalArgumentException("La edad debe estar entre 18 y 70 años");
+        }
+        return edad;
+    }
+
+    private LocalDate validarFechas(LocalDate inicio, LocalDate fin) {
+        if (fin == null) {
+            throw new IllegalArgumentException("La fecha de fin de contrato es obligatoria");
+        }
+        if (!fin.isAfter(inicio)) {
+            throw new IllegalArgumentException("La fecha de fin debe ser posterior a la fecha de inicio");
+        }
+        return fin;
+    }
+
+    private CoordinadorDeActividades crearCoordinadorModificado(CoordinadorDeActividades original,
+            Map<String, Object> cambios, int edad, LocalDate fechaFin) {
+
+        return new CoordinadorDeActividades(
+                (String) cambios.get("primerNombre"),
+                (String) cambios.getOrDefault("segundoNombre", original.getSegundoNombre()),
+                (String) cambios.get("primerApellido"),
+                (String) cambios.get("segundoApellido"),
+                edad,
+                original.getSexo(), // Mantener el valor original
+                (String) cambios.get("nacionalidad"),
+                original.getIdentificacion(), // Mantener la misma cédula
+                (String) cambios.get("correo"),
+                (String) cambios.get("turno"),
+                original.getFechaInicioContrato(), // Mantener fecha original
+                fechaFin,
+                original.getUsuario(), // Credenciales originales
+                original.getContrasena(),
+                (String) cambios.get("cargo")
+        );
+    }
+
+    private File determinarImagenFinal(CoordinadorDeActividades original, File nuevaImagen) {
+        if (nuevaImagen != null) {
+            return nuevaImagen;
+        }
+        if (original.getRutaImagen() != null && !original.getRutaImagen().isEmpty()) {
+            return new File(original.getRutaImagen());
         }
         return null;
     }
 
-    public void cargarDatosEnFormulario(CoordinadorDeActividades coordinador) {
-        if (coordinador != null) {
-            txtPrimerNombre2.setText(coordinador.getPrimerNombre());
-            txtSegundoNombre2.setText(coordinador.getSegundoNombre());
-            txtPrimerApellido2.setText(coordinador.getPrimerApellido());
-            txtSegundoApellido2.setText(coordinador.getSegundoApellido());
-            txtEdad2.setText(String.valueOf(coordinador.getEdad()));
-            txtCedula2.setText(coordinador.getIdentificacion());
-            txtNacionalidad2.setText(coordinador.getNacionalidad());
-            txtCorreo2.setText(coordinador.getCorreo());
-            cmbTurno2.setSelectedItem(coordinador.getTurno());
-            cmbCargo2.setSelectedItem(coordinador.getCargo());
-            if (coordinador.getFechaInicioContrato() != null) {
-                // Asumiendo que tienes un dateChooser para fecha inicio
-                // dateInicioContrato2.setDate(java.sql.Date.valueOf(coordinador.getFechaInicioContrato()));
-            }
-            if (coordinador.getFechaFinContrato() != null) {
-                dateFinContrato2.setDate(java.sql.Date.valueOf(coordinador.getFechaFinContrato()));
-            }
-            
-            if (coordinador.getRutaImagen() != null && !coordinador.getRutaImagen().isEmpty()) {
-                rutaImagenSeleccionada2 = coordinador.getRutaImagen();
-            }
+    // Métodos de consulta
+    public List<CoordinadorDeActividades> obtenerTodosCoordinadores() {
+        return coordinadorDAO.obtenerCoordinadores();
+    }
+
+    public CoordinadorDeActividades obtenerCoordinadorPorCedula(String cedula) {
+        return coordinadorDAO.obtenerCoordinadorPorCedula(cedula);
+    }
+
+    public boolean eliminarCoordinador(String cedula) {
+        return coordinadorDAO.eliminarCoordinador(cedula);
+    }
+
+    public CoordinadorDeActividades obtenerCoordinadorPorUsuario(String usuario) {
+        return coordinadorDAO.obtenerCoordinadorPorUsuario(usuario);
+    }
+
+    // Métodos de validación
+    private void validarCamposObligatorios(String primerNombre, String primerApellido,
+            String segundoApellido, int edad, String cedula,
+            String nacionalidad, String correo, String turno, String cargo) {
+
+        StringBuilder camposFaltantes = new StringBuilder();
+
+        if (primerNombre == null || primerNombre.trim().isEmpty()) {
+            camposFaltantes.append("- Primer nombre\n");
+        }
+        if (primerApellido == null || primerApellido.trim().isEmpty()) {
+            camposFaltantes.append("- Primer apellido\n");
+        }
+        if (segundoApellido == null || segundoApellido.trim().isEmpty()) {
+            camposFaltantes.append("- Segundo apellido\n");
+        }
+        if (cedula == null || cedula.trim().isEmpty()) {
+            camposFaltantes.append("- Cédula\n");
+        }
+        if (nacionalidad == null || nacionalidad.trim().isEmpty()) {
+            camposFaltantes.append("- Nacionalidad\n");
+        }
+        if (correo == null || correo.trim().isEmpty()) {
+            camposFaltantes.append("- Correo\n");
+        }
+        if (turno == null || turno.trim().isEmpty()) {
+            camposFaltantes.append("- Turno\n");
+        }
+        if (cargo == null || cargo.trim().isEmpty()) {
+            camposFaltantes.append("- Cargo\n");
+        }
+
+        if (camposFaltantes.length() > 0) {
+            throw new IllegalArgumentException("Campos obligatorios faltantes:\n" + camposFaltantes);
         }
     }
 
-    public void limpiarFormulario() {
-        txtPrimerNombre2.setText("");
-        txtSegundoNombre2.setText("");
-        txtPrimerApellido2.setText("");
-        txtSegundoApellido2.setText("");
-        txtEdad2.setText("");
-        txtCedula2.setText("");
-        txtNacionalidad2.setText("");
-        txtCorreo2.setText("");
-        cmbTurno2.setSelectedIndex(0);
-        cmbCargo2.setSelectedIndex(0);
-        dateFinContrato2.setDate(null);
-        rutaImagenSeleccionada2 = null;
+    private void validarFechasContrato(LocalDate inicio, LocalDate fin) {
+        if (fin == null) {
+            throw new IllegalArgumentException("La fecha de fin de contrato es obligatoria");
+        }
+
+        if (!fin.isAfter(inicio)) {
+            throw new IllegalArgumentException("La fecha de fin debe ser posterior a la fecha de inicio");
+        }
     }
 
-    // ==================== GETTERS Y SETTERS ====================
+    private void validarImagen(File imagen) {
+        if (imagen == null) {
+            throw new IllegalArgumentException("Debe proporcionar una imagen del coordinador");
+        }
 
-    public JTextField getTxtPrimerNombre2() {
-        return txtPrimerNombre2;
-    }
+        if (!imagen.exists()) {
+            throw new IllegalArgumentException("El archivo de imagen no existe: " + imagen.getAbsolutePath());
+        }
 
-    public void setTxtPrimerNombre2(JTextField txtPrimerNombre2) {
-        this.txtPrimerNombre2 = txtPrimerNombre2;
-    }
+        // Verificar que sea un archivo de imagen válido
+        try {
+            BufferedImage img = ImageIO.read(imagen);
+            if (img == null) {
+                throw new IllegalArgumentException("El archivo no es una imagen válida");
+            }
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Error al leer la imagen: " + e.getMessage());
+        }
 
-    public JTextField getTxtSegundoNombre2() {
-        return txtSegundoNombre2;
-    }
+        // Verificar extensión del archivo
+        String nombre = imagen.getName().toLowerCase();
+        if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg") && !nombre.endsWith(".png")) {
+            throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG");
+        }
 
-    public void setTxtSegundoNombre2(JTextField txtSegundoNombre2) {
-        this.txtSegundoNombre2 = txtSegundoNombre2;
-    }
-
-    public JTextField getTxtPrimerApellido2() {
-        return txtPrimerApellido2;
-    }
-
-    public void setTxtPrimerApellido2(JTextField txtPrimerApellido2) {
-        this.txtPrimerApellido2 = txtPrimerApellido2;
-    }
-
-    public JTextField getTxtSegundoApellido2() {
-        return txtSegundoApellido2;
-    }
-
-    public void setTxtSegundoApellido2(JTextField txtSegundoApellido2) {
-        this.txtSegundoApellido2 = txtSegundoApellido2;
-    }
-
-    public JTextField getTxtEdad2() {
-        return txtEdad2;
-    }
-
-    public void setTxtEdad2(JTextField txtEdad2) {
-        this.txtEdad2 = txtEdad2;
-    }
-
-    public JTextField getTxtCedula2() {
-        return txtCedula2;
-    }
-
-    public void setTxtCedula2(JTextField txtCedula2) {
-        this.txtCedula2 = txtCedula2;
-    }
-
-    public JTextField getTxtNacionalidad2() {
-        return txtNacionalidad2;
-    }
-
-    public void setTxtNacionalidad2(JTextField txtNacionalidad2) {
-        this.txtNacionalidad2 = txtNacionalidad2;
-    }
-
-    public JTextField getTxtCorreo2() {
-        return txtCorreo2;
-    }
-
-    public void setTxtCorreo2(JTextField txtCorreo2) {
-        this.txtCorreo2 = txtCorreo2;
-    }
-
-    public JComboBox<String> getCmbTurno2() {
-        return cmbTurno2;
-    }
-
-    public void setCmbTurno2(JComboBox<String> cmbTurno2) {
-        this.cmbTurno2 = cmbTurno2;
-    }
-
-    public JComboBox<String> getCmbCargo2() {
-        return cmbCargo2;
-    }
-
-    public void setCmbCargo2(JComboBox<String> cmbCargo2) {
-        this.cmbCargo2 = cmbCargo2;
-    }
-
-    public JDateChooser getDateFinContrato2() {
-        return dateFinContrato2;
-    }
-
-    public void setDateFinContrato2(JDateChooser dateFinContrato2) {
-        this.dateFinContrato2 = dateFinContrato2;
-    }
-
-    public String getRutaImagenSeleccionada2() {
-        return rutaImagenSeleccionada2;
-    }
-
-    public void setRutaImagenSeleccionada2(String rutaImagenSeleccionada2) {
-        this.rutaImagenSeleccionada2 = rutaImagenSeleccionada2;
+        // Verificar tamaño máximo (opcional)
+        long maxSize = 5 * 1024 * 1024; // 5MB
+        if (imagen.length() > maxSize) {
+            throw new IllegalArgumentException("La imagen es demasiado grande (máximo 5MB)");
+        }
     }
 }

@@ -1,3 +1,40 @@
 {
-    "name": "gameV"
+  "coordinadores": [
+    {
+      "usuario": "",
+      "contrasena": "",
+      "turno": "Diurno",
+      "cargo": "Oficial",
+      "fechaInicioContrato": "2025-05-08",
+      "fechaFinContrato": "2025-05-15",
+      "rutaImagen": "src/Resources/imagenes_CDA/090831928_1746910148141.jpg",
+      "correo": "thejh0nl3n0n@gmail.com",
+      "primerNombre": "w",
+      "segundoNombre": "q",
+      "primerApellido": "qq",
+      "segundoApellido": "q",
+      "edad": 53,
+      "sexo": "Femenino",
+      "nacionalidad": "po",
+      "identificacion": "090831928"
+    },
+    {
+      "usuario": "5xÑ4pYoñ\u0026",
+      "contrasena": "#U@Ud¿E¡%L$Ñ79t",
+      "turno": "Diurno",
+      "cargo": "Oficial",
+      "fechaInicioContrato": "2025-05-09",
+      "fechaFinContrato": "2025-05-22",
+      "rutaImagen": "src/Resources/imagenes_CDA/1313131131_1746835432897.png",
+      "correo": "lisamaryshelley@gmail.com",
+      "primerNombre": "q",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "sd",
+      "identificacion": "1313131131"
+    }
+  ]
 }

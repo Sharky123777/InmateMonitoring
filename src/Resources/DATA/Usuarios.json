@@ -1,44 +1,121 @@
 {
   "usuarios": [
     {
-      "usuario": "SharlokAlcazar502*",
-      "password": "CEx*cwE6",
-      "rol": "ENFERMERA"
-    },
-    {
-      "usuario": "CelinaRestrepo139\u0026",
-      "password": "58fpZS#h",
-      "rol": "ENFERMERA"
-    },
-    {
       "usuario": "MaritzaQuintana35\u0026",
       "password": "Mquidd654@",
-      "rol": "DIRECTOR"
+      "rol": "DIRECTOR",
+      "primerNombre": "Maritza",
+      "segundoNombre": "",
+      "primerApellido": "Quintana",
+      "segundoApellido": "Lopez",
+      "edad": 42,
+      "sexo": "Femenino",
+      "nacionalidad": "Colombiana",
+      "identificacion": "987654321"
     },
     {
-      "usuario": "CarlosLopez21#",
-      "password": "C4rl0s@Admn",
-      "rol": "OFICIAL_DE_REGISTRO"
+      "usuario": "wq478*",
+      "password": "HG@9K\u0026T6",
+      "rol": "ENFERMERA",
+      "primerNombre": "w",
+      "segundoNombre": "w",
+      "primerApellido": "q",
+      "segundoApellido": "q",
+      "edad": 64,
+      "sexo": "Femenino",
+      "nacionalidad": "po",
+      "identificacion": "91873819"
     },
     {
-      "usuario": "JuliaRios_Tecnico",
-      "password": "J7l1aTech*",
-      "rol": "PERSONAL_DE_CONTROL"
+      "usuario": "5xÑ4pYoñ\u0026",
+      "password": "56b2c625548977db5127ad3440ac39eb7f0a7a12f0ff6f230ab0aa6d6233eb71",
+      "rol": "COORDINADOR_DE_ACTIVIDADES",
+      "primerNombre": "q",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "sd",
+      "identificacion": "1313131131"
     },
     {
-      "usuario": "LauraGomez_Auxiliar",
-      "password": "L4uAux12#",
-      "rol": "COORDINADOR_DE_ACTIVIDADES"
+      "usuario": "\u0026U4#s$\u0026d91",
+      "password": "0f9a3f3a7858ccbaccd24ec36e36d1b73b801290d30398089fcc91185a668355",
+      "rol": "COORDINADOR_DE_ACTIVIDADES",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 45,
+      "sexo": "Femenino",
+      "nacionalidad": "qeq",
+      "identificacion": "389123812"
     },
     {
-      "usuario": "RonaldaCano17$",
-      "password": "GdNY3cs\u0026",
-      "rol": "ENFERMERA"
+      "usuario": "o$MLaW#0e",
+      "password": "c958b509b38afcddc1d064213366115824b016b8ab15045bc78169d82c581129",
+      "rol": "ENFERMERA",
+      "primerNombre": "w",
+      "segundoNombre": "w",
+      "primerApellido": "w",
+      "segundoApellido": "w",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "pqoepqeq",
+      "identificacion": "091831212"
     },
     {
-      "usuario": "JhoanaArrieta357*",
-      "password": "EbFJSo3w",
-      "rol": "ENFERMERA"
+      "usuario": "4LvSW22#G%%Ñ",
+      "password": "0ba2b8faf7331246ea35eaa5646e673b84ab823fb9af4ec3453810f1e69f19a4",
+      "rol": "ENFERMERA",
+      "primerNombre": "sas",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 45,
+      "sexo": "Femenino",
+      "nacionalidad": "w",
+      "identificacion": "3131313"
+    },
+    {
+      "usuario": "IMñ1dlxl@",
+      "password": "a966efb604f606cceef7d6608358e85ab085916262c1905118a902b5bd3b3360",
+      "rol": "ENFERMERA",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "p",
+      "identificacion": "313131313"
+    },
+    {
+      "usuario": "ÑxYVwVN3eZN@",
+      "password": "80aeaaabb344eba156896316efeefde3a6125e6d4668cee0f2f3a84f6a537809",
+      "rol": "ENFERMERA",
+      "primerNombre": "pepE",
+      "segundoNombre": "w",
+      "primerApellido": "w",
+      "segundoApellido": "w",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "wqeq",
+      "identificacion": "1387831"
+    },
+    {
+      "usuario": "%@ñ6ueSñW",
+      "password": "55827e09094dea4710e97f4b6bfa57135b822cad4164116bb1abf4d871eeedc2",
+      "rol": "ENFERMERA",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 45,
+      "sexo": "Femenino",
+      "nacionalidad": "pepe",
+      "identificacion": "3331313"
     }
   ]
 }

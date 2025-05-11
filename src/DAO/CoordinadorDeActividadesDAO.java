@@ -1,43 +1,40 @@
 package DAO;
 
+import Controller.UsuarioController;
 import Model.Entities.CoordinadorDeActividades;
+import Model.Constants.RolEnum;
+import Utilidades.EmailSender;
+import Model.Entities.Usuario;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 public class CoordinadorDeActividadesDAO {
-    private static final String RUTA_JSON = "C:\\Users\\gameV\\Documents\\NetBeansProjects\\InmateMonitorinG\\src\\Resources\\DATA\\CoordinadoresDeActividades.json";
+
+    private static final String RUTA_JSON = "C:\\Users\\gameV\\Documents\\NetBeansProjects\\InmateMonitorinG\\src\\Resources\\DATA\\CDA.json";
     private static final String RUTA_IMAGENES = "src/Resources/imagenes_CDA/";
+    private static final String RUTA_USUARIOS = "src/Resources/DATA/usuarios.json";
     private final Gson gson;
-    
     private static CoordinadorDeActividadesDAO instancia;
-    
+
     public CoordinadorDeActividadesDAO() {
         this.gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-            .create();
-        
-        // Crear directorios si no existen
-        File carpetaImagenes = new File(RUTA_IMAGENES);
-        if (!carpetaImagenes.exists()) {
-            carpetaImagenes.mkdirs();
-        }
-        
-        File carpetaJson = new File(RUTA_JSON).getParentFile();
-        if (!carpetaJson.exists()) {
-            carpetaJson.mkdirs();
-        }
+                .setPrettyPrinting()
+                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                .create();
+
+        crearDirectoriosSiNoExisten();
     }
-    
+
     public static synchronized CoordinadorDeActividadesDAO getInstancia() {
         if (instancia == null) {
             instancia = new CoordinadorDeActividadesDAO();
@@ -45,272 +42,356 @@ public class CoordinadorDeActividadesDAO {
         return instancia;
     }
 
-    // Adaptador para LocalDate
+    private void crearDirectoriosSiNoExisten() {
+        try {
+            Files.createDirectories(Paths.get(RUTA_IMAGENES));
+            Files.createDirectories(Paths.get(RUTA_JSON).getParent());
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null,
+                    "Error al crear directorios: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private static class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
+
         private final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
-        
+
         @Override
         public JsonElement serialize(LocalDate date, Type typeOfSrc, JsonSerializationContext context) {
             return new JsonPrimitive(date.format(formatter));
         }
-        
+
         @Override
-        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) 
-            throws JsonParseException {
+        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
             return LocalDate.parse(json.getAsString(), formatter);
         }
     }
 
-    public boolean guardarCDA(String primerNombre, String segundoNombre, String primerApellido, 
-                            String segundoApellido, int edad, String cedula, 
-                            String nacionalidad, String correo, String turno, 
-                            LocalDate fechaFinContrato, String cargo, File imagen) {
-        try {
-            // Validaciones básicas
-            if (primerNombre == null || primerNombre.trim().isEmpty() || 
-                primerApellido == null || primerApellido.trim().isEmpty() || 
-                cedula == null || cedula.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Nombre, apellido y cédula son obligatorios", 
-                    "Error", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
+    public void guardarUsuario(Usuario usuario) throws IOException {
+        List<Usuario> usuarios = obtenerTodosUsuarios();
+        usuarios.removeIf(u -> u.getUsuario().equals(usuario.getUsuario()));
+        usuarios.add(usuario);
 
-            // Validar cédula única
-            if (existeCoordinadorConCedula(cedula)) {
-                JOptionPane.showMessageDialog(null, "Ya existe un coordinador con esta cédula: " + cedula, 
-                    "Error", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-
-            // Crear el objeto Coordinador
-            CoordinadorDeActividades nuevoCoordinador = new CoordinadorDeActividades(
-                primerNombre, 
-                segundoNombre, 
-                primerApellido, 
-                segundoApellido,
-                edad, 
-                cedula, 
-                nacionalidad, 
-                correo, 
-                turno, 
-                fechaFinContrato, 
-                cargo
-            );
-
-            // Manejar la imagen
-            if (imagen != null && imagen.exists()) {
-                String nombreImagen = cedula + "_" + imagen.getName();
-                String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-                
-                Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
-                nuevoCoordinador.setRutaImagen(rutaImagenFinal);
-            }
-
-            // Guardar en JSON
-            List<CoordinadorDeActividades> coordinadores = obtenerCDAS();
-            coordinadores.add(nuevoCoordinador);
-            guardarListaCoordinadores(coordinadores);
-
-            return true;
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error al guardar el coordinador: " + e.getMessage(), 
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+        try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
+            JsonObject jsonObject = new JsonObject();
+            JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
+            jsonObject.add("usuarios", usuariosArray);
+            gson.toJson(jsonObject, writer);
         }
     }
 
-    public List<CoordinadorDeActividades> obtenerCDAS() {
+    public CoordinadorDeActividades obtenerCoordinadorPorUsuario(String usuario) {
+        List<CoordinadorDeActividades> coordinadores = obtenerCoordinadores();
+        return coordinadores.stream()
+                .filter(c -> c.getUsuario().equals(usuario))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private List<Usuario> obtenerTodosUsuarios() throws IOException {
+        File archivo = new File(RUTA_USUARIOS);
+
+        if (!archivo.exists() || archivo.length() == 0) {
+            return new ArrayList<>();
+        }
+
+        try (FileReader reader = new FileReader(archivo)) {
+            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+            JsonArray usuariosArray = jsonObject.getAsJsonArray("usuarios");
+
+            Type tipoLista = new TypeToken<List<Usuario>>() {
+            }.getType();
+            return gson.fromJson(usuariosArray, tipoLista);
+        }
+    }
+
+    private void eliminarUsuario(String usuario) throws IOException {
+        List<Usuario> usuarios = obtenerTodosUsuarios();
+        usuarios.removeIf(u -> u.getUsuario().equals(usuario));
+
+        try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
+            JsonObject jsonObject = new JsonObject();
+            JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
+            jsonObject.add("usuarios", usuariosArray);
+            gson.toJson(jsonObject, writer);
+        }
+    }
+
+    private String generarContrasena() {
+        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder(8);
+
+        for (int i = 0; i < 8; i++) {
+            sb.append(caracteres.charAt(random.nextInt(caracteres.length())));
+        }
+
+        return sb.toString();
+    }
+
+    private String guardarImagenDesdeCamara(BufferedImage imagen, String identificacion) throws IOException {
+        String nombreImagen = identificacion + "_foto.jpg";
+        String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+
+        File outputFile = new File(rutaImagenFinal);
+        ImageIO.write(imagen, "jpg", outputFile);
+
+        return rutaImagenFinal;
+    }
+
+    // En CoordinadorDeActividadesDAO.java
+    public boolean guardarCoordinador(CoordinadorDeActividades coordinador, File imagen) throws IOException {
+        // 1. Generar credenciales
+        UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
+        String usuario = credenciales.usuario;
+        String contrasena = credenciales.contrasena;
+        String contrasenaEncriptada = UsuarioController.getInstancia().encriptarContrasena(contrasena);
+
+        // 3. Asignar credenciales
+        coordinador.setUsuario(usuario);
+        coordinador.setContrasena(contrasenaEncriptada); // AQUÍ GUARDAMOS LA CONTRASEÑA ENCRIPTADA
+
+        // 4. Guardar imagen
+        String nombreImagen = coordinador.getIdentificacion() + "_"
+                + System.currentTimeMillis()
+                + imagen.getName().substring(imagen.getName().lastIndexOf("."));
+
+        String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+        Files.createDirectories(Paths.get(RUTA_IMAGENES));
+        Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+        coordinador.setRutaImagen(rutaImagenFinal);
+
+        // 5. Guardar coordinador
+        List<CoordinadorDeActividades> coordinadores = obtenerCoordinadores();
+        coordinadores.add(coordinador);
+        guardarListaCoordinadores(coordinadores);
+
+        // 6. Guardar usuario (CON CONTRASEÑA ENCRIPTADA)
+        Usuario nuevoUsuario = new Usuario(
+                coordinador.getPrimerNombre(),
+                coordinador.getSegundoNombre(),
+                coordinador.getPrimerApellido(),
+                coordinador.getSegundoApellido(),
+                coordinador.getEdad(),
+                coordinador.getSexo(),
+                coordinador.getNacionalidad(),
+                coordinador.getIdentificacion(),
+                usuario,
+                contrasenaEncriptada,
+                RolEnum.COORDINADOR_DE_ACTIVIDADES
+        );
+
+        guardarUsuario(nuevoUsuario);
+
+        // 7. Enviar correo (CON CONTRASEÑA SIN ENCRIPTAR)
+        return EmailSender.getInstancia().enviarCredenciales(
+                coordinador.getCorreo(),
+                usuario,
+                contrasena, // Usamos la contraseña original sin encriptar
+                RolEnum.COORDINADOR_DE_ACTIVIDADES
+        );
+    }
+
+    public List<CoordinadorDeActividades> obtenerCoordinadores() {
         List<CoordinadorDeActividades> coordinadores = new ArrayList<>();
         File archivo = new File(RUTA_JSON);
 
-        if (!archivo.exists() || archivo.length() == 0) {
-            try {
-                archivo.createNewFile();
+        try {
+            if (!archivo.exists() || archivo.length() == 0) {
                 guardarListaCoordinadores(new ArrayList<>());
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Error al crear archivo: " + e.getMessage(), 
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                return coordinadores;
             }
-            return coordinadores;
-        }
 
-        try (Reader reader = new FileReader(archivo)) {
-            Type tipoLista = new TypeToken<Map<String, List<CoordinadorDeActividades>>>() {}.getType();
-            Map<String, List<CoordinadorDeActividades>> datos = gson.fromJson(reader, tipoLista);
-            
-            if (datos != null && datos.containsKey("coordinadores")) {
-                for (CoordinadorDeActividades c : datos.get("coordinadores")) {
-                    if (validarCoordinador(c)) {
-                        coordinadores.add(c);
-                    }
-                }
+            String contenido = new String(Files.readAllBytes(archivo.toPath()));
+
+            if (contenido.trim().isEmpty()) {
+                guardarListaCoordinadores(new ArrayList<>());
+                return coordinadores;
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, 
-                "Error al leer archivo. Verifique el formato de los datos.", 
-                "Error", JOptionPane.ERROR_MESSAGE);
+
+            try {
+                JsonObject jsonObject = JsonParser.parseString(contenido).getAsJsonObject();
+                JsonArray coordinadoresArray = jsonObject.getAsJsonArray("coordinadores");
+
+                Type tipoLista = new TypeToken<List<CoordinadorDeActividades>>() {
+                }.getType();
+                return gson.fromJson(coordinadoresArray, tipoLista);
+            } catch (JsonSyntaxException e) {
+                System.err.println("Formato JSON inválido. Creando nuevo archivo.");
+                guardarListaCoordinadores(new ArrayList<>());
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null,
+                    "Error al leer/escribir archivo: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
         return coordinadores;
     }
 
-    private boolean validarCoordinador(CoordinadorDeActividades c) {
-        return c != null && 
-               c.getEdad() > 0 && 
-               c.getIdentificacion() != null && 
-               !c.getIdentificacion().isEmpty();
-    }
-
     private void guardarListaCoordinadores(List<CoordinadorDeActividades> coordinadores) throws IOException {
-        Gson gsonOrdenado = new GsonBuilder()
-            .setPrettyPrinting()
-            .registerTypeAdapter(CoordinadorDeActividades.class, new CoordinadorTypeAdapter())
-            .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-            .create();
-        
+        JsonObject jsonObject = new JsonObject();
+        JsonArray coordinadoresArray = new JsonArray();
+
+        for (CoordinadorDeActividades coordinador : coordinadores) {
+            JsonObject coordinadorJson = new JsonObject();
+            coordinadorJson.addProperty("usuario", coordinador.getUsuario());
+            coordinadorJson.addProperty("contrasena", coordinador.getContrasena());
+            coordinadorJson.addProperty("turno", coordinador.getTurno());
+            coordinadorJson.addProperty("cargo", coordinador.getCargo());
+            coordinadorJson.addProperty("fechaInicioContrato", coordinador.getFechaInicioContrato().toString());
+            coordinadorJson.addProperty("fechaFinContrato", coordinador.getFechaFinContrato().toString());
+            coordinadorJson.addProperty("rutaImagen", coordinador.getRutaImagen());
+            coordinadorJson.addProperty("correo", coordinador.getCorreo());
+            coordinadorJson.addProperty("primerNombre", coordinador.getPrimerNombre());
+            coordinadorJson.addProperty("segundoNombre", coordinador.getSegundoNombre());
+            coordinadorJson.addProperty("primerApellido", coordinador.getPrimerApellido());
+            coordinadorJson.addProperty("segundoApellido", coordinador.getSegundoApellido());
+            coordinadorJson.addProperty("edad", coordinador.getEdad());
+            coordinadorJson.addProperty("sexo", coordinador.getSexo());
+            coordinadorJson.addProperty("nacionalidad", coordinador.getNacionalidad());
+            coordinadorJson.addProperty("identificacion", coordinador.getIdentificacion());
+
+            coordinadoresArray.add(coordinadorJson);
+        }
+
+        jsonObject.add("coordinadores", coordinadoresArray);
+
         try (Writer writer = new FileWriter(RUTA_JSON)) {
-            gsonOrdenado.toJson(Collections.singletonMap("coordinadores", coordinadores), writer);
+            gson.toJson(jsonObject, writer);
         }
     }
 
-    // Adaptador para orden de serialización
-    private static class CoordinadorTypeAdapter extends TypeAdapter<CoordinadorDeActividades> {
-        @Override
-        public void write(JsonWriter out, CoordinadorDeActividades c) throws IOException {
-            out.beginObject();
-            out.name("primerNombre").value(c.getPrimerNombre());
-            out.name("segundoNombre").value(c.getSegundoNombre());
-            out.name("primerApellido").value(c.getPrimerApellido());
-            out.name("segundoApellido").value(c.getSegundoApellido());
-            out.name("edad").value(c.getEdad());
-            out.name("identificacion").value(c.getIdentificacion());
-            out.name("nacionalidad").value(c.getNacionalidad());
-            out.name("correo").value(c.getCorreo());
-            out.name("turno").value(c.getTurno());
-            out.name("fechaFinContrato").value(c.getFechaFinContrato().toString());
-            out.name("rutaImagen").value(c.getRutaImagen());
-            out.name("cargo").value(c.getCargo());
-            out.endObject();
-        }
-
-        @Override
-        public CoordinadorDeActividades read(JsonReader in) throws IOException {
-            return null; // Implementar si es necesario
-        }
+    public boolean puedeAgregarCoordinador() {
+        List<CoordinadorDeActividades> coordinadores = obtenerCoordinadores();
+        return coordinadores.size() < 2;
     }
 
     public boolean existeCoordinadorConCedula(String cedula) {
-        return obtenerCDAS().stream()
-                .anyMatch(c -> c.getIdentificacion().equals(cedula));
+        if (cedula == null || cedula.trim().isEmpty()) {
+            return false;
+        }
+        return obtenerCoordinadores().stream()
+                .anyMatch(c -> c.getIdentificacion() != null && c.getIdentificacion().equals(cedula));
     }
 
     public boolean eliminarCoordinador(String cedula) {
         try {
-            List<CoordinadorDeActividades> coordinadores = obtenerCDAS();
-            Iterator<CoordinadorDeActividades> iterator = coordinadores.iterator();
-            boolean encontrado = false;
+            List<CoordinadorDeActividades> coordinadores = obtenerCoordinadores();
+            Optional<CoordinadorDeActividades> coordinadorAEliminar = coordinadores.stream()
+                    .filter(c -> c.getIdentificacion().equals(cedula))
+                    .findFirst();
 
-            while (iterator.hasNext()) {
-                CoordinadorDeActividades c = iterator.next();
-                if (c.getIdentificacion().equals(cedula)) {
-                    // Eliminar imagen asociada
-                    if (c.getRutaImagen() != null && !c.getRutaImagen().isEmpty()) {
-                        try {
-                            Files.deleteIfExists(Paths.get(c.getRutaImagen()));
-                        } catch (IOException e) {
-                            System.err.println("Error al eliminar la imagen: " + e.getMessage());
-                        }
-                    }
-                    iterator.remove();
-                    encontrado = true;
-                    break;
-                }
-            }
-
-            if (encontrado) {
+            if (coordinadorAEliminar.isPresent()) {
+                eliminarUsuario(coordinadorAEliminar.get().getUsuario());
+                coordinadores.removeIf(c -> c.getIdentificacion().equals(cedula));
                 guardarListaCoordinadores(coordinadores);
                 return true;
             }
             return false;
-            
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error al eliminar el coordinador: " + e.getMessage(), 
-                "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al eliminar el coordinador: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
-    
-    public boolean modificarCoordinador(String cedula, String primerNombre, String segundoNombre, 
-                                  String primerApellido, String segundoApellido, int edad,
-                                  String nacionalidad, String correo, String turno,
-                                  LocalDate fechaFinContrato, String cargo, File nuevaImagen) {
+
+    public boolean modificarCoordinador(String cedulaOriginal, CoordinadorDeActividades coordinadorModificado, File nuevaImagen) {
         try {
-            List<CoordinadorDeActividades> coordinadores = obtenerCDAS();
-            
-            for (CoordinadorDeActividades c : coordinadores) {
-                if (c.getIdentificacion().equals(cedula)) {
-                    // Actualizar campos
-                    c.setPrimerNombre(primerNombre);
-                    c.setSegundoNombre(segundoNombre);
-                    c.setPrimerApellido(primerApellido);
-                    c.setSegundoApellido(segundoApellido);
-                    c.setEdad(edad);
-                    c.setNacionalidad(nacionalidad);
-                    c.setCorreo(correo);
-                    c.setTurno(turno);
-                    c.setFechaFinContrato(fechaFinContrato);
-                    c.setCargo(cargo);
-                    
-                    // Manejar imagen
+            List<CoordinadorDeActividades> coordinadores = obtenerCoordinadores();
+
+            for (int i = 0; i < coordinadores.size(); i++) {
+                CoordinadorDeActividades c = coordinadores.get(i);
+                if (c.getIdentificacion().equals(cedulaOriginal)) {
+                    String rutaImagenFinal = c.getRutaImagen();
+
+                    // Solo actualizar la imagen si se proporciona una nueva
                     if (nuevaImagen != null && nuevaImagen.exists()) {
-                        if (c.getRutaImagen() != null && !c.getRutaImagen().isEmpty()) {
-                            try {
-                                Files.deleteIfExists(Paths.get(c.getRutaImagen()));
-                            } catch (IOException e) {
-                                System.err.println("Error al eliminar imagen anterior: " + e.getMessage());
-                            }
-                        }
-                        
-                        String nombreImagen = cedula + "_" + nuevaImagen.getName();
-                        String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+                        String nombreImagen = coordinadorModificado.getIdentificacion() + "_" + System.currentTimeMillis()
+                                + nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
+                        rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
                         Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
-                        c.setRutaImagen(rutaImagenFinal);
                     }
-                    
+
+                    coordinadorModificado.setFechaInicioContrato(c.getFechaInicioContrato());
+                    coordinadorModificado.setUsuario(c.getUsuario());
+                    coordinadorModificado.setContrasena(c.getContrasena());
+                    coordinadorModificado.setRutaImagen(rutaImagenFinal);
+
+                    coordinadores.set(i, coordinadorModificado);
                     guardarListaCoordinadores(coordinadores);
                     return true;
                 }
             }
-            
-            JOptionPane.showMessageDialog(null, "No se encontró un coordinador con la cédula: " + cedula, 
-                "Error", JOptionPane.ERROR_MESSAGE);
             return false;
-            
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error al modificar el coordinador: " + e.getMessage(), 
-                "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al modificar coordinador: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
-    
+
     public CoordinadorDeActividades obtenerCoordinadorPorCedula(String cedula) {
-        return obtenerCDAS().stream()
+        return obtenerCoordinadores().stream()
                 .filter(c -> c.getIdentificacion().equals(cedula))
                 .findFirst()
                 .orElse(null);
     }
-    
-    public boolean existeCoordinador(String cedula) {
-        if (cedula == null || cedula.trim().isEmpty()) {
-            return false;
-        }
-        
-        for (CoordinadorDeActividades c : obtenerCDAS()) {
-            if (c.getIdentificacion() != null && 
-                c.getIdentificacion().equalsIgnoreCase(cedula.trim())) {
-                return true;
-            }
-        }
-        
-        return false;
+
+    public CoordinadorDeActividades obtenerCoordinadorPorIdentificacion(String cedula) {
+        return obtenerCoordinadorPorCedula(cedula);
+    }
+
+    public List<Object[]> obtenerDatosCoordinadoresParaTabla() {
+        return obtenerCoordinadores().stream()
+                .map(c -> new Object[]{
+            c.getPrimerNombre(),
+            c.getSegundoNombre(),
+            c.getPrimerApellido(),
+            c.getSegundoApellido(),
+            c.getEdad(),
+            c.getIdentificacion(),
+            c.getNacionalidad(),
+            c.getCorreo(),
+            c.getCargo(),
+            c.getTurno(),
+            c.getFechaInicioContrato(),
+            c.getFechaFinContrato()
+        })
+                .collect(Collectors.toList());
+    }
+
+    public String[] getNombresColumnas() {
+        return new String[]{
+            "Primer Nombre",
+            "Segundo Nombre",
+            "Primer Apellido",
+            "Segundo Apellido",
+            "Edad",
+            "Cédula",
+            "Nacionalidad",
+            "Correo",
+            "Turno",
+            "Cargo",
+            "Fecha inicio contrato",
+            "Fin de Contrato"
+        };
+    }
+
+    public Class<?>[] getTiposColumnas() {
+        return new Class<?>[]{
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+            Integer.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class, // Tipo para fecha inicio
+            String.class // Tipo para fecha fin
+        };
     }
 }
