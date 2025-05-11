@@ -63,12 +63,12 @@ private String contrasena;
 
     public String getFechaContratacionFormateada() {
     return fechaContratacion != null ? 
-           fechaContratacion.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
+           fechaContratacion.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) : "";
 }
 
 public String getFechaFinContratoFormateada() {
     return fechaFinContrato != null ? 
-           fechaFinContrato.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
+           fechaFinContrato.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) : "";
 }
 
     public void setFechaFinContrato(LocalDate fechaFinContrato) {
