@@ -44,21 +44,6 @@
       "sexo": "Femenino",
       "nacionalidad": "w",
       "identificacion": "3131313"
-    },
-    {
-      "turno": "Nocturno",
-      "fechaContratacion": "2025-05-10",
-      "fechaFinContrato": "2025-05-30",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/3331313_1746926095898.png",
-      "correo": "thejh0nl3n0n@gmail.com",
-      "primerNombre": "s",
-      "segundoNombre": "s",
-      "primerApellido": "s",
-      "segundoApellido": "s",
-      "edad": 45,
-      "sexo": "Femenino",
-      "nacionalidad": "pepe",
-      "identificacion": "3331313"
     }
   ]
 }
