@@ -15,6 +15,7 @@ import java.util.List;
 
 public class SancionDAO {
 
+    private static SancionDAO instancia;
     private static final String JSON_FILE = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\sanciones.json";
     private Gson gson;
 
@@ -24,6 +25,13 @@ public class SancionDAO {
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
                 .create();
+    }
+
+    public static synchronized SancionDAO getInstancia() {
+        if (instancia == null) {
+            instancia = new SancionDAO();
+        }
+        return instancia;
     }
 
     public List<Sancion> cargarTodas() {

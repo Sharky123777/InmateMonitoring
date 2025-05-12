@@ -21,6 +21,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.JTabbedPane;
 
 public class PersonalDeControl extends javax.swing.JFrame {
 
@@ -31,7 +32,6 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private File imagenVisitanteNuevaSeleccionada;
     private File imagenPDCSeleccionada;
     private List<File> imagenesTemporales = new ArrayList<>();
-    private Visitante visitanteOriginal;
     int cantidadTotal;
 
     public PersonalDeControl() {
@@ -64,7 +64,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 return;
             }
 
-            String identificacion = TablaPresos.getValueAt(filaSeleccionada, 4).toString();
+            String identificacion = TablaPresos.getValueAt(filaSeleccionada, 6).toString();
             Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
 
             if (preso != null) {
@@ -82,7 +82,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 return;
             }
 
-            String identificacion = TablaPresos.getValueAt(filaSeleccionada, 4).toString();
+            String identificacion = TablaPresos.getValueAt(filaSeleccionada, 6).toString();
             Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
 
             if (preso != null) {
@@ -97,49 +97,162 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
     public void inicializarMenuHistorialVisitantes() {
         JMenuItem actualizarInfo = new JMenuItem("Actualizar visitante");
+        JMenuItem cambiarEstado = new JMenuItem("Cambiar estado visitante");
 
         ppMenuTablaVisitantes.add(actualizarInfo);
+        ppMenuTablaVisitantes.add(cambiarEstado);
         TablaHistorialVisitantes.setComponentPopupMenu(ppMenuTablaVisitantes);
 
         actualizarInfo.addActionListener(e -> {
             int fila = TablaHistorialVisitantes.getSelectedRow();
             if (fila == -1) {
-                JOptionPane.showMessageDialog(this, "Seleccione un visitante", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "Seleccione un visitante",
+                        "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            String identificacion = TablaHistorialVisitantes.getValueAt(fila, 5).toString();
+            String identificacion = TablaHistorialVisitantes.getValueAt(fila, 6).toString();
+            String identificacionPreso = TablaHistorialVisitantes.getValueAt(fila, 11).toString(); // Asumiendo que la columna 11 es la ID del preso
+
             Visitante visitante = new VisitanteDAO().buscarVisitantePorIdentificacion(identificacion);
 
             if (visitante != null) {
-                TabbedPDC.setSelectedIndex(6);
+                ModificarVisitante dialog = new ModificarVisitante(
+                        this,
+                        true,
+                        visitante,
+                        TablaHistorialVisitantes,
+                        identificacionPreso
+                );
+                dialog.setLocationRelativeTo(this);
+                dialog.setVisible(true);
+
+                controller.cargarHistorialVisitantes(identificacionPreso, TablaHistorialVisitantes);
             } else {
-                JOptionPane.showMessageDialog(this, "Visitante no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "Visitante no encontrado",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        cambiarEstado.addActionListener(e -> {
+            int fila = TablaHistorialVisitantes.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this,
+                        "Seleccione un visitante",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String identificacion = TablaHistorialVisitantes.getValueAt(fila, 6).toString();
+            String identificacionPreso = TablaHistorialVisitantes.getValueAt(fila, 11).toString();
+
+            Visitante visitante = new VisitanteDAO().buscarVisitantePorIdentificacion(identificacion);
+
+            if (visitante != null) {
+                CambioEstadoVisitante dialog = new CambioEstadoVisitante(
+                        this,
+                        true,
+                        visitante,
+                        identificacionPreso,
+                        TablaHistorialVisitantes
+                );
+                dialog.setLocationRelativeTo(this);
+                dialog.setVisible(true);
+
+                controller.cargarHistorialVisitantes(identificacionPreso, TablaHistorialVisitantes);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Visitante no encontrado",
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
     }
 
     public void inicializarMenuHistorialVisitas() {
         JMenuItem actualizarInfo = new JMenuItem("Actualizar visita");
+        JMenuItem cambiarEstado = new JMenuItem("Cambiar estado visita");
 
         ppMenuTablaVisitas.add(actualizarInfo);
+        ppMenuTablaVisitas.add(cambiarEstado);
         TablaHistorialVisitas.setComponentPopupMenu(ppMenuTablaVisitas);
-
         actualizarInfo.addActionListener(e -> {
             int fila = TablaHistorialVisitas.getSelectedRow();
             if (fila == -1) {
-                JOptionPane.showMessageDialog(this, "Seleccione una visita", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "Seleccione una visita",
+                        "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            int idVisita = Integer.parseInt(TablaHistorialVisitas.getValueAt(fila, 0).toString());
-            Visita visita = new VisitaDAO().buscarVisitaPorId(idVisita);
+            try {
+                int idVisita = Integer.parseInt(TablaHistorialVisitas.getValueAt(fila, 0).toString());
+                String identificacionPreso = TablaHistorialVisitas.getValueAt(fila, 7).toString();
 
-            if (visita != null) {
+                Visita visita = new VisitaDAO().buscarVisitaPorId(idVisita);
 
-                TabbedPDC.setSelectedIndex(7);
-            } else {
-                JOptionPane.showMessageDialog(this, "Visita no encontrada", "Error", JOptionPane.ERROR_MESSAGE);
+                if (visita != null) {
+                    ModificarVisita dialog = new ModificarVisita(
+                            this,
+                            true,
+                            visita,
+                            TablaHistorialVisitas,
+                            identificacionPreso
+                    );
+                    dialog.setLocationRelativeTo(this);
+                    dialog.setVisible(true);
+
+                    controller.cargarHistorialVisitas(identificacionPreso, TablaHistorialVisitas);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "Visita no encontrada",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "ID de visita inválido",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        cambiarEstado.addActionListener(e -> {
+            int fila = TablaHistorialVisitas.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this,
+                        "Seleccione una visita",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try {
+                int idVisita = Integer.parseInt(TablaHistorialVisitas.getValueAt(fila, 0).toString());
+                String identificacionPreso = TablaHistorialVisitas.getValueAt(fila, 7).toString();
+
+                Visita visita = new VisitaDAO().buscarVisitaPorId(idVisita);
+
+                if (visita != null) {
+                    CambioEstadoVisita dialog = new CambioEstadoVisita(
+                            this,
+                            true,
+                            visita,
+                            identificacionPreso,
+                            TablaHistorialVisitas
+                    );
+
+                    dialog.setLocationRelativeTo(this);
+                    dialog.setVisible(true);
+
+                    controller.cargarHistorialVisitas(identificacionPreso, TablaHistorialVisitas);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "Visita no encontrada",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "ID de visita inválido",
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
     }
@@ -239,8 +352,6 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel18 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
-        DuracionVisita = new javax.swing.JComboBox<>();
-        jLabel31 = new javax.swing.JLabel();
         TipoVisita = new javax.swing.JComboBox<>();
         jLabel32 = new javax.swing.JLabel();
         LugarVisita = new javax.swing.JComboBox<>();
@@ -250,6 +361,9 @@ public class PersonalDeControl extends javax.swing.JFrame {
         VistaPreviaVisitante = new javax.swing.JLabel();
         FechaVisita = new com.toedter.calendar.JDateChooser();
         HoraVisita = new javax.swing.JComboBox<>();
+        jLabel51 = new javax.swing.JLabel();
+        GuardarVisitaFinal = new javax.swing.JButton();
+        botonCancelarProceso = new javax.swing.JButton();
         PanelActualizarInformacion = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
         jLabel36 = new javax.swing.JLabel();
@@ -283,40 +397,6 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         TablaHistorialVisitantes = new javax.swing.JTable();
         jLabel34 = new javax.swing.JLabel();
-        PanelActualizarVisitante = new javax.swing.JPanel();
-        jPanel8 = new javax.swing.JPanel();
-        jLabel14 = new javax.swing.JLabel();
-        NuevoPrimerNombreVisitante = new javax.swing.JTextField();
-        jLabel59 = new javax.swing.JLabel();
-        NuevoSegundoNombreVisitante = new javax.swing.JTextField();
-        jLabel60 = new javax.swing.JLabel();
-        NuevoPrimerApellidoVisitante = new javax.swing.JTextField();
-        jLabel61 = new javax.swing.JLabel();
-        NuevoSegundoApellidoVisitante = new javax.swing.JTextField();
-        jLabel62 = new javax.swing.JLabel();
-        NuevaEdadVisitante = new javax.swing.JTextField();
-        jLabel63 = new javax.swing.JLabel();
-        NuevoSexoVisitante = new javax.swing.JComboBox<>();
-        jLabel64 = new javax.swing.JLabel();
-        NuevaRelacionConPresoVisitante = new javax.swing.JComboBox<>();
-        BotonModificarVisitante = new javax.swing.JButton();
-        jLabel65 = new javax.swing.JLabel();
-        jLabel66 = new javax.swing.JLabel();
-        NuevaImagenVisitante = new javax.swing.JButton();
-        jPanel16 = new javax.swing.JPanel();
-        NuevaVistaPreviaVisitante = new javax.swing.JLabel();
-        jSeparator11 = new javax.swing.JSeparator();
-        PanelActualizarVisita = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel51 = new javax.swing.JLabel();
-        jLabel67 = new javax.swing.JLabel();
-        jLabel68 = new javax.swing.JLabel();
-        jLabel69 = new javax.swing.JLabel();
-        NuevaDuracionVisita = new javax.swing.JComboBox<>();
-        NuevoTipoVisita = new javax.swing.JComboBox<>();
-        NuevoLugarVisita = new javax.swing.JComboBox<>();
-        BotonModificarVisita = new javax.swing.JButton();
-        jSeparator10 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -413,7 +493,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         PanelPerfil.setBackground(new java.awt.Color(255, 255, 255));
         PanelPerfil.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        FondoFoto.setBackground(new java.awt.Color(255, 255, 255));
+        FondoFoto.setBackground(new java.awt.Color(204, 204, 204));
         FondoFoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         FondoFoto.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         FondoFoto.add(FotoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 180, 200));
@@ -505,7 +585,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         jLabel49.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel49.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel49.setText("Sexo:");
+        jLabel49.setText("Genero:");
         jPanel7.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, -1));
 
         jLabel45.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
@@ -524,20 +604,20 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         TablaPresos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Foto", "Id", "Nombre completo", "Edad", "Identificacion", "Nacionalidad", "Celda", "Seccion"
+                "Foto", "Id", "Nombres", "Apellidos", "Genero", "Edad", "Identificacion", "Nacionalidad", "Celda", "Seccion"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, true, true, true
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -549,8 +629,20 @@ public class PersonalDeControl extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(TablaPresos);
+        if (TablaPresos.getColumnModel().getColumnCount() > 0) {
+            TablaPresos.getColumnModel().getColumn(0).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(1).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(2).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(3).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(4).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(5).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(6).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(7).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(8).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(9).setResizable(false);
+        }
 
-        PanelListaPresos.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 110, 980, 440));
+        PanelListaPresos.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 1070, 440));
         PanelListaPresos.add(BarraDeBusquedaPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 30, 640, 30));
 
         BotonCargarTodos.setText("Cargar Todos Los presos");
@@ -587,7 +679,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         jLabel16.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel16.setText("Sexo:");
+        jLabel16.setText("Genero:");
         jPanel9.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, -1, -1));
 
         jLabel17.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -630,13 +722,13 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel26.setText("Correo electronico:");
         jPanel9.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, -1, -1));
 
-        BotonGuardarVisitante.setText("Guardar visitante");
+        BotonGuardarVisitante.setText("Guardar datos del visitante");
         BotonGuardarVisitante.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BotonGuardarVisitanteActionPerformed(evt);
             }
         });
-        jPanel9.add(BotonGuardarVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 470, 130, 30));
+        jPanel9.add(BotonGuardarVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 470, 180, 30));
 
         jLabel27.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel27.setForeground(new java.awt.Color(0, 0, 0));
@@ -648,18 +740,18 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel28.setText("Primer nombre:");
         jPanel9.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
         jPanel9.add(SegundoNombreVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 100, 310, 30));
-        jPanel9.add(PrimerApellidoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 140, 320, 30));
+        jPanel9.add(PrimerApellidoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 310, 30));
         jPanel9.add(SegundoApellidoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 180, 310, 30));
-        jPanel9.add(IdentificacionVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 220, 330, 30));
+        jPanel9.add(IdentificacionVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, 310, 30));
         jPanel9.add(EmailVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 260, 300, 30));
 
         RelacionConPresoVisitante.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Esposa/Esposo", "Padre/Madre", "Hijo/Hija", "Hermano/Hermana", "Abuelo/Abuela", "Nieto/Nieta", "Tío/Tía", "Sobrino/Sobrina", "Primo/Prima", "Suegro/Suegra", "Yerno/Nuera", "Cuñado/Cuñada", "Amigo/Amiga", "Compañero de Trabajo", "Vecino/Vecina", "Conocido/Conocida", "Abogado/Abogada", "Asistente Social", "Representante Legal", "Sacerdote/Pastor", "Novio/Novia", "Tutor Legal", "Ex-Esposo/Ex-Esposa", "Familiar Político " }));
         jPanel9.add(RelacionConPresoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 420, 280, 30));
 
         SexoVisitante.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Femenino", "Masculino" }));
-        jPanel9.add(SexoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 340, 390, 30));
-        jPanel9.add(EdadVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 300, 390, 30));
-        jPanel9.add(PrimerNombreVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, 320, 30));
+        jPanel9.add(SexoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 340, 300, 30));
+        jPanel9.add(EdadVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 300, 300, 30));
+        jPanel9.add(PrimerNombreVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 60, 310, 30));
 
         NacionalidadVisitante.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Afganistán  ", "Albania  ", "Alemania  ", "Andorra  ", "Angola  ", "Antigua y Barbuda  ", "Arabia Saudita  ", "Argelia  ", "Argentina  ", "Armenia  ", "Australia  ", "Austria  ", "Azerbaiyán  ", "Bahamas  ", "Bahréin  ", "Bangladés  ", "Barbados  ", "Bélgica  ", "Belice  ", "Benín  ", "Bielorrusia  ", "Birmania  ", "Bolivia  ", "Bosnia y Herzegovina  ", "Botsuana  ", "Brasil  ", "Brunéi  ", "Bulgaria  ", "Burkina Faso  ", "Burundi  ", "Bután  ", "Cabo Verde  ", "Camboya  ", "Camerún  ", "Canadá  ", "Chad  ", "Chile  ", "China  ", "Chipre  ", "Colombia  ", "Comoras  ", "Congo  ", "Corea del Norte  ", "Corea del Sur  ", "Costa de Marfil  ", "Costa Rica  ", "Croacia  ", "Cuba  ", "Dinamarca  ", "Dominica  ", "Ecuador  ", "Egipto  ", "El Salvador  ", "Emiratos Árabes Unidos  ", "Eritrea  ", "Eslovaquia  ", "Eslovenia  ", "España  ", "Estados Unidos  ", "Estonia  ", "Etiopía  ", "Filipinas  ", "Finlandia  ", "Fiyi  ", "Francia  ", "Gabón  ", "Gambia  ", "Georgia  ", "Ghana  ", "Granada  ", "Grecia  ", "Guatemala  ", "Guinea  ", "Guinea-Bisáu  ", "Guinea Ecuatorial  ", "Guyana  ", "Haití  ", "Honduras  ", "Hungría  ", "India  ", "Indonesia  ", "Irak  ", "Irán  ", "Irlanda  ", "Islandia  ", "Israel  ", "Italia  ", "Jamaica  ", "Japón  ", "Jordania  ", "Kazajistán  ", "Kenia  ", "Kirguistán  ", "Kiribati  ", "Kuwait  ", "Laos  ", "Lesoto  ", "Letonia  ", "Líbano  ", "Liberia  ", "Libia  ", "Liechtenstein  ", "Lituania  ", "Luxemburgo  ", "Madagascar  ", "Malasia  ", "Malaui  ", "Maldivas  ", "Malí  ", "Malta  ", "Marruecos  ", "Islas Marshall  ", "Mauricio  ", "Mauritania  ", "México  ", "Micronesia  ", "Moldavia  ", "Mónaco  ", "Mongolia  ", "Montenegro  ", "Mozambique  ", "Namibia  ", "Nauru  ", "Nepal  ", "Nicaragua  ", "Níger  ", "Nigeria  ", "Noruega  ", "Nueva Zelanda  ", "Omán  ", "Países Bajos  ", "Pakistán  ", "Palaos  ", "Panamá  ", "Papúa Nueva Guinea  ", "Paraguay  ", "Perú  ", "Polonia  ", "Portugal  ", "Qatar  ", "Reino Unido  ", "República Centroafricana  ", "República Checa  ", "República Dominicana  ", "Ruanda  ", "Rumanía  ", "Rusia  ", "Samoa  ", "San Cristóbal y Nieves  ", "San Marino  ", "San Vicente y las Granadinas  ", "Santa Lucía  ", "Santo Tomé y Príncipe  ", "Senegal  ", "Serbia  ", "Seychelles  ", "Sierra Leona  ", "Singapur  ", "Siria  ", "Somalia  ", "Sri Lanka  ", "Sudáfrica  ", "Sudán  ", "Sudán del Sur  ", "Suecia  ", "Suiza  ", "Surinam  ", "Tailandia  ", "Tanzania  ", "Tayikistán  ", "Timor Oriental  ", "Togo  ", "Tonga  ", "Trinidad y Tobago  ", "Túnez  ", "Turkmenistán  ", "Turquía  ", "Tuvalu  ", "Ucrania  ", "Uganda  ", "Uruguay  ", "Uzbekistán  ", "Vanuatu  ", "Vaticano  ", "Venezuela  ", "Vietnam  ", "Yemen  ", "Yibuti  ", "Zambia  ", "Zimbabue" }));
         NacionalidadVisitante.addActionListener(new java.awt.event.ActionListener() {
@@ -667,7 +759,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 NacionalidadVisitanteActionPerformed(evt);
             }
         });
-        jPanel9.add(NacionalidadVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 382, 340, 30));
+        jPanel9.add(NacionalidadVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 382, 300, 30));
 
         PanelGuardarVisita.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 520, 520));
 
@@ -705,8 +797,8 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         jLabel18.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel18.setText("Lugar de visita:");
-        PanelGuardarVisita.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(619, 320, 110, -1));
+        jLabel18.setText("Guardar Visita final:");
+        PanelGuardarVisita.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 420, 140, -1));
 
         jLabel29.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel29.setForeground(new java.awt.Color(0, 0, 0));
@@ -716,41 +808,33 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel30.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel30.setForeground(new java.awt.Color(0, 0, 0));
         jLabel30.setText("Hora de la visita:");
-        PanelGuardarVisita.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 200, -1, -1));
-
-        DuracionVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "1", "2" }));
-        PanelGuardarVisita.add(DuracionVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 230, 180, 30));
-
-        jLabel31.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel31.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel31.setText("Duración de la visita en horas:");
-        PanelGuardarVisita.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 240, -1, -1));
+        PanelGuardarVisita.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 210, -1, -1));
 
         TipoVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Visita regular", "Familiar", "Intimas o Conyugales", "Legal", "Religiosas" }));
-        PanelGuardarVisita.add(TipoVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 270, 300, 30));
+        PanelGuardarVisita.add(TipoVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 250, 270, 30));
 
         jLabel32.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel32.setForeground(new java.awt.Color(0, 0, 0));
         jLabel32.setText("Tipo de visita:");
-        PanelGuardarVisita.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(619, 280, 100, -1));
+        PanelGuardarVisita.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 260, 100, -1));
 
         LugarVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Sala de visitas", "Cabinas de visitas conyugales", "Salas de visitas legales" }));
-        PanelGuardarVisita.add(LugarVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 310, 290, 30));
+        PanelGuardarVisita.add(LugarVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 300, 270, 30));
 
-        BotonGuardarVisita.setText("Guardar visita");
+        BotonGuardarVisita.setText("Guardar datos de la visita");
         BotonGuardarVisita.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BotonGuardarVisitaActionPerformed(evt);
             }
         });
-        PanelGuardarVisita.add(BotonGuardarVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 360, 110, 30));
+        PanelGuardarVisita.add(BotonGuardarVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 340, 180, 30));
 
         jLabel22.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel22.setForeground(new java.awt.Color(0, 0, 0));
         jLabel22.setText("Vista previa foto visitante:");
         PanelGuardarVisita.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 370, -1, -1));
 
-        jPanel11.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel11.setBackground(new java.awt.Color(204, 204, 204));
         jPanel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         jPanel11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         jPanel11.add(VistaPreviaVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 8, 140, 160));
@@ -759,7 +843,30 @@ public class PersonalDeControl extends javax.swing.JFrame {
         PanelGuardarVisita.add(FechaVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 152, 270, 30));
 
         HoraVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "08:00", "09:00", "10:00" }));
-        PanelGuardarVisita.add(HoraVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 190, 270, 30));
+        PanelGuardarVisita.add(HoraVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 200, 270, 30));
+
+        jLabel51.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel51.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel51.setText("Lugar de visita:");
+        PanelGuardarVisita.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 310, 110, -1));
+
+        GuardarVisitaFinal.setText("Guardar visita final");
+        GuardarVisitaFinal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GuardarVisitaFinalActionPerformed(evt);
+            }
+        });
+        PanelGuardarVisita.add(GuardarVisitaFinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 410, 130, 30));
+
+        botonCancelarProceso.setBackground(new java.awt.Color(29, 35, 51));
+        botonCancelarProceso.setForeground(new java.awt.Color(255, 255, 255));
+        botonCancelarProceso.setText("CANCELAR PROCESO");
+        botonCancelarProceso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonCancelarProcesoActionPerformed(evt);
+            }
+        });
+        PanelGuardarVisita.add(botonCancelarProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 530, 180, 40));
 
         TabbedPDC.addTab("GUARDAR VISITA", PanelGuardarVisita);
 
@@ -841,7 +948,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel4.setText("Vista previa nueva foto");
         PanelActualizarInformacion.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 140, -1, -1));
 
-        jPanel14.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel14.setBackground(new java.awt.Color(204, 204, 204));
         jPanel14.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         jPanel14.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         jPanel14.add(VistaPreviaNuevaFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 210, 250));
@@ -863,20 +970,20 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         TablaHistorialVisitas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Id", "Identificación visitante", "Fecha", "Hora", "Duración", "Tipo de visita", "Lugar", "Identificación visitado"
+                "Id", "Identificación visitante", "Fecha", "Hora", "Duración", "Tipo de visita", "Lugar", "visitado", "Estado"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -887,7 +994,18 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        TablaHistorialVisitas.setRowHeight(40);
         jScrollPane2.setViewportView(TablaHistorialVisitas);
+        if (TablaHistorialVisitas.getColumnModel().getColumnCount() > 0) {
+            TablaHistorialVisitas.getColumnModel().getColumn(1).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(2).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(3).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(4).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(5).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(6).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(7).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(8).setResizable(false);
+        }
 
         PanelHistorialVisitas.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 1040, 490));
 
@@ -903,20 +1021,20 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         TablaHistorialVisitantes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Foto", "Id", "Nombre completo", "Email", "Edad", "Identificación", "Sexo", "Nacionalidad", "Relación", "Cantidad visitas", "Visitado"
+                "Foto", "Id", "Nombres", "Apellidos", "Email", "Edad", "Identificación", "Genero", "Nacionalidad", "Relación", "Cantidad", "Visitado", "Estado"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, true, false
+                false, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -928,6 +1046,21 @@ public class PersonalDeControl extends javax.swing.JFrame {
             }
         });
         jScrollPane3.setViewportView(TablaHistorialVisitantes);
+        if (TablaHistorialVisitantes.getColumnModel().getColumnCount() > 0) {
+            TablaHistorialVisitantes.getColumnModel().getColumn(0).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(1).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(2).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(3).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(4).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(5).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(6).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(7).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(8).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(9).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(10).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(11).setResizable(false);
+            TablaHistorialVisitantes.getColumnModel().getColumn(12).setResizable(false);
+        }
 
         PanelHistorialVisitantes.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 1040, 490));
 
@@ -938,171 +1071,13 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         TabbedPDC.addTab("HISTORIAL VISITANTES", PanelHistorialVisitantes);
 
-        PanelActualizarVisitante.setBackground(new java.awt.Color(255, 255, 255));
-        PanelActualizarVisitante.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
-        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel14.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
-        jLabel14.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel14.setText("Modificar datos de un visitante");
-        jPanel8.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 40, -1, -1));
-        jPanel8.add(NuevoPrimerNombreVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 110, 320, 30));
-
-        jLabel59.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel59.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel59.setText("Segundo nombre:");
-        jPanel8.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, -1, -1));
-
-        NuevoSegundoNombreVisitante.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NuevoSegundoNombreVisitanteActionPerformed(evt);
-            }
-        });
-        jPanel8.add(NuevoSegundoNombreVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 160, 310, 30));
-
-        jLabel60.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel60.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel60.setText("Primer apellido:");
-        jPanel8.add(jLabel60, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, -1, -1));
-        jPanel8.add(NuevoPrimerApellidoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 210, 320, 30));
-
-        jLabel61.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel61.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel61.setText("Segundo apellido:");
-        jPanel8.add(jLabel61, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, -1, -1));
-        jPanel8.add(NuevoSegundoApellidoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 260, 310, 30));
-
-        jLabel62.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel62.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel62.setText("Edad:");
-        jPanel8.add(jLabel62, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, -1, -1));
-
-        NuevaEdadVisitante.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NuevaEdadVisitanteActionPerformed(evt);
-            }
-        });
-        jPanel8.add(NuevaEdadVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 310, 390, 30));
-
-        jLabel63.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel63.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel63.setText("Sexo:");
-        jPanel8.add(jLabel63, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 370, -1, -1));
-
-        NuevoSexoVisitante.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Femenino", "Masculino" }));
-        jPanel8.add(NuevoSexoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 360, 390, 30));
-
-        jLabel64.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel64.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel64.setText("Vista previa foto");
-        jPanel8.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 100, -1, -1));
-
-        NuevaRelacionConPresoVisitante.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Esposa/Esposo", "Padre/Madre", "Hijo/Hija", "Hermano/Hermana", "Abuelo/Abuela", "Nieto/Nieta", "Tío/Tía", "Sobrino/Sobrina", "Primo/Prima", "Suegro/Suegra", "Yerno/Nuera", "Cuñado/Cuñada", "Amigo/Amiga", "Compañero de Trabajo", "Vecino/Vecina", "Conocido/Conocida", "Abogado/Abogada", "Asistente Social", "Representante Legal", "Sacerdote/Pastor", "Novio/Novia", "Tutor Legal", "Ex-Esposo/Ex-Esposa", "Familiar Político " }));
-        jPanel8.add(NuevaRelacionConPresoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 410, 280, 30));
-
-        BotonModificarVisitante.setText("Modificar visitante");
-        BotonModificarVisitante.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BotonModificarVisitanteActionPerformed(evt);
-            }
-        });
-        jPanel8.add(BotonModificarVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 480, 130, 30));
-
-        jLabel65.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel65.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel65.setText("Primer nombre:");
-        jPanel8.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, -1, -1));
-
-        jLabel66.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel66.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel66.setText("Relación con el preso:");
-        jPanel8.add(jLabel66, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 420, -1, -1));
-
-        NuevaImagenVisitante.setText("Selecionar nueva foto");
-        NuevaImagenVisitante.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NuevaImagenVisitanteActionPerformed(evt);
-            }
-        });
-        jPanel8.add(NuevaImagenVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 330, -1, 30));
-
-        jPanel16.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel16.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel16.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel16.add(NuevaVistaPreviaVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 150, 170));
-
-        jPanel8.add(jPanel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 120, 170, 190));
-        jPanel8.add(jSeparator11, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 63, 390, 10));
-
-        PanelActualizarVisitante.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, 710, 550));
-
-        TabbedPDC.addTab("MODIFICAR VISITANTE", PanelActualizarVisitante);
-
-        PanelActualizarVisita.setBackground(new java.awt.Color(255, 255, 255));
-        PanelActualizarVisita.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel51.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
-        jLabel51.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel51.setText("Modificar datos de una visita");
-        jPanel1.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, -1, -1));
-
-        jLabel67.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel67.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel67.setText("Duración de la visita:");
-        jPanel1.add(jLabel67, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, -1, -1));
-
-        jLabel68.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel68.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel68.setText("Tipo de visita:");
-        jPanel1.add(jLabel68, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 210, -1, -1));
-
-        jLabel69.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel69.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel69.setText("Lugar de Visita:");
-        jPanel1.add(jLabel69, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, -1, -1));
-
-        NuevaDuracionVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "1", "2 " }));
-        NuevaDuracionVisita.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NuevaDuracionVisitaActionPerformed(evt);
-            }
-        });
-        jPanel1.add(NuevaDuracionVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 150, 260, 30));
-
-        NuevoTipoVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Visita regular", "Familiar", "Intimas o Conyugales", "Legal", "Religiosas" }));
-        jPanel1.add(NuevoTipoVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 200, 300, 30));
-
-        NuevoLugarVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Sala de visitas", "Cabinas de visitas conyugales", "Salas de visitas legales" }));
-        jPanel1.add(NuevoLugarVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 250, 290, 30));
-
-        BotonModificarVisita.setText("Modificar visita");
-        BotonModificarVisita.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BotonModificarVisitaActionPerformed(evt);
-            }
-        });
-        jPanel1.add(BotonModificarVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 330, 140, 40));
-        jPanel1.add(jSeparator10, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, 330, -1));
-
-        PanelActualizarVisita.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 60, 590, 440));
-
-        TabbedPDC.addTab("MODIFICAR VISITA", PanelActualizarVisita);
-
         getContentPane().add(TabbedPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 1100, 630));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void BotonGuardarVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGuardarVisitanteActionPerformed
-        VisitaController visitaController = new VisitaController();
-        visitaController.registrarVisitante(this, visitantesTemporales, imagenesTemporales);
+        controller.registrarVisitante(this, visitantesTemporales, imagenesTemporales);
     }//GEN-LAST:event_BotonGuardarVisitanteActionPerformed
 
     private void AgregarImagenVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarImagenVisitanteActionPerformed
@@ -1113,8 +1088,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
     }//GEN-LAST:event_AgregarImagenVisitanteActionPerformed
     }
     private void BotonGuardarVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGuardarVisitaActionPerformed
-        VisitaController visitaController = new VisitaController();
-        visitaController.registrarVisita(this, visitantesTemporales, imagenesTemporales);
+        controller.guardarVisitaTemporal(this);
     }//GEN-LAST:event_BotonGuardarVisitaActionPerformed
 
     private void BotonActualizarInformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonActualizarInformacionActionPerformed
@@ -1163,123 +1137,6 @@ public class PersonalDeControl extends javax.swing.JFrame {
         visitaController.cargarDatosPresoEnTablaPorSeccion(seccionSeleccionada, TablaPresos);
     }//GEN-LAST:event_JcomboSeccionActionPerformed
 
-    private void NuevaImagenVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevaImagenVisitanteActionPerformed
-        VisitaController controller = new VisitaController();
-        File imagen = controller.seleccionarImagen(this, NuevaVistaPreviaVisitante);
-        if (imagen != null) {
-            this.imagenVisitanteNuevaSeleccionada = imagen;
-
-        }     }//GEN-LAST:event_NuevaImagenVisitanteActionPerformed
-
-    private void BotonModificarVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonModificarVisitanteActionPerformed
-        try {
-            if (ppMenuTablaVisitantes.isVisible()) {
-                ppMenuTablaVisitantes.setVisible(false);
-            }
-
-            int fila = TablaHistorialVisitantes.getSelectedRow();
-            if (fila == -1) {
-                JOptionPane.showMessageDialog(this, "Seleccione un visitante", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            String identificacion = TablaHistorialVisitantes.getValueAt(fila, 5).toString();
-            Visitante visitanteOriginal = new VisitanteDAO().buscarVisitantePorIdentificacion(identificacion);
-
-            if (visitanteOriginal == null) {
-                JOptionPane.showMessageDialog(this, "Visitante no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            VisitaController controller = new VisitaController();
-            File nuevaImagen = imagenVisitanteNuevaSeleccionada != null
-                    ? imagenVisitanteNuevaSeleccionada
-                    : new File(visitanteOriginal.getFotoPath());
-
-            Visitante actualizado = controller.actualizarVisitante(
-                    visitanteOriginal,
-                    NuevoPrimerNombreVisitante.getText(),
-                    NuevoSegundoNombreVisitante.getText(),
-                    NuevoPrimerApellidoVisitante.getText(),
-                    NuevoSegundoApellidoVisitante.getText(),
-                    NuevaEdadVisitante.getText(),
-                    NuevoSexoVisitante.getSelectedItem().toString(),
-                    NuevaRelacionConPresoVisitante.getSelectedItem().toString(),
-                    nuevaImagen
-            );
-
-            if (actualizado != null) {
-                controller.cargarHistorialVisitantes(IdentificacionPresoVisita.getText(), TablaHistorialVisitantes);
-                TablaHistorialVisitantes.revalidate();
-                TablaHistorialVisitantes.repaint();
-                imagenVisitanteNuevaSeleccionada = null;
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,
-                    "Error al actualizar: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        } finally {
-            ppMenuTablaVisitantes.setEnabled(true);
-            TablaHistorialVisitantes.requestFocus();
-        }
-     }//GEN-LAST:event_BotonModificarVisitanteActionPerformed
-
-    private void NuevoSegundoNombreVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevoSegundoNombreVisitanteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NuevoSegundoNombreVisitanteActionPerformed
-
-    private void NuevaEdadVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevaEdadVisitanteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NuevaEdadVisitanteActionPerformed
-
-    private void NuevaDuracionVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevaDuracionVisitaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NuevaDuracionVisitaActionPerformed
-
-    private void BotonModificarVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonModificarVisitaActionPerformed
-        try {
-            if (ppMenuTablaVisitas.isVisible()) {
-                ppMenuTablaVisitas.setVisible(false);
-            }
-
-            int fila = TablaHistorialVisitas.getSelectedRow();
-            if (fila == -1) {
-                JOptionPane.showMessageDialog(this, "Seleccione una visita", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            int idVisita = (int) TablaHistorialVisitas.getValueAt(fila, 0);
-            Visita visitaOriginal = visitaDAO.buscarVisitaPorId(idVisita);
-
-            if (visitaOriginal == null) {
-                JOptionPane.showMessageDialog(this, "Visita no encontrada", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            String nuevaDuracion = NuevaDuracionVisita.getSelectedItem().toString();
-            String nuevoTipo = NuevoTipoVisita.getSelectedItem().toString();
-            String nuevoLugar = NuevoLugarVisita.getSelectedItem().toString();
-
-            Visita visitaActualizada = controller.actualizarVisita(idVisita, nuevaDuracion, nuevoTipo, nuevoLugar);
-
-            if (visitaActualizada != null) {
-                controller.cargarHistorialVisitas(IdentificacionPresoVisita.getText(), TablaHistorialVisitas);
-                TablaHistorialVisitas.revalidate();
-                TablaHistorialVisitas.repaint();
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,
-                    "Error al actualizar: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        } finally {
-            ppMenuTablaVisitas.setEnabled(true);
-            TablaHistorialVisitas.requestFocus();
-        }    }//GEN-LAST:event_BotonModificarVisitaActionPerformed
-
     private void jPanel3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseEntered
         jPanel3.setBackground(new Color(43, 54, 84));     }//GEN-LAST:event_jPanel3MouseEntered
 
@@ -1309,6 +1166,31 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private void jPanel15MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel15MouseExited
         jPanel15.setBackground(new Color(29, 35, 51));
     }//GEN-LAST:event_jPanel15MouseExited
+
+    private void GuardarVisitaFinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarVisitaFinalActionPerformed
+        controller.guardarVisitaFinal(this, visitantesTemporales, imagenesTemporales);
+    }//GEN-LAST:event_GuardarVisitaFinalActionPerformed
+
+    private void botonCancelarProcesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCancelarProcesoActionPerformed
+        if (!controller.existeVisitaTemporal()) {
+            JOptionPane.showMessageDialog(this,
+                    "No hay ninguna visita en proceso para cancelar",
+                    "Información",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro que desea cancelar la visita en proceso?\nSe perderán todos los datos no guardados.",
+                "Confirmar cancelación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            controller.cancelarProcesoVisita(this, visitantesTemporales, imagenesTemporales);
+        }    }//GEN-LAST:event_botonCancelarProcesoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1353,11 +1235,8 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JButton BotonCargarTodos;
     private javax.swing.JButton BotonGuardarVisita;
     private javax.swing.JButton BotonGuardarVisitante;
-    private javax.swing.JButton BotonModificarVisita;
-    private javax.swing.JButton BotonModificarVisitante;
     private javax.swing.JComboBox<String> CantidadDeVisitantesCombo;
     private javax.swing.JTextField ContraseñaActual;
-    private javax.swing.JComboBox<String> DuracionVisita;
     private javax.swing.JLabel EdadPDC;
     private javax.swing.JTextField EdadVisitante;
     private javax.swing.JLabel EmailPDC;
@@ -1367,6 +1246,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser FechaVisita;
     private javax.swing.JPanel FondoFoto;
     private javax.swing.JLabel FotoPDC;
+    private javax.swing.JButton GuardarVisitaFinal;
     private javax.swing.JComboBox<String> HoraVisita;
     private javax.swing.JLabel IdentificacionPDC;
     private javax.swing.JTextField IdentificacionPresoVisita;
@@ -1377,27 +1257,13 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> NacionalidadVisitante;
     private javax.swing.JLabel NombreCompletoPDC;
     private javax.swing.JTextField NuevaContraseña;
-    private javax.swing.JComboBox<String> NuevaDuracionVisita;
-    private javax.swing.JTextField NuevaEdadVisitante;
-    private javax.swing.JButton NuevaImagenVisitante;
     private javax.swing.JTextField NuevaNacionalidad;
-    private javax.swing.JComboBox<String> NuevaRelacionConPresoVisitante;
-    private javax.swing.JLabel NuevaVistaPreviaVisitante;
     private javax.swing.JTextField NuevoEmail;
-    private javax.swing.JComboBox<String> NuevoLugarVisita;
     private javax.swing.JTextField NuevoPrimerApellido;
-    private javax.swing.JTextField NuevoPrimerApellidoVisitante;
     private javax.swing.JTextField NuevoPrimerNombre;
-    private javax.swing.JTextField NuevoPrimerNombreVisitante;
     private javax.swing.JTextField NuevoSegundoApellido;
-    private javax.swing.JTextField NuevoSegundoApellidoVisitante;
     private javax.swing.JTextField NuevoSegundoNombre;
-    private javax.swing.JTextField NuevoSegundoNombreVisitante;
-    private javax.swing.JComboBox<String> NuevoSexoVisitante;
-    private javax.swing.JComboBox<String> NuevoTipoVisita;
     private javax.swing.JPanel PanelActualizarInformacion;
-    private javax.swing.JPanel PanelActualizarVisita;
-    private javax.swing.JPanel PanelActualizarVisitante;
     private javax.swing.JPanel PanelBotones;
     private javax.swing.JPanel PanelGuardarVisita;
     private javax.swing.JPanel PanelHistorialVisitantes;
@@ -1420,13 +1286,13 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JLabel TurnoPDC;
     private javax.swing.JLabel VistaPreviaNuevaFoto;
     private javax.swing.JLabel VistaPreviaVisitante;
+    private javax.swing.JButton botonCancelarProceso;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -1445,7 +1311,6 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
@@ -1468,42 +1333,26 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
-    private javax.swing.JLabel jLabel59;
-    private javax.swing.JLabel jLabel60;
-    private javax.swing.JLabel jLabel61;
-    private javax.swing.JLabel jLabel62;
-    private javax.swing.JLabel jLabel63;
-    private javax.swing.JLabel jLabel64;
-    private javax.swing.JLabel jLabel65;
-    private javax.swing.JLabel jLabel66;
-    private javax.swing.JLabel jLabel67;
-    private javax.swing.JLabel jLabel68;
-    private javax.swing.JLabel jLabel69;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
-    private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator10;
-    private javax.swing.JSeparator jSeparator11;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
@@ -1573,10 +1422,6 @@ public class PersonalDeControl extends javax.swing.JFrame {
         return HoraVisita;
     }
 
-    public JComboBox<String> getDuracionVisita() {
-        return DuracionVisita;
-    }
-
     public JComboBox<String> getTipoVisita() {
         return TipoVisita;
     }
@@ -1637,38 +1482,6 @@ public class PersonalDeControl extends javax.swing.JFrame {
         return FotoPDC;
     }
 
-    public JTextField getNuevoPrimerNombreVisitante() {
-        return NuevoPrimerNombreVisitante;
-    }
-
-    public JTextField getNuevoSegundoNombreVisitante() {
-        return NuevoSegundoNombreVisitante;
-    }
-
-    public JTextField getNuevoPrimerApellidoVisitante() {
-        return NuevoPrimerApellidoVisitante;
-    }
-
-    public JTextField getNuevoSegundoApellidoVisitante() {
-        return NuevoSegundoApellidoVisitante;
-    }
-
-    public JTextField getNuevaEdadVisitante() {
-        return NuevaEdadVisitante;
-    }
-
-    public JComboBox<String> getNuevoSexoVisitante() {
-        return NuevoSexoVisitante;
-    }
-
-    public JComboBox<String> getNuevaRelacionConPresoVisitante() {
-        return NuevaRelacionConPresoVisitante;
-    }
-
-    public JLabel getNuevaVistaPreviaVisitante() {
-        return NuevaVistaPreviaVisitante;
-    }
-
     public void setImagenVisitanteNuevaSeleccionada(File imagen) {
         this.imagenVisitanteNuevaSeleccionada = imagen;
     }
@@ -1677,16 +1490,8 @@ public class PersonalDeControl extends javax.swing.JFrame {
         return imagenVisitanteNuevaSeleccionada;
     }
 
-    public JComboBox<String> getNuevaDuracionVisita() {
-        return NuevaDuracionVisita;
-    }
-
-    public JComboBox<String> getNuevoTipoVisita() {
-        return NuevoTipoVisita;
-    }
-
-    public JComboBox<String> getNuevoLugarVisita() {
-        return NuevoLugarVisita;
+    public JTabbedPane getTabbedPDC() {
+        return TabbedPDC;
     }
 
 }

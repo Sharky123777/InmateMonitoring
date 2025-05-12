@@ -1,5 +1,6 @@
 package Model.Entities;
 
+import Model.Constants.EstadoVisitaEnum;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -10,22 +11,32 @@ public class Visita {
     private int id;
     private LocalDate fechaVisita;
     private LocalTime horaVisita;
-    private String duracionVisitaEnHoras;
+    private final String duracionVisitaEnHoras = "1";
     private String tipoVisita;
     private String lugarVisita;
     private Preso preso;
     private List<Visitante> visitantes;
     private static int ultimoId = 0;
+    private EstadoVisitaEnum estado;
 
-    public Visita(int id, LocalDate fechaVisita, LocalTime horaVisita, String duracionVisitaEnHoras, String tipoVisita, String lugarVisita, Preso preso, List<Visitante> visitantes) {
+    public Visita(int id, LocalDate fechaVisita, LocalTime horaVisita, String tipoVisita,
+            String lugarVisita, Preso preso, List<Visitante> visitantes) {
         this.id = ++ultimoId;
         this.fechaVisita = fechaVisita;
         this.horaVisita = horaVisita;
-        this.duracionVisitaEnHoras = duracionVisitaEnHoras;
         this.tipoVisita = tipoVisita;
         this.lugarVisita = lugarVisita;
         this.preso = preso;
-        this.visitantes = new ArrayList<>();
+        this.visitantes = new ArrayList<>(visitantes);
+        this.estado = EstadoVisitaEnum.EN_PROCESO;
+    }
+
+    public EstadoVisitaEnum getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoVisitaEnum estado) {
+        this.estado = estado;
     }
 
     public int getId() {
@@ -54,10 +65,6 @@ public class Visita {
 
     public String getDuracionVisitaEnHoras() {
         return duracionVisitaEnHoras;
-    }
-
-    public void setDuracionVisitaEnHoras(String duracionVisitaEnHoras) {
-        this.duracionVisitaEnHoras = duracionVisitaEnHoras;
     }
 
     public String getTipoVisita() {

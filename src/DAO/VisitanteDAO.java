@@ -1,5 +1,6 @@
 package DAO;
 
+import Model.Constants.EstadoVisitanteEnum;
 import Model.Entities.Visita;
 import Model.Entities.Visitante;
 import com.google.gson.Gson;
@@ -20,10 +21,18 @@ import javax.swing.JOptionPane;
 
 public class VisitanteDAO {
 
+    private static VisitanteDAO instancia;
     private static final String JSON_FILE = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\visitantes.json";
     private static final String IMAGES_DIR = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\Images\\";
 
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    public static synchronized VisitanteDAO getInstancia() {
+        if (instancia == null) {
+            instancia = new VisitanteDAO();
+        }
+        return instancia;
+    }
 
     public List<Visitante> cargarTodos() {
         File archivo = new File(JSON_FILE);
@@ -68,6 +77,16 @@ public class VisitanteDAO {
         if (visitante.getId() == 0) {
             int nuevoId = obtenerProximoId(visitantes);
             visitante.setId(nuevoId);
+            visitante.setEstado(EstadoVisitanteEnum.HABILITADO);
+        } else {
+            Visitante existente = visitantes.stream()
+                    .filter(v -> v.getId() == visitante.getId())
+                    .findFirst()
+                    .orElse(null);
+
+            if (existente != null && visitante.getEstado() == null) {
+                visitante.setEstado(existente.getEstado());
+            }
         }
 
         if (imagenSeleccionada != null) {
@@ -265,7 +284,6 @@ public class VisitanteDAO {
 
         for (Visitante visitante : visitantes) {
             if (visitante.getIdentificacion().equals(identificacion)) {
-                // Actualizar campos
                 if (primerNombre != null) {
                     visitante.setPrimerNombre(primerNombre);
                 }
@@ -313,6 +331,30 @@ public class VisitanteDAO {
             System.err.println("Error al guardar imagen del visitante: " + e.getMessage());
             return null;
         }
+    }
+
+    public Visitante modificarEstadoVisitanteYDevolver(String identificacion,
+            EstadoVisitanteEnum nuevoEstado,
+            String razonDeshabilitacion) {
+        List<Visitante> visitantes = cargarTodos();
+
+        for (Visitante visitante : visitantes) {
+            if (visitante.getIdentificacion().equals(identificacion)) {
+                visitante.setEstado(nuevoEstado);
+
+                if (nuevoEstado == EstadoVisitanteEnum.DESHABILITADO) {
+                    visitante.setRazonDeshabilitacion(razonDeshabilitacion);
+                } else {
+                    visitante.setRazonDeshabilitacion(null);
+                }
+
+                if (guardarCambios(visitantes)) {
+                    return visitante;
+                }
+                return null;
+            }
+        }
+        return null;
     }
 
     private boolean guardarCambios(List<?> lista) {

@@ -66,7 +66,7 @@ public class Oficial extends javax.swing.JFrame {
                 return;
             }
 
-            presoSeleccionadoIdentificacion = TablaPresos.getValueAt(filaSeleccionada, 4).toString();
+            presoSeleccionadoIdentificacion = TablaPresos.getValueAt(filaSeleccionada, 5).toString();
             Preso preso = new PresoDAO().buscarPresoPorIdentificacion(presoSeleccionadoIdentificacion);
 
             if (preso != null) {
@@ -384,7 +384,7 @@ public class Oficial extends javax.swing.JFrame {
         jPanel6.add(FechaInicioContratoOficial, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 430, 220, 30));
         jPanel6.add(TurnoOficial, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 220, 30));
 
-        FondoFoto.setBackground(new java.awt.Color(255, 255, 255));
+        FondoFoto.setBackground(new java.awt.Color(204, 204, 204));
         FondoFoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         FondoFoto.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         FondoFoto.add(FotoOficial, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 180, 200));
@@ -461,7 +461,7 @@ public class Oficial extends javax.swing.JFrame {
 
         jLabel49.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel49.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel49.setText("Sexo:");
+        jLabel49.setText("Genero:");
         jPanel12.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, -1, -1));
         jPanel12.add(jSeparator9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 540, 10));
         jPanel12.add(SexoOficial, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 300, 480, 30));
@@ -499,20 +499,20 @@ public class Oficial extends javax.swing.JFrame {
 
         TablaPresos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Foto", "Id", "Nombre completo", "Edad", "Identificacion", "Nacionalidad", "Celda", "Sección"
+                "Foto", "Id", "Nombres", "Apellidos", "Edad", "Identificacion", "Genero", "Nacionalidad", "Celda", "Sección"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, true, true, true
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -524,8 +524,20 @@ public class Oficial extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(TablaPresos);
+        if (TablaPresos.getColumnModel().getColumnCount() > 0) {
+            TablaPresos.getColumnModel().getColumn(0).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(1).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(2).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(3).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(4).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(5).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(6).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(7).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(8).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(9).setResizable(false);
+        }
 
-        PanelListaPresos.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 110, 980, 440));
+        PanelListaPresos.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 1080, 440));
 
         BotonCargarTodosPresos.setText("Cargar Todos Los presos");
         BotonCargarTodosPresos.addActionListener(new java.awt.event.ActionListener() {
@@ -565,17 +577,17 @@ public class Oficial extends javax.swing.JFrame {
 
         tablaGuardias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Foto", "Nombre", "Edad", "Cedula", "Sexo", "Nacionalidad", "Correo", "Turno", "Cargo", "FechaContratacion", "FechaFinContrato"
+                "Foto", "Nombres", "Apellidos", "Edad", "Cedula", "Genero", "Nacionalidad", "Correo", "Turno", "Cargo", "FechaContratacion", "FechaFinContrato"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -583,6 +595,20 @@ public class Oficial extends javax.swing.JFrame {
             }
         });
         jScrollPane6.setViewportView(tablaGuardias);
+        if (tablaGuardias.getColumnModel().getColumnCount() > 0) {
+            tablaGuardias.getColumnModel().getColumn(0).setResizable(false);
+            tablaGuardias.getColumnModel().getColumn(1).setResizable(false);
+            tablaGuardias.getColumnModel().getColumn(2).setResizable(false);
+            tablaGuardias.getColumnModel().getColumn(3).setResizable(false);
+            tablaGuardias.getColumnModel().getColumn(4).setResizable(false);
+            tablaGuardias.getColumnModel().getColumn(5).setResizable(false);
+            tablaGuardias.getColumnModel().getColumn(6).setResizable(false);
+            tablaGuardias.getColumnModel().getColumn(7).setResizable(false);
+            tablaGuardias.getColumnModel().getColumn(8).setResizable(false);
+            tablaGuardias.getColumnModel().getColumn(9).setResizable(false);
+            tablaGuardias.getColumnModel().getColumn(10).setResizable(false);
+            tablaGuardias.getColumnModel().getColumn(11).setResizable(false);
+        }
 
         PanelListaGuardias.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 1080, 470));
 

@@ -1,5 +1,6 @@
 package DAO;
 
+import Model.Constants.EstadoCitaMedicaEnum;
 import Model.Entities.CitaMedica;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,7 +18,7 @@ import java.time.LocalTime;
 
 public class CitaMedicaDAO {
 
-    private static final String JSON_FILE = "C:\\Users\\nicol\\OneDrive\\Escritorio\\Copia - 3\\src\\Resources\\DATA\\citasMedicas.json";
+    private static final String JSON_FILE = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\citasMedicas.json";
     private Gson gson;
 
     public CitaMedicaDAO() {
@@ -65,6 +66,10 @@ public class CitaMedicaDAO {
 
         if (cita.getId() == 0) {
             cita.setId(obtenerProximoId(citas));
+        }
+
+        if (cita.getEstado() == null) {
+            cita.setEstado(EstadoCitaMedicaEnum.PENDIENTE);
         }
 
         for (int i = 0; i < citas.size(); i++) {

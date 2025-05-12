@@ -1,8 +1,10 @@
 package DAO;
 
+import Model.Constants.EstadoVisitaEnum;
 import Model.Entities.LocalDateAdapter;
 import Model.Entities.LocalTimeAdapter;
 import Model.Entities.Visita;
+import Model.Entities.Visitante;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import java.io.*;
@@ -15,6 +17,7 @@ import javax.swing.JOptionPane;
 
 public class VisitaDAO {
 
+    private static VisitaDAO instancia;
     private static final String JSON_FILE = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\visitas.json";
     private Gson gson;
 
@@ -24,6 +27,13 @@ public class VisitaDAO {
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
                 .create();
+    }
+
+    public static synchronized VisitaDAO getInstancia() {
+        if (instancia == null) {
+            instancia = new VisitaDAO();
+        }
+        return instancia;
     }
 
     public List<Visita> cargarTodas() {
@@ -92,11 +102,11 @@ public class VisitaDAO {
         return visitasFiltradas;
     }
 
-    public void guardarTodas(List<Visita> visitas) {
-        try (FileWriter writer = new FileWriter(JSON_FILE)) {
+    private void guardarTodas(List<Visita> visitas) {
+        try (Writer writer = new FileWriter(JSON_FILE)) {
             gson.toJson(visitas, writer);
         } catch (IOException e) {
-            System.err.println("Error al guardar en archivo JSON: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -123,16 +133,13 @@ public class VisitaDAO {
     }
 
     public Visita modificarDatosVisitaYDevolver(int id,
-            String duracion, String tipo, String lugar) {
+            String tipo, String lugar) {
 
         List<Visita> visitas = cargarTodas();
 
         for (Visita visita : visitas) {
             if (visita.getId() == id) {
 
-                if (duracion != null) {
-                    visita.setDuracionVisitaEnHoras(duracion);
-                }
                 if (tipo != null) {
                     visita.setTipoVisita(tipo);
                 }
@@ -159,6 +166,22 @@ public class VisitaDAO {
         }
     }
 
+    public Visita modificarEstadoVisitaYDevolver(int id, EstadoVisitaEnum nuevoEstado) {
+        List<Visita> visitas = cargarTodas();
+
+        for (Visita visita : visitas) {
+            if (visita.getId() == id) {
+                visita.setEstado(nuevoEstado);
+
+                if (guardarCambios(visitas)) {
+                    return visita;
+                }
+                return null;
+            }
+        }
+        return null;
+    }
+
     public Visita buscarVisitaPorId(int id) {
         List<Visita> visitas = cargarTodas();
 
@@ -169,6 +192,39 @@ public class VisitaDAO {
         }
 
         return null;
+    }
+
+    public List<Visita> cargarPorIdentificacionPresoFechaYHora(String identificacionPreso, LocalDate fecha, LocalTime hora) {
+        List<Visita> todasVisitas = cargarTodas();
+        List<Visita> visitasFiltradas = new ArrayList<>();
+
+        for (Visita visita : todasVisitas) {
+            if (visita.getPreso() != null
+                    && visita.getPreso().getIdentificacion().equals(identificacionPreso)
+                    && visita.getFechaVisita().equals(fecha)
+                    && visita.getHoraVisita().equals(hora)
+                    && visita.getEstado() != EstadoVisitaEnum.CANCELADA) {
+                visitasFiltradas.add(visita);
+            }
+        }
+
+        return visitasFiltradas;
+    }
+
+    public boolean tieneVisitaEnFecha(String identificacionVisitante, LocalDate fecha) {
+        List<Visita> todasVisitas = cargarTodas();
+
+        for (Visita visita : todasVisitas) {
+            if (visita.getEstado() != EstadoVisitaEnum.CANCELADA
+                    && visita.getFechaVisita().equals(fecha)) {
+                for (Visitante visitante : visita.getVisitantes()) {
+                    if (visitante.getIdentificacion().equals(identificacionVisitante)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 }

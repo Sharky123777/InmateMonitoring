@@ -1,5 +1,6 @@
 package Model.Entities;
 
+import Model.Constants.EstadoCitaMedicaEnum;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -12,6 +13,7 @@ public class CitaMedica {
     private Guardia guardia;
     private Preso preso;
     private Enfermera enfermera;
+    private EstadoCitaMedicaEnum estado;
 
     public CitaMedica(int id, LocalDate fecha, LocalTime hora, String motivo, Guardia guardia, Preso preso, Enfermera enfermera) {
         this.id = id;
@@ -21,6 +23,7 @@ public class CitaMedica {
         this.guardia = guardia;
         this.preso = preso;
         this.enfermera = enfermera;
+        this.estado = EstadoCitaMedicaEnum.PENDIENTE;
     }
 
     public int getId() {
@@ -77,5 +80,14 @@ public class CitaMedica {
 
     public void setEnfermera(Enfermera enfermera) {
         this.enfermera = enfermera;
+    }
+
+    public EstadoCitaMedicaEnum getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoCitaMedicaEnum estado) {
+        this.estado = estado;
+
     }
 }

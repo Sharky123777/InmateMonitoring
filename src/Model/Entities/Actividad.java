@@ -1,24 +1,34 @@
 package Model.Entities;
 
+import Model.Constants.EstadoActividadesEnum;
+import Model.Constants.EstadoActividadesPresoEnum;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Actividad {
+
+    private Map<String, EstadoActividadesPresoEnum> estadosPorPreso;
     private String idActividad;
     private String nombre;
-    private String tipo; 
+    private String tipo;
     private String dia;
-    private String horario; 
+    private String horario;
     private String lugar;
     private int cupoMaximo;
-    private List<String> presosAsignadosIds; 
-    private String estado; 
+    private List<String> presosAsignadosIds;
+    private EstadoActividadesEnum estado;
     private int presosInscritos;
     private String responsableOficial;
 
-    public Actividad(String idActividad, String nombre, String tipo, String dia, 
-                    String horario, String lugar, int cupoMaximo, String responsableOficial) {
+    public Actividad() {
+        this.estadosPorPreso = new HashMap<>(); // Inicialización en el constructor
+    }
+
+    public Actividad(String idActividad, String nombre, String tipo, String dia,
+            String horario, String lugar, int cupoMaximo, String responsableOficial) {
         this.idActividad = idActividad;
         this.nombre = nombre;
         this.tipo = tipo;
@@ -28,9 +38,17 @@ public class Actividad {
         this.cupoMaximo = cupoMaximo;
         this.presosAsignadosIds = new ArrayList<>();
         this.presosInscritos = presosInscritos;
-        this.estado = "Activa";
+        this.estado = EstadoActividadesEnum.ACTIVA;
         this.responsableOficial = responsableOficial;
     }
+    
+    public void setEstadoPreso(String presoId, EstadoActividadesPresoEnum estado) {
+    this.estadosPorPreso.put(presoId, estado);
+}
+
+public EstadoActividadesPresoEnum getEstadoPreso(String presoId) {
+    return this.estadosPorPreso.getOrDefault(presoId, EstadoActividadesPresoEnum.ACTIVA);
+}
 
     public String getResponsableOficial() {
         return responsableOficial;
@@ -41,9 +59,6 @@ public class Actividad {
     }
 
  
-
-    
-    
 
     public int getPresosInscritos() {
         return presosInscritos;
@@ -117,13 +132,11 @@ public class Actividad {
         return presosAsignadosIds;
     }
 
-    public String getEstado() {
+    public EstadoActividadesEnum getEstado() {
         return estado;
     }
 
-  
-
-    public void setEstado(String estado) {
+    public void setEstado(EstadoActividadesEnum estado) {
         this.estado = estado;
     }
 

@@ -3,6 +3,8 @@ package Controller;
 import DAO.ActividadDAO;
 import DAO.OficialDAO;
 import DAO.PresoDAO;
+import Model.Constants.EstadoActividadesEnum;
+import Model.Constants.EstadoActividadesPresoEnum;
 import Model.Entities.Actividad;
 import Model.Entities.Oficial;
 import Model.Entities.Preso;
@@ -110,7 +112,7 @@ public class ActividadController {
         return actividadDAO.buscarActividadesPorPreso(identificacionP);
     }
 
-    public List<Actividad> buscarActividadesPorEstado(String estado) {
+    public List<Actividad> buscarActividadesPorEstado(EstadoActividadesEnum estado) {
         return actividadDAO.buscarActividadesPorEstado(estado);
     }
 
@@ -266,11 +268,11 @@ public class ActividadController {
         return filas;
     }
 
-    public boolean actualizarEstadoActividad(String idActividad, String nuevoEstado) {
+    public boolean actualizarEstadoActividad(String idActividad, EstadoActividadesEnum nuevoEstado) {
         return actividadDAO.actualizarEstadoActividad(idActividad, nuevoEstado);
     }
 
-    public void actualizarEstadoPresosActividad(String idActividad, String estado) {
+    public void actualizarEstadoPresosActividad(String idActividad, EstadoActividadesEnum estado) {
         actividadDAO.actualizarEstadoPresosActividad(idActividad, estado);
     }
 

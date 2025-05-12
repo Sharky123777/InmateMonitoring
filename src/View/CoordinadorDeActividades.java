@@ -143,8 +143,6 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
 
         });
     }
-    
-    
 
     public void inicializarMenuActividadesEspecifica() {
         JMenuItem CambiarEstado = new JMenuItem("Cambiar estado");

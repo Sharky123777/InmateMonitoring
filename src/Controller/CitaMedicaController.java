@@ -224,9 +224,11 @@ public class CitaMedicaController {
             modelo.addRow(new Object[]{
                 foto,
                 preso.getId(),
-                preso.getNombreCompleto(),
+                preso.getNombresCompletos(),
+                preso.getApellidosCompletos(),
                 preso.getEdad(),
                 preso.getIdentificacion(),
+                preso.getSexo(),
                 preso.getNacionalidad(),
                 preso.getCeldaAsignada(),
                 preso.getSeccionAsignada()
@@ -249,9 +251,11 @@ public class CitaMedicaController {
             modelo.addRow(new Object[]{
                 foto,
                 preso.getId(),
-                preso.getNombreCompleto(),
+                preso.getNombresCompletos(),
+                preso.getApellidosCompletos(),
                 preso.getEdad(),
                 preso.getIdentificacion(),
+                preso.getSexo(),
                 preso.getNacionalidad(),
                 preso.getCeldaAsignada(),
                 preso.getSeccionAsignada()
@@ -348,9 +352,11 @@ public class CitaMedicaController {
                 modelo.addRow(new Object[]{
                     foto,
                     preso.getId(),
-                    preso.getNombreCompleto(),
+                    preso.getNombresCompletos(),
+                    preso.getApellidosCompletos(),
                     preso.getEdad(),
                     preso.getIdentificacion(),
+                    preso.getSexo(),
                     preso.getNacionalidad(),
                     preso.getCeldaAsignada(),
                     preso.getSeccionAsignada()
@@ -373,7 +379,8 @@ public class CitaMedicaController {
 
             modelo.addRow(new Object[]{
                 foto,
-                guardia.getNombreCompleto(),
+                guardia.getNombresCompletos(),
+                guardia.getApellidosCompletos(),
                 guardia.getEdad(),
                 guardia.getIdentificacion(),
                 guardia.getSexo(),
@@ -405,7 +412,8 @@ public class CitaMedicaController {
 
                 modelo.addRow(new Object[]{
                     foto,
-                    guardia.getNombreCompleto(),
+                    guardia.getNombresCompletos(),
+                    guardia.getApellidosCompletos(),
                     guardia.getEdad(),
                     guardia.getIdentificacion(),
                     guardia.getSexo(),
