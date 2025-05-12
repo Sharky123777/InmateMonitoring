@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
 
 public class EnfermeraDAO {
 
-    private static final String RUTA_JSON = "C:\\Users\\gameV\\Documents\\NetBeansProjects\\InmateMonitorinG\\src\\Resources\\DATA\\enfermera.json";
+    private static final String RUTA_JSON = "src/Resources/DATA/enfermera.json";
     private static final String RUTA_IMAGENES = "src/Resources/imagenes_enfermeras/";
     private static final String RUTA_USUARIOS = "src/Resources/DATA/usuarios.json";
     private final Gson gson;

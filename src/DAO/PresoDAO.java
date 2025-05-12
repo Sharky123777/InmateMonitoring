@@ -41,7 +41,7 @@ public class PresoDAO {
     private static ExpedienteDAO expedienteDAO = ExpedienteDAO.getInstancia();
     private static PresoDAO instancia;
 
-    private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\presos.json\\";
+    private static final String JSON_FILE ="src/Resources/DATA/presos.json/";
     private static final String RUTA_IMAGENES = "src/Resources/imagenes_presos/";
 
     private Gson gson = new GsonBuilder()

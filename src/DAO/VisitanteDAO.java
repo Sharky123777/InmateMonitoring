@@ -22,8 +22,8 @@ import javax.swing.JOptionPane;
 public class VisitanteDAO {
 
     private static VisitanteDAO instancia;
-    private static final String JSON_FILE = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\visitantes.json";
-    private static final String IMAGES_DIR = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\Images\\";
+    private static final String JSON_FILE = "src/Resources/DATA/visitantes.json";
+    private static final String IMAGES_DIR = "src/Resources/Images/";
 
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 

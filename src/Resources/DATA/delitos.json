@@ -158,5 +158,21 @@
       "fechaIngreso": "2025-05-12",
       "fechaSalidaCalculada": "2028-10-12"
     }
+  },
+  {
+    "id": 11,
+    "presoId": "1234565432",
+    "codigo": 101,
+    "nombre": "Genocidio",
+    "articuloLey": "Artículo 101",
+    "gravedad": "Alta",
+    "descripcion": "Mato a casi toda su familia xd",
+    "fechaComision": "2025-05-05",
+    "sentencia": {
+      "años": 4,
+      "meses": 0,
+      "fechaIngreso": "2025-05-12",
+      "fechaSalidaCalculada": "2029-05-12"
+    }
   }
 ]

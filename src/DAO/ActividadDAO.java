@@ -29,7 +29,7 @@ public class ActividadDAO {
         return instancia;
     }
 
-    private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\actividades.json\\";
+    private static final String JSON_FILE = "src/Resources/DATA/actividades.json";
     private Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())

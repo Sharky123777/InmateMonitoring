@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
 public class VisitaDAO {
 
     private static VisitaDAO instancia;
-    private static final String JSON_FILE = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\visitas.json";
+    private static final String JSON_FILE = "src/Resources/DATA/visitas.json";
     private Gson gson;
 
     public VisitaDAO() {

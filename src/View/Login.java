@@ -162,7 +162,7 @@ public class Login extends javax.swing.JFrame {
                     new PersonalDeControl().setVisible(true);
                     break;
                 case OFICIAL_DE_REGISTRO:
-                    new OficialRegistro().setVisible(true);
+                    new OficialDeRegistro().setVisible(true);
                     break;
                 case ENFERMERA:
                     new Enfermera().setVisible(true);

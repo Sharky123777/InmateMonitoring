@@ -31,7 +31,7 @@ public class IntentoFugaDAO {
         return instancia;
     }
 
-    private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\intentosFuga.json";
+    private static final String JSON_FILE = "src/Resources/DATA/intentosFuga.json";
 
     private final Gson gson = new GsonBuilder()
             .setPrettyPrinting()

@@ -122,7 +122,7 @@ public class ActividadController {
         modelo.setRowCount(0);
 
         for (Actividad actividad : actividades) {
-            Oficial oficial = oficialDAO.buscarPorIdentificacion(actividad.getResponsableOficial());
+            Oficial oficial = oficialDAO.obtenerOficialPorCedula(actividad.getResponsableOficial());
             String nombreOficial = (oficial != null) ? oficial.getPrimerNombre() + " " + oficial.getPrimerApellido() : "Sin asignar";
 
             modelo.addRow(new Object[]{
@@ -168,7 +168,7 @@ public class ActividadController {
 
         for (Actividad actividad : actividades) {
 
-            Oficial oficial = oficialDAO.buscarPorIdentificacion(actividad.getResponsableOficial());
+            Oficial oficial = oficialDAO.obtenerOficialPorCedula(actividad.getResponsableOficial());
             String nombreOficial = (oficial != null) ? oficial.getPrimerNombre() + " " + oficial.getPrimerApellido() : "Sin asignar";
 
             modelo.addRow(new Object[]{
@@ -223,7 +223,7 @@ public class ActividadController {
         List<Object[]> filas = new ArrayList<>();
 
         for (Actividad actividad : actividades) {
-            Oficial oficial = oficialDAO.buscarPorIdentificacion(actividad.getResponsableOficial());
+            Oficial oficial = oficialDAO.obtenerOficialPorCedula(actividad.getResponsableOficial());
             String nombreOficial = (oficial != null) ? oficial.getPrimerNombre() + " " + oficial.getPrimerApellido() : "Sin asignar";
 
             filas.add(new Object[]{
@@ -340,7 +340,7 @@ public class ActividadController {
             if (!responsableOficial.trim().isEmpty()
                     && !responsableOficial.equals(actividadOriginal.getResponsableOficial())) {
 
-                Oficial oficial = oficialDAO.buscarPorIdentificacion(responsableOficial);
+                Oficial oficial = oficialDAO.obtenerOficialPorCedula(responsableOficial);
                 if (oficial == null) {
                     throw new Exception("No se encontró el guardia con ID: " + responsableOficial);
                 }

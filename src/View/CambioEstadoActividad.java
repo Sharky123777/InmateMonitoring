@@ -108,7 +108,7 @@ public class CambioEstadoActividad extends javax.swing.JDialog {
     
     if ("ACTIVA".equals(nuevoEstado) && 
         "CANCELADA".equals(actividadSeleccionada.getEstado())) {
-        Model.Entities.Oficial responsable = oficialDAO.buscarPorIdentificacion(actividadSeleccionada.getResponsableOficial());
+        Model.Entities.Oficial responsable = oficialDAO.obtenerOficialPorCedula(actividadSeleccionada.getResponsableOficial());
         
         if (responsable != null) {
             if (!actividadController.puedeAgregarActividad(responsable)) {

@@ -1576,7 +1576,7 @@ CoordinadorDeActividades.setSelectedIndex(3);
 
             OficialDAO oficialDAO = new OficialDAO();
 
-            Oficial responsable = oficialDAO.buscarPorIdentificacion(responsableIden);
+            Oficial responsable = oficialDAO.obtenerOficialPorCedula(responsableIden);
 
             if (responsable == null) {
                 JOptionPane.showMessageDialog(null, "El oficial con esa identificación no existe.", "Error", JOptionPane.ERROR_MESSAGE);

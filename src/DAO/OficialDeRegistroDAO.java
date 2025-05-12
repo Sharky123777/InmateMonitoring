@@ -21,7 +21,7 @@ import javax.swing.JOptionPane;
 
 public class OficialDeRegistroDAO {
    
-   private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\oficialesDeRegistro.json";
+   private static final String JSON_FILE = "src/Resources/DATA/oficialesDeRegistro.json";
 
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 

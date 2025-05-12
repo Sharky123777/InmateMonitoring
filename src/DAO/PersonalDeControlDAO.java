@@ -18,8 +18,8 @@ import java.util.List;
 public class PersonalDeControlDAO {
 
     private static PersonalDeControlDAO instancia;
-    private static final String JSON_FILE = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\personalDeControl.json";
-    private static final String IMAGES_DIR = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\Images\\";
+    private static final String JSON_FILE = "src/Resources/DATA/personalDeControl.json";
+    private static final String IMAGES_DIR = "src/Resources/imagenes_personalDeControl/";
     private Gson gson;
 
     public PersonalDeControlDAO() {

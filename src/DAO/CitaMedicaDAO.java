@@ -18,7 +18,7 @@ import java.time.LocalTime;
 
 public class CitaMedicaDAO {
 
-    private static final String JSON_FILE = "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\DATA\\citasMedicas.json";
+    private static final String JSON_FILE = "src/Resources/DATA/citasMedicas.json";
     private Gson gson;
 
     public CitaMedicaDAO() {

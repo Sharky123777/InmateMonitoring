@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class ExpedienteDAO {
 
     private static ExpedienteDAO instancia;
-    private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\expedientes.json";
+    private static final String JSON_FILE = "src/Resources/DATA/expedientes.json";
 
     private final Gson gson = new GsonBuilder()
             .setPrettyPrinting()

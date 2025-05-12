@@ -20,7 +20,7 @@ public class CeldaDAO {
             private static CeldaDAO instancia;
 
     
-    private static final String JSON_FILE = "C:\\Users\\ASUS\\Documents\\NetBeansProjects\\InmateMonitoring\\src\\Resources\\DATA\\celdas.json";
+    private static final String JSON_FILE = "src/Resources/DATA/celdas.json";
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     

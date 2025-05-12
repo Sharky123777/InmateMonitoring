@@ -18,7 +18,7 @@ public class DelitoDAO {
 
    private static DelitoDAO instancia;
 
-    private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\delitos.json";
+    private static final String JSON_FILE = "src/Resources/DATA/delitos.json";
     private Gson gson;
     
      public static synchronized DelitoDAO getInstancia() {
