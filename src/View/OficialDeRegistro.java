@@ -25,6 +25,7 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -42,6 +43,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -60,6 +62,9 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     private JLabel nacionalidad = new JLabel();
     private JLabel fotoLabel = new JLabel();
     private JLabel SentenciaTotal = new JLabel();
+    private JTextField txtReclusa;
+    private JTextField txtIdentificacionReclusa;
+    private JTextField txtEstadoReclusa;
 
     private HashMap<String, String[]> datosDelitos;
 
@@ -257,16 +262,28 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         for (Object[] fila : presosInactivos) {
             model.addRow(fila);
         }
+
     }
 
     public void inicializarMenuPresos() {
-        JMenu cambiarEstadoMenu = new JMenu("Cambiar Estado");
-        JMenuItem Expediente = new JMenuItem("Expediente");
-        JMenuItem Informacion = new JMenuItem("Información General");
-        JMenuItem Actualizar = new JMenuItem("Actualizar Información");
-        JMenuItem AñadirDelito = new JMenuItem("Añadir Delito");
-        JMenuItem itemHistorial = new JMenuItem("Ver historial de Expedientes");
+        String rutaAbsoluta = "C:/Users/ASUS/Desktop/InmateMonitoring/src/Resources/Iconos/";
 
+        JMenu cambiarEstadoMenu = new JMenu("Cambiar Estado");
+        cambiarEstadoMenu.setIcon(new ImageIcon(rutaAbsoluta + "liberar.png"));
+
+        JMenuItem Expediente = new JMenuItem("Expediente");
+        Expediente.setIcon(new ImageIcon(rutaAbsoluta + "expediente.png"));
+
+        JMenuItem Informacion = new JMenuItem("Información General");
+        Informacion.setIcon(new ImageIcon(rutaAbsoluta + "informacion.png"));
+
+        JMenuItem Actualizar = new JMenuItem("Actualizar Información");
+        Actualizar.setIcon(new ImageIcon(rutaAbsoluta + "documento.png"));
+
+        JMenuItem HistorialExpediente = new JMenuItem("Ver historial de Expedientes");
+        HistorialExpediente.setIcon(new ImageIcon(rutaAbsoluta + "informacion-personal.png"));
+
+        //JMenuItem AñadirDelito = new JMenuItem("Añadir Delito");
         JMenuItem ActivoItem = new JMenuItem("Marcar como Activo");
         JMenuItem fugadoItem = new JMenuItem("Marcar como Fugado");
         JMenuItem liberarItem = new JMenuItem("Liberar Preso");
@@ -277,24 +294,16 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         cambiarEstadoMenu.add(liberarItem);
         cambiarEstadoMenu.add(fallecidoItem);
 
-        ppMenuTablaPresos.add(itemHistorial);
         ppMenuTablaPresos.add(Expediente);
         ppMenuTablaPresos.add(Informacion);
-        ppMenuTablaPresos.add(AñadirDelito);
+        //ppMenuTablaPresos.add(AñadirDelito);
         ppMenuTablaPresos.add(Actualizar);
+        ppMenuTablaPresos.add(HistorialExpediente);
+
         ppMenuTablaPresos.addSeparator();
         ppMenuTablaPresos.add(cambiarEstadoMenu);
 
         TablaPresos.setComponentPopupMenu(ppMenuTablaPresos);
-
-        itemHistorial.addActionListener(e -> {
-            int fila = TablaPresos.getSelectedRow();
-            if (fila >= 0) {
-                String identificacion = TablaPresos.getValueAt(fila, 5).toString();
-                HistorialExpedienteDialog dialog = new HistorialExpedienteDialog(null, identificacion);
-                dialog.setVisible(true);
-            }
-        });
 
         Expediente.addActionListener(e -> {
             try {
@@ -309,31 +318,30 @@ public class OficialDeRegistro extends javax.swing.JFrame {
                         nivelRiesgExp, nom, ape, edad, identi, naciona, fotoPresoExpediente,
                         tablaExpediente, sentenciaTotaal, panelEstadoEspecialPreso, lblMensajeEspecialPreso
                 );
-                OficialDeRegistroView.setSelectedIndex(2);
+                OficialDeRegistroView.setSelectedIndex(8);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
             }
         });
 
-        AñadirDelito.addActionListener(e -> {
-            int fila = TablaPresos.getSelectedRow();
-            if (fila == -1) {
-                JOptionPane.showMessageDialog(null, "Seleccione un preso primero", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            String identificacion = TablaPresos.getValueAt(fila, 5).toString();
-            Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
-
-            if (preso == null) {
-                JOptionPane.showMessageDialog(null, "Preso no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            presoOriginal = preso;
-            OficialDeRegistroView.setSelectedIndex(7);
-        });
-
+//        AñadirDelito.addActionListener(e -> {
+//            int fila = TablaPresos.getSelectedRow();
+//            if (fila == -1) {
+//                JOptionPane.showMessageDialog(null, "Seleccione un preso primero", "Advertencia", JOptionPane.WARNING_MESSAGE);
+//                return;
+//            }
+//
+//            String identificacion = TablaPresos.getValueAt(fila, 5).toString();
+//            Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
+//
+//            if (preso == null) {
+//                JOptionPane.showMessageDialog(null, "Preso no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+//                return;
+//            }
+//
+//            presoOriginal = preso;
+//            OficialDeRegistroView.setSelectedIndex(7);
+//        });
         Actualizar.addActionListener(e -> {
             int fila = TablaPresos.getSelectedRow();
             if (fila == -1) {
@@ -383,10 +391,49 @@ public class OficialDeRegistro extends javax.swing.JFrame {
                 Image img = icon.getImage().getScaledInstance(ImagenPresoInformacion.getWidth(), ImagenPresoInformacion.getHeight(), Image.SCALE_SMOOTH);
                 ImagenPresoInformacion.setIcon(new ImageIcon(img));
 
-                OficialDeRegistroView.setSelectedIndex(3);
+                OficialDeRegistroView.setSelectedIndex(2);
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error al cargar información: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        HistorialExpediente.addActionListener(e -> {
+            int fila = TablaPresos.getSelectedRow();
+            if (fila >= 0) {
+                String identificacion = TablaPresos.getValueAt(fila, 5).toString();
+
+                HistorialExpedienteDialog dialog = new HistorialExpedienteDialog(
+                        null,
+                        identificacion,
+                        expedienteController,
+                        OficialDeRegistroView,
+                        lblFechaSalida,
+                        RegistroNum,
+                        CodExpe,
+                        FechaAper,
+                        Estado,
+                        Juzgado,
+                        nivelRiesgExp,
+                        nom,
+                        ape,
+                        edad,
+                        identi,
+                        naciona,
+                        fotoPresoExpediente,
+                        tablaExpediente,
+                        sentenciaTotaal,
+                        panelEstadoEspecialPreso,
+                        lblMensajeEspecialPreso,
+                        txtReclusa,
+                        txtIdentificacionReclusa,
+                        txtEstadoReclusa
+                );
+                dialog.setLocationRelativeTo(null);
+
+                dialog.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Seleccione un preso primero", "Aviso", JOptionPane.WARNING_MESSAGE);
             }
         });
 
@@ -1007,7 +1054,17 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         presosInactivos = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaInactivos = new javax.swing.JTable();
+        jPanel15 = new RoundedPanel(30);
+        ;
         jLabel79 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        lblLiberadas = new javax.swing.JLabel();
+        lblFallecidas = new javax.swing.JLabel();
+        jLabel86 = new javax.swing.JLabel();
+        txtBusquedPresosInactivos = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         Expediente = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -2206,7 +2263,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
                 SelectorSeccionActionPerformed(evt);
             }
         });
-        jPanel2.add(SelectorSeccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, 90, 30));
+        jPanel2.add(SelectorSeccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 140, 30));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 330, 80));
 
@@ -2766,14 +2823,51 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         tablaInactivos.setRowHeight(50);
         jScrollPane3.setViewportView(tablaInactivos);
 
-        presosInactivos.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 980, -1));
+        presosInactivos.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 190, 980, 370));
 
-        jLabel79.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        jLabel79.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel79.setText("Presos en libertad o inactivos");
-        presosInactivos.add(jLabel79, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 50, -1, -1));
+        jPanel15.setBackground(new java.awt.Color(29, 35, 51));
+        jPanel15.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel79.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel79.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel79.setText("Filtrar por: ");
+        jPanel15.add(jLabel79, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 22, -1, 30));
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODAS", "LIBERADAS", "FALLECIDAS" }));
+        jPanel15.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 160, 50));
+
+        jLabel18.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel18.setText("Cantidad total de liberadas: ");
+        jPanel15.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 40, 200, 30));
+
+        jLabel20.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel20.setText("Cantidad total de fallecidas: ");
+        jPanel15.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 10, 200, 30));
+
+        lblLiberadas.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jPanel15.add(lblLiberadas, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 40, 230, 30));
+
+        lblFallecidas.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jPanel15.add(lblFallecidas, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 0, 230, 40));
+
+        presosInactivos.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, 970, 70));
+
+        jLabel86.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel86.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel86.setText("Ingrese la identificación:");
+        presosInactivos.add(jLabel86, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 50, 180, 30));
+
+        txtBusquedPresosInactivos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBusquedPresosInactivosActionPerformed(evt);
+            }
+        });
+        presosInactivos.add(txtBusquedPresosInactivos, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 520, 30));
+
+        jButton4.setText("Buscar");
+        presosInactivos.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 50, 70, 30));
+
+        jButton1.setBackground(new java.awt.Color(51, 0, 0));
         jButton1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Volver");
@@ -2782,7 +2876,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        presosInactivos.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 30, 100, 30));
+        presosInactivos.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 50, 110, 30));
 
         OficialDeRegistroView.addTab("Presos  inactivos", presosInactivos);
 
@@ -3794,13 +3888,13 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     }//GEN-LAST:event_btnActualilzarODRActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        OficialDeRegistroView.setSelectedIndex(4);
+        OficialDeRegistroView.setSelectedIndex(3);
 
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        OficialDeRegistroView.setSelectedIndex(8);
+        OficialDeRegistroView.setSelectedIndex(7);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void InputSegundoNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InputSegundoNombreActionPerformed
@@ -3861,6 +3955,10 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void txtBusquedPresosInactivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedPresosInactivosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBusquedPresosInactivosActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -3995,6 +4093,8 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel100;
@@ -4026,8 +4126,10 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
@@ -4094,6 +4196,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel83;
     private javax.swing.JLabel jLabel84;
     private javax.swing.JLabel jLabel85;
+    private javax.swing.JLabel jLabel86;
     private javax.swing.JLabel jLabel87;
     private javax.swing.JLabel jLabel88;
     private javax.swing.JLabel jLabel89;
@@ -4111,6 +4214,7 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
@@ -4214,8 +4318,10 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JSeparator jSeparator92;
     private javax.swing.JSeparator jSeparator93;
+    private javax.swing.JLabel lblFallecidas;
     private javax.swing.JLabel lblFechaSalida;
     private javax.swing.JLabel lblFoto;
+    private javax.swing.JLabel lblLiberadas;
     private javax.swing.JLabel lblMensajeEspecialPreso;
     private javax.swing.JLabel lblProgreso;
     private javax.swing.JLabel lblProgreso1;
@@ -4266,5 +4372,6 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     private javax.swing.JTable tablaInactivos;
     private javax.swing.JTable tablaSancion;
     private javax.swing.JTextArea textAreaDescripcion1;
+    private javax.swing.JTextField txtBusquedPresosInactivos;
     // End of variables declaration//GEN-END:variables
 }

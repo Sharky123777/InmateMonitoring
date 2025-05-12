@@ -323,17 +323,22 @@ public class GeneradorExpedientePDF {
         document.add(sentenciaWrapper);
         document.add(Chunk.NEWLINE);
 
-        // Tabla de delitos con diseño moderno
-        PdfPTable tablaDelitos = new PdfPTable(4);
+        // Tabla de delitos con diseño moderno ahora con 5 columnas (añadiendo descripción)
+        PdfPTable tablaDelitos = new PdfPTable(5);
         tablaDelitos.setWidthPercentage(100);
         tablaDelitos.setSpacingBefore(10);
         tablaDelitos.setHeaderRows(1);
-        
+
+        // Ajustar los anchos de las columnas para dar más espacio a la descripción
+        float[] columnWidths = {20f, 15f, 12f, 15f, 38f}; // Porcentajes aproximados
+        tablaDelitos.setWidths(columnWidths);
+
         // Encabezados de tabla modernos
         agregarCeldaEncabezadoModerno(tablaDelitos, "Delito", fontEtiqueta);
         agregarCeldaEncabezadoModerno(tablaDelitos, "Fecha comisión", fontEtiqueta);
         agregarCeldaEncabezadoModerno(tablaDelitos, "Gravedad", fontEtiqueta);
         agregarCeldaEncabezadoModerno(tablaDelitos, "Sentencia", fontEtiqueta);
+        agregarCeldaEncabezadoModerno(tablaDelitos, "Descripción", fontEtiqueta);
 
         if (delitos != null && !delitos.isEmpty()) {
             boolean alternate = false;
@@ -345,13 +350,13 @@ public class GeneradorExpedientePDF {
                 // Celda de delito
                 PdfPCell delitoCell = new PdfPCell(new Phrase(delito.getNombre(), fontNormal));
                 delitoCell.setBackgroundColor(rowColor);
-                delitoCell.setPadding(8);
+                delitoCell.setPadding(6);
                 tablaDelitos.addCell(delitoCell);
                 
                 // Celda de fecha
                 PdfPCell fechaCell = new PdfPCell(new Phrase(delito.getFechaComision().format(formatter), fontNormal));
                 fechaCell.setBackgroundColor(rowColor);
-                fechaCell.setPadding(8);
+                fechaCell.setPadding(6);
                 tablaDelitos.addCell(fechaCell);
                 
                 // Celda de gravedad con color según nivel
@@ -360,19 +365,40 @@ public class GeneradorExpedientePDF {
                     delito.getGravedad().equalsIgnoreCase("Media") ? COLOR_PRIMARIO : BaseColor.DARK_GRAY);
                 PdfPCell gravedadCell = new PdfPCell(new Phrase(delito.getGravedad(), gravedadFont));
                 gravedadCell.setBackgroundColor(rowColor);
-                gravedadCell.setPadding(8);
+                gravedadCell.setPadding(6);
                 gravedadCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tablaDelitos.addCell(gravedadCell);
                 
                 // Celda de sentencia
                 PdfPCell sentenciaDelitoCell = new PdfPCell(new Phrase(delito.getSentencia().getSentenciaFormateada(), fontNormal));
                 sentenciaDelitoCell.setBackgroundColor(rowColor);
-                sentenciaDelitoCell.setPadding(8);
+                sentenciaDelitoCell.setPadding(6);
                 tablaDelitos.addCell(sentenciaDelitoCell);
+                
+                // Celda para la descripción con manejo de texto largo
+                PdfPCell descripcionCell = new PdfPCell();
+                descripcionCell.setBackgroundColor(rowColor);
+                descripcionCell.setPadding(6);
+                
+                String descripcion = delito.getDescripcion() != null ? delito.getDescripcion() : "Sin descripción";
+                
+                // Dividir el texto en párrafos si es muy largo
+                if (descripcion.length() > 150) {
+                    // Usamos Paragraph para manejar texto largo con saltos de línea automáticos
+                    Paragraph descripcionParrafo = new Paragraph(descripcion, 
+                        new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL, BaseColor.DARK_GRAY));
+                    descripcionCell.addElement(descripcionParrafo);
+                } else {
+                    // Para texto corto, usamos Phrase normal
+                    descripcionCell.setPhrase(new Phrase(descripcion, 
+                        new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.DARK_GRAY)));
+                }
+                
+                tablaDelitos.addCell(descripcionCell);
             }
         } else {
             PdfPCell noDelitos = new PdfPCell(new Phrase("No hay delitos registrados", fontNormal));
-            noDelitos.setColspan(4);
+            noDelitos.setColspan(5);
             noDelitos.setHorizontalAlignment(Element.ALIGN_CENTER);
             noDelitos.setBorder(Rectangle.NO_BORDER);
             noDelitos.setPadding(10);

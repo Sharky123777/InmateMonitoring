@@ -410,5 +410,68 @@ public class ExpedienteController {
         return null;
     }
 }
+    
+  public void cargarExpedienteCompletoDesdeObjeto(
+        ExpedienteJudicial expediente,
+        JLabel fechaSalida,
+        JLabel registroNum,
+        JLabel codExpe,
+        JLabel fechaAper,
+        JLabel estado,
+        JLabel juzgado,
+        JLabel nivelRiesgo,
+        JLabel nombre,
+        JLabel apellidos,
+        JLabel edad,
+        JLabel identificacion,
+        JLabel nacionalidad,
+        JLabel fotoLabel,
+        JTable tablaExpediente,
+        JLabel sentenciaTotalLabel,
+        JPanel panelEstadoEspecialPreso,
+        JLabel lblMensajeEspecialPreso
+) {
+    try {
+        Preso preso = expediente.getPreso();
+        if (preso == null) {
+            throw new IllegalStateException("El expediente no contiene un preso asociado.");
+        }
+
+        List<Delito> delitos = expediente.getDelitos();
+        if (delitos == null) delitos = new ArrayList<>();
+
+        cargarDatosPresoUI(
+                preso,
+                nombre,
+                apellidos,
+                edad,
+                identificacion,
+                nacionalidad,
+                fotoLabel,
+                estado,
+                panelEstadoEspecialPreso,
+                lblMensajeEspecialPreso
+        );
+
+        cargarDatosExpedienteUI(expediente, registroNum, codExpe, fechaAper, estado, juzgado, nivelRiesgo);
+
+        Sentencia sentencia = expedienteDAO.calcularSentenciaTotal(delitos);
+        sentenciaTotalLabel.setText(sentencia.getSentenciaFormateada());
+
+        if (sentencia.getFechaSalidaCalculada() != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            fechaSalida.setText(sentencia.getFechaSalidaCalculada().format(formatter));
+        } else {
+            fechaSalida.setText("No disponible");
+        }
+
+        cargarTablaDelitosUI(delitos, tablaExpediente);
+
+    } catch (Exception e) {
+        Validador.mostrarError("Error al cargar expediente: " + e.getMessage());
+    }
+}
+
+
 
 }

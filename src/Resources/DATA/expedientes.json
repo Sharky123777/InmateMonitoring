@@ -1,1178 +1,202 @@
 [
   {
-    "codigoExpediente": "EXP-3UB6-XQ01",
-    "numeroRegistro": "REG-2025-2559",
-    "fechaApertura": "2025-05-02",
-    "estado": "CERRADO",
+    "codigoExpediente": "EXP-1747065953302",
+    "numeroRegistro": "REG-2025-6046",
+    "fechaApertura": "2025-05-12",
+    "estado": "ABIERTO",
     "delitos": [
       {
         "id": 1,
-        "presoId": "001122334",
-        "codigo": 221,
-        "nombre": "Calumnia",
-        "articuloLey": "Artículo 221",
+        "presoId": "1237440696",
+        "codigo": 265,
+        "nombre": "Daño en bien ajeno",
+        "articuloLey": "Artículo 265",
         "gravedad": "Baja",
-        "descripcion": "La interna fue condenada por calumniar públicamente a una docente universitaria\n acusándola falsamente de haber cometido abuso de poder y actos indebidos con estudiantes. \nEstas acusaciones fueron difundidas en redes sociales y durante una asamblea estudiantil,\n causando un daño considerable a la reputación profesional de la docente. \nLas investigaciones demostraron que la presa actuó movida por conflictos personales\n y sin ningún tipo de prueba, lo que llevó a su condena por el delito de calumnia, agravado por el impacto público del caso y la afectación psicológica de la víctima.",
-        "fechaComision": "2025-04-03",
+        "descripcion": "Se metio en un bien ajeno a destruir todo",
+        "fechaComision": "2025-05-01",
         "sentencia": {
-          "años": 2,
+          "años": 3,
           "meses": 0,
-          "fechaIngreso": "2025-04-25",
-          "fechaSalidaCalculada": "2027-04-25"
+          "fechaIngreso": "2025-05-12",
+          "fechaSalidaCalculada": "2028-05-12"
         }
       },
       {
         "id": 2,
-        "presoId": "001122334",
-        "codigo": 287,
-        "nombre": "Falsedad en documento público",
-        "articuloLey": "Artículo 287",
-        "gravedad": "Baja",
-        "descripcion": "La interna fue condenada por falsedad de documento después de ser arrestada por presentar un título universitario falsificado con el fin de obtener un empleo en una empresa privada. El documento fue alterado digitalmente para simular la autenticidad de una licenciatura que no había sido obtenida por ella. La falsificación fue descubierta cuando el empleador verificó la validez del título en la universidad correspondiente. La condena se basó en el uso de documentos falsificados con el propósito de engañar a terceros, lo que conllevó a la pérdida de confianza de la víctima y una pena de prisión.",
-        "fechaComision": "2025-04-03",
+        "presoId": "1237440696",
+        "codigo": 189,
+        "nombre": "Violación de habitación ajena",
+        "articuloLey": "Artículo 189",
+        "gravedad": "Media",
+        "descripcion": "Violo la habitacion ajena, entro\npor que tenia frio",
+        "fechaComision": "2022-05-11",
+        "sentencia": {
+          "años": 1,
+          "meses": 4,
+          "fechaIngreso": "2025-05-12",
+          "fechaSalidaCalculada": "2026-09-12"
+        }
+      },
+      {
+        "id": 3,
+        "presoId": "1237440696",
+        "codigo": 233,
+        "nombre": "Inasistencia alimentaria",
+        "articuloLey": "Artículo 233",
+        "gravedad": "Media",
+        "descripcion": "No pago la manutencion de sus hijos",
+        "fechaComision": "2025-05-01",
+        "sentencia": {
+          "años": 5,
+          "meses": 4,
+          "fechaIngreso": "2025-05-12",
+          "fechaSalidaCalculada": "2030-09-12"
+        }
+      },
+      {
+        "id": 4,
+        "presoId": "1237440696",
+        "codigo": 131,
+        "nombre": "Omisión de socorro",
+        "articuloLey": "Artículo 131",
+        "gravedad": "Media",
+        "descripcion": "Presencio un accudente y se fue corriendo",
+        "fechaComision": "2023-05-06",
+        "sentencia": {
+          "años": 0,
+          "meses": 4,
+          "fechaIngreso": "2025-05-12",
+          "fechaSalidaCalculada": "2025-09-12"
+        }
+      },
+      {
+        "id": 5,
+        "presoId": "1237440696",
+        "codigo": 111,
+        "nombre": "Lesiones personales leves",
+        "articuloLey": "Artículo 111",
+        "gravedad": "Media",
+        "descripcion": "Multiples lesiones con alta gravedad",
+        "fechaComision": "2025-05-05",
+        "sentencia": {
+          "años": 1,
+          "meses": 4,
+          "fechaIngreso": "2025-05-12",
+          "fechaSalidaCalculada": "2026-09-12"
+        }
+      },
+      {
+        "id": 6,
+        "presoId": "1237440696",
+        "codigo": 289,
+        "nombre": "Falsedad en documento privado",
+        "articuloLey": "Artículo 289",
+        "gravedad": "Media",
+        "descripcion": "Falsifico un  documento para ir al concierto\n de un cantante famoso",
+        "fechaComision": "2023-05-19",
+        "sentencia": {
+          "años": 1,
+          "meses": 4,
+          "fechaIngreso": "2025-05-12",
+          "fechaSalidaCalculada": "2026-09-12"
+        }
+      },
+      {
+        "id": 7,
+        "presoId": "1237440696",
+        "codigo": 296,
+        "nombre": "Usurpación de derechos",
+        "articuloLey": "Artículo 296",
+        "gravedad": "Alta",
+        "descripcion": "Rompia los derechos de las personas",
+        "fechaComision": "2025-05-03",
+        "sentencia": {
+          "años": 2,
+          "meses": 6,
+          "fechaIngreso": "2025-05-12",
+          "fechaSalidaCalculada": "2027-11-12"
+        }
+      },
+      {
+        "id": 8,
+        "presoId": "1237440696",
+        "codigo": 490,
+        "nombre": "Estafa",
+        "articuloLey": "Artículo 490",
+        "gravedad": "Media",
+        "descripcion": "Frecuentaba casinos y pagaba con billetes falsos",
+        "fechaComision": "2025-05-01",
         "sentencia": {
           "años": 4,
-          "meses": 3,
-          "fechaIngreso": "2025-04-25",
-          "fechaSalidaCalculada": "2029-07-25"
+          "meses": 6,
+          "fechaIngreso": "2025-05-12",
+          "fechaSalidaCalculada": "2029-11-12"
+        }
+      },
+      {
+        "id": 9,
+        "presoId": "1237440696",
+        "codigo": 319,
+        "nombre": "Contrabando",
+        "articuloLey": "Artículo 319 - Contrabando",
+        "gravedad": "Alta",
+        "descripcion": "Contrabandeaba marihuana y decia que ere cilantro",
+        "fechaComision": "2024-05-23",
+        "sentencia": {
+          "años": 3,
+          "meses": 8,
+          "fechaIngreso": "2025-05-12",
+          "fechaSalidaCalculada": "2029-01-12"
+        }
+      },
+      {
+        "id": 10,
+        "presoId": "1237440696",
+        "codigo": 103,
+        "nombre": "Homicidio",
+        "articuloLey": "Artículo 103",
+        "gravedad": "Media",
+        "descripcion": "Mato a una persona, por que no habia desayunado",
+        "fechaComision": "2025-05-10",
+        "sentencia": {
+          "años": 3,
+          "meses": 5,
+          "fechaIngreso": "2025-05-12",
+          "fechaSalidaCalculada": "2028-10-12"
         }
       }
     ],
+    "juzgado": "Juzgado penal",
     "totalVisitas": 0,
     "nivelAdaptacion": "Por evaluar",
     "actividades": [],
     "observacionesConducta": "Ninguna",
     "nivelRiesgo": "Riesgo bajo",
     "preso": {
-      "estatura": 1.7,
-      "peso": 89.0,
-      "delitos": [
-        {
-          "id": 1,
-          "presoId": "001122334",
-          "codigo": 221,
-          "nombre": "Calumnia",
-          "articuloLey": "Artículo 221",
-          "gravedad": "Baja",
-          "descripcion": "La interna fue condenada por calumniar públicamente a una docente universitaria\n acusándola falsamente de haber cometido abuso de poder y actos indebidos con estudiantes. \nEstas acusaciones fueron difundidas en redes sociales y durante una asamblea estudiantil,\n causando un daño considerable a la reputación profesional de la docente. \nLas investigaciones demostraron que la presa actuó movida por conflictos personales\n y sin ningún tipo de prueba, lo que llevó a su condena por el delito de calumnia, agravado por el impacto público del caso y la afectación psicológica de la víctima.",
-          "fechaComision": "2025-04-03",
-          "sentencia": {
-            "años": 2,
-            "meses": 0,
-            "fechaIngreso": "2025-04-25",
-            "fechaSalidaCalculada": "2027-04-25"
-          }
-        },
-        {
-          "id": 2,
-          "presoId": "001122334",
-          "codigo": 287,
-          "nombre": "Falsedad en documento público",
-          "articuloLey": "Artículo 287",
-          "gravedad": "Baja",
-          "descripcion": "La interna fue condenada por falsedad de documento después de ser arrestada por presentar un título universitario falsificado con el fin de obtener un empleo en una empresa privada. El documento fue alterado digitalmente para simular la autenticidad de una licenciatura que no había sido obtenida por ella. La falsificación fue descubierta cuando el empleador verificó la validez del título en la universidad correspondiente. La condena se basó en el uso de documentos falsificados con el propósito de engañar a terceros, lo que conllevó a la pérdida de confianza de la víctima y una pena de prisión.",
-          "fechaComision": "2025-04-03",
-          "sentencia": {
-            "años": 4,
-            "meses": 3,
-            "fechaIngreso": "2025-04-25",
-            "fechaSalidaCalculada": "2029-07-25"
-          }
-        }
-      ],
-      "nivelDeSeguridad": "Baja",
-      "seccionAsignada": "Sección C",
+      "estatura": 1.84,
+      "peso": 100.0,
+      "delitos": [],
+      "nivelDeSeguridad": "Medio",
+      "seccionAsignada": "Sección A",
       "condicion": "En espera",
-      "celdaAsignada": "CELD-52",
+      "celdaAsignada": "CELD-39",
       "enAislamiento": false,
       "nivelDeRiesgo": "Riesgo bajo",
       "numeroDeVisitas": 0,
-      "grupoSanguineo": "\u003cSeleccione\u003e",
-      "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_1.jpg",
+      "grupoSanguineo": "A+",
+      "fotoPath": "src/Resources/imagenes_presos/preso_1.jpg",
       "estado": "ACTIVO",
       "id": 1,
       "actividadesAsignadasIds": [],
+      "actividadesCanceladasIds": [],
       "primerNombre": "Luz",
       "segundoNombre": "Dari",
       "primerApellido": "Crespo",
       "segundoApellido": "Gomez",
       "edad": 18,
       "sexo": "F",
-      "nacionalidad": "Austriaca",
-      "identificacion": "001122334"
-    }
-  },
-  {
-    "codigoExpediente": "EXP-SWSJ-G6C9",
-    "numeroRegistro": "REG-2025-8529",
-    "fechaApertura": "2025-05-02",
-    "estado": "ABIERTO",
-    "delitos": [
-      {
-        "id": 12,
-        "presoId": "091234567",
-        "codigo": 265,
-        "nombre": "Daño en bien ajeno",
-        "articuloLey": "Artículo 265",
-        "gravedad": "Media",
-        "descripcion": "Dañaba los bienes ajenos, de manera \nincorrecta",
-        "fechaComision": "2025-05-01",
-        "sentencia": {
-          "años": 4,
-          "meses": 2,
-          "fechaIngreso": "2025-05-02",
-          "fechaSalidaCalculada": "2029-07-02"
-        }
-      },
-      {
-        "id": 13,
-        "presoId": "091234567",
-        "codigo": 404,
-        "nombre": "Concusión",
-        "articuloLey": "Artículo 404",
-        "gravedad": "Media",
-        "descripcion": "Concusionaba de manera\naleatoria sin intentarlo progresivamente",
-        "fechaComision": "2024-05-10",
-        "sentencia": {
-          "años": 3,
-          "meses": 1,
-          "fechaIngreso": "2025-05-02",
-          "fechaSalidaCalculada": "2028-06-02"
-        }
-      },
-      {
-        "id": 18,
-        "presoId": "091234567",
-        "codigo": 189,
-        "nombre": "Violación de habitación ajena",
-        "articuloLey": "Artículo 189",
-        "gravedad": "Alta",
-        "descripcion": "WWDWDWDWDWDW",
-        "fechaComision": "2025-05-06",
-        "sentencia": {
-          "años": 0,
-          "meses": 2,
-          "fechaIngreso": "2025-05-11",
-          "fechaSalidaCalculada": "2025-07-11"
-        }
-      }
-    ],
-    "totalVisitas": 0,
-    "nivelAdaptacion": "Por evaluar",
-    "actividades": [],
-    "observacionesConducta": "Ninguna",
-    "nivelRiesgo": "Riesgo medio",
-    "preso": {
-      "estatura": 1.9,
-      "peso": 87.0,
-      "delitos": [
-        {
-          "id": 12,
-          "presoId": "091234567",
-          "codigo": 265,
-          "nombre": "Daño en bien ajeno",
-          "articuloLey": "Artículo 265",
-          "gravedad": "Media",
-          "descripcion": "Dañaba los bienes ajenos, de manera \nincorrecta",
-          "fechaComision": "2025-05-01",
-          "sentencia": {
-            "años": 4,
-            "meses": 2,
-            "fechaIngreso": "2025-05-02",
-            "fechaSalidaCalculada": "2029-07-02"
-          }
-        },
-        {
-          "id": 13,
-          "presoId": "091234567",
-          "codigo": 404,
-          "nombre": "Concusión",
-          "articuloLey": "Artículo 404",
-          "gravedad": "Media",
-          "descripcion": "Concusionaba de manera\naleatoria sin intentarlo progresivamente",
-          "fechaComision": "2024-05-10",
-          "sentencia": {
-            "años": 3,
-            "meses": 1,
-            "fechaIngreso": "2025-05-02",
-            "fechaSalidaCalculada": "2028-06-02"
-          }
-        }
-      ],
-      "nivelDeSeguridad": "Bajo",
-      "seccionAsignada": "Sección A",
-      "condicion": "En espera",
-      "celdaAsignada": "CELD-37",
-      "enAislamiento": false,
-      "nivelDeRiesgo": "Riesgo medio",
-      "numeroDeVisitas": 0,
-      "grupoSanguineo": "O+",
-      "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_7.jpg",
-      "estado": "ACTIVO",
-      "id": 7,
-      "actividadesAsignadasIds": [],
-      "actividadesCanceladasIds": [],
-      "primerNombre": "Laracia",
-      "segundoNombre": "Antonela",
-      "primerApellido": "Cilgado",
-      "segundoApellido": "Perez",
-      "edad": 45,
-      "sexo": "F",
-      "nacionalidad": "Libia",
-      "identificacion": "091234567"
-    }
-  },
-  {
-    "codigoExpediente": "EXP-K8WL-QELW",
-    "numeroRegistro": "REG-2025-9303",
-    "fechaApertura": "2025-05-04",
-    "estado": "ABIERTO",
-    "delitos": [
-      {
-        "id": 7,
-        "presoId": "414141414",
-        "codigo": 269,
-        "nombre": "Daño informático",
-        "articuloLey": "Artículo 269 - Daño informático",
-        "gravedad": "Baja",
-        "descripcion": "Dañaba cosas infomaticas",
-        "fechaComision": "2025-04-01",
-        "sentencia": {
-          "años": 1,
-          "meses": 0,
-          "fechaIngreso": "2025-04-26",
-          "fechaSalidaCalculada": "2026-04-26"
-        }
-      }
-    ],
-    "juzgado": "Juzgado penal",
-    "totalVisitas": 0,
-    "nivelAdaptacion": "Por evaluar",
-    "actividades": [],
-    "observacionesConducta": "Ninguna",
-    "nivelRiesgo": "Riesgo bajo",
-    "preso": {
-      "estatura": 1.9,
-      "peso": 99.0,
-      "delitos": [
-        {
-          "id": 7,
-          "presoId": "414141414",
-          "codigo": 269,
-          "nombre": "Daño informático",
-          "articuloLey": "Artículo 269 - Daño informático",
-          "gravedad": "Baja",
-          "descripcion": "Dañaba cosas infomaticas",
-          "fechaComision": "2025-04-01",
-          "sentencia": {
-            "años": 1,
-            "meses": 0,
-            "fechaIngreso": "2025-04-26",
-            "fechaSalidaCalculada": "2026-04-26"
-          }
-        }
-      ],
-      "nivelDeSeguridad": "Bajo",
-      "seccionAsignada": "Sección A",
-      "condicion": "En espera",
-      "celdaAsignada": "CELD-35",
-      "enAislamiento": true,
-      "nivelDeRiesgo": "Riesgo bajo",
-      "numeroDeVisitas": 0,
-      "grupoSanguineo": "\u003cSeleccione\u003e",
-      "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_3.jpg",
-      "estado": "ACTIVO",
-      "id": 3,
-      "primerNombre": "Sandra",
-      "segundoNombre": "Licia",
-      "primerApellido": "Asteria",
-      "segundoApellido": "Lineria",
-      "edad": 44,
-      "sexo": "F",
-      "nacionalidad": "China",
-      "identificacion": "414141414"
-    }
-  },
-  {
-    "codigoExpediente": "EXP-M10C-VBNZ",
-    "numeroRegistro": "REG-2025-2646",
-    "fechaApertura": "2025-05-04",
-    "estado": "ABIERTO",
-    "delitos": [
-      {
-        "id": 3,
-        "presoId": "123123123",
-        "codigo": 246,
-        "nombre": "Fraude",
-        "articuloLey": "Artículo 246 - Fraude",
-        "gravedad": "Media",
-        "descripcion": "Comentio un fraude de manera ilegal",
-        "fechaComision": "2025-04-01",
-        "sentencia": {
-          "años": 2,
-          "meses": 1,
-          "fechaIngreso": "2025-04-26",
-          "fechaSalidaCalculada": "2027-05-26"
-        }
-      },
-      {
-        "id": 4,
-        "presoId": "123123123",
-        "codigo": 209,
-        "nombre": "Actos sexuales con menor de 14 años",
-        "articuloLey": "Artículo 209",
-        "gravedad": "Alta",
-        "descripcion": "Cometio actos sexuales con un menor de 16 años de edad\ny los padres lo sabian",
-        "fechaComision": "2025-04-01",
-        "sentencia": {
-          "años": 5,
-          "meses": 5,
-          "fechaIngreso": "2025-04-26",
-          "fechaSalidaCalculada": "2030-09-26"
-        }
-      },
-      {
-        "id": 5,
-        "presoId": "123123123",
-        "codigo": 338,
-        "nombre": "Minería ilegal",
-        "articuloLey": "Artículo 338",
-        "gravedad": "Media",
-        "descripcion": "Minaba de manera ilegal",
-        "fechaComision": "2025-04-02",
-        "sentencia": {
-          "años": 2,
-          "meses": 5,
-          "fechaIngreso": "2025-04-26",
-          "fechaSalidaCalculada": "2027-09-26"
-        }
-      },
-      {
-        "id": 6,
-        "presoId": "123123123",
-        "codigo": 416,
-        "nombre": "Abuso de autoridad",
-        "articuloLey": "Artículo 416 - Penal",
-        "gravedad": "Media",
-        "descripcion": "Abusaba de autoridad",
-        "fechaComision": "2025-04-05",
-        "sentencia": {
-          "años": 1,
-          "meses": 5,
-          "fechaIngreso": "2025-04-26",
-          "fechaSalidaCalculada": "2026-09-26"
-        }
-      }
-    ],
-    "juzgado": "Juzgado penal",
-    "totalVisitas": 0,
-    "nivelAdaptacion": "Por evaluar",
-    "actividades": [],
-    "observacionesConducta": "Ninguna",
-    "nivelRiesgo": "Alto",
-    "preso": {
-      "estatura": 1.8,
-      "peso": 69.0,
-      "delitos": [
-        {
-          "id": 3,
-          "presoId": "123123123",
-          "codigo": 246,
-          "nombre": "Fraude",
-          "articuloLey": "Artículo 246 - Fraude",
-          "gravedad": "Media",
-          "descripcion": "Comentio un fraude de manera ilegal",
-          "fechaComision": "2025-04-01",
-          "sentencia": {
-            "años": 2,
-            "meses": 1,
-            "fechaIngreso": "2025-04-26",
-            "fechaSalidaCalculada": "2027-05-26"
-          }
-        },
-        {
-          "id": 4,
-          "presoId": "123123123",
-          "codigo": 209,
-          "nombre": "Actos sexuales con menor de 14 años",
-          "articuloLey": "Artículo 209",
-          "gravedad": "Alta",
-          "descripcion": "Cometio actos sexuales con un menor de 16 años de edad\ny los padres lo sabian",
-          "fechaComision": "2025-04-01",
-          "sentencia": {
-            "años": 5,
-            "meses": 5,
-            "fechaIngreso": "2025-04-26",
-            "fechaSalidaCalculada": "2030-09-26"
-          }
-        },
-        {
-          "id": 5,
-          "presoId": "123123123",
-          "codigo": 338,
-          "nombre": "Minería ilegal",
-          "articuloLey": "Artículo 338",
-          "gravedad": "Media",
-          "descripcion": "Minaba de manera ilegal",
-          "fechaComision": "2025-04-02",
-          "sentencia": {
-            "años": 2,
-            "meses": 5,
-            "fechaIngreso": "2025-04-26",
-            "fechaSalidaCalculada": "2027-09-26"
-          }
-        },
-        {
-          "id": 6,
-          "presoId": "123123123",
-          "codigo": 416,
-          "nombre": "Abuso de autoridad",
-          "articuloLey": "Artículo 416 - Penal",
-          "gravedad": "Media",
-          "descripcion": "Abusaba de autoridad",
-          "fechaComision": "2025-04-05",
-          "sentencia": {
-            "años": 1,
-            "meses": 5,
-            "fechaIngreso": "2025-04-26",
-            "fechaSalidaCalculada": "2026-09-26"
-          }
-        }
-      ],
-      "nivelDeSeguridad": "Medio",
-      "seccionAsignada": "Sección B",
-      "condicion": "En espera",
-      "celdaAsignada": "CELD-72",
-      "enAislamiento": true,
-      "nivelDeRiesgo": "Alto",
-      "numeroDeVisitas": 0,
-      "grupoSanguineo": "\u003cSeleccione\u003e",
-      "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_2.jpg",
-      "estado": "ACTIVO",
-      "id": 2,
-      "primerNombre": "Andrea",
-      "segundoNombre": "",
-      "primerApellido": "Tovares",
-      "segundoApellido": "Jimenez",
-      "edad": 40,
-      "sexo": "F",
-      "nacionalidad": "Bielorrusa",
-      "identificacion": "123123123"
-    }
-  },
-  {
-    "codigoExpediente": "EXP-X3KB-SADJ",
-    "numeroRegistro": "REG-2025-6526",
-    "fechaApertura": "2025-05-04",
-    "estado": "ABIERTO",
-    "delitos": [
-      {
-        "id": 14,
-        "presoId": "123456000",
-        "codigo": 189,
-        "nombre": "Violación de habitación ajena",
-        "articuloLey": "Artículo 189",
-        "gravedad": "Baja",
-        "descripcion": "ñññññññññññññññ",
-        "fechaComision": "2025-05-01",
-        "sentencia": {
-          "años": 1,
-          "meses": 0,
-          "fechaIngreso": "2025-05-04",
-          "fechaSalidaCalculada": "2026-05-04"
-        }
-      },
-      {
-        "id": 15,
-        "presoId": "123456000",
-        "codigo": 233,
-        "nombre": "Inasistencia alimentaria",
-        "articuloLey": "Artículo 233",
-        "gravedad": "Baja",
-        "descripcion": "ll",
-        "fechaComision": "2024-05-10",
-        "sentencia": {
-          "años": 1,
-          "meses": 1,
-          "fechaIngreso": "2025-05-04",
-          "fechaSalidaCalculada": "2026-06-04"
-        }
-      }
-    ],
-    "juzgado": "Juzgado penal",
-    "totalVisitas": 0,
-    "nivelAdaptacion": "Por evaluar",
-    "actividades": [],
-    "observacionesConducta": "Ninguna",
-    "nivelRiesgo": "Riesgo bajo",
-    "preso": {
-      "estatura": 1.85,
-      "peso": 67.0,
-      "delitos": [
-        {
-          "id": 14,
-          "presoId": "123456000",
-          "codigo": 189,
-          "nombre": "Violación de habitación ajena",
-          "articuloLey": "Artículo 189",
-          "gravedad": "Baja",
-          "descripcion": "ñññññññññññññññ",
-          "fechaComision": "2025-05-01",
-          "sentencia": {
-            "años": 1,
-            "meses": 0,
-            "fechaIngreso": "2025-05-04",
-            "fechaSalidaCalculada": "2026-05-04"
-          }
-        },
-        {
-          "id": 15,
-          "presoId": "123456000",
-          "codigo": 233,
-          "nombre": "Inasistencia alimentaria",
-          "articuloLey": "Artículo 233",
-          "gravedad": "Baja",
-          "descripcion": "ll",
-          "fechaComision": "2024-05-10",
-          "sentencia": {
-            "años": 1,
-            "meses": 1,
-            "fechaIngreso": "2025-05-04",
-            "fechaSalidaCalculada": "2026-06-04"
-          }
-        }
-      ],
-      "nivelDeSeguridad": "Medio",
-      "seccionAsignada": "Sección B",
-      "condicion": "En espera",
-      "celdaAsignada": "CELD-75",
-      "enAislamiento": false,
-      "nivelDeRiesgo": "Riesgo bajo",
-      "numeroDeVisitas": 0,
-      "grupoSanguineo": "O-",
-      "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_8.png",
-      "estado": "ACTIVO",
-      "id": 8,
-      "actividadesAsignadasIds": [],
-      "actividadesCanceladasIds": [],
-      "primerNombre": "oioioioioio",
-      "segundoNombre": "9845",
-      "primerApellido": "oioioioio",
-      "segundoApellido": "545",
-      "edad": 34,
-      "sexo": "F",
-      "nacionalidad": "Bielorrusa",
-      "identificacion": "123456000"
-    }
-  },
-  {
-    "codigoExpediente": "EXP-1746462438987",
-    "numeroRegistro": "REG-2025-7067",
-    "fechaApertura": "2025-05-05",
-    "estado": "ABIERTO",
-    "delitos": [
-      {
-        "id": 10,
-        "presoId": "230909098",
-        "codigo": 265,
-        "nombre": "Daño en bien ajeno",
-        "articuloLey": "Artículo 265",
-        "gravedad": "Baja",
-        "descripcion": "El individuo ha sido acusado de causar\n de manera intencional daños materiales\n a bienes muebles e inmuebles que no le\n pertenecen, afectando su estructura, \nfuncionalidad o valor económico. \nEstos actos se realizaron sin el consentimiento del propietario\n y con plena conciencia de las consecuencias de su conducta. \nEl daño ocasionado generó perjuicios a terceros, ya sea por la destrucción parcial o total del bien, \npor el deterioro significativo del mismo o por la afectación de su uso legítimo.\n Este tipo de conducta se enmarca dentro de las infracciones contra la propiedad \ny puede implicar responsabilidad civil\n y penal, dependiendo del alcance\n del perjuicio causado.",
-        "fechaComision": "2024-05-10",
-        "sentencia": {
-          "años": 3,
-          "meses": 0,
-          "fechaIngreso": "2025-05-01",
-          "fechaSalidaCalculada": "2028-05-01"
-        }
-      },
-      {
-        "id": 11,
-        "presoId": "230909098",
-        "codigo": 244,
-        "nombre": "Extorsión",
-        "articuloLey": "Artículo 244 - Extorsión",
-        "gravedad": "Baja",
-        "descripcion": "\"El individuo ha sido imputado por el delito\n de extorsión, al haber ejercido presión \nsobre una o más personas mediante \namenazas, intimidaciones o coacción\n psicológica con el fin de obtener, \nde manera ilegítima, beneficios económicos,\n bienes materiales, favores personales\n o la realización de actos en contra de la\n voluntad de la víctima. Estas amenazas\n podían implicar el daño físico, la afectación\n de la integridad moral o familiar de la\n persona, o la divulgación de información\n perjudicial. La conducta fue ejecutada con total\nconocimiento de su ilegalidad, vulnerando \nlos derechos fundamentales de la víctima\n y alterando su libertad de decisión.\n Este delito representa una grave\n transgresión al orden jurídico y a la\n seguridad de los ciudadanos, \nsiendo tipificado en la legislación penal \npor atentar contra la autonomía y el \npatrimonio de los afectados",
-        "fechaComision": "2023-05-05",
-        "sentencia": {
-          "años": 2,
-          "meses": 4,
-          "fechaIngreso": "2025-05-01",
-          "fechaSalidaCalculada": "2027-09-01"
-        }
-      },
-      {
-        "id": 17,
-        "presoId": "230909098",
-        "codigo": 221,
-        "nombre": "Calumnia",
-        "articuloLey": "Artículo 221",
-        "gravedad": "Media",
-        "descripcion": "KIKIKI",
-        "fechaComision": "2025-05-10",
-        "sentencia": {
-          "años": 1,
-          "meses": 0,
-          "fechaIngreso": "2025-05-11",
-          "fechaSalidaCalculada": "2026-05-11"
-        }
-      }
-    ],
-    "juzgado": "Juzgado penal",
-    "totalVisitas": 0,
-    "nivelAdaptacion": "Por evaluar",
-    "actividades": [],
-    "observacionesConducta": "Ninguna",
-    "nivelRiesgo": "Riesgo bajo",
-    "preso": {
-      "estatura": 1.7,
-      "peso": 56.0,
-      "delitos": [
-        {
-          "id": 10,
-          "presoId": "230909098",
-          "codigo": 265,
-          "nombre": "Daño en bien ajeno",
-          "articuloLey": "Artículo 265",
-          "gravedad": "Baja",
-          "descripcion": "El individuo ha sido acusado de causar\n de manera intencional daños materiales\n a bienes muebles e inmuebles que no le\n pertenecen, afectando su estructura, \nfuncionalidad o valor económico. \nEstos actos se realizaron sin el consentimiento del propietario\n y con plena conciencia de las consecuencias de su conducta. \nEl daño ocasionado generó perjuicios a terceros, ya sea por la destrucción parcial o total del bien, \npor el deterioro significativo del mismo o por la afectación de su uso legítimo.\n Este tipo de conducta se enmarca dentro de las infracciones contra la propiedad \ny puede implicar responsabilidad civil\n y penal, dependiendo del alcance\n del perjuicio causado.",
-          "fechaComision": "2024-05-10",
-          "sentencia": {
-            "años": 3,
-            "meses": 0,
-            "fechaIngreso": "2025-05-01",
-            "fechaSalidaCalculada": "2028-05-01"
-          }
-        },
-        {
-          "id": 11,
-          "presoId": "230909098",
-          "codigo": 244,
-          "nombre": "Extorsión",
-          "articuloLey": "Artículo 244 - Extorsión",
-          "gravedad": "Baja",
-          "descripcion": "\"El individuo ha sido imputado por el delito\n de extorsión, al haber ejercido presión \nsobre una o más personas mediante \namenazas, intimidaciones o coacción\n psicológica con el fin de obtener, \nde manera ilegítima, beneficios económicos,\n bienes materiales, favores personales\n o la realización de actos en contra de la\n voluntad de la víctima. Estas amenazas\n podían implicar el daño físico, la afectación\n de la integridad moral o familiar de la\n persona, o la divulgación de información\n perjudicial. La conducta fue ejecutada con total\nconocimiento de su ilegalidad, vulnerando \nlos derechos fundamentales de la víctima\n y alterando su libertad de decisión.\n Este delito representa una grave\n transgresión al orden jurídico y a la\n seguridad de los ciudadanos, \nsiendo tipificado en la legislación penal \npor atentar contra la autonomía y el \npatrimonio de los afectados",
-          "fechaComision": "2023-05-05",
-          "sentencia": {
-            "años": 2,
-            "meses": 4,
-            "fechaIngreso": "2025-05-01",
-            "fechaSalidaCalculada": "2027-09-01"
-          }
-        }
-      ],
-      "nivelDeSeguridad": "Bajo",
-      "seccionAsignada": "Sección C",
-      "condicion": "En espera",
-      "celdaAsignada": "CELD-53",
-      "enAislamiento": false,
-      "nivelDeRiesgo": "Riesgo bajo",
-      "numeroDeVisitas": 0,
-      "grupoSanguineo": "A-",
-      "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_6.jpg",
-      "estado": "ACTIVO",
-      "id": 6,
-      "primerNombre": "Camila",
-      "segundoNombre": "Yasmin",
-      "primerApellido": "Londoño",
-      "segundoApellido": "",
-      "edad": 25,
-      "sexo": "F",
-      "nacionalidad": "Beninesa",
-      "identificacion": "230909098"
-    }
-  },
-  {
-    "codigoExpediente": "EXP-LDWZ-N1H7",
-    "numeroRegistro": "REG-2025-5512",
-    "fechaApertura": "2025-05-06",
-    "estado": "ABIERTO",
-    "delitos": [
-      {
-        "id": 9,
-        "presoId": "667788990",
-        "codigo": 221,
-        "nombre": "Calumnia",
-        "articuloLey": "Artículo 221",
-        "gravedad": "Baja",
-        "descripcion": "Calumniabia contra el indigente",
-        "fechaComision": "2024-04-02",
-        "sentencia": {
-          "años": 1,
-          "meses": 2,
-          "fechaIngreso": "2025-04-30",
-          "fechaSalidaCalculada": "2026-06-30"
-        }
-      }
-    ],
-    "juzgado": "Juzgado penal",
-    "totalVisitas": 0,
-    "nivelAdaptacion": "Por evaluar",
-    "actividades": [],
-    "observacionesConducta": "Ninguna",
-    "nivelRiesgo": "Riesgo bajo",
-    "preso": {
-      "estatura": 1.8,
-      "peso": 67.0,
-      "delitos": [
-        {
-          "id": 9,
-          "presoId": "667788990",
-          "codigo": 221,
-          "nombre": "Calumnia",
-          "articuloLey": "Artículo 221",
-          "gravedad": "Baja",
-          "descripcion": "Calumniabia contra el indigente",
-          "fechaComision": "2024-04-02",
-          "sentencia": {
-            "años": 1,
-            "meses": 2,
-            "fechaIngreso": "2025-04-30",
-            "fechaSalidaCalculada": "2026-06-30"
-          }
-        }
-      ],
-      "nivelDeSeguridad": "Bajo",
-      "seccionAsignada": "Sección B",
-      "condicion": "En espera",
-      "celdaAsignada": "CELD-74",
-      "enAislamiento": false,
-      "nivelDeRiesgo": "Riesgo bajo",
-      "numeroDeVisitas": 0,
-      "grupoSanguineo": "A-",
-      "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_5.jpg",
-      "estado": "FALLECIDO",
-      "id": 5,
-      "primerNombre": "Juliana",
-      "segundoNombre": "Marla",
-      "primerApellido": "Gomez",
-      "segundoApellido": "Jurado",
-      "edad": 55,
-      "sexo": "F",
-      "nacionalidad": "Omana",
-      "identificacion": "667788990"
-    }
-  },
-  {
-    "codigoExpediente": "EXP-GC7F-4WH7",
-    "numeroRegistro": "REG-2025-8025",
-    "fechaApertura": "2025-05-10",
-    "estado": "ABIERTO",
-    "delitos": [
-      {
-        "id": 8,
-        "presoId": "889900776",
-        "codigo": 189,
-        "nombre": "Violación de habitación ajena",
-        "articuloLey": "Artículo 189",
-        "gravedad": "Baja",
-        "descripcion": "Entro a una habitacion mientras la persona dormia",
-        "fechaComision": "2025-04-02",
-        "sentencia": {
-          "años": 1,
-          "meses": 0,
-          "fechaIngreso": "2025-04-26",
-          "fechaSalidaCalculada": "2026-04-26"
-        }
-      },
-      {
-        "id": 16,
-        "presoId": "889900776",
-        "codigo": 265,
-        "nombre": "Daño en bien ajeno",
-        "articuloLey": "Artículo 265",
-        "gravedad": "Media",
-        "descripcion": "dñao asinwe",
-        "fechaComision": "2025-05-09",
-        "sentencia": {
-          "años": 2,
-          "meses": 0,
-          "fechaIngreso": "2025-05-10",
-          "fechaSalidaCalculada": "2027-05-10"
-        }
-      }
-    ],
-    "juzgado": "Juzgado penal",
-    "totalVisitas": 0,
-    "nivelAdaptacion": "Por evaluar",
-    "actividades": [],
-    "observacionesConducta": "Ninguna",
-    "nivelRiesgo": "Riesgo alto",
-    "preso": {
-      "estatura": 1.8,
-      "peso": 55.0,
-      "delitos": [
-        {
-          "id": 8,
-          "presoId": "889900776",
-          "codigo": 189,
-          "nombre": "Violación de habitación ajena",
-          "articuloLey": "Artículo 189",
-          "gravedad": "Baja",
-          "descripcion": "Entro a una habitacion mientras la persona dormia",
-          "fechaComision": "2025-04-02",
-          "sentencia": {
-            "años": 1,
-            "meses": 0,
-            "fechaIngreso": "2025-04-26",
-            "fechaSalidaCalculada": "2026-04-26"
-          }
-        }
-      ],
-      "nivelDeSeguridad": "Bajo",
-      "seccionAsignada": "Sección B",
-      "condicion": "En espera",
-      "celdaAsignada": "CELD-73",
-      "enAislamiento": true,
-      "nivelDeRiesgo": "Riesgo alto",
-      "numeroDeVisitas": 0,
-      "grupoSanguineo": "\u003cSeleccione\u003e",
-      "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_4.jpg",
-      "estado": "LIBERADO",
-      "id": 4,
-      "primerNombre": "Carolina",
-      "segundoNombre": "",
-      "primerApellido": "Herrera",
-      "segundoApellido": "Alcazar",
-      "edad": 88,
-      "sexo": "F",
-      "nacionalidad": "Alemana",
-      "identificacion": "889900776"
-    }
-  },
-  {
-    "codigoExpediente": "EXP-1746973002801",
-    "numeroRegistro": "REG-2025-1723",
-    "fechaApertura": "2025-05-11",
-    "estado": "ABIERTO",
-    "delitos": [
-      {
-        "id": 10,
-        "presoId": "230909098",
-        "codigo": 265,
-        "nombre": "Daño en bien ajeno",
-        "articuloLey": "Artículo 265",
-        "gravedad": "Baja",
-        "descripcion": "El individuo ha sido acusado de causar\n de manera intencional daños materiales\n a bienes muebles e inmuebles que no le\n pertenecen, afectando su estructura, \nfuncionalidad o valor económico. \nEstos actos se realizaron sin el consentimiento del propietario\n y con plena conciencia de las consecuencias de su conducta. \nEl daño ocasionado generó perjuicios a terceros, ya sea por la destrucción parcial o total del bien, \npor el deterioro significativo del mismo o por la afectación de su uso legítimo.\n Este tipo de conducta se enmarca dentro de las infracciones contra la propiedad \ny puede implicar responsabilidad civil\n y penal, dependiendo del alcance\n del perjuicio causado.",
-        "fechaComision": "2024-05-10",
-        "sentencia": {
-          "años": 3,
-          "meses": 0,
-          "fechaIngreso": "2025-05-01",
-          "fechaSalidaCalculada": "2028-05-01"
-        }
-      },
-      {
-        "id": 11,
-        "presoId": "230909098",
-        "codigo": 244,
-        "nombre": "Extorsión",
-        "articuloLey": "Artículo 244 - Extorsión",
-        "gravedad": "Baja",
-        "descripcion": "\"El individuo ha sido imputado por el delito\n de extorsión, al haber ejercido presión \nsobre una o más personas mediante \namenazas, intimidaciones o coacción\n psicológica con el fin de obtener, \nde manera ilegítima, beneficios económicos,\n bienes materiales, favores personales\n o la realización de actos en contra de la\n voluntad de la víctima. Estas amenazas\n podían implicar el daño físico, la afectación\n de la integridad moral o familiar de la\n persona, o la divulgación de información\n perjudicial. La conducta fue ejecutada con total\nconocimiento de su ilegalidad, vulnerando \nlos derechos fundamentales de la víctima\n y alterando su libertad de decisión.\n Este delito representa una grave\n transgresión al orden jurídico y a la\n seguridad de los ciudadanos, \nsiendo tipificado en la legislación penal \npor atentar contra la autonomía y el \npatrimonio de los afectados",
-        "fechaComision": "2023-05-05",
-        "sentencia": {
-          "años": 2,
-          "meses": 4,
-          "fechaIngreso": "2025-05-01",
-          "fechaSalidaCalculada": "2027-09-01"
-        }
-      },
-      {
-        "id": 17,
-        "presoId": "230909098",
-        "codigo": 221,
-        "nombre": "Calumnia",
-        "articuloLey": "Artículo 221",
-        "gravedad": "Media",
-        "descripcion": "KIKIKI",
-        "fechaComision": "2025-05-10",
-        "sentencia": {
-          "años": 1,
-          "meses": 0,
-          "fechaIngreso": "2025-05-11",
-          "fechaSalidaCalculada": "2026-05-11"
-        }
-      }
-    ],
-    "juzgado": "Juzgado penal",
-    "totalVisitas": 0,
-    "nivelAdaptacion": "Por evaluar",
-    "actividades": [],
-    "observacionesConducta": "Ninguna",
-    "nivelRiesgo": "Riesgo medio",
-    "preso": {
-      "estatura": 2.0,
-      "peso": 200.0,
-      "delitos": [
-        {
-          "id": 10,
-          "presoId": "230909098",
-          "codigo": 265,
-          "nombre": "Daño en bien ajeno",
-          "articuloLey": "Artículo 265",
-          "gravedad": "Baja",
-          "descripcion": "El individuo ha sido acusado de causar\n de manera intencional daños materiales\n a bienes muebles e inmuebles que no le\n pertenecen, afectando su estructura, \nfuncionalidad o valor económico. \nEstos actos se realizaron sin el consentimiento del propietario\n y con plena conciencia de las consecuencias de su conducta. \nEl daño ocasionado generó perjuicios a terceros, ya sea por la destrucción parcial o total del bien, \npor el deterioro significativo del mismo o por la afectación de su uso legítimo.\n Este tipo de conducta se enmarca dentro de las infracciones contra la propiedad \ny puede implicar responsabilidad civil\n y penal, dependiendo del alcance\n del perjuicio causado.",
-          "fechaComision": "2024-05-10",
-          "sentencia": {
-            "años": 3,
-            "meses": 0,
-            "fechaIngreso": "2025-05-01",
-            "fechaSalidaCalculada": "2028-05-01"
-          }
-        },
-        {
-          "id": 11,
-          "presoId": "230909098",
-          "codigo": 244,
-          "nombre": "Extorsión",
-          "articuloLey": "Artículo 244 - Extorsión",
-          "gravedad": "Baja",
-          "descripcion": "\"El individuo ha sido imputado por el delito\n de extorsión, al haber ejercido presión \nsobre una o más personas mediante \namenazas, intimidaciones o coacción\n psicológica con el fin de obtener, \nde manera ilegítima, beneficios económicos,\n bienes materiales, favores personales\n o la realización de actos en contra de la\n voluntad de la víctima. Estas amenazas\n podían implicar el daño físico, la afectación\n de la integridad moral o familiar de la\n persona, o la divulgación de información\n perjudicial. La conducta fue ejecutada con total\nconocimiento de su ilegalidad, vulnerando \nlos derechos fundamentales de la víctima\n y alterando su libertad de decisión.\n Este delito representa una grave\n transgresión al orden jurídico y a la\n seguridad de los ciudadanos, \nsiendo tipificado en la legislación penal \npor atentar contra la autonomía y el \npatrimonio de los afectados",
-          "fechaComision": "2023-05-05",
-          "sentencia": {
-            "años": 2,
-            "meses": 4,
-            "fechaIngreso": "2025-05-01",
-            "fechaSalidaCalculada": "2027-09-01"
-          }
-        }
-      ],
-      "nivelDeSeguridad": "Bajo",
-      "seccionAsignada": "Sección A",
-      "condicion": "En espera",
-      "celdaAsignada": "CELD-38",
-      "enAislamiento": false,
-      "nivelDeRiesgo": "Riesgo medio",
-      "numeroDeVisitas": 0,
-      "grupoSanguineo": "O+",
-      "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_6.jpg",
-      "estado": "ACTIVO",
-      "id": 6,
-      "fechaLiberacion": "2025-05-05",
-      "fechaFuga": "2025-05-05",
-      "primerNombre": "LUSIANA",
-      "segundoNombre": "",
-      "primerApellido": "ANDREINA",
-      "segundoApellido": "",
-      "edad": 88,
-      "sexo": "F",
-      "nacionalidad": "Beninesa",
-      "identificacion": "230909098"
-    }
-  },
-  {
-    "codigoExpediente": "EXP-1746975480789",
-    "numeroRegistro": "REG-2025-5520",
-    "fechaApertura": "2025-05-11",
-    "estado": "ABIERTO",
-    "delitos": [
-      {
-        "id": 12,
-        "presoId": "091234567",
-        "codigo": 265,
-        "nombre": "Daño en bien ajeno",
-        "articuloLey": "Artículo 265",
-        "gravedad": "Media",
-        "descripcion": "Dañaba los bienes ajenos, de manera \nincorrecta",
-        "fechaComision": "2025-05-01",
-        "sentencia": {
-          "años": 4,
-          "meses": 2,
-          "fechaIngreso": "2025-05-02",
-          "fechaSalidaCalculada": "2029-07-02"
-        }
-      },
-      {
-        "id": 13,
-        "presoId": "091234567",
-        "codigo": 404,
-        "nombre": "Concusión",
-        "articuloLey": "Artículo 404",
-        "gravedad": "Media",
-        "descripcion": "Concusionaba de manera\naleatoria sin intentarlo progresivamente",
-        "fechaComision": "2024-05-10",
-        "sentencia": {
-          "años": 3,
-          "meses": 1,
-          "fechaIngreso": "2025-05-02",
-          "fechaSalidaCalculada": "2028-06-02"
-        }
-      },
-      {
-        "id": 18,
-        "presoId": "091234567",
-        "codigo": 189,
-        "nombre": "Violación de habitación ajena",
-        "articuloLey": "Artículo 189",
-        "gravedad": "Alta",
-        "descripcion": "WWDWDWDWDWDW",
-        "fechaComision": "2025-05-06",
-        "sentencia": {
-          "años": 0,
-          "meses": 2,
-          "fechaIngreso": "2025-05-11",
-          "fechaSalidaCalculada": "2025-07-11"
-        }
-      }
-    ],
-    "juzgado": "Juzgado penal",
-    "totalVisitas": 0,
-    "nivelAdaptacion": "Por evaluar",
-    "actividades": [],
-    "observacionesConducta": "Ninguna",
-    "nivelRiesgo": "Riesgo medio",
-    "preso": {
-      "estatura": 2.0,
-      "peso": 200.0,
-      "delitos": [
-        {
-          "id": 12,
-          "presoId": "091234567",
-          "codigo": 265,
-          "nombre": "Daño en bien ajeno",
-          "articuloLey": "Artículo 265",
-          "gravedad": "Media",
-          "descripcion": "Dañaba los bienes ajenos, de manera \nincorrecta",
-          "fechaComision": "2025-05-01",
-          "sentencia": {
-            "años": 4,
-            "meses": 2,
-            "fechaIngreso": "2025-05-02",
-            "fechaSalidaCalculada": "2029-07-02"
-          }
-        },
-        {
-          "id": 13,
-          "presoId": "091234567",
-          "codigo": 404,
-          "nombre": "Concusión",
-          "articuloLey": "Artículo 404",
-          "gravedad": "Media",
-          "descripcion": "Concusionaba de manera\naleatoria sin intentarlo progresivamente",
-          "fechaComision": "2024-05-10",
-          "sentencia": {
-            "años": 3,
-            "meses": 1,
-            "fechaIngreso": "2025-05-02",
-            "fechaSalidaCalculada": "2028-06-02"
-          }
-        }
-      ],
-      "nivelDeSeguridad": "Alto",
-      "seccionAsignada": "Sección B",
-      "condicion": "En espera",
-      "celdaAsignada": "CELD-77",
-      "enAislamiento": false,
-      "nivelDeRiesgo": "Riesgo medio",
-      "numeroDeVisitas": 0,
-      "grupoSanguineo": "A-",
-      "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_7.jpg",
-      "estado": "ACTIVO",
-      "id": 7,
-      "actividadesAsignadasIds": [],
-      "actividadesCanceladasIds": [],
-      "fechaLiberacion": "2025-05-05",
-      "fechaFuga": "2025-05-05",
-      "primerNombre": "QQQQQ",
-      "segundoNombre": "",
-      "primerApellido": "QQQQQ",
-      "segundoApellido": "",
-      "edad": 33,
-      "sexo": "F",
-      "nacionalidad": "Libia",
-      "identificacion": "091234567"
-    }
-  },
-  {
-    "codigoExpediente": "EXP-1746976377671",
-    "numeroRegistro": "REG-2025-2216",
-    "fechaApertura": "2025-05-11",
-    "estado": "ABIERTO",
-    "delitos": [
-      {
-        "id": 19,
-        "presoId": "001122334",
-        "codigo": 246,
-        "nombre": "Fraude",
-        "articuloLey": "Artículo 246 - Fraude",
-        "gravedad": "Baja",
-        "descripcion": "Fue vista cometiendo multiples fraudes\nmientras jugaba domino, lo cual fue muy mal visto\nuna total falta de respeto",
-        "fechaComision": "2025-05-05",
-        "sentencia": {
-          "años": 1,
-          "meses": 0,
-          "fechaIngreso": "2025-05-11",
-          "fechaSalidaCalculada": "2026-05-11"
-        }
-      }
-    ],
-    "juzgado": "Juzgado penal",
-    "totalVisitas": 0,
-    "nivelAdaptacion": "Por evaluar",
-    "actividades": [],
-    "observacionesConducta": "Ninguna",
-    "nivelRiesgo": "Riesgo bajo",
-    "preso": {
-      "estatura": 1.8,
-      "peso": 200.0,
-      "delitos": [
-        {
-          "id": 1,
-          "presoId": "001122334",
-          "codigo": 221,
-          "nombre": "Calumnia",
-          "articuloLey": "Artículo 221",
-          "gravedad": "Baja",
-          "descripcion": "La interna fue condenada por calumniar públicamente a una docente universitaria\n acusándola falsamente de haber cometido abuso de poder y actos indebidos con estudiantes. \nEstas acusaciones fueron difundidas en redes sociales y durante una asamblea estudiantil,\n causando un daño considerable a la reputación profesional de la docente. \nLas investigaciones demostraron que la presa actuó movida por conflictos personales\n y sin ningún tipo de prueba, lo que llevó a su condena por el delito de calumnia, agravado por el impacto público del caso y la afectación psicológica de la víctima.",
-          "fechaComision": "2025-04-03",
-          "sentencia": {
-            "años": 2,
-            "meses": 0,
-            "fechaIngreso": "2025-04-25",
-            "fechaSalidaCalculada": "2027-04-25"
-          }
-        },
-        {
-          "id": 2,
-          "presoId": "001122334",
-          "codigo": 287,
-          "nombre": "Falsedad en documento público",
-          "articuloLey": "Artículo 287",
-          "gravedad": "Baja",
-          "descripcion": "La interna fue condenada por falsedad de documento después de ser arrestada por presentar un título universitario falsificado con el fin de obtener un empleo en una empresa privada. El documento fue alterado digitalmente para simular la autenticidad de una licenciatura que no había sido obtenida por ella. La falsificación fue descubierta cuando el empleador verificó la validez del título en la universidad correspondiente. La condena se basó en el uso de documentos falsificados con el propósito de engañar a terceros, lo que conllevó a la pérdida de confianza de la víctima y una pena de prisión.",
-          "fechaComision": "2025-04-03",
-          "sentencia": {
-            "años": 4,
-            "meses": 3,
-            "fechaIngreso": "2025-04-25",
-            "fechaSalidaCalculada": "2029-07-25"
-          }
-        }
-      ],
-      "nivelDeSeguridad": "Bajo",
-      "seccionAsignada": "Sección C",
-      "condicion": "En espera",
-      "celdaAsignada": "CELD-54",
-      "enAislamiento": false,
-      "nivelDeRiesgo": "Riesgo bajo",
-      "numeroDeVisitas": 0,
-      "grupoSanguineo": "A+",
-      "fotoPath": "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\preso_1.jpg",
-      "estado": "ACTIVO",
-      "id": 1,
-      "actividadesAsignadasIds": [],
-      "fechaLiberacion": "2031-07-25",
-      "primerNombre": "Luz",
-      "segundoNombre": "Dari",
-      "primerApellido": "Crespo",
-      "segundoApellido": "Gomez",
-      "edad": 19,
-      "sexo": "F",
-      "nacionalidad": "Austriaca",
-      "identificacion": "001122334"
+      "nacionalidad": "Mauriciana",
+      "identificacion": "1237440696"
     }
   }
 ]

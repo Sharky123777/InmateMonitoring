@@ -279,7 +279,7 @@ public class PresoController {
                     presoExistente.setNivelDeSeguridad(nivelSeguridad.toString());
 
                     presoDAO.actualizarPreso(presoExistente);
-                    
+
                     if (imagen != null) {
                         presoDAO.actualizarFotoPreso(presoExistente, imagen);
                     }
@@ -295,6 +295,8 @@ public class PresoController {
                     obtenerTodosLosPresosParaTabla();
                     obtenerPresosInactivosParaTabla();
 
+                    obtenerPresosInactivosParaTabla();
+                    obtenerTodosLosPresosParaTabla();
                     return true;
                 }
 
@@ -406,7 +408,6 @@ public class PresoController {
                     .findFirst()
                     .orElse(null);
 
-            
             if (preso.getEstado() == EstadoPresoEnum.LIBERADO) {
                 if (expedienteAbierto != null) {
                     expedienteAbierto.setEstado(EstadoExpedienteEnum.CERRADO);
@@ -773,11 +774,10 @@ public class PresoController {
             throw new IllegalArgumentException("Estado requerido");
         }
 
-       if (fechaCambio == null || 
-    (nuevoEstado != EstadoPresoEnum.LIBERADO && fechaCambio.isAfter(LocalDate.now()))) {
-    throw new IllegalArgumentException("Fecha no valida, fecha futura.");
-}
-
+        if (fechaCambio == null
+                || (nuevoEstado != EstadoPresoEnum.LIBERADO && fechaCambio.isAfter(LocalDate.now()))) {
+            throw new IllegalArgumentException("Fecha no valida, fecha futura.");
+        }
 
         Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
         if (preso == null) {
@@ -812,6 +812,7 @@ public class PresoController {
                 break;
 
             case FALLECIDO:
+
                 break;
         }
 

@@ -2,6 +2,7 @@ package DAO;
 
 import DAO.DelitoDAO;
 import DAO.CeldaDAO;
+import Model.Constants.EstadoExpedienteEnum;
 import Model.Constants.EstadoPresoEnum;
 import Model.Entities.Actividad;
 import Model.Entities.Celda;
@@ -37,10 +38,11 @@ public class PresoDAO {
 
     private static IntentoFugaDAO intentoFugaDAO = IntentoFugaDAO.getInstancia();
     private static DelitoDAO delitoDAO = DelitoDAO.getInstancia();
+    private static ExpedienteDAO expedienteDAO = ExpedienteDAO.getInstancia();
     private static PresoDAO instancia;
 
     private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\presos.json\\";
-    private static final String IMAGES_DIR = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\";
+    private static final String RUTA_IMAGENES = "src/Resources/imagenes_presos/";
 
     private Gson gson = new GsonBuilder()
             .setPrettyPrinting()
@@ -128,9 +130,9 @@ public class PresoDAO {
         if (imagenSeleccionada != null) {
             try {
                 String nombreArchivo = "preso_" + preso.getId() + getExtension(imagenSeleccionada.getName());
-                String rutaDestino = IMAGES_DIR + nombreArchivo;
+                String rutaDestino = RUTA_IMAGENES + nombreArchivo;
 
-                new File(IMAGES_DIR).mkdirs();
+                new File(RUTA_IMAGENES).mkdirs();
 
                 Files.copy(imagenSeleccionada.toPath(),
                         new File(rutaDestino).toPath(),
@@ -332,9 +334,9 @@ public class PresoDAO {
         try {
             String extension = nuevaFoto.getName().substring(nuevaFoto.getName().lastIndexOf("."));
             String nombreArchivo = "preso_" + preso.getId() + extension;
-            String rutaDestino = IMAGES_DIR + nombreArchivo;
+            String rutaDestino = RUTA_IMAGENES + nombreArchivo;
 
-            new File(IMAGES_DIR).mkdirs();
+            new File(RUTA_IMAGENES).mkdirs();
             Files.copy(nuevaFoto.toPath(), new File(rutaDestino).toPath(), StandardCopyOption.REPLACE_EXISTING);
             preso.setFotoPath(rutaDestino);
         } catch (IOException e) {
@@ -405,44 +407,54 @@ public class PresoDAO {
         }
     }
 
-    public boolean cambiarEstadoPreso(String identificacion, EstadoPresoEnum nuevoEstado, LocalDate fechaCambio) {
-        List<Preso> presos = cargarTodos();
+public boolean cambiarEstadoPreso(String identificacion, EstadoPresoEnum nuevoEstado, LocalDate fechaCambio) {
+    List<Preso> presos = cargarTodos();
 
-        for (Preso preso : presos) {
-            if (preso.getIdentificacion().equals(identificacion)) {
-                EstadoPresoEnum estadoActual = preso.getEstado();
+    for (Preso preso : presos) {
+        if (preso.getIdentificacion().equals(identificacion)) {
+            EstadoPresoEnum estadoActual = preso.getEstado();
 
-                preso.setEstado(nuevoEstado);
+            // Cambiar estado del preso
+            preso.setEstado(nuevoEstado);
 
-                switch (nuevoEstado) {
-                    case FUGADO:
-                        preso.setFechaFuga(fechaCambio);
-                        intentoFugaDAO.registrarFuga(identificacion, fechaCambio);
-                        break;
+            // Acciones según el nuevo estado del preso
+            switch (nuevoEstado) {
+                case FUGADO:
+                    preso.setFechaFuga(fechaCambio);
+                    intentoFugaDAO.registrarFuga(identificacion, fechaCambio);
+                    break;
 
-                    case LIBERADO:
-                        preso.setFechaLiberacion(fechaCambio);
-                        break;
+                case LIBERADO:
+                    preso.setFechaLiberacion(fechaCambio);
 
-                    case FALLECIDO:
-                        preso.setFechaDefuncion(fechaCambio);
-                        break;
+                    // Aquí actualizamos el expediente a CERRADO si el preso es liberado
+                    ExpedienteJudicial expedienteAbierto = expedienteDAO.obtenerExpedienteAbierto(identificacion);
+                    if (expedienteAbierto != null) {
+                        expedienteAbierto.setEstado(EstadoExpedienteEnum.CERRADO);
+                        expedienteDAO.actualizarExpediente(expedienteAbierto);
+                    }
+                    break;
 
-                    case ACTIVO:
-                        if (estadoActual == EstadoPresoEnum.FUGADO) {
-                            intentoFugaDAO.registrarReingreso(identificacion, fechaCambio);
-                        }
-                        preso.setFechaFuga(null);
-                        preso.setFechaLiberacion(null);
-                        preso.setFechaDefuncion(null);
-                        break;
-                }
+                case FALLECIDO:
+                    preso.setFechaDefuncion(fechaCambio);
+                    break;
 
-                return guardarCambios(presos);
+                case ACTIVO:
+                    if (estadoActual == EstadoPresoEnum.FUGADO) {
+                        intentoFugaDAO.registrarReingreso(identificacion, fechaCambio);
+                    }
+                    preso.setFechaFuga(null);
+                    preso.setFechaLiberacion(null);
+                    preso.setFechaDefuncion(null);
+                    break;
             }
+
+            // Guardamos los cambios de estado del preso
+            return guardarCambios(presos);
         }
-        return false;
     }
+    return false;
+}
 
     public boolean marcarComoLiberado(String numeroIdentificacion) {
         return cambiarEstadoPreso(numeroIdentificacion, EstadoPresoEnum.LIBERADO, LocalDate.now());
