@@ -1,286 +1,271 @@
 package Controller;
 
 import DAO.EnfermeraDAO;
+import DAO.UsuarioDAO;
+import Model.Constants.RolEnum;
 import Model.Entities.Enfermera;
-import com.toedter.calendar.JDateChooser;
-import java.awt.Image;
+import Model.Entities.Usuario;
+import Utilidades.EmailSender;
+import View.FrmCamara;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class EnfermeraController {
-
     private static EnfermeraController instancia;
     private final EnfermeraDAO enfermeraDAO;
-    private final JTextField txtPrimerNombre;
-    private final JTextField txtSegundoNombre;
-    private final JTextField txtPrimerApellido;
-    private final JTextField txtSegundoApellido;
-    private final JTextField txtEdad;
-    private final JTextField txtCedula;
-    private final JTextField txtNacionalidad;
-    private final JTextField txtCorreo;
-    private final JComboBox<String> cmbTurno;
-    private final JDateChooser dateChooserFinContrato;
-    private String rutaImagenSeleccionada;
+    private FrmCamara ventanaCamara;
 
-    private EnfermeraController(JTextField txtPrimerNombre, JTextField txtSegundoNombre,
-            JTextField txtPrimerApellido, JTextField txtSegundoApellido,
-            JTextField txtEdad, JTextField txtCedula,
-            JTextField txtNacionalidad, JTextField txtCorreo,
-            JComboBox<String> cmbTurno,
-            JDateChooser dateChooserFinContrato) {
+    private EnfermeraController() {
         this.enfermeraDAO = EnfermeraDAO.getInstancia();
-        this.txtPrimerNombre = txtPrimerNombre;
-        this.txtSegundoNombre = txtSegundoNombre;
-        this.txtPrimerApellido = txtPrimerApellido;
-        this.txtSegundoApellido = txtSegundoApellido;
-        this.txtEdad = txtEdad;
-        this.txtCedula = txtCedula;
-        this.txtNacionalidad = txtNacionalidad;
-        this.txtCorreo = txtCorreo;
-        this.cmbTurno = cmbTurno;
-        this.dateChooserFinContrato = dateChooserFinContrato;
     }
 
-    public static synchronized EnfermeraController getInstancia(JTextField txtPrimerNombre, JTextField txtSegundoNombre,
-            JTextField txtPrimerApellido, JTextField txtSegundoApellido,
-            JTextField txtEdad, JTextField txtCedula,
-            JTextField txtNacionalidad, JTextField txtCorreo,
-            JComboBox<String> cmbTurno,
-            JDateChooser dateChooserFinContrato) {
+    public static synchronized EnfermeraController getInstancia() {
         if (instancia == null) {
-            instancia = new EnfermeraController(txtPrimerNombre, txtSegundoNombre,
-                    txtPrimerApellido, txtSegundoApellido,
-                    txtEdad, txtCedula, txtNacionalidad,
-                    txtCorreo, cmbTurno, dateChooserFinContrato);
+            instancia = new EnfermeraController();
         }
         return instancia;
     }
-
-    public Map<String, Object> prepararModificacion(String cedula) {
-        Enfermera enfermera = obtenerEnfermeraPorCedula(cedula);
-        if (enfermera == null) {
-            throw new IllegalArgumentException("Enfermera no encontrada con cédula: " + cedula);
-        }
-
-        Map<String, Object> datos = new LinkedHashMap<>();
-        datos.put("cedula", enfermera.getIdentificacion());
-        datos.put("primerNombre", enfermera.getPrimerNombre());
-        datos.put("segundoNombre", enfermera.getSegundoNombre());
-        datos.put("primerApellido", enfermera.getPrimerApellido());
-        datos.put("segundoApellido", enfermera.getSegundoApellido());
-        datos.put("edad", enfermera.getEdad());
-        datos.put("nacionalidad", enfermera.getNacionalidad());
-        datos.put("correo", enfermera.getCorreo());
-        datos.put("turno", enfermera.getTurno());
-        datos.put("fechaInicio", enfermera.getFechaContratacion());
-        datos.put("fechaFin", enfermera.getFechaFinContrato());
-        datos.put("sexo", enfermera.getSexo());
-        datos.put("rutaImagen", enfermera.getRutaImagen());
-        datos.put("usuario", enfermera.getUsuario());
-        datos.put("contrasena", enfermera.getContrasena());
-
-        return datos;
-    }
-
-    public boolean procesarModificacion(String cedulaOriginal, 
-                                  Map<String, Object> cambios, 
-                                  File nuevaImagen) {
+    
+    public File capturarImagenEnfermera() {
+    FrmCamara ventanaCamara = new FrmCamara();
+    ventanaCamara.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    
+    // Mostrar como diálogo modal
+    JDialog dialog = new JDialog();
+    dialog.setModal(true);
+    dialog.setContentPane(ventanaCamara.getContentPane());
+    dialog.pack();
+    dialog.setLocationRelativeTo(null);
+    dialog.setVisible(true);
+    
+    // Esperar hasta que se cierre
+    while (dialog.isVisible()) {
         try {
-            Enfermera original = obtenerEnfermeraPorCedula(cedulaOriginal);
-            if (original == null) {
-                throw new IllegalArgumentException("Enfermera no encontrada con cédula: " + cedulaOriginal);
-            }
-
-            boolean cambiosEnCampos = !original.getPrimerNombre().equals(cambios.get("primerNombre")) ||
-                    !Objects.equals(original.getSegundoNombre(), cambios.get("segundoNombre")) ||
-                    !original.getPrimerApellido().equals(cambios.get("primerApellido")) ||
-                    !original.getSegundoApellido().equals(cambios.get("segundoApellido")) ||
-                    original.getEdad() != (int) cambios.get("edad") ||
-                    !original.getNacionalidad().equals(cambios.get("nacionalidad")) ||
-                    !original.getCorreo().equals(cambios.get("correo")) ||
-                    !original.getTurno().equals(cambios.get("turno")) ||
-                    !original.getFechaFinContrato().equals(cambios.get("fechaFin"));
-
-            boolean cambioImagen = nuevaImagen != null && 
-                    (original.getRutaImagen() == null || 
-                    !nuevaImagen.getAbsolutePath().equals(original.getRutaImagen()));
-
-            if (!cambiosEnCampos && !cambioImagen) {
-                int respuesta = JOptionPane.showConfirmDialog(
-                    null, 
-                    "No se han detectado cambios en los datos. ¿Desea guardar igualmente?",
-                    "Confirmar sin cambios",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-                
-                if (respuesta != JOptionPane.YES_OPTION) {
-                    return false;
-                }
-            }
-
-            validarCamposModificacion(cambios);
-            validarEdad((int) cambios.get("edad"));
-
-            LocalDate fechaInicio = original.getFechaContratacion();
-            LocalDate fechaFin = (LocalDate) cambios.get("fechaFin");
-            validarFechasContrato(fechaInicio, fechaFin);
-
-            validarLimiteEnfermerasPorTurno((String) cambios.get("turno"), cedulaOriginal);
-
-            Enfermera enfermeraModificada = new Enfermera(
-                (String) cambios.get("primerNombre"),
-                (String) cambios.get("segundoNombre"),
-                (String) cambios.get("primerApellido"),
-                (String) cambios.get("segundoApellido"),
-                (int) cambios.get("edad"),
-                "Femenino",
-                (String) cambios.get("nacionalidad"),
-                cedulaOriginal,
-                (String) cambios.get("turno"),
-                fechaInicio,
-                fechaFin,
-                (String) cambios.get("correo"),
-                original.getUsuario(),  // Mantener el mismo usuario
-                original.getContrasena() // Mantener la misma contraseña
-            );
-
-            if (!cambioImagen && original.getRutaImagen() != null) {
-                enfermeraModificada.setRutaImagen(original.getRutaImagen());
-            }
-
-            return enfermeraDAO.modificarEnfermera(cedulaOriginal, enfermeraModificada, nuevaImagen);
-
-        } catch (IllegalArgumentException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Error al modificar enfermera: " + e.getMessage(), e);
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return null;
         }
     }
+    
+    return ventanaCamara.getImagenCapturada();
+}
 
-    public Enfermera agregarEnfermera() {
+  public Enfermera registrarEnfermera(String primerNombre, String segundoNombre,
+    String primerApellido, String segundoApellido, int edad, String cedula,
+    String nacionalidad, String correo, String turno, LocalDate fechaFinContrato,
+    File imagen) throws IOException {
+    
     try {
-        // Validaciones de campos obligatorios
-        StringBuilder camposFaltantes = new StringBuilder();
-        if (txtPrimerNombre.getText().trim().isEmpty()) camposFaltantes.append("- Primer nombre\n");
-        if (txtPrimerApellido.getText().trim().isEmpty()) camposFaltantes.append("- Primer apellido\n");
-        if (txtSegundoApellido.getText().trim().isEmpty()) camposFaltantes.append("- Segundo apellido\n");
-        if (txtEdad.getText().trim().isEmpty()) camposFaltantes.append("- Edad\n");
-        if (txtCedula.getText().trim().isEmpty()) camposFaltantes.append("- Cédula\n");
-        if (txtNacionalidad.getText().trim().isEmpty()) camposFaltantes.append("- Nacionalidad\n");
-        if (txtCorreo.getText().trim().isEmpty()) camposFaltantes.append("- Correo\n");
-        if (cmbTurno.getSelectedItem() == null || cmbTurno.getSelectedItem().toString().trim().isEmpty()) 
-            camposFaltantes.append("- Turno\n");
-
-        if (camposFaltantes.length() > 0) {
-            throw new IllegalArgumentException("Los siguientes campos son obligatorios:\n" + camposFaltantes);
+        // Validación de cédula única
+        if (enfermeraDAO.existeEnfermeraConCedula(cedula)) {
+            throw new IllegalArgumentException("Ya existe una enfermera con la cédula " + cedula);
         }
-
-        // Validación de imagen
-        if (rutaImagenSeleccionada == null || rutaImagenSeleccionada.trim().isEmpty()) {
-            throw new IllegalArgumentException("Debe seleccionar una imagen de la enfermera");
-        }
-
-        File imagen = new File(rutaImagenSeleccionada);
-        if (!imagen.exists()) {
-            throw new IllegalArgumentException("El archivo de imagen no existe en la ruta especificada");
-        }
-
-        if (!imagen.getName().toLowerCase().matches(".*\\.(jpg|jpeg|png|gif)$")) {
-            throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, PNG o GIF");
-        }
-
-        // Validación de edad
-        int edad;
-        try {
-            edad = Integer.parseInt(txtEdad.getText().trim());
-            if (edad < 18 || edad > 70) {
-                throw new IllegalArgumentException("La edad debe estar entre 18 y 70 años");
-            }
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("La edad debe ser un número válido");
-        }
-
-        // Validación de fechas
-        if (dateChooserFinContrato.getDate() == null) {
-            throw new IllegalArgumentException("La fecha de fin de contrato es obligatoria");
-        }
-
-        LocalDate fechaFinContrato = dateChooserFinContrato.getDate().toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalDate();
-        if (!fechaFinContrato.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("La fecha de fin de contrato debe ser posterior a la fecha actual");
-        }
-
-        // Validación de correo
-        String correo = txtCorreo.getText().trim();
-        if (!correo.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            throw new IllegalArgumentException("Formato de correo electrónico inválido");
-        }
-
-        // Obtener datos del formulario
-        String primerNombre = txtPrimerNombre.getText().trim();
-        String segundoNombre = txtSegundoNombre.getText().trim();
-        String primerApellido = txtPrimerApellido.getText().trim();
-        String segundoApellido = txtSegundoApellido.getText().trim();
-        String cedula = txtCedula.getText().trim();
-        String nacionalidad = txtNacionalidad.getText().trim();
-        String turno = cmbTurno.getSelectedItem().toString();
-
-        // Validar límite de enfermeras
+        
+        // Validar campos obligatorios
+        validarCamposObligatorios(primerNombre, primerApellido, segundoApellido, 
+                edad, cedula, nacionalidad, correo, turno);
+        
+        // Validaciones adicionales
+        validarEdad(edad);
+        validarFechasContrato(LocalDate.now(), fechaFinContrato);
         validarLimiteEnfermerasPorTurno(turno, null);
+        validarImagen(imagen);
 
-        // Crear nueva enfermera (usuario y contraseña se generarán en el DAO)
+        // Crear nueva enfermera
         Enfermera nuevaEnfermera = new Enfermera(
-            primerNombre, segundoNombre,
-            primerApellido, segundoApellido,
-            edad, "Femenino", nacionalidad, cedula,
-            turno, LocalDate.now(), fechaFinContrato, correo,
-            "", "" // Estos campos los generará el DAO
+            primerNombre, segundoNombre, primerApellido, segundoApellido,
+            edad, "Femenino", nacionalidad, cedula, turno, 
+            LocalDate.now(), fechaFinContrato, correo, "", ""
         );
 
-        // Guardar en la base de datos
-        boolean guardado = enfermeraDAO.guardarEnfermera(nuevaEnfermera, imagen);
+        // Guardar a través del DAO
+        boolean guardado = EnfermeraDAO.getInstancia().guardarEnfermera(nuevaEnfermera, imagen);
         
         if (guardado) {
-            limpiarFormulario();
-            // Retornar la enfermera con los datos actualizados (incluyendo usuario y contraseña)
-            return enfermeraDAO.obtenerEnfermeraPorCedula(cedula);
+            return EnfermeraDAO.getInstancia().obtenerEnfermeraPorCedula(cedula);
         }
+        throw new RuntimeException("No se pudo guardar la enfermera en la base de datos");
         
-        return null;
-
     } catch (IllegalArgumentException e) {
+        // Relanzar excepciones de validación
         throw e;
     } catch (Exception e) {
-        throw new RuntimeException("Error inesperado al guardar la enfermera: " + e.getMessage(), e);
+        // Capturar cualquier otra excepción y lanzarla como RuntimeException
+        throw new RuntimeException("Error al registrar enfermera: " + e.getMessage(), e);
     }
 }
 
-    private void limpiarFormulario() {
-        txtPrimerNombre.setText("");
-        txtSegundoNombre.setText("");
-        txtPrimerApellido.setText("");
-        txtSegundoApellido.setText("");
-        txtEdad.setText("");
-        txtCedula.setText("");
-        txtNacionalidad.setText("");
-        txtCorreo.setText("");
-        cmbTurno.setSelectedIndex(0);
-        dateChooserFinContrato.setDate(null);
-        rutaImagenSeleccionada = null;
+private void validarImagen(File imagen) {
+    if (imagen == null || !imagen.exists()) {
+        throw new IllegalArgumentException("Debe proporcionar una imagen válida de la enfermera");
+    }
+    
+    // Validar extensión del archivo
+    String nombre = imagen.getName().toLowerCase();
+    if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg") && !nombre.endsWith(".png")) {
+        throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG");
+    }
+}
+    
+    public int modificarEnfermera(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
+    try {
+        // 1. Verificar existencia de la enfermera
+        Enfermera original = obtenerEnfermeraPorCedula(cedulaOriginal);
+        if (original == null) {
+            throw new IllegalArgumentException("Enfermera no encontrada con cédula: " + cedulaOriginal);
+        }
+
+        // 2. Verificar si hay cambios reales
+        if (!verificarCambios(original, cambios, nuevaImagen)) {
+            return 0; // Código 0 = No hay cambios
+        }
+
+        // 3. Validar campos modificados
+        validarCamposModificacion(cambios);
+        
+        // 4. Extraer y validar datos
+        int edad = (int) cambios.get("edad");
+        LocalDate fechaFin = (LocalDate) cambios.get("fechaFin");
+        String turno = (String) cambios.get("turno");
+        
+        validarEdad(edad);
+        validarFechasContrato(original.getFechaContratacion(), fechaFin);
+        validarLimiteEnfermerasPorTurno(turno, cedulaOriginal);
+        
+        // 5. Verificar si el correo fue modificado
+        String nuevoCorreo = (String) cambios.get("correo");
+        boolean correoModificado = !original.getCorreo().equals(nuevoCorreo);
+        
+        // 6. Construir enfermera modificada
+        Enfermera enfermeraModificada = construirEnfermeraModificada(cedulaOriginal, cambios, original);
+        
+        // 7. Ejecutar modificación
+        boolean resultado = enfermeraDAO.modificarEnfermera(cedulaOriginal, enfermeraModificada, nuevaImagen);
+        
+        // 8. Si se modificó el correo, preguntar por reenvío de credenciales
+        if (resultado && correoModificado) {
+            preguntarReenvioCredenciales(original, nuevoCorreo);
+        }
+        
+        return resultado ? 1 : -1; // 1=Éxito, -1=Error
+        
+    } catch (IllegalArgumentException e) {
+        throw e;
+    } catch (Exception e) {
+        throw new RuntimeException("Error al modificar enfermera: " + e.getMessage(), e);
+    }
+}
+
+private void preguntarReenvioCredenciales(Enfermera enfermera, String nuevoCorreo) {
+    int opcion = JOptionPane.showConfirmDialog(
+        null,
+        "Se ha modificado el correo de la enfermera. ¿Desea reenviar las credenciales al nuevo correo?",
+        "Reenviar Credenciales",
+        JOptionPane.YES_NO_OPTION
+    );
+
+    if (opcion == JOptionPane.YES_OPTION) {
+        reenviarCredenciales(enfermera, nuevoCorreo);
+    }
+}
+
+private void reenviarCredenciales(Enfermera enfermera, String nuevoCorreo) {
+    try {
+        // Obtener las credenciales sin encriptar del usuario asociado
+        UsuarioDAO usuarioDAO = UsuarioDAO.getInstancia();
+        Usuario usuario = usuarioDAO.obtenerUsuarioPorUsername(enfermera.getUsuario());
+        
+        if (usuario != null) {
+            // Enviar correo con las credenciales sin encriptar
+            boolean enviado = EmailSender.getInstancia().enviarCredenciales(
+                nuevoCorreo,
+                usuario.getUsuario(),
+                usuario.getPassword(), // Aquí deberías tener la contraseña original sin encriptar
+                RolEnum.ENFERMERA
+            );
+            
+            if (!enviado) {
+                JOptionPane.showMessageDialog(
+                    null,
+                    "Las credenciales se actualizaron pero no se pudieron enviar por correo.",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE
+                );
+            }
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(
+            null,
+            "Error al reenviar credenciales: " + e.getMessage(),
+            "Error",
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
+}
+
+
+private boolean verificarCambios(Enfermera original, Map<String, Object> cambios, File nuevaImagen) {
+    // Verificar cambios en campos básicos
+    if (!original.getPrimerNombre().equals(cambios.get("primerNombre"))) return true;
+    if (!Objects.equals(original.getSegundoNombre(), cambios.get("segundoNombre"))) return true;
+    if (!original.getPrimerApellido().equals(cambios.get("primerApellido"))) return true;
+    if (!original.getSegundoApellido().equals(cambios.get("segundoApellido"))) return true;
+    if (original.getEdad() != (int) cambios.get("edad")) return true;
+    if (!original.getNacionalidad().equals(cambios.get("nacionalidad"))) return true;
+    if (!original.getCorreo().equals(cambios.get("correo"))) return true;
+    if (!original.getTurno().equals(cambios.get("turno"))) return true;
+    if (!original.getFechaFinContrato().equals(cambios.get("fechaFin"))) return true;
+    
+    // Verificar si se cambió la imagen
+    return nuevaImagen != null;
+}
+
+   
+    
+    private Enfermera construirEnfermeraModificada(String cedulaOriginal, 
+            Map<String, Object> cambios, Enfermera original) {
+        
+        return new Enfermera(
+            (String) cambios.get("primerNombre"),
+            (String) cambios.get("segundoNombre"),
+            (String) cambios.get("primerApellido"),
+            (String) cambios.get("segundoApellido"),
+            (int) cambios.get("edad"),
+            "Femenino",
+            (String) cambios.get("nacionalidad"),
+            cedulaOriginal,
+            (String) cambios.get("turno"),
+            original.getFechaContratacion(),
+            (LocalDate) cambios.get("fechaFin"),
+            (String) cambios.get("correo"),
+            original.getUsuario(),
+            original.getContrasena()
+        );
     }
 
+    private File validarYProcesarImagen(String rutaImagen) {
+        if (rutaImagen == null || rutaImagen.trim().isEmpty()) {
+            throw new IllegalArgumentException("Debe seleccionar una imagen de la enfermera");
+        }
+
+        File imagen = new File(rutaImagen);
+        validarImagen(imagen);
+        return imagen;
+    }
+
+    // Métodos de consulta
     public List<Enfermera> obtenerTodasEnfermeras() {
         return enfermeraDAO.obtenerEnfermeras();
     }
 
-    public Enfermera obtenerEnfermeraPorCedula(String cedula) {
+   public Enfermera obtenerEnfermeraPorCedula(String cedula) {
         return enfermeraDAO.obtenerEnfermeraPorIdentificacion(cedula);
     }
 
@@ -288,76 +273,24 @@ public class EnfermeraController {
         return enfermeraDAO.eliminarEnfermera(cedula);
     }
 
-    public DefaultTableModel obtenerModeloTablaEnfermeras() {
-        String[] columnas = {
-            "Foto", "Nombres", "Apellidos", "Edad", "Cédula", 
-            "Sexo", "Nacionalidad", "Correo", "Turno", 
-            "Fecha Inicio", "Fecha Fin", "Usuario"
-        };
-
-        DefaultTableModel modelo = new DefaultTableModel(columnas, 0) {
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                return columnIndex == 0 ? ImageIcon.class : String.class;
-            }
-            
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        List<Enfermera> enfermeras = enfermeraDAO.obtenerEnfermeras();
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        for (Enfermera enfermera : enfermeras) {
-            ImageIcon icono = null;
-            if (enfermera.getRutaImagen() != null && !enfermera.getRutaImagen().isEmpty()) {
-                try {
-                    ImageIcon original = new ImageIcon(enfermera.getRutaImagen());
-                    Image imagenEscalada = original.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
-                    icono = new ImageIcon(imagenEscalada);
-                } catch (Exception e) {
-                    System.err.println("Error al cargar imagen: " + e.getMessage());
-                }
-            }
-
-            modelo.addRow(new Object[]{
-                icono,
-                enfermera.getNombresParaTabla(),
-                enfermera.getApellidosParaTabla(),
-                String.valueOf(enfermera.getEdad()),
-                enfermera.getIdentificacion(),
-                enfermera.getSexo(),
-                enfermera.getNacionalidad(),
-                enfermera.getCorreo(),
-                enfermera.getTurno(),
-                enfermera.getFechaContratacion() != null ? 
-                    enfermera.getFechaContratacion().format(dateFormatter) : "",
-                enfermera.getFechaFinContrato() != null ? 
-                    enfermera.getFechaFinContrato().format(dateFormatter) : "",
-                enfermera.getUsuario() // Mostrar el usuario en la tabla
-            });
-        }
-
-        return modelo;
+    public Enfermera obtenerEnfermeraPorUsuario(String usuario) {
+        return enfermeraDAO.obtenerEnfermeraPorUsuario(usuario);
     }
 
-    // Métodos de validación (sin cambios)
+    // Métodos de validación
     private void validarLimiteEnfermerasPorTurno(String turno, String cedulaOriginal) {
         List<Enfermera> enfermeras = enfermeraDAO.obtenerEnfermeras();
         long count = enfermeras.stream()
                 .filter(e -> e.getTurno().equalsIgnoreCase(turno))
-                .filter(e -> !e.getIdentificacion().equals(cedulaOriginal))
+                .filter(e -> cedulaOriginal == null || !e.getIdentificacion().equals(cedulaOriginal))
                 .count();
         
         if (count >= 2) {
-            throw new IllegalArgumentException("Ya existen 2 enfermeras en el turno " + turno + 
-                                             ". No se pueden agregar más.");
+            throw new IllegalArgumentException("Ya existen 2 enfermeras en el turno " + turno);
         }
         
         if (enfermeras.size() >= 4 && cedulaOriginal == null) {
-            throw new IllegalArgumentException("Se ha alcanzado el límite máximo de 4 enfermeras (2 diurnas y 2 nocturnas)");
+            throw new IllegalArgumentException("Límite máximo de 4 enfermeras alcanzado");
         }
     }
 
@@ -385,78 +318,64 @@ public class EnfermeraController {
         }
     }
 
-    private boolean validarCamposObligatorios(String primerNombre, String primerApellido,
-            String segundoApellido, int edad, String cedula,
-            String nacionalidad, String correo,
-            String turno) {
-        StringBuilder camposFaltantes = new StringBuilder();
-
-        if (primerNombre == null || primerNombre.trim().isEmpty()) {
-            camposFaltantes.append("- Primer nombre\n");
-        }
-        if (primerApellido == null || primerApellido.trim().isEmpty()) {
-            camposFaltantes.append("- Primer apellido\n");
-        }
-        if (segundoApellido == null || segundoApellido.trim().isEmpty()) {
-            camposFaltantes.append("- Segundo apellido\n");
-        }
-        if (cedula == null || cedula.trim().isEmpty()) {
-            camposFaltantes.append("- Cédula\n");
-        }
-        if (nacionalidad == null || nacionalidad.trim().isEmpty()) {
-            camposFaltantes.append("- Nacionalidad\n");
-        }
-        if (correo == null || correo.trim().isEmpty()) {
-            camposFaltantes.append("- Correo\n");
-        }
-        if (turno == null || turno.trim().isEmpty()) {
-            camposFaltantes.append("- Turno\n");
-        }
-
-        if (camposFaltantes.length() > 0) {
-            throw new IllegalArgumentException("Los siguientes campos son obligatorios:\n" + camposFaltantes.toString());
-        }
-
-        return true;
-    }
-
-    private boolean validarImagen(File imagen) {
-        if (imagen == null || !imagen.exists()) {
-            throw new IllegalArgumentException("Debe seleccionar una imagen válida");
-        }
-
-        String nombre = imagen.getName().toLowerCase();
-        if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg")
-                && !nombre.endsWith(".png") && !nombre.endsWith(".gif")) {
-            throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, PNG o GIF");
-        }
-
-        return true;
-    }
+    private void validarCamposObligatorios(String primerNombre, String primerApellido,
+        String segundoApellido, int edad, String cedula,
+        String nacionalidad, String correo, String turno) {
     
-    public Enfermera obtenerEnfermeraPorUsuario(String usuario) {
-    return enfermeraDAO.obtenerEnfermeraPorUsuario(usuario);
+    List<String> errores = new ArrayList<>();
+
+    if (primerNombre == null || primerNombre.trim().isEmpty()) {
+        errores.add("Primer nombre es obligatorio");
+    }
+    if (primerApellido == null || primerApellido.trim().isEmpty()) {
+        errores.add("Primer apellido es obligatorio");
+    }
+    if (segundoApellido == null || segundoApellido.trim().isEmpty()) {
+        errores.add("Segundo apellido es obligatorio");
+    }
+    if (cedula == null || cedula.trim().isEmpty()) {
+        errores.add("Cédula es obligatoria");
+    }
+    if (nacionalidad == null || nacionalidad.trim().isEmpty()) {
+        errores.add("Nacionalidad es obligatoria");
+    }
+    if (correo == null || correo.trim().isEmpty()) {
+        errores.add("Correo es obligatorio");
+    } else if (!correo.matches("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)*(\\.[a-zA-Z]{2,})$")) {
+        errores.add("Correo electrónico no válido");
+    }
+    if (turno == null || turno.trim().isEmpty()) {
+        errores.add("Turno es obligatorio");
+    }
+    if (edad <= 0) {
+        errores.add("Edad debe ser un número positivo");
+    }
+
+    if (!errores.isEmpty()) {
+        throw new IllegalArgumentException("Errores de validación:\n- " + 
+            String.join("\n- ", errores));
+    }
 }
 
-    private boolean validarFechasContrato(LocalDate inicio, LocalDate fin) {
+   
+
+    private void validarFechasContrato(LocalDate inicio, LocalDate fin) {
         if (fin == null) {
-            throw new IllegalArgumentException("La fecha de fin de contrato no puede estar vacía");
+            throw new IllegalArgumentException("La fecha de fin de contrato es obligatoria");
         }
 
         if (!fin.isAfter(inicio)) {
-            throw new IllegalArgumentException("La fecha de fin de contrato debe ser posterior a la fecha de inicio");
+            throw new IllegalArgumentException("La fecha de fin debe ser posterior a la fecha de inicio");
         }
-
-        return true;
     }
 
     private void validarEdad(int edad) {
         if (edad < 18 || edad > 70) {
             throw new IllegalArgumentException("La edad debe estar entre 18 y 70 años");
+        } if (edad < 0) {
+            throw new IllegalArgumentException("La edad debe ser un número valido");
         }
     }
-
-    public void setRutaImagenSeleccionada(String rutaImagenSeleccionada) {
-        this.rutaImagenSeleccionada = rutaImagenSeleccionada;
-    }
+    
+    
 }
