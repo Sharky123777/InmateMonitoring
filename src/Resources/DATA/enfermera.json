@@ -47,18 +47,18 @@
     },
     {
       "turno": "Diurno",
-      "fechaContratacion": "2025-05-11",
+      "fechaContratacion": "2025-05-12",
       "fechaFinContrato": "2025-05-22",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/313131313_1747009039902.png",
-      "correo": "sharkyalcazar@gmail.com",
-      "primerNombre": "pa",
-      "segundoNombre": "every",
-      "primerApellido": "W",
-      "segundoApellido": "W",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/3_1747066973561.png",
+      "correo": "vivaSm4g@gmail.com",
+      "primerNombre": "sS",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
       "edad": 34,
       "sexo": "Femenino",
-      "nacionalidad": "P",
-      "identificacion": "313131313"
+      "nacionalidad": "vi",
+      "identificacion": "3"
     }
   ]
 }

@@ -40,6 +40,7 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import Controller.OficialController;
 import java.awt.Graphics2D;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -86,6 +87,7 @@ public class Director extends javax.swing.JFrame {
 
     EnfermeraDAO enfermeraDAO = new EnfermeraDAO();
     private EnfermeraController enfermeraController;
+    private OficialController oficialController;
 
     private BufferedImage imagenCapturadaModificacion;
     private CoordinadorDeActividadesController coordinadorController;
@@ -135,6 +137,7 @@ public class Director extends javax.swing.JFrame {
         enfermeraController = EnfermeraController.getInstancia();
         coordinadorController = CoordinadorDeActividadesController.getInstancia();
         guardiaController = guardiaController.getInstancia();
+        oficialController = OficialController.getInstancia(); 
 
         // Configuración MEJORADA del JDateChooser
         jDateChooserFinContrato = new JDateChooser();
@@ -153,6 +156,7 @@ public class Director extends javax.swing.JFrame {
         actualizarTablaGuardias();
         actualizarTablaEnfermeras();
         actualizarTablaCDA();
+        actualizarTablaOficiales();
 
         // Configurar el tabbed pane (ocultar las pestañas pero mantener la funcionalidad)
         tabPrincipal.setUI(null);  // Oculta las pestañas del tabbedPane
@@ -560,7 +564,7 @@ public class Director extends javax.swing.JFrame {
         jLabel112 = new javax.swing.JLabel();
         jLabel113 = new javax.swing.JLabel();
         ModificarOficial = new javax.swing.JPanel();
-        ModificarNurse1 = new javax.swing.JPanel();
+        modificarOficial = new javax.swing.JPanel();
         jPanel24 = new RoundedPanel(30);
         jSeparator75 = new javax.swing.JSeparator();
         jSeparator76 = new javax.swing.JSeparator();
@@ -2483,8 +2487,8 @@ public class Director extends javax.swing.JFrame {
 
         ModificarOficial.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        ModificarNurse1.setBackground(new java.awt.Color(20, 25, 40));
-        ModificarNurse1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        modificarOficial.setBackground(new java.awt.Color(20, 25, 40));
+        modificarOficial.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel24.setBackground(new java.awt.Color(29, 35, 51));
         jPanel24.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -2695,14 +2699,14 @@ public class Director extends javax.swing.JFrame {
         jLabel126.setText("Primer nombre:");
         jPanel24.add(jLabel126, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, 20));
 
-        ModificarNurse1.add(jPanel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
+        modificarOficial.add(jPanel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
 
         jLabel127.setFont(new java.awt.Font("Arial", 2, 10)); // NOI18N
         jLabel127.setForeground(new java.awt.Color(153, 0, 0));
         jLabel127.setText("NINGUN CAMPO DEBE ESTAR VACIO AL MODIFICAR, A EXCEPCIÓN DEL SEGUNDO NOMBRE.");
-        ModificarNurse1.add(jLabel127, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 10, -1, 30));
+        modificarOficial.add(jLabel127, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 10, -1, 30));
 
-        ModificarOficial.add(ModificarNurse1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        ModificarOficial.add(modificarOficial, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 590));
 
         tabPrincipal.addTab("ModificarOficial", ModificarOficial);
 
@@ -2768,70 +2772,70 @@ public class Director extends javax.swing.JFrame {
 
     // Métodos para Oficiales en la vista Director
     private void cargarTablaOficiales() {
-    DefaultTableModel modelo = new DefaultTableModel() {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-
-        @Override
-        public Class<?> getColumnClass(int columnIndex) {
-            return columnIndex == 0 ? ImageIcon.class : Object.class;
-        }
-    };
-
-    modelo.setColumnIdentifiers(new String[]{
-        "Foto",
-        "Nombre",
-        "Apellido",
-        "Edad",
-        "Cédula",
-        "Nacionalidad",
-        "Correo",
-        "Turno",
-        "Inicio Contrato",
-        "Fin Contrato"
-    });
-
-    List<Oficial> oficiales = OficialController.getInstancia().obtenerTodosOficiales();
-
-    for (Oficial o : oficiales) {
-        ImageIcon icono = null; // Inicialmente sin imagen
-
-        // Intentar cargar la imagen solo si existe la ruta y el archivo
-        if (o.getRutaImagen() != null && !o.getRutaImagen().isEmpty()) {
-            try {
-                File file = new File(o.getRutaImagen());
-                if (file.exists()) {
-                    Image img = new ImageIcon(o.getRutaImagen()).getImage()
-                            .getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-                    icono = new ImageIcon(img);
-                }
-            } catch (Exception ex) {
-                System.err.println("Error cargando imagen para oficial " + o.getIdentificacion() + ": " + ex.getMessage());
-                icono = null; // Asegurarse que sea null si hay error
+        DefaultTableModel modelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
             }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return columnIndex == 0 ? ImageIcon.class : Object.class;
+            }
+        };
+
+        modelo.setColumnIdentifiers(new String[]{
+            "Foto",
+            "Nombre",
+            "Apellido",
+            "Edad",
+            "Cédula",
+            "Nacionalidad",
+            "Correo",
+            "Turno",
+            "Inicio Contrato",
+            "Fin Contrato"
+        });
+
+        List<Oficial> oficiales = OficialController.getInstancia().obtenerTodosOficiales();
+
+        for (Oficial o : oficiales) {
+            ImageIcon icono = null; // Inicialmente sin imagen
+
+            // Intentar cargar la imagen solo si existe la ruta y el archivo
+            if (o.getRutaImagen() != null && !o.getRutaImagen().isEmpty()) {
+                try {
+                    File file = new File(o.getRutaImagen());
+                    if (file.exists()) {
+                        Image img = new ImageIcon(o.getRutaImagen()).getImage()
+                                .getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                        icono = new ImageIcon(img);
+                    }
+                } catch (Exception ex) {
+                    System.err.println("Error cargando imagen para oficial " + o.getIdentificacion() + ": " + ex.getMessage());
+                    icono = null; // Asegurarse que sea null si hay error
+                }
+            }
+
+            modelo.addRow(new Object[]{
+                icono, // Puede ser null
+                o.getPrimerNombre() + " " + (o.getSegundoNombre() != null ? o.getSegundoNombre() : ""),
+                o.getPrimerApellido() + " " + o.getSegundoApellido(),
+                o.getEdad(),
+                o.getIdentificacion(),
+                o.getNacionalidad(),
+                o.getCorreo(),
+                o.getTurno(),
+                o.getFechaContratacion(),
+                o.getFechaFinContrato()
+            });
         }
 
-        modelo.addRow(new Object[]{
-            icono, // Puede ser null
-            o.getPrimerNombre() + " " + (o.getSegundoNombre() != null ? o.getSegundoNombre() : ""),
-            o.getPrimerApellido() + " " + o.getSegundoApellido(),
-            o.getEdad(),
-            o.getIdentificacion(),
-            o.getNacionalidad(),
-            o.getCorreo(),
-            o.getTurno(),
-            o.getFechaContratacion(),
-            o.getFechaFinContrato()
-        });
+        tablaOficial.setModel(modelo);
+        tablaOficial.setRowHeight(85);
+        tablaOficial.getColumnModel().getColumn(0).setPreferredWidth(85);
+        tablaOficial.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
     }
-
-    tablaOficial.setModel(modelo);
-    tablaOficial.setRowHeight(85);
-    tablaOficial.getColumnModel().getColumn(0).setPreferredWidth(85);
-    tablaOficial.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
-}
 
     private void cargarTablaGuardias() {
         DefaultTableModel modelo = guardiaController.obtenerModeloTabla();
@@ -3787,10 +3791,6 @@ public class Director extends javax.swing.JFrame {
             limpiarFormularioEnfermera();
             actualizarTablaEnfermeras();
 
-            JOptionPane.showMessageDialog(this,
-                    "Enfermera registrada exitosamente!",
-                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
         } catch (IllegalArgumentException e) {
             // Mostrar mensajes de error de validación
             JOptionPane.showMessageDialog(this,
@@ -4001,6 +4001,73 @@ public class Director extends javax.swing.JFrame {
         tablaCoordinadores.setRowHeight(85);
         tablaCoordinadores.getColumnModel().getColumn(0).setPreferredWidth(85);
         tablaCoordinadores.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
+    }
+    
+    private void actualizarTablaOficiales() {
+       DefaultTableModel modelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return columnIndex == 0 ? ImageIcon.class : Object.class;
+            }
+        };
+
+        modelo.setColumnIdentifiers(new String[]{
+            "Foto",
+            "Nombre",
+            "Apellido",
+            "Edad",
+            "Cédula",
+            "Nacionalidad",
+            "Correo",
+            "Turno",
+            "Inicio Contrato", // Nueva columna
+            "Fin Contrato"
+        });
+
+        List<Oficial> oficiales = oficialController.obtenerTodosOficiales();
+
+        // Crear una imagen por defecto segura
+        ImageIcon iconoPorDefecto = crearIconoPorDefecto();
+
+        for (Oficial o : oficiales) {
+            ImageIcon icono = iconoPorDefecto;
+
+            if (o.getRutaImagen() != null && !o.getRutaImagen().isEmpty()) {
+                try {
+                    File file = new File(o.getRutaImagen());
+                    if (file.exists()) {
+                        Image img = new ImageIcon(o.getRutaImagen()).getImage()
+                                .getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                        icono = new ImageIcon(img);
+                    }
+                } catch (Exception ex) {
+                    System.err.println("Error cargando imagen: " + ex.getMessage());
+                }
+            }
+
+            modelo.addRow(new Object[]{
+                icono,
+                o.getPrimerNombre() + " " + (o.getSegundoNombre() != null ? o.getSegundoNombre() : ""),
+                o.getPrimerApellido() + " " + o.getSegundoApellido(),
+                o.getEdad(),
+                o.getIdentificacion(),
+                o.getNacionalidad(),
+                o.getCorreo(),
+                o.getTurno(),
+                o.getFechaContratacion(),
+                o.getFechaFinContratoFormateada()
+            });
+        }
+
+        tablaOficial.setModel(modelo);
+        tablaOficial.setRowHeight(85);
+        tablaOficial.getColumnModel().getColumn(0).setPreferredWidth(85);
+        tablaOficial.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
     }
 
     private void actualizarTablaEnfermeras() {
@@ -4538,19 +4605,18 @@ public class Director extends javax.swing.JFrame {
             limpiarFormularioCDA();
             actualizarTablaCDA();
 
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this,
-                    "La edad debe ser un número válido",
-                    "Error", JOptionPane.ERROR_MESSAGE);
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this,
-                    e.getMessage(),
+                    "Error de validación: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             JOptionPane.showMessageDialog(this,
-                    "Error al registrar coordinador: " + e.getMessage(),
+                    "Error al guardar el coordinador: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error de E/S: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton9ActionPerformed
 
@@ -5232,12 +5298,12 @@ public class Director extends javax.swing.JFrame {
         String cedula = tablaCoordinadores.getValueAt(fila, 4).toString(); // Cambia 4 por el índice correcto
 
         try {
-            
+
             CoordinadorDeActividades coordinador = CoordinadorDeActividadesController.getInstancia()
                     .obtenerCoordinadorPorCedula(cedula);
 
             if (coordinador != null) {
-               
+
                 cargarDatosCoordinadorParaModificar(coordinador);
 
                 // Cambiar al panel de modificación (asegúrate que el nombre sea correcto)
@@ -5684,7 +5750,7 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPrimerNombreMod3KeyTyped
 
     private void BorrarOfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BorrarOfActionPerformed
-         int filaSeleccionada = tablaOficial.getSelectedRow();
+        int filaSeleccionada = tablaOficial.getSelectedRow();
 
         if (filaSeleccionada == -1) {
             JOptionPane.showMessageDialog(this,
@@ -5718,7 +5784,40 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_BorrarOfActionPerformed
 
     private void modOfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modOfActionPerformed
-      
+  int fila = tablaOficial.getSelectedRow();
+
+        if (fila < 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Seleccione un oficial primero",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+       
+        String cedula = tablaOficial.getValueAt(fila, 4).toString(); // Cambia 4 por el índice correcto
+
+        try {
+
+            Oficial oficial = OficialController.getInstancia()
+                    .obtenerOficialPorCedula(cedula);
+
+            if (oficial != null) {
+
+                cargarDatosOficialParaModificar(oficial);
+
+                // Cambiar al panel de modificación (asegúrate que el nombre sea correcto)
+                tabPrincipal.setSelectedComponent(ModificarOficial);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "No se encontró el Oficial con cédula: " + cedula,
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar datos: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_modOfActionPerformed
 
     /**
@@ -5776,7 +5875,6 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JMenuItem ModificarEnfermera;
     private javax.swing.JPanel ModificarGuardia;
     private javax.swing.JPanel ModificarNurse;
-    private javax.swing.JPanel ModificarNurse1;
     private javax.swing.JPanel ModificarODR;
     private javax.swing.JPanel ModificarOficial;
     private javax.swing.JPanel MostrarEnfermeras;
@@ -6067,6 +6165,7 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JLabel lblImagenMod2;
     private javax.swing.JLabel lblImagenMod3;
     private javax.swing.JMenuItem modOf;
+    private javax.swing.JPanel modificarOficial;
     private javax.swing.JPanel mostrarCoordinadora;
     private javax.swing.JPanel mostrarOficial;
     private javax.swing.JTabbedPane tabPrincipal;

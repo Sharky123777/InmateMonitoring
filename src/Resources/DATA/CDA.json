@@ -35,6 +35,42 @@
       "sexo": "Femenino",
       "nacionalidad": "sd",
       "identificacion": "1313131131"
+    },
+    {
+      "usuario": "665BñFrñ",
+      "contrasena": "082afac722e9ebcd2c24e53e49d8b2b4ffb4eca62df5c955cee47deda2ef3508",
+      "turno": "Diurno",
+      "cargo": "Coordinadora mañana",
+      "fechaInicioContrato": "2025-05-12",
+      "fechaFinContrato": "2025-05-23",
+      "rutaImagen": "src/Resources/imagenes_CDA/31873183_1747067053541.png",
+      "correo": "S@GMAIL.COM",
+      "primerNombre": "sS",
+      "segundoNombre": "S",
+      "primerApellido": "S",
+      "segundoApellido": "S",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "W",
+      "identificacion": "31873183"
+    },
+    {
+      "usuario": "5\u0026F$IYwR\u0026sW",
+      "contrasena": "6454a839384e530f7e1a6426760fdf22686c9dfe4f264303acf6eb3c64151fe8",
+      "turno": "Diurno",
+      "cargo": "Coordinadora mañana",
+      "fechaInicioContrato": "2025-05-12",
+      "fechaFinContrato": "2025-05-23",
+      "rutaImagen": "src/Resources/imagenes_CDA/378123781_1747067269860.png",
+      "correo": "w",
+      "primerNombre": "s",
+      "segundoNombre": "",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "w",
+      "identificacion": "378123781"
     }
   ]
 }

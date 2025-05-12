@@ -56,6 +56,7 @@ public class ModernTopMenu extends JPanel {
     
      ArrayList<MenuItem> oficialItems = new ArrayList<>();
     oficialItems.add(new MenuItem("Agregar oficial", 15)); // AgregarCDA
+    oficialItems.add(new MenuItem("Mostrar oficial", 17)); // AgregarCDA
     menuStructure.put("Oficial", oficialItems );
     
     

@@ -98,10 +98,10 @@ public class CoordinadorDeActividadesController {
             LocalDate fechaFinContrato, File imagenSeleccionadaCDA) throws IOException {
 
         // Validación de cédula única (agregar al inicio)
-    if (coordinadorDAO.existeCoordinadorConCedula(cedula)) {
-        throw new IllegalArgumentException("Ya existe una coordinadora con la cédula " + cedula);
-    }
-    
+        if (coordinadorDAO.existeCoordinadorConCedula(cedula)) {
+            throw new IllegalArgumentException("Ya existe una coordinadora con la cédula " + cedula);
+        }
+
         // Validación de campos obligatorios
         validarCamposObligatorios(primerNombre, primerApellido, segundoApellido,
                 edad, cedula, nacionalidad, correo, turno, cargo);
@@ -139,44 +139,36 @@ public class CoordinadorDeActividadesController {
     }
 
     public boolean modificarCoordinador(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
-        System.out.println("Iniciando proceso de modificación para cédula: " + cedulaOriginal);
-        
+
         try {
             // 1. Validar existencia del coordinador original
             CoordinadorDeActividades original = validarYObternerOriginal(cedulaOriginal);
-            System.out.println("Coordinador original encontrado: " + original.getPrimerNombre());
-            
+
             // 2. Verificar que todos los campos requeridos estén presentes
             validarCamposModificados(cambios);
-            System.out.println("Validación de campos completada");
 
             // 3. Verificar si hay cambios reales - PUNTO CRÍTICO
             boolean hayCambios = verificarCambios(original, cambios, nuevaImagen);
-            System.out.println("Resultado de verificación de cambios: " + hayCambios);
 
             if (!hayCambios) {
-                System.out.println("No se detectaron cambios. Mostrando diálogo de confirmación.");
+
                 // Mostrar diálogo de confirmación
                 int opcion = JOptionPane.showConfirmDialog(null,
                         "¿Está segura que no desea realizar cambios?",
                         "Sin cambios detectados",
                         JOptionPane.YES_NO_OPTION);
-                
-                System.out.println("Opción seleccionada: " + (opcion == JOptionPane.YES_OPTION ? "SI" : "NO"));
 
                 if (opcion == JOptionPane.YES_OPTION) {
                     // Retornar false para indicar que no se realizaron cambios
-                    System.out.println("Usuario confirmó no realizar cambios");
+
                     return false;
                 } else {
                     // El usuario quiere seguir editando
-                    System.out.println("Usuario decidió seguir editando");
+
                     throw new CancelarModificacionException();
                 }
             }
 
-            System.out.println("Hay cambios, procediendo con la validación y modificación");
-            
             // 4. Validar edad
             int edad = validarEdad((int) cambios.get("edad"));
 
@@ -197,7 +189,7 @@ public class CoordinadorDeActividadesController {
 
             // 9. Ejecutar modificación en DAO
             boolean resultado = coordinadorDAO.modificarCoordinador(cedulaOriginal, coordinadorModificado, imagenFinal);
-            
+
             if (resultado) {
                 // Mostrar mensaje de éxito
                 System.out.println("Modificación exitosa, mostrando mensaje");
@@ -205,7 +197,7 @@ public class CoordinadorDeActividadesController {
                         "COORDINADORA MODIFICADA EXITOSAMENTE",
                         "Éxito", JOptionPane.INFORMATION_MESSAGE);
             }
-            
+
             return resultado;
 
         } catch (CancelarModificacionException e) {
@@ -217,83 +209,84 @@ public class CoordinadorDeActividadesController {
             throw e;
         } catch (Exception e) {
             // Capturar cualquier otro error
-            JOptionPane.showMessageDialog(null, 
-                    "Error al modificar coordinador: " + e.getMessage(), 
+            JOptionPane.showMessageDialog(null,
+                    "Error al modificar coordinador: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException("Error al modificar coordinador: " + e.getMessage(), e);
         }
     }
 
     private boolean verificarCambios(CoordinadorDeActividades original, Map<String, Object> cambios, File nuevaImagen) {
-    System.out.println("Verificando cambios:");
-    
-    // Verificar cambios en campos básicos
-    if (!original.getPrimerNombre().trim().equals(((String)cambios.get("primerNombre")).trim())) {
-        System.out.println("Cambio detectado en primer nombre");
-        return true;
-    }
-    
-    String segundoNombreOriginal = original.getSegundoNombre() != null ? original.getSegundoNombre().trim() : "";
-    String segundoNombreNuevo = cambios.getOrDefault("segundoNombre", "").toString().trim();
-    if (!segundoNombreOriginal.equals(segundoNombreNuevo)) {
-        System.out.println("Cambio detectado en segundo nombre");
-        return true;
-    }
-    
-    if (!original.getPrimerApellido().trim().equals(((String)cambios.get("primerApellido")).trim())) {
-        System.out.println("Cambio detectado en primer apellido");
-        return true;
-    }
-    
-    if (!original.getSegundoApellido().trim().equals(((String)cambios.get("segundoApellido")).trim())) {
-        System.out.println("Cambio detectado en segundo apellido");
-        return true;
-    }
-    
-    if (original.getEdad() != (int) cambios.get("edad")) {
-        System.out.println("Cambio detectado en edad");
-        return true;
-    }
-    
-    if (!original.getNacionalidad().trim().equals(((String)cambios.get("nacionalidad")).trim())) {
-        System.out.println("Cambio detectado en nacionalidad");
-        return true;
+        System.out.println("Verificando cambios:");
+
+        // Verificar cambios en campos básicos
+        if (!original.getPrimerNombre().trim().equals(((String) cambios.get("primerNombre")).trim())) {
+            System.out.println("Cambio detectado en primer nombre");
+            return true;
+        }
+
+        String segundoNombreOriginal = original.getSegundoNombre() != null ? original.getSegundoNombre().trim() : "";
+        String segundoNombreNuevo = cambios.getOrDefault("segundoNombre", "").toString().trim();
+        if (!segundoNombreOriginal.equals(segundoNombreNuevo)) {
+            System.out.println("Cambio detectado en segundo nombre");
+            return true;
+        }
+
+        if (!original.getPrimerApellido().trim().equals(((String) cambios.get("primerApellido")).trim())) {
+            System.out.println("Cambio detectado en primer apellido");
+            return true;
+        }
+
+        if (!original.getSegundoApellido().trim().equals(((String) cambios.get("segundoApellido")).trim())) {
+            System.out.println("Cambio detectado en segundo apellido");
+            return true;
+        }
+
+        if (original.getEdad() != (int) cambios.get("edad")) {
+            System.out.println("Cambio detectado en edad");
+            return true;
+        }
+
+        if (!original.getNacionalidad().trim().equals(((String) cambios.get("nacionalidad")).trim())) {
+            System.out.println("Cambio detectado en nacionalidad");
+            return true;
+        }
+
+        if (!original.getCorreo().trim().equals(((String) cambios.get("correo")).trim())) {
+            System.out.println("Cambio detectado en correo");
+            return true;
+        }
+
+        if (!original.getTurno().trim().equals(((String) cambios.get("turno")).trim())) {
+            System.out.println("Cambio detectado en turno");
+            return true;
+        }
+
+        if (!original.getCargo().trim().equals(((String) cambios.get("cargo")).trim())) {
+            System.out.println("Cambio detectado en cargo");
+            return true;
+        }
+
+        LocalDate fechaFinOriginal = original.getFechaFinContrato();
+        LocalDate fechaFinNueva = (LocalDate) cambios.get("fechaFin");
+        if (!fechaFinOriginal.equals(fechaFinNueva)) {
+            System.out.println("Cambio detectado en fecha fin");
+            return true;
+        }
+
+        // Verificar si se cambió la imagen (solo si se proporciona una nueva)
+        if (nuevaImagen != null) {
+            System.out.println("Cambio detectado: nueva imagen proporcionada");
+            return true;
+        }
+
+        System.out.println("No se detectaron cambios");
+        return false;
     }
 
-    if (!original.getCorreo().trim().equals(((String)cambios.get("correo")).trim())) {
-        System.out.println("Cambio detectado en correo");
-        return true;
-    }
-    
-    if (!original.getTurno().trim().equals(((String)cambios.get("turno")).trim())) {
-        System.out.println("Cambio detectado en turno");
-        return true;
-    }
-    
-    if (!original.getCargo().trim().equals(((String)cambios.get("cargo")).trim())) {
-        System.out.println("Cambio detectado en cargo");
-        return true;
-    }
-    
-    LocalDate fechaFinOriginal = original.getFechaFinContrato();
-    LocalDate fechaFinNueva = (LocalDate) cambios.get("fechaFin");
-    if (!fechaFinOriginal.equals(fechaFinNueva)) {
-        System.out.println("Cambio detectado en fecha fin");
-        return true;
-    }
-
-    // Verificar si se cambió la imagen (solo si se proporciona una nueva)
-    if (nuevaImagen != null) {
-        System.out.println("Cambio detectado: nueva imagen proporcionada");
-        return true;
-    }
-
-    System.out.println("No se detectaron cambios");
-    return false;
-}
-    
     // Excepción personalizada para cuando el usuario cancela la modificación
     public class CancelarModificacionException extends RuntimeException {
+
         public CancelarModificacionException() {
             super("El usuario decidió continuar editando");
         }

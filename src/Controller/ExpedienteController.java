@@ -119,10 +119,17 @@ public class ExpedienteController {
         return delitoDAO.obtenerDescripcionDelito(idDelito);
     }
     
-    private void validarCorreo(String correo) {
+   private void validarCorreo(String correo) {
     if (correo == null || correo.trim().isEmpty()) {
         throw new IllegalArgumentException("El correo electrónico es obligatorio");
     }
+    
+    // Expresión regular para validar formato básico de email
+    String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+    if (!correo.matches(regex)) {
+        throw new IllegalArgumentException("Formato de correo inválido. Debe tener formato usuario@dominio");
+    }
+}
     
     // Expresión regular para validar formato básico de correo
     String regex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";

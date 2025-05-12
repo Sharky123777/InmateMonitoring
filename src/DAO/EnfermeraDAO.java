@@ -149,28 +149,8 @@ public class EnfermeraDAO {
         }
     }
 
-    // Método para generar una contraseña aleatoria
-    private String generarContrasena() {
-        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder(8);
-
-        for (int i = 0; i < 8; i++) {
-            sb.append(caracteres.charAt(random.nextInt(caracteres.length())));
-        }
-
-        return sb.toString();
-    }
-
-    private String guardarImagenDesdeCamara(BufferedImage imagen, String identificacion) throws IOException {
-        String nombreImagen = identificacion + "_foto.jpg";
-        String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-
-        File outputFile = new File(rutaImagenFinal);
-        ImageIO.write(imagen, "jpg", outputFile);
-
-        return rutaImagenFinal;
-    }
+    
+   
 
     public boolean guardarEnfermera(Enfermera enfermera, File imagen) throws IOException {
     // 1. Generar credenciales (sin encriptar para el correo)
@@ -223,17 +203,12 @@ public class EnfermeraDAO {
             RolEnum.ENFERMERA
     );
 
-    if (correoEnviado) {
+    if (!correoEnviado) {
         JOptionPane.showMessageDialog(null, 
-            "Enfermera registrada exitosamente y credenciales enviadas al correo.",
-            "Éxito", 
-            JOptionPane.INFORMATION_MESSAGE);
-    } else {
-        JOptionPane.showMessageDialog(null, 
-            "Enfermera registrada pero hubo un error al enviar las credenciales por correo.",
-            "Advertencia", 
+           "Enfermera registrada pero hubo un error al enviar las credenciales por correo.",
+            "Advertencia",
             JOptionPane.WARNING_MESSAGE);
-    }
+    } 
 
     return true;
 }
