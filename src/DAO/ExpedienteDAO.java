@@ -21,12 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class ExpedienteDAO {
 
     private static ExpedienteDAO instancia;
     private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\expedientes.json";
 
-    private Gson gson = new GsonBuilder()
+    private final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
             .create();
@@ -56,7 +57,7 @@ public class ExpedienteDAO {
     }
 
     public boolean actualizarExpediente(ExpedienteJudicial expediente) {
-        return guardarExpediente(expediente); 
+        return guardarExpediente(expediente);
     }
 
     public ExpedienteJudicial buscarPorCodigo(String codigoExpediente) {
@@ -66,11 +67,11 @@ public class ExpedienteDAO {
                 .orElse(null);
     }
 
-    public ExpedienteJudicial buscarPorPreso(String identificacionPreso) {
+    // NUEVO MÉTODO: Buscar todos los expedientes asociados a un preso
+    public List<ExpedienteJudicial> buscarExpedientesPorPreso(String identificacionPreso) {
         return cargarTodos().stream()
                 .filter(e -> e.getPreso() != null && e.getPreso().getIdentificacion().equals(identificacionPreso))
-                .findFirst()
-                .orElse(null);
+                .collect(Collectors.toList());
     }
 
     public List<ExpedienteJudicial> listarTodos() {
@@ -128,7 +129,6 @@ public class ExpedienteDAO {
     }
 
     public boolean agregarDelitosAExpediente(String codigoExpediente, List<Delito> nuevosDelitos) {
-
         List<ExpedienteJudicial> expedientes = cargarTodos();
 
         for (ExpedienteJudicial expediente : expedientes) {
@@ -148,15 +148,19 @@ public class ExpedienteDAO {
     }
 
     public ExpedienteJudicial actualizarExpedienteConDelitos(Preso preso, List<Delito> delitos) {
-        ExpedienteJudicial expediente = buscarPorPreso(preso.getIdentificacion());
+        List<ExpedienteJudicial> expedientes = buscarExpedientesPorPreso(preso.getIdentificacion());
+
+        ExpedienteJudicial expediente = expedientes.stream()
+                .filter(e -> e.getEstado() == EstadoExpedienteEnum.ABIERTO)
+                .findFirst()
+                .orElse(null);
 
         if (expediente == null) {
             expediente = new ExpedienteJudicial(preso);
-
             expediente.setCodigoExpediente(generarCodigoUnico());
-            expediente.setDelitos(new ArrayList<>());
             expediente.setFechaApertura(LocalDate.now());
             expediente.setEstado(EstadoExpedienteEnum.ABIERTO);
+            expediente.setDelitos(new ArrayList<>());
         }
 
         List<Delito> delitosActualizados = new ArrayList<>(expediente.getDelitos());
@@ -167,28 +171,47 @@ public class ExpedienteDAO {
         }
 
         expediente.setDelitos(delitosActualizados);
-
         guardarExpediente(expediente);
-
         return expediente;
     }
 
     private String generarCodigoUnico() {
         return "EXP-" + System.currentTimeMillis();
     }
+
     public Sentencia calcularSentenciaTotal(List<Delito> delitos) {
-    if (delitos == null || delitos.isEmpty()) {
-        return new Sentencia(0, 0, LocalDate.now());
+        if (delitos == null || delitos.isEmpty()) {
+            return new Sentencia(0, 0, LocalDate.now());
+        }
+
+        LocalDate fechaIngreso = delitos.get(0).getSentencia().getFechaIngreso();
+        Sentencia total = new Sentencia(0, 0, fechaIngreso);
+
+        for (Delito delito : delitos) {
+            total.sumarSentencia(delito.getSentencia());
+        }
+
+        return total;
     }
     
-    LocalDate fechaIngreso = delitos.get(0).getSentencia().getFechaIngreso();
-    Sentencia total = new Sentencia(0, 0, fechaIngreso);
-    
-    for (Delito delito : delitos) {
-        total.sumarSentencia(delito.getSentencia());
-    }
-    
-    return total;
+    public ExpedienteJudicial obtenerExpedienteAbierto(String identificacionPreso) {
+    return buscarExpedientesPorPreso(identificacionPreso).stream()
+            .filter(e -> e.getEstado() == EstadoExpedienteEnum.ABIERTO)
+            .findFirst()
+            .orElse(null);
 }
+
+    public ExpedienteJudicial crearExpedienteNuevoParaReincidencia(Preso preso, List<Delito> nuevosDelitos) {
+    ExpedienteJudicial expediente = new ExpedienteJudicial(preso);
+    expediente.setCodigoExpediente(generarCodigoUnico());
+    expediente.setFechaApertura(LocalDate.now());
+    expediente.setEstado(EstadoExpedienteEnum.ABIERTO);
+    expediente.setDelitos(new ArrayList<>(nuevosDelitos));
+
+    guardarExpediente(expediente);
+    return expediente;
+}
+    
+   
 
 }

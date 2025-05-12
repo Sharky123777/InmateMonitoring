@@ -170,14 +170,16 @@ public class PresoDAO {
         return (lastDot == -1) ? "" : filename.substring(lastDot);
     }
 
-    public void guardarTodos(List<Preso> presos) {
-        try (FileWriter writer = new FileWriter(JSON_FILE)) {
-            gson.toJson(presos, writer);
-        } catch (IOException e) {
-            System.err.println("Error al guardar en archivo JSON: " + e.getMessage());
-            throw new RuntimeException("Error al guardar los datos", e);
-        }
+   private boolean guardarTodos(List<Preso> presos) {
+    try (Writer writer = new FileWriter(JSON_FILE)) {
+        gson.toJson(presos, writer);
+        return true;
+    } catch (IOException e) {
+        System.err.println("Error al guardar en archivo JSON: " + e.getMessage());
+        return false;
     }
+}
+
 
     public Preso buscarPresoPorIdentificacion(String identificacion) {
         List<Preso> presos = cargarTodos();
@@ -326,7 +328,7 @@ public class PresoDAO {
         return true;
     }
 
-    private void actualizarFotoPreso(Preso preso, File nuevaFoto) {
+    public void actualizarFotoPreso(Preso preso, File nuevaFoto) {
         try {
             String extension = nuevaFoto.getName().substring(nuevaFoto.getName().lastIndexOf("."));
             String nombreArchivo = "preso_" + preso.getId() + extension;
@@ -341,13 +343,7 @@ public class PresoDAO {
     }
 
     private boolean guardarCambios(List<Preso> presos) {
-        try {
-            guardarTodos(presos);
-            return true;
-        } catch (Exception e) {
-            System.err.println("Error al guardar: " + e.getMessage());
-            return false;
-        }
+           return guardarTodos(presos);
     }
 
     public boolean existePresoConIdentificacion(String identificacion) {
@@ -416,10 +412,8 @@ public class PresoDAO {
             if (preso.getIdentificacion().equals(identificacion)) {
                 EstadoPresoEnum estadoActual = preso.getEstado();
 
-                // Registrar cambio de estado
                 preso.setEstado(nuevoEstado);
 
-                // Manejar fechas según el estado
                 switch (nuevoEstado) {
                     case FUGADO:
                         preso.setFechaFuga(fechaCambio);
@@ -436,10 +430,8 @@ public class PresoDAO {
 
                     case ACTIVO:
                         if (estadoActual == EstadoPresoEnum.FUGADO) {
-                            // Solo registrar reingreso en IntentoFuga, no en Preso
                             intentoFugaDAO.registrarReingreso(identificacion, fechaCambio);
                         }
-                        // Resetear fechas especiales
                         preso.setFechaFuga(null);
                         preso.setFechaLiberacion(null);
                         preso.setFechaDefuncion(null);

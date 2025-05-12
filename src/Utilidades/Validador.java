@@ -1,6 +1,7 @@
 package Utilidades;
 
 import DAO.PresoDAO;
+import Model.Constants.EstadoPresoEnum;
 import Model.Entities.Oficial;
 import Model.Entities.Preso;
 import javax.swing.JOptionPane;
@@ -31,14 +32,33 @@ public class Validador {
         }
         return result;
     }
+    
+    public void validarEntradaPositiva(String dato){
+        
+         try {
+        long datoLong = Long.parseLong(dato);
+        if (datoLong < 0) {
+            throw new ArithmeticException(dato + " debe ser positivo");
+        }
+    } catch (NumberFormatException e) {
+        throw new IllegalArgumentException(dato + " no es un número válido.");
+    }
+        
+    }
 
-    public void validarIdentificacionUnica(String identificacion) {
-        validarFormatoIdentificacion(identificacion);
+public void validarIdentificacionUnica(String identificacion) {
+    validarFormatoIdentificacion(identificacion);
 
-        if (presoDAO.existePresoConIdentificacion(identificacion)) {
-            throw new IllegalArgumentException("Ya existe un preso con esta identificación en el sistema");
+    Preso presoExistente = presoDAO.buscarPresoPorIdentificacion(identificacion);
+
+    if (presoExistente != null) {
+        EstadoPresoEnum estado = presoExistente.getEstado();
+
+        if (estado != EstadoPresoEnum.LIBERADO) {
+            throw new IllegalArgumentException("Ya existe un preso con esta identificación y su estado actual es: " + estado);
         }
     }
+}
 
     public static void validarFormatoIdentificacion(String identificacion) {
         if (identificacion == null || identificacion.trim().isEmpty()) {

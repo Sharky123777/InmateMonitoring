@@ -238,5 +238,69 @@
       "fechaIngreso": "2025-05-04",
       "fechaSalidaCalculada": "2026-06-04"
     }
+  },
+  {
+    "id": 16,
+    "presoId": "889900776",
+    "codigo": 265,
+    "nombre": "Daño en bien ajeno",
+    "articuloLey": "Artículo 265",
+    "gravedad": "Media",
+    "descripcion": "dñao asinwe",
+    "fechaComision": "2025-05-09",
+    "sentencia": {
+      "años": 2,
+      "meses": 0,
+      "fechaIngreso": "2025-05-10",
+      "fechaSalidaCalculada": "2027-05-10"
+    }
+  },
+  {
+    "id": 17,
+    "presoId": "230909098",
+    "codigo": 221,
+    "nombre": "Calumnia",
+    "articuloLey": "Artículo 221",
+    "gravedad": "Media",
+    "descripcion": "KIKIKI",
+    "fechaComision": "2025-05-10",
+    "sentencia": {
+      "años": 1,
+      "meses": 0,
+      "fechaIngreso": "2025-05-11",
+      "fechaSalidaCalculada": "2026-05-11"
+    }
+  },
+  {
+    "id": 18,
+    "presoId": "091234567",
+    "codigo": 189,
+    "nombre": "Violación de habitación ajena",
+    "articuloLey": "Artículo 189",
+    "gravedad": "Alta",
+    "descripcion": "WWDWDWDWDWDW",
+    "fechaComision": "2025-05-06",
+    "sentencia": {
+      "años": 0,
+      "meses": 2,
+      "fechaIngreso": "2025-05-11",
+      "fechaSalidaCalculada": "2025-07-11"
+    }
+  },
+  {
+    "id": 19,
+    "presoId": "001122334",
+    "codigo": 246,
+    "nombre": "Fraude",
+    "articuloLey": "Artículo 246 - Fraude",
+    "gravedad": "Baja",
+    "descripcion": "Fue vista cometiendo multiples fraudes\nmientras jugaba domino, lo cual fue muy mal visto\nuna total falta de respeto",
+    "fechaComision": "2025-05-05",
+    "sentencia": {
+      "años": 1,
+      "meses": 0,
+      "fechaIngreso": "2025-05-11",
+      "fechaSalidaCalculada": "2026-05-11"
+    }
   }
 ]

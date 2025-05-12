@@ -5,6 +5,7 @@ import DAO.DelitoDAO;
 import DAO.ExpedienteDAO;
 import DAO.IntentoFugaDAO;
 import DAO.PresoDAO;
+import Model.Constants.EstadoExpedienteEnum;
 import Model.Constants.EstadoPresoEnum;
 import Model.Entities.Celda;
 import Model.Entities.Delito;
@@ -211,27 +212,98 @@ public class PresoController {
 
             Validador.validarNombre(primerNombre);
             Validador.validarNombre(primerApellido);
-            validador.validarIdentificacionUnica((String) identificacion);
-
             Validador.validarEdad(edadStr);
-
-            float estatura = Float.parseFloat(estaturaStr);
             Validador.validarEstatura(estaturaStr);
-
-            float peso = Float.parseFloat(pesoStr);
             Validador.validarPeso(pesoStr);
 
             Validador.validarSeleccion("grupo sanguíneo", grupoSanguineo, "<Seleccionar>");
             Validador.validarSeleccion("sección", seccion, "<Seleccionar>");
             Validador.validarSeleccion("nivel de riesgo", nivelRiesgo, "<Seleccionar>");
             Validador.validarSeleccion("nivel de seguridad", nivelSeguridad, "<Seleccionar>");
-
             Validador.validarSeleccion("identificación", identificacion, "<Seleccionar>");
             Validador.validarListaNoVacia("delitos", delitos);
-
             Validador.validarImagen(imagen);
 
+            String identificacionStr = (String) identificacion;
             String seccionStr = seccion.toString();
+
+            Preso presoExistente = presoDAO.buscarPresoPorIdentificacion(identificacionStr);
+
+            if (presoExistente != null) {
+                if (presoExistente.getEstado() == EstadoPresoEnum.FALLECIDO) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Este preso falleció el " + presoExistente.getFechaDefuncion().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ".\nNo puede ser reinsertado.",
+                            "Preso fallecido",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    return false;
+                }
+
+                if (presoExistente.getEstado() == EstadoPresoEnum.LIBERADO) {
+                    int respuesta = JOptionPane.showConfirmDialog(
+                            null,
+                            "Este preso ya existía en el sistema y fue LIBERADO.\n¿Desea reinsertarlo y actualizar sus datos con los nuevos valores ingresados?",
+                            "Confirmar reinserción",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE
+                    );
+
+                    if (respuesta != JOptionPane.YES_OPTION) {
+                        Validador.mostrarAdvertencia("Operación cancelada por el usuario.");
+                        return false;
+                    }
+
+                    int celdasDisponibles = celdaDAO.obtenerCeldasDisponibles(seccionStr);
+                    if (celdasDisponibles <= 0) {
+                        throw new IllegalArgumentException("No hay celdas disponibles en la sección " + seccionStr);
+                    }
+
+                    Celda celdaAsignada = celdaDAO.asignarCeldaDisponible(seccionStr);
+                    if (celdaAsignada == null) {
+                        throw new RuntimeException("No se pudo asignar celda automáticamente");
+                    }
+
+                    presoExistente.setEstado(EstadoPresoEnum.ACTIVO);
+                    presoExistente.setCeldaAsignada(celdaAsignada.getNombreFormateado());
+                    presoExistente.setSeccionAsignada(seccionStr);
+                    presoExistente.setPrimerNombre(primerNombre);
+                    presoExistente.setSegundoNombre(segundoNombre);
+                    presoExistente.setPrimerApellido(primerApellido);
+                    presoExistente.setSegundoApellido(segundoApellido);
+                    presoExistente.setEdad(Integer.parseInt(edadStr));
+                    presoExistente.setEstatura(Float.parseFloat(estaturaStr));
+                    presoExistente.setPeso(Float.parseFloat(pesoStr));
+                    presoExistente.setGrupoSanguineo(grupoSanguineo.toString());
+                    presoExistente.setNivelDeRiesgo(nivelRiesgo.toString());
+                    presoExistente.setNivelDeSeguridad(nivelSeguridad.toString());
+
+                    presoDAO.actualizarPreso(presoExistente);
+                    
+                    if (imagen != null) {
+                        presoDAO.actualizarFotoPreso(presoExistente, imagen);
+                    }
+
+                    for (Delito delito : delitos) {
+                        delito.setPresoId(identificacionStr);
+                        delitoDAO.guardarDelito(delito);
+                    }
+
+                    expedienteDAO.crearExpedienteNuevoParaReincidencia(presoExistente, delitos);
+
+                    Validador.mostrarInfo("Preso reincorporado correctamente con nuevo expediente");
+                    obtenerTodosLosPresosParaTabla();
+                    obtenerPresosInactivosParaTabla();
+
+                    return true;
+                }
+
+                Validador.mostrarError("Ya existe un preso activo con esta identificación.");
+                return false;
+            }
+
+            validador.validarIdentificacionUnica(identificacionStr);
+
             int celdasDisponibles = celdaDAO.obtenerCeldasDisponibles(seccionStr);
             if (celdasDisponibles <= 0) {
                 throw new IllegalArgumentException("No hay celdas disponibles en la sección " + seccionStr);
@@ -244,7 +316,8 @@ public class PresoController {
 
             Preso nuevoPreso = new Preso(
                     primerNombre, segundoNombre, primerApellido, segundoApellido,
-                    Integer.parseInt(edadStr), sexo, nacionalidad, (String) identificacion, estatura, peso,
+                    Integer.parseInt(edadStr), sexo, nacionalidad, identificacionStr,
+                    Float.parseFloat(estaturaStr), Float.parseFloat(pesoStr),
                     new ArrayList<>(),
                     nivelSeguridad.toString(), seccionStr, "En espera",
                     celdaAsignada.getNombreFormateado(), false,
@@ -255,11 +328,12 @@ public class PresoController {
 
             if (presoGuardado) {
                 for (Delito delito : delitos) {
-                    delito.setPresoId((String) identificacion);
+                    delito.setPresoId(identificacionStr);
                     delitoDAO.guardarDelito(delito);
                 }
 
-                Validador.mostrarInfo("Preso registrado correctamente");
+                expedienteDAO.crearExpedienteNuevoParaReincidencia(nuevoPreso, delitos);
+                Validador.mostrarInfo("Preso registrado correctamente con expediente nuevo");
                 return true;
             } else {
                 Validador.mostrarError("No se pudo guardar el preso");
@@ -325,12 +399,34 @@ public class PresoController {
             preso.getDelitos().add(nuevoDelito);
             PresoDAO.getInstancia().actualizarPreso(preso);
 
-            ExpedienteJudicial expediente = ExpedienteDAO.getInstancia().buscarPorPreso(preso.getIdentificacion());
-            if (expediente == null) {
-                expediente = new ExpedienteJudicial(preso);
+            ExpedienteDAO expedienteDAO = ExpedienteDAO.getInstancia();
+            List<ExpedienteJudicial> expedientes = expedienteDAO.buscarExpedientesPorPreso(preso.getIdentificacion());
+            ExpedienteJudicial expedienteAbierto = expedientes.stream()
+                    .filter(e -> e.getEstado() == EstadoExpedienteEnum.ABIERTO)
+                    .findFirst()
+                    .orElse(null);
+
+            
+            if (preso.getEstado() == EstadoPresoEnum.LIBERADO) {
+                if (expedienteAbierto != null) {
+                    expedienteAbierto.setEstado(EstadoExpedienteEnum.CERRADO);
+                    expedienteDAO.actualizarExpediente(expedienteAbierto);
+                }
+
+                List<Delito> soloNuevo = new ArrayList<>();
+                soloNuevo.add(nuevoDelito);
+
+                expedienteDAO.crearExpedienteNuevoParaReincidencia(preso, soloNuevo);
+            } else {
+                if (expedienteAbierto != null) {
+                    expedienteAbierto.agregarDelito(nuevoDelito);
+                    expedienteDAO.actualizarExpediente(expedienteAbierto);
+                } else {
+                    List<Delito> soloNuevo = new ArrayList<>();
+                    soloNuevo.add(nuevoDelito);
+                    expedienteDAO.crearExpedienteNuevoParaReincidencia(preso, soloNuevo);
+                }
             }
-            expediente.getDelitos().add(nuevoDelito);
-            ExpedienteDAO.getInstancia().guardarExpediente(expediente);
 
             Validador.mostrarInfo("Delito agregado correctamente");
             return true;
@@ -472,15 +568,22 @@ public class PresoController {
             List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(identificacion);
             preso.setDelitos(delitos);
 
-            ExpedienteJudicial expediente = expedienteDAO.buscarPorPreso(identificacion);
+            List<ExpedienteJudicial> expedientes = expedienteDAO.buscarExpedientesPorPreso(identificacion);
 
-            if (expediente != null) {
-                expediente.setDelitos(delitos);
-                expedienteDAO.actualizarExpediente(expediente);
+            // Buscar si ya hay uno abierto
+            ExpedienteJudicial expedienteAbierto = expedientes.stream()
+                    .filter(e -> e.getEstado() == EstadoExpedienteEnum.ABIERTO)
+                    .findFirst()
+                    .orElse(null);
+
+            if (expedienteAbierto != null) {
+                expedienteAbierto.setDelitos(delitos);
+                expedienteDAO.actualizarExpediente(expedienteAbierto);
             } else {
-                expediente = new ExpedienteJudicial(preso);
-                expediente.setDelitos(delitos);
-                expedienteDAO.guardarExpediente(expediente);
+                // Crear nuevo expediente si no hay abierto
+                ExpedienteJudicial nuevoExpediente = new ExpedienteJudicial(preso);
+                nuevoExpediente.setDelitos(delitos);
+                expedienteDAO.guardarExpediente(nuevoExpediente);
             }
 
             return preso;
@@ -670,9 +773,11 @@ public class PresoController {
             throw new IllegalArgumentException("Estado requerido");
         }
 
-        if (fechaCambio == null || fechaCambio.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("Fecha no válida (nula o futura)");
-        }
+       if (fechaCambio == null || 
+    (nuevoEstado != EstadoPresoEnum.LIBERADO && fechaCambio.isAfter(LocalDate.now()))) {
+    throw new IllegalArgumentException("Fecha no valida, fecha futura.");
+}
+
 
         Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
         if (preso == null) {
@@ -683,7 +788,6 @@ public class PresoController {
             throw new IllegalStateException("No se puede liberar/fallecer a un preso fugado. Primero debe ser recapturado (cambiar a ACTIVO)");
         }
 
-        // Validaciones específicas por estado
         switch (nuevoEstado) {
             case FUGADO:
                 if (intentoFugaDAO.tieneFugaActiva(identificacion)) {
@@ -699,6 +803,12 @@ public class PresoController {
 
             case LIBERADO:
                 validarLiberacionCompleta(preso, fechaCambio);
+
+                ExpedienteJudicial expedienteAbierto = expedienteDAO.obtenerExpedienteAbierto(identificacion);
+                if (expedienteAbierto != null) {
+                    expedienteAbierto.setEstado(EstadoExpedienteEnum.CERRADO);
+                    expedienteDAO.actualizarExpediente(expedienteAbierto);
+                }
                 break;
 
             case FALLECIDO:

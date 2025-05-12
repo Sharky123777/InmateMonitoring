@@ -10,6 +10,12 @@
   },
   {
     "identificacionPreso": "414141414",
-    "fechaFuga": "2025-05-05"
+    "fechaFuga": "2025-05-05",
+    "fechaReingreso": "2025-05-09"
+  },
+  {
+    "identificacionPreso": "889900776",
+    "fechaFuga": "2025-05-11",
+    "fechaReingreso": "2025-05-11"
   }
 ]
