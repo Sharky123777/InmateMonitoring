@@ -4,6 +4,8 @@ import Controller.VisitaController;
 import Model.Constants.EstadoVisitanteEnum;
 import Model.Entities.Visitante;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 
 public class CambioEstadoVisitante extends javax.swing.JDialog {
@@ -74,11 +76,11 @@ public class CambioEstadoVisitante extends javax.swing.JDialog {
 
         jLabel9.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel9.setText("Estado visita:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, -1));
+        jLabel9.setText("Estado visitante:");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
 
         JcomboNuevoEstadoVisitante.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "HABILITADO", "DESHABILITADO" }));
-        jPanel1.add(JcomboNuevoEstadoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(132, 100, 140, 30));
+        jPanel1.add(JcomboNuevoEstadoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 140, 30));
 
         BotonModificarEstadoVisitante.setText("Modificar estado");
         BotonModificarEstadoVisitante.addActionListener(new java.awt.event.ActionListener() {
@@ -120,6 +122,39 @@ public class CambioEstadoVisitante extends javax.swing.JDialog {
                 return;
             }
 
+            String razonDeshabilitacion = null;
+
+            if (nuevoEstado == EstadoVisitanteEnum.DESHABILITADO) {
+                JTextArea textArea = new JTextArea(5, 20);
+                textArea.setLineWrap(true);
+                textArea.setWrapStyleWord(true);
+                JScrollPane scrollPane = new JScrollPane(textArea);
+
+                boolean entradaValida = false;
+
+                while (!entradaValida) {
+                    int opcion = JOptionPane.showConfirmDialog(this,
+                            new Object[]{"Ingrese la razón de deshabilitación (obligatorio):", scrollPane},
+                            "Razón de deshabilitación",
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.QUESTION_MESSAGE);
+
+                    if (opcion == JOptionPane.CANCEL_OPTION || opcion == JOptionPane.CLOSED_OPTION) {
+                        return; 
+                    }
+
+                    razonDeshabilitacion = textArea.getText().trim();
+
+                    if (razonDeshabilitacion.isEmpty()) {
+                        JOptionPane.showMessageDialog(this,
+                                "Debe ingresar una razón para deshabilitar al visitante.",
+                                "Campo obligatorio", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        entradaValida = true;
+                    }
+                }
+            }
+
             int confirmacion = JOptionPane.showConfirmDialog(this,
                     "¿Está seguro de cambiar el estado del visitante a " + nuevoEstado + "?",
                     "Confirmar cambio",
@@ -129,23 +164,16 @@ public class CambioEstadoVisitante extends javax.swing.JDialog {
                 return;
             }
 
-            // Llamar al controlador con todos los parámetros necesarios
             Visitante visitanteActualizado = controller.cambiarEstadoVisitante(
                     visitante.getIdentificacion(),
                     nuevoEstado,
+                    razonDeshabilitacion,
                     identificacionPreso,
                     tablaVisitantes
             );
 
             if (visitanteActualizado != null) {
-                // Actualizar el visitante local con los nuevos datos
                 visitante = visitanteActualizado;
-
-                JOptionPane.showMessageDialog(this,
-                        "Estado del visitante actualizado correctamente a: " + nuevoEstado.toString(),
-                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-                regresarATabla1();
                 dispose();
             } else {
                 JOptionPane.showMessageDialog(this,

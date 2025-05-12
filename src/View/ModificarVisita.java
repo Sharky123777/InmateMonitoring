@@ -38,7 +38,7 @@ public class ModificarVisita extends javax.swing.JDialog {
     private void regresarATabla1() {
         if (this.getParent() instanceof PersonalDeControl) {
             PersonalDeControl padre = (PersonalDeControl) this.getParent();
-            padre.getTabbedPDC().setSelectedIndex(1); 
+            padre.getTabbedPDC().setSelectedIndex(1);
         }
     }
 
@@ -126,13 +126,6 @@ public class ModificarVisita extends javax.swing.JDialog {
 
             String nuevoTipo = NuevoTipoVisita.getSelectedItem().toString();
             String nuevoLugar = NuevoLugarVisita.getSelectedItem().toString();
-
-            if (nuevoTipo.equals("< Seleccionar >") || nuevoLugar.equals("< Seleccionar >")) {
-                JOptionPane.showMessageDialog(this,
-                        "Debe seleccionar valores válidos para todos los campos",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
 
             Visita visitaActualizada = controller.actualizarVisita(
                     visita.getId(),

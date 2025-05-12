@@ -10,6 +10,7 @@ public class Visitante extends Persona {
     private static int ultimoId = 0;
     private int id;
     private EstadoVisitanteEnum estado;
+    private String razonDeshabilitacion;
 
     public Visitante(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
             int edad, String sexo, String nacionalidad, String identificacion,
@@ -20,6 +21,7 @@ public class Visitante extends Persona {
         this.fotoPath = fotoPath;
         this.email = email;
         this.estado = EstadoVisitanteEnum.HABILITADO;
+        this.razonDeshabilitacion = null;
     }
 
     public int getId() {
@@ -68,5 +70,13 @@ public class Visitante extends Persona {
 
     public void setEstado(EstadoVisitanteEnum estado) {
         this.estado = estado;
+    }
+
+    public String getRazonDeshabilitacion() {
+        return razonDeshabilitacion;
+    }
+
+    public void setRazonDeshabilitacion(String razonDeshabilitacion) {
+        this.razonDeshabilitacion = razonDeshabilitacion;
     }
 }

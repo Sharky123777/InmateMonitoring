@@ -64,7 +64,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 return;
             }
 
-            String identificacion = TablaPresos.getValueAt(filaSeleccionada, 5).toString();
+            String identificacion = TablaPresos.getValueAt(filaSeleccionada, 6).toString();
             Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
 
             if (preso != null) {
@@ -82,7 +82,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 return;
             }
 
-            String identificacion = TablaPresos.getValueAt(filaSeleccionada, 5).toString();
+            String identificacion = TablaPresos.getValueAt(filaSeleccionada, 6).toString();
             Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
 
             if (preso != null) {
@@ -146,7 +146,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
             }
 
             String identificacion = TablaHistorialVisitantes.getValueAt(fila, 6).toString();
-            String identificacionPreso = TablaHistorialVisitantes.getValueAt(fila, 11).toString(); // Asumiendo que la columna 11 es la ID del preso
+            String identificacionPreso = TablaHistorialVisitantes.getValueAt(fila, 11).toString();
 
             Visitante visitante = new VisitanteDAO().buscarVisitantePorIdentificacion(identificacion);
 
@@ -188,7 +188,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
             try {
                 int idVisita = Integer.parseInt(TablaHistorialVisitas.getValueAt(fila, 0).toString());
-                String identificacionPreso = TablaHistorialVisitas.getValueAt(fila, 1).toString();
+                String identificacionPreso = TablaHistorialVisitas.getValueAt(fila, 7).toString();
 
                 Visita visita = new VisitaDAO().buscarVisitaPorId(idVisita);
 
@@ -227,7 +227,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
             try {
                 int idVisita = Integer.parseInt(TablaHistorialVisitas.getValueAt(fila, 0).toString());
-                String identificacionPreso = TablaHistorialVisitas.getValueAt(fila, 1).toString();
+                String identificacionPreso = TablaHistorialVisitas.getValueAt(fila, 7).toString();
 
                 Visita visita = new VisitaDAO().buscarVisitaPorId(idVisita);
 
@@ -493,7 +493,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         PanelPerfil.setBackground(new java.awt.Color(255, 255, 255));
         PanelPerfil.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        FondoFoto.setBackground(new java.awt.Color(255, 255, 255));
+        FondoFoto.setBackground(new java.awt.Color(204, 204, 204));
         FondoFoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         FondoFoto.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         FondoFoto.add(FotoPDC, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 180, 200));
@@ -585,7 +585,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         jLabel49.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel49.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel49.setText("Sexo:");
+        jLabel49.setText("Genero:");
         jPanel7.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, -1));
 
         jLabel45.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
@@ -604,20 +604,20 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         TablaPresos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Foto", "Id", "Nombres", "Apellidos", "Edad", "Identificacion", "Nacionalidad", "Celda", "Seccion"
+                "Foto", "Id", "Nombres", "Apellidos", "Genero", "Edad", "Identificacion", "Nacionalidad", "Celda", "Seccion"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true, false, false, true, true, true
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -629,6 +629,18 @@ public class PersonalDeControl extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(TablaPresos);
+        if (TablaPresos.getColumnModel().getColumnCount() > 0) {
+            TablaPresos.getColumnModel().getColumn(0).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(1).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(2).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(3).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(4).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(5).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(6).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(7).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(8).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(9).setResizable(false);
+        }
 
         PanelListaPresos.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 1070, 440));
         PanelListaPresos.add(BarraDeBusquedaPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 30, 640, 30));
@@ -667,7 +679,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         jLabel16.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel16.setText("Sexo:");
+        jLabel16.setText("Genero:");
         jPanel9.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, -1, -1));
 
         jLabel17.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -822,7 +834,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel22.setText("Vista previa foto visitante:");
         PanelGuardarVisita.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 370, -1, -1));
 
-        jPanel11.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel11.setBackground(new java.awt.Color(204, 204, 204));
         jPanel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         jPanel11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         jPanel11.add(VistaPreviaVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 8, 140, 160));
@@ -936,7 +948,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel4.setText("Vista previa nueva foto");
         PanelActualizarInformacion.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 140, -1, -1));
 
-        jPanel14.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel14.setBackground(new java.awt.Color(204, 204, 204));
         jPanel14.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         jPanel14.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         jPanel14.add(VistaPreviaNuevaFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 210, 250));
@@ -964,14 +976,14 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Id", "Identificación visitante", "Fecha", "Hora", "Duración", "Tipo de visita", "Lugar", "Identificación visitado", "Estado"
+                "Id", "Identificación visitante", "Fecha", "Hora", "Duración", "Tipo de visita", "Lugar", "visitado", "Estado"
             }
         ) {
             Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, true
+                false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -982,7 +994,18 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        TablaHistorialVisitas.setRowHeight(40);
         jScrollPane2.setViewportView(TablaHistorialVisitas);
+        if (TablaHistorialVisitas.getColumnModel().getColumnCount() > 0) {
+            TablaHistorialVisitas.getColumnModel().getColumn(1).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(2).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(3).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(4).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(5).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(6).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(7).setResizable(false);
+            TablaHistorialVisitas.getColumnModel().getColumn(8).setResizable(false);
+        }
 
         PanelHistorialVisitas.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 1040, 490));
 
@@ -1004,11 +1027,11 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Foto", "Id", "Nombres", "Apellidos", "Email", "Edad", "Identificación", "Sexo", "Nacionalidad", "Relación", "Cantidad", "Visitado", "Estado"
+                "Foto", "Id", "Nombres", "Apellidos", "Email", "Edad", "Identificación", "Genero", "Nacionalidad", "Relación", "Cantidad", "Visitado", "Estado"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false, false, false, false, false, false, false

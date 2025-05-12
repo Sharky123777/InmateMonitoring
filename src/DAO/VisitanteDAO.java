@@ -333,12 +333,20 @@ public class VisitanteDAO {
         }
     }
 
-    public Visitante modificarEstadoVisitanteYDevolver(String identificacion, EstadoVisitanteEnum nuevoEstado) {
+    public Visitante modificarEstadoVisitanteYDevolver(String identificacion,
+            EstadoVisitanteEnum nuevoEstado,
+            String razonDeshabilitacion) {
         List<Visitante> visitantes = cargarTodos();
 
         for (Visitante visitante : visitantes) {
             if (visitante.getIdentificacion().equals(identificacion)) {
                 visitante.setEstado(nuevoEstado);
+
+                if (nuevoEstado == EstadoVisitanteEnum.DESHABILITADO) {
+                    visitante.setRazonDeshabilitacion(razonDeshabilitacion);
+                } else {
+                    visitante.setRazonDeshabilitacion(null);
+                }
 
                 if (guardarCambios(visitantes)) {
                     return visitante;

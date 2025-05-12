@@ -548,47 +548,64 @@ public class VisitaController {
     }
 
     public void cargarHistorialVisitantes(String identificacionPreso, JTable tabla) {
+        if (identificacionPreso == null || identificacionPreso.isEmpty() || tabla == null) {
+            return;
+        }
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
         modelo.setRowCount(0);
 
-        List<Visita> visitas = visitaDAO.cargarPorIdentificacionPreso(identificacionPreso);
+        tabla.setAutoCreateRowSorter(false);
 
-        Map<String, Object[]> visitantesMap = new LinkedHashMap<>();
-        Map<String, Integer> contadorVisitas = new HashMap<>();
+        try {
+            List<Visita> visitas = visitaDAO.cargarPorIdentificacionPreso(identificacionPreso);
+            Map<String, Object[]> visitantesMap = new LinkedHashMap<>();
+            Map<String, Integer> contadorVisitas = new HashMap<>();
 
-        for (Visita visita : visitas) {
-            for (Visitante visitante : visita.getVisitantes()) {
-                String idVisitante = visitante.getIdentificacion();
-
-                contadorVisitas.put(idVisitante, contadorVisitas.getOrDefault(idVisitante, 0) + 1);
-
-                if (!visitantesMap.containsKey(idVisitante)) {
-                    ImageIcon foto = cargarImagen(visitante.getFotoPath());
-                    visitantesMap.put(idVisitante, new Object[]{
-                        foto,
-                        visitante.getId(),
-                        visitante.getNombresCompletos(),
-                        visitante.getApellidosCompletos(),
-                        visitante.getEmail(),
-                        visitante.getEdad(),
-                        visitante.getIdentificacion(),
-                        visitante.getSexo(),
-                        visitante.getNacionalidad(),
-                        visitante.getRelacionConPreso(),
-                        contadorVisitas.get(idVisitante),
-                        identificacionPreso,
-                        visitante.getEstado().toString()
-                    });
-                } else {
-                    Object[] datos = visitantesMap.get(idVisitante);
-                    datos[10] = contadorVisitas.get(idVisitante);
-                    datos[12] = visitante.getEstado().toString();
+            for (Visita visita : visitas) {
+                for (Visitante visitante : visita.getVisitantes()) {
+                    String idVisitante = visitante.getIdentificacion();
+                    contadorVisitas.put(idVisitante, contadorVisitas.getOrDefault(idVisitante, 0) + 1);
                 }
             }
-        }
 
-        for (Object[] datos : visitantesMap.values()) {
-            modelo.addRow(datos);
+            for (Visita visita : visitas) {
+                for (Visitante visitante : visita.getVisitantes()) {
+                    String idVisitante = visitante.getIdentificacion();
+
+                    Visitante visitanteActual = visitanteDAO.buscarVisitantePorIdentificacion(idVisitante);
+                    if (visitanteActual == null) {
+                        continue;
+                    }
+
+                    ImageIcon foto = cargarImagen(visitanteActual.getFotoPath());
+
+                    visitantesMap.put(idVisitante, new Object[]{
+                        foto,
+                        visitanteActual.getId(),
+                        visitanteActual.getNombresCompletos(),
+                        visitanteActual.getApellidosCompletos(),
+                        visitanteActual.getEmail(),
+                        visitanteActual.getEdad(),
+                        visitanteActual.getIdentificacion(),
+                        visitanteActual.getSexo(),
+                        visitanteActual.getNacionalidad(),
+                        visitanteActual.getRelacionConPreso(),
+                        contadorVisitas.get(idVisitante),
+                        identificacionPreso,
+                        visitanteActual.getEstado().toString()
+                    });
+                }
+            }
+
+            for (Object[] datos : visitantesMap.values()) {
+                modelo.addRow(datos);
+            }
+
+        } finally {
+            tabla.setAutoCreateRowSorter(true);
+            modelo.fireTableDataChanged();
+            tabla.revalidate();
+            tabla.repaint();
         }
     }
 
@@ -619,6 +636,7 @@ public class VisitaController {
                 preso.getId(),
                 preso.getNombresCompletos(),
                 preso.getApellidosCompletos(),
+                preso.getSexo(),
                 preso.getEdad(),
                 preso.getIdentificacion(),
                 preso.getNacionalidad(),
@@ -646,6 +664,7 @@ public class VisitaController {
                 preso.getNombresCompletos(),
                 preso.getApellidosCompletos(),
                 preso.getApellidosCompletos(),
+                preso.getSexo(),
                 preso.getEdad(),
                 preso.getIdentificacion(),
                 preso.getNacionalidad(),
@@ -747,6 +766,7 @@ public class VisitaController {
                     preso.getNombresCompletos(),
                     preso.getApellidosCompletos(),
                     preso.getEdad(),
+                    preso.getSexo(),
                     preso.getIdentificacion(),
                     preso.getNacionalidad(),
                     preso.getCeldaAsignada(),
@@ -919,8 +939,15 @@ public class VisitaController {
     }
 
     private boolean hayCambiosVisita(Visita visitaOriginal, String tipo, String lugar) {
-        return (!tipo.equals(visitaOriginal.getTipoVisita()))
-                || (!lugar.equals(visitaOriginal.getLugarVisita()));
+        if (!tipo.equals("< Seleccionar >") && !tipo.equals(visitaOriginal.getTipoVisita())) {
+            return true;
+        }
+
+        if (!lugar.equals("< Seleccionar >") && !lugar.equals(visitaOriginal.getLugarVisita())) {
+            return true;
+        }
+
+        return false;
     }
 
     public Visita actualizarVisita(int idVisita,
@@ -1012,7 +1039,11 @@ public class VisitaController {
         }
     }
 
-    public Visitante cambiarEstadoVisitante(String identificacion, EstadoVisitanteEnum nuevoEstado, String identificacionPreso, JTable tablaVisitantes) {
+    public Visitante cambiarEstadoVisitante(String identificacion,
+            EstadoVisitanteEnum nuevoEstado,
+            String razonDeshabilitacion,
+            String identificacionPreso,
+            JTable tablaVisitantes) {
         if (nuevoEstado == null) {
             mostrarError("Debe seleccionar un estado válido");
             return null;
@@ -1029,7 +1060,11 @@ public class VisitaController {
             return null;
         }
 
-        Visitante visitanteActualizado = visitanteDAO.modificarEstadoVisitanteYDevolver(identificacion, nuevoEstado);
+        Visitante visitanteActualizado = visitanteDAO.modificarEstadoVisitanteYDevolver(
+                identificacion,
+                nuevoEstado,
+                razonDeshabilitacion
+        );
 
         if (visitanteActualizado != null) {
             if (identificacionPreso != null && tablaVisitantes != null) {
