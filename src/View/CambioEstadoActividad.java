@@ -3,6 +3,7 @@ package View;
 
 import Controller.ActividadController;
 import DAO.OficialDAO;
+import Model.Constants.EstadoActividadesEnum;
 import Model.Entities.Actividad;
 import Model.Entities.Oficial;
 import javax.swing.JOptionPane;
@@ -102,11 +103,11 @@ public class CambioEstadoActividad extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnActualizarEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarEstadoActionPerformed
-  String nuevoEstado = (String) nuevoEstadoComb.getSelectedItem();
+        EstadoActividadesEnum nuevoEstado = (EstadoActividadesEnum) nuevoEstadoComb.getSelectedItem();
     String idActividad = actividadSeleccionada.getIdActividad();
     
-    if ("ACTIVA".equalsIgnoreCase(nuevoEstado) && 
-        "CANCELADA".equalsIgnoreCase(actividadSeleccionada.getEstado())) {
+    if ("ACTIVA".equals(nuevoEstado) && 
+        "CANCELADA".equals(actividadSeleccionada.getEstado())) {
         Model.Entities.Oficial responsable = oficialDAO.buscarPorIdentificacion(actividadSeleccionada.getResponsableOficial());
         
         if (responsable != null) {
@@ -122,8 +123,8 @@ public class CambioEstadoActividad extends javax.swing.JDialog {
     if (actividadController.actualizarEstadoActividad(idActividad, nuevoEstado)) {
         JOptionPane.showMessageDialog(this, "Estado de la actividad actualizado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         
-        if ("CANCELADA".equalsIgnoreCase(nuevoEstado)) {
-            actividadController.actualizarEstadoPresosActividad(idActividad, "CANCELADA");
+        if ("CANCELADA".equals(nuevoEstado)) {
+            actividadController.actualizarEstadoPresosActividad(idActividad, EstadoActividadesEnum.CANCELADA);
         }
         
         this.dispose();

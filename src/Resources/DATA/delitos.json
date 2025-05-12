@@ -1,178 +1,162 @@
 [
   {
     "id": 1,
-    "presoId": "001122334",
-    "codigo": 221,
-    "nombre": "Calumnia",
-    "articuloLey": "Artículo 221",
-    "gravedad": "Baja",
-    "descripcion": "La interna fue condenada por calumniar públicamente a una docente universitaria\n acusándola falsamente de haber cometido abuso de poder y actos indebidos con estudiantes. \nEstas acusaciones fueron difundidas en redes sociales y durante una asamblea estudiantil,\n causando un daño considerable a la reputación profesional de la docente. \nLas investigaciones demostraron que la presa actuó movida por conflictos personales\n y sin ningún tipo de prueba, lo que llevó a su condena por el delito de calumnia, agravado por el impacto público del caso y la afectación psicológica de la víctima.",
-    "fechaComision": "2025-04-03",
-    "sentencia": {
-      "años": 2,
-      "meses": 0,
-      "fechaIngreso": "2025-04-25",
-      "fechaSalidaCalculada": "2027-04-25"
-    }
-  },
-  {
-    "id": 2,
-    "presoId": "001122334",
-    "codigo": 287,
-    "nombre": "Falsedad en documento público",
-    "articuloLey": "Artículo 287",
-    "gravedad": "Baja",
-    "descripcion": "La interna fue condenada por falsedad de documento después de ser arrestada por presentar un título universitario falsificado con el fin de obtener un empleo en una empresa privada. El documento fue alterado digitalmente para simular la autenticidad de una licenciatura que no había sido obtenida por ella. La falsificación fue descubierta cuando el empleador verificó la validez del título en la universidad correspondiente. La condena se basó en el uso de documentos falsificados con el propósito de engañar a terceros, lo que conllevó a la pérdida de confianza de la víctima y una pena de prisión.",
-    "fechaComision": "2025-04-03",
-    "sentencia": {
-      "años": 4,
-      "meses": 3,
-      "fechaIngreso": "2025-04-25",
-      "fechaSalidaCalculada": "2029-07-25"
-    }
-  },
-  {
-    "id": 3,
-    "presoId": "123123123",
-    "codigo": 246,
-    "nombre": "Fraude",
-    "articuloLey": "Artículo 246 - Fraude",
-    "gravedad": "Media",
-    "descripcion": "Comentio un fraude de manera ilegal",
-    "fechaComision": "2025-04-01",
-    "sentencia": {
-      "años": 2,
-      "meses": 1,
-      "fechaIngreso": "2025-04-26",
-      "fechaSalidaCalculada": "2027-05-26"
-    }
-  },
-  {
-    "id": 4,
-    "presoId": "123123123",
-    "codigo": 209,
-    "nombre": "Actos sexuales con menor de 14 años",
-    "articuloLey": "Artículo 209",
-    "gravedad": "Alta",
-    "descripcion": "Cometio actos sexuales con un menor de 16 años de edad\ny los padres lo sabian",
-    "fechaComision": "2025-04-01",
-    "sentencia": {
-      "años": 5,
-      "meses": 5,
-      "fechaIngreso": "2025-04-26",
-      "fechaSalidaCalculada": "2030-09-26"
-    }
-  },
-  {
-    "id": 5,
-    "presoId": "123123123",
-    "codigo": 338,
-    "nombre": "Minería ilegal",
-    "articuloLey": "Artículo 338",
-    "gravedad": "Media",
-    "descripcion": "Minaba de manera ilegal",
-    "fechaComision": "2025-04-02",
-    "sentencia": {
-      "años": 2,
-      "meses": 5,
-      "fechaIngreso": "2025-04-26",
-      "fechaSalidaCalculada": "2027-09-26"
-    }
-  },
-  {
-    "id": 6,
-    "presoId": "123123123",
-    "codigo": 416,
-    "nombre": "Abuso de autoridad",
-    "articuloLey": "Artículo 416 - Penal",
-    "gravedad": "Media",
-    "descripcion": "Abusaba de autoridad",
-    "fechaComision": "2025-04-05",
-    "sentencia": {
-      "años": 1,
-      "meses": 5,
-      "fechaIngreso": "2025-04-26",
-      "fechaSalidaCalculada": "2026-09-26"
-    }
-  },
-  {
-    "id": 7,
-    "presoId": "414141414",
-    "codigo": 269,
-    "nombre": "Daño informático",
-    "articuloLey": "Artículo 269 - Daño informático",
-    "gravedad": "Baja",
-    "descripcion": "Dañaba cosas infomaticas",
-    "fechaComision": "2025-04-01",
-    "sentencia": {
-      "años": 1,
-      "meses": 0,
-      "fechaIngreso": "2025-04-26",
-      "fechaSalidaCalculada": "2026-04-26"
-    }
-  },
-  {
-    "id": 8,
-    "presoId": "889900776",
-    "codigo": 189,
-    "nombre": "Violación de habitación ajena",
-    "articuloLey": "Artículo 189",
-    "gravedad": "Baja",
-    "descripcion": "Entro a una habitacion mientras la persona dormia",
-    "fechaComision": "2025-04-02",
-    "sentencia": {
-      "años": 1,
-      "meses": 0,
-      "fechaIngreso": "2025-04-26",
-      "fechaSalidaCalculada": "2026-04-26"
-    }
-  },
-  {
-    "id": 9,
-    "presoId": "667788990",
-    "codigo": 221,
-    "nombre": "Calumnia",
-    "articuloLey": "Artículo 221",
-    "gravedad": "Baja",
-    "descripcion": "Calumniabia contra el indigente",
-    "fechaComision": "2024-04-02",
-    "sentencia": {
-      "años": 1,
-      "meses": 2,
-      "fechaIngreso": "2025-04-30",
-      "fechaSalidaCalculada": "2026-06-30"
-    }
-  },
-  {
-    "id": 10,
-    "presoId": "230909098",
+    "presoId": "1237440696",
     "codigo": 265,
     "nombre": "Daño en bien ajeno",
     "articuloLey": "Artículo 265",
     "gravedad": "Baja",
-    "descripcion": "El individuo ha sido acusado de causar\n de manera intencional daños materiales\n a bienes muebles e inmuebles que no le\n pertenecen, afectando su estructura, \nfuncionalidad o valor económico. \nEstos actos se realizaron sin el consentimiento del propietario\n y con plena conciencia de las consecuencias de su conducta. \nEl daño ocasionado generó perjuicios a terceros, ya sea por la destrucción parcial o total del bien, \npor el deterioro significativo del mismo o por la afectación de su uso legítimo.\n Este tipo de conducta se enmarca dentro de las infracciones contra la propiedad \ny puede implicar responsabilidad civil\n y penal, dependiendo del alcance\n del perjuicio causado.",
-    "fechaComision": "2024-05-10",
+    "descripcion": "Se metio en un bien ajeno a destruir todo",
+    "fechaComision": "2025-05-01",
     "sentencia": {
       "años": 3,
       "meses": 0,
-      "fechaIngreso": "2025-05-01",
-      "fechaSalidaCalculada": "2028-05-01"
+      "fechaIngreso": "2025-05-12",
+      "fechaSalidaCalculada": "2028-05-12"
     }
   },
   {
-    "id": 11,
-    "presoId": "230909098",
-    "codigo": 244,
-    "nombre": "Extorsión",
-    "articuloLey": "Artículo 244 - Extorsión",
-    "gravedad": "Baja",
-    "descripcion": "\"El individuo ha sido imputado por el delito\n de extorsión, al haber ejercido presión \nsobre una o más personas mediante \namenazas, intimidaciones o coacción\n psicológica con el fin de obtener, \nde manera ilegítima, beneficios económicos,\n bienes materiales, favores personales\n o la realización de actos en contra de la\n voluntad de la víctima. Estas amenazas\n podían implicar el daño físico, la afectación\n de la integridad moral o familiar de la\n persona, o la divulgación de información\n perjudicial. La conducta fue ejecutada con total\nconocimiento de su ilegalidad, vulnerando \nlos derechos fundamentales de la víctima\n y alterando su libertad de decisión.\n Este delito representa una grave\n transgresión al orden jurídico y a la\n seguridad de los ciudadanos, \nsiendo tipificado en la legislación penal \npor atentar contra la autonomía y el \npatrimonio de los afectados",
-    "fechaComision": "2023-05-05",
+    "id": 2,
+    "presoId": "1237440696",
+    "codigo": 189,
+    "nombre": "Violación de habitación ajena",
+    "articuloLey": "Artículo 189",
+    "gravedad": "Media",
+    "descripcion": "Violo la habitacion ajena, entro\npor que tenia frio",
+    "fechaComision": "2022-05-11",
+    "sentencia": {
+      "años": 1,
+      "meses": 4,
+      "fechaIngreso": "2025-05-12",
+      "fechaSalidaCalculada": "2026-09-12"
+    }
+  },
+  {
+    "id": 3,
+    "presoId": "1237440696",
+    "codigo": 233,
+    "nombre": "Inasistencia alimentaria",
+    "articuloLey": "Artículo 233",
+    "gravedad": "Media",
+    "descripcion": "No pago la manutencion de sus hijos",
+    "fechaComision": "2025-05-01",
+    "sentencia": {
+      "años": 5,
+      "meses": 4,
+      "fechaIngreso": "2025-05-12",
+      "fechaSalidaCalculada": "2030-09-12"
+    }
+  },
+  {
+    "id": 4,
+    "presoId": "1237440696",
+    "codigo": 131,
+    "nombre": "Omisión de socorro",
+    "articuloLey": "Artículo 131",
+    "gravedad": "Media",
+    "descripcion": "Presencio un accudente y se fue corriendo",
+    "fechaComision": "2023-05-06",
+    "sentencia": {
+      "años": 0,
+      "meses": 4,
+      "fechaIngreso": "2025-05-12",
+      "fechaSalidaCalculada": "2025-09-12"
+    }
+  },
+  {
+    "id": 5,
+    "presoId": "1237440696",
+    "codigo": 111,
+    "nombre": "Lesiones personales leves",
+    "articuloLey": "Artículo 111",
+    "gravedad": "Media",
+    "descripcion": "Multiples lesiones con alta gravedad",
+    "fechaComision": "2025-05-05",
+    "sentencia": {
+      "años": 1,
+      "meses": 4,
+      "fechaIngreso": "2025-05-12",
+      "fechaSalidaCalculada": "2026-09-12"
+    }
+  },
+  {
+    "id": 6,
+    "presoId": "1237440696",
+    "codigo": 289,
+    "nombre": "Falsedad en documento privado",
+    "articuloLey": "Artículo 289",
+    "gravedad": "Media",
+    "descripcion": "Falsifico un  documento para ir al concierto\n de un cantante famoso",
+    "fechaComision": "2023-05-19",
+    "sentencia": {
+      "años": 1,
+      "meses": 4,
+      "fechaIngreso": "2025-05-12",
+      "fechaSalidaCalculada": "2026-09-12"
+    }
+  },
+  {
+    "id": 7,
+    "presoId": "1237440696",
+    "codigo": 296,
+    "nombre": "Usurpación de derechos",
+    "articuloLey": "Artículo 296",
+    "gravedad": "Alta",
+    "descripcion": "Rompia los derechos de las personas",
+    "fechaComision": "2025-05-03",
     "sentencia": {
       "años": 2,
-      "meses": 4,
-      "fechaIngreso": "2025-05-01",
-      "fechaSalidaCalculada": "2027-09-01"
+      "meses": 6,
+      "fechaIngreso": "2025-05-12",
+      "fechaSalidaCalculada": "2027-11-12"
+    }
+  },
+  {
+    "id": 8,
+    "presoId": "1237440696",
+    "codigo": 490,
+    "nombre": "Estafa",
+    "articuloLey": "Artículo 490",
+    "gravedad": "Media",
+    "descripcion": "Frecuentaba casinos y pagaba con billetes falsos",
+    "fechaComision": "2025-05-01",
+    "sentencia": {
+      "años": 4,
+      "meses": 6,
+      "fechaIngreso": "2025-05-12",
+      "fechaSalidaCalculada": "2029-11-12"
+    }
+  },
+  {
+    "id": 9,
+    "presoId": "1237440696",
+    "codigo": 319,
+    "nombre": "Contrabando",
+    "articuloLey": "Artículo 319 - Contrabando",
+    "gravedad": "Alta",
+    "descripcion": "Contrabandeaba marihuana y decia que ere cilantro",
+    "fechaComision": "2024-05-23",
+    "sentencia": {
+      "años": 3,
+      "meses": 8,
+      "fechaIngreso": "2025-05-12",
+      "fechaSalidaCalculada": "2029-01-12"
+    }
+  },
+  {
+    "id": 10,
+    "presoId": "1237440696",
+    "codigo": 103,
+    "nombre": "Homicidio",
+    "articuloLey": "Artículo 103",
+    "gravedad": "Media",
+    "descripcion": "Mato a una persona, por que no habia desayunado",
+    "fechaComision": "2025-05-10",
+    "sentencia": {
+      "años": 3,
+      "meses": 5,
+      "fechaIngreso": "2025-05-12",
+      "fechaSalidaCalculada": "2028-10-12"
     }
   }
 ]

@@ -72,16 +72,16 @@ public class ValidarFechaDialog extends javax.swing.JDialog {
 
         jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Validación de sentencia cumplida");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 240, -1));
+        jLabel2.setText("Validación de fecha");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 150, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 40));
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Ingrese la fecha actual");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 170, -1));
-        jPanel1.add(FechaActualValidacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 90, 140, 30));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 170, -1));
+        jPanel1.add(FechaActualValidacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 110, 140, 30));
 
         btnAceptar.setBackground(new java.awt.Color(13, 75, 13));
         btnAceptar.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N

@@ -81,11 +81,11 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Validaci&#xf3;n de sentencia cumplida"/>
+                <Property name="text" type="java.lang.String" value="Validaci&#xf3;n de fecha"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="100" y="10" width="240" height="-1"/>
+                  <AbsoluteConstraints x="150" y="10" width="150" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -103,14 +103,14 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="40" y="100" width="170" height="-1"/>
+              <AbsoluteConstraints x="50" y="120" width="170" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
         <Component class="com.toedter.calendar.JDateChooser" name="FechaActualValidacion">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="210" y="90" width="140" height="30"/>
+              <AbsoluteConstraints x="230" y="110" width="140" height="30"/>
             </Constraint>
           </Constraints>
         </Component>

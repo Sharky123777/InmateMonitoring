@@ -1,5 +1,6 @@
 package Controller;
 
+import DAO.ExpedienteDAO;
 import DAO.PersonalDeControlDAO;
 import DAO.PresoDAO;
 import DAO.VisitaDAO;
@@ -7,6 +8,7 @@ import DAO.VisitanteDAO;
 import Model.Entities.Preso;
 import Model.Entities.Visita;
 import Model.Entities.Visitante;
+import Model.Entities.ExpedienteJudicial;
 import Model.Constants.EstadoVisitaEnum;
 import Model.Constants.EstadoVisitanteEnum;
 import View.PersonalDeControl;
@@ -399,7 +401,7 @@ public class VisitaController {
                 return false;
             }
 
-            if (!preso.getEstado().equalsIgnoreCase("ACTIVO")) {
+            if (!preso.getEstado().equals("ACTIVO")) {
                 mostrarError("El preso " + preso.getNombresCompletos() + " no puede recibir visitas.\n"
                         + "Motivo: Estado actual = " + preso.getEstado() + "\n"
                         + "Solo permitido: Presos en estado ACTIVO");
@@ -419,11 +421,16 @@ public class VisitaController {
                         + "Solo puede recibir visitas con nivel de seguridad Baja o Media");
                 return false;
             }
+            ExpedienteJudicial expediente = ExpedienteDAO.getInstancia().obtenerExpedienteAbierto(identificacionPreso);
 
-            if (preso.getExpediente() != null && preso.getExpediente().getNivelRiesgo().equalsIgnoreCase("Riesgo alto")) {
-                mostrarError("El preso " + preso.getNombresCompletos() + " tiene nivel de riesgo ALTO.\n"
-                        + "No puede recibir visitas por motivos de seguridad");
-                return false;
+            if (expediente != null) {
+                if (expediente.getNivelRiesgo() != null
+                        && expediente.getNivelRiesgo().equalsIgnoreCase("Riesgo alto")) {
+                    mostrarError("El preso " + preso.getNombresCompletos() + " tiene nivel de riesgo ALTO.\n"
+                            + "No puede recibir visitas por motivos de seguridad");
+                    return false;
+                }
+
             }
 
             String tipo = view.getTipoVisita().getSelectedItem().toString();

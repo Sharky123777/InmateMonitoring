@@ -1,6 +1,7 @@
 package Utilidades;
 
 import DAO.PresoDAO;
+import Model.Constants.EstadoPresoEnum;
 import Model.Entities.Oficial;
 import Model.Entities.Preso;
 import javax.swing.JOptionPane;
@@ -31,14 +32,33 @@ public class Validador {
         }
         return result;
     }
+    
+    public void validarEntradaPositiva(String dato){
+        
+         try {
+        long datoLong = Long.parseLong(dato);
+        if (datoLong < 0) {
+            throw new ArithmeticException(dato + " debe ser positivo");
+        }
+    } catch (NumberFormatException e) {
+        throw new IllegalArgumentException(dato + " no es un número válido.");
+    }
+        
+    }
 
-    public void validarIdentificacionUnica(String identificacion) {
-        validarFormatoIdentificacion(identificacion);
+public void validarIdentificacionUnica(String identificacion) {
+    validarFormatoIdentificacion(identificacion);
 
-        if (presoDAO.existePresoConIdentificacion(identificacion)) {
-            throw new IllegalArgumentException("Ya existe un preso con esta identificación en el sistema");
+    Preso presoExistente = presoDAO.buscarPresoPorIdentificacion(identificacion);
+
+    if (presoExistente != null) {
+        EstadoPresoEnum estado = presoExistente.getEstado();
+
+        if (estado != EstadoPresoEnum.LIBERADO) {
+            throw new IllegalArgumentException("Ya existe un preso con esta identificación y su estado actual es: " + estado);
         }
     }
+}
 
     public static void validarFormatoIdentificacion(String identificacion) {
         if (identificacion == null || identificacion.trim().isEmpty()) {
@@ -118,14 +138,21 @@ public class Validador {
     public static void mostrarInfo(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
     }
+    
+    public static void validarString (String nombre){
+      if (!Pattern.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]{2,50}$", nombre)) {
+            throw new IllegalArgumentException("El campo solo puede contener letras y espacios (2-50 caracteres)");
+        }
+  
+    }
 
     public static void validarNombre(String nombre) {
         if (nombre == null || nombre.trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre no puede estar vacío");
+            throw new IllegalArgumentException("El nombre y apellido no puede estar vacío");
         }
 
         if (!Pattern.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]{2,50}$", nombre)) {
-            throw new IllegalArgumentException("El nombre solo puede contener letras y espacios (2-50 caracteres)");
+            throw new IllegalArgumentException("El nombre y apellido solo puede contener letras y espacios (2-50 caracteres)");
         }
     }
 

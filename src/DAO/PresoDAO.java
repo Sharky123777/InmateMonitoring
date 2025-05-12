@@ -2,6 +2,8 @@ package DAO;
 
 import DAO.DelitoDAO;
 import DAO.CeldaDAO;
+import Model.Constants.EstadoExpedienteEnum;
+import Model.Constants.EstadoPresoEnum;
 import Model.Entities.Actividad;
 import Model.Entities.Celda;
 import Model.Entities.ExpedienteJudicial;
@@ -34,11 +36,13 @@ import javax.swing.JOptionPane;
 
 public class PresoDAO {
 
+    private static IntentoFugaDAO intentoFugaDAO = IntentoFugaDAO.getInstancia();
     private static DelitoDAO delitoDAO = DelitoDAO.getInstancia();
+    private static ExpedienteDAO expedienteDAO = ExpedienteDAO.getInstancia();
     private static PresoDAO instancia;
 
     private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\presos.json\\";
-    private static final String IMAGES_DIR = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\Images\\";
+    private static final String RUTA_IMAGENES = "src/Resources/imagenes_presos/";
 
     private Gson gson = new GsonBuilder()
             .setPrettyPrinting()
@@ -126,9 +130,9 @@ public class PresoDAO {
         if (imagenSeleccionada != null) {
             try {
                 String nombreArchivo = "preso_" + preso.getId() + getExtension(imagenSeleccionada.getName());
-                String rutaDestino = IMAGES_DIR + nombreArchivo;
+                String rutaDestino = RUTA_IMAGENES + nombreArchivo;
 
-                new File(IMAGES_DIR).mkdirs();
+                new File(RUTA_IMAGENES).mkdirs();
 
                 Files.copy(imagenSeleccionada.toPath(),
                         new File(rutaDestino).toPath(),
@@ -168,14 +172,16 @@ public class PresoDAO {
         return (lastDot == -1) ? "" : filename.substring(lastDot);
     }
 
-    public void guardarTodos(List<Preso> presos) {
-        try (FileWriter writer = new FileWriter(JSON_FILE)) {
-            gson.toJson(presos, writer);
-        } catch (IOException e) {
-            System.err.println("Error al guardar en archivo JSON: " + e.getMessage());
-            throw new RuntimeException("Error al guardar los datos", e);
-        }
+   private boolean guardarTodos(List<Preso> presos) {
+    try (Writer writer = new FileWriter(JSON_FILE)) {
+        gson.toJson(presos, writer);
+        return true;
+    } catch (IOException e) {
+        System.err.println("Error al guardar en archivo JSON: " + e.getMessage());
+        return false;
     }
+}
+
 
     public Preso buscarPresoPorIdentificacion(String identificacion) {
         List<Preso> presos = cargarTodos();
@@ -324,13 +330,13 @@ public class PresoDAO {
         return true;
     }
 
-    private void actualizarFotoPreso(Preso preso, File nuevaFoto) {
+    public void actualizarFotoPreso(Preso preso, File nuevaFoto) {
         try {
             String extension = nuevaFoto.getName().substring(nuevaFoto.getName().lastIndexOf("."));
             String nombreArchivo = "preso_" + preso.getId() + extension;
-            String rutaDestino = IMAGES_DIR + nombreArchivo;
+            String rutaDestino = RUTA_IMAGENES + nombreArchivo;
 
-            new File(IMAGES_DIR).mkdirs();
+            new File(RUTA_IMAGENES).mkdirs();
             Files.copy(nuevaFoto.toPath(), new File(rutaDestino).toPath(), StandardCopyOption.REPLACE_EXISTING);
             preso.setFotoPath(rutaDestino);
         } catch (IOException e) {
@@ -338,40 +344,8 @@ public class PresoDAO {
         }
     }
 
-    public boolean agregarDelitosAExpediente(Preso preso, List<Delito> nuevosDelitos) {
-        ExpedienteJudicial expediente = preso.getExpediente();
-        if (expediente == null) {
-            expediente = new ExpedienteJudicial();
-            preso.setExpediente(expediente);
-        }
-
-        expediente.getDelitos().addAll(nuevosDelitos);
-        preso.getDelitos().addAll(nuevosDelitos);
-
-        DelitoDAO delitoDAO = new DelitoDAO();
-        for (Delito delito : nuevosDelitos) {
-            delitoDAO.guardarDelito(delito);
-        }
-
-        List<Preso> presos = cargarTodos();
-        for (int i = 0; i < presos.size(); i++) {
-            if (presos.get(i).getIdentificacion().equals(preso.getIdentificacion())) {
-                presos.set(i, preso);
-                return guardarCambios(presos);
-            }
-        }
-
-        return false;
-    }
-
     private boolean guardarCambios(List<Preso> presos) {
-        try {
-            guardarTodos(presos);
-            return true;
-        } catch (Exception e) {
-            System.err.println("Error al guardar: " + e.getMessage());
-            return false;
-        }
+           return guardarTodos(presos);
     }
 
     public boolean existePresoConIdentificacion(String identificacion) {
@@ -389,38 +363,12 @@ public class PresoDAO {
         List<Preso> filtrados = new ArrayList<>();
 
         for (Preso preso : todos) {
-            if (preso.getSeccionAsignada().equalsIgnoreCase(seccion)
-                    && "ACTIVO".equalsIgnoreCase(preso.getEstado())) {
+            if (seccion != null && seccion.equalsIgnoreCase(preso.getSeccionAsignada())
+                    && preso.getEstado() == EstadoPresoEnum.ACTIVO) {
                 filtrados.add(preso);
             }
         }
         return filtrados;
-    }
-
-    public boolean actualizarPreso(Preso preso) {
-        List<Preso> presos = cargarTodos();
-
-        try {
-            boolean encontrado = false;
-            for (int i = 0; i < presos.size(); i++) {
-                if (presos.get(i).getIdentificacion().equals(preso.getIdentificacion())) {
-                    presos.set(i, preso);
-                    encontrado = true;
-                    break;
-                }
-            }
-
-            if (!encontrado) {
-                return false;
-            }
-
-            guardarTodos(presos);
-            return true;
-
-        } catch (RuntimeException e) {
-            System.err.println("Error al actualizar preso: " + e.getMessage());
-            return false;
-        }
     }
 
     public boolean agregarActividadAsignada(String idPreso, String idActividad) {
@@ -459,32 +407,102 @@ public class PresoDAO {
         }
     }
 
-    public boolean cambiarEstadoPreso(String identificacion, String nuevoEstado) {
-        List<Preso> presos = cargarTodos();
+public boolean cambiarEstadoPreso(String identificacion, EstadoPresoEnum nuevoEstado, LocalDate fechaCambio) {
+    List<Preso> presos = cargarTodos();
 
-        for (Preso preso : presos) {
-            if (preso.getIdentificacion().equals(identificacion)) {
-                preso.setEstado(nuevoEstado);
-                return guardarCambios(presos);
+    for (Preso preso : presos) {
+        if (preso.getIdentificacion().equals(identificacion)) {
+            EstadoPresoEnum estadoActual = preso.getEstado();
+
+            // Cambiar estado del preso
+            preso.setEstado(nuevoEstado);
+
+            // Acciones según el nuevo estado del preso
+            switch (nuevoEstado) {
+                case FUGADO:
+                    preso.setFechaFuga(fechaCambio);
+                    intentoFugaDAO.registrarFuga(identificacion, fechaCambio);
+                    break;
+
+                case LIBERADO:
+                    preso.setFechaLiberacion(fechaCambio);
+
+                    // Aquí actualizamos el expediente a CERRADO si el preso es liberado
+                    ExpedienteJudicial expedienteAbierto = expedienteDAO.obtenerExpedienteAbierto(identificacion);
+                    if (expedienteAbierto != null) {
+                        expedienteAbierto.setEstado(EstadoExpedienteEnum.CERRADO);
+                        expedienteDAO.actualizarExpediente(expedienteAbierto);
+                    }
+                    break;
+
+                case FALLECIDO:
+                    preso.setFechaDefuncion(fechaCambio);
+                    break;
+
+                case ACTIVO:
+                    if (estadoActual == EstadoPresoEnum.FUGADO) {
+                        intentoFugaDAO.registrarReingreso(identificacion, fechaCambio);
+                    }
+                    preso.setFechaFuga(null);
+                    preso.setFechaLiberacion(null);
+                    preso.setFechaDefuncion(null);
+                    break;
             }
+
+            // Guardamos los cambios de estado del preso
+            return guardarCambios(presos);
         }
-        return false;
+    }
+    return false;
+}
+
+    public boolean marcarComoLiberado(String numeroIdentificacion) {
+        return cambiarEstadoPreso(numeroIdentificacion, EstadoPresoEnum.LIBERADO, LocalDate.now());
     }
 
-    public boolean eliminarPresoL(String numeroIdentificacion) {
-        return cambiarEstadoPreso(numeroIdentificacion, "LIBERADO");
+    public boolean marcarComoFallecido(String numeroIdentificacion, LocalDate fechaDefuncion) {
+        return cambiarEstadoPreso(numeroIdentificacion, EstadoPresoEnum.FALLECIDO, fechaDefuncion);
     }
 
-    public List<Preso> buscarPorEstado(String estado) {
+    public boolean marcarComoFugado(String numeroIdentificacion, LocalDate fechaFuga) {
+        return cambiarEstadoPreso(numeroIdentificacion, EstadoPresoEnum.FUGADO, fechaFuga);
+    }
+
+    public List<Preso> buscarPorEstado(EstadoPresoEnum estado) {
         List<Preso> todos = cargarTodos();
         List<Preso> filtrados = new ArrayList<>();
 
         for (Preso preso : todos) {
-            if (preso.getEstado() != null && preso.getEstado().equalsIgnoreCase(estado)) {
+            if (preso.getEstado() == estado) {
                 filtrados.add(preso);
             }
         }
         return filtrados;
     }
 
+    public boolean actualizarPreso(Preso preso) {
+        List<Preso> presos = cargarTodos();
+
+        try {
+            boolean encontrado = false;
+            for (int i = 0; i < presos.size(); i++) {
+                if (presos.get(i).getIdentificacion().equals(preso.getIdentificacion())) {
+                    presos.set(i, preso);
+                    encontrado = true;
+                    break;
+                }
+            }
+
+            if (!encontrado) {
+                return false;
+            }
+
+            guardarTodos(presos);
+            return true;
+
+        } catch (RuntimeException e) {
+            System.err.println("Error al actualizar preso: " + e.getMessage());
+            return false;
+        }
+    }
 }
