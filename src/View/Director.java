@@ -15,12 +15,14 @@ import javax.swing.SwingUtilities;
 import Model.Constants.RolEnum;
 import View.FrmCamara;
 import Controller.CoordinadorDeActividadesController;
+import Controller.OficialController;
 import DAO.EnfermeraDAO;
 import DAO.GuardiaDAO;
 import Model.Constants.RolEnum;
 import Utilidades.EmailSender;
 import java.awt.Image;
 import java.io.File;
+import Model.Entities.Oficial;
 import java.time.LocalDate;
 import Model.Entities.Guardia;
 import javax.swing.ImageIcon;
@@ -95,6 +97,8 @@ public class Director extends javax.swing.JFrame {
     private File imagenSeleccionadaModCDA;
     private File rutaImagenEnfermera;
     private File rutaImagenEnfermeraMod;
+    private File rutaImagenOficial;
+    private File rutaImagenOficialMod;
 
     private PersonalDeControlController controller;
     private File imagenPDCSeleccionada;
@@ -103,12 +107,14 @@ public class Director extends javax.swing.JFrame {
 
     public Director() {
         initComponents();
-        
+
         // Continuamos con el resto de tu código original
         txtFechaContratacion.setEditable(false);
         txtFechaContratacion.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
         txtFechaContratacion2.setEditable(false);
         txtFechaContratacion2.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+        txtFechaContratacion3.setEditable(false);
+        txtFechaContratacion3.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
         txtFechaContratacion1.setEditable(false);
         txtFechaContratacionMod1.setEditable(false);
         txtSexo.setEditable(false);
@@ -128,6 +134,7 @@ public class Director extends javax.swing.JFrame {
         guardiaController = GuardiaController.getInstancia();
         enfermeraController = EnfermeraController.getInstancia();
         coordinadorController = CoordinadorDeActividadesController.getInstancia();
+        guardiaController = guardiaController.getInstancia();
 
         // Configuración MEJORADA del JDateChooser
         jDateChooserFinContrato = new JDateChooser();
@@ -153,7 +160,7 @@ public class Director extends javax.swing.JFrame {
         // Crear y configurar el menú moderno
         menuSuperior = new ModernTopMenu(tabPrincipal);
 
-       // Colores adaptados para combinar con [20,25,40] y [29,35,51]
+        // Colores adaptados para combinar con [20,25,40] y [29,35,51]
         menuSuperior.setColors(
                 new Color(29, 35, 51), // Azul principal (más claro)
                 new Color(41, 50, 65), // Azul hover (ligeramente más claro que el principal)
@@ -161,7 +168,6 @@ public class Director extends javax.swing.JFrame {
                 new Color(20, 25, 40), // Fondo oscuro (más oscuro de los dos)
                 new Color(24, 30, 45) // Fondo desplegable (intermedio)
         );
-      
 
         // Añadir el menú al contenedor principal, en la parte superior
         // NOTA: Es importante mantener el BorderLayout para que esto funcione correctamente
@@ -194,8 +200,6 @@ public class Director extends javax.swing.JFrame {
             getContentPane().add(menuSuperior, BorderLayout.NORTH);
         }
 
-        
-
         // Ajustar el tamaño del frame para acomodar el menú
         pack();
     }
@@ -213,6 +217,9 @@ public class Director extends javax.swing.JFrame {
         jPopupMenu4 = new javax.swing.JPopupMenu();
         ModificarCDA = new javax.swing.JMenuItem();
         EliminarCDA = new javax.swing.JMenuItem();
+        jPopupMenu3 = new javax.swing.JPopupMenu();
+        modOf = new javax.swing.JMenuItem();
+        BorrarOf = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jButton13 = new javax.swing.JButton();
         tabPrincipal = new javax.swing.JTabbedPane();
@@ -502,18 +509,103 @@ public class Director extends javax.swing.JFrame {
         mostrarCoordinadora = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaCoordinadores = new javax.swing.JTable();
-        AgregarOficial = new javax.swing.JPanel();
-        jLabel30 = new javax.swing.JLabel();
-        ModificarOficial = new javax.swing.JPanel();
-        jLabel92 = new javax.swing.JLabel();
-        mostrarOficial = new javax.swing.JPanel();
-        jLabel93 = new javax.swing.JLabel();
         añadirODR = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
         ModificarODR = new javax.swing.JPanel();
         jLabel97 = new javax.swing.JLabel();
         MostrarODR = new javax.swing.JPanel();
         jLabel98 = new javax.swing.JLabel();
+        AñadirOficial = new javax.swing.JPanel();
+        jPanel9 = new RoundedPanel(30);
+        jSeparator31 = new javax.swing.JSeparator();
+        jSeparator66 = new javax.swing.JSeparator();
+        jSeparator67 = new javax.swing.JSeparator();
+        jSeparator68 = new javax.swing.JSeparator();
+        jSeparator69 = new javax.swing.JSeparator();
+        jSeparator70 = new javax.swing.JSeparator();
+        jSeparator71 = new javax.swing.JSeparator();
+        jSeparator72 = new javax.swing.JSeparator();
+        jSeparator73 = new javax.swing.JSeparator();
+        jButton14 = new javax.swing.JButton();
+        jPanel22 = new javax.swing.JPanel();
+        jPanel23 = new javax.swing.JPanel();
+        lblImagen3 = new javax.swing.JLabel();
+        jLabel99 = new javax.swing.JLabel();
+        jLabel100 = new javax.swing.JLabel();
+        txtFechaContratacion3 = new javax.swing.JTextField();
+        dateFinContrato3 = new com.toedter.calendar.JDateChooser();
+        jLabel101 = new javax.swing.JLabel();
+        cmbTurno3 = new javax.swing.JComboBox<>();
+        jLabel102 = new javax.swing.JLabel();
+        jLabel103 = new javax.swing.JLabel();
+        txtCorreo3 = new javax.swing.JTextField();
+        jSeparator74 = new javax.swing.JSeparator();
+        jButton15 = new javax.swing.JButton();
+        jLabel104 = new javax.swing.JLabel();
+        txtNacionalidad3 = new javax.swing.JTextField();
+        txtSexo3 = new javax.swing.JTextField();
+        jLabel105 = new javax.swing.JLabel();
+        jLabel106 = new javax.swing.JLabel();
+        txtCedula3 = new javax.swing.JTextField();
+        txtEdad3 = new javax.swing.JTextField();
+        jLabel107 = new javax.swing.JLabel();
+        jLabel108 = new javax.swing.JLabel();
+        txtSegundoApellido3 = new javax.swing.JTextField();
+        txtPrimerApellido3 = new javax.swing.JTextField();
+        jLabel109 = new javax.swing.JLabel();
+        jLabel110 = new javax.swing.JLabel();
+        txtSegundoNombre3 = new javax.swing.JTextField();
+        txtPrimerNombre3 = new javax.swing.JTextField();
+        jLabel111 = new javax.swing.JLabel();
+        jLabel112 = new javax.swing.JLabel();
+        jLabel113 = new javax.swing.JLabel();
+        ModificarOficial = new javax.swing.JPanel();
+        ModificarNurse1 = new javax.swing.JPanel();
+        jPanel24 = new RoundedPanel(30);
+        jSeparator75 = new javax.swing.JSeparator();
+        jSeparator76 = new javax.swing.JSeparator();
+        jSeparator77 = new javax.swing.JSeparator();
+        jSeparator78 = new javax.swing.JSeparator();
+        jSeparator79 = new javax.swing.JSeparator();
+        jSeparator80 = new javax.swing.JSeparator();
+        jSeparator81 = new javax.swing.JSeparator();
+        jSeparator82 = new javax.swing.JSeparator();
+        jSeparator83 = new javax.swing.JSeparator();
+        jButton16 = new javax.swing.JButton();
+        jPanel25 = new javax.swing.JPanel();
+        jPanel26 = new javax.swing.JPanel();
+        lblImagenMod3 = new javax.swing.JLabel();
+        jLabel114 = new javax.swing.JLabel();
+        jLabel115 = new javax.swing.JLabel();
+        txtFechaContratacionMod3 = new javax.swing.JTextField();
+        dateFinContratoMod3 = new com.toedter.calendar.JDateChooser();
+        jLabel116 = new javax.swing.JLabel();
+        cmbTurnoMod3 = new javax.swing.JComboBox<>();
+        jLabel117 = new javax.swing.JLabel();
+        jLabel118 = new javax.swing.JLabel();
+        txtCorreoMod3 = new javax.swing.JTextField();
+        jSeparator84 = new javax.swing.JSeparator();
+        jButton17 = new javax.swing.JButton();
+        jLabel119 = new javax.swing.JLabel();
+        txtNacionalidadMod3 = new javax.swing.JTextField();
+        txtSexoMod3 = new javax.swing.JTextField();
+        jLabel120 = new javax.swing.JLabel();
+        jLabel121 = new javax.swing.JLabel();
+        txtCedulaMod3 = new javax.swing.JTextField();
+        txtEdadMod3 = new javax.swing.JTextField();
+        jLabel122 = new javax.swing.JLabel();
+        jLabel123 = new javax.swing.JLabel();
+        txtSegundoApellidoMod3 = new javax.swing.JTextField();
+        txtPrimerApellidoMod3 = new javax.swing.JTextField();
+        jLabel124 = new javax.swing.JLabel();
+        jLabel125 = new javax.swing.JLabel();
+        txtSegundoNombreMod3 = new javax.swing.JTextField();
+        txtPrimerNombreMod3 = new javax.swing.JTextField();
+        jLabel126 = new javax.swing.JLabel();
+        jLabel127 = new javax.swing.JLabel();
+        mostrarOficial = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tablaOficial = new javax.swing.JTable();
         Credenciales = new javax.swing.JPanel();
 
         Modificar.setText("Modificar");
@@ -563,6 +655,22 @@ public class Director extends javax.swing.JFrame {
             }
         });
         jPopupMenu4.add(EliminarCDA);
+
+        modOf.setText("Modificar");
+        modOf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modOfActionPerformed(evt);
+            }
+        });
+        jPopupMenu3.add(modOf);
+
+        BorrarOf.setText("Eliminar");
+        BorrarOf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BorrarOfActionPerformed(evt);
+            }
+        });
+        jPopupMenu3.add(BorrarOf);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -2114,34 +2222,17 @@ public class Director extends javax.swing.JFrame {
 
         tabPrincipal.addTab("MostrarCDA", mostrarCoordinadora);
 
-        AgregarOficial.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel30.setText("AgregarOficial");
-        AgregarOficial.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 140, -1, -1));
-
-        tabPrincipal.addTab("AgregarOficial", AgregarOficial);
-
-        ModificarOficial.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel92.setText("Modificar Oficial");
-        ModificarOficial.add(jLabel92, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 130, -1, -1));
-
-        tabPrincipal.addTab("ModificarOficial", ModificarOficial);
-
-        mostrarOficial.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel93.setText("MostrarOficial");
-        mostrarOficial.add(jLabel93, new org.netbeans.lib.awtextra.AbsoluteConstraints(527, 5, -1, 20));
-
-        tabPrincipal.addTab("MostrarOficial", mostrarOficial);
+        añadirODR.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel20.setText("AGREGAR");
-        añadirODR.add(jLabel20);
+        añadirODR.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(523, 5, -1, -1));
 
         tabPrincipal.addTab("AggODR", añadirODR);
 
+        ModificarODR.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         jLabel97.setText("Modificar");
-        ModificarODR.add(jLabel97);
+        ModificarODR.add(jLabel97, new org.netbeans.lib.awtextra.AbsoluteConstraints(524, 5, -1, -1));
 
         tabPrincipal.addTab("ModificarODR", ModificarODR);
 
@@ -2151,6 +2242,511 @@ public class Director extends javax.swing.JFrame {
         MostrarODR.add(jLabel98, new org.netbeans.lib.awtextra.AbsoluteConstraints(529, 5, -1, -1));
 
         tabPrincipal.addTab("MostrarODR", MostrarODR);
+
+        AñadirOficial.setBackground(new java.awt.Color(20, 25, 40));
+        AñadirOficial.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel9.setBackground(new java.awt.Color(29, 35, 51));
+        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel9.add(jSeparator31, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, 310, 20));
+        jPanel9.add(jSeparator66, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, 310, 20));
+        jPanel9.add(jSeparator67, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 310, 20));
+        jPanel9.add(jSeparator68, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 310, 20));
+        jPanel9.add(jSeparator69, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 280, 310, 20));
+        jPanel9.add(jSeparator70, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 360, 310, 20));
+        jPanel9.add(jSeparator71, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 310, 20));
+        jPanel9.add(jSeparator72, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 200, 310, 20));
+        jPanel9.add(jSeparator73, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 400, 310, 20));
+
+        jButton14.setText("Añadir");
+        jButton14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton14ActionPerformed(evt);
+            }
+        });
+        jPanel9.add(jButton14, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 460, 180, 40));
+
+        jPanel22.setBackground(new java.awt.Color(0, 0, 51));
+        jPanel22.setRequestFocusEnabled(false);
+        jPanel22.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel23.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel23.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+        jPanel23.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblImagen3.setBackground(new java.awt.Color(255, 255, 255));
+        lblImagen3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel23.add(lblImagen3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 270, 180));
+
+        jPanel22.add(jPanel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 270, 180));
+
+        jPanel9.add(jPanel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 40, 310, 220));
+
+        jLabel99.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel99.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel99.setText("Agregar Foto de la oficial:");
+        jPanel9.add(jLabel99, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 10, -1, 30));
+
+        jLabel100.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel100.setText("Fecha de contratación:");
+        jPanel9.add(jLabel100, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 330, -1, 20));
+
+        txtFechaContratacion3.setEditable(false);
+        jPanel9.add(txtFechaContratacion3, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 350, 190, 30));
+        jPanel9.add(dateFinContrato3, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 410, 190, 30));
+
+        jLabel101.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel101.setText("Fecha de finalización del contrato:");
+        jPanel9.add(jLabel101, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 380, -1, 20));
+
+        cmbTurno3.setForeground(new java.awt.Color(255, 255, 255));
+        cmbTurno3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Diurno", "Nocturno" }));
+        jPanel9.add(cmbTurno3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 370, 240, 30));
+
+        jLabel102.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel102.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel102.setText("Turno:");
+        jPanel9.add(jLabel102, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, -1, -1));
+
+        jLabel103.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel103.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel103.setText("Correo:");
+        jPanel9.add(jLabel103, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 340, -1, -1));
+
+        txtCorreo3.setBackground(new java.awt.Color(29, 35, 51));
+        txtCorreo3.setForeground(new java.awt.Color(255, 255, 255));
+        txtCorreo3.setBorder(null);
+        txtCorreo3.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCorreo3FocusLost(evt);
+            }
+        });
+        txtCorreo3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCorreo3ActionPerformed(evt);
+            }
+        });
+        txtCorreo3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCorreo3KeyTyped(evt);
+            }
+        });
+        jPanel9.add(txtCorreo3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 330, 240, 30));
+        jPanel9.add(jSeparator74, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, 310, 20));
+
+        jButton15.setText("Seleccionar Imagen");
+        jButton15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton15ActionPerformed(evt);
+            }
+        });
+        jPanel9.add(jButton15, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 280, -1, -1));
+
+        jLabel104.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel104.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel104.setText("Nacionalidad:");
+        jPanel9.add(jLabel104, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, 90, -1));
+
+        txtNacionalidad3.setBackground(new java.awt.Color(29, 35, 51));
+        txtNacionalidad3.setForeground(new java.awt.Color(255, 255, 255));
+        txtNacionalidad3.setBorder(null);
+        txtNacionalidad3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNacionalidad3KeyTyped(evt);
+            }
+        });
+        jPanel9.add(txtNacionalidad3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 210, 30));
+
+        txtSexo3.setEditable(false);
+        txtSexo3.setBackground(new java.awt.Color(29, 35, 51));
+        txtSexo3.setForeground(new java.awt.Color(255, 255, 255));
+        txtSexo3.setText("Femenino");
+        txtSexo3.setBorder(null);
+        jPanel9.add(txtSexo3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, 250, 30));
+
+        jLabel105.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel105.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel105.setText("Genero");
+        jPanel9.add(jLabel105, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 260, -1, -1));
+
+        jLabel106.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel106.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel106.setText("Cedula:");
+        jPanel9.add(jLabel106, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 210, -1, 30));
+
+        txtCedula3.setBackground(new java.awt.Color(29, 35, 51));
+        txtCedula3.setForeground(new java.awt.Color(255, 255, 255));
+        txtCedula3.setBorder(null);
+        txtCedula3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCedula3ActionPerformed(evt);
+            }
+        });
+        txtCedula3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCedula3KeyTyped(evt);
+            }
+        });
+        jPanel9.add(txtCedula3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 210, 240, 30));
+
+        txtEdad3.setBackground(new java.awt.Color(29, 35, 51));
+        txtEdad3.setForeground(new java.awt.Color(255, 255, 255));
+        txtEdad3.setBorder(null);
+        txtEdad3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtEdad3KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEdad3KeyTyped(evt);
+            }
+        });
+        jPanel9.add(txtEdad3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 170, 250, 30));
+
+        jLabel107.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel107.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel107.setText("Edad:");
+        jPanel9.add(jLabel107, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, -1, -1));
+
+        jLabel108.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel108.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel108.setText("Segundo Apellido:");
+        jPanel9.add(jLabel108, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, -1, 20));
+
+        txtSegundoApellido3.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoApellido3.setForeground(new java.awt.Color(255, 255, 255));
+        txtSegundoApellido3.setBorder(null);
+        txtSegundoApellido3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoApellido3KeyTyped(evt);
+            }
+        });
+        jPanel9.add(txtSegundoApellido3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 130, 180, 30));
+
+        txtPrimerApellido3.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerApellido3.setForeground(new java.awt.Color(255, 255, 255));
+        txtPrimerApellido3.setBorder(null);
+        txtPrimerApellido3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerApellido3KeyTyped(evt);
+            }
+        });
+        jPanel9.add(txtPrimerApellido3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 90, 190, 30));
+
+        jLabel109.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel109.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel109.setText("Primer Apellido:");
+        jPanel9.add(jLabel109, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, -1, 20));
+
+        jLabel110.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel110.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel110.setText("Segundo nombre:");
+        jPanel9.add(jLabel110, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 50, -1, 30));
+
+        txtSegundoNombre3.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoNombre3.setForeground(new java.awt.Color(255, 255, 255));
+        txtSegundoNombre3.setBorder(null);
+        txtSegundoNombre3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoNombre3KeyTyped(evt);
+            }
+        });
+        jPanel9.add(txtSegundoNombre3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, 180, 30));
+
+        txtPrimerNombre3.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerNombre3.setForeground(new java.awt.Color(255, 255, 255));
+        txtPrimerNombre3.setBorder(null);
+        txtPrimerNombre3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerNombre3KeyTyped(evt);
+            }
+        });
+        jPanel9.add(txtPrimerNombre3, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 10, 200, 30));
+
+        jLabel111.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel111.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel111.setText("Primer nombre:");
+        jPanel9.add(jLabel111, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, -1, 20));
+
+        AñadirOficial.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
+
+        jLabel112.setFont(new java.awt.Font("Arial", 2, 13)); // NOI18N
+        jLabel112.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel112.setText("Asegurese de ingresar correctamente la cedula ya que esta no podrá ser modificada más adelante.");
+        AñadirOficial.add(jLabel112, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, -1, -1));
+
+        jLabel113.setFont(new java.awt.Font("Arial", 2, 10)); // NOI18N
+        jLabel113.setForeground(new java.awt.Color(153, 0, 0));
+        jLabel113.setText("TODOS LOS DATOS SON DE CARACTER OBLIGATORIO A EXCEPCIÓN DEL SEGUNDO NOMBRE.");
+        AñadirOficial.add(jLabel113, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 20, -1, 30));
+
+        tabPrincipal.addTab("Agregaroficial", AñadirOficial);
+
+        ModificarOficial.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        ModificarNurse1.setBackground(new java.awt.Color(20, 25, 40));
+        ModificarNurse1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel24.setBackground(new java.awt.Color(29, 35, 51));
+        jPanel24.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel24.add(jSeparator75, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 310, 20));
+        jPanel24.add(jSeparator76, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 40, 310, 20));
+        jPanel24.add(jSeparator77, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, 310, 20));
+        jPanel24.add(jSeparator78, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 120, 310, 20));
+        jPanel24.add(jSeparator79, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 280, 310, 20));
+        jPanel24.add(jSeparator80, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 360, 310, 20));
+        jPanel24.add(jSeparator81, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, 310, 20));
+        jPanel24.add(jSeparator82, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 200, 310, 20));
+        jPanel24.add(jSeparator83, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 400, 310, 20));
+
+        jButton16.setText("Modificar");
+        jButton16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton16ActionPerformed(evt);
+            }
+        });
+        jPanel24.add(jButton16, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 430, 180, 40));
+
+        jPanel25.setBackground(new java.awt.Color(0, 0, 51));
+        jPanel25.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel26.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel26.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+        jPanel26.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel26.add(lblImagenMod3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 270, 180));
+
+        jPanel25.add(jPanel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 270, 180));
+
+        jPanel24.add(jPanel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 40, 310, 220));
+
+        jLabel114.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel114.setText("Modificar foto de la oficial:");
+        jPanel24.add(jLabel114, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 20, -1, -1));
+
+        jLabel115.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel115.setText("Fecha de contratación:");
+        jPanel24.add(jLabel115, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 340, -1, 20));
+
+        txtFechaContratacionMod3.setEditable(false);
+        jPanel24.add(txtFechaContratacionMod3, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 360, 190, 30));
+        jPanel24.add(dateFinContratoMod3, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 420, 190, 30));
+
+        jLabel116.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel116.setText("Fecha de finalización del contrato:");
+        jPanel24.add(jLabel116, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 400, -1, -1));
+
+        cmbTurnoMod3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Diurno", "Nocturno" }));
+        jPanel24.add(cmbTurnoMod3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 370, 250, 30));
+
+        jLabel117.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel117.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel117.setText("Turno:");
+        jPanel24.add(jLabel117, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 380, -1, -1));
+
+        jLabel118.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel118.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel118.setText("Correo:");
+        jPanel24.add(jLabel118, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 340, -1, -1));
+
+        txtCorreoMod3.setBackground(new java.awt.Color(29, 35, 51));
+        txtCorreoMod3.setForeground(new java.awt.Color(255, 255, 255));
+        txtCorreoMod3.setBorder(null);
+        txtCorreoMod3.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCorreoMod3FocusLost(evt);
+            }
+        });
+        txtCorreoMod3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCorreoMod3KeyTyped(evt);
+            }
+        });
+        jPanel24.add(txtCorreoMod3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 330, 240, 30));
+        jPanel24.add(jSeparator84, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 320, 310, 20));
+
+        jButton17.setText("Seleccionar Imagen");
+        jButton17.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton17ActionPerformed(evt);
+            }
+        });
+        jPanel24.add(jButton17, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 280, -1, -1));
+
+        jLabel119.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel119.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel119.setText("Nacionalidad:");
+        jPanel24.add(jLabel119, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 300, 90, -1));
+
+        txtNacionalidadMod3.setBackground(new java.awt.Color(29, 35, 51));
+        txtNacionalidadMod3.setForeground(new java.awt.Color(255, 255, 255));
+        txtNacionalidadMod3.setBorder(null);
+        txtNacionalidadMod3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNacionalidadMod3KeyTyped(evt);
+            }
+        });
+        jPanel24.add(txtNacionalidadMod3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 210, 30));
+
+        txtSexoMod3.setEditable(false);
+        txtSexoMod3.setBackground(new java.awt.Color(29, 35, 51));
+        txtSexoMod3.setForeground(new java.awt.Color(255, 255, 255));
+        txtSexoMod3.setText("Femenino");
+        txtSexoMod3.setBorder(null);
+        jPanel24.add(txtSexoMod3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 250, 250, 30));
+
+        jLabel120.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel120.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel120.setText("Genero");
+        jPanel24.add(jLabel120, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, -1, -1));
+
+        jLabel121.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel121.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel121.setText("Cedula:");
+        jPanel24.add(jLabel121, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 210, -1, 30));
+
+        txtCedulaMod3.setEditable(false);
+        txtCedulaMod3.setBackground(new java.awt.Color(29, 35, 51));
+        txtCedulaMod3.setForeground(new java.awt.Color(255, 255, 255));
+        txtCedulaMod3.setBorder(null);
+        txtCedulaMod3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCedulaMod3ActionPerformed(evt);
+            }
+        });
+        txtCedulaMod3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCedulaMod3KeyTyped(evt);
+            }
+        });
+        jPanel24.add(txtCedulaMod3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 210, 240, 30));
+
+        txtEdadMod3.setBackground(new java.awt.Color(29, 35, 51));
+        txtEdadMod3.setForeground(new java.awt.Color(255, 255, 255));
+        txtEdadMod3.setBorder(null);
+        txtEdadMod3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtEdadMod3KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEdadMod3KeyTyped(evt);
+            }
+        });
+        jPanel24.add(txtEdadMod3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 170, 250, 30));
+
+        jLabel122.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel122.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel122.setText("Edad:");
+        jPanel24.add(jLabel122, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 180, -1, -1));
+
+        jLabel123.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel123.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel123.setText("Segundo Apellido:");
+        jPanel24.add(jLabel123, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 140, -1, 20));
+
+        txtSegundoApellidoMod3.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoApellidoMod3.setForeground(new java.awt.Color(255, 255, 255));
+        txtSegundoApellidoMod3.setBorder(null);
+        txtSegundoApellidoMod3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoApellidoMod3KeyTyped(evt);
+            }
+        });
+        jPanel24.add(txtSegundoApellidoMod3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 130, 190, 30));
+
+        txtPrimerApellidoMod3.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerApellidoMod3.setForeground(new java.awt.Color(255, 255, 255));
+        txtPrimerApellidoMod3.setBorder(null);
+        txtPrimerApellidoMod3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerApellidoMod3KeyTyped(evt);
+            }
+        });
+        jPanel24.add(txtPrimerApellidoMod3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 90, 200, 30));
+
+        jLabel124.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel124.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel124.setText("Primer Apellido:");
+        jPanel24.add(jLabel124, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 100, -1, 20));
+
+        jLabel125.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel125.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel125.setText("Segundo nombre:");
+        jPanel24.add(jLabel125, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, -1, 30));
+
+        txtSegundoNombreMod3.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoNombreMod3.setBorder(null);
+        txtSegundoNombreMod3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoNombreMod3KeyTyped(evt);
+            }
+        });
+        jPanel24.add(txtSegundoNombreMod3, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 50, 180, 30));
+
+        txtPrimerNombreMod3.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerNombreMod3.setBorder(null);
+        txtPrimerNombreMod3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerNombreMod3KeyTyped(evt);
+            }
+        });
+        jPanel24.add(txtPrimerNombreMod3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, 200, 30));
+
+        jLabel126.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel126.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel126.setText("Primer nombre:");
+        jPanel24.add(jLabel126, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, 20));
+
+        ModificarNurse1.add(jPanel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
+
+        jLabel127.setFont(new java.awt.Font("Arial", 2, 10)); // NOI18N
+        jLabel127.setForeground(new java.awt.Color(153, 0, 0));
+        jLabel127.setText("NINGUN CAMPO DEBE ESTAR VACIO AL MODIFICAR, A EXCEPCIÓN DEL SEGUNDO NOMBRE.");
+        ModificarNurse1.add(jLabel127, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 10, -1, 30));
+
+        ModificarOficial.add(ModificarNurse1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+
+        tabPrincipal.addTab("ModificarOficial", ModificarOficial);
+
+        mostrarOficial.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        tablaOficial.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Foto", "Nombre", "Apellido", "Edad", "Cedula", "Sexo", "Nacionalidad", "Correo", "Turno", "Cargo", "FechaContratacion", "FechaFinContrato"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tablaOficial.setComponentPopupMenu(jPopupMenu3);
+        jScrollPane4.setViewportView(tablaOficial);
+        if (tablaOficial.getColumnModel().getColumnCount() > 0) {
+            tablaOficial.getColumnModel().getColumn(0).setResizable(false);
+            tablaOficial.getColumnModel().getColumn(1).setResizable(false);
+            tablaOficial.getColumnModel().getColumn(2).setResizable(false);
+            tablaOficial.getColumnModel().getColumn(3).setResizable(false);
+            tablaOficial.getColumnModel().getColumn(4).setResizable(false);
+            tablaOficial.getColumnModel().getColumn(5).setResizable(false);
+            tablaOficial.getColumnModel().getColumn(6).setResizable(false);
+            tablaOficial.getColumnModel().getColumn(7).setResizable(false);
+            tablaOficial.getColumnModel().getColumn(8).setResizable(false);
+            tablaOficial.getColumnModel().getColumn(9).setResizable(false);
+            tablaOficial.getColumnModel().getColumn(10).setResizable(false);
+            tablaOficial.getColumnModel().getColumn(11).setResizable(false);
+        }
+
+        mostrarOficial.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 1080, 560));
+
+        tabPrincipal.addTab("MostrarOficial", mostrarOficial);
         tabPrincipal.addTab("CambiarCredenciales", Credenciales);
 
         jPanel1.add(tabPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 650));
@@ -2169,6 +2765,73 @@ public class Director extends javax.swing.JFrame {
         System.out.println("Componente null? " + (jDateChooserFinContrato == null));
         System.out.println("Editor null? " + (jDateChooserFinContrato.getDateEditor() == null));
     }
+
+    // Métodos para Oficiales en la vista Director
+    private void cargarTablaOficiales() {
+    DefaultTableModel modelo = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            return columnIndex == 0 ? ImageIcon.class : Object.class;
+        }
+    };
+
+    modelo.setColumnIdentifiers(new String[]{
+        "Foto",
+        "Nombre",
+        "Apellido",
+        "Edad",
+        "Cédula",
+        "Nacionalidad",
+        "Correo",
+        "Turno",
+        "Inicio Contrato",
+        "Fin Contrato"
+    });
+
+    List<Oficial> oficiales = OficialController.getInstancia().obtenerTodosOficiales();
+
+    for (Oficial o : oficiales) {
+        ImageIcon icono = null; // Inicialmente sin imagen
+
+        // Intentar cargar la imagen solo si existe la ruta y el archivo
+        if (o.getRutaImagen() != null && !o.getRutaImagen().isEmpty()) {
+            try {
+                File file = new File(o.getRutaImagen());
+                if (file.exists()) {
+                    Image img = new ImageIcon(o.getRutaImagen()).getImage()
+                            .getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                    icono = new ImageIcon(img);
+                }
+            } catch (Exception ex) {
+                System.err.println("Error cargando imagen para oficial " + o.getIdentificacion() + ": " + ex.getMessage());
+                icono = null; // Asegurarse que sea null si hay error
+            }
+        }
+
+        modelo.addRow(new Object[]{
+            icono, // Puede ser null
+            o.getPrimerNombre() + " " + (o.getSegundoNombre() != null ? o.getSegundoNombre() : ""),
+            o.getPrimerApellido() + " " + o.getSegundoApellido(),
+            o.getEdad(),
+            o.getIdentificacion(),
+            o.getNacionalidad(),
+            o.getCorreo(),
+            o.getTurno(),
+            o.getFechaContratacion(),
+            o.getFechaFinContrato()
+        });
+    }
+
+    tablaOficial.setModel(modelo);
+    tablaOficial.setRowHeight(85);
+    tablaOficial.getColumnModel().getColumn(0).setPreferredWidth(85);
+    tablaOficial.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
+}
 
     private void cargarTablaGuardias() {
         DefaultTableModel modelo = guardiaController.obtenerModeloTabla();
@@ -2373,6 +3036,92 @@ public class Director extends javax.swing.JFrame {
         txtFechaContratacionMod1.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
         lblImagenMod1.setIcon(null);
         rutaImagenEnfermeraMod = null; // Limpiar variable de registro
+    }
+
+    private void cargarDatosOficialParaModificar(Oficial oficial) {
+        if (oficial == null) {
+            return;
+        }
+
+        txtPrimerNombreMod3.setText(oficial.getPrimerNombre());
+        txtSegundoNombreMod3.setText(oficial.getSegundoNombre() != null ? oficial.getSegundoNombre() : "");
+        txtPrimerApellidoMod3.setText(oficial.getPrimerApellido());
+        txtSegundoApellidoMod3.setText(oficial.getSegundoApellido());
+        txtEdadMod3.setText(String.valueOf(oficial.getEdad()));
+        txtCedulaMod3.setText(oficial.getIdentificacion());
+        txtNacionalidadMod3.setText(oficial.getNacionalidad());
+        txtCorreoMod3.setText(oficial.getCorreo());
+        cmbTurnoMod3.setSelectedItem(oficial.getTurno());
+        txtFechaContratacionMod3.setText(oficial.getFechaContratacion().toString());
+
+        try {
+            dateFinContratoMod3.setDate(
+                    Date.from(oficial.getFechaFinContrato().atStartOfDay(ZoneId.systemDefault()).toInstant())
+            );
+        } catch (Exception e) {
+            dateFinContratoMod3.setDate(null);
+        }
+
+        // Manejo seguro de la imagen
+        cargarImagenOficial(oficial.getRutaImagen());
+    }
+
+    private void cargarImagenOficial(String rutaImagen) {
+        try {
+            if (rutaImagen != null && !rutaImagen.isEmpty()) {
+                File file = new File(rutaImagen);
+                if (file.exists()) {
+                    ImageIcon icon = new ImageIcon(rutaImagen);
+                    Image img = icon.getImage().getScaledInstance(
+                            lblImagenMod3.getWidth(),
+                            lblImagenMod3.getHeight(),
+                            Image.SCALE_SMOOTH
+                    );
+                    lblImagenMod3.setIcon(new ImageIcon(img));
+                    rutaImagenOficialMod = file;
+                    return;
+                }
+            }
+            // Imagen por defecto si no hay imagen o no se puede cargar
+            lblImagenMod3.setIcon(new ImageIcon(getClass().getResource("/Resources/default_officer.png")));
+            rutaImagenOficialMod = null;
+        } catch (Exception e) {
+            System.err.println("Error al cargar imagen: " + e.getMessage());
+            lblImagenMod3.setIcon(new ImageIcon(getClass().getResource("/Resources/default_officer.png")));
+            rutaImagenOficialMod = null;
+        }
+    }
+
+    private void limpiarFormularioOficial() {
+        txtPrimerNombre3.setText("");
+        txtSegundoNombre3.setText("");
+        txtPrimerApellido3.setText("");
+        txtSegundoApellido3.setText("");
+        txtEdad3.setText("");
+        txtCedula3.setText("");
+        txtNacionalidad3.setText("");
+        txtCorreo3.setText("");
+        cmbTurno3.setSelectedIndex(0);
+        dateFinContrato3.setDate(null);
+        txtFechaContratacion3.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+        lblImagen3.setIcon(null);
+        rutaImagenOficial = null;
+    }
+
+    private void limpiarFormularioOficialMod() {
+        txtPrimerNombreMod3.setText("");
+        txtSegundoNombreMod3.setText("");
+        txtPrimerApellidoMod3.setText("");
+        txtSegundoApellidoMod3.setText("");
+        txtEdadMod3.setText("");
+        txtCedulaMod3.setText("");
+        txtNacionalidadMod3.setText("");
+        txtCorreoMod3.setText("");
+        cmbTurnoMod3.setSelectedIndex(0);
+        dateFinContratoMod3.setDate(null);
+        txtFechaContratacionMod3.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+        lblImagenMod3.setIcon(null);
+        rutaImagenOficialMod = null;
     }
 
 
@@ -4483,12 +5232,12 @@ public class Director extends javax.swing.JFrame {
         String cedula = tablaCoordinadores.getValueAt(fila, 4).toString(); // Cambia 4 por el índice correcto
 
         try {
-            // Obtener el coordinador completo desde el controlador
+            
             CoordinadorDeActividades coordinador = CoordinadorDeActividadesController.getInstancia()
                     .obtenerCoordinadorPorCedula(cedula);
 
             if (coordinador != null) {
-                // Cargar datos en el formulario de modificación
+               
                 cargarDatosCoordinadorParaModificar(coordinador);
 
                 // Cambiar al panel de modificación (asegúrate que el nombre sea correcto)
@@ -4546,6 +5295,432 @@ public class Director extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_EliminarCDAActionPerformed
 
+    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
+        try {
+            // Obtener valores del formulario
+            String primerNombre = txtPrimerNombre3.getText().trim();
+            String segundoNombre = txtSegundoNombre3.getText().trim();
+            String primerApellido = txtPrimerApellido3.getText().trim();
+            String segundoApellido = txtSegundoApellido3.getText().trim();
+            String cedula = txtCedula3.getText().trim();
+            String nacionalidad = txtNacionalidad3.getText().trim();
+            String correo = txtCorreo3.getText().trim();
+            String turno = cmbTurno3.getSelectedItem().toString();
+
+            // Validar edad
+            int edad;
+            try {
+                edad = Integer.parseInt(txtEdad3.getText().trim());
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("La edad debe ser un número válido.");
+            }
+
+            // Validar fecha fin
+            if (dateFinContrato3.getDate() == null) {
+                throw new IllegalArgumentException("Seleccione una fecha de fin de contrato.");
+            }
+            LocalDate fechaFin = dateFinContrato3.getDate().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+
+            // Validar imagen
+            if (rutaImagenOficial == null || !rutaImagenOficial.exists()) {
+                throw new IllegalArgumentException("Debe seleccionar una imagen válida del oficial.");
+            }
+
+            // Validar formato de imagen
+            String nombreImagen = rutaImagenOficial.getName().toLowerCase();
+            if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
+                throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
+            }
+
+            // Llamar al Controller
+            Oficial nuevoOficial = OficialController.getInstancia().registrarOficial(
+                    primerNombre,
+                    segundoNombre,
+                    primerApellido,
+                    segundoApellido,
+                    edad,
+                    cedula,
+                    nacionalidad,
+                    correo,
+                    turno,
+                    fechaFin,
+                    rutaImagenOficial
+            );
+
+            // Éxito
+            limpiarFormularioOficial();
+            cargarTablaOficiales();
+            JOptionPane.showMessageDialog(this, "Oficial registrado exitosamente.",
+                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Error de validación", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton14ActionPerformed
+
+    private void txtCorreo3FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreo3FocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreo3FocusLost
+
+    private void txtCorreo3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreo3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreo3ActionPerformed
+
+    private void txtCorreo3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreo3KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreo3KeyTyped
+
+    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
+        // Mostrar opciones al usuario (cámara o selección de archivo)
+        Object[] options = {"Tomar Foto", "Seleccionar Archivo", "Cancelar"};
+        int opcion = JOptionPane.showOptionDialog(
+                this,
+                "¿Cómo desea obtener la imagen del oficial?",
+                "Seleccionar Imagen",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+        try {
+            File nuevaImagen = null;
+
+            if (opcion == 0) { // Tomar Foto con cámara
+                nuevaImagen = OficialController.getInstancia().capturarImagenOficial();
+            } else if (opcion == 1) { // Seleccionar archivo del sistema
+                JFileChooser fileChooser = new JFileChooser();
+                FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                        "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");
+                fileChooser.setFileFilter(filter);
+
+                // Configurar el directorio inicial
+                fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+
+                int resultado = fileChooser.showOpenDialog(this);
+
+                if (resultado == JFileChooser.APPROVE_OPTION) {
+                    nuevaImagen = fileChooser.getSelectedFile();
+
+                    // Validar extensión del archivo
+                    String nombreArchivo = nuevaImagen.getName().toLowerCase();
+                    if (!nombreArchivo.endsWith(".jpg")
+                            && !nombreArchivo.endsWith(".jpeg")
+                            && !nombreArchivo.endsWith(".png")) {
+                        JOptionPane.showMessageDialog(this,
+                                "Formato de imagen no válido. Use JPG, JPEG o PNG.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+            }
+
+            // Mostrar previsualización si se seleccionó una imagen
+            if (nuevaImagen != null && nuevaImagen.exists()) {
+                // Escalar la imagen para que se ajuste al JLabel
+                ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
+                Image imagenEscalada = icono.getImage()
+                        .getScaledInstance(
+                                lblImagen3.getWidth(),
+                                lblImagen3.getHeight(),
+                                Image.SCALE_SMOOTH
+                        );
+
+                // Mostrar en el JLabel
+                lblImagen3.setIcon(new ImageIcon(imagenEscalada));
+
+                // Guardar referencia al archivo
+                rutaImagenOficial = nuevaImagen;
+
+                // Mostrar tooltip con la ruta
+                lblImagen3.setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al obtener imagen: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton15ActionPerformed
+
+    private void txtNacionalidad3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidad3KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNacionalidad3KeyTyped
+
+    private void txtCedula3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedula3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCedula3ActionPerformed
+
+    private void txtCedula3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedula3KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCedula3KeyTyped
+
+    private void txtEdad3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdad3KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEdad3KeyPressed
+
+    private void txtEdad3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdad3KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEdad3KeyTyped
+
+    private void txtSegundoApellido3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellido3KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSegundoApellido3KeyTyped
+
+    private void txtPrimerApellido3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellido3KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrimerApellido3KeyTyped
+
+    private void txtSegundoNombre3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombre3KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSegundoNombre3KeyTyped
+
+    private void txtPrimerNombre3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombre3KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrimerNombre3KeyTyped
+
+    private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
+        try {
+            // Obtener valores del formulario
+            String cedulaOriginal = txtCedulaMod3.getText().trim();
+            String primerNombre = txtPrimerNombreMod3.getText().trim();
+            String segundoNombre = txtSegundoNombreMod3.getText().trim();
+            String primerApellido = txtPrimerApellidoMod3.getText().trim();
+            String segundoApellido = txtSegundoApellidoMod3.getText().trim();
+            String nacionalidad = txtNacionalidadMod3.getText().trim();
+            String correo = txtCorreoMod3.getText().trim();
+            String turno = cmbTurnoMod3.getSelectedItem().toString();
+
+            // Validar edad
+            int edad;
+            try {
+                edad = Integer.parseInt(txtEdadMod3.getText().trim());
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("La edad debe ser un número válido.");
+            }
+
+            // Validar fecha fin
+            if (dateFinContratoMod3.getDate() == null) {
+                throw new IllegalArgumentException("Seleccione una fecha de fin de contrato.");
+            }
+            LocalDate fechaFin = dateFinContratoMod3.getDate().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+
+            // Validar imagen (si se seleccionó una nueva)
+            if (rutaImagenOficialMod != null) {
+                if (!rutaImagenOficialMod.exists()) {
+                    throw new IllegalArgumentException("La imagen seleccionada no existe.");
+                }
+                String nombreImagen = rutaImagenOficialMod.getName().toLowerCase();
+                if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
+                    throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
+                }
+            }
+
+            // Preparar cambios
+            Map<String, Object> cambios = new HashMap<>();
+            cambios.put("primerNombre", primerNombre);
+            cambios.put("segundoNombre", segundoNombre);
+            cambios.put("primerApellido", primerApellido);
+            cambios.put("segundoApellido", segundoApellido);
+            cambios.put("edad", edad);
+            cambios.put("nacionalidad", nacionalidad);
+            cambios.put("correo", correo);
+            cambios.put("turno", turno);
+            cambios.put("fechaFin", fechaFin);
+
+            // Llamar al Controller
+            int resultado = OficialController.getInstancia().modificarOficial(
+                    cedulaOriginal,
+                    cambios,
+                    rutaImagenOficialMod // Puede ser null
+            );
+
+            if (resultado == 1) {
+                limpiarFormularioOficialMod();
+                cargarTablaOficiales();
+                JOptionPane.showMessageDialog(this, "Oficial modificado exitosamente.",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } else if (resultado == 0) {
+                JOptionPane.showMessageDialog(this, "No se realizaron cambios.",
+                        "Información", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Error de validación", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton16ActionPerformed
+
+    private void txtCorreoMod3FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreoMod3FocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreoMod3FocusLost
+
+    private void txtCorreoMod3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreoMod3KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreoMod3KeyTyped
+
+    private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
+        // Opciones para el diálogo
+        Object[] options = {"Tomar Foto", "Seleccionar Archivo", "Cancelar"};
+        int opcion = JOptionPane.showOptionDialog(
+                this,
+                "¿Cómo desea obtener la imagen del oficial?",
+                "Seleccionar Imagen",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+        try {
+            File nuevaImagen = null;
+
+            if (opcion == 0) { // Tomar Foto con cámara
+                nuevaImagen = OficialController.getInstancia().capturarImagenOficial();
+            } else if (opcion == 1) { // Seleccionar archivo del sistema
+                JFileChooser fileChooser = new JFileChooser();
+                FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                        "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");
+                fileChooser.setFileFilter(filter);
+                fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+
+                int resultado = fileChooser.showOpenDialog(this);
+
+                if (resultado == JFileChooser.APPROVE_OPTION) {
+                    nuevaImagen = fileChooser.getSelectedFile();
+
+                    // Validar extensión del archivo
+                    String nombreArchivo = nuevaImagen.getName().toLowerCase();
+                    if (!nombreArchivo.endsWith(".jpg")
+                            && !nombreArchivo.endsWith(".jpeg")
+                            && !nombreArchivo.endsWith(".png")) {
+                        JOptionPane.showMessageDialog(this,
+                                "Formato de imagen no válido. Use JPG, JPEG o PNG.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+            }
+
+            // Mostrar previsualización si se seleccionó una imagen
+            if (nuevaImagen != null && nuevaImagen.exists()) {
+                // Escalar la imagen para el JLabel
+                ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
+                Image imagenEscalada = icono.getImage()
+                        .getScaledInstance(
+                                lblImagenMod3.getWidth(),
+                                lblImagenMod3.getHeight(),
+                                Image.SCALE_SMOOTH
+                        );
+
+                // Mostrar en el JLabel
+                lblImagenMod3.setIcon(new ImageIcon(imagenEscalada));
+
+                // Guardar referencia al archivo
+                rutaImagenOficialMod = nuevaImagen;
+
+                // Mostrar tooltip con la ruta
+                lblImagenMod3.setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al obtener imagen: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton17ActionPerformed
+
+    private void txtNacionalidadMod3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadMod3KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNacionalidadMod3KeyTyped
+
+    private void txtCedulaMod3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaMod3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCedulaMod3ActionPerformed
+
+    private void txtCedulaMod3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaMod3KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCedulaMod3KeyTyped
+
+    private void txtEdadMod3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadMod3KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEdadMod3KeyPressed
+
+    private void txtEdadMod3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadMod3KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEdadMod3KeyTyped
+
+    private void txtSegundoApellidoMod3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellidoMod3KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSegundoApellidoMod3KeyTyped
+
+    private void txtPrimerApellidoMod3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellidoMod3KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrimerApellidoMod3KeyTyped
+
+    private void txtSegundoNombreMod3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombreMod3KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSegundoNombreMod3KeyTyped
+
+    private void txtPrimerNombreMod3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreMod3KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrimerNombreMod3KeyTyped
+
+    private void BorrarOfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BorrarOfActionPerformed
+         int filaSeleccionada = tablaOficial.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Seleccione una oficial primero",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String cedula = tablaOficial.getValueAt(filaSeleccionada, 4).toString();
+
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de eliminar a la guardia con cédula " + cedula + "?",
+                "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            try {
+                boolean eliminado = guardiaController.eliminarGuardia(cedula);
+
+                if (eliminado) {
+                    JOptionPane.showMessageDialog(this,
+                            "Guardia eliminada con éxito",
+                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    actualizarTablaEnfermeras();
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al eliminar: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_BorrarOfActionPerformed
+
+    private void modOfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modOfActionPerformed
+      
+    }//GEN-LAST:event_modOfActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -4583,10 +5758,11 @@ public class Director extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel AgregarCDA;
-    private javax.swing.JPanel AgregarOficial;
     private javax.swing.JPanel AñadirDelito;
     private javax.swing.JPanel AñadirEnfermera;
     private javax.swing.JPanel AñadirGuardia;
+    private javax.swing.JPanel AñadirOficial;
+    private javax.swing.JMenuItem BorrarOf;
     private javax.swing.JPanel Credenciales;
     private javax.swing.JPanel Director;
     private javax.swing.JPanel DisminuirSentencia;
@@ -4600,6 +5776,7 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JMenuItem ModificarEnfermera;
     private javax.swing.JPanel ModificarGuardia;
     private javax.swing.JPanel ModificarNurse;
+    private javax.swing.JPanel ModificarNurse1;
     private javax.swing.JPanel ModificarODR;
     private javax.swing.JPanel ModificarOficial;
     private javax.swing.JPanel MostrarEnfermeras;
@@ -4610,19 +5787,27 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbTurno;
     private javax.swing.JComboBox<String> cmbTurno1;
     private javax.swing.JComboBox<String> cmbTurno2;
+    private javax.swing.JComboBox<String> cmbTurno3;
     private javax.swing.JComboBox<String> cmbTurnoMod;
     private javax.swing.JComboBox<String> cmbTurnoMod1;
     private javax.swing.JComboBox<String> cmbTurnoMod2;
+    private javax.swing.JComboBox<String> cmbTurnoMod3;
     private com.toedter.calendar.JDateChooser dateFinContrato1;
     private com.toedter.calendar.JDateChooser dateFinContrato2;
+    private com.toedter.calendar.JDateChooser dateFinContrato3;
     private com.toedter.calendar.JDateChooser dateFinContratoMod;
     private com.toedter.calendar.JDateChooser dateFinContratoMod1;
     private com.toedter.calendar.JDateChooser dateFinContratoMod2;
+    private com.toedter.calendar.JDateChooser dateFinContratoMod3;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
+    private javax.swing.JButton jButton14;
+    private javax.swing.JButton jButton15;
+    private javax.swing.JButton jButton16;
+    private javax.swing.JButton jButton17;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -4634,8 +5819,36 @@ public class Director extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser jDateChooserFinContrato;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel100;
+    private javax.swing.JLabel jLabel101;
+    private javax.swing.JLabel jLabel102;
+    private javax.swing.JLabel jLabel103;
+    private javax.swing.JLabel jLabel104;
+    private javax.swing.JLabel jLabel105;
+    private javax.swing.JLabel jLabel106;
+    private javax.swing.JLabel jLabel107;
+    private javax.swing.JLabel jLabel108;
+    private javax.swing.JLabel jLabel109;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel110;
+    private javax.swing.JLabel jLabel111;
+    private javax.swing.JLabel jLabel112;
+    private javax.swing.JLabel jLabel113;
+    private javax.swing.JLabel jLabel114;
+    private javax.swing.JLabel jLabel115;
+    private javax.swing.JLabel jLabel116;
+    private javax.swing.JLabel jLabel117;
+    private javax.swing.JLabel jLabel118;
+    private javax.swing.JLabel jLabel119;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel120;
+    private javax.swing.JLabel jLabel121;
+    private javax.swing.JLabel jLabel122;
+    private javax.swing.JLabel jLabel123;
+    private javax.swing.JLabel jLabel124;
+    private javax.swing.JLabel jLabel125;
+    private javax.swing.JLabel jLabel126;
+    private javax.swing.JLabel jLabel127;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -4655,7 +5868,6 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
@@ -4723,13 +5935,12 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabel90;
     private javax.swing.JLabel jLabel91;
-    private javax.swing.JLabel jLabel92;
-    private javax.swing.JLabel jLabel93;
     private javax.swing.JLabel jLabel94;
     private javax.swing.JLabel jLabel95;
     private javax.swing.JLabel jLabel96;
     private javax.swing.JLabel jLabel97;
     private javax.swing.JLabel jLabel98;
+    private javax.swing.JLabel jLabel99;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -4744,17 +5955,25 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
+    private javax.swing.JPanel jPanel22;
+    private javax.swing.JPanel jPanel23;
+    private javax.swing.JPanel jPanel24;
+    private javax.swing.JPanel jPanel25;
+    private javax.swing.JPanel jPanel26;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
+    private javax.swing.JPopupMenu jPopupMenu3;
     private javax.swing.JPopupMenu jPopupMenu4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator11;
@@ -4779,6 +5998,7 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator29;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator30;
+    private javax.swing.JSeparator jSeparator31;
     private javax.swing.JSeparator jSeparator32;
     private javax.swing.JSeparator jSeparator33;
     private javax.swing.JSeparator jSeparator34;
@@ -4816,83 +6036,126 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator63;
     private javax.swing.JSeparator jSeparator64;
     private javax.swing.JSeparator jSeparator65;
+    private javax.swing.JSeparator jSeparator66;
+    private javax.swing.JSeparator jSeparator67;
+    private javax.swing.JSeparator jSeparator68;
+    private javax.swing.JSeparator jSeparator69;
     private javax.swing.JSeparator jSeparator7;
+    private javax.swing.JSeparator jSeparator70;
+    private javax.swing.JSeparator jSeparator71;
+    private javax.swing.JSeparator jSeparator72;
+    private javax.swing.JSeparator jSeparator73;
+    private javax.swing.JSeparator jSeparator74;
+    private javax.swing.JSeparator jSeparator75;
+    private javax.swing.JSeparator jSeparator76;
+    private javax.swing.JSeparator jSeparator77;
+    private javax.swing.JSeparator jSeparator78;
+    private javax.swing.JSeparator jSeparator79;
     private javax.swing.JSeparator jSeparator8;
+    private javax.swing.JSeparator jSeparator80;
+    private javax.swing.JSeparator jSeparator81;
+    private javax.swing.JSeparator jSeparator82;
+    private javax.swing.JSeparator jSeparator83;
+    private javax.swing.JSeparator jSeparator84;
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JLabel lblFoto;
     private javax.swing.JLabel lblImagen1;
     private javax.swing.JLabel lblImagen2;
+    private javax.swing.JLabel lblImagen3;
     private javax.swing.JLabel lblImagenMod;
     private javax.swing.JLabel lblImagenMod1;
     private javax.swing.JLabel lblImagenMod2;
+    private javax.swing.JLabel lblImagenMod3;
+    private javax.swing.JMenuItem modOf;
     private javax.swing.JPanel mostrarCoordinadora;
     private javax.swing.JPanel mostrarOficial;
     private javax.swing.JTabbedPane tabPrincipal;
     private javax.swing.JTable tablaCoordinadores;
     private javax.swing.JTable tablaEnfermeras;
     private javax.swing.JTable tablaGuardias;
+    private javax.swing.JTable tablaOficial;
     private javax.swing.JComboBox<String> txtCargoMod;
     private javax.swing.JComboBox<String> txtCargoMod1;
     private javax.swing.JTextField txtCedula;
     private javax.swing.JTextField txtCedula1;
     private javax.swing.JTextField txtCedula2;
+    private javax.swing.JTextField txtCedula3;
     private javax.swing.JTextField txtCedulaMod;
     private javax.swing.JTextField txtCedulaMod1;
     private javax.swing.JTextField txtCedulaMod2;
+    private javax.swing.JTextField txtCedulaMod3;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtCorreo1;
     private javax.swing.JTextField txtCorreo2;
+    private javax.swing.JTextField txtCorreo3;
     private javax.swing.JTextField txtCorreoMod;
     private javax.swing.JTextField txtCorreoMod1;
     private javax.swing.JTextField txtCorreoMod2;
+    private javax.swing.JTextField txtCorreoMod3;
     private javax.swing.JTextField txtEdad;
     private javax.swing.JTextField txtEdad1;
     private javax.swing.JTextField txtEdad2;
+    private javax.swing.JTextField txtEdad3;
     private javax.swing.JTextField txtEdadMod;
     private javax.swing.JTextField txtEdadMod1;
     private javax.swing.JTextField txtEdadMod2;
+    private javax.swing.JTextField txtEdadMod3;
     private javax.swing.JTextField txtFechaContratacion;
     private javax.swing.JTextField txtFechaContratacion1;
     private javax.swing.JTextField txtFechaContratacion2;
+    private javax.swing.JTextField txtFechaContratacion3;
     private javax.swing.JTextField txtFechaContratacionMod;
     private javax.swing.JTextField txtFechaContratacionMod1;
     private javax.swing.JTextField txtFechaContratacionMod2;
+    private javax.swing.JTextField txtFechaContratacionMod3;
     private javax.swing.JTextField txtNacionalidad;
     private javax.swing.JTextField txtNacionalidad1;
     private javax.swing.JTextField txtNacionalidad2;
+    private javax.swing.JTextField txtNacionalidad3;
     private javax.swing.JTextField txtNacionalidadMod;
     private javax.swing.JTextField txtNacionalidadMod1;
     private javax.swing.JTextField txtNacionalidadMod2;
+    private javax.swing.JTextField txtNacionalidadMod3;
     private javax.swing.JTextField txtPrimerApellido;
     private javax.swing.JTextField txtPrimerApellido1;
     private javax.swing.JTextField txtPrimerApellido2;
+    private javax.swing.JTextField txtPrimerApellido3;
     private javax.swing.JTextField txtPrimerApellidoMod;
     private javax.swing.JTextField txtPrimerApellidoMod1;
     private javax.swing.JTextField txtPrimerApellidoMod2;
+    private javax.swing.JTextField txtPrimerApellidoMod3;
     private javax.swing.JTextField txtPrimerNombre;
     private javax.swing.JTextField txtPrimerNombre1;
     private javax.swing.JTextField txtPrimerNombre2;
+    private javax.swing.JTextField txtPrimerNombre3;
     private javax.swing.JTextField txtPrimerNombreMod;
     private javax.swing.JTextField txtPrimerNombreMod1;
     private javax.swing.JTextField txtPrimerNombreMod2;
+    private javax.swing.JTextField txtPrimerNombreMod3;
     private javax.swing.JTextField txtSegundoApellido;
     private javax.swing.JTextField txtSegundoApellido1;
     private javax.swing.JTextField txtSegundoApellido2;
+    private javax.swing.JTextField txtSegundoApellido3;
     private javax.swing.JTextField txtSegundoApellidoMod;
     private javax.swing.JTextField txtSegundoApellidoMod1;
     private javax.swing.JTextField txtSegundoApellidoMod2;
+    private javax.swing.JTextField txtSegundoApellidoMod3;
     private javax.swing.JTextField txtSegundoNombre;
     private javax.swing.JTextField txtSegundoNombre1;
     private javax.swing.JTextField txtSegundoNombre2;
+    private javax.swing.JTextField txtSegundoNombre3;
     private javax.swing.JTextField txtSegundoNombreMod;
     private javax.swing.JTextField txtSegundoNombreMod1;
     private javax.swing.JTextField txtSegundoNombreMod2;
+    private javax.swing.JTextField txtSegundoNombreMod3;
     private javax.swing.JTextField txtSexo;
     private javax.swing.JTextField txtSexo1;
     private javax.swing.JTextField txtSexo2;
+    private javax.swing.JTextField txtSexo3;
     private javax.swing.JTextField txtSexoMod;
     private javax.swing.JTextField txtSexoMod1;
     private javax.swing.JTextField txtSexoMod2;
+    private javax.swing.JTextField txtSexoMod3;
     // End of variables declaration//GEN-END:variables
 
 }

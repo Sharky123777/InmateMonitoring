@@ -1,30 +1,41 @@
 package DAO;
 
-import Model.Entities.Actividad;
+import Controller.UsuarioController;
 import Model.Entities.Oficial;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import Model.Constants.RolEnum;
+import Utilidades.EmailSender;
+import Model.Entities.Usuario;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-
-import javax.swing.JOptionPane;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.Type;
+import java.nio.file.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 public class OficialDAO {
 
-    private static final String JSON_FILE = "C:\\Users\\ASUS\\Desktop\\InmateMonitoring\\src\\Resources\\DATA\\oficiales.json\\";
+    private static final String RUTA_JSON = "C:\\Users\\gameV\\Documents\\NetBeansProjects\\InmateMonitorinG\\src\\Resources\\DATA\\oficial.json";
+    private static final String RUTA_IMAGENES = "src/Resources/imagenes_oficiales/";
+    private static final String RUTA_USUARIOS = "src/Resources/DATA/usuarios.json";
+    private final Gson gson;
+    private static OficialDAO instancia;
 
-        private static OficialDAO instancia;
+    public OficialDAO() {
+        this.gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                .create();
+
+        crearDirectoriosSiNoExisten();
+    }
 
     public static synchronized OficialDAO getInstancia() {
         if (instancia == null) {
@@ -32,165 +43,396 @@ public class OficialDAO {
         }
         return instancia;
     }
-    
-    private Gson gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .registerTypeAdapter(LocalDate.class, new OficialDAO.LocalDateAdapter())
-            .create();
-    
-    
+
+    private void crearDirectoriosSiNoExisten() {
+        try {
+            Files.createDirectories(Paths.get(RUTA_IMAGENES));
+            Files.createDirectories(Paths.get(RUTA_JSON).getParent());
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null,
+                    "Error al crear directorios: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private static class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
+
+        private final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+
         @Override
         public JsonElement serialize(LocalDate date, Type typeOfSrc, JsonSerializationContext context) {
-            return new JsonPrimitive(date.toString());
+            return new JsonPrimitive(date.format(formatter));
         }
 
         @Override
-        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            return LocalDate.parse(json.getAsString());
+        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
+            return LocalDate.parse(json.getAsString(), formatter);
         }
     }
-    
-    public List<Oficial> cargarTodos() {
-        File archivo = new File(JSON_FILE);
 
-        try {
-            if (!archivo.exists()) {
-                archivo.createNewFile();
-                guardarTodos(new ArrayList<>());
+    private String generarUsuarioUnico(String primerNombre, String primerApellido, List<Usuario> usuariosExistentes) {
+        Random random = new Random();
+        String usuarioBase = primerNombre + primerApellido;
+        String caracteresEspeciales = "!@#$%^&*";
+
+        while (true) {
+            int numeroRandom = random.nextInt(1000) + 1;
+            char caracterEspecial = caracteresEspeciales.charAt(random.nextInt(caracteresEspeciales.length()));
+
+            String usuarioGenerado = usuarioBase + numeroRandom + caracterEspecial;
+
+            boolean existe = usuariosExistentes.stream()
+                    .anyMatch(u -> u.getUsuario().equalsIgnoreCase(usuarioGenerado));
+
+            if (!existe) {
+                return usuarioGenerado;
             }
+        }
+    }
 
-            if (archivo.length() == 0) return new ArrayList<>();
+    private void guardarUsuario(Usuario usuario) throws IOException {
+        List<Usuario> usuarios = obtenerTodosUsuarios();
+        usuarios.removeIf(u -> u.getUsuario().equals(usuario.getUsuario()));
+        usuarios.add(usuario);
 
-            try (Reader reader = new FileReader(archivo)) {
-                Type tipoLista = new TypeToken<List<Oficial>>() {}.getType();
-                List<Oficial> lista = gson.fromJson(reader, tipoLista);
-                return lista != null ? lista : new ArrayList<>();
-            }
+        try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
+            JsonObject jsonObject = new JsonObject();
+            JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
+            jsonObject.add("usuarios", usuariosArray);
+            gson.toJson(jsonObject, writer);
+        }
+    }
 
-        } catch (IOException e) {
-            System.err.println("Error al cargar oficiales: " + e.getMessage());
+    public Oficial obtenerOficialPorUsuario(String usuario) {
+        List<Oficial> oficiales = obtenerOficiales();
+        return oficiales.stream()
+                .filter(o -> o.getUsuario().equals(usuario))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private List<Usuario> obtenerTodosUsuarios() throws IOException {
+        File archivo = new File(RUTA_USUARIOS);
+
+        if (!archivo.exists() || archivo.length() == 0) {
             return new ArrayList<>();
         }
+
+        try (FileReader reader = new FileReader(archivo)) {
+            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+            JsonArray usuariosArray = jsonObject.getAsJsonArray("usuarios");
+
+            Type tipoLista = new TypeToken<List<Usuario>>() {
+            }.getType();
+            return gson.fromJson(usuariosArray, tipoLista);
+        }
     }
 
-    public void guardarOficial(Oficial oficial) {
-        List<Oficial> lista = cargarTodos();
-        lista.add(oficial);
-        guardarTodos(lista);
+    private void eliminarUsuario(String usuario) throws IOException {
+        List<Usuario> usuarios = obtenerTodosUsuarios();
+        usuarios.removeIf(u -> u.getUsuario().equals(usuario));
+
+        try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
+            JsonObject jsonObject = new JsonObject();
+            JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
+            jsonObject.add("usuarios", usuariosArray);
+            gson.toJson(jsonObject, writer);
+        }
     }
 
-    public void guardarTodos(List<Oficial> lista) {
-        try (Writer writer = new FileWriter(JSON_FILE)) {
-            gson.toJson(lista, writer);
+    private String generarContrasena() {
+        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder(8);
+
+        for (int i = 0; i < 8; i++) {
+            sb.append(caracteres.charAt(random.nextInt(caracteres.length())));
+        }
+
+        return sb.toString();
+    }
+
+    private String guardarImagenDesdeCamara(BufferedImage imagen, String identificacion) throws IOException {
+        String nombreImagen = identificacion + "_foto.jpg";
+        String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+
+        File outputFile = new File(rutaImagenFinal);
+        ImageIO.write(imagen, "jpg", outputFile);
+
+        return rutaImagenFinal;
+    }
+
+    public boolean guardarOficial(Oficial oficial, File imagen) throws IOException {
+        UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
+        String usuario = credenciales.usuario;
+        String contrasena = credenciales.contrasena;
+        String contrasenaEncriptada = UsuarioController.getInstancia().encriptarContrasena(contrasena);
+
+        oficial.setUsuario(usuario);
+        oficial.setContrasena(contrasenaEncriptada);
+
+        String nombreImagen = oficial.getIdentificacion() + "_"
+                + System.currentTimeMillis()
+                + imagen.getName().substring(imagen.getName().lastIndexOf("."));
+
+        String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+        Files.createDirectories(Paths.get(RUTA_IMAGENES));
+        Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+        oficial.setRutaImagen(rutaImagenFinal);
+
+        List<Oficial> oficiales = obtenerOficiales();
+        oficiales.add(oficial);
+        guardarListaOficiales(oficiales);
+
+        Usuario nuevoUsuario = new Usuario(
+                oficial.getPrimerNombre(),
+                oficial.getSegundoNombre(),
+                oficial.getPrimerApellido(),
+                oficial.getSegundoApellido(),
+                oficial.getEdad(),
+                oficial.getSexo(),
+                oficial.getNacionalidad(),
+                oficial.getIdentificacion(),
+                usuario,
+                contrasenaEncriptada,
+                RolEnum.OFICIAL
+        );
+
+        guardarUsuario(nuevoUsuario);
+
+        boolean correoEnviado = EmailSender.getInstancia().enviarCredenciales(
+                oficial.getCorreo(),
+                usuario,
+                contrasena,
+                RolEnum.OFICIAL
+        );
+
+        if (correoEnviado) {
+            JOptionPane.showMessageDialog(null, 
+                "Oficial registrado exitosamente y credenciales enviadas al correo.",
+                "Éxito", 
+                JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, 
+                "Oficial registrado pero hubo un error al enviar las credenciales por correo.",
+                "Advertencia", 
+                JOptionPane.WARNING_MESSAGE);
+        }
+
+        return true;
+    }
+
+    public List<Oficial> obtenerOficiales() {
+        List<Oficial> oficiales = new ArrayList<>();
+        File archivo = new File(RUTA_JSON);
+
+        try {
+            if (!archivo.exists() || archivo.length() == 0) {
+                guardarListaOficiales(new ArrayList<>());
+                return oficiales;
+            }
+
+            String contenido = new String(Files.readAllBytes(archivo.toPath()));
+
+            if (contenido.trim().isEmpty()) {
+                guardarListaOficiales(new ArrayList<>());
+                return oficiales;
+            }
+
+            try {
+                JsonObject jsonObject = JsonParser.parseString(contenido).getAsJsonObject();
+                JsonArray oficialesArray = jsonObject.getAsJsonArray("oficiales");
+
+                Type tipoLista = new TypeToken<List<Oficial>>() {
+                }.getType();
+                return gson.fromJson(oficialesArray, tipoLista);
+            } catch (JsonSyntaxException e) {
+                System.err.println("Formato JSON inválido. Creando nuevo archivo.");
+                guardarListaOficiales(new ArrayList<>());
+            }
         } catch (IOException e) {
-            System.err.println("Error al guardar oficiales: " + e.getMessage());
+            JOptionPane.showMessageDialog(null,
+                    "Error al leer/escribir archivo: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return oficiales;
+    }
+
+    private void guardarListaOficiales(List<Oficial> oficiales) throws IOException {
+        JsonObject jsonObject = new JsonObject();
+        JsonArray oficialesArray = new JsonArray();
+
+        for (Oficial oficial : oficiales) {
+            JsonObject oficialJson = new JsonObject();
+            oficialJson.addProperty("turno", oficial.getTurno());
+            oficialJson.addProperty("fechaContratacion", oficial.getFechaContratacion().toString());
+            oficialJson.addProperty("fechaFinContrato", oficial.getFechaFinContrato().toString());
+            oficialJson.addProperty("rutaImagen", oficial.getRutaImagen());
+            oficialJson.addProperty("correo", oficial.getCorreo());
+            oficialJson.addProperty("primerNombre", oficial.getPrimerNombre());
+            oficialJson.addProperty("segundoNombre", oficial.getSegundoNombre());
+            oficialJson.addProperty("primerApellido", oficial.getPrimerApellido());
+            oficialJson.addProperty("segundoApellido", oficial.getSegundoApellido());
+            oficialJson.addProperty("edad", oficial.getEdad());
+            oficialJson.addProperty("sexo", oficial.getSexo());
+            oficialJson.addProperty("nacionalidad", oficial.getNacionalidad());
+            oficialJson.addProperty("identificacion", oficial.getIdentificacion());
+
+            oficialesArray.add(oficialJson);
+        }
+
+        jsonObject.add("oficiales", oficialesArray);
+
+        try (Writer writer = new FileWriter(RUTA_JSON)) {
+            gson.toJson(jsonObject, writer);
         }
     }
 
-    public Oficial buscarPorIdentificacion(String identificacion) {
-        for (Oficial o : cargarTodos()) {
-            if (o.getIdentificacion().equals(identificacion)) {
-                return o;
-            }
-        }
-        return null;
-    }
+    public boolean puedeAgregarOficial(String turno) {
+        List<Oficial> oficiales = obtenerOficiales();
 
-    public boolean eliminarPorIdentificacion(String identificacion) {
-        List<Oficial> lista = cargarTodos();
-        boolean eliminado = lista.removeIf(o -> o.getIdentificacion().equals(identificacion));
-        if (eliminado) {
-            guardarTodos(lista);
-        }
-        return eliminado;
-    }
-
-    public boolean actualizarOficial(
-            String identificacionOriginal,
-            String nuevoPrimerNombre,
-            String nuevoSegundoNombre,
-            String nuevoPrimerApellido,
-            String nuevoSegundoApellido,
-            Integer nuevaEdad,
-            String nuevoSexo,
-            String nuevaNacionalidad,
-            LocalDate nuevaFechaIngreso,
-            String nuevoTurno,
-            String nuevaPlaca,
-            String nuevoCargo,
-            String nuevaFotoPath
-    ) {
-        List<Oficial> lista = cargarTodos();
-        boolean encontrado = false;
-
-        for (Oficial o : lista) {
-            if (o.getIdentificacion().equals(identificacionOriginal)) {
-                if (nuevoPrimerNombre != null) o.setPrimerNombre(nuevoPrimerNombre);
-                if (nuevoSegundoNombre != null) o.setSegundoNombre(nuevoSegundoNombre);
-                if (nuevoPrimerApellido != null) o.setPrimerApellido(nuevoPrimerApellido);
-                if (nuevoSegundoApellido != null) o.setSegundoApellido(nuevoSegundoApellido);
-                if (nuevaEdad != null) o.setEdad(nuevaEdad);
-                if (nuevoSexo != null) o.setSexo(nuevoSexo);
-                if (nuevaNacionalidad != null) o.setNacionalidad(nuevaNacionalidad);
-                if (nuevaFechaIngreso != null) o.setFechaInicioContrato(nuevaFechaIngreso);
-                if (nuevoTurno != null) o.setTurno(nuevoTurno);
-                if (nuevaPlaca != null) o.setPlaca(nuevaPlaca);
-                if (nuevoCargo != null) o.setCargo(nuevoCargo);
-                if (nuevaFotoPath != null) o.setFotoPath(nuevaFotoPath);
-                encontrado = true;
-                break;
-            }
-        }
-
-        if (!encontrado) {
-            JOptionPane.showMessageDialog(null, "Oficial no encontrado: " + identificacionOriginal, "Error", JOptionPane.ERROR_MESSAGE);
+        // Límite total de 4 oficiales
+        if (oficiales.size() >= 4) {
             return false;
         }
 
-        guardarTodos(lista);
-        return true;
-    }
-   public boolean asignarOficialAActividad(String idActividad, String identificacionOficial) {
-    ActividadDAO actividadDAO = ActividadDAO.getInstancia();
-    Actividad actividad = actividadDAO.buscarActividadPorId(idActividad);
+        // Límite de 2 por turno
+        long countPorTurno = oficiales.stream()
+                .filter(o -> o.getTurno().equalsIgnoreCase(turno))
+                .count();
 
-    if (actividad == null) {
-        JOptionPane.showMessageDialog(null, "Actividad no encontrada.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        return false;
+        return countPorTurno < 2;
     }
 
-    Oficial oficial = this.buscarPorIdentificacion(identificacionOficial); 
-    if (oficial == null) {
-        JOptionPane.showMessageDialog(null, "Oficial no encontrado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        return false;
+    public boolean existeOficialConCedula(String cedula) {
+        if (cedula == null || cedula.trim().isEmpty()) {
+            return false;
+        }
+        return obtenerOficiales().stream()
+                .anyMatch(o -> o.getIdentificacion() != null && o.getIdentificacion().equals(cedula));
     }
 
-    actividad.setResponsableOficial(oficial.getIdentificacion());  
-    
-    if (actividadDAO.guardarActividades(actividadDAO.cargarActividades())) {
-        JOptionPane.showMessageDialog(null, "Oficial asignado a la actividad correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
-        return true;
-    } else {
-        return false;
-    }
+    public boolean eliminarOficial(String cedula) {
+        try {
+            List<Oficial> oficiales = obtenerOficiales();
+            Optional<Oficial> oficialAEliminar = oficiales.stream()
+                    .filter(o -> o.getIdentificacion().equals(cedula))
+                    .findFirst();
 
-
-}
-    
-    public List<Actividad> obtenerActividadesPorOficial(String identificacionOficial) {
-    ActividadDAO actividadDAO = ActividadDAO.getInstancia();
-    List<Actividad> todasActividades = actividadDAO.cargarActividades();
-    
-    List<Actividad> actividadesOficial = new ArrayList<>();
-    for (Actividad actividad : todasActividades) {
-        if (actividad.getResponsableOficial() != null && actividad.getResponsableOficial().equals(identificacionOficial)) {
-            actividadesOficial.add(actividad);
+            if (oficialAEliminar.isPresent()) {
+                eliminarUsuario(oficialAEliminar.get().getUsuario());
+                oficiales.removeIf(o -> o.getIdentificacion().equals(cedula));
+                guardarListaOficiales(oficiales);
+                return true;
+            }
+            return false;
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al eliminar el oficial: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
     }
-    return actividadesOficial;
-}
 
+    public boolean modificarOficial(String cedulaOriginal, Oficial oficialModificado, File nuevaImagen) {
+        try {
+            List<Oficial> oficiales = obtenerOficiales();
 
-    
+            for (int i = 0; i < oficiales.size(); i++) {
+                Oficial o = oficiales.get(i);
+                if (o.getIdentificacion().equals(cedulaOriginal)) {
+                    String rutaImagenFinal = o.getRutaImagen();
+
+                    if (nuevaImagen != null && nuevaImagen.exists()) {
+                        String nombreImagen = oficialModificado.getIdentificacion() + "_" + System.currentTimeMillis()
+                                + nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
+                        rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+                        Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+                    }
+
+                    oficialModificado.setUsuario(o.getUsuario());
+                    oficialModificado.setContrasena(o.getContrasena());
+                    oficialModificado.setRutaImagen(rutaImagenFinal);
+
+                    oficiales.set(i, oficialModificado);
+
+                    guardarListaOficiales(oficiales);
+                    return true;
+                }
+            }
+
+            return false;
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al modificar oficial: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    public Oficial obtenerOficialPorCedula(String cedula) {
+        return obtenerOficiales().stream()
+                .filter(o -> o.getIdentificacion().equals(cedula))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public Oficial obtenerOficialPorIdentificacion(String cedula) {
+        return obtenerOficialPorCedula(cedula);
+    }
+
+    public List<Oficial> obtenerOficialPorTurno(String turno) {
+        return obtenerOficiales().stream()
+                .filter(o -> o.getTurno().equalsIgnoreCase(turno))
+                .collect(Collectors.toList());
+    }
+
+    public List<Object[]> obtenerDatosOficialesParaTabla() {
+        return obtenerOficiales().stream()
+                .map(o -> new Object[]{
+                    o.getPrimerNombre(),
+                    o.getSegundoNombre(),
+                    o.getPrimerApellido(),
+                    o.getSegundoApellido(),
+                    o.getEdad(),
+                    o.getIdentificacion(),
+                    o.getNacionalidad(),
+                    o.getCorreo(),
+                    o.getTurno(),
+                    o.getFechaContratacionFormateada(),
+                    o.getFechaFinContratoFormateada()
+                })
+                .collect(Collectors.toList());
+    }
+
+    public String[] getNombresColumnas() {
+        return new String[]{
+            "Primer Nombre",
+            "Segundo Nombre",
+            "Primer Apellido",
+            "Segundo Apellido",
+            "Edad",
+            "Cédula",
+            "Nacionalidad",
+            "Correo",
+            "Turno",
+            "Inicio Contrato",
+            "Fin de Contrato"
+        };
+    }
+
+    public Class<?>[] getTiposColumnas() {
+        return new Class<?>[]{
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+            Integer.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class
+        };
+    }
 }

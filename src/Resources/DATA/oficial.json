@@ -1,0 +1,49 @@
+{
+  "oficiales": [
+    {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-12",
+      "fechaFinContrato": "2025-05-16",
+      "rutaImagen": "src/Resources/imagenes_oficiales/18377137131_1747065046412.jpg",
+      "correo": "vivasm4g@gmail.com",
+      "primerNombre": "papa",
+      "segundoNombre": "jonass",
+      "primerApellido": "eeeeeee",
+      "segundoApellido": "eee",
+      "edad": 44,
+      "sexo": "Masculino",
+      "nacionalidad": "papa",
+      "identificacion": "18377137131"
+    },
+    {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-12",
+      "fechaFinContrato": "2025-05-30",
+      "rutaImagen": "src/Resources/imagenes_oficiales/4243242424_1747065295587.png",
+      "correo": "sh@gmail.com",
+      "primerNombre": "w",
+      "segundoNombre": "w",
+      "primerApellido": "w",
+      "segundoApellido": "w",
+      "edad": 34,
+      "sexo": "Masculino",
+      "nacionalidad": "w",
+      "identificacion": "4243242424"
+    },
+    {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-12",
+      "fechaFinContrato": "2025-05-22",
+      "rutaImagen": "src/Resources/imagenes_oficiales/31313131_1747065850753.jpg",
+      "correo": "s@gmail.com",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Masculino",
+      "nacionalidad": "perfil",
+      "identificacion": "31313131"
+    }
+  ]
+}

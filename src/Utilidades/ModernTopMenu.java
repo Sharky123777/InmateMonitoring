@@ -47,21 +47,25 @@ public class ModernTopMenu extends JPanel {
     enfermerasItems.add(new MenuItem("Ver Lista de Enfermeras", 5)); // MostrarEnfermeras
     menuStructure.put("Enfermeras", enfermerasItems);
     
-    // Menú Guardias
+   
     ArrayList<MenuItem> guardiasItems = new ArrayList<>();
-    guardiasItems.add(new MenuItem("Añadir Guardia", 6)); // AñadirGuardia
+    guardiasItems.add(new MenuItem("Añadir Guardia", 6)); 
    
     guardiasItems.add(new MenuItem("Ver Lista de Guardias", 8)); // ListaDeGuardias
     menuStructure.put("Guardias", guardiasItems);
     
-    // Menú CDA
+     ArrayList<MenuItem> oficialItems = new ArrayList<>();
+    oficialItems.add(new MenuItem("Agregar oficial", 15)); // AgregarCDA
+    menuStructure.put("Oficial", oficialItems );
+    
+    
     ArrayList<MenuItem> cdaItems = new ArrayList<>();
     cdaItems.add(new MenuItem("Agregar CDA", 9)); // AgregarCDA
     
     cdaItems.add(new MenuItem("Mostrar CDA", 11)); // mostrarCoordinadora
     menuStructure.put("CDA", cdaItems);
     
-    // Menú Configuración
+    
     ArrayList<MenuItem> configItems = new ArrayList<>();
     configItems.add(new MenuItem("Cambiar credenciales", 18));
     configItems.add(new MenuItem("Usuarios", 13));

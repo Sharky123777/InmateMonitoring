@@ -155,6 +155,45 @@
       "sexo": "Femenino",
       "nacionalidad": "P",
       "identificacion": "313131313"
+    },
+    {
+      "usuario": "@OWp8¡S#",
+      "password": "5b23e4ae2ffe2b9a36a7a42215bf74de4c0d712ac7289ea03922048d3dab691d",
+      "rol": "OFICIAL",
+      "primerNombre": "papa",
+      "segundoNombre": "jonass",
+      "primerApellido": "eeeeeee",
+      "segundoApellido": "eee",
+      "edad": 44,
+      "sexo": "Masculino",
+      "nacionalidad": "papa",
+      "identificacion": "18377137131"
+    },
+    {
+      "usuario": "TñtHE7Rv0d#",
+      "password": "eb4b9a21f703685d8e29ec8413a3fe5d2cd1892bcdb9bb9bfa6c055d9884f162",
+      "rol": "OFICIAL",
+      "primerNombre": "w",
+      "segundoNombre": "w",
+      "primerApellido": "w",
+      "segundoApellido": "w",
+      "edad": 34,
+      "sexo": "Masculino",
+      "nacionalidad": "w",
+      "identificacion": "4243242424"
+    },
+    {
+      "usuario": "¡\u0026¡hM?Y!?lU5",
+      "password": "0aee9ca81ea08e876e7abcd5e546160bcf39043b07375799bdaa1d2a71875e8f",
+      "rol": "OFICIAL",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Masculino",
+      "nacionalidad": "perfil",
+      "identificacion": "31313131"
     }
   ]
 }

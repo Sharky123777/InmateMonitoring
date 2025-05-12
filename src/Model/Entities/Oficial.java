@@ -1,74 +1,124 @@
 package Model.Entities;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import com.google.gson.annotations.SerializedName;
 
 public class Oficial extends Persona {
-
-    private String placa;
-    private String cargo;
-    private LocalDate fechaInicioContrato;
+    private String usuario;
+    private String contrasena;
+    private String turno; // "Diurno" o "Nocturno"
+    
+    @SerializedName("fechaContratacion")
+    private LocalDate fechaContratacion;
+    
+    @SerializedName("fechaFinContrato")
     private LocalDate fechaFinContrato;
-    private String turno;
-    private String fotoPath;
-
-    public Oficial(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
-            int edad, String sexo, String nacionalidad, String identificacion,
-            String placa, String cargo, LocalDate fechaInicioContrato, LocalDate fechaFinContrato,
-            String turno, String fotoPath) {
-        super(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, sexo, nacionalidad, identificacion);
-        this.placa = placa;
-        this.cargo = cargo;
-        this.fechaInicioContrato = fechaInicioContrato;
-        this.fechaFinContrato = fechaFinContrato;
+    
+    @SerializedName("rutaImagen")
+    private String rutaImagen;
+    
+    @SerializedName("correo")
+    private String correo;
+    
+    public Oficial(String primerNombre, String segundoNombre, 
+               String primerApellido, String segundoApellido,
+               int edad, String sexo, String nacionalidad, 
+               String identificacion, String turno,
+               LocalDate fechaContratacion, LocalDate fechaFinContrato,
+               String correo, String usuario, String contrasena) {
+        super(primerNombre, segundoNombre, primerApellido, segundoApellido, 
+              edad, sexo, nacionalidad, identificacion);
         this.turno = turno;
-        this.fotoPath = fotoPath;
-    }
-
-    public String getPlaca() {
-        return placa;
-    }
-
-    public void setPlaca(String placa) {
-        this.placa = placa;
-    }
-
-    public String getCargo() {
-        return cargo;
-    }
-
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
-    }
-
-    public LocalDate getFechaInicioContrato() {
-        return fechaInicioContrato;
-    }
-
-    public void setFechaInicioContrato(LocalDate fechaInicioContrato) {
-        this.fechaInicioContrato = fechaInicioContrato;
-    }
-
-    public LocalDate getFechaFinContrato() {
-        return fechaFinContrato;
-    }
-
-    public void setFechaFinContrato(LocalDate fechaFinContrato) {
+        this.fechaContratacion = fechaContratacion;
         this.fechaFinContrato = fechaFinContrato;
+        this.correo = correo;
+        this.usuario = usuario;
+        this.contrasena = contrasena;
     }
 
+    // Getters y Setters
     public String getTurno() {
-        return turno;
+        return turno != null ? turno : "";
     }
 
     public void setTurno(String turno) {
         this.turno = turno;
     }
 
-    public String getFotoPath() {
-        return fotoPath;
+    public LocalDate getFechaContratacion() {
+        return fechaContratacion;
     }
 
-    public void setFotoPath(String fotoPath) {
-        this.fotoPath = fotoPath;
+    public void setFechaContratacion(LocalDate fechaContratacion) {
+        this.fechaContratacion = fechaContratacion;
+    }
+
+    public LocalDate getFechaFinContrato() {
+        return fechaFinContrato;
+    }
+
+    public String getFechaContratacionFormateada() {
+        return fechaContratacion != null ? 
+               fechaContratacion.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) : "";
+    }
+
+    public String getFechaFinContratoFormateada() {
+        return fechaFinContrato != null ? 
+               fechaFinContrato.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) : "";
+    }
+
+    public void setFechaFinContrato(LocalDate fechaFinContrato) {
+        this.fechaFinContrato = fechaFinContrato;
+    }
+
+    public String getRutaImagen() {
+        return rutaImagen != null ? rutaImagen : "";
+    }
+
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
+    }
+
+    public String getCorreo() {
+        return correo != null ? correo : "";
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+    
+    public String getNombresParaTabla() {
+        String nombres = getPrimerNombre();
+        if (!getSegundoNombre().isEmpty()) {
+            nombres += " " + getSegundoNombre();
+        }
+        return nombres.trim();
+    }
+    
+    
+ 
+    public String getApellidosParaTabla() {
+        String apellidos = getPrimerApellido();
+        if (!getSegundoApellido().isEmpty()) {
+            apellidos += " " + getSegundoApellido();
+        }
+        return apellidos.trim();
     }
 }
