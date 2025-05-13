@@ -9,6 +9,7 @@ import Model.Entities.Visita;
 import Model.Entities.Visitante;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.io.File;
@@ -16,12 +17,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JTabbedPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class PersonalDeControl extends javax.swing.JFrame {
 
@@ -642,7 +646,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
             TablaPresos.getColumnModel().getColumn(9).setResizable(false);
         }
 
-        PanelListaPresos.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 1070, 440));
+        PanelListaPresos.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 1080, 440));
         PanelListaPresos.add(BarraDeBusquedaPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 30, 640, 30));
 
         BotonCargarTodos.setText("Cargar Todos Los presos");
@@ -1062,7 +1066,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
             TablaHistorialVisitantes.getColumnModel().getColumn(12).setResizable(false);
         }
 
-        PanelHistorialVisitantes.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 1040, 490));
+        PanelHistorialVisitantes.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 1080, 490));
 
         jLabel34.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel34.setForeground(new java.awt.Color(0, 0, 0));
@@ -1081,9 +1085,70 @@ public class PersonalDeControl extends javax.swing.JFrame {
     }//GEN-LAST:event_BotonGuardarVisitanteActionPerformed
 
     private void AgregarImagenVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarImagenVisitanteActionPerformed
-        File imagen = controller.seleccionarImagen(this, VistaPreviaVisitante);
-        if (imagen != null) {
-            this.imagenVisitanteSeleccionada = imagen;
+        Object[] options = {"Tomar Foto", "Seleccionar Archivo", "Cancelar"};
+        int opcion = JOptionPane.showOptionDialog(
+                this,
+                "¿Cómo desea obtener la imagen del visitante?",
+                "Seleccionar Imagen",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+        try {
+            File nuevaImagen = null;
+
+            if (opcion == 0) { 
+                nuevaImagen = controller.capturarImagenVisitante();
+            } else if (opcion == 1) { 
+                JFileChooser fileChooser = new JFileChooser();
+                FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                        "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");
+                fileChooser.setFileFilter(filter);
+
+                fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+
+                int resultado = fileChooser.showOpenDialog(this);
+
+                if (resultado == JFileChooser.APPROVE_OPTION) {
+                    nuevaImagen = fileChooser.getSelectedFile();
+
+                    String nombreArchivo = nuevaImagen.getName().toLowerCase();
+                    if (!nombreArchivo.endsWith(".jpg")
+                            && !nombreArchivo.endsWith(".jpeg")
+                            && !nombreArchivo.endsWith(".png")) {
+                        JOptionPane.showMessageDialog(this,
+                                "Formato de imagen no válido. Use JPG, JPEG o PNG.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+            }
+
+            if (nuevaImagen != null && nuevaImagen.exists()) {
+                ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
+                Image imagenEscalada = icono.getImage()
+                        .getScaledInstance(
+                                VistaPreviaVisitante.getWidth(),
+                                VistaPreviaVisitante.getHeight(),
+                                Image.SCALE_SMOOTH
+                        );
+
+                VistaPreviaVisitante.setIcon(new ImageIcon(imagenEscalada));
+
+                imagenVisitanteSeleccionada = nuevaImagen;
+
+                VistaPreviaVisitante.setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al obtener imagen: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+
 
     }//GEN-LAST:event_AgregarImagenVisitanteActionPerformed
     }

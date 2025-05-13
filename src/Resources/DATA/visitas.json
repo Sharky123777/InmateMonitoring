@@ -10,19 +10,6 @@
       "estatura": 1.7,
       "peso": 89.0,
       "delitos": [],
-      "expediente": {
-        "codigoExpediente": "EXP-QSLY-HPC0",
-        "numeroRegistro": "REG-2025-5274",
-        "fechaApertura": "2025-04-25",
-        "estado": "Activo",
-        "delitos": [],
-        "juzgado": "Juzgado de Ejecución Penal",
-        "totalVisitas": 0,
-        "nivelAdaptacion": "Por evaluar",
-        "actividades": [],
-        "observacionesConducta": "Ninguna",
-        "nivelRiesgo": "Riesgo bajo"
-      },
       "nivelDeSeguridad": "Baja",
       "seccionAsignada": "Sección C",
       "condicion": "En espera",
@@ -62,5 +49,431 @@
       }
     ],
     "estado": "CANCELADA"
+  },
+  {
+    "id": 1,
+    "fechaVisita": "2025-05-14",
+    "horaVisita": "10:00",
+    "duracionVisitaEnHoras": "1",
+    "tipoVisita": "Visita regular",
+    "lugarVisita": "Sala de visitas",
+    "preso": {
+      "estatura": 1.84,
+      "peso": 100.0,
+      "delitos": [
+        {
+          "id": 1,
+          "presoId": "1237440696",
+          "codigo": 265,
+          "nombre": "Daño en bien ajeno",
+          "articuloLey": "Artículo 265",
+          "gravedad": "Baja",
+          "descripcion": "Se metio en un bien ajeno a destruir todo",
+          "fechaComision": "2025-05-01",
+          "sentencia": {
+            "años": 3,
+            "meses": 0,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2028-05-12"
+          }
+        },
+        {
+          "id": 2,
+          "presoId": "1237440696",
+          "codigo": 189,
+          "nombre": "Violación de habitación ajena",
+          "articuloLey": "Artículo 189",
+          "gravedad": "Media",
+          "descripcion": "Violo la habitacion ajena, entro\npor que tenia frio",
+          "fechaComision": "2022-05-11",
+          "sentencia": {
+            "años": 1,
+            "meses": 4,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2026-09-12"
+          }
+        },
+        {
+          "id": 3,
+          "presoId": "1237440696",
+          "codigo": 233,
+          "nombre": "Inasistencia alimentaria",
+          "articuloLey": "Artículo 233",
+          "gravedad": "Media",
+          "descripcion": "No pago la manutencion de sus hijos",
+          "fechaComision": "2025-05-01",
+          "sentencia": {
+            "años": 5,
+            "meses": 4,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2030-09-12"
+          }
+        },
+        {
+          "id": 4,
+          "presoId": "1237440696",
+          "codigo": 131,
+          "nombre": "Omisión de socorro",
+          "articuloLey": "Artículo 131",
+          "gravedad": "Media",
+          "descripcion": "Presencio un accudente y se fue corriendo",
+          "fechaComision": "2023-05-06",
+          "sentencia": {
+            "años": 0,
+            "meses": 4,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2025-09-12"
+          }
+        },
+        {
+          "id": 5,
+          "presoId": "1237440696",
+          "codigo": 111,
+          "nombre": "Lesiones personales leves",
+          "articuloLey": "Artículo 111",
+          "gravedad": "Media",
+          "descripcion": "Multiples lesiones con alta gravedad",
+          "fechaComision": "2025-05-05",
+          "sentencia": {
+            "años": 1,
+            "meses": 4,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2026-09-12"
+          }
+        },
+        {
+          "id": 6,
+          "presoId": "1237440696",
+          "codigo": 289,
+          "nombre": "Falsedad en documento privado",
+          "articuloLey": "Artículo 289",
+          "gravedad": "Media",
+          "descripcion": "Falsifico un  documento para ir al concierto\n de un cantante famoso",
+          "fechaComision": "2023-05-19",
+          "sentencia": {
+            "años": 1,
+            "meses": 4,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2026-09-12"
+          }
+        },
+        {
+          "id": 7,
+          "presoId": "1237440696",
+          "codigo": 296,
+          "nombre": "Usurpación de derechos",
+          "articuloLey": "Artículo 296",
+          "gravedad": "Alta",
+          "descripcion": "Rompia los derechos de las personas",
+          "fechaComision": "2025-05-03",
+          "sentencia": {
+            "años": 2,
+            "meses": 6,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2027-11-12"
+          }
+        },
+        {
+          "id": 8,
+          "presoId": "1237440696",
+          "codigo": 490,
+          "nombre": "Estafa",
+          "articuloLey": "Artículo 490",
+          "gravedad": "Media",
+          "descripcion": "Frecuentaba casinos y pagaba con billetes falsos",
+          "fechaComision": "2025-05-01",
+          "sentencia": {
+            "años": 4,
+            "meses": 6,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2029-11-12"
+          }
+        },
+        {
+          "id": 9,
+          "presoId": "1237440696",
+          "codigo": 319,
+          "nombre": "Contrabando",
+          "articuloLey": "Artículo 319 - Contrabando",
+          "gravedad": "Alta",
+          "descripcion": "Contrabandeaba marihuana y decia que ere cilantro",
+          "fechaComision": "2024-05-23",
+          "sentencia": {
+            "años": 3,
+            "meses": 8,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2029-01-12"
+          }
+        },
+        {
+          "id": 10,
+          "presoId": "1237440696",
+          "codigo": 103,
+          "nombre": "Homicidio",
+          "articuloLey": "Artículo 103",
+          "gravedad": "Media",
+          "descripcion": "Mato a una persona, por que no habia desayunado",
+          "fechaComision": "2025-05-10",
+          "sentencia": {
+            "años": 3,
+            "meses": 5,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2028-10-12"
+          }
+        }
+      ],
+      "nivelDeSeguridad": "Medio",
+      "seccionAsignada": "Sección A",
+      "condicion": "En espera",
+      "celdaAsignada": "CELD-39",
+      "enAislamiento": false,
+      "nivelDeRiesgo": "Riesgo bajo",
+      "numeroDeVisitas": 0,
+      "grupoSanguineo": "A+",
+      "fotoPath": "src/Resources/imagenes_presos/preso_1.jpg",
+      "estado": "ACTIVO",
+      "id": 1,
+      "actividadesAsignadasIds": [],
+      "actividadesCanceladasIds": [],
+      "primerNombre": "Luz",
+      "segundoNombre": "Dari",
+      "primerApellido": "Crespo",
+      "segundoApellido": "Gomez",
+      "edad": 18,
+      "sexo": "F",
+      "nacionalidad": "Mauriciana",
+      "identificacion": "1237440696"
+    },
+    "visitantes": [
+      {
+        "relacionConPreso": "Hermano/Hermana",
+        "fotoPath": "C:\\Users\\nicol\\AppData\\Local\\Temp\\enfermera_7972732708851975116.jpg",
+        "email": "Maria@gmail.com",
+        "id": 1,
+        "estado": "HABILITADO",
+        "primerNombre": "Maria",
+        "segundoNombre": "Liz",
+        "primerApellido": "Leon",
+        "segundoApellido": "Mier",
+        "edad": 30,
+        "sexo": "Femenino",
+        "nacionalidad": "Colombia  ",
+        "identificacion": "585595922"
+      }
+    ],
+    "estado": "EN_PROCESO"
+  },
+  {
+    "id": 1,
+    "fechaVisita": "2025-05-14",
+    "horaVisita": "08:00",
+    "duracionVisitaEnHoras": "1",
+    "tipoVisita": "Visita regular",
+    "lugarVisita": "Sala de visitas",
+    "preso": {
+      "estatura": 1.84,
+      "peso": 100.0,
+      "delitos": [
+        {
+          "id": 1,
+          "presoId": "1237440696",
+          "codigo": 265,
+          "nombre": "Daño en bien ajeno",
+          "articuloLey": "Artículo 265",
+          "gravedad": "Baja",
+          "descripcion": "Se metio en un bien ajeno a destruir todo",
+          "fechaComision": "2025-05-01",
+          "sentencia": {
+            "años": 3,
+            "meses": 0,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2028-05-12"
+          }
+        },
+        {
+          "id": 2,
+          "presoId": "1237440696",
+          "codigo": 189,
+          "nombre": "Violación de habitación ajena",
+          "articuloLey": "Artículo 189",
+          "gravedad": "Media",
+          "descripcion": "Violo la habitacion ajena, entro\npor que tenia frio",
+          "fechaComision": "2022-05-11",
+          "sentencia": {
+            "años": 1,
+            "meses": 4,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2026-09-12"
+          }
+        },
+        {
+          "id": 3,
+          "presoId": "1237440696",
+          "codigo": 233,
+          "nombre": "Inasistencia alimentaria",
+          "articuloLey": "Artículo 233",
+          "gravedad": "Media",
+          "descripcion": "No pago la manutencion de sus hijos",
+          "fechaComision": "2025-05-01",
+          "sentencia": {
+            "años": 5,
+            "meses": 4,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2030-09-12"
+          }
+        },
+        {
+          "id": 4,
+          "presoId": "1237440696",
+          "codigo": 131,
+          "nombre": "Omisión de socorro",
+          "articuloLey": "Artículo 131",
+          "gravedad": "Media",
+          "descripcion": "Presencio un accudente y se fue corriendo",
+          "fechaComision": "2023-05-06",
+          "sentencia": {
+            "años": 0,
+            "meses": 4,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2025-09-12"
+          }
+        },
+        {
+          "id": 5,
+          "presoId": "1237440696",
+          "codigo": 111,
+          "nombre": "Lesiones personales leves",
+          "articuloLey": "Artículo 111",
+          "gravedad": "Media",
+          "descripcion": "Multiples lesiones con alta gravedad",
+          "fechaComision": "2025-05-05",
+          "sentencia": {
+            "años": 1,
+            "meses": 4,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2026-09-12"
+          }
+        },
+        {
+          "id": 6,
+          "presoId": "1237440696",
+          "codigo": 289,
+          "nombre": "Falsedad en documento privado",
+          "articuloLey": "Artículo 289",
+          "gravedad": "Media",
+          "descripcion": "Falsifico un  documento para ir al concierto\n de un cantante famoso",
+          "fechaComision": "2023-05-19",
+          "sentencia": {
+            "años": 1,
+            "meses": 4,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2026-09-12"
+          }
+        },
+        {
+          "id": 7,
+          "presoId": "1237440696",
+          "codigo": 296,
+          "nombre": "Usurpación de derechos",
+          "articuloLey": "Artículo 296",
+          "gravedad": "Alta",
+          "descripcion": "Rompia los derechos de las personas",
+          "fechaComision": "2025-05-03",
+          "sentencia": {
+            "años": 2,
+            "meses": 6,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2027-11-12"
+          }
+        },
+        {
+          "id": 8,
+          "presoId": "1237440696",
+          "codigo": 490,
+          "nombre": "Estafa",
+          "articuloLey": "Artículo 490",
+          "gravedad": "Media",
+          "descripcion": "Frecuentaba casinos y pagaba con billetes falsos",
+          "fechaComision": "2025-05-01",
+          "sentencia": {
+            "años": 4,
+            "meses": 6,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2029-11-12"
+          }
+        },
+        {
+          "id": 9,
+          "presoId": "1237440696",
+          "codigo": 319,
+          "nombre": "Contrabando",
+          "articuloLey": "Artículo 319 - Contrabando",
+          "gravedad": "Alta",
+          "descripcion": "Contrabandeaba marihuana y decia que ere cilantro",
+          "fechaComision": "2024-05-23",
+          "sentencia": {
+            "años": 3,
+            "meses": 8,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2029-01-12"
+          }
+        },
+        {
+          "id": 10,
+          "presoId": "1237440696",
+          "codigo": 103,
+          "nombre": "Homicidio",
+          "articuloLey": "Artículo 103",
+          "gravedad": "Media",
+          "descripcion": "Mato a una persona, por que no habia desayunado",
+          "fechaComision": "2025-05-10",
+          "sentencia": {
+            "años": 3,
+            "meses": 5,
+            "fechaIngreso": "2025-05-12",
+            "fechaSalidaCalculada": "2028-10-12"
+          }
+        }
+      ],
+      "nivelDeSeguridad": "Medio",
+      "seccionAsignada": "Sección A",
+      "condicion": "En espera",
+      "celdaAsignada": "CELD-39",
+      "enAislamiento": false,
+      "nivelDeRiesgo": "Riesgo bajo",
+      "numeroDeVisitas": 0,
+      "grupoSanguineo": "A+",
+      "fotoPath": "src/Resources/imagenes_presos/preso_1.jpg",
+      "estado": "ACTIVO",
+      "id": 1,
+      "actividadesAsignadasIds": [],
+      "actividadesCanceladasIds": [],
+      "primerNombre": "Luz",
+      "segundoNombre": "Dari",
+      "primerApellido": "Crespo",
+      "segundoApellido": "Gomez",
+      "edad": 18,
+      "sexo": "F",
+      "nacionalidad": "Mauriciana",
+      "identificacion": "1237440696"
+    },
+    "visitantes": [
+      {
+        "relacionConPreso": "Hermano/Hermana",
+        "fotoPath": "C:\\Users\\nicol\\AppData\\Local\\Temp\\enfermera_11353979899307658790.jpg",
+        "email": "Camilo123@gmail.com",
+        "id": 1,
+        "estado": "HABILITADO",
+        "primerNombre": "Camilo",
+        "segundoNombre": "Jose",
+        "primerApellido": "Jurado",
+        "segundoApellido": "Guerrero",
+        "edad": 20,
+        "sexo": "Masculino",
+        "nacionalidad": "Colombia  ",
+        "identificacion": "852465456"
+      }
+    ],
+    "estado": "EN_PROCESO"
   }
 ]

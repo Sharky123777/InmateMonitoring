@@ -23,7 +23,7 @@ public class VisitanteDAO {
 
     private static VisitanteDAO instancia;
     private static final String JSON_FILE = "src/Resources/DATA/visitantes.json";
-    private static final String IMAGES_DIR = "src/Resources/Images/";
+    private static final String IMAGES_DIR = "src/Resources/imagenes_visitantes/";
 
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 

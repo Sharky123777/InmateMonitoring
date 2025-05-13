@@ -2,6 +2,7 @@ package View;
 
 import Controller.VisitaController;
 import Model.Entities.Visitante;
+import java.awt.Image;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -161,8 +162,47 @@ public class ModificarVisitante extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void NuevaImagenVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevaImagenVisitanteActionPerformed
-        VisitaController controller = new VisitaController();
-        nuevaImagenVisitante = controller.seleccionarImagen(this, getNuevaVistaPreviaVisitante());
+        Object[] options = {"Tomar Foto", "Seleccionar Archivo", "Cancelar"};
+        int opcion = JOptionPane.showOptionDialog(
+                this,
+                "¿Cómo desea obtener la nueva imagen del visitante?",
+                "Seleccionar Imagen",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+        try {
+            File nuevaImagen = null;
+            VisitaController controller = new VisitaController();
+
+            if (opcion == 0) { 
+                nuevaImagen = controller.capturarImagenVisitante();
+            } else if (opcion == 1) { // Seleccionar archivo
+                nuevaImagen = controller.seleccionarImagen(this, getNuevaVistaPreviaVisitante());
+            }
+
+            if (nuevaImagen != null && nuevaImagen.exists()) {
+                ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
+                Image imagenEscalada = icono.getImage().getScaledInstance(
+                        getNuevaVistaPreviaVisitante().getWidth(),
+                        getNuevaVistaPreviaVisitante().getHeight(),
+                        Image.SCALE_SMOOTH
+                );
+                getNuevaVistaPreviaVisitante().setIcon(new ImageIcon(imagenEscalada));
+                getNuevaVistaPreviaVisitante().setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
+
+                nuevaImagenVisitante = nuevaImagen;
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al obtener imagen: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_NuevaImagenVisitanteActionPerformed
 
     private void BotonModificarVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonModificarVisitanteActionPerformed

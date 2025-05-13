@@ -5,12 +5,14 @@ import DAO.PersonalDeControlDAO;
 import DAO.PresoDAO;
 import DAO.VisitaDAO;
 import DAO.VisitanteDAO;
+import Model.Constants.EstadoPresoEnum;
 import Model.Entities.Preso;
 import Model.Entities.Visita;
 import Model.Entities.Visitante;
 import Model.Entities.ExpedienteJudicial;
 import Model.Constants.EstadoVisitaEnum;
 import Model.Constants.EstadoVisitanteEnum;
+import View.FrmCamara;
 import View.PersonalDeControl;
 import java.awt.AlphaComposite;
 import java.awt.Component;
@@ -34,7 +36,9 @@ import java.util.Map;
 import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -401,7 +405,7 @@ public class VisitaController {
                 return false;
             }
 
-            if (!preso.getEstado().equals("ACTIVO")) {
+            if (preso.getEstado() != EstadoPresoEnum.ACTIVO) {
                 mostrarError("El preso " + preso.getNombresCompletos() + " no puede recibir visitas.\n"
                         + "Motivo: Estado actual = " + preso.getEstado() + "\n"
                         + "Solo permitido: Presos en estado ACTIVO");
@@ -416,9 +420,9 @@ public class VisitaController {
             }
 
             String nivelSeguridad = preso.getNivelDeSeguridad();
-            if (!nivelSeguridad.equalsIgnoreCase("Baja") && !nivelSeguridad.equalsIgnoreCase("Media")) {
+            if (!nivelSeguridad.equalsIgnoreCase("Baja") && !nivelSeguridad.equalsIgnoreCase("Medio")) {
                 mostrarError("El preso " + preso.getNombresCompletos() + " tiene nivel de seguridad " + nivelSeguridad + ".\n"
-                        + "Solo puede recibir visitas con nivel de seguridad Baja o Media");
+                        + "Solo puede recibir visitas con nivel de seguridad Baja o Medio");
                 return false;
             }
             ExpedienteJudicial expediente = ExpedienteDAO.getInstancia().obtenerExpedienteAbierto(identificacionPreso);
@@ -804,30 +808,37 @@ public class VisitaController {
             String relacion,
             File imagen) {
 
-        if (!primerNombre.equals(visitanteOriginal.getPrimerNombre())) {
-            return true;
-        }
-        if (!segundoNombre.equals(visitanteOriginal.getSegundoNombre())) {
-            return true;
-        }
-        if (!primerApellido.equals(visitanteOriginal.getPrimerApellido())) {
-            return true;
-        }
-        if (!segundoApellido.equals(visitanteOriginal.getSegundoApellido())) {
+        if (!primerNombre.trim().isEmpty() && !primerNombre.equals(visitanteOriginal.getPrimerNombre())) {
             return true;
         }
 
-        try {
-            if (!edad.isEmpty() && Integer.parseInt(edad) != visitanteOriginal.getEdad()) {
+        if (!segundoNombre.trim().isEmpty() && !segundoNombre.equals(visitanteOriginal.getSegundoNombre())) {
+            return true;
+        }
+
+        if (!primerApellido.trim().isEmpty() && !primerApellido.equals(visitanteOriginal.getPrimerApellido())) {
+            return true;
+        }
+
+        if (!segundoApellido.trim().isEmpty() && !segundoApellido.equals(visitanteOriginal.getSegundoApellido())) {
+            return true;
+        }
+
+        if (!edad.trim().isEmpty()) {
+            try {
+                int edadInt = Integer.parseInt(edad);
+                if (edadInt != visitanteOriginal.getEdad()) {
+                    return true;
+                }
+            } catch (NumberFormatException e) {
                 return true;
             }
-        } catch (NumberFormatException e) {
-            return true;
         }
 
         if (!sexo.equals("< Seleccionar >") && !sexo.equals(visitanteOriginal.getSexo())) {
             return true;
         }
+
         if (!relacion.equals("< Seleccionar >") && !relacion.equals(visitanteOriginal.getRelacionConPreso())) {
             return true;
         }
@@ -835,7 +846,9 @@ public class VisitaController {
         if (imagen != null) {
             try {
                 File originalFile = new File(visitanteOriginal.getFotoPath());
-                return !imagen.getCanonicalPath().equals(originalFile.getCanonicalPath());
+                if (!imagen.getCanonicalPath().equals(originalFile.getCanonicalPath())) {
+                    return true;
+                }
             } catch (IOException e) {
                 return true;
             }
@@ -1087,5 +1100,28 @@ public class VisitaController {
             mostrarError("Error al cambiar el estado del visitante");
             return null;
         }
+    }
+
+    public File capturarImagenVisitante() {
+        FrmCamara ventanaCamara = new FrmCamara();
+        ventanaCamara.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JDialog dialog = new JDialog();
+        dialog.setModal(true);
+        dialog.setContentPane(ventanaCamara.getContentPane());
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+
+        while (dialog.isVisible()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return null;
+            }
+        }
+
+        return ventanaCamara.getImagenCapturada();
     }
 }
