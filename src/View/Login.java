@@ -38,16 +38,12 @@ public class Login extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jPanel6 = new RoundedPanel(30);
         tituloInpec = new javax.swing.JLabel();
-        logoInpec = new javax.swing.JLabel();
         lema = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         FieldUsuario = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         Password = new javax.swing.JPasswordField();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
@@ -59,9 +55,6 @@ public class Login extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/1117691499019247666-removebg-preview (3).png"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 40, -1, -1));
-
         jPanel6.setBackground(new java.awt.Color(29, 35, 51));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -69,9 +62,6 @@ public class Login extends javax.swing.JFrame {
         tituloInpec.setForeground(new java.awt.Color(255, 255, 255));
         tituloInpec.setText("INPEC");
         jPanel6.add(tituloInpec, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 20, 160, -1));
-
-        logoInpec.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/inpec-removebg-preview (1).png"))); // NOI18N
-        jPanel6.add(logoInpec, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, -1, -1));
 
         lema.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
         lema.setForeground(new java.awt.Color(153, 153, 153));
@@ -89,16 +79,10 @@ public class Login extends javax.swing.JFrame {
         FieldUsuario.setBorder(null);
         jPanel6.add(FieldUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 200, 350, 40));
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/icons8-email-40.png"))); // NOI18N
-        jPanel6.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 200, 40, -1));
-
         jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Contraseña");
         jPanel6.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 260, -1, -1));
-
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Diseño_sin_título__4_-removebg-preview (2).png"))); // NOI18N
-        jPanel6.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 300, -1, -1));
 
         Password.setBackground(new java.awt.Color(29, 35, 51));
         Password.setForeground(new java.awt.Color(255, 255, 255));
@@ -217,17 +201,13 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPasswordField Password;
     private javax.swing.JComboBox<String> RolCmbBox;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel lema;
-    private javax.swing.JLabel logoInpec;
     private javax.swing.JLabel tituloInpec;
     // End of variables declaration//GEN-END:variables
 }
