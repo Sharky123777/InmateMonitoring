@@ -175,16 +175,16 @@ public class CoordinadorDeActividadesController {
             // 5. Validar fechas
             LocalDate fechaFin = validarFechas(original.getFechaInicioContrato(), (LocalDate) cambios.get("fechaFin"));
 
-            // 6. Validar imagen si se proporciona una nueva
+            
             if (nuevaImagen != null) {
                 validarImagen(nuevaImagen);
             }
 
-            // 7. Crear objeto modificado
+            
             CoordinadorDeActividades coordinadorModificado = crearCoordinadorModificado(
                     original, cambios, edad, fechaFin);
 
-            // 8. Determinar qué imagen usar
+
             File imagenFinal = determinarImagenFinal(original, nuevaImagen);
 
             // 9. Ejecutar modificación en DAO
