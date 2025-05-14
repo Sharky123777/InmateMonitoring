@@ -6,14 +6,21 @@ import javax.swing.table.*;
 import java.awt.*;
 
 public class ActividadRenderer extends DefaultTableCellRenderer {
-
-    @Override
+@Override
 public Component getTableCellRendererComponent(JTable table, Object value, 
     boolean isSelected, boolean hasFocus, int row, int column) {
-    
+
     Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-    
-    String estado = (String) table.getValueAt(row, 5); 
+
+    String estado = "";
+    if (value != null) {
+        // Si el valor es un Enum, lo convertimos a String
+        if (value instanceof Enum) {
+            estado = value.toString();
+        } else {
+            estado = value.toString();
+        }
+    }
     
     Color verde = new Color(146, 241, 131);
     Color cafe = new Color(186, 141, 111);

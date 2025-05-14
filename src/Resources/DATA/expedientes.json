@@ -254,5 +254,61 @@
       "nacionalidad": "Alemana",
       "identificacion": "1234565432"
     }
+  },
+  {
+    "codigoExpediente": "EXP-1747084285934",
+    "numeroRegistro": "REG-2025-8508",
+    "fechaApertura": "2025-05-12",
+    "estado": "ABIERTO",
+    "delitos": [
+      {
+        "id": 12,
+        "presoId": "123456789",
+        "codigo": 265,
+        "nombre": "Daño en bien ajeno",
+        "articuloLey": "Artículo 265",
+        "gravedad": "Media",
+        "descripcion": "Daño el bien ajeno",
+        "fechaComision": "2025-05-06",
+        "sentencia": {
+          "años": 1,
+          "meses": 0,
+          "fechaIngreso": "2025-05-12",
+          "fechaSalidaCalculada": "2026-05-12"
+        }
+      }
+    ],
+    "juzgado": "Juzgado penal",
+    "totalVisitas": 0,
+    "nivelAdaptacion": "Por evaluar",
+    "actividades": [],
+    "observacionesConducta": "Ninguna",
+    "nivelRiesgo": "Riesgo medio",
+    "preso": {
+      "estatura": 1.8,
+      "peso": 100.0,
+      "delitos": [],
+      "nivelDeSeguridad": "Medio",
+      "seccionAsignada": "Sección B",
+      "condicion": "En espera",
+      "celdaAsignada": "CELD-21",
+      "enAislamiento": false,
+      "nivelDeRiesgo": "Riesgo medio",
+      "numeroDeVisitas": 0,
+      "grupoSanguineo": "A+",
+      "fotoPath": "src/Resources/imagenes_presos/preso_3.jpg",
+      "estado": "ACTIVO",
+      "id": 3,
+      "actividadesAsignadasIds": [],
+      "actividadesCanceladasIds": [],
+      "primerNombre": "Andrea",
+      "segundoNombre": "Sofia",
+      "primerApellido": "Loñedo",
+      "segundoApellido": "Tamales",
+      "edad": 44,
+      "sexo": "F",
+      "nacionalidad": "Andorrana",
+      "identificacion": "123456789"
+    }
   }
 ]
