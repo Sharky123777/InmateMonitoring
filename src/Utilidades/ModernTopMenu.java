@@ -1,4 +1,4 @@
-package utilidades;
+package Utilidades;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -7,7 +7,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 /**
- * Menú superior moderno para sistema carcelario
+ * @
  */
 public class ModernTopMenu extends JPanel {
     

@@ -20,7 +20,7 @@ public class EmailSender {
         this.username = "imsharlok@gmail.com";
         this.password = "aydondnxwjrjhagz";
         
-        // Ruta mejorada para el logo
+       
         this.logoPath = Paths.get(System.getProperty("user.dir"), "src", "Pictures", "inpecLooooogo.png").toString();
         
         this.props = new Properties();
