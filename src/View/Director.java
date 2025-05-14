@@ -226,7 +226,6 @@ public class Director extends javax.swing.JFrame {
         modOf = new javax.swing.JMenuItem();
         BorrarOf = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
-        jButton13 = new javax.swing.JButton();
         tabPrincipal = new javax.swing.JTabbedPane();
         Director = new javax.swing.JPanel();
         DisminuirSentencia = new javax.swing.JPanel();
@@ -682,15 +681,6 @@ public class Director extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(20, 25, 40));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jButton13.setBackground(new java.awt.Color(255, 255, 255));
-        jButton13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/icons8-sign-out-40.png"))); // NOI18N
-        jButton13.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton13ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton13, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 570, -1, -1));
 
         Director.setBackground(new java.awt.Color(255, 255, 255));
         tabPrincipal.addTab("Director", Director);
@@ -5233,12 +5223,6 @@ public class Director extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtNacionalidadMod2KeyTyped
 
-    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        Login otro = new Login();
-        otro.setVisible(true); // Mostrar el nuevo JFrame
-        this.dispose();
-    }//GEN-LAST:event_jButton13ActionPerformed
-
     private void txtFechaContratacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaContratacionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFechaContratacionActionPerformed
@@ -5840,7 +5824,6 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton16;
