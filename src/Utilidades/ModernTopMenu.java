@@ -7,7 +7,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 /**
- * Menú superior moderno para sistema carcelario
+ * @
  */
 public class ModernTopMenu extends JPanel {
     

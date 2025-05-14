@@ -30,6 +30,7 @@ public class CeldaDAO {
         }
         return instancia;
     }
+     
     
     public List<Celda> cargarTodas() {
         try (Reader reader = new FileReader(JSON_FILE)) {
