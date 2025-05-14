@@ -77,7 +77,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-import utilidades.ModernTopMenu;
+import Utilidades.ModernTopMenu;
 
 /**
  *
@@ -4768,8 +4768,6 @@ public class Director extends javax.swing.JFrame {
                         cambios,
                         imagenSeleccionadaModCDA // Usamos la imagen modificada
                 );
-
-                
 
                 tabPrincipal.setSelectedComponent(mostrarCoordinadora);
                 actualizarTablaCDA();
