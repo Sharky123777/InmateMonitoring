@@ -3,21 +3,27 @@ package View;
 import Controller.ActividadController;
 import Model.Entities.Preso;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 
 public class AsignacionActividad extends javax.swing.JDialog {
-
+    
     ActividadController controller = ActividadController.getInstancia();
+    
+   private JTable tablaGeneral;
 
-    public AsignacionActividad(java.awt.Frame parent, boolean modal, Preso preso) {
-        super(parent, modal);
-        initComponents();
-                setLocationRelativeTo(parent);
+public AsignacionActividad(java.awt.Frame parent, boolean modal, Preso preso, JTable tablaGeneral) {
+    super(parent, modal);
+    initComponents();
+    setLocationRelativeTo(parent);
 
-            controller.cargarActividadesDisponiblesEnTabla(actividadesAsignacionTabla, preso.getIdentificacion());
-        identiPreso.setText(preso.getIdentificacion());
-        nombreApePreso.setText(preso.getNombresCompletos() + " " + preso.getApellidosCompletos());
-    }
+    this.tablaGeneral = tablaGeneral; // guarda la referencia para actualizarla luego
 
+    controller.cargarActividadesDisponiblesEnTabla(actividadesAsignacionTabla, preso.getIdentificacion());
+    identiPreso.setText(preso.getIdentificacion());
+    nombreApePreso.setText(preso.getNombresCompletos() + " " + preso.getApellidosCompletos());
+}
+
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -46,6 +52,9 @@ public class AsignacionActividad extends javax.swing.JDialog {
 
         actividadesAsignacionTabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
@@ -84,9 +93,9 @@ public class AsignacionActividad extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 70, 120, 30));
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 80, 120, 30));
 
-        btnAsignar.setBackground(new java.awt.Color(0, 102, 51));
+        btnAsignar.setBackground(new java.awt.Color(0, 51, 0));
         btnAsignar.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnAsignar.setText("Asignar");
         btnAsignar.addActionListener(new java.awt.event.ActionListener() {
@@ -94,7 +103,7 @@ public class AsignacionActividad extends javax.swing.JDialog {
                 btnAsignarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAsignar, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 110, 120, 40));
+        jPanel1.add(btnAsignar, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 120, 120, 40));
 
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
         jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 540, 10));
@@ -143,17 +152,18 @@ public class AsignacionActividad extends javax.swing.JDialog {
     private void btnAsignarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarActionPerformed
         int filasSeleccionadas = actividadesAsignacionTabla.getRowCount();
         boolean actividadSeleccionada = false;
-
+        
         for (int i = 0; i < filasSeleccionadas; i++) {
             boolean actividadMarcada = (Boolean) actividadesAsignacionTabla.getValueAt(i, 0);
             if (actividadMarcada) {
                 actividadSeleccionada = true;
                 String idActividad = (String) actividadesAsignacionTabla.getValueAt(i, 1);
                 String identificacionPreso = identiPreso.getText();
-                boolean asignado = controller.asignarPresoAActividad(idActividad, identificacionPreso);
-
+                boolean asignado = controller.asignarPresoAActividad(idActividad, identificacionPreso, tablaGeneral);
+                
+                controller.cargarActividadesEnTabla(tablaGeneral);
                 this.dispose();
-
+                
                 if (!actividadSeleccionada) {
                     JOptionPane.showMessageDialog(this, "Por favor seleccione al menos una actividad.");
                 }
