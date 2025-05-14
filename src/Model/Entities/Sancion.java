@@ -4,25 +4,33 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Sancion {
-
     private int id;
     private String motivo;
     private LocalDate fechaSancion;
     private LocalTime hora;
-    private String duracionEnHoras;
     private String tipoSancion;
     private Preso preso;
     private Guardia guardia;
 
-    public Sancion(int id, String motivo, LocalDate fechaSancion, LocalTime hora, String duracionEnHoras, String tipoSancion, Preso preso, Guardia guardia) {
+    public Sancion(int id, String motivo, LocalDate fechaSancion, LocalTime hora, 
+                  String tipoSancion, Preso preso, Guardia guardia) {
         this.id = id;
         this.motivo = motivo;
         this.fechaSancion = fechaSancion;
         this.hora = hora;
-        this.duracionEnHoras = duracionEnHoras;
         this.tipoSancion = tipoSancion;
         this.preso = preso;
         this.guardia = guardia;
+    }
+
+    public boolean estaActiva() {
+        LocalDate hoy = LocalDate.now();
+        if (tipoSancion.equalsIgnoreCase("Suspensión de visitas")) {
+            LocalDate fechaFin = fechaSancion.plusDays(1);
+            return !hoy.isBefore(fechaSancion) && !hoy.isAfter(fechaFin);
+        } else {
+            return hoy.isEqual(fechaSancion);
+        }
     }
 
     public int getId() {
@@ -55,14 +63,6 @@ public class Sancion {
 
     public void setHora(LocalTime hora) {
         this.hora = hora;
-    }
-
-    public String getDuracionEnHoras() {
-        return duracionEnHoras;
-    }
-
-    public void setDuracionEnHoras(String duracionEnHoras) {
-        this.duracionEnHoras = duracionEnHoras;
     }
 
     public String getTipoSancion() {

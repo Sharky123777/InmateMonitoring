@@ -3,9 +3,12 @@ package Controller;
 import DAO.GuardiaDAO;
 import DAO.PresoDAO;
 import DAO.SancionDAO;
+import DAO.VisitaDAO;
+import Model.Constants.EstadoVisitaEnum;
 import Model.Entities.Guardia;
 import Model.Entities.Preso;
 import Model.Entities.Sancion;
+import Model.Entities.Visita;
 import View.Oficial;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,10 +23,12 @@ public class SancionController {
 
     private final SancionDAO sancionDAO;
     private final PresoDAO presoDAO;
+    private final VisitaDAO visitaDAO;
 
     public SancionController() {
         this.sancionDAO = new SancionDAO();
         this.presoDAO = new PresoDAO();
+        this.visitaDAO = VisitaDAO.getInstancia();
     }
 
     public void mostrarError(String mensaje) {
@@ -39,77 +44,118 @@ public class SancionController {
             return false;
         }
 
+        int opcion = JOptionPane.showConfirmDialog(
+                view,
+                "¿Está seguro de registrar esta sanción?",
+                "Confirmar Registro",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (opcion != JOptionPane.YES_OPTION) {
+            limpiarCamposSancion(view);
+            return false;
+        }
+
         String identificacionPreso = view.getIdentificacionPresoSancion().getText().trim();
         String motivoSancion = view.getMotivoSancion().getText().trim();
         String tipoSancion = view.getTipoSancion().getSelectedItem().toString();
         Date fechaSeleccionada = view.getFechaSancion().getDate();
-        String duracion = view.getDuracionSancion().getSelectedItem().toString();
         String horaStr = view.getHoraSancion().getSelectedItem().toString();
         String identificacionGuardia = view.getIdentificacionGuardiaSancion().getText().trim();
 
-        if (!identificacionPreso.matches("\\d{6,10}")) {
-            mostrarError("La identificación del preso debe tener entre 6 y 10 dígitos numéricos.");
+        if (!identificacionPreso.matches("\\d{6,10}") || !identificacionGuardia.matches("\\d{6,10}")) {
+            mostrarError("Las identificaciones deben tener entre 6 y 10 dígitos.");
             return false;
         }
 
-        if (!identificacionGuardia.matches("\\d{6,10}")) {
-            mostrarError("La identificación del guardia debe tener entre 6 y 10 dígitos numéricos.");
+        LocalDate fecha = fechaSeleccionada.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalTime hora = LocalTime.parse(horaStr);
+
+        if (!fecha.equals(LocalDate.now())) {
+            mostrarError("Las sanciones solo pueden registrarse el día actual (" + LocalDate.now() + ")");
             return false;
         }
 
-        if (duracion.equals("< Seleccionar >")) {
-            mostrarError("Debe seleccionar una duración para la sanción.");
-            return false;
-        }
-
-        if (horaStr.equals("< Seleccionar >")) {
-            mostrarError("Debe seleccionar una hora para la sanción.");
-            return false;
-        }
-
-        LocalDate fecha = fechaSeleccionada.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-
-        if (fecha.isAfter(LocalDate.now())) {
-            mostrarError("La fecha de la sanción no puede ser futura.");
+        if (hora.isAfter(LocalTime.now())) {
+            mostrarError("No puede registrar sanciones con hora futura.");
             return false;
         }
 
         try {
             Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
             if (preso == null) {
-                mostrarError("No se encontró ningún preso con esa identificación.");
+                mostrarError("Preso no encontrado.");
+                return false;
+            }
+
+            List<Sancion> sancionesHoy = sancionDAO.obtenerSancionesPorPresoYFecha(identificacionPreso, fecha);
+
+            if (sancionesHoy.size() >= 3) {
+                mostrarError("Límite de 3 sanciones diarias alcanzado para este preso.");
                 return false;
             }
 
             Guardia guardia = new GuardiaDAO().obtenerGuardiaPorCedula(identificacionGuardia);
             if (guardia == null) {
-                mostrarError("No se encontró ningún guardia con esa identificación.");
+                mostrarError("Guardia no encontrado.");
                 return false;
             }
 
-            LocalTime hora = LocalTime.parse(horaStr);
+            String turnoSancion = determinarTurno(hora);
+            if (turnoSancion == null || !guardia.getTurno().equalsIgnoreCase(turnoSancion)) {
+                mostrarError("El guardia no estaba en turno a esta hora.");
+                return false;
+            }
 
-            Sancion nuevaSancion = new Sancion(
-                    0, motivoSancion, fecha, hora, duracion, tipoSancion, preso, guardia
-            );
+            List<Sancion> sancionesExistentes = sancionDAO.obtenerSancionesPorPresoFechaYHora(identificacionPreso, fecha, hora);
+            if (!sancionesExistentes.isEmpty()) {
+                mostrarError("Ya existe una sanción registrada para este preso en la misma fecha y hora");
+                return false;
+            }
 
-            boolean exito = sancionDAO.guardarSancion(nuevaSancion);
+            Sancion nuevaSancion = new Sancion(0, motivoSancion, fecha, hora, tipoSancion, preso, guardia);
 
-            if (exito) {
-                mostrarExito("La sanción se registró con éxito.");
+            if (sancionDAO.guardarSancion(nuevaSancion)) {
+                cancelarVisitasPendientes(identificacionPreso, fecha);
+                mostrarExito("Sanción registrada exitosamente.");
                 limpiarCamposSancion(view);
                 return true;
             } else {
-                mostrarError("No se pudo guardar la sanción.");
+                mostrarError("Error al guardar la sanción.");
                 return false;
             }
-
         } catch (Exception e) {
-            mostrarError("Error al registrar la sanción: " + e.getMessage());
+            mostrarError("Error: " + e.getMessage());
             return false;
         }
+    }
+
+    private void cancelarVisitasPendientes(String identificacionPreso, LocalDate fecha) {
+        List<Visita> visitas = visitaDAO.cargarPorIdentificacionPreso(identificacionPreso);
+        int visitasCanceladas = 0;
+
+        for (Visita visita : visitas) {
+            if (visita.getFechaVisita().equals(fecha)
+                    && visita.getEstado() == EstadoVisitaEnum.EN_PROCESO) {
+                visitaDAO.modificarEstadoVisitaYDevolver(visita.getId(), EstadoVisitaEnum.CANCELADA);
+                visitasCanceladas++;
+            }
+        }
+
+        if (visitasCanceladas > 0) {
+            mostrarExito("Se cancelaron " + visitasCanceladas + " visitas programadas para hoy "
+                    + "debido a la sanción impuesta.");
+        }
+    }
+
+    private String determinarTurno(LocalTime hora) {
+        if (!hora.isBefore(LocalTime.of(8, 0)) && hora.isBefore(LocalTime.of(16, 20))) {
+            return "Diurno";
+        } else if (!hora.isBefore(LocalTime.of(16, 20)) && !hora.isAfter(LocalTime.of(20, 0))) {
+            return "Nocturno";
+        }
+        return null;
     }
 
     private boolean validarCamposSancion(Oficial view) {
@@ -133,11 +179,6 @@ public class SancionController {
             return false;
         }
 
-        if (view.getDuracionSancion().getSelectedIndex() == 0) {
-            mostrarError("Debe seleccionar una duración.");
-            return false;
-        }
-
         if (view.getHoraSancion().getSelectedIndex() == 0) {
             mostrarError("Debe seleccionar una hora.");
             return false;
@@ -145,6 +186,18 @@ public class SancionController {
 
         if (view.getIdentificacionGuardiaSancion().getText().trim().isEmpty()) {
             mostrarError("La identificación del guardia es obligatoria.");
+            return false;
+        }
+
+        if (view.getMotivoSancion().getText().trim().length() < 10) {
+            mostrarError("El motivo debe tener al menos 10 caracteres");
+            return false;
+        }
+
+        Date fechaSeleccionada = view.getFechaSancion().getDate();
+        LocalDate fechaSeleccionadaLD = fechaSeleccionada.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        if (fechaSeleccionadaLD.isBefore(LocalDate.now())) {
+            mostrarError("La fecha de la sanción no puede ser en el pasado.");
             return false;
         }
 
@@ -156,7 +209,6 @@ public class SancionController {
         view.getMotivoSancion().setText("");
         view.getTipoSancion().setSelectedIndex(0);
         view.getFechaSancion().setDate(null);
-        view.getDuracionSancion().setSelectedIndex(0);
         view.getHoraSancion().setSelectedIndex(0);
         view.getIdentificacionGuardiaSancion().setText("");
     }
@@ -166,14 +218,13 @@ public class SancionController {
         modelo.setRowCount(0);
 
         List<Sancion> sanciones = sancionDAO.cargarPorIdentificacionPreso(identificacionPreso);
-
         for (Sancion sancion : sanciones) {
             modelo.addRow(new Object[]{
                 sancion.getId(),
                 sancion.getTipoSancion(),
                 sancion.getFechaSancion(),
                 sancion.getHora(),
-                sancion.getDuracionEnHoras(),
+                "1 día",
                 sancion.getPreso().getIdentificacion(),
                 sancion.getMotivo(),
                 sancion.getGuardia().getIdentificacion()
@@ -185,13 +236,9 @@ public class SancionController {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
         modelo.setRowCount(0);
 
-        List<Sancion> sanciones;
-
-        if (tipoSancion.equals("< Seleccionar >")) {
-            sanciones = sancionDAO.cargarPorIdentificacionPreso(identificacionPreso);
-        } else {
-            sanciones = sancionDAO.cargarPorTipoYIdentificacionPreso(tipoSancion, identificacionPreso);
-        }
+        List<Sancion> sanciones = tipoSancion.equals("< Seleccionar >")
+                ? sancionDAO.cargarPorIdentificacionPreso(identificacionPreso)
+                : sancionDAO.cargarPorTipoYIdentificacionPreso(tipoSancion, identificacionPreso);
 
         for (Sancion sancion : sanciones) {
             modelo.addRow(new Object[]{
@@ -199,38 +246,11 @@ public class SancionController {
                 sancion.getTipoSancion(),
                 sancion.getFechaSancion(),
                 sancion.getHora(),
-                sancion.getDuracionEnHoras(),
+                "1 día",
                 sancion.getPreso().getIdentificacion(),
                 sancion.getMotivo(),
                 sancion.getGuardia().getIdentificacion()
             });
         }
     }
-
-    public void cargarHistorialSancionesFiltrado(String identificacionPreso, String tipoSancion, JTable tabla) {
-        DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
-        modelo.setRowCount(0);
-
-        List<Sancion> sanciones = sancionDAO.cargarPorTipoYIdentificacionPreso(tipoSancion, identificacionPreso);
-        llenarTablaSanciones(modelo, sanciones);
-
-        tabla.revalidate();
-        tabla.repaint();
-    }
-
-    private void llenarTablaSanciones(DefaultTableModel modelo, List<Sancion> sanciones) {
-        for (Sancion sancion : sanciones) {
-            modelo.addRow(new Object[]{
-                sancion.getId(),
-                sancion.getTipoSancion(),
-                sancion.getFechaSancion(),
-                sancion.getHora(),
-                sancion.getDuracionEnHoras(),
-                sancion.getPreso().getIdentificacion(),
-                sancion.getMotivo(),
-                sancion.getGuardia().getIdentificacion()
-            });
-        }
-    }
-
 }

@@ -3,6 +3,7 @@ package Controller;
 import DAO.ExpedienteDAO;
 import DAO.PersonalDeControlDAO;
 import DAO.PresoDAO;
+import DAO.SancionDAO;
 import DAO.VisitaDAO;
 import DAO.VisitanteDAO;
 import Model.Constants.EstadoPresoEnum;
@@ -12,6 +13,7 @@ import Model.Entities.Visitante;
 import Model.Entities.ExpedienteJudicial;
 import Model.Constants.EstadoVisitaEnum;
 import Model.Constants.EstadoVisitanteEnum;
+import Model.Entities.Sancion;
 import View.FrmCamara;
 import View.PersonalDeControl;
 import java.awt.AlphaComposite;
@@ -51,6 +53,7 @@ public class VisitaController {
     private VisitaDAO visitaDAO = VisitaDAO.getInstancia();
     private VisitanteDAO visitanteDAO = VisitanteDAO.getInstancia();
     private PersonalDeControlDAO personalDeControlDAO = PersonalDeControlDAO.getInstancia();
+    private SancionDAO sancionDAO = SancionDAO.getInstancia();
     private Visita visitaTemporal = null;
 
     public void limpiarCamposVisitante(PersonalDeControl view) {
@@ -405,6 +408,24 @@ public class VisitaController {
                 return false;
             }
 
+            List<Sancion> sancionesActivas = sancionDAO.obtenerSancionesActivasPorPreso(identificacionPreso);
+            if (!sancionesActivas.isEmpty()) {
+                for (Sancion sancion : sancionesActivas) {
+                    if (sancion.getTipoSancion().equalsIgnoreCase("Suspensión de visitas")) {
+                        LocalDate fechaFinSancion = sancion.getFechaSancion().plusDays(1);
+                        mostrarError("El preso tiene una suspensión de visitas activa hasta: " + fechaFinSancion);
+                        return false;
+                    }
+                }
+            }
+
+            LocalDate fechaVisita = view.getFechaVisita().getDate().toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate();
+            List<Sancion> sancionesEnFecha = sancionDAO.obtenerSancionesPorPresoYFecha(identificacionPreso, fechaVisita);
+            if (!sancionesEnFecha.isEmpty()) {
+                mostrarError("El preso tiene sanciones registradas para la fecha seleccionada");
+                return false;
+            }
             if (preso.getEstado() != EstadoPresoEnum.ACTIVO) {
                 mostrarError("El preso " + preso.getNombresCompletos() + " no puede recibir visitas.\n"
                         + "Motivo: Estado actual = " + preso.getEstado() + "\n"
@@ -425,35 +446,29 @@ public class VisitaController {
                         + "Solo puede recibir visitas con nivel de seguridad Baja o Medio");
                 return false;
             }
+
             ExpedienteJudicial expediente = ExpedienteDAO.getInstancia().obtenerExpedienteAbierto(identificacionPreso);
-
-            if (expediente != null) {
-                if (expediente.getNivelRiesgo() != null
-                        && expediente.getNivelRiesgo().equalsIgnoreCase("Riesgo alto")) {
-                    mostrarError("El preso " + preso.getNombresCompletos() + " tiene nivel de riesgo ALTO.\n"
-                            + "No puede recibir visitas por motivos de seguridad");
-                    return false;
-                }
-
+            if (expediente != null && expediente.getNivelRiesgo() != null
+                    && expediente.getNivelRiesgo().equalsIgnoreCase("Riesgo alto")) {
+                mostrarError("El preso " + preso.getNombresCompletos() + " tiene nivel de riesgo ALTO.\n"
+                        + "No puede recibir visitas por motivos de seguridad");
+                return false;
             }
 
             String tipo = view.getTipoVisita().getSelectedItem().toString();
             String lugar = view.getLugarVisita().getSelectedItem().toString();
             String horaSeleccionada = view.getHoraVisita().getSelectedItem().toString();
-
-            Date fechaSeleccionada = view.getFechaVisita().getDate();
-            LocalDate fecha = fechaSeleccionada.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             LocalTime horaVisita = LocalTime.parse(horaSeleccionada);
 
-            if (!fecha.isAfter(LocalDate.now())) {
+            if (!fechaVisita.isAfter(LocalDate.now())) {
                 mostrarError("La fecha debe ser posterior al día actual.\n"
-                        + "Fecha seleccionada: " + fecha + "\n"
+                        + "Fecha seleccionada: " + fechaVisita + "\n"
                         + "Fecha actual: " + LocalDate.now());
                 return false;
             }
 
             List<Visita> visitasExistentes = visitaDAO.cargarPorIdentificacionPresoFechaYHora(
-                    identificacionPreso, fecha, horaVisita);
+                    identificacionPreso, fechaVisita, horaVisita);
 
             if (!visitasExistentes.isEmpty()) {
                 Visita visitaExistente = visitasExistentes.get(0);
@@ -467,14 +482,13 @@ public class VisitaController {
 
             visitaTemporal = new Visita(
                     0,
-                    fecha,
+                    fechaVisita,
                     horaVisita,
                     tipo,
                     lugar,
                     preso,
                     new ArrayList<>()
             );
-
             visitaTemporal.setEstado(EstadoVisitaEnum.EN_PROCESO);
 
             JOptionPane.showMessageDialog(null,
@@ -482,7 +496,6 @@ public class VisitaController {
                     "Información", JOptionPane.INFORMATION_MESSAGE);
 
             limpiarCamposVisita(view);
-
             return true;
 
         } catch (Exception e) {
@@ -1124,4 +1137,5 @@ public class VisitaController {
 
         return ventanaCamara.getImagenCapturada();
     }
+
 }

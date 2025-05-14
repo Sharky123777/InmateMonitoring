@@ -24,11 +24,11 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Oficial extends javax.swing.JFrame {
-
+    
     private File imagenOficialSeleccionada;
     private String presoSeleccionadoIdentificacion;
     private final SancionController sancionController = new SancionController();
-
+    
     public Oficial() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -40,7 +40,7 @@ public class Oficial extends javax.swing.JFrame {
         controller.cargarTodosLosGuardias(tablaGuardias);
         controller.configurarTablaImagenes(tablaGuardias);
         InicializarMenuSanciones();
-
+        
         InicializarMenu();
         ComboTipoSancion1.addActionListener(new ActionListener() {
             @Override
@@ -51,24 +51,24 @@ public class Oficial extends javax.swing.JFrame {
             }
         });
     }
-
+    
     private void InicializarMenu() {
         JMenuItem historialSanciones = new JMenuItem("Historial de sanciones");
-
+        
         ppMenuTablaPresos.add(historialSanciones);
         TablaPresos.setComponentPopupMenu(ppMenuTablaPresos);
         TablaHistorialSanciones.setComponentPopupMenu(ppMenuTablaSanciones);
-
+        
         historialSanciones.addActionListener(e -> {
             int filaSeleccionada = TablaPresos.getSelectedRow();
             if (filaSeleccionada == -1) {
                 sancionController.mostrarError("¡Selecciona un preso primero!");
                 return;
             }
-
+            
             presoSeleccionadoIdentificacion = TablaPresos.getValueAt(filaSeleccionada, 5).toString();
             Preso preso = new PresoDAO().buscarPresoPorIdentificacion(presoSeleccionadoIdentificacion);
-
+            
             if (preso != null) {
                 sancionController.cargarHistorialSanciones(presoSeleccionadoIdentificacion, TablaHistorialSanciones);
                 TabbedOficial.setSelectedIndex(6);
@@ -77,14 +77,14 @@ public class Oficial extends javax.swing.JFrame {
             }
         });
     }
-
+    
     private void InicializarMenuSanciones() {
         JMenuItem actualizarSancion = new JMenuItem("Actualizar sanción");
         JMenuItem eliminarSancion = new JMenuItem("Eliminar sanción");
-
+        
         ppMenuTablaSanciones.add(eliminarSancion);
         ppMenuTablaSanciones.add(actualizarSancion);
-
+        
         eliminarSancion.addActionListener(e -> {
             int filaSeleccionada = TablaHistorialSanciones.getSelectedRow();
             if (filaSeleccionada == -1) {
@@ -93,7 +93,7 @@ public class Oficial extends javax.swing.JFrame {
             }
         });
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -214,7 +214,6 @@ public class Oficial extends javax.swing.JFrame {
         jLabel57 = new javax.swing.JLabel();
         IdentificacionPresoSancion = new javax.swing.JTextField();
         jLabel58 = new javax.swing.JLabel();
-        jLabel59 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         MotivoSancion = new javax.swing.JTextArea();
         BotonAsignarSancion = new javax.swing.JButton();
@@ -227,7 +226,6 @@ public class Oficial extends javax.swing.JFrame {
         jLabel69 = new javax.swing.JLabel();
         HoraSancion = new javax.swing.JComboBox<>();
         jLabel70 = new javax.swing.JLabel();
-        DuracionSancion = new javax.swing.JComboBox<>();
         jPanel19 = new javax.swing.JPanel();
         PanelListaSanciones = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -235,18 +233,7 @@ public class Oficial extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jLabel60 = new javax.swing.JLabel();
         ComboTipoSancion1 = new javax.swing.JComboBox<>();
-        PanelActualizarSancion = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel63 = new javax.swing.JLabel();
-        jLabel65 = new javax.swing.JLabel();
-        jLabel67 = new javax.swing.JLabel();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        NuevoMotivoSancion = new javax.swing.JTextArea();
-        BotonModificarSancion = new javax.swing.JButton();
-        jSeparator13 = new javax.swing.JSeparator();
-        NuevoTipoSancion = new javax.swing.JComboBox<>();
-        NuevaFechaSancion = new com.toedter.calendar.JDateChooser();
-        jLabel68 = new javax.swing.JLabel();
+        BotonCargarSanciones = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -824,11 +811,6 @@ public class Oficial extends javax.swing.JFrame {
         jLabel58.setText("Identificación del preso:");
         jPanel3.add(jLabel58, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, -1, -1));
 
-        jLabel59.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel59.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel59.setText("Duracion en horas:");
-        jPanel3.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, -1, -1));
-
         MotivoSancion.setColumns(20);
         MotivoSancion.setRows(5);
         jScrollPane4.setViewportView(MotivoSancion);
@@ -841,10 +823,10 @@ public class Oficial extends javax.swing.JFrame {
                 BotonAsignarSancionActionPerformed(evt);
             }
         });
-        jPanel3.add(BotonAsignarSancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 450, 190, 30));
+        jPanel3.add(BotonAsignarSancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 460, 190, 30));
         jPanel3.add(jSeparator11, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 50, 390, 20));
 
-        TipoSancion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Amonestación verbal o escrita", "Limitación de actividades recreativas o deportivas", "Suspensión de visitas o comunicaciones", "Aislamiento en celda disciplinaria" }));
+        TipoSancion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Amonestación verbal", "Amonestación escrita", "Limitación de actividades recreativas", "Suspensión de visitas" }));
         jPanel3.add(TipoSancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 380, 30));
         jPanel3.add(FechaSancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, 380, 30));
 
@@ -864,16 +846,18 @@ public class Oficial extends javax.swing.JFrame {
         jLabel69.setText("Fecha de la sanción:");
         jPanel3.add(jLabel69, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, -1, -1));
 
-        HoraSancion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "08:00", "08:20", "08:40", "09:00", "09:20", "09:40", "10:00", "10:20", "10:40", "11:00", "11:20", "11:40", "12:00", "12:20", "12:40", "13:00", "13:20", "13:40", "14:00", "14:20", "14:40", "15:00", "15:20", "15:40", "16:00", "16:20", "16:40", "17:00", "17:20", "17:40", "18:00", "18:20", "18:40", "19:00", "19:20", "19:40", "20:00" }));
+        HoraSancion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00" }));
+        HoraSancion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                HoraSancionActionPerformed(evt);
+            }
+        });
         jPanel3.add(HoraSancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 400, 380, 30));
 
         jLabel70.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel70.setForeground(new java.awt.Color(0, 0, 0));
         jLabel70.setText("Hora de la sanción:");
         jPanel3.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, -1, -1));
-
-        DuracionSancion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "1", "2" }));
-        jPanel3.add(DuracionSancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 460, 380, 30));
 
         PanelAsignarSanciones.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 980, 530));
 
@@ -894,7 +878,7 @@ public class Oficial extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Id", "Tipo Sanción", "Fecha sanción", "Hora sanción", "Duracion en horas", "Preso sancionado", "Motivo", "Guardia"
+                "Id", "Tipo Sanción", "Fecha sanción", "Hora sanción", "Duracion", "Preso sancionado", "Motivo", "Guardia"
             }
         ) {
             Class[] types = new Class [] {
@@ -934,7 +918,7 @@ public class Oficial extends javax.swing.JFrame {
         jLabel60.setText("Filtrar sanciones por tipo:");
         jPanel4.add(jLabel60, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
-        ComboTipoSancion1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Amonestación verbal o escrita", "Limitación de actividades recreativas o deportivas", "Suspensión de visitas o comunicaciones", "Aislamiento en celda disciplinaria" }));
+        ComboTipoSancion1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Amonestación verbal", "Amonestación escrita", "Limitación de actividades recreativas", "Suspensión de visitas" }));
         ComboTipoSancion1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ComboTipoSancion1ActionPerformed(evt);
@@ -942,59 +926,17 @@ public class Oficial extends javax.swing.JFrame {
         });
         jPanel4.add(ComboTipoSancion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, 300, 40));
 
+        BotonCargarSanciones.setText("Cargar todas las sanciones");
+        BotonCargarSanciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonCargarSancionesActionPerformed(evt);
+            }
+        });
+        jPanel4.add(BotonCargarSanciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 13, 190, 30));
+
         PanelListaSanciones.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 1060, 60));
 
         TabbedOficial.addTab("LISTA DE SANCIONES", PanelListaSanciones);
-
-        PanelActualizarSancion.setBackground(new java.awt.Color(255, 255, 255));
-        PanelActualizarSancion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
-        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel63.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel63.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel63.setText("MODIFICAR SANCIONES");
-        jPanel5.add(jLabel63, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 20, -1, -1));
-
-        jLabel65.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel65.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel65.setText("Motivo de la sanción:");
-        jPanel5.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 80, -1, -1));
-
-        jLabel67.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel67.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel67.setText("Fecha de la sanción:");
-        jPanel5.add(jLabel67, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, -1, -1));
-
-        NuevoMotivoSancion.setColumns(20);
-        NuevoMotivoSancion.setRows(5);
-        jScrollPane7.setViewportView(NuevoMotivoSancion);
-
-        jPanel5.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 120, 360, 230));
-
-        BotonModificarSancion.setText("Modificar sancion");
-        BotonModificarSancion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BotonModificarSancionActionPerformed(evt);
-            }
-        });
-        jPanel5.add(BotonModificarSancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 400, 190, 30));
-        jPanel5.add(jSeparator13, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 50, 390, 20));
-
-        NuevoTipoSancion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Amonestación verbal o escrita", "Limitación de actividades recreativas o deportivas", "Suspensión de visitas o comunicaciones", "Aislamiento en celda disciplinaria" }));
-        jPanel5.add(NuevoTipoSancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 440, 30));
-        jPanel5.add(NuevaFechaSancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 440, 30));
-
-        jLabel68.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel68.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel68.setText("Tipo de sanción:");
-        jPanel5.add(jLabel68, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, -1, -1));
-
-        PanelActualizarSancion.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, 980, 490));
-
-        TabbedOficial.addTab("ACTUALIZAR SANCIONES", PanelActualizarSancion);
 
         getContentPane().add(TabbedOficial, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 1100, 630));
 
@@ -1025,24 +967,24 @@ public class Oficial extends javax.swing.JFrame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "Imágenes (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif");
         fileChooser.setFileFilter(filter);
-
+        
         int resultado = fileChooser.showOpenDialog(this);
-
+        
         if (resultado == JFileChooser.APPROVE_OPTION) {
             imagenOficialSeleccionada = fileChooser.getSelectedFile();
-
+            
             try {
                 BufferedImage originalImage = ImageIO.read(imagenOficialSeleccionada);
-
+                
                 ImageIcon icon = new ImageIcon(originalImage);
                 Image img = icon.getImage();
                 Image imgEscalada = img.getScaledInstance(
                         VistaPreviaNuevaFoto.getWidth(),
                         VistaPreviaNuevaFoto.getHeight(),
                         Image.SCALE_SMOOTH);
-
+                
                 VistaPreviaNuevaFoto.setIcon(new ImageIcon(imgEscalada));
-
+                
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this,
                         "Error al cargar la imagen: " + ex.getMessage(),
@@ -1050,7 +992,7 @@ public class Oficial extends javax.swing.JFrame {
             }
     }//GEN-LAST:event_SubirNuevaFotoPerfilActionPerformed
     }
-
+    
 
     private void IdentificacionPresoSancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IdentificacionPresoSancionActionPerformed
         // TODO add your handling code here:
@@ -1075,13 +1017,13 @@ public class Oficial extends javax.swing.JFrame {
     private void jPanel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel11MouseClicked
         TabbedOficial.setSelectedIndex(5);
     }//GEN-LAST:event_jPanel11MouseClicked
-
+    
 
     private void BotonAsignarSancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonAsignarSancionActionPerformed
         SancionController controller = new SancionController();
         controller.registrarSancion(this);
     }//GEN-LAST:event_BotonAsignarSancionActionPerformed
-
+    
 
     private void botonAgendarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgendarCitaActionPerformed
         CitaMedicaController citaController = new CitaMedicaController();
@@ -1123,10 +1065,6 @@ public class Oficial extends javax.swing.JFrame {
         CitaMedicaController citaMedicaController = new CitaMedicaController();
         citaMedicaController.buscarGuardiaPorIdentificacion(BarraDeBusquedaGuardias.getText().trim(), tablaGuardias);
     }//GEN-LAST:event_BotonBuscarGuardia1ActionPerformed
-
-    private void BotonModificarSancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonModificarSancionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BotonModificarSancionActionPerformed
 
     private void jPanel7MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MouseEntered
         jPanel7.setBackground(new Color(43, 54, 84));
@@ -1174,6 +1112,14 @@ public class Oficial extends javax.swing.JFrame {
         controller.filtrarSancionesPorTipo(presoSeleccionadoIdentificacion, tipo, TablaHistorialSanciones);
     }//GEN-LAST:event_ComboTipoSancion1ActionPerformed
 
+    private void HoraSancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HoraSancionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_HoraSancionActionPerformed
+
+    private void BotonCargarSancionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCargarSancionesActionPerformed
+        sancionController.cargarHistorialSanciones(presoSeleccionadoIdentificacion, TablaPresos);
+    }//GEN-LAST:event_BotonCargarSancionesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1216,13 +1162,12 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JButton BotonAsignarSancion;
     private javax.swing.JButton BotonBuscarGuardia1;
     private javax.swing.JButton BotonBuscarPresoIdentificacion;
+    private javax.swing.JButton BotonCargarSanciones;
     private javax.swing.JButton BotonCargarTodosGuardias;
     private javax.swing.JButton BotonCargarTodosPresos;
-    private javax.swing.JButton BotonModificarSancion;
     private javax.swing.JButton CerrarSesionBoton;
     private javax.swing.JComboBox<String> ComboTipoSancion1;
     private javax.swing.JTextField ContraseñaActual;
-    private javax.swing.JComboBox<String> DuracionSancion;
     private javax.swing.JLabel EdadOficial;
     private javax.swing.JLabel EmailOficial;
     private com.toedter.calendar.JDateChooser FechaCita;
@@ -1244,17 +1189,13 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JLabel NacionalidadOficial;
     private javax.swing.JLabel NombreCompletoOficial;
     private javax.swing.JTextField NuevaContraseña;
-    private com.toedter.calendar.JDateChooser NuevaFechaSancion;
     private javax.swing.JTextField NuevaNacionalidad;
     private javax.swing.JTextField NuevoEmail;
-    private javax.swing.JTextArea NuevoMotivoSancion;
     private javax.swing.JTextField NuevoPrimerApellido;
     private javax.swing.JTextField NuevoPrimerNombre;
     private javax.swing.JTextField NuevoSegundoApellido;
     private javax.swing.JTextField NuevoSegundoNombre;
-    private javax.swing.JComboBox<String> NuevoTipoSancion;
     private javax.swing.JPanel PanelActualizarInformacion;
-    private javax.swing.JPanel PanelActualizarSancion;
     private javax.swing.JPanel PanelAgendarCita;
     private javax.swing.JPanel PanelAsignarSanciones;
     private javax.swing.JPanel PanelBotones;
@@ -1305,16 +1246,11 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel57;
     private javax.swing.JLabel jLabel58;
-    private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel60;
     private javax.swing.JLabel jLabel61;
     private javax.swing.JLabel jLabel62;
-    private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel64;
-    private javax.swing.JLabel jLabel65;
     private javax.swing.JLabel jLabel66;
-    private javax.swing.JLabel jLabel67;
-    private javax.swing.JLabel jLabel68;
     private javax.swing.JLabel jLabel69;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel70;
@@ -1332,7 +1268,6 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
@@ -1342,12 +1277,10 @@ public class Oficial extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator11;
     private javax.swing.JSeparator jSeparator12;
-    private javax.swing.JSeparator jSeparator13;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
@@ -1363,61 +1296,57 @@ public class Oficial extends javax.swing.JFrame {
    public JTextField getIdentificacionPresoCita() {
         return IdentificacionPresoCita;
     }
-
+    
     public JTextField getIdentificacionGuardia() {
         return IdentificacionGuardia;
     }
-
+    
     public JTextArea getMotivoCita() {
         return MotivoCita;
     }
-
+    
     public JDateChooser getFechaCita() {
         return FechaCita;
     }
-
+    
     public JComboBox<String> getComboHoraCita() {
         return JcomboHoraCita;
     }
-
+    
     public JTextField getIdentificacionPresoSancion() {
         return IdentificacionPresoSancion;
     }
-
+    
     public JTextArea getMotivoSancion() {
         return MotivoSancion;
     }
-
+    
     public JComboBox<String> getTipoSancion() {
         return TipoSancion;
     }
-
+    
     public JDateChooser getFechaSancion() {
         return FechaSancion;
     }
-
+    
     public JComboBox<String> getHoraSancion() {
         return HoraSancion;
     }
-
-    public JComboBox<String> getDuracionSancion() {
-        return DuracionSancion;
-    }
-
+    
     public JTextField getIdentificacionGuardiaSancion() {
         return IdentificacionGuardiaSancion;
     }
-
+    
     public JTable getTablaPresos() {
         return TablaPresos;
     }
-
+    
     public JTable getTablaGuardias() {
         return tablaGuardias;
     }
-
+    
     public JTable getTablaHistorialSanciones() {
         return TablaHistorialSanciones;
     }
-
+    
 }
