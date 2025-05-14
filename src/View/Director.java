@@ -41,6 +41,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import Controller.OficialController;
+import Controller.OficialDeRegistroController;
 import java.awt.Graphics2D;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -88,6 +89,7 @@ public class Director extends javax.swing.JFrame {
     EnfermeraDAO enfermeraDAO = new EnfermeraDAO();
     private EnfermeraController enfermeraController;
     private OficialController oficialController;
+    private OficialDeRegistroController oficialRegistro;
 
     private BufferedImage imagenCapturadaModificacion;
     private CoordinadorDeActividadesController coordinadorController;
@@ -139,8 +141,9 @@ public class Director extends javax.swing.JFrame {
         coordinadorController = CoordinadorDeActividadesController.getInstancia();
         guardiaController = guardiaController.getInstancia();
         oficialController = OficialController.getInstancia();
+        oficialRegistro = OficialDeRegistroController.getInstancia();
+        
 
-        // Configuración MEJORADA del JDateChooser
         jDateChooserFinContrato = new JDateChooser();
         jDateChooserFinContrato.setDateFormatString("dd/MM/yyyy");
 
@@ -226,7 +229,6 @@ public class Director extends javax.swing.JFrame {
         modOf = new javax.swing.JMenuItem();
         BorrarOf = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
-        jButton13 = new javax.swing.JButton();
         tabPrincipal = new javax.swing.JTabbedPane();
         Director = new javax.swing.JPanel();
         DisminuirSentencia = new javax.swing.JPanel();
@@ -515,11 +517,54 @@ public class Director extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaCoordinadores = new javax.swing.JTable();
         añadirODR = new javax.swing.JPanel();
-        jLabel20 = new javax.swing.JLabel();
-        ModificarODR = new javax.swing.JPanel();
-        jLabel97 = new javax.swing.JLabel();
+        AñadirEnfermera1 = new javax.swing.JPanel();
+        jPanel27 = new RoundedPanel(30);
+        jSeparator85 = new javax.swing.JSeparator();
+        jSeparator86 = new javax.swing.JSeparator();
+        jSeparator87 = new javax.swing.JSeparator();
+        jSeparator88 = new javax.swing.JSeparator();
+        jSeparator89 = new javax.swing.JSeparator();
+        jSeparator90 = new javax.swing.JSeparator();
+        jSeparator91 = new javax.swing.JSeparator();
+        jSeparator92 = new javax.swing.JSeparator();
+        jSeparator93 = new javax.swing.JSeparator();
+        jButton18 = new javax.swing.JButton();
+        jPanel28 = new javax.swing.JPanel();
+        jPanel29 = new javax.swing.JPanel();
+        lblImagen4 = new javax.swing.JLabel();
+        jLabel92 = new javax.swing.JLabel();
+        jLabel93 = new javax.swing.JLabel();
+        txtFechaContratacion4 = new javax.swing.JTextField();
+        dateFinContrato4 = new com.toedter.calendar.JDateChooser();
+        jLabel128 = new javax.swing.JLabel();
+        cmbTurno4 = new javax.swing.JComboBox<>();
+        jLabel129 = new javax.swing.JLabel();
+        jLabel130 = new javax.swing.JLabel();
+        txtCorreo4 = new javax.swing.JTextField();
+        jSeparator94 = new javax.swing.JSeparator();
+        jButton19 = new javax.swing.JButton();
+        jLabel131 = new javax.swing.JLabel();
+        txtNacionalidad4 = new javax.swing.JTextField();
+        txtSexo4 = new javax.swing.JTextField();
+        jLabel132 = new javax.swing.JLabel();
+        jLabel133 = new javax.swing.JLabel();
+        txtCedula4 = new javax.swing.JTextField();
+        txtEdad4 = new javax.swing.JTextField();
+        jLabel134 = new javax.swing.JLabel();
+        jLabel135 = new javax.swing.JLabel();
+        txtSegundoApellido4 = new javax.swing.JTextField();
+        txtPrimerApellido4 = new javax.swing.JTextField();
+        jLabel136 = new javax.swing.JLabel();
+        jLabel137 = new javax.swing.JLabel();
+        txtSegundoNombre4 = new javax.swing.JTextField();
+        txtPrimerNombre4 = new javax.swing.JTextField();
+        jLabel138 = new javax.swing.JLabel();
+        jLabel139 = new javax.swing.JLabel();
+        jLabel140 = new javax.swing.JLabel();
         MostrarODR = new javax.swing.JPanel();
-        jLabel98 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tablaGuardias1 = new javax.swing.JTable();
+        jButton13 = new javax.swing.JButton();
         AñadirOficial = new javax.swing.JPanel();
         jPanel9 = new RoundedPanel(30);
         jSeparator31 = new javax.swing.JSeparator();
@@ -612,6 +657,50 @@ public class Director extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         tablaOficial = new javax.swing.JTable();
         Credenciales = new javax.swing.JPanel();
+        ModificarODR = new javax.swing.JPanel();
+        ModificarNurse1 = new javax.swing.JPanel();
+        jPanel30 = new RoundedPanel(30);
+        jSeparator95 = new javax.swing.JSeparator();
+        jSeparator96 = new javax.swing.JSeparator();
+        jSeparator97 = new javax.swing.JSeparator();
+        jSeparator98 = new javax.swing.JSeparator();
+        jSeparator99 = new javax.swing.JSeparator();
+        jSeparator100 = new javax.swing.JSeparator();
+        jSeparator101 = new javax.swing.JSeparator();
+        jSeparator102 = new javax.swing.JSeparator();
+        jSeparator103 = new javax.swing.JSeparator();
+        jButton20 = new javax.swing.JButton();
+        jPanel31 = new javax.swing.JPanel();
+        jPanel32 = new javax.swing.JPanel();
+        lblImagenMod4 = new javax.swing.JLabel();
+        jLabel141 = new javax.swing.JLabel();
+        jLabel142 = new javax.swing.JLabel();
+        txtFechaContratacionMod4 = new javax.swing.JTextField();
+        dateFinContratoMod4 = new com.toedter.calendar.JDateChooser();
+        jLabel143 = new javax.swing.JLabel();
+        cmbTurnoMod4 = new javax.swing.JComboBox<>();
+        jLabel144 = new javax.swing.JLabel();
+        jLabel145 = new javax.swing.JLabel();
+        txtCorreoMod4 = new javax.swing.JTextField();
+        jSeparator104 = new javax.swing.JSeparator();
+        jButton21 = new javax.swing.JButton();
+        jLabel146 = new javax.swing.JLabel();
+        txtNacionalidadMod4 = new javax.swing.JTextField();
+        txtSexoMod4 = new javax.swing.JTextField();
+        jLabel147 = new javax.swing.JLabel();
+        jLabel148 = new javax.swing.JLabel();
+        txtCedulaMod4 = new javax.swing.JTextField();
+        txtEdadMod4 = new javax.swing.JTextField();
+        jLabel149 = new javax.swing.JLabel();
+        jLabel150 = new javax.swing.JLabel();
+        txtSegundoApellidoMod4 = new javax.swing.JTextField();
+        txtPrimerApellidoMod4 = new javax.swing.JTextField();
+        jLabel151 = new javax.swing.JLabel();
+        jLabel152 = new javax.swing.JLabel();
+        txtSegundoNombreMod4 = new javax.swing.JTextField();
+        txtPrimerNombreMod4 = new javax.swing.JTextField();
+        jLabel153 = new javax.swing.JLabel();
+        jLabel154 = new javax.swing.JLabel();
 
         Modificar.setText("Modificar");
         Modificar.addActionListener(new java.awt.event.ActionListener() {
@@ -682,15 +771,6 @@ public class Director extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(20, 25, 40));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jButton13.setBackground(new java.awt.Color(255, 255, 255));
-        jButton13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/icons8-sign-out-40.png"))); // NOI18N
-        jButton13.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton13ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton13, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 570, -1, -1));
 
         Director.setBackground(new java.awt.Color(255, 255, 255));
         tabPrincipal.addTab("Director", Director);
@@ -2229,22 +2309,294 @@ public class Director extends javax.swing.JFrame {
 
         añadirODR.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel20.setText("AGREGAR");
-        añadirODR.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(523, 5, -1, -1));
+        AñadirEnfermera1.setBackground(new java.awt.Color(20, 25, 40));
+        AñadirEnfermera1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel27.setBackground(new java.awt.Color(29, 35, 51));
+        jPanel27.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel27.add(jSeparator85, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, 310, 20));
+        jPanel27.add(jSeparator86, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, 310, 20));
+        jPanel27.add(jSeparator87, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 310, 20));
+        jPanel27.add(jSeparator88, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 310, 20));
+        jPanel27.add(jSeparator89, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 280, 310, 20));
+        jPanel27.add(jSeparator90, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 360, 310, 20));
+        jPanel27.add(jSeparator91, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 310, 20));
+        jPanel27.add(jSeparator92, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 200, 310, 20));
+        jPanel27.add(jSeparator93, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 400, 310, 20));
+
+        jButton18.setText("Añadir");
+        jButton18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton18ActionPerformed(evt);
+            }
+        });
+        jPanel27.add(jButton18, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 460, 180, 40));
+
+        jPanel28.setBackground(new java.awt.Color(0, 0, 51));
+        jPanel28.setRequestFocusEnabled(false);
+        jPanel28.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel29.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel29.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+        jPanel29.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblImagen4.setBackground(new java.awt.Color(255, 255, 255));
+        lblImagen4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel29.add(lblImagen4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 270, 180));
+
+        jPanel28.add(jPanel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 270, 180));
+
+        jPanel27.add(jPanel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 40, 310, 220));
+
+        jLabel92.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel92.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel92.setText("Agregar Foto de la registradora:");
+        jPanel27.add(jLabel92, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 10, -1, 30));
+
+        jLabel93.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel93.setText("Fecha de contratación:");
+        jPanel27.add(jLabel93, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 330, -1, 20));
+
+        txtFechaContratacion4.setEditable(false);
+        jPanel27.add(txtFechaContratacion4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 350, 190, 30));
+        jPanel27.add(dateFinContrato4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 410, 190, 30));
+
+        jLabel128.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel128.setText("Fecha de finalización del contrato:");
+        jPanel27.add(jLabel128, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 380, -1, 20));
+
+        cmbTurno4.setForeground(new java.awt.Color(255, 255, 255));
+        cmbTurno4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Diurno", "Nocturno" }));
+        jPanel27.add(cmbTurno4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 370, 240, 30));
+
+        jLabel129.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel129.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel129.setText("Turno:");
+        jPanel27.add(jLabel129, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, -1, -1));
+
+        jLabel130.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel130.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel130.setText("Correo:");
+        jPanel27.add(jLabel130, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 340, -1, -1));
+
+        txtCorreo4.setBackground(new java.awt.Color(29, 35, 51));
+        txtCorreo4.setForeground(new java.awt.Color(255, 255, 255));
+        txtCorreo4.setBorder(null);
+        txtCorreo4.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCorreo4FocusLost(evt);
+            }
+        });
+        txtCorreo4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCorreo4ActionPerformed(evt);
+            }
+        });
+        txtCorreo4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCorreo4KeyTyped(evt);
+            }
+        });
+        jPanel27.add(txtCorreo4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 330, 240, 30));
+        jPanel27.add(jSeparator94, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, 310, 20));
+
+        jButton19.setText("Seleccionar Imagen");
+        jButton19.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton19ActionPerformed(evt);
+            }
+        });
+        jPanel27.add(jButton19, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 280, -1, -1));
+
+        jLabel131.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel131.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel131.setText("Nacionalidad:");
+        jPanel27.add(jLabel131, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, 90, -1));
+
+        txtNacionalidad4.setBackground(new java.awt.Color(29, 35, 51));
+        txtNacionalidad4.setForeground(new java.awt.Color(255, 255, 255));
+        txtNacionalidad4.setBorder(null);
+        txtNacionalidad4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNacionalidad4KeyTyped(evt);
+            }
+        });
+        jPanel27.add(txtNacionalidad4, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 210, 30));
+
+        txtSexo4.setEditable(false);
+        txtSexo4.setBackground(new java.awt.Color(29, 35, 51));
+        txtSexo4.setForeground(new java.awt.Color(255, 255, 255));
+        txtSexo4.setText("Femenino");
+        txtSexo4.setBorder(null);
+        jPanel27.add(txtSexo4, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, 250, 30));
+
+        jLabel132.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel132.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel132.setText("Genero");
+        jPanel27.add(jLabel132, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 260, -1, -1));
+
+        jLabel133.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel133.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel133.setText("Cedula:");
+        jPanel27.add(jLabel133, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 210, -1, 30));
+
+        txtCedula4.setBackground(new java.awt.Color(29, 35, 51));
+        txtCedula4.setForeground(new java.awt.Color(255, 255, 255));
+        txtCedula4.setBorder(null);
+        txtCedula4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCedula4ActionPerformed(evt);
+            }
+        });
+        txtCedula4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCedula4KeyTyped(evt);
+            }
+        });
+        jPanel27.add(txtCedula4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 210, 240, 30));
+
+        txtEdad4.setBackground(new java.awt.Color(29, 35, 51));
+        txtEdad4.setForeground(new java.awt.Color(255, 255, 255));
+        txtEdad4.setBorder(null);
+        txtEdad4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtEdad4KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEdad4KeyTyped(evt);
+            }
+        });
+        jPanel27.add(txtEdad4, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 170, 250, 30));
+
+        jLabel134.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel134.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel134.setText("Edad:");
+        jPanel27.add(jLabel134, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, -1, -1));
+
+        jLabel135.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel135.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel135.setText("Segundo Apellido:");
+        jPanel27.add(jLabel135, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, -1, 20));
+
+        txtSegundoApellido4.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoApellido4.setForeground(new java.awt.Color(255, 255, 255));
+        txtSegundoApellido4.setBorder(null);
+        txtSegundoApellido4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoApellido4KeyTyped(evt);
+            }
+        });
+        jPanel27.add(txtSegundoApellido4, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 130, 180, 30));
+
+        txtPrimerApellido4.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerApellido4.setForeground(new java.awt.Color(255, 255, 255));
+        txtPrimerApellido4.setBorder(null);
+        txtPrimerApellido4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerApellido4KeyTyped(evt);
+            }
+        });
+        jPanel27.add(txtPrimerApellido4, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 90, 190, 30));
+
+        jLabel136.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel136.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel136.setText("Primer Apellido:");
+        jPanel27.add(jLabel136, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, -1, 20));
+
+        jLabel137.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel137.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel137.setText("Segundo nombre:");
+        jPanel27.add(jLabel137, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 50, -1, 30));
+
+        txtSegundoNombre4.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoNombre4.setForeground(new java.awt.Color(255, 255, 255));
+        txtSegundoNombre4.setBorder(null);
+        txtSegundoNombre4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoNombre4KeyTyped(evt);
+            }
+        });
+        jPanel27.add(txtSegundoNombre4, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, 180, 30));
+
+        txtPrimerNombre4.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerNombre4.setForeground(new java.awt.Color(255, 255, 255));
+        txtPrimerNombre4.setBorder(null);
+        txtPrimerNombre4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerNombre4KeyTyped(evt);
+            }
+        });
+        jPanel27.add(txtPrimerNombre4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 10, 200, 30));
+
+        jLabel138.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel138.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel138.setText("Primer nombre:");
+        jPanel27.add(jLabel138, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, -1, 20));
+
+        AñadirEnfermera1.add(jPanel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
+
+        jLabel139.setFont(new java.awt.Font("Arial", 2, 13)); // NOI18N
+        jLabel139.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel139.setText("Asegurese de ingresar correctamente la cedula ya que esta no podrá ser modificada más adelante.");
+        AñadirEnfermera1.add(jLabel139, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, -1, -1));
+
+        jLabel140.setFont(new java.awt.Font("Arial", 2, 10)); // NOI18N
+        jLabel140.setForeground(new java.awt.Color(153, 0, 0));
+        jLabel140.setText("TODOS LOS DATOS SON DE CARACTER OBLIGATORIO A EXCEPCIÓN DEL SEGUNDO NOMBRE.");
+        AñadirEnfermera1.add(jLabel140, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 20, -1, 30));
+
+        añadirODR.add(AñadirEnfermera1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 580));
 
         tabPrincipal.addTab("AggODR", añadirODR);
 
-        ModificarODR.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel97.setText("Modificar");
-        ModificarODR.add(jLabel97, new org.netbeans.lib.awtextra.AbsoluteConstraints(524, 5, -1, -1));
-
-        tabPrincipal.addTab("ModificarODR", ModificarODR);
-
         MostrarODR.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel98.setText("Mostrar");
-        MostrarODR.add(jLabel98, new org.netbeans.lib.awtextra.AbsoluteConstraints(529, 5, -1, -1));
+        tablaGuardias1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Foto", "Nombre", "Apellido", "Edad", "Cedula", "Sexo", "Nacionalidad", "Correo", "Turno", "Cargo", "FechaContratacion", "FechaFinContrato"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tablaGuardias1.setComponentPopupMenu(jPopupMenu1);
+        jScrollPane5.setViewportView(tablaGuardias1);
+        if (tablaGuardias1.getColumnModel().getColumnCount() > 0) {
+            tablaGuardias1.getColumnModel().getColumn(0).setResizable(false);
+            tablaGuardias1.getColumnModel().getColumn(1).setResizable(false);
+            tablaGuardias1.getColumnModel().getColumn(2).setResizable(false);
+            tablaGuardias1.getColumnModel().getColumn(3).setResizable(false);
+            tablaGuardias1.getColumnModel().getColumn(4).setResizable(false);
+            tablaGuardias1.getColumnModel().getColumn(5).setResizable(false);
+            tablaGuardias1.getColumnModel().getColumn(6).setResizable(false);
+            tablaGuardias1.getColumnModel().getColumn(7).setResizable(false);
+            tablaGuardias1.getColumnModel().getColumn(8).setResizable(false);
+            tablaGuardias1.getColumnModel().getColumn(9).setResizable(false);
+            tablaGuardias1.getColumnModel().getColumn(10).setResizable(false);
+            tablaGuardias1.getColumnModel().getColumn(11).setResizable(false);
+        }
+
+        MostrarODR.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1080, 550));
+
+        jButton13.setBackground(new java.awt.Color(255, 255, 255));
+        jButton13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/icons8-sign-out-40.png"))); // NOI18N
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
+            }
+        });
+        MostrarODR.add(jButton13, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 0, 50, 50));
 
         tabPrincipal.addTab("MostrarODR", MostrarODR);
 
@@ -2753,6 +3105,231 @@ public class Director extends javax.swing.JFrame {
 
         tabPrincipal.addTab("MostrarOficial", mostrarOficial);
         tabPrincipal.addTab("CambiarCredenciales", Credenciales);
+
+        ModificarODR.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        ModificarNurse1.setBackground(new java.awt.Color(20, 25, 40));
+        ModificarNurse1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel30.setBackground(new java.awt.Color(29, 35, 51));
+        jPanel30.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel30.add(jSeparator95, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 310, 20));
+        jPanel30.add(jSeparator96, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 40, 310, 20));
+        jPanel30.add(jSeparator97, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, 310, 20));
+        jPanel30.add(jSeparator98, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 120, 310, 20));
+        jPanel30.add(jSeparator99, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 280, 310, 20));
+        jPanel30.add(jSeparator100, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 360, 310, 20));
+        jPanel30.add(jSeparator101, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, 310, 20));
+        jPanel30.add(jSeparator102, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 200, 310, 20));
+        jPanel30.add(jSeparator103, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 400, 310, 20));
+
+        jButton20.setText("Modificar");
+        jButton20.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton20ActionPerformed(evt);
+            }
+        });
+        jPanel30.add(jButton20, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 430, 180, 40));
+
+        jPanel31.setBackground(new java.awt.Color(0, 0, 51));
+        jPanel31.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel32.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel32.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+        jPanel32.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel32.add(lblImagenMod4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 270, 180));
+
+        jPanel31.add(jPanel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 270, 180));
+
+        jPanel30.add(jPanel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 40, 310, 220));
+
+        jLabel141.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel141.setText("Modificar foto de la registradora:");
+        jPanel30.add(jLabel141, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 20, -1, -1));
+
+        jLabel142.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel142.setText("Fecha de contratación:");
+        jPanel30.add(jLabel142, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 340, -1, 20));
+
+        txtFechaContratacionMod4.setEditable(false);
+        jPanel30.add(txtFechaContratacionMod4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 360, 190, 30));
+        jPanel30.add(dateFinContratoMod4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 420, 190, 30));
+
+        jLabel143.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel143.setText("Fecha de finalización del contrato:");
+        jPanel30.add(jLabel143, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 400, -1, -1));
+
+        cmbTurnoMod4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Diurno", "Nocturno" }));
+        jPanel30.add(cmbTurnoMod4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 370, 250, 30));
+
+        jLabel144.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel144.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel144.setText("Turno:");
+        jPanel30.add(jLabel144, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 380, -1, -1));
+
+        jLabel145.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel145.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel145.setText("Correo:");
+        jPanel30.add(jLabel145, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 340, -1, -1));
+
+        txtCorreoMod4.setBackground(new java.awt.Color(29, 35, 51));
+        txtCorreoMod4.setForeground(new java.awt.Color(255, 255, 255));
+        txtCorreoMod4.setBorder(null);
+        txtCorreoMod4.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCorreoMod4FocusLost(evt);
+            }
+        });
+        txtCorreoMod4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCorreoMod4KeyTyped(evt);
+            }
+        });
+        jPanel30.add(txtCorreoMod4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 330, 240, 30));
+        jPanel30.add(jSeparator104, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 320, 310, 20));
+
+        jButton21.setText("Seleccionar Imagen");
+        jButton21.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton21ActionPerformed(evt);
+            }
+        });
+        jPanel30.add(jButton21, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 280, -1, -1));
+
+        jLabel146.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel146.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel146.setText("Nacionalidad:");
+        jPanel30.add(jLabel146, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 300, 90, -1));
+
+        txtNacionalidadMod4.setBackground(new java.awt.Color(29, 35, 51));
+        txtNacionalidadMod4.setForeground(new java.awt.Color(255, 255, 255));
+        txtNacionalidadMod4.setBorder(null);
+        txtNacionalidadMod4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNacionalidadMod4KeyTyped(evt);
+            }
+        });
+        jPanel30.add(txtNacionalidadMod4, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 210, 30));
+
+        txtSexoMod4.setEditable(false);
+        txtSexoMod4.setBackground(new java.awt.Color(29, 35, 51));
+        txtSexoMod4.setForeground(new java.awt.Color(255, 255, 255));
+        txtSexoMod4.setText("Femenino");
+        txtSexoMod4.setBorder(null);
+        jPanel30.add(txtSexoMod4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 250, 250, 30));
+
+        jLabel147.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel147.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel147.setText("Genero");
+        jPanel30.add(jLabel147, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, -1, -1));
+
+        jLabel148.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel148.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel148.setText("Cedula:");
+        jPanel30.add(jLabel148, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 210, -1, 30));
+
+        txtCedulaMod4.setEditable(false);
+        txtCedulaMod4.setBackground(new java.awt.Color(29, 35, 51));
+        txtCedulaMod4.setForeground(new java.awt.Color(255, 255, 255));
+        txtCedulaMod4.setBorder(null);
+        txtCedulaMod4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCedulaMod4ActionPerformed(evt);
+            }
+        });
+        txtCedulaMod4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCedulaMod4KeyTyped(evt);
+            }
+        });
+        jPanel30.add(txtCedulaMod4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 210, 240, 30));
+
+        txtEdadMod4.setBackground(new java.awt.Color(29, 35, 51));
+        txtEdadMod4.setForeground(new java.awt.Color(255, 255, 255));
+        txtEdadMod4.setBorder(null);
+        txtEdadMod4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtEdadMod4KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEdadMod4KeyTyped(evt);
+            }
+        });
+        jPanel30.add(txtEdadMod4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 170, 250, 30));
+
+        jLabel149.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel149.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel149.setText("Edad:");
+        jPanel30.add(jLabel149, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 180, -1, -1));
+
+        jLabel150.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel150.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel150.setText("Segundo Apellido:");
+        jPanel30.add(jLabel150, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 140, -1, 20));
+
+        txtSegundoApellidoMod4.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoApellidoMod4.setForeground(new java.awt.Color(255, 255, 255));
+        txtSegundoApellidoMod4.setBorder(null);
+        txtSegundoApellidoMod4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoApellidoMod4KeyTyped(evt);
+            }
+        });
+        jPanel30.add(txtSegundoApellidoMod4, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 130, 190, 30));
+
+        txtPrimerApellidoMod4.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerApellidoMod4.setForeground(new java.awt.Color(255, 255, 255));
+        txtPrimerApellidoMod4.setBorder(null);
+        txtPrimerApellidoMod4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerApellidoMod4KeyTyped(evt);
+            }
+        });
+        jPanel30.add(txtPrimerApellidoMod4, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 90, 200, 30));
+
+        jLabel151.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel151.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel151.setText("Primer Apellido:");
+        jPanel30.add(jLabel151, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 100, -1, 20));
+
+        jLabel152.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel152.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel152.setText("Segundo nombre:");
+        jPanel30.add(jLabel152, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, -1, 30));
+
+        txtSegundoNombreMod4.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoNombreMod4.setBorder(null);
+        txtSegundoNombreMod4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSegundoNombreMod4KeyTyped(evt);
+            }
+        });
+        jPanel30.add(txtSegundoNombreMod4, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 50, 180, 30));
+
+        txtPrimerNombreMod4.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerNombreMod4.setBorder(null);
+        txtPrimerNombreMod4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrimerNombreMod4KeyTyped(evt);
+            }
+        });
+        jPanel30.add(txtPrimerNombreMod4, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, 200, 30));
+
+        jLabel153.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel153.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel153.setText("Primer nombre:");
+        jPanel30.add(jLabel153, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, 20));
+
+        ModificarNurse1.add(jPanel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
+
+        jLabel154.setFont(new java.awt.Font("Arial", 2, 10)); // NOI18N
+        jLabel154.setForeground(new java.awt.Color(153, 0, 0));
+        jLabel154.setText("NINGUN CAMPO DEBE ESTAR VACIO AL MODIFICAR, A EXCEPCIÓN DEL SEGUNDO NOMBRE.");
+        ModificarNurse1.add(jLabel154, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 10, -1, 30));
+
+        ModificarODR.add(ModificarNurse1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 580));
+
+        tabPrincipal.addTab("ModificarODR", ModificarODR);
 
         jPanel1.add(tabPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 650));
 
@@ -5759,6 +6336,114 @@ public class Director extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_modOfActionPerformed
 
+    private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton18ActionPerformed
+
+    private void txtCorreo4FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreo4FocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreo4FocusLost
+
+    private void txtCorreo4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreo4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreo4ActionPerformed
+
+    private void txtCorreo4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreo4KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreo4KeyTyped
+
+    private void jButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton19ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton19ActionPerformed
+
+    private void txtNacionalidad4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidad4KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNacionalidad4KeyTyped
+
+    private void txtCedula4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedula4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCedula4ActionPerformed
+
+    private void txtCedula4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedula4KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCedula4KeyTyped
+
+    private void txtEdad4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdad4KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEdad4KeyPressed
+
+    private void txtEdad4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdad4KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEdad4KeyTyped
+
+    private void txtSegundoApellido4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellido4KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSegundoApellido4KeyTyped
+
+    private void txtPrimerApellido4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellido4KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrimerApellido4KeyTyped
+
+    private void txtSegundoNombre4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombre4KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSegundoNombre4KeyTyped
+
+    private void txtPrimerNombre4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombre4KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrimerNombre4KeyTyped
+
+    private void jButton20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton20ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton20ActionPerformed
+
+    private void txtCorreoMod4FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreoMod4FocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreoMod4FocusLost
+
+    private void txtCorreoMod4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreoMod4KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreoMod4KeyTyped
+
+    private void jButton21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton21ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton21ActionPerformed
+
+    private void txtNacionalidadMod4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadMod4KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNacionalidadMod4KeyTyped
+
+    private void txtCedulaMod4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaMod4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCedulaMod4ActionPerformed
+
+    private void txtCedulaMod4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaMod4KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCedulaMod4KeyTyped
+
+    private void txtEdadMod4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadMod4KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEdadMod4KeyPressed
+
+    private void txtEdadMod4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadMod4KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEdadMod4KeyTyped
+
+    private void txtSegundoApellidoMod4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellidoMod4KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSegundoApellidoMod4KeyTyped
+
+    private void txtPrimerApellidoMod4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellidoMod4KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrimerApellidoMod4KeyTyped
+
+    private void txtSegundoNombreMod4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombreMod4KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSegundoNombreMod4KeyTyped
+
+    private void txtPrimerNombreMod4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreMod4KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrimerNombreMod4KeyTyped
+
     /**
      * @param args the command line arguments
      */
@@ -5798,6 +6483,7 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JPanel AgregarCDA;
     private javax.swing.JPanel AñadirDelito;
     private javax.swing.JPanel AñadirEnfermera;
+    private javax.swing.JPanel AñadirEnfermera1;
     private javax.swing.JPanel AñadirGuardia;
     private javax.swing.JPanel AñadirOficial;
     private javax.swing.JMenuItem BorrarOf;
@@ -5814,6 +6500,7 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JMenuItem ModificarEnfermera;
     private javax.swing.JPanel ModificarGuardia;
     private javax.swing.JPanel ModificarNurse;
+    private javax.swing.JPanel ModificarNurse1;
     private javax.swing.JPanel ModificarODR;
     private javax.swing.JPanel ModificarOficial;
     private javax.swing.JPanel MostrarEnfermeras;
@@ -5825,17 +6512,21 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbTurno1;
     private javax.swing.JComboBox<String> cmbTurno2;
     private javax.swing.JComboBox<String> cmbTurno3;
+    private javax.swing.JComboBox<String> cmbTurno4;
     private javax.swing.JComboBox<String> cmbTurnoMod;
     private javax.swing.JComboBox<String> cmbTurnoMod1;
     private javax.swing.JComboBox<String> cmbTurnoMod2;
     private javax.swing.JComboBox<String> cmbTurnoMod3;
+    private javax.swing.JComboBox<String> cmbTurnoMod4;
     private com.toedter.calendar.JDateChooser dateFinContrato1;
     private com.toedter.calendar.JDateChooser dateFinContrato2;
     private com.toedter.calendar.JDateChooser dateFinContrato3;
+    private com.toedter.calendar.JDateChooser dateFinContrato4;
     private com.toedter.calendar.JDateChooser dateFinContratoMod;
     private com.toedter.calendar.JDateChooser dateFinContratoMod1;
     private com.toedter.calendar.JDateChooser dateFinContratoMod2;
     private com.toedter.calendar.JDateChooser dateFinContratoMod3;
+    private com.toedter.calendar.JDateChooser dateFinContratoMod4;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
@@ -5845,7 +6536,11 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton16;
     private javax.swing.JButton jButton17;
+    private javax.swing.JButton jButton18;
+    private javax.swing.JButton jButton19;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton20;
+    private javax.swing.JButton jButton21;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
@@ -5886,15 +6581,41 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel125;
     private javax.swing.JLabel jLabel126;
     private javax.swing.JLabel jLabel127;
+    private javax.swing.JLabel jLabel128;
+    private javax.swing.JLabel jLabel129;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel130;
+    private javax.swing.JLabel jLabel131;
+    private javax.swing.JLabel jLabel132;
+    private javax.swing.JLabel jLabel133;
+    private javax.swing.JLabel jLabel134;
+    private javax.swing.JLabel jLabel135;
+    private javax.swing.JLabel jLabel136;
+    private javax.swing.JLabel jLabel137;
+    private javax.swing.JLabel jLabel138;
+    private javax.swing.JLabel jLabel139;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel140;
+    private javax.swing.JLabel jLabel141;
+    private javax.swing.JLabel jLabel142;
+    private javax.swing.JLabel jLabel143;
+    private javax.swing.JLabel jLabel144;
+    private javax.swing.JLabel jLabel145;
+    private javax.swing.JLabel jLabel146;
+    private javax.swing.JLabel jLabel147;
+    private javax.swing.JLabel jLabel148;
+    private javax.swing.JLabel jLabel149;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel150;
+    private javax.swing.JLabel jLabel151;
+    private javax.swing.JLabel jLabel152;
+    private javax.swing.JLabel jLabel153;
+    private javax.swing.JLabel jLabel154;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
@@ -5972,11 +6693,11 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabel90;
     private javax.swing.JLabel jLabel91;
+    private javax.swing.JLabel jLabel92;
+    private javax.swing.JLabel jLabel93;
     private javax.swing.JLabel jLabel94;
     private javax.swing.JLabel jLabel95;
     private javax.swing.JLabel jLabel96;
-    private javax.swing.JLabel jLabel97;
-    private javax.swing.JLabel jLabel98;
     private javax.swing.JLabel jLabel99;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -5997,7 +6718,13 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel24;
     private javax.swing.JPanel jPanel25;
     private javax.swing.JPanel jPanel26;
+    private javax.swing.JPanel jPanel27;
+    private javax.swing.JPanel jPanel28;
+    private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel30;
+    private javax.swing.JPanel jPanel31;
+    private javax.swing.JPanel jPanel32;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel7;
@@ -6011,8 +6738,14 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator10;
+    private javax.swing.JSeparator jSeparator100;
+    private javax.swing.JSeparator jSeparator101;
+    private javax.swing.JSeparator jSeparator102;
+    private javax.swing.JSeparator jSeparator103;
+    private javax.swing.JSeparator jSeparator104;
     private javax.swing.JSeparator jSeparator11;
     private javax.swing.JSeparator jSeparator12;
     private javax.swing.JSeparator jSeparator13;
@@ -6094,15 +6827,32 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator82;
     private javax.swing.JSeparator jSeparator83;
     private javax.swing.JSeparator jSeparator84;
+    private javax.swing.JSeparator jSeparator85;
+    private javax.swing.JSeparator jSeparator86;
+    private javax.swing.JSeparator jSeparator87;
+    private javax.swing.JSeparator jSeparator88;
+    private javax.swing.JSeparator jSeparator89;
     private javax.swing.JSeparator jSeparator9;
+    private javax.swing.JSeparator jSeparator90;
+    private javax.swing.JSeparator jSeparator91;
+    private javax.swing.JSeparator jSeparator92;
+    private javax.swing.JSeparator jSeparator93;
+    private javax.swing.JSeparator jSeparator94;
+    private javax.swing.JSeparator jSeparator95;
+    private javax.swing.JSeparator jSeparator96;
+    private javax.swing.JSeparator jSeparator97;
+    private javax.swing.JSeparator jSeparator98;
+    private javax.swing.JSeparator jSeparator99;
     private javax.swing.JLabel lblFoto;
     private javax.swing.JLabel lblImagen1;
     private javax.swing.JLabel lblImagen2;
     private javax.swing.JLabel lblImagen3;
+    private javax.swing.JLabel lblImagen4;
     private javax.swing.JLabel lblImagenMod;
     private javax.swing.JLabel lblImagenMod1;
     private javax.swing.JLabel lblImagenMod2;
     private javax.swing.JLabel lblImagenMod3;
+    private javax.swing.JLabel lblImagenMod4;
     private javax.swing.JMenuItem modOf;
     private javax.swing.JPanel modificarOficial;
     private javax.swing.JPanel mostrarCoordinadora;
@@ -6111,6 +6861,7 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JTable tablaCoordinadores;
     private javax.swing.JTable tablaEnfermeras;
     private javax.swing.JTable tablaGuardias;
+    private javax.swing.JTable tablaGuardias1;
     private javax.swing.JTable tablaOficial;
     private javax.swing.JComboBox<String> txtCargoMod;
     private javax.swing.JComboBox<String> txtCargoMod1;
@@ -6118,82 +6869,102 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JTextField txtCedula1;
     private javax.swing.JTextField txtCedula2;
     private javax.swing.JTextField txtCedula3;
+    private javax.swing.JTextField txtCedula4;
     private javax.swing.JTextField txtCedulaMod;
     private javax.swing.JTextField txtCedulaMod1;
     private javax.swing.JTextField txtCedulaMod2;
     private javax.swing.JTextField txtCedulaMod3;
+    private javax.swing.JTextField txtCedulaMod4;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtCorreo1;
     private javax.swing.JTextField txtCorreo2;
     private javax.swing.JTextField txtCorreo3;
+    private javax.swing.JTextField txtCorreo4;
     private javax.swing.JTextField txtCorreoMod;
     private javax.swing.JTextField txtCorreoMod1;
     private javax.swing.JTextField txtCorreoMod2;
     private javax.swing.JTextField txtCorreoMod3;
+    private javax.swing.JTextField txtCorreoMod4;
     private javax.swing.JTextField txtEdad;
     private javax.swing.JTextField txtEdad1;
     private javax.swing.JTextField txtEdad2;
     private javax.swing.JTextField txtEdad3;
+    private javax.swing.JTextField txtEdad4;
     private javax.swing.JTextField txtEdadMod;
     private javax.swing.JTextField txtEdadMod1;
     private javax.swing.JTextField txtEdadMod2;
     private javax.swing.JTextField txtEdadMod3;
+    private javax.swing.JTextField txtEdadMod4;
     private javax.swing.JTextField txtFechaContratacion;
     private javax.swing.JTextField txtFechaContratacion1;
     private javax.swing.JTextField txtFechaContratacion2;
     private javax.swing.JTextField txtFechaContratacion3;
+    private javax.swing.JTextField txtFechaContratacion4;
     private javax.swing.JTextField txtFechaContratacionMod;
     private javax.swing.JTextField txtFechaContratacionMod1;
     private javax.swing.JTextField txtFechaContratacionMod2;
     private javax.swing.JTextField txtFechaContratacionMod3;
+    private javax.swing.JTextField txtFechaContratacionMod4;
     private javax.swing.JTextField txtNacionalidad;
     private javax.swing.JTextField txtNacionalidad1;
     private javax.swing.JTextField txtNacionalidad2;
     private javax.swing.JTextField txtNacionalidad3;
+    private javax.swing.JTextField txtNacionalidad4;
     private javax.swing.JTextField txtNacionalidadMod;
     private javax.swing.JTextField txtNacionalidadMod1;
     private javax.swing.JTextField txtNacionalidadMod2;
     private javax.swing.JTextField txtNacionalidadMod3;
+    private javax.swing.JTextField txtNacionalidadMod4;
     private javax.swing.JTextField txtPrimerApellido;
     private javax.swing.JTextField txtPrimerApellido1;
     private javax.swing.JTextField txtPrimerApellido2;
     private javax.swing.JTextField txtPrimerApellido3;
+    private javax.swing.JTextField txtPrimerApellido4;
     private javax.swing.JTextField txtPrimerApellidoMod;
     private javax.swing.JTextField txtPrimerApellidoMod1;
     private javax.swing.JTextField txtPrimerApellidoMod2;
     private javax.swing.JTextField txtPrimerApellidoMod3;
+    private javax.swing.JTextField txtPrimerApellidoMod4;
     private javax.swing.JTextField txtPrimerNombre;
     private javax.swing.JTextField txtPrimerNombre1;
     private javax.swing.JTextField txtPrimerNombre2;
     private javax.swing.JTextField txtPrimerNombre3;
+    private javax.swing.JTextField txtPrimerNombre4;
     private javax.swing.JTextField txtPrimerNombreMod;
     private javax.swing.JTextField txtPrimerNombreMod1;
     private javax.swing.JTextField txtPrimerNombreMod2;
     private javax.swing.JTextField txtPrimerNombreMod3;
+    private javax.swing.JTextField txtPrimerNombreMod4;
     private javax.swing.JTextField txtSegundoApellido;
     private javax.swing.JTextField txtSegundoApellido1;
     private javax.swing.JTextField txtSegundoApellido2;
     private javax.swing.JTextField txtSegundoApellido3;
+    private javax.swing.JTextField txtSegundoApellido4;
     private javax.swing.JTextField txtSegundoApellidoMod;
     private javax.swing.JTextField txtSegundoApellidoMod1;
     private javax.swing.JTextField txtSegundoApellidoMod2;
     private javax.swing.JTextField txtSegundoApellidoMod3;
+    private javax.swing.JTextField txtSegundoApellidoMod4;
     private javax.swing.JTextField txtSegundoNombre;
     private javax.swing.JTextField txtSegundoNombre1;
     private javax.swing.JTextField txtSegundoNombre2;
     private javax.swing.JTextField txtSegundoNombre3;
+    private javax.swing.JTextField txtSegundoNombre4;
     private javax.swing.JTextField txtSegundoNombreMod;
     private javax.swing.JTextField txtSegundoNombreMod1;
     private javax.swing.JTextField txtSegundoNombreMod2;
     private javax.swing.JTextField txtSegundoNombreMod3;
+    private javax.swing.JTextField txtSegundoNombreMod4;
     private javax.swing.JTextField txtSexo;
     private javax.swing.JTextField txtSexo1;
     private javax.swing.JTextField txtSexo2;
     private javax.swing.JTextField txtSexo3;
+    private javax.swing.JTextField txtSexo4;
     private javax.swing.JTextField txtSexoMod;
     private javax.swing.JTextField txtSexoMod1;
     private javax.swing.JTextField txtSexoMod2;
     private javax.swing.JTextField txtSexoMod3;
+    private javax.swing.JTextField txtSexoMod4;
     // End of variables declaration//GEN-END:variables
 
 }
