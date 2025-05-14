@@ -1,4 +1,4 @@
-package utilidades;
+package Utilidades;
 
 import java.awt.*;
 import java.awt.event.*;

@@ -292,22 +292,16 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     }
 
     public void inicializarMenuPresos() {
-        String rutaAbsoluta = "C:/Users/ASUS/Desktop/InmateMonitoring/src/Resources/Iconos/";
 
         JMenu cambiarEstadoMenu = new JMenu("Cambiar Estado");
-        cambiarEstadoMenu.setIcon(new ImageIcon(rutaAbsoluta + "liberar.png"));
 
         JMenuItem Expediente = new JMenuItem("Expediente");
-        Expediente.setIcon(new ImageIcon(rutaAbsoluta + "expediente.png"));
 
         JMenuItem Informacion = new JMenuItem("Información General");
-        Informacion.setIcon(new ImageIcon(rutaAbsoluta + "informacion.png"));
 
         JMenuItem Actualizar = new JMenuItem("Actualizar Información");
-        Actualizar.setIcon(new ImageIcon(rutaAbsoluta + "documento.png"));
 
         JMenuItem HistorialExpediente = new JMenuItem("Ver historial de Expedientes");
-        HistorialExpediente.setIcon(new ImageIcon(rutaAbsoluta + "informacion-personal.png"));
 
         //JMenuItem AñadirDelito = new JMenuItem("Añadir Delito");
         JMenuItem ActivoItem = new JMenuItem("Marcar como Activo");
