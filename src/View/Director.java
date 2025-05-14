@@ -93,6 +93,7 @@ public class Director extends javax.swing.JFrame {
     private CoordinadorDeActividadesController coordinadorController;
     private GuardiaController guardiaController;
     private String rutaImagenSeleccionada = "";
+    public boolean imagenFueModificada;
 
     private File imagenSeleccionadaMod;
     private File imagenSeleccionadaCDA;
@@ -137,7 +138,7 @@ public class Director extends javax.swing.JFrame {
         enfermeraController = EnfermeraController.getInstancia();
         coordinadorController = CoordinadorDeActividadesController.getInstancia();
         guardiaController = guardiaController.getInstancia();
-        oficialController = OficialController.getInstancia(); 
+        oficialController = OficialController.getInstancia();
 
         // Configuración MEJORADA del JDateChooser
         jDateChooserFinContrato = new JDateChooser();
@@ -4002,9 +4003,9 @@ public class Director extends javax.swing.JFrame {
         tablaCoordinadores.getColumnModel().getColumn(0).setPreferredWidth(85);
         tablaCoordinadores.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
     }
-    
+
     private void actualizarTablaOficiales() {
-       DefaultTableModel modelo = new DefaultTableModel() {
+        DefaultTableModel modelo = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -4732,46 +4733,18 @@ public class Director extends javax.swing.JFrame {
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
         try {
-            System.out.println("== INICIANDO PROCESO DE MODIFICACIÓN ==");
-            String cedulaOriginal = txtCedulaMod2.getText().trim();
-            System.out.println("Cédula a modificar: " + cedulaOriginal);
 
-            // Validar que la cédula no esté vacía
-            if (cedulaOriginal.isEmpty()) {
-                JOptionPane.showMessageDialog(this,
-                        "Debe especificar la cédula del coordinador a modificar",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // Obtener el coordinador original para verificaciones
-            CoordinadorDeActividades original = CoordinadorDeActividadesController.getInstancia()
-                    .obtenerCoordinadorPorCedula(cedulaOriginal);
-
-            if (original == null) {
-                JOptionPane.showMessageDialog(this,
-                        "No se encontró ningún coordinador con la cédula ingresada",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            System.out.println("Coordinador encontrado: " + original.getPrimerNombre() + " " + original.getPrimerApellido());
-
-            // Preparar mapa de cambios
             Map<String, Object> cambios = new HashMap<>();
             cambios.put("primerNombre", txtPrimerNombreMod2.getText().trim());
             cambios.put("segundoNombre", txtSegundoNombreMod2.getText().trim());
             cambios.put("primerApellido", txtPrimerApellidoMod2.getText().trim());
             cambios.put("segundoApellido", txtSegundoApellidoMod2.getText().trim());
 
-            // Validar y convertir la edad
+            // Validar y convertir edad
             try {
                 cambios.put("edad", Integer.parseInt(txtEdadMod2.getText().trim()));
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this,
-                        "La edad debe ser un número válido",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
+                throw new IllegalArgumentException("La edad debe ser un número válido");
             }
 
             cambios.put("nacionalidad", txtNacionalidadMod2.getText().trim());
@@ -4779,63 +4752,51 @@ public class Director extends javax.swing.JFrame {
             cambios.put("turno", cmbTurnoMod2.getSelectedItem().toString());
             cambios.put("cargo", txtCargoMod1.getSelectedItem().toString());
 
-            // Validar fecha de fin de contrato
             if (dateFinContratoMod2.getDate() == null) {
-                JOptionPane.showMessageDialog(this,
-                        "Debe seleccionar una fecha de fin de contrato",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
+                throw new IllegalArgumentException("Seleccione una fecha de fin de contrato");
             }
-
             cambios.put("fechaFin", dateFinContratoMod2.getDate().toInstant()
                     .atZone(ZoneId.systemDefault()).toLocalDate());
 
-            System.out.println("Datos preparados, llamando al controlador");
+            // 2. Obtener cédula original (no editable)
+            String cedulaOriginal = txtCedulaMod2.getText().trim();
 
             try {
-                // Modificar coordinador usando el controlador
+                // 3. Llamar al controller
                 boolean resultado = CoordinadorDeActividadesController.getInstancia().modificarCoordinador(
                         cedulaOriginal,
                         cambios,
-                        imagenSeleccionadaCDA // Puede ser null si no se cambió la imagen
+                        imagenSeleccionadaModCDA // Usamos la imagen modificada
                 );
 
-                System.out.println("Resultado de modificación: " + (resultado ? "Cambios realizados" : "Sin cambios"));
+                
 
-                if (resultado) {
-                    // Se realizaron cambios exitosamente
-                    // (El mensaje "COORDINADORA MODIFICADA EXITOSAMENTE" ya se muestra en el controlador)
-                    System.out.println("Actualizando tabla y cambiando panel");
-                    actualizarTablaCDA();
-                    tabPrincipal.setSelectedComponent(mostrarCoordinadora);
-                    limpiarFormularioModificacionCDA();
-                    imagenSeleccionadaCDA = null;
-                } else {
-                    // No hubo cambios y el usuario confirmó que quería salir
-                    System.out.println("No hubo cambios, usuario confirmó salir");
-                    actualizarTablaCDA();
-                    tabPrincipal.setSelectedComponent(mostrarCoordinadora);
-                    limpiarFormularioModificacionCDA();
-                    imagenSeleccionadaCDA = null;
-                }
+                tabPrincipal.setSelectedComponent(mostrarCoordinadora);
+                actualizarTablaCDA();
+                limpiarFormularioModificacionCDA();
+                imagenSeleccionadaModCDA = null;
+                imagenSeleccionadaCDA = null;
 
             } catch (CoordinadorDeActividadesController.CancelarModificacionException e) {
-                // El usuario decidió continuar editando, no hacer nada
-                System.out.println("Usuario decidió seguir editando (excepción capturada)");
-                return;
+
             } catch (IllegalArgumentException e) {
-                // Error de validación, mostrar mensaje pero no salir del panel de edición
-                System.out.println("Error de validación: " + e.getMessage());
                 JOptionPane.showMessageDialog(this,
                         e.getMessage(),
                         "Error de validación", JOptionPane.ERROR_MESSAGE);
-                return;  // Añadimos return para asegurarnos de no seguir procesando
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al modificar coordinadora: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
             }
 
-        } catch (Exception e) {
-            // Capturar cualquier otra excepción inesperada
+        } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this,
-                    "Error inesperado: " + e.getMessage(),
+                    e.getMessage(),
+                    "Error de validación", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al modificar coordinadora: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
@@ -5556,77 +5517,58 @@ public class Director extends javax.swing.JFrame {
 
     private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
         try {
-            // Obtener valores del formulario
-            String cedulaOriginal = txtCedulaMod3.getText().trim();
-            String primerNombre = txtPrimerNombreMod3.getText().trim();
-            String segundoNombre = txtSegundoNombreMod3.getText().trim();
-            String primerApellido = txtPrimerApellidoMod3.getText().trim();
-            String segundoApellido = txtSegundoApellidoMod3.getText().trim();
-            String nacionalidad = txtNacionalidadMod3.getText().trim();
-            String correo = txtCorreoMod3.getText().trim();
-            String turno = cmbTurnoMod3.getSelectedItem().toString();
-
-            // Validar edad
-            int edad;
-            try {
-                edad = Integer.parseInt(txtEdadMod3.getText().trim());
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("La edad debe ser un número válido.");
-            }
-
-            // Validar fecha fin
-            if (dateFinContratoMod3.getDate() == null) {
-                throw new IllegalArgumentException("Seleccione una fecha de fin de contrato.");
-            }
-            LocalDate fechaFin = dateFinContratoMod3.getDate().toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate();
-
-            // Validar imagen (si se seleccionó una nueva)
-            if (rutaImagenOficialMod != null) {
-                if (!rutaImagenOficialMod.exists()) {
-                    throw new IllegalArgumentException("La imagen seleccionada no existe.");
-                }
-                String nombreImagen = rutaImagenOficialMod.getName().toLowerCase();
-                if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
-                    throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
-                }
-            }
-
-            // Preparar cambios
+            // 1. Preparar cambios
             Map<String, Object> cambios = new HashMap<>();
-            cambios.put("primerNombre", primerNombre);
-            cambios.put("segundoNombre", segundoNombre);
-            cambios.put("primerApellido", primerApellido);
-            cambios.put("segundoApellido", segundoApellido);
-            cambios.put("edad", edad);
-            cambios.put("nacionalidad", nacionalidad);
-            cambios.put("correo", correo);
-            cambios.put("turno", turno);
-            cambios.put("fechaFin", fechaFin);
+            cambios.put("primerNombre", txtPrimerNombreMod3.getText().trim());
+            cambios.put("segundoNombre", txtSegundoNombreMod3.getText().trim());
+            cambios.put("primerApellido", txtPrimerApellidoMod3.getText().trim());
+            cambios.put("segundoApellido", txtSegundoApellidoMod3.getText().trim());
+            cambios.put("edad", Integer.parseInt(txtEdadMod3.getText().trim()));
+            cambios.put("nacionalidad", txtNacionalidadMod3.getText().trim());
+            cambios.put("correo", txtCorreoMod3.getText().trim());
+            cambios.put("turno", cmbTurnoMod3.getSelectedItem().toString());
+            cambios.put("fechaFin", dateFinContratoMod3.getDate().toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate());
 
-            // Llamar al Controller
+            String cedulaOriginal = txtCedulaMod3.getText().trim();
+
+            // 2. Solo considerar como nueva imagen si el usuario seleccionó una explícitamente
+            File imagenModificada = imagenFueModificada ? rutaImagenOficialMod : null;
+
+            // 3. Llamar al controlador
             int resultado = OficialController.getInstancia().modificarOficial(
-                    cedulaOriginal,
-                    cambios,
-                    rutaImagenOficialMod // Puede ser null
-            );
+                    cedulaOriginal, cambios, imagenModificada);
 
-            if (resultado == 1) {
-                limpiarFormularioOficialMod();
-                cargarTablaOficiales();
-                JOptionPane.showMessageDialog(this, "Oficial modificado exitosamente.",
-                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            } else if (resultado == 0) {
-                JOptionPane.showMessageDialog(this, "No se realizaron cambios.",
-                        "Información", JOptionPane.INFORMATION_MESSAGE);
+            // 4. Manejar resultados
+            switch (resultado) {
+                case 1: // Éxito
+                    JOptionPane.showMessageDialog(this,
+                            "Oficial modificado exitosamente",
+                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    tabPrincipal.setSelectedComponent(mostrarOficial); // Cambiar al panel de tabla
+                    cargarTablaOficiales(); // Actualizar tabla
+                    break;
+
+                case 0: // No hay cambios
+                    int opcion = JOptionPane.showConfirmDialog(this,
+                            "No se detectaron cambios. ¿Desea cancelar la modificación?",
+                            "Sin cambios",
+                            JOptionPane.YES_NO_OPTION);
+
+                    if (opcion == JOptionPane.YES_OPTION) {
+                        tabPrincipal.setSelectedComponent(mostrarOficial); // Cambiar al panel de tabla
+                    }
+                    break;
+
+                case -1: // Error
+                    throw new RuntimeException("Error desconocido al modificar oficial");
             }
 
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this, e.getMessage(),
                     "Error de validación", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(),
+            JOptionPane.showMessageDialog(this, "Error al modificar oficial: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
@@ -5784,7 +5726,7 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_BorrarOfActionPerformed
 
     private void modOfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modOfActionPerformed
-  int fila = tablaOficial.getSelectedRow();
+        int fila = tablaOficial.getSelectedRow();
 
         if (fila < 0) {
             JOptionPane.showMessageDialog(this,
@@ -5793,7 +5735,6 @@ public class Director extends javax.swing.JFrame {
             return;
         }
 
-       
         String cedula = tablaOficial.getValueAt(fila, 4).toString(); // Cambia 4 por el índice correcto
 
         try {
