@@ -4769,8 +4769,6 @@ public class Director extends javax.swing.JFrame {
                         imagenSeleccionadaModCDA // Usamos la imagen modificada
                 );
 
-                
-
                 tabPrincipal.setSelectedComponent(mostrarCoordinadora);
                 actualizarTablaCDA();
                 limpiarFormularioModificacionCDA();

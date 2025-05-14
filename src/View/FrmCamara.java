@@ -229,7 +229,7 @@ public class FrmCamara extends javax.swing.JFrame {
     private void btnPrenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrenderActionPerformed
         textoBotonesCuandoCargaCamara();
     
-    // Usar SwingUtilities para asegurar ejecución en EDT
+    
     SwingUtilities.invokeLater(() -> {
         try {
             if (!webcam.isOpen()) {
@@ -273,12 +273,12 @@ public void dispose() {
 
         if (pregunta == 0) {
             try {
-                // Crear un archivo temporal para la imagen
+                
                 imagenCapturada = File.createTempFile("enfermera_", ".jpg");
                 ImageIO.write(imagenBuffer, "jpg", imagenCapturada);
 
                 JOptionPane.showMessageDialog(this, "Foto capturada con éxito");
-                this.dispose(); // Cerrar la ventana después de guardar
+                this.dispose(); 
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this,
                         "Error al guardar la imagen: " + e.getMessage(),
