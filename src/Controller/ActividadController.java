@@ -98,9 +98,11 @@ public class ActividadController {
         }
     }
 
-    public boolean asignarPresoAActividad(String idActividad, String identificacionPr) {
+    public boolean asignarPresoAActividad(String idActividad, String identificacionPr, JTable tablaGeneral) {
         if (actividadDAO.asignarPresoAActividad(idActividad, identificacionPr)) {
+            cargarActividadesEnTabla(tablaGeneral);
             Validador.mostrarInfo("Preso asignado exitosamente a la actividad");
+            
             return true;
         } else {
             Validador.mostrarAdvertencia("No se pudo asignar el preso. Verifique el cupo o si ya está asignado");

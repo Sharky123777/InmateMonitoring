@@ -233,6 +233,8 @@ public class ActividadDAO {
                     JOptionPane.showMessageDialog(null,
                             "Preso asignado a la actividad correctamente.",
                             "Información", JOptionPane.INFORMATION_MESSAGE);
+                    cargarActividades();
+                    
                     return true;
                 } else {
                     return false;

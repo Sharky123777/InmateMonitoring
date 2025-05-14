@@ -14,6 +14,7 @@ import Model.Entities.IntentoFuga;
 import Model.Entities.Preso;
 import Model.Entities.Sentencia;
 import Utilidades.Validador;
+import View.FrmCamara;
 import java.awt.AlphaComposite;
 import java.awt.Component;
 import java.awt.Graphics2D;
@@ -32,6 +33,8 @@ import java.util.List;
 import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -91,8 +94,8 @@ public class PresoController {
                 !edad.trim().isEmpty() && Integer.parseInt(edad.trim()) != presoOriginal.getEdad(),
                 !estatura.trim().isEmpty() && Float.parseFloat(estatura.trim()) != presoOriginal.getEstatura(),
                 !peso.trim().isEmpty() && Float.parseFloat(peso.trim()) != presoOriginal.getPeso(),
-                nacionalidad != null && !nacionalidad.toString().equals("<Seleccione>"),
-                grupoSanguineo != null && !grupoSanguineo.toString().equals("<Seleccione>")
+                nacionalidad != null && !nacionalidad.toString().equals("<Seleccionar>"),
+                grupoSanguineo != null && !grupoSanguineo.toString().equals("<Seleccionar>")
                 && !grupoSanguineo.toString().equals(presoOriginal.getGrupoSanguineo()),
                 nivelSeguridad != null && !nivelSeguridad.toString().equals("<Seleccionar>")
                 && !nivelSeguridad.toString().equals(presoOriginal.getNivelDeSeguridad()),
@@ -155,7 +158,7 @@ public class PresoController {
                     segundoApellido.trim().isEmpty() ? presoOriginal.getSegundoApellido() : segundoApellido.trim(),
                     edad.trim().isEmpty() ? presoOriginal.getEdad() : Integer.parseInt(edad.trim()),
                     presoOriginal.getSexo(),
-                    nacionalidad == null || nacionalidad.toString().equals("<Seleccione>")
+                    nacionalidad == null || nacionalidad.toString().equals("<Seleccionar>")
                     ? presoOriginal.getNacionalidad() : nacionalidad.toString(),
                     estatura.trim().isEmpty() ? presoOriginal.getEstatura() : Float.parseFloat(estatura.trim()),
                     peso.trim().isEmpty() ? presoOriginal.getPeso() : Float.parseFloat(peso.trim()),
@@ -836,6 +839,30 @@ public class PresoController {
 
     public List<IntentoFuga> obtenerIntentosFuga(String identificacionPreso) {
         return intentoFugaDAO.obtenerPorPreso(identificacionPreso);
+    }
+    
+    public File capturarImagenPreso(){
+        FrmCamara ventanaCamara = new FrmCamara();
+        ventanaCamara.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        JDialog dialog = new JDialog();
+        dialog.setModal(true);
+        dialog.setContentPane(ventanaCamara.getContentPane());
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+
+        while (dialog.isVisible()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return null;
+            }
+        }
+        
+        return ventanaCamara.getImagenCapturada();
+
+        
     }
 
 }
