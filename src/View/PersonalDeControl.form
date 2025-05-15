@@ -698,7 +698,7 @@
                 <Component class="javax.swing.JTable" name="TablaPresos">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="10" rowCount="4">
+                      <Table columnCount="11" rowCount="4">
                         <Column editable="false" title="Foto" type="java.lang.String"/>
                         <Column editable="false" title="Id" type="java.lang.Integer"/>
                         <Column editable="false" title="Nombres" type="java.lang.String"/>
@@ -709,10 +709,16 @@
                         <Column editable="false" title="Nacionalidad" type="java.lang.String"/>
                         <Column editable="false" title="Celda" type="java.lang.String"/>
                         <Column editable="false" title="Seccion" type="java.lang.String"/>
+                        <Column editable="false" title="Estado" type="java.lang.String"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="0">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
                           <Title/>
                           <Editor/>
@@ -1654,11 +1660,21 @@
             <Component class="javax.swing.JComboBox" name="HoraVisita">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
+                  <StringArray count="14">
                     <StringItem index="0" value="&lt; Seleccionar &gt;"/>
                     <StringItem index="1" value="08:00"/>
                     <StringItem index="2" value="09:00"/>
                     <StringItem index="3" value="10:00"/>
+                    <StringItem index="4" value="11:00"/>
+                    <StringItem index="5" value="12:00"/>
+                    <StringItem index="6" value="13:00"/>
+                    <StringItem index="7" value="14:00"/>
+                    <StringItem index="8" value="15:00"/>
+                    <StringItem index="9" value="16:00"/>
+                    <StringItem index="10" value="17:00"/>
+                    <StringItem index="11" value="18:00"/>
+                    <StringItem index="12" value="19:00"/>
+                    <StringItem index="13" value="20:00"/>
                   </StringArray>
                 </Property>
               </Properties>

@@ -9,6 +9,8 @@ import Model.Entities.Guardia;
 import Model.Entities.Preso;
 import Model.Entities.Sancion;
 import Model.Entities.Visita;
+import Model.Entities.Visitante;
+import Utilidades.EmailSender;
 import View.Oficial;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -21,14 +23,12 @@ import javax.swing.table.DefaultTableModel;
 
 public class SancionController {
 
-    private final SancionDAO sancionDAO;
-    private final PresoDAO presoDAO;
-    private final VisitaDAO visitaDAO;
+    private SancionDAO sancionDAO = SancionDAO.getInstancia();
+    private PresoDAO presoDAO = PresoDAO.getInstancia();
+    private VisitaDAO visitaDAO = VisitaDAO.getInstancia();
 
     public SancionController() {
-        this.sancionDAO = new SancionDAO();
-        this.presoDAO = new PresoDAO();
-        this.visitaDAO = VisitaDAO.getInstancia();
+
     }
 
     public void mostrarError(String mensaje) {
@@ -131,21 +131,50 @@ public class SancionController {
         }
     }
 
-    private void cancelarVisitasPendientes(String identificacionPreso, LocalDate fecha) {
+    private void cancelarVisitasPendientes(String identificacionPreso, LocalDate fechaSancion) {
         List<Visita> visitas = visitaDAO.cargarPorIdentificacionPreso(identificacionPreso);
         int visitasCanceladas = 0;
+        String motivoCancelacion = "Sanción aplicada al preso";
 
         for (Visita visita : visitas) {
-            if (visita.getFechaVisita().equals(fecha)
+            if ((visita.getFechaVisita().equals(fechaSancion)
+                    || visita.getFechaVisita().equals(fechaSancion.plusDays(1)))
                     && visita.getEstado() == EstadoVisitaEnum.EN_PROCESO) {
+
                 visitaDAO.modificarEstadoVisitaYDevolver(visita.getId(), EstadoVisitaEnum.CANCELADA);
                 visitasCanceladas++;
+
+                notificarCancelacionAVisitantes(visita, motivoCancelacion);
             }
         }
 
         if (visitasCanceladas > 0) {
-            mostrarExito("Se cancelaron " + visitasCanceladas + " visitas programadas para hoy "
-                    + "debido a la sanción impuesta.");
+            mostrarExito("Se cancelaron " + visitasCanceladas + " visitas programadas para hoy y mañana.");
+        }
+    }
+
+    private void notificarCancelacionAVisitantes(Visita visita, String motivo) {
+        try {
+            List<Visitante> visitantes = visita.getVisitantes();
+
+            for (Visitante visitante : visitantes) {
+                if (visitante.getEdad() >= 18
+                        && visitante.getEmail() != null
+                        && !visitante.getEmail().isEmpty()) {
+
+                    boolean correoEnviado = EmailSender.getInstancia().enviarNotificacionCancelacion(
+                            visitante,
+                            visita,
+                            motivo
+                    );
+
+                    if (!correoEnviado) {
+                        System.err.println("Error al enviar notificación a: " + visitante.getEmail());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error en notificación de cancelación: " + e.getMessage());
         }
     }
 

@@ -166,20 +166,16 @@ public class SancionDAO {
     }
 
     public List<Sancion> obtenerSancionesActivasPorPreso(String identificacionPreso) {
-    List<Sancion> sanciones = cargarPorIdentificacionPreso(identificacionPreso);
-    LocalDate hoy = LocalDate.now();
+        List<Sancion> sanciones = cargarPorIdentificacionPreso(identificacionPreso);
+        LocalDate hoy = LocalDate.now();
 
-    return sanciones.stream()
-            .filter(sancion -> {
-                if (sancion.getTipoSancion().equalsIgnoreCase("Suspensión de visitas")) {
+        return sanciones.stream()
+                .filter(sancion -> {
                     LocalDate fechaFin = sancion.getFechaSancion().plusDays(1);
                     return !hoy.isBefore(sancion.getFechaSancion()) && !hoy.isAfter(fechaFin);
-                } else {
-                    return hoy.isEqual(sancion.getFechaSancion());
-                }
-            })
-            .collect(Collectors.toList());
-}
+                })
+                .collect(Collectors.toList());
+    }
 
     public List<Sancion> obtenerSancionesPorPresoYFecha(String identificacionPreso, LocalDate fecha) {
         List<Sancion> sanciones = cargarPorIdentificacionPreso(identificacionPreso);

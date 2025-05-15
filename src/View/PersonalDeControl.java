@@ -29,7 +29,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class PersonalDeControl extends javax.swing.JFrame {
 
-    private VisitaDAO visitaDAO = new VisitaDAO();
     private VisitaController controller = new VisitaController();
     private List<Visitante> visitantesTemporales = new ArrayList<>();
     private File imagenVisitanteSeleccionada;
@@ -40,6 +39,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
     public PersonalDeControl() {
         initComponents();
+        controller.verificarVisitasVencidas();
         FechaVisita.getDateEditor().setEnabled(false);
         this.setLocationRelativeTo(null);
         controller.cargarTodosLosPresos(TablaPresos);
@@ -608,20 +608,20 @@ public class PersonalDeControl extends javax.swing.JFrame {
 
         TablaPresos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Foto", "Id", "Nombres", "Apellidos", "Genero", "Edad", "Identificacion", "Nacionalidad", "Celda", "Seccion"
+                "Foto", "Id", "Nombres", "Apellidos", "Genero", "Edad", "Identificacion", "Nacionalidad", "Celda", "Seccion", "Estado"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -644,6 +644,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
             TablaPresos.getColumnModel().getColumn(7).setResizable(false);
             TablaPresos.getColumnModel().getColumn(8).setResizable(false);
             TablaPresos.getColumnModel().getColumn(9).setResizable(false);
+            TablaPresos.getColumnModel().getColumn(10).setResizable(false);
         }
 
         PanelListaPresos.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 1080, 440));
@@ -846,7 +847,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         PanelGuardarVisita.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 390, 160, 180));
         PanelGuardarVisita.add(FechaVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 152, 270, 30));
 
-        HoraVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "08:00", "09:00", "10:00" }));
+        HoraVisita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00" }));
         PanelGuardarVisita.add(HoraVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 200, 270, 30));
 
         jLabel51.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -1100,9 +1101,9 @@ public class PersonalDeControl extends javax.swing.JFrame {
         try {
             File nuevaImagen = null;
 
-            if (opcion == 0) { 
+            if (opcion == 0) {
                 nuevaImagen = controller.capturarImagenVisitante();
-            } else if (opcion == 1) { 
+            } else if (opcion == 1) {
                 JFileChooser fileChooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter(
                         "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");

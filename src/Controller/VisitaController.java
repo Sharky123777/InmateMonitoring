@@ -14,6 +14,7 @@ import Model.Entities.ExpedienteJudicial;
 import Model.Constants.EstadoVisitaEnum;
 import Model.Constants.EstadoVisitanteEnum;
 import Model.Entities.Sancion;
+import Utilidades.EmailSender;
 import View.FrmCamara;
 import View.PersonalDeControl;
 import java.awt.AlphaComposite;
@@ -26,6 +27,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -212,7 +214,6 @@ public class VisitaController {
             mostrarError("Digite la identificación del preso");
             return false;
         }
-
         if (view.getTipoVisita().getSelectedIndex() == 0
                 || view.getLugarVisita().getSelectedIndex() == 0) {
             mostrarError("Complete todos los campos requeridos para la visita");
@@ -221,6 +222,29 @@ public class VisitaController {
 
         if (view.getFechaVisita().getDate() == null) {
             mostrarError("Seleccione una fecha para la visita");
+            return false;
+        }
+
+        if (view.getHoraVisita().getSelectedIndex() == 0) {
+            mostrarError("Seleccione una hora para la visita");
+            return false;
+        }
+
+        try {
+            String horaSeleccionada = view.getHoraVisita().getSelectedItem().toString();
+            LocalTime horaVisita = LocalTime.parse(horaSeleccionada);
+
+            if (horaVisita.isBefore(LocalTime.of(8, 0))) {
+                mostrarError("Las visitas no pueden programarse antes de las 8:00 AM");
+                return false;
+            }
+
+            if (horaVisita.isAfter(LocalTime.of(19, 0))) {
+                mostrarError("La última hora permitida para visitas es las 7:00 PM");
+                return false;
+            }
+        } catch (Exception e) {
+            mostrarError("Hora seleccionada no válida");
             return false;
         }
 
@@ -408,28 +432,65 @@ public class VisitaController {
                 return false;
             }
 
+            String horaSeleccionada = view.getHoraVisita().getSelectedItem().toString();
+            LocalTime horaVisita = LocalTime.parse(horaSeleccionada);
+
+            if (horaVisita.isBefore(LocalTime.of(8, 0))) {
+                mostrarError("Las visitas no pueden ser antes de las 8:00 AM");
+                return false;
+            }
+
+            if (horaVisita.isAfter(LocalTime.of(19, 0))) {
+                mostrarError("La última visita debe ser a las 19:00 (termina a las 20:00)");
+                return false;
+            }
+
             List<Sancion> sancionesActivas = sancionDAO.obtenerSancionesActivasPorPreso(identificacionPreso);
+            LocalDate fechaVisita = view.getFechaVisita().getDate().toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate();
+
             if (!sancionesActivas.isEmpty()) {
+                StringBuilder mensajeError = new StringBuilder("El preso tiene sanciones que bloquean visitas:\n");
+                boolean bloqueaVisita = false;
+
                 for (Sancion sancion : sancionesActivas) {
-                    if (sancion.getTipoSancion().equalsIgnoreCase("Suspensión de visitas")) {
-                        LocalDate fechaFinSancion = sancion.getFechaSancion().plusDays(1);
-                        mostrarError("El preso tiene una suspensión de visitas activa hasta: " + fechaFinSancion);
-                        return false;
+                    LocalDate fechaInicioSancion = sancion.getFechaSancion();
+                    LocalDate fechaFinSancion = fechaInicioSancion.plusDays(1);
+
+                    boolean visitaDuranteSancion
+                            = !fechaVisita.isBefore(fechaInicioSancion)
+                            && !fechaVisita.isAfter(fechaFinSancion);
+
+                    if (visitaDuranteSancion) {
+                        mensajeError.append("- ").append(sancion.getTipoSancion())
+                                .append(" (Válida desde ")
+                                .append(fechaInicioSancion)
+                                .append(" hasta ")
+                                .append(fechaFinSancion)
+                                .append(")\n");
+                        bloqueaVisita = true;
                     }
+                }
+
+                if (bloqueaVisita) {
+                    mensajeError.append("\nNo se pueden registrar visitas durante los períodos de sanción.");
+                    mostrarError(mensajeError.toString());
+                    return false;
                 }
             }
 
-            LocalDate fechaVisita = view.getFechaVisita().getDate().toInstant()
-                    .atZone(ZoneId.systemDefault()).toLocalDate();
-            List<Sancion> sancionesEnFecha = sancionDAO.obtenerSancionesPorPresoYFecha(identificacionPreso, fechaVisita);
-            if (!sancionesEnFecha.isEmpty()) {
-                mostrarError("El preso tiene sanciones registradas para la fecha seleccionada");
-                return false;
-            }
             if (preso.getEstado() != EstadoPresoEnum.ACTIVO) {
-                mostrarError("El preso " + preso.getNombresCompletos() + " no puede recibir visitas.\n"
-                        + "Motivo: Estado actual = " + preso.getEstado() + "\n"
-                        + "Solo permitido: Presos en estado ACTIVO");
+                String mensajeEstado = switch (preso.getEstado()) {
+                    case FALLECIDO ->
+                        "No se pueden registrar visitas para presos fallecidos";
+                    case LIBERADO ->
+                        "No se pueden registrar visitas para presos liberados";
+                    case FUGADO ->
+                        "No se pueden registrar visitas para presos fugados";
+                    default ->
+                        "El preso no puede recibir visitas en su estado actual: " + preso.getEstado();
+                };
+                mostrarError(mensajeEstado);
                 return false;
             }
 
@@ -441,24 +502,17 @@ public class VisitaController {
             }
 
             String nivelSeguridad = preso.getNivelDeSeguridad();
-            if (!nivelSeguridad.equalsIgnoreCase("Baja") && !nivelSeguridad.equalsIgnoreCase("Medio")) {
+            if (!nivelSeguridad.equalsIgnoreCase("Baja") && !nivelSeguridad.equalsIgnoreCase("Media")) {
                 mostrarError("El preso " + preso.getNombresCompletos() + " tiene nivel de seguridad " + nivelSeguridad + ".\n"
-                        + "Solo puede recibir visitas con nivel de seguridad Baja o Medio");
+                        + "Solo puede recibir visitas con nivel de seguridad Baja o Media");
                 return false;
             }
 
-            ExpedienteJudicial expediente = ExpedienteDAO.getInstancia().obtenerExpedienteAbierto(identificacionPreso);
-            if (expediente != null && expediente.getNivelRiesgo() != null
-                    && expediente.getNivelRiesgo().equalsIgnoreCase("Riesgo alto")) {
+            if (preso.getNivelDeRiesgo().equalsIgnoreCase("Riesgo alto")) {
                 mostrarError("El preso " + preso.getNombresCompletos() + " tiene nivel de riesgo ALTO.\n"
                         + "No puede recibir visitas por motivos de seguridad");
                 return false;
             }
-
-            String tipo = view.getTipoVisita().getSelectedItem().toString();
-            String lugar = view.getLugarVisita().getSelectedItem().toString();
-            String horaSeleccionada = view.getHoraVisita().getSelectedItem().toString();
-            LocalTime horaVisita = LocalTime.parse(horaSeleccionada);
 
             if (!fechaVisita.isAfter(LocalDate.now())) {
                 mostrarError("La fecha debe ser posterior al día actual.\n"
@@ -479,6 +533,9 @@ public class VisitaController {
                         + "Estado: " + visitaExistente.getEstado());
                 return false;
             }
+
+            String tipo = view.getTipoVisita().getSelectedItem().toString();
+            String lugar = view.getLugarVisita().getSelectedItem().toString();
 
             visitaTemporal = new Visita(
                     0,
@@ -501,6 +558,19 @@ public class VisitaController {
         } catch (Exception e) {
             mostrarError("Error al guardar visita temporal: " + e.getMessage());
             return false;
+        }
+    }
+
+    public void verificarVisitasVencidas() {
+        try {
+            int cantidad = visitaDAO.finalizarVisitasAutomaticamente();
+            if (cantidad > 0) {
+                System.out.println("[" + LocalDateTime.now() + "] Se finalizaron automáticamente "
+                        + cantidad + " visitas vencidas.");
+            }
+        } catch (Exception e) {
+            System.err.println("Error al finalizar visitas automáticamente: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -534,19 +604,48 @@ public class VisitaController {
 
         visitaDAO.guardarVisita(visitaTemporal);
 
+        Visitante visitanteMayorEdad = null;
+        for (Visitante visitante : visitantes) {
+            if (visitante.getEdad() >= 18) {
+                visitanteMayorEdad = visitante;
+                break;
+            }
+        }
+
         for (int i = 0; i < visitantes.size(); i++) {
             visitanteDAO.guardarVisitante(visitantes.get(i), imagenes.get(i));
+        }
+
+        if (visitanteMayorEdad != null
+                && visitanteMayorEdad.getEmail() != null
+                && !visitanteMayorEdad.getEmail().isEmpty()) {
+
+            boolean correoEnviado = EmailSender.getInstancia().enviarDetallesVisita(visitanteMayorEdad, visitaTemporal);
+
+            String mensaje = "¡Visita y " + cantidadEsperada + " visitantes registrados exitosamente!\n";
+            if (correoEnviado) {
+                mensaje += "\nSe envió confirmación al visitante mayor de edad: "
+                        + visitanteMayorEdad.getEmail();
+            } else {
+                mensaje += "\nNo se pudo enviar el correo de confirmación al visitante mayor de edad.";
+            }
+
+            JOptionPane.showMessageDialog(null, mensaje, "Registro completado", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            String mensaje = "¡Visita y " + cantidadEsperada + " visitantes registrados exitosamente!\n";
+            if (visitanteMayorEdad == null) {
+                mensaje += "\nNo se encontró un visitante mayor de edad para enviar confirmación.";
+            } else {
+                mensaje += "\nEl visitante mayor de edad no tiene email registrado.";
+            }
+
+            JOptionPane.showMessageDialog(null, mensaje, "Registro completado", JOptionPane.INFORMATION_MESSAGE);
         }
 
         visitaTemporal = null;
         visitantes.clear();
         imagenes.clear();
         view.getCantidadDeVisitantesCombo().setSelectedIndex(0);
-
-        JOptionPane.showMessageDialog(null,
-                "¡Visita y " + cantidadEsperada + " visitantes registrados exitosamente!",
-                "Registro completado",
-                JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void cargarHistorialVisitas(String identificacionPreso, JTable tabla) {
@@ -665,7 +764,8 @@ public class VisitaController {
                 preso.getIdentificacion(),
                 preso.getNacionalidad(),
                 preso.getCeldaAsignada(),
-                preso.getSeccionAsignada()
+                preso.getSeccionAsignada(),
+                preso.getEstado()
             });
         }
     }
@@ -693,7 +793,9 @@ public class VisitaController {
                 preso.getIdentificacion(),
                 preso.getNacionalidad(),
                 preso.getCeldaAsignada(),
-                preso.getSeccionAsignada()
+                preso.getSeccionAsignada(),
+                preso.getEstado()
+
             });
         } else {
             mostrarError("No se encontró ningún preso con esa identificación");
@@ -794,7 +896,9 @@ public class VisitaController {
                     preso.getIdentificacion(),
                     preso.getNacionalidad(),
                     preso.getCeldaAsignada(),
-                    preso.getSeccionAsignada()
+                    preso.getSeccionAsignada(),
+                    preso.getEstado()
+
                 });
             }
         }
@@ -1039,6 +1143,20 @@ public class VisitaController {
         if (visita == null) {
             mostrarError("No se encontró la visita con ID: " + idVisita);
             return null;
+        }
+
+        if (nuevoEstado == EstadoVisitaEnum.FINALIZADA) {
+            if (visita.getEstado() != EstadoVisitaEnum.EN_PROCESO) {
+                LocalDate fechaActual = LocalDate.now();
+                LocalDate fechaVisita = visita.getFechaVisita();
+
+                if (!fechaActual.isAfter(fechaVisita)) {
+                    mostrarError("No puede finalizar una visita el mismo día o antes.\n"
+                            + "Fecha de la visita: " + fechaVisita + "\n"
+                            + "Puede finalizar a partir de: " + fechaVisita.plusDays(1));
+                    return null;
+                }
+            }
         }
 
         if (visita.getEstado() == nuevoEstado) {

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Sancion {
+
     private int id;
     private String motivo;
     private LocalDate fechaSancion;
@@ -12,8 +13,8 @@ public class Sancion {
     private Preso preso;
     private Guardia guardia;
 
-    public Sancion(int id, String motivo, LocalDate fechaSancion, LocalTime hora, 
-                  String tipoSancion, Preso preso, Guardia guardia) {
+    public Sancion(int id, String motivo, LocalDate fechaSancion, LocalTime hora,
+            String tipoSancion, Preso preso, Guardia guardia) {
         this.id = id;
         this.motivo = motivo;
         this.fechaSancion = fechaSancion;
@@ -25,12 +26,8 @@ public class Sancion {
 
     public boolean estaActiva() {
         LocalDate hoy = LocalDate.now();
-        if (tipoSancion.equalsIgnoreCase("Suspensión de visitas")) {
-            LocalDate fechaFin = fechaSancion.plusDays(1);
-            return !hoy.isBefore(fechaSancion) && !hoy.isAfter(fechaFin);
-        } else {
-            return hoy.isEqual(fechaSancion);
-        }
+        LocalDate fechaFin = fechaSancion.plusDays(1);
+        return !hoy.isBefore(fechaSancion) && !hoy.isAfter(fechaFin);
     }
 
     public int getId() {

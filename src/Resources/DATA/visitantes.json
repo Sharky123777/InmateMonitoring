@@ -1,17 +1,17 @@
 [
   {
-    "relacionConPreso": "Hermano/Hermana",
-    "fotoPath": "src/Resources/imagenes_visitantes/visitante_852465456.jpg",
-    "email": "Camilo123@gmail.com",
+    "relacionConPreso": "Amigo/Amiga",
+    "fotoPath": "src/Resources/imagenes_visitantes/visitante_1.jpg",
+    "email": "lauramariatorresgomez74@gmail.com",
     "id": 1,
     "estado": "HABILITADO",
-    "primerNombre": "Nicolle",
-    "segundoNombre": "Andrea",
-    "primerApellido": "Lopez",
-    "segundoApellido": "Rivera",
-    "edad": 18,
+    "primerNombre": "Laura",
+    "segundoNombre": "Maria",
+    "primerApellido": "Torres",
+    "segundoApellido": "Gomez",
+    "edad": 20,
     "sexo": "Femenino",
     "nacionalidad": "Colombia  ",
-    "identificacion": "852465456"
+    "identificacion": "102928223"
   }
 ]

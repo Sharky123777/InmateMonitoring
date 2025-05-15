@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
 public class VisitaDAO {
@@ -226,7 +227,41 @@ public class VisitaDAO {
         }
         return false;
     }
-    
-    
+
+    public List<Visita> obtenerVisitasParaFinalizar() {
+        LocalDate hoy = LocalDate.now();
+        LocalTime horaActual = LocalTime.now();
+
+        return cargarTodas().stream()
+                .filter(visita -> visita.getEstado() == EstadoVisitaEnum.EN_PROCESO)
+                .filter(visita -> {
+                    if (visita.getFechaVisita().isBefore(hoy)) {
+                        return true;
+                    }
+                    if (visita.getFechaVisita().equals(hoy)) {
+                        LocalTime horaFinVisita = visita.getHoraVisita().plusHours(1);
+                        return horaActual.isAfter(horaFinVisita);
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public int finalizarVisitasAutomaticamente() {
+        List<Visita> visitasAFinalizar = obtenerVisitasParaFinalizar();
+        if (visitasAFinalizar.isEmpty()) {
+            return 0;
+        }
+
+        List<Visita> todasVisitas = cargarTodas();
+        for (Visita visita : todasVisitas) {
+            if (visitasAFinalizar.stream().anyMatch(v -> v.getId() == visita.getId())) {
+                visita.setEstado(EstadoVisitaEnum.FINALIZADA);
+            }
+        }
+
+        guardarTodas(todasVisitas);
+        return visitasAFinalizar.size();
+    }
 
 }
