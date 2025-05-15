@@ -233,6 +233,19 @@
       "sexo": "Femenino",
       "nacionalidad": "w",
       "identificacion": "378123781"
+    },
+    {
+      "usuario": "!Ñ%td%FY5\u0026",
+      "password": "6d0a51d2d9b17742e7e381e7853aeb33544dcc861ba2fbeea5a1bd20fcea18ec",
+      "rol": "PERSONAL_DE_CONTROL",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Masculino",
+      "nacionalidad": "sharlok",
+      "identificacion": "3981238913"
     }
   ]
 }

@@ -4,10 +4,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import com.google.gson.annotations.SerializedName;
 
-public class Oficial extends Persona {
+public class PersonalControl extends Persona {
     private String usuario;
     private String contrasena;
-    private String turno; 
+    private String turno; // "Diurno" o "Nocturno"
     
     @SerializedName("fechaContratacion")
     private LocalDate fechaContratacion;
@@ -21,7 +21,7 @@ public class Oficial extends Persona {
     @SerializedName("correo")
     private String correo;
     
-    public Oficial(String primerNombre, String segundoNombre, 
+    public PersonalControl(String primerNombre, String segundoNombre, 
                String primerApellido, String segundoApellido,
                int edad, String sexo, String nacionalidad, 
                String identificacion, String turno,
@@ -112,8 +112,6 @@ public class Oficial extends Persona {
         return nombres.trim();
     }
     
-    
- 
     public String getApellidosParaTabla() {
         String apellidos = getPrimerApellido();
         if (!getSegundoApellido().isEmpty()) {
