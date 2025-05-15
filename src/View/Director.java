@@ -268,7 +268,6 @@ public class Director extends javax.swing.JFrame {
         jLabel31 = new javax.swing.JLabel();
         jLabel32 = new javax.swing.JLabel();
         txtFechaContratacion1 = new javax.swing.JTextField();
-        dateFinContrato1 = new com.toedter.calendar.JDateChooser();
         jLabel33 = new javax.swing.JLabel();
         cmbTurno1 = new javax.swing.JComboBox<>();
         jLabel35 = new javax.swing.JLabel();
@@ -312,7 +311,6 @@ public class Director extends javax.swing.JFrame {
         jLabel46 = new javax.swing.JLabel();
         jLabel47 = new javax.swing.JLabel();
         txtFechaContratacionMod1 = new javax.swing.JTextField();
-        dateFinContratoMod1 = new com.toedter.calendar.JDateChooser();
         jLabel48 = new javax.swing.JLabel();
         cmbTurnoMod1 = new javax.swing.JComboBox<>();
         jLabel50 = new javax.swing.JLabel();
@@ -359,7 +357,6 @@ public class Director extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         txtFechaContratacion = new javax.swing.JTextField();
-        jDateChooserFinContrato = new com.toedter.calendar.JDateChooser();
         jLabel14 = new javax.swing.JLabel();
         cmbCargo = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
@@ -406,7 +403,6 @@ public class Director extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         txtFechaContratacionMod = new javax.swing.JTextField();
-        dateFinContratoMod = new com.toedter.calendar.JDateChooser();
         jLabel17 = new javax.swing.JLabel();
         txtCargoMod = new javax.swing.JComboBox<>();
         jLabel18 = new javax.swing.JLabel();
@@ -455,7 +451,6 @@ public class Director extends javax.swing.JFrame {
         jLabel49 = new javax.swing.JLabel();
         jLabel61 = new javax.swing.JLabel();
         txtFechaContratacion2 = new javax.swing.JTextField();
-        dateFinContrato2 = new com.toedter.calendar.JDateChooser();
         jLabel62 = new javax.swing.JLabel();
         cmbCargo2 = new javax.swing.JComboBox<>();
         jLabel63 = new javax.swing.JLabel();
@@ -502,7 +497,6 @@ public class Director extends javax.swing.JFrame {
         jLabel75 = new javax.swing.JLabel();
         jLabel76 = new javax.swing.JLabel();
         txtFechaContratacionMod2 = new javax.swing.JTextField();
-        dateFinContratoMod2 = new com.toedter.calendar.JDateChooser();
         jLabel77 = new javax.swing.JLabel();
         txtCargoMod1 = new javax.swing.JComboBox<>();
         jLabel78 = new javax.swing.JLabel();
@@ -552,7 +546,6 @@ public class Director extends javax.swing.JFrame {
         jLabel92 = new javax.swing.JLabel();
         jLabel93 = new javax.swing.JLabel();
         txtFechaContratacion4 = new javax.swing.JTextField();
-        dateFinContrato4 = new com.toedter.calendar.JDateChooser();
         jLabel128 = new javax.swing.JLabel();
         cmbTurno4 = new javax.swing.JComboBox<>();
         jLabel129 = new javax.swing.JLabel();
@@ -600,7 +593,6 @@ public class Director extends javax.swing.JFrame {
         jLabel99 = new javax.swing.JLabel();
         jLabel100 = new javax.swing.JLabel();
         txtFechaContratacion3 = new javax.swing.JTextField();
-        dateFinContrato3 = new com.toedter.calendar.JDateChooser();
         jLabel101 = new javax.swing.JLabel();
         cmbTurno3 = new javax.swing.JComboBox<>();
         jLabel102 = new javax.swing.JLabel();
@@ -645,7 +637,6 @@ public class Director extends javax.swing.JFrame {
         jLabel114 = new javax.swing.JLabel();
         jLabel115 = new javax.swing.JLabel();
         txtFechaContratacionMod3 = new javax.swing.JTextField();
-        dateFinContratoMod3 = new com.toedter.calendar.JDateChooser();
         jLabel116 = new javax.swing.JLabel();
         cmbTurnoMod3 = new javax.swing.JComboBox<>();
         jLabel117 = new javax.swing.JLabel();
@@ -693,7 +684,6 @@ public class Director extends javax.swing.JFrame {
         jLabel141 = new javax.swing.JLabel();
         jLabel142 = new javax.swing.JLabel();
         txtFechaContratacionMod4 = new javax.swing.JTextField();
-        dateFinContratoMod4 = new com.toedter.calendar.JDateChooser();
         jLabel143 = new javax.swing.JLabel();
         cmbTurnoMod4 = new javax.swing.JComboBox<>();
         jLabel144 = new javax.swing.JLabel();
@@ -737,7 +727,6 @@ public class Director extends javax.swing.JFrame {
         jLabel97 = new javax.swing.JLabel();
         jLabel98 = new javax.swing.JLabel();
         txtFechaContratacion5 = new javax.swing.JTextField();
-        dateFinContrato5 = new com.toedter.calendar.JDateChooser();
         jLabel155 = new javax.swing.JLabel();
         cmbTurno5 = new javax.swing.JComboBox<>();
         jLabel156 = new javax.swing.JLabel();
@@ -782,7 +771,6 @@ public class Director extends javax.swing.JFrame {
         jLabel168 = new javax.swing.JLabel();
         jLabel169 = new javax.swing.JLabel();
         txtFechaContratacionMod5 = new javax.swing.JTextField();
-        dateFinContratoMod5 = new com.toedter.calendar.JDateChooser();
         jLabel170 = new javax.swing.JLabel();
         cmbTurnoMod5 = new javax.swing.JComboBox<>();
         jLabel171 = new javax.swing.JLabel();
@@ -968,7 +956,6 @@ public class Director extends javax.swing.JFrame {
 
         txtFechaContratacion1.setEditable(false);
         jPanel7.add(txtFechaContratacion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 350, 190, 30));
-        jPanel7.add(dateFinContrato1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 410, 190, 30));
 
         jLabel33.setForeground(new java.awt.Color(255, 255, 255));
         jLabel33.setText("Fecha de finalización del contrato:");
@@ -1201,7 +1188,6 @@ public class Director extends javax.swing.JFrame {
 
         txtFechaContratacionMod1.setEditable(false);
         jPanel10.add(txtFechaContratacionMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 360, 190, 30));
-        jPanel10.add(dateFinContratoMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 420, 190, 30));
 
         jLabel48.setForeground(new java.awt.Color(255, 255, 255));
         jLabel48.setText("Fecha de finalización del contrato:");
@@ -1471,7 +1457,6 @@ public class Director extends javax.swing.JFrame {
             }
         });
         jPanel3.add(txtFechaContratacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 400, 190, 30));
-        jPanel3.add(jDateChooserFinContrato, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 460, 190, 30));
 
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
         jLabel14.setText("Fecha de finalización del contrato:");
@@ -1707,7 +1692,6 @@ public class Director extends javax.swing.JFrame {
 
         txtFechaContratacionMod.setEditable(false);
         jPanel4.add(txtFechaContratacionMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 380, 190, 30));
-        jPanel4.add(dateFinContratoMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 440, 190, 30));
 
         jLabel17.setForeground(new java.awt.Color(255, 255, 255));
         jLabel17.setText("Fecha de finalización del contrato:");
@@ -1982,7 +1966,6 @@ public class Director extends javax.swing.JFrame {
 
         txtFechaContratacion2.setEditable(false);
         jPanel12.add(txtFechaContratacion2, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 390, 190, 30));
-        jPanel12.add(dateFinContrato2, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 450, 190, 30));
 
         jLabel62.setForeground(new java.awt.Color(255, 255, 255));
         jLabel62.setText("Fecha de finalización del contrato:");
@@ -2223,7 +2206,6 @@ public class Director extends javax.swing.JFrame {
 
         txtFechaContratacionMod2.setEditable(false);
         jPanel15.add(txtFechaContratacionMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 380, 190, 30));
-        jPanel15.add(dateFinContratoMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 440, 190, 30));
 
         jLabel77.setForeground(new java.awt.Color(255, 255, 255));
         jLabel77.setText("Fecha de finalización del contrato:");
@@ -2500,7 +2482,6 @@ public class Director extends javax.swing.JFrame {
 
         txtFechaContratacion4.setEditable(false);
         jPanel27.add(txtFechaContratacion4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 350, 190, 30));
-        jPanel27.add(dateFinContrato4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 410, 190, 30));
 
         jLabel128.setForeground(new java.awt.Color(255, 255, 255));
         jLabel128.setText("Fecha de finalización del contrato:");
@@ -2791,7 +2772,6 @@ public class Director extends javax.swing.JFrame {
 
         txtFechaContratacion3.setEditable(false);
         jPanel9.add(txtFechaContratacion3, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 350, 190, 30));
-        jPanel9.add(dateFinContrato3, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 410, 190, 30));
 
         jLabel101.setForeground(new java.awt.Color(255, 255, 255));
         jLabel101.setText("Fecha de finalización del contrato:");
@@ -3026,7 +3006,6 @@ public class Director extends javax.swing.JFrame {
 
         txtFechaContratacionMod3.setEditable(false);
         jPanel24.add(txtFechaContratacionMod3, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 360, 190, 30));
-        jPanel24.add(dateFinContratoMod3, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 420, 190, 30));
 
         jLabel116.setForeground(new java.awt.Color(255, 255, 255));
         jLabel116.setText("Fecha de finalización del contrato:");
@@ -3294,7 +3273,6 @@ public class Director extends javax.swing.JFrame {
 
         txtFechaContratacionMod4.setEditable(false);
         jPanel30.add(txtFechaContratacionMod4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 360, 190, 30));
-        jPanel30.add(dateFinContratoMod4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 420, 190, 30));
 
         jLabel143.setForeground(new java.awt.Color(255, 255, 255));
         jLabel143.setText("Fecha de finalización del contrato:");
@@ -3524,7 +3502,6 @@ public class Director extends javax.swing.JFrame {
 
         txtFechaContratacion5.setEditable(false);
         jPanel35.add(txtFechaContratacion5, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 350, 190, 30));
-        jPanel35.add(dateFinContrato5, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 410, 190, 30));
 
         jLabel155.setForeground(new java.awt.Color(255, 255, 255));
         jLabel155.setText("Fecha de finalización del contrato:");
@@ -3761,7 +3738,6 @@ public class Director extends javax.swing.JFrame {
 
         txtFechaContratacionMod5.setEditable(false);
         jPanel38.add(txtFechaContratacionMod5, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 360, 190, 30));
-        jPanel38.add(dateFinContratoMod5, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 420, 190, 30));
 
         jLabel170.setForeground(new java.awt.Color(255, 255, 255));
         jLabel170.setText("Fecha de finalización del contrato:");
@@ -8121,22 +8097,12 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbTurnoMod3;
     private javax.swing.JComboBox<String> cmbTurnoMod4;
     private javax.swing.JComboBox<String> cmbTurnoMod5;
-    private com.toedter.calendar.JDateChooser dateFinContrato1;
-    private com.toedter.calendar.JDateChooser dateFinContrato2;
-    private com.toedter.calendar.JDateChooser dateFinContrato3;
-    private com.toedter.calendar.JDateChooser dateFinContrato4;
-    private com.toedter.calendar.JDateChooser dateFinContrato5;
-    private com.toedter.calendar.JDateChooser dateFinContratoMod;
-    private com.toedter.calendar.JDateChooser dateFinContratoMod1;
-    private com.toedter.calendar.JDateChooser dateFinContratoMod2;
-    private com.toedter.calendar.JDateChooser dateFinContratoMod3;
-    private com.toedter.calendar.JDateChooser dateFinContratoMod4;
-    private com.toedter.calendar.JDateChooser dateFinContratoMod5;
     private javax.swing.JMenuItem eliminarPDC;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton16;
@@ -8157,7 +8123,6 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private com.toedter.calendar.JDateChooser jDateChooserFinContrato;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel100;
