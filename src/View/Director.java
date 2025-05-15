@@ -165,7 +165,6 @@ public class Director extends javax.swing.JFrame {
         calendario.add(Calendar.MONTH, 1);
         jDateChooserFinContrato.setDate(calendario.getTime());
 
-        // Actualización de tablas
         actualizarTablaGuardias();
         actualizarTablaEnfermeras();
         actualizarTablaCDA();
