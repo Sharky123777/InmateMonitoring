@@ -234,6 +234,9 @@ public class Director extends javax.swing.JFrame {
         jPopupMenu3 = new javax.swing.JPopupMenu();
         modOf = new javax.swing.JMenuItem();
         BorrarOf = new javax.swing.JMenuItem();
+        jPopupMenu5 = new javax.swing.JPopupMenu();
+        modificarODR = new javax.swing.JMenuItem();
+        EliminarODR = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         tabPrincipal = new javax.swing.JTabbedPane();
         Director = new javax.swing.JPanel();
@@ -567,7 +570,7 @@ public class Director extends javax.swing.JFrame {
         jLabel138 = new javax.swing.JLabel();
         jLabel139 = new javax.swing.JLabel();
         jLabel140 = new javax.swing.JLabel();
-        tablaODR = new javax.swing.JPanel();
+        mostrarODR = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tablaRegistradoras = new javax.swing.JTable();
         jButton13 = new javax.swing.JButton();
@@ -664,7 +667,7 @@ public class Director extends javax.swing.JFrame {
         tablaOficial = new javax.swing.JTable();
         Credenciales = new javax.swing.JPanel();
         ModificarODR = new javax.swing.JPanel();
-        ModificarNurse1 = new javax.swing.JPanel();
+        modODR = new javax.swing.JPanel();
         jPanel30 = new RoundedPanel(30);
         jSeparator95 = new javax.swing.JSeparator();
         jSeparator96 = new javax.swing.JSeparator();
@@ -771,6 +774,22 @@ public class Director extends javax.swing.JFrame {
             }
         });
         jPopupMenu3.add(BorrarOf);
+
+        modificarODR.setText("jMenuItem1");
+        modificarODR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modificarODRActionPerformed(evt);
+            }
+        });
+        jPopupMenu5.add(modificarODR);
+
+        EliminarODR.setText("jMenuItem1");
+        EliminarODR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarODRActionPerformed(evt);
+            }
+        });
+        jPopupMenu5.add(EliminarODR);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -2555,7 +2574,7 @@ public class Director extends javax.swing.JFrame {
 
         tabPrincipal.addTab("AggODR", añadirODR);
 
-        tablaODR.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        mostrarODR.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tablaRegistradoras.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -2576,7 +2595,7 @@ public class Director extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tablaRegistradoras.setComponentPopupMenu(jPopupMenu1);
+        tablaRegistradoras.setComponentPopupMenu(jPopupMenu5);
         jScrollPane5.setViewportView(tablaRegistradoras);
         if (tablaRegistradoras.getColumnModel().getColumnCount() > 0) {
             tablaRegistradoras.getColumnModel().getColumn(0).setResizable(false);
@@ -2593,7 +2612,7 @@ public class Director extends javax.swing.JFrame {
             tablaRegistradoras.getColumnModel().getColumn(11).setResizable(false);
         }
 
-        tablaODR.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1080, 550));
+        mostrarODR.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1080, 550));
 
         jButton13.setBackground(new java.awt.Color(255, 255, 255));
         jButton13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/icons8-sign-out-40.png"))); // NOI18N
@@ -2602,9 +2621,9 @@ public class Director extends javax.swing.JFrame {
                 jButton13ActionPerformed(evt);
             }
         });
-        tablaODR.add(jButton13, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 0, 50, 50));
+        mostrarODR.add(jButton13, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 0, 50, 50));
 
-        tabPrincipal.addTab("MostrarODR", tablaODR);
+        tabPrincipal.addTab("MostrarODR", mostrarODR);
 
         AñadirOficial.setBackground(new java.awt.Color(20, 25, 40));
         AñadirOficial.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -3114,8 +3133,8 @@ public class Director extends javax.swing.JFrame {
 
         ModificarODR.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        ModificarNurse1.setBackground(new java.awt.Color(20, 25, 40));
-        ModificarNurse1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        modODR.setBackground(new java.awt.Color(20, 25, 40));
+        modODR.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel30.setBackground(new java.awt.Color(29, 35, 51));
         jPanel30.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -3326,14 +3345,14 @@ public class Director extends javax.swing.JFrame {
         jLabel153.setText("Primer nombre:");
         jPanel30.add(jLabel153, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, 20));
 
-        ModificarNurse1.add(jPanel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
+        modODR.add(jPanel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
 
         jLabel154.setFont(new java.awt.Font("Arial", 2, 10)); // NOI18N
         jLabel154.setForeground(new java.awt.Color(153, 0, 0));
         jLabel154.setText("NINGUN CAMPO DEBE ESTAR VACIO AL MODIFICAR, A EXCEPCIÓN DEL SEGUNDO NOMBRE.");
-        ModificarNurse1.add(jLabel154, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 10, -1, 30));
+        modODR.add(jLabel154, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 10, -1, 30));
 
-        ModificarODR.add(ModificarNurse1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 580));
+        ModificarODR.add(modODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 580));
 
         tabPrincipal.addTab("ModificarODR", ModificarODR);
 
@@ -4448,7 +4467,7 @@ public class Director extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-
+    
     private void cargarDatosEnfermeraParaModificar(Enfermera enfermera) {
         if (enfermera == null) {
             return;
@@ -4489,6 +4508,49 @@ public class Director extends javax.swing.JFrame {
             }
         } else {
             lblImagenMod1.setIcon(new ImageIcon(getClass().getResource("/Resources/default_nurse.png")));
+        }
+    }
+
+    private void cargarDatosODRParaModificar(OficialDeRegistro odr) {
+        if (odr == null) {
+            return;
+        }
+
+        txtPrimerNombreMod4.setText(odr.getPrimerNombre());
+        txtSegundoNombreMod4.setText(odr.getSegundoNombre() != null ? odr.getSegundoNombre() : "");
+        txtPrimerApellidoMod4.setText(odr.getPrimerApellido());
+        txtSegundoApellidoMod4.setText(odr.getSegundoApellido());
+        txtEdadMod4.setText(String.valueOf(odr.getEdad()));
+        txtCedulaMod4.setText(odr.getIdentificacion());
+        txtNacionalidadMod4.setText(odr.getNacionalidad());
+        txtCorreoMod4.setText(odr.getCorreo());
+        cmbTurnoMod4.setSelectedItem(odr.getTurno());
+        txtFechaContratacionMod4.setText(odr.getFechaContratacion().toString());
+
+        try {
+            dateFinContratoMod4.setDate(
+                    Date.from(odr.getFechaFinContrato().atStartOfDay(ZoneId.systemDefault()).toInstant())
+            );
+        } catch (Exception e) {
+            dateFinContratoMod4.setDate(null);
+        }
+
+        // Cargar imagen existente
+        if (odr.getRutaImagen() != null && !odr.getRutaImagen().isEmpty()) {
+            File imagenExistente = new File(odr.getRutaImagen());
+            if (imagenExistente.exists()) {
+                ImageIcon icon = new ImageIcon(imagenExistente.getAbsolutePath());
+                Image img = icon.getImage().getScaledInstance(
+                        lblImagenMod4.getWidth(),
+                        lblImagenMod4.getHeight(),
+                        Image.SCALE_SMOOTH
+                );
+                lblImagenMod4.setIcon(new ImageIcon(img));
+            } else {
+                lblImagenMod4.setIcon(new ImageIcon(getClass().getResource("/Resources/default_nurse.png")));
+            }
+        } else {
+            lblImagenMod4.setIcon(new ImageIcon(getClass().getResource("/Resources/default_nurse.png")));
         }
     }
 
@@ -6352,13 +6414,14 @@ public class Director extends javax.swing.JFrame {
 
         if (confirmacion == JOptionPane.YES_OPTION) {
             try {
-                boolean eliminado = guardiaController.eliminarGuardia(cedula);
+                boolean eliminado = OficialController.getInstancia().eliminarOficial(cedula);
 
                 if (eliminado) {
                     JOptionPane.showMessageDialog(this,
                             "Guardia eliminada con éxito",
                             "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    actualizarTablaEnfermeras();
+                    
+                    actualizarTablaOficiales();
                 }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this,
@@ -6596,7 +6659,64 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPrimerNombre4KeyTyped
 
     private void jButton20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton20ActionPerformed
-        // TODO add your handling code here:
+        try {
+            // 1. Preparar cambios
+            Map<String, Object> cambios = new HashMap<>();
+            cambios.put("primerNombre", txtPrimerNombreMod4.getText().trim());
+            cambios.put("segundoNombre", txtSegundoNombreMod4.getText().trim());
+            cambios.put("primerApellido", txtPrimerApellidoMod4.getText().trim());
+            cambios.put("segundoApellido", txtSegundoApellidoMod4.getText().trim());
+            cambios.put("edad", Integer.parseInt(txtEdadMod4.getText().trim()));
+            cambios.put("nacionalidad", txtNacionalidadMod4.getText().trim());
+            cambios.put("correo", txtCorreoMod4.getText().trim());
+            cambios.put("turno", cmbTurnoMod4.getSelectedItem().toString());
+            cambios.put("fechaFin", dateFinContratoMod4.getDate().toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate());
+
+            String cedulaOriginal = txtCedulaMod4.getText().trim();
+
+            // 2. Solo considerar como nueva imagen si el usuario seleccionó una explícitamente
+            File imagenModificada = imagenFueModificada ? imagenSeleccionadaModODR : null;
+
+            // 3. Llamar al controlador
+            int resultado = OficialDeRegistroController.getInstancia().modificarOficial(cedulaOriginal, cambios, imagenSeleccionadaModODR);
+
+            // 4. Manejar resultados
+            switch (resultado) {
+                case 1: // Éxito
+                    JOptionPane.showMessageDialog(this,
+                                "Registradora modificada exitosamente",
+                                
+                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    actualizarTablaODR();
+                    limpiarFormularioModificacionODR();
+                    tabPrincipal.setSelectedComponent(mostrarODR); // Cambiar al panel de tabla
+                    cargarTablaOficiales(); // Actualizar tabla
+                    break;
+
+                case 0: // No hay cambios
+                    int opcion = JOptionPane.showConfirmDialog(this,
+                            "No se detectaron cambios. ¿Desea cancelar la modificación?",
+                            "Sin cambios",
+                            JOptionPane.YES_NO_OPTION);
+
+                    if (opcion == JOptionPane.YES_OPTION) {
+                        tabPrincipal.setSelectedComponent(mostrarODR); // Cambiar al panel de tabla
+                    }
+                    break;
+
+                case -1: // Error
+                    throw new RuntimeException("Error desconocido al modificar la registradora");
+            }
+
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Error de validación", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al modificar registradora: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_jButton20ActionPerformed
 
     private void txtCorreoMod4FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreoMod4FocusLost
@@ -6608,7 +6728,48 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCorreoMod4KeyTyped
 
     private void jButton21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton21ActionPerformed
-        // TODO add your handling code here:
+         Object[] options = {"Usar Cámara", "Seleccionar Archivo", "Cancelar"};
+        int opcion = JOptionPane.showOptionDialog(this,
+                "¿Cómo desea obtener la imagen?",
+                "Seleccionar Imagen",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+
+        try {
+            File nuevaImagen = null;
+
+            if (opcion == 0) {
+                nuevaImagen = oficialRegistro.capturarImagenOficial();
+            } else if (opcion == 1) {
+                JFileChooser fileChooser = new JFileChooser();
+                FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                        "Imágenes", "jpg", "png", "jpeg");
+                fileChooser.setFileFilter(filter);
+
+                if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                    nuevaImagen = fileChooser.getSelectedFile();
+                }
+            }
+
+            if (nuevaImagen != null) {
+                ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
+                Image imagenEscalada = icono.getImage()
+                        .getScaledInstance(
+                                lblImagenMod4.getWidth(),
+                                lblImagenMod4.getHeight(),
+                                Image.SCALE_SMOOTH
+                        );
+                lblImagenMod4.setIcon(new ImageIcon(imagenEscalada));
+                imagenSeleccionadaModODR = nuevaImagen;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al obtener imagen: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jButton21ActionPerformed
 
     private void txtNacionalidadMod4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadMod4KeyTyped
@@ -6646,6 +6807,77 @@ public class Director extends javax.swing.JFrame {
     private void txtPrimerNombreMod4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreMod4KeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPrimerNombreMod4KeyTyped
+
+    private void modificarODRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarODRActionPerformed
+         int fila = tablaRegistradoras.getSelectedRow();
+
+        if (fila < 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Seleccione una registradora primero",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String cedula = tablaRegistradoras.getValueAt(fila, 4).toString(); // Cambia 4 por el índice correcto
+
+        try {
+
+            OficialDeRegistro oficialR = OficialDeRegistroController.getInstancia()
+                    .obtenerOficialPorCedula(cedula);
+
+            if (oficialR != null) {
+
+                cargarDatosODRParaModificar(oficialR);
+
+                // Cambiar al panel de modificación (asegúrate que el nombre sea correcto)
+                tabPrincipal.setSelectedComponent(ModificarODR);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "No se encontró el Oficial con cédula: " + cedula,
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar datos: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_modificarODRActionPerformed
+
+    private void EliminarODRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarODRActionPerformed
+       int filaSeleccionada = tablaRegistradoras.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Seleccione una registradora primero",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String cedula = tablaRegistradoras.getValueAt(filaSeleccionada, 4).toString();
+
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de eliminar a la registradora con cédula " + cedula + "?",
+                "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            try {
+                boolean eliminado = OficialDeRegistroController.getInstancia().eliminarOficial(cedula);
+
+                if (eliminado) {
+                    JOptionPane.showMessageDialog(this,
+                            "Registradora eliminada con éxito",
+                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    
+                    actualizarTablaODR();
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al eliminar: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_EliminarODRActionPerformed
 
     /**
      * @param args the command line arguments
@@ -6696,6 +6928,7 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JMenuItem Eliminar;
     private javax.swing.JMenuItem EliminarCDA;
     private javax.swing.JMenuItem EliminarEnfermera;
+    private javax.swing.JMenuItem EliminarODR;
     private javax.swing.JPanel ListaDeGuardias;
     private javax.swing.JMenuItem Modificar;
     private javax.swing.JMenuItem ModificarCDA;
@@ -6703,7 +6936,6 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JMenuItem ModificarEnfermera;
     private javax.swing.JPanel ModificarGuardia;
     private javax.swing.JPanel ModificarNurse;
-    private javax.swing.JPanel ModificarNurse1;
     private javax.swing.JPanel ModificarODR;
     private javax.swing.JPanel ModificarOficial;
     private javax.swing.JPanel MostrarEnfermeras;
@@ -6936,6 +7168,7 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JPopupMenu jPopupMenu3;
     private javax.swing.JPopupMenu jPopupMenu4;
+    private javax.swing.JPopupMenu jPopupMenu5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -7055,15 +7288,17 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JLabel lblImagenMod2;
     private javax.swing.JLabel lblImagenMod3;
     private javax.swing.JLabel lblImagenMod4;
+    private javax.swing.JPanel modODR;
     private javax.swing.JMenuItem modOf;
+    private javax.swing.JMenuItem modificarODR;
     private javax.swing.JPanel modificarOficial;
     private javax.swing.JPanel mostrarCoordinadora;
+    private javax.swing.JPanel mostrarODR;
     private javax.swing.JPanel mostrarOficial;
     private javax.swing.JTabbedPane tabPrincipal;
     private javax.swing.JTable tablaCoordinadores;
     private javax.swing.JTable tablaEnfermeras;
     private javax.swing.JTable tablaGuardias;
-    private javax.swing.JPanel tablaODR;
     private javax.swing.JTable tablaOficial;
     private javax.swing.JTable tablaRegistradoras;
     private javax.swing.JComboBox<String> txtCargoMod;
