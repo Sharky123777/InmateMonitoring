@@ -6774,12 +6774,6 @@ public class Director extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtNacionalidadMod2KeyTyped
 
-    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        Login otro = new Login();
-        otro.setVisible(true); // Mostrar el nuevo JFrame
-        this.dispose();
-    }//GEN-LAST:event_jButton13ActionPerformed
-
     private void txtFechaContratacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaContratacionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFechaContratacionActionPerformed
@@ -8143,7 +8137,6 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton16;
