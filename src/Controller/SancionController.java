@@ -89,13 +89,6 @@ public class SancionController {
                 return false;
             }
 
-            List<Sancion> sancionesHoy = sancionDAO.obtenerSancionesPorPresoYFecha(identificacionPreso, fecha);
-
-            if (sancionesHoy.size() >= 3) {
-                mostrarError("Límite de 3 sanciones diarias alcanzado para este preso.");
-                return false;
-            }
-
             Guardia guardia = new GuardiaDAO().obtenerGuardiaPorCedula(identificacionGuardia);
             if (guardia == null) {
                 mostrarError("Guardia no encontrado.");
@@ -115,10 +108,14 @@ public class SancionController {
             }
 
             Sancion nuevaSancion = new Sancion(0, motivoSancion, fecha, hora, tipoSancion, preso, guardia);
-
             if (sancionDAO.guardarSancion(nuevaSancion)) {
-                cancelarVisitasPendientes(identificacionPreso, fecha);
-                mostrarExito("Sanción registrada exitosamente.");
+                if (nuevaSancion.esAislamiento()) {
+                    preso.setEnAislamiento(true);
+                    presoDAO.actualizarPreso(preso);
+                }
+
+                cancelarVisitasPendientes(identificacionPreso, fecha, nuevaSancion.getDiasDuracion());
+                mostrarExito("Sanción registrada exitosamente. Duración: " + nuevaSancion.getDiasDuracion() + " días");
                 limpiarCamposSancion(view);
                 return true;
             } else {
@@ -131,15 +128,20 @@ public class SancionController {
         }
     }
 
-    private void cancelarVisitasPendientes(String identificacionPreso, LocalDate fechaSancion) {
+    private void cancelarVisitasPendientes(String identificacionPreso, LocalDate fechaSancion, int diasDuracion) {
         List<Visita> visitas = visitaDAO.cargarPorIdentificacionPreso(identificacionPreso);
         int visitasCanceladas = 0;
-        String motivoCancelacion = "Sanción aplicada al preso";
+
+        String motivoCancelacion = (diasDuracion == 10)
+                ? "Preso en aislamiento por " + diasDuracion + " días"
+                : "Sanción aplicada al preso (Duración: " + diasDuracion + " días)";
 
         for (Visita visita : visitas) {
-            if ((visita.getFechaVisita().equals(fechaSancion)
-                    || visita.getFechaVisita().equals(fechaSancion.plusDays(1)))
-                    && visita.getEstado() == EstadoVisitaEnum.EN_PROCESO) {
+            LocalDate fechaVisita = visita.getFechaVisita();
+            LocalDate fechaFinSancion = fechaSancion.plusDays(diasDuracion);
+
+            if ((!fechaVisita.isBefore(fechaSancion) && !fechaVisita.isAfter(fechaFinSancion)
+                    && visita.getEstado() == EstadoVisitaEnum.EN_PROCESO)) {
 
                 visitaDAO.modificarEstadoVisitaYDevolver(visita.getId(), EstadoVisitaEnum.CANCELADA);
                 visitasCanceladas++;
@@ -149,7 +151,8 @@ public class SancionController {
         }
 
         if (visitasCanceladas > 0) {
-            mostrarExito("Se cancelaron " + visitasCanceladas + " visitas programadas para hoy y mañana.");
+            mostrarExito("Se cancelaron " + visitasCanceladas + " visitas programadas. "
+                    + (diasDuracion == 10 ? "El preso estará en aislamiento." : ""));
         }
     }
 
@@ -248,15 +251,21 @@ public class SancionController {
 
         List<Sancion> sanciones = sancionDAO.cargarPorIdentificacionPreso(identificacionPreso);
         for (Sancion sancion : sanciones) {
+            int duracionAcumulada = sancionDAO.obtenerDuracionAcumuladaPorTipo(
+                    identificacionPreso,
+                    sancion.getTipoSancion()
+            );
+
             modelo.addRow(new Object[]{
                 sancion.getId(),
                 sancion.getTipoSancion(),
                 sancion.getFechaSancion(),
                 sancion.getHora(),
-                "1 día",
+                sancion.getDiasDuracion() + " días",
                 sancion.getPreso().getIdentificacion(),
                 sancion.getMotivo(),
-                sancion.getGuardia().getIdentificacion()
+                sancion.getGuardia().getIdentificacion(),
+                duracionAcumulada + " días"
             });
         }
     }
@@ -270,15 +279,21 @@ public class SancionController {
                 : sancionDAO.cargarPorTipoYIdentificacionPreso(tipoSancion, identificacionPreso);
 
         for (Sancion sancion : sanciones) {
+            int duracionAcumulada = sancionDAO.obtenerDuracionAcumuladaPorTipo(
+                    identificacionPreso,
+                    sancion.getTipoSancion()
+            );
+
             modelo.addRow(new Object[]{
                 sancion.getId(),
                 sancion.getTipoSancion(),
                 sancion.getFechaSancion(),
                 sancion.getHora(),
-                "1 día",
+                sancion.getDiasDuracion() + " días",
                 sancion.getPreso().getIdentificacion(),
                 sancion.getMotivo(),
-                sancion.getGuardia().getIdentificacion()
+                sancion.getGuardia().getIdentificacion(),
+                duracionAcumulada + " días"
             });
         }
     }

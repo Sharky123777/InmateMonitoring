@@ -10,12 +10,8 @@ import Model.Entities.Visitante;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.io.File;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -350,8 +346,8 @@ public class PersonalDeControl extends javax.swing.JFrame {
         CantidadDeVisitantesCombo = new javax.swing.JComboBox<>();
         jLabel15 = new javax.swing.JLabel();
         jPanel10 = new javax.swing.JPanel();
-        jLabel33 = new javax.swing.JLabel();
         IdentificacionPresoVisita = new javax.swing.JTextField();
+        jLabel52 = new javax.swing.JLabel();
         AgregarImagenVisitante = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
@@ -368,6 +364,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel51 = new javax.swing.JLabel();
         GuardarVisitaFinal = new javax.swing.JButton();
         botonCancelarProceso = new javax.swing.JButton();
+        jLabel60 = new javax.swing.JLabel();
         PanelActualizarInformacion = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
         jLabel36 = new javax.swing.JLabel();
@@ -779,16 +776,16 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel15.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(0, 0, 0));
         jLabel15.setText("Información de la visita");
-        PanelGuardarVisita.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 40, -1, -1));
+        PanelGuardarVisita.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 30, -1, -1));
 
         jPanel10.setBackground(new java.awt.Color(180, 180, 195));
         jPanel10.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel33.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel33.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel33.setText("Identificación del preso:");
-        jPanel10.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
         jPanel10.add(IdentificacionPresoVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, 180, 30));
+
+        jLabel52.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel52.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel52.setText("Identificación del preso:");
+        jPanel10.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
 
         PanelGuardarVisita.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 70, 400, 70));
 
@@ -803,7 +800,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel18.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(0, 0, 0));
         jLabel18.setText("Guardar Visita final:");
-        PanelGuardarVisita.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 420, 140, -1));
+        PanelGuardarVisita.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 440, 140, -1));
 
         jLabel29.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel29.setForeground(new java.awt.Color(0, 0, 0));
@@ -861,7 +858,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 GuardarVisitaFinalActionPerformed(evt);
             }
         });
-        PanelGuardarVisita.add(GuardarVisitaFinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 410, 130, 30));
+        PanelGuardarVisita.add(GuardarVisitaFinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 430, 130, 30));
 
         botonCancelarProceso.setBackground(new java.awt.Color(29, 35, 51));
         botonCancelarProceso.setForeground(new java.awt.Color(255, 255, 255));
@@ -871,7 +868,12 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 botonCancelarProcesoActionPerformed(evt);
             }
         });
-        PanelGuardarVisita.add(botonCancelarProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 530, 180, 40));
+        PanelGuardarVisita.add(botonCancelarProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 520, 180, 40));
+
+        jLabel60.setFont(new java.awt.Font("Arial", 2, 14)); // NOI18N
+        jLabel60.setForeground(new java.awt.Color(153, 0, 0));
+        jLabel60.setText("Guardar los datos de la visita primero");
+        PanelGuardarVisita.add(jLabel60, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, -1, -1));
 
         TabbedPDC.addTab("GUARDAR VISITA", PanelGuardarVisita);
 
@@ -1378,7 +1380,6 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel32;
-    private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
@@ -1399,6 +1400,8 @@ public class PersonalDeControl extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel52;
+    private javax.swing.JLabel jLabel60;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;

@@ -1808,9 +1808,9 @@
                       <StringArray count="5">
                         <StringItem index="0" value="&lt; Seleccionar &gt;"/>
                         <StringItem index="1" value="Amonestaci&#xf3;n verbal"/>
-                        <StringItem index="2" value="Amonestaci&#xf3;n escrita"/>
-                        <StringItem index="3" value="Limitaci&#xf3;n de actividades recreativas"/>
-                        <StringItem index="4" value="Suspensi&#xf3;n de visitas"/>
+                        <StringItem index="2" value="Limitaci&#xf3;n de actividades recreativas"/>
+                        <StringItem index="3" value="Suspensi&#xf3;n de visitas"/>
+                        <StringItem index="4" value="Aislamiento"/>
                       </StringArray>
                     </Property>
                   </Properties>
@@ -1987,7 +1987,7 @@
                 <Component class="javax.swing.JTable" name="TablaHistorialSanciones">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="8" rowCount="4">
+                      <Table columnCount="9" rowCount="4">
                         <Column editable="false" title="Id" type="java.lang.Integer"/>
                         <Column editable="false" title="Tipo Sanci&#xf3;n" type="java.lang.String"/>
                         <Column editable="false" title="Fecha sanci&#xf3;n" type="java.lang.String"/>
@@ -1996,10 +1996,16 @@
                         <Column editable="false" title="Preso sancionado" type="java.lang.String"/>
                         <Column editable="false" title="Motivo" type="java.lang.String"/>
                         <Column editable="false" title="Guardia" type="java.lang.String"/>
+                        <Column editable="false" title="Duracion total" type="java.lang.Integer"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="0">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
                           <Title/>
                           <Editor/>
@@ -2068,12 +2074,11 @@
                 <Component class="javax.swing.JComboBox" name="ComboTipoSancion1">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="5">
+                      <StringArray count="4">
                         <StringItem index="0" value="&lt; Seleccionar &gt;"/>
                         <StringItem index="1" value="Amonestaci&#xf3;n verbal"/>
-                        <StringItem index="2" value="Amonestaci&#xf3;n escrita"/>
-                        <StringItem index="3" value="Limitaci&#xf3;n de actividades recreativas"/>
-                        <StringItem index="4" value="Suspensi&#xf3;n de visitas"/>
+                        <StringItem index="2" value="Suspensi&#xf3;n de visitas"/>
+                        <StringItem index="3" value="Aislamiento"/>
                       </StringArray>
                     </Property>
                   </Properties>

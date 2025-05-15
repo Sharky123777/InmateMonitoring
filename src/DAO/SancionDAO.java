@@ -5,7 +5,6 @@ import Model.Entities.LocalTimeAdapter;
 import Model.Entities.Sancion;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.*;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
@@ -171,7 +170,7 @@ public class SancionDAO {
 
         return sanciones.stream()
                 .filter(sancion -> {
-                    LocalDate fechaFin = sancion.getFechaSancion().plusDays(1);
+                    LocalDate fechaFin = sancion.getFechaSancion().plusDays(sancion.getDiasDuracion());
                     return !hoy.isBefore(sancion.getFechaSancion()) && !hoy.isAfter(fechaFin);
                 })
                 .collect(Collectors.toList());
@@ -182,5 +181,22 @@ public class SancionDAO {
         return sanciones.stream()
                 .filter(sancion -> sancion.getFechaSancion().equals(fecha))
                 .collect(Collectors.toList());
+    }
+
+    public int obtenerDuracionAcumuladaPorTipo(String identificacionPreso, String tipoSancion) {
+        List<Sancion> sanciones = cargarPorIdentificacionPreso(identificacionPreso);
+        return sanciones.stream()
+                .filter(s -> s.esDeTipo(tipoSancion))
+                .filter(s -> s.estaActiva())
+                .mapToInt(Sancion::getDuracionBase)
+                .sum();
+    }
+
+    public int obtenerDuracionTotalSancionesActivas(String identificacionPreso) {
+        List<Sancion> sanciones = cargarPorIdentificacionPreso(identificacionPreso);
+        return sanciones.stream()
+                .filter(Sancion::estaActiva)
+                .mapToInt(Sancion::getDuracionBase)
+                .sum();
     }
 }

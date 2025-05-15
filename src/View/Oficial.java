@@ -810,7 +810,7 @@ public class Oficial extends javax.swing.JFrame {
         jPanel3.add(BotonAsignarSancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 460, 190, 30));
         jPanel3.add(jSeparator11, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 50, 390, 20));
 
-        TipoSancion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Amonestación verbal", "Amonestación escrita", "Limitación de actividades recreativas", "Suspensión de visitas" }));
+        TipoSancion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Amonestación verbal", "Limitación de actividades recreativas", "Suspensión de visitas", "Aislamiento" }));
         jPanel3.add(TipoSancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 380, 30));
         jPanel3.add(FechaSancion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, 380, 30));
 
@@ -856,20 +856,20 @@ public class Oficial extends javax.swing.JFrame {
 
         TablaHistorialSanciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Id", "Tipo Sanción", "Fecha sanción", "Hora sanción", "Duracion", "Preso sancionado", "Motivo", "Guardia"
+                "Id", "Tipo Sanción", "Fecha sanción", "Hora sanción", "Duracion", "Preso sancionado", "Motivo", "Guardia", "Duracion total"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -890,6 +890,7 @@ public class Oficial extends javax.swing.JFrame {
             TablaHistorialSanciones.getColumnModel().getColumn(5).setResizable(false);
             TablaHistorialSanciones.getColumnModel().getColumn(6).setResizable(false);
             TablaHistorialSanciones.getColumnModel().getColumn(7).setResizable(false);
+            TablaHistorialSanciones.getColumnModel().getColumn(8).setResizable(false);
         }
 
         PanelListaSanciones.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 1060, 460));
@@ -897,7 +898,7 @@ public class Oficial extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(139, 139, 157));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        ComboTipoSancion1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Amonestación verbal", "Amonestación escrita", "Limitación de actividades recreativas", "Suspensión de visitas" }));
+        ComboTipoSancion1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Amonestación verbal", "Suspensión de visitas", "Aislamiento" }));
         ComboTipoSancion1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ComboTipoSancion1ActionPerformed(evt);

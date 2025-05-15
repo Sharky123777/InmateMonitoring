@@ -1,17 +1,3 @@
 [
-  {
-    "relacionConPreso": "Amigo/Amiga",
-    "fotoPath": "src/Resources/imagenes_visitantes/visitante_1.jpg",
-    "email": "lauramariatorresgomez74@gmail.com",
-    "id": 1,
-    "estado": "HABILITADO",
-    "primerNombre": "Laura",
-    "segundoNombre": "Maria",
-    "primerApellido": "Torres",
-    "segundoApellido": "Gomez",
-    "edad": 20,
-    "sexo": "Femenino",
-    "nacionalidad": "Colombia  ",
-    "identificacion": "102928223"
-  }
+
 ]
