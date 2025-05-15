@@ -47,6 +47,38 @@
       "sexo": "Femenino",
       "nacionalidad": "po",
       "identificacion": "1313313138"
+    },
+    {
+      "cargo": "Guardia jefe",
+      "turno": "Diurno",
+      "fechaInicioContrato": "2025-05-14",
+      "fechaFinContrato": "2025-06-15",
+      "rutaImagen": "src/Resources/imagenes_guardias/3131313131_1747264988586.png",
+      "correo": "@.com",
+      "primerNombre": "s",
+      "segundoNombre": "S",
+      "primerApellido": "S",
+      "segundoApellido": "S",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "PAPA",
+      "identificacion": "3131313131"
+    },
+    {
+      "cargo": "Guardia jefe",
+      "turno": "Diurno",
+      "fechaInicioContrato": "2025-05-14",
+      "fechaFinContrato": "2025-06-15",
+      "rutaImagen": "src/Resources/imagenes_guardias/133131313_1747265287530.png",
+      "correo": "13131@.com",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 33,
+      "sexo": "Femenino",
+      "nacionalidad": "papa",
+      "identificacion": "133131313"
     }
   ]
 }

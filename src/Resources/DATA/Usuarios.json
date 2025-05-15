@@ -233,6 +233,19 @@
       "sexo": "Femenino",
       "nacionalidad": "w",
       "identificacion": "378123781"
+    },
+    {
+      "usuario": "EJME3$DO#5r",
+      "password": "3b2e2f73c84de031a4b35d0a9be0c52778f5c0117ec6493c07271fb981c83912",
+      "rol": "OFICIAL_DE_REGISTRO",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Masculino",
+      "nacionalidad": "o",
+      "identificacion": "138137813781"
     }
   ]
 }

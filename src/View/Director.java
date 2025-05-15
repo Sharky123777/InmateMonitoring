@@ -15,6 +15,7 @@ import javax.swing.SwingUtilities;
 import Model.Constants.RolEnum;
 import View.FrmCamara;
 import Controller.CoordinadorDeActividadesController;
+import Model.Entities.OficialDeRegistro;
 import Controller.OficialController;
 import DAO.EnfermeraDAO;
 import DAO.GuardiaDAO;
@@ -97,9 +98,12 @@ public class Director extends javax.swing.JFrame {
     private String rutaImagenSeleccionada = "";
     public boolean imagenFueModificada;
 
-    private File imagenSeleccionadaMod;
+    private File rutaImagenGuardia;
+    private File rutaImagenGuardiaMod;
     private File imagenSeleccionadaCDA;
     private File imagenSeleccionadaModCDA;
+    private File imagenSeleccionadaODR;
+    private File imagenSeleccionadaModODR;
     private File rutaImagenEnfermera;
     private File rutaImagenEnfermeraMod;
     private File rutaImagenOficial;
@@ -120,6 +124,8 @@ public class Director extends javax.swing.JFrame {
         txtFechaContratacion2.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
         txtFechaContratacion3.setEditable(false);
         txtFechaContratacion3.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+        txtFechaContratacion4.setEditable(false);
+        txtFechaContratacion4.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
         txtFechaContratacion1.setEditable(false);
         txtFechaContratacionMod1.setEditable(false);
         txtSexo.setEditable(false);
@@ -142,7 +148,6 @@ public class Director extends javax.swing.JFrame {
         guardiaController = guardiaController.getInstancia();
         oficialController = OficialController.getInstancia();
         oficialRegistro = OficialDeRegistroController.getInstancia();
-        
 
         jDateChooserFinContrato = new JDateChooser();
         jDateChooserFinContrato.setDateFormatString("dd/MM/yyyy");
@@ -161,6 +166,7 @@ public class Director extends javax.swing.JFrame {
         actualizarTablaEnfermeras();
         actualizarTablaCDA();
         actualizarTablaOficiales();
+        actualizarTablaODR();
 
         // Configurar el tabbed pane (ocultar las pestañas pero mantener la funcionalidad)
         tabPrincipal.setUI(null);  // Oculta las pestañas del tabbedPane
@@ -561,9 +567,9 @@ public class Director extends javax.swing.JFrame {
         jLabel138 = new javax.swing.JLabel();
         jLabel139 = new javax.swing.JLabel();
         jLabel140 = new javax.swing.JLabel();
-        MostrarODR = new javax.swing.JPanel();
+        tablaODR = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        tablaGuardias1 = new javax.swing.JTable();
+        tablaRegistradoras = new javax.swing.JTable();
         jButton13 = new javax.swing.JButton();
         AñadirOficial = new javax.swing.JPanel();
         jPanel9 = new RoundedPanel(30);
@@ -2406,7 +2412,7 @@ public class Director extends javax.swing.JFrame {
                 jButton19ActionPerformed(evt);
             }
         });
-        jPanel27.add(jButton19, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 280, -1, -1));
+        jPanel27.add(jButton19, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 280, -1, -1));
 
         jLabel131.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel131.setForeground(new java.awt.Color(255, 255, 255));
@@ -2549,9 +2555,9 @@ public class Director extends javax.swing.JFrame {
 
         tabPrincipal.addTab("AggODR", añadirODR);
 
-        MostrarODR.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        tablaODR.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tablaGuardias1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaRegistradoras.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null, null, null},
@@ -2570,24 +2576,24 @@ public class Director extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tablaGuardias1.setComponentPopupMenu(jPopupMenu1);
-        jScrollPane5.setViewportView(tablaGuardias1);
-        if (tablaGuardias1.getColumnModel().getColumnCount() > 0) {
-            tablaGuardias1.getColumnModel().getColumn(0).setResizable(false);
-            tablaGuardias1.getColumnModel().getColumn(1).setResizable(false);
-            tablaGuardias1.getColumnModel().getColumn(2).setResizable(false);
-            tablaGuardias1.getColumnModel().getColumn(3).setResizable(false);
-            tablaGuardias1.getColumnModel().getColumn(4).setResizable(false);
-            tablaGuardias1.getColumnModel().getColumn(5).setResizable(false);
-            tablaGuardias1.getColumnModel().getColumn(6).setResizable(false);
-            tablaGuardias1.getColumnModel().getColumn(7).setResizable(false);
-            tablaGuardias1.getColumnModel().getColumn(8).setResizable(false);
-            tablaGuardias1.getColumnModel().getColumn(9).setResizable(false);
-            tablaGuardias1.getColumnModel().getColumn(10).setResizable(false);
-            tablaGuardias1.getColumnModel().getColumn(11).setResizable(false);
+        tablaRegistradoras.setComponentPopupMenu(jPopupMenu1);
+        jScrollPane5.setViewportView(tablaRegistradoras);
+        if (tablaRegistradoras.getColumnModel().getColumnCount() > 0) {
+            tablaRegistradoras.getColumnModel().getColumn(0).setResizable(false);
+            tablaRegistradoras.getColumnModel().getColumn(1).setResizable(false);
+            tablaRegistradoras.getColumnModel().getColumn(2).setResizable(false);
+            tablaRegistradoras.getColumnModel().getColumn(3).setResizable(false);
+            tablaRegistradoras.getColumnModel().getColumn(4).setResizable(false);
+            tablaRegistradoras.getColumnModel().getColumn(5).setResizable(false);
+            tablaRegistradoras.getColumnModel().getColumn(6).setResizable(false);
+            tablaRegistradoras.getColumnModel().getColumn(7).setResizable(false);
+            tablaRegistradoras.getColumnModel().getColumn(8).setResizable(false);
+            tablaRegistradoras.getColumnModel().getColumn(9).setResizable(false);
+            tablaRegistradoras.getColumnModel().getColumn(10).setResizable(false);
+            tablaRegistradoras.getColumnModel().getColumn(11).setResizable(false);
         }
 
-        MostrarODR.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1080, 550));
+        tablaODR.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1080, 550));
 
         jButton13.setBackground(new java.awt.Color(255, 255, 255));
         jButton13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/icons8-sign-out-40.png"))); // NOI18N
@@ -2596,9 +2602,9 @@ public class Director extends javax.swing.JFrame {
                 jButton13ActionPerformed(evt);
             }
         });
-        MostrarODR.add(jButton13, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 0, 50, 50));
+        tablaODR.add(jButton13, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 0, 50, 50));
 
-        tabPrincipal.addTab("MostrarODR", MostrarODR);
+        tabPrincipal.addTab("MostrarODR", tablaODR);
 
         AñadirOficial.setBackground(new java.awt.Color(20, 25, 40));
         AñadirOficial.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -3422,20 +3428,6 @@ public class Director extends javax.swing.JFrame {
         ajustarImagenesTabla();
     }
 
-    private void ajustarColumnasTablaCDA() {
-
-        TableColumnModel columnModel = tablaCoordinadores.getColumnModel();
-
-        columnModel.getColumn(0).setPreferredWidth(60);
-        columnModel.getColumn(1).setPreferredWidth(150);
-        columnModel.getColumn(2).setPreferredWidth(150);
-        columnModel.getColumn(3).setPreferredWidth(80);
-        columnModel.getColumn(4).setPreferredWidth(80);
-        columnModel.getColumn(5).setPreferredWidth(120);
-
-        tablaCoordinadores.setRowHeight(60);
-    }
-
     private void cargarDatosGuardiaParaModificar(Guardia guardia) {
         if (guardia == null) {
             return;
@@ -3482,17 +3474,17 @@ public class Director extends javax.swing.JFrame {
                             Image.SCALE_SMOOTH
                     );
                     lblImagenMod.setIcon(new ImageIcon(img));
-                    imagenSeleccionadaMod = file;
+                    rutaImagenGuardia = file;
                     return;
                 }
             }
             // Imagen por defecto si no hay imagen o no se puede cargar
             lblImagenMod.setIcon(new ImageIcon(getClass().getResource("/Resources/default_guard.png")));
-            imagenSeleccionadaMod = null;
+            rutaImagenGuardia = null;
         } catch (Exception e) {
             System.err.println("Error al cargar imagen: " + e.getMessage());
             lblImagenMod.setIcon(new ImageIcon(getClass().getResource("/Resources/default_guard.png")));
-            imagenSeleccionadaMod = null;
+            rutaImagenGuardia = null;
         }
     }
 
@@ -3510,30 +3502,6 @@ public class Director extends javax.swing.JFrame {
         txtFechaContratacionMod.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         lblImagenMod.setIcon(null);
         rutaImagenSeleccionada = null;
-    }
-
-    private void limpiarFormularioModificacionCDA() {
-        // Limpiar campos de texto
-        txtCedulaMod2.setText("");
-        txtPrimerNombreMod2.setText("");
-        txtSegundoNombreMod2.setText("");
-        txtPrimerApellidoMod2.setText("");
-        txtSegundoApellidoMod2.setText("");
-        txtEdadMod2.setText("");
-        txtNacionalidadMod2.setText("");
-        txtCorreoMod2.setText("");
-        txtFechaContratacionMod2.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
-
-        // Limpiar comboboxes
-        cmbTurnoMod2.setSelectedIndex(0);
-        txtCargoMod1.setSelectedIndex(0);
-
-        // Limpiar fecha
-        dateFinContratoMod2.setDate(null);
-
-        // Limpiar imagen
-        lblImagenMod2.setIcon(null);
-        imagenSeleccionadaModCDA = null;
     }
 
     private void limpiarFormularioCDA() {
@@ -3558,6 +3526,76 @@ public class Director extends javax.swing.JFrame {
         // Limpiar imagen
         lblImagen2.setIcon(null);
         imagenSeleccionadaCDA = null;
+    }
+
+    private void limpiarFormularioODR() {
+        // Limpiar campos de texto
+        txtCedula4.setText("");
+        txtPrimerNombre4.setText("");
+        txtSegundoNombre4.setText("");
+        txtPrimerApellido4.setText("");
+        txtSegundoApellido4.setText("");
+        txtEdad4.setText("");
+        txtNacionalidad4.setText("");
+        txtCorreo4.setText("");
+        txtFechaContratacion4.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+
+        // Limpiar comboboxes
+        cmbTurno4.setSelectedIndex(0);
+
+        // Limpiar fecha
+        dateFinContrato4.setDate(null);
+
+        // Limpiar imagen
+        lblImagen4.setIcon(null);
+        imagenSeleccionadaCDA = null;
+    }
+
+    private void limpiarFormularioModificacionODR() {
+        // Limpiar campos de texto
+        txtCedulaMod4.setText("");
+        txtPrimerNombreMod4.setText("");
+        txtSegundoNombreMod4.setText("");
+        txtPrimerApellidoMod4.setText("");
+        txtSegundoApellidoMod4.setText("");
+        txtEdadMod4.setText("");
+        txtNacionalidadMod4.setText("");
+        txtCorreoMod4.setText("");
+        txtFechaContratacionMod4.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+
+        // Limpiar comboboxes
+        cmbTurnoMod4.setSelectedIndex(0);
+
+        // Limpiar fecha
+        dateFinContratoMod4.setDate(null);
+
+        // Limpiar imagen
+        lblImagenMod4.setIcon(null);
+        imagenSeleccionadaModODR = null;
+    }
+
+    private void limpiarFormularioModificacionCDA() {
+        // Limpiar campos de texto
+        txtCedulaMod2.setText("");
+        txtPrimerNombreMod2.setText("");
+        txtSegundoNombreMod2.setText("");
+        txtPrimerApellidoMod2.setText("");
+        txtSegundoApellidoMod2.setText("");
+        txtEdadMod2.setText("");
+        txtNacionalidadMod2.setText("");
+        txtCorreoMod2.setText("");
+        txtFechaContratacionMod2.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+
+        // Limpiar comboboxes
+        cmbTurnoMod2.setSelectedIndex(0);
+        txtCargoMod1.setSelectedIndex(0);
+
+        // Limpiar fecha
+        dateFinContratoMod2.setDate(null);
+
+        // Limpiar imagen
+        lblImagenMod2.setIcon(null);
+        imagenSeleccionadaModCDA = null;
     }
 
     private class ImagenRenderer extends DefaultTableCellRenderer {
@@ -3737,12 +3775,12 @@ public class Director extends javax.swing.JFrame {
                     .toLocalDate();
 
             // Validar imagen (similar a EnfermeraController)
-            if (imagenSeleccionadaMod == null || !imagenSeleccionadaMod.exists()) {
+            if (rutaImagenGuardia == null || !rutaImagenGuardia.exists()) {
                 throw new IllegalArgumentException("Debe seleccionar una imagen válida del guardia.");
             }
 
             // Validar formato de imagen
-            String nombreImagen = imagenSeleccionadaMod.getName().toLowerCase();
+            String nombreImagen = rutaImagenGuardia.getName().toLowerCase();
             if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
                 throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
             }
@@ -3760,7 +3798,7 @@ public class Director extends javax.swing.JFrame {
                     turno,
                     fechaFin,
                     cargo,
-                    imagenSeleccionadaMod
+                    rutaImagenGuardia
             );
 
             // Éxito
@@ -3910,35 +3948,6 @@ public class Director extends javax.swing.JFrame {
         rutaImagenSeleccionada = null;
     }
 
-    private void eliminarGuardia(String cedula, int filaSeleccionada) {
-        try {
-
-            GuardiaDAO dao = new GuardiaDAO();
-            boolean eliminado = dao.eliminarGuardia(cedula);
-
-            if (eliminado) {
-
-                ((DefaultTableModel) tablaGuardias.getModel()).removeRow(filaSeleccionada);
-
-                JOptionPane.showMessageDialog(this,
-                        "Guardia eliminado exitosamente",
-                        "Éxito",
-                        JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        "No se pudo eliminar el guardia",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al eliminar: " + ex.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
-        }
-
-    }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // Mostrar opciones al usuario (cámara o selección de archivo)
@@ -4001,7 +4010,7 @@ public class Director extends javax.swing.JFrame {
                 lblFoto.setIcon(new ImageIcon(imagenEscalada));
 
                 // Guardar referencia al archivo para cuando se guarde
-                imagenSeleccionadaMod = nuevaImagen;
+                rutaImagenGuardiaMod = nuevaImagen;
 
                 // Mostrar tooltip con la ruta
                 lblFoto.setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
@@ -4088,11 +4097,11 @@ public class Director extends javax.swing.JFrame {
                     .toLocalDate();
 
             // Validar imagen (si se seleccionó una nueva)
-            if (imagenSeleccionadaMod != null) {
-                if (!imagenSeleccionadaMod.exists()) {
+            if (rutaImagenGuardiaMod != null) {
+                if (!rutaImagenGuardiaMod.exists()) {
                     throw new IllegalArgumentException("La imagen seleccionada no existe.");
                 }
-                String nombreImagen = imagenSeleccionadaMod.getName().toLowerCase();
+                String nombreImagen = rutaImagenGuardiaMod.getName().toLowerCase();
                 if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
                     throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
                 }
@@ -4115,7 +4124,7 @@ public class Director extends javax.swing.JFrame {
             boolean modificado = guardiaController.modificarGuardia(
                     cedulaOriginal,
                     cambios,
-                    imagenSeleccionadaMod // Puede ser null
+                    rutaImagenGuardiaMod // Puede ser null
             );
 
             if (modificado) {
@@ -4211,7 +4220,7 @@ public class Director extends javax.swing.JFrame {
                 lblImagenMod.setIcon(new ImageIcon(imagenEscalada));
 
                 // Guardar referencia al archivo para cuando se guarde
-                imagenSeleccionadaMod = nuevaImagen;
+                rutaImagenGuardiaMod = nuevaImagen;
 
                 // Mostrar tooltip con la ruta
                 lblImagenMod.setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
@@ -4483,32 +4492,6 @@ public class Director extends javax.swing.JFrame {
         }
     }
 
-    private void cargarImagenEnfermera(String rutaImagen) {
-        try {
-            if (rutaImagen != null && !rutaImagen.isEmpty()) {
-                File file = new File(rutaImagen);
-                if (file.exists()) {
-                    ImageIcon icon = new ImageIcon(rutaImagen);
-                    Image img = icon.getImage().getScaledInstance(
-                            lblImagenMod1.getWidth(),
-                            lblImagenMod1.getHeight(),
-                            Image.SCALE_SMOOTH
-                    );
-                    lblImagenMod1.setIcon(new ImageIcon(img));
-                    imagenSeleccionadaMod = file;
-                    return;
-                }
-            }
-
-            lblImagenMod1.setIcon(new ImageIcon(getClass().getResource("/Resources/default_nurse.png")));
-            imagenSeleccionadaMod = null;
-        } catch (Exception e) {
-            System.err.println("Error al cargar imagen: " + e.getMessage());
-            lblImagenMod1.setIcon(new ImageIcon(getClass().getResource("/Resources/default_nurse.png")));
-            imagenSeleccionadaMod = null;
-        }
-    }
-
     private void actualizarTablaCDA() {
         DefaultTableModel modelo = new DefaultTableModel() {
             @Override
@@ -4537,13 +4520,13 @@ public class Director extends javax.swing.JFrame {
         });
 
         // Asegúrate de importar Model.Entities.CoordinadorDeActividades
-        List<Model.Entities.CoordinadorDeActividades> coordinadores
+        List<CoordinadorDeActividades> coordinadores
                 = CoordinadorDeActividadesController.getInstancia().obtenerTodosCoordinadores();
 
         // Crear una imagen por defecto segura
         ImageIcon iconoPorDefecto = crearIconoPorDefecto();
 
-        for (Model.Entities.CoordinadorDeActividades c : coordinadores) {
+        for (CoordinadorDeActividades c : coordinadores) {
             ImageIcon icono = iconoPorDefecto;
 
             if (c.getRutaImagen() != null && !c.getRutaImagen().isEmpty()) {
@@ -4646,6 +4629,91 @@ public class Director extends javax.swing.JFrame {
         tablaOficial.setRowHeight(85);
         tablaOficial.getColumnModel().getColumn(0).setPreferredWidth(85);
         tablaOficial.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
+    }
+
+    private void actualizarTablaODR() {
+        DefaultTableModel modelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return columnIndex == 0 ? ImageIcon.class : Object.class;
+            }
+        };
+
+        modelo.setColumnIdentifiers(new String[]{
+            "Foto",
+            "Nombre",
+            "Apellido",
+            "Edad",
+            "Cédula",
+            "Nacionalidad",
+            "Correo",
+            "Turno",
+            "Inicio Contrato",
+            "Fin Contrato"
+        });
+
+        List<OficialDeRegistro> odr = OficialDeRegistroController.getInstancia().obtenerTodosOficiales();
+
+        // Crear una imagen por defecto segura
+        ImageIcon iconoPorDefecto = crearIconoPorDefecto();
+
+        for (OficialDeRegistro or : odr) {
+            ImageIcon icono = iconoPorDefecto;
+
+            // CORRECCIÓN PRINCIPAL: Cambiar la condición para verificar la ruta de la imagen
+            if (or.getRutaImagen() != null && !or.getRutaImagen().isEmpty()) {
+                try {
+                    File file = new File(or.getRutaImagen());
+                    if (file.exists()) {
+                        // DEBUG: Mostrar información de la imagen
+                        System.out.println("Cargando imagen de: " + or.getRutaImagen());
+                        System.out.println("Tamaño archivo: " + file.length() + " bytes");
+
+                        // Cargar la imagen con mejor manejo de errores
+                        Image img = ImageIO.read(file);
+                        if (img != null) {
+                            img = img.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                            icono = new ImageIcon(img);
+                        } else {
+                            System.err.println("La imagen no pudo ser cargada (null)");
+                        }
+                    } else {
+                        System.err.println("Archivo no existe: " + or.getRutaImagen());
+                    }
+                } catch (Exception ex) {
+                    System.err.println("Error cargando imagen: " + ex.getMessage());
+                    ex.printStackTrace();
+                }
+            } else {
+                System.out.println("Oficial sin ruta de imagen: " + or.getIdentificacion());
+            }
+
+            modelo.addRow(new Object[]{
+                icono,
+                or.getPrimerNombre() + " " + (or.getSegundoNombre() != null ? or.getSegundoNombre() : ""),
+                or.getPrimerApellido() + " " + or.getSegundoApellido(),
+                or.getEdad(),
+                or.getIdentificacion(),
+                or.getNacionalidad(),
+                or.getCorreo(),
+                or.getTurno(),
+                or.getFechaContratacion().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")),
+                or.getFechaFinContrato() != null
+                ? or.getFechaFinContrato().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) : ""
+            });
+        }
+
+        tablaRegistradoras.setModel(modelo);
+        tablaRegistradoras.setRowHeight(85);
+        tablaRegistradoras.getColumnModel().getColumn(0).setPreferredWidth(85);
+
+        // Asegurar que el renderizador está configurado correctamente
+        tablaRegistradoras.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
     }
 
     private void actualizarTablaEnfermeras() {
@@ -6337,7 +6405,60 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_modOfActionPerformed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
-        // TODO add your handling code here:
+        try {
+
+            String primerNombre = txtPrimerNombre4.getText().trim();
+            String segundoNombre = txtSegundoNombre4.getText().trim();
+            String primerApellido = txtPrimerApellido4.getText().trim();
+            String segundoApellido = txtSegundoApellido4.getText().trim();
+            String cedula = txtCedula4.getText().trim();
+            String nacionalidad = txtNacionalidad4.getText().trim();
+            String correo = txtCorreo4.getText().trim();
+            String turno = cmbTurno4.getSelectedItem().toString();
+
+            // Validar edad
+            int edad;
+            try {
+                edad = Integer.parseInt(txtEdad4.getText().trim());
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("La edad debe ser un número válido.");
+            }
+
+            // Validar fecha fin
+            if (dateFinContrato4.getDate() == null) {
+                throw new IllegalArgumentException("Seleccione una fecha de fin de contrato.");
+            }
+            LocalDate fechaFin = dateFinContrato4.getDate().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+
+            if (imagenSeleccionadaODR == null || !imagenSeleccionadaODR.exists()) {
+                throw new IllegalArgumentException("Debe seleccionar una imagen válida de la registradora.");
+            }
+
+            // Validar formato de imagen
+            String nombreImagen = imagenSeleccionadaODR.getName().toLowerCase();
+            if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
+                throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
+            }
+
+            OficialDeRegistro nuevoOficialR = oficialRegistro.registrarOficial(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, cedula, nacionalidad, correo, turno, fechaFin, imagenSeleccionadaODR);
+            // Llamar al Controller (centraliza validaciones adicionales)
+
+            // Éxito
+            limpiarFormularioODR();
+            actualizarTablaODR();
+            JOptionPane.showMessageDialog(this, "Registradora agregada exitosamente.",
+                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Error de validación", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void txtCorreo4FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreo4FocusLost
@@ -6353,7 +6474,89 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCorreo4KeyTyped
 
     private void jButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton19ActionPerformed
-        // TODO add your handling code here:
+        Object[] options = {"Tomar Foto", "Seleccionar Archivo", "Cancelar"};
+        int opcion = JOptionPane.showOptionDialog(
+                this,
+                "¿Cómo desea obtener la imagen de la registradora?",
+                "Seleccionar Imagen",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+        try {
+            if (opcion == 0) { // Tomar foto
+                imagenSeleccionadaODR = oficialRegistro.capturarImagenOficial();
+                if (imagenSeleccionadaODR == null) {
+                    JOptionPane.showMessageDialog(this,
+                            "No se pudo capturar la imagen",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            } else if (opcion == 1) { // Seleccionar archivo
+                JFileChooser fileChooser = new JFileChooser();
+                FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                        "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");
+                fileChooser.setFileFilter(filter);
+                fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+
+                int resultado = fileChooser.showOpenDialog(this);
+                if (resultado == JFileChooser.APPROVE_OPTION) {
+                    File archivoSeleccionado = fileChooser.getSelectedFile();
+
+                    // Validar extensión
+                    String nombreArchivo = archivoSeleccionado.getName().toLowerCase();
+                    if (!nombreArchivo.endsWith(".jpg") && !nombreArchivo.endsWith(".jpeg")
+                            && !nombreArchivo.endsWith(".png")) {
+                        JOptionPane.showMessageDialog(this,
+                                "Formato de imagen no válido. Use JPG, JPEG o PNG.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                        imagenSeleccionadaODR = null;
+                        return;
+                    }
+
+                    // Crear copia en directorio temporal
+                    String tempDir = System.getProperty("java.io.tmpdir");
+                    String nombreTemp = "oficial_registro_" + System.currentTimeMillis()
+                            + nombreArchivo.substring(nombreArchivo.lastIndexOf("."));
+                    imagenSeleccionadaODR = new File(tempDir, nombreTemp);
+
+                    try {
+                        Files.copy(archivoSeleccionado.toPath(), imagenSeleccionadaODR.toPath(),
+                                StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException e) {
+                        JOptionPane.showMessageDialog(this,
+                                "Error al copiar la imagen: " + e.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                        imagenSeleccionadaODR = null;
+                        return;
+                    }
+                }
+            }
+
+            // Actualizar vista
+            if (imagenSeleccionadaODR != null && imagenSeleccionadaODR.exists()) {
+                ImageIcon icono = new ImageIcon(imagenSeleccionadaODR.getAbsolutePath());
+                Image img = icono.getImage()
+                        .getScaledInstance(
+                                lblImagen4.getWidth(),
+                                lblImagen4.getHeight(),
+                                Image.SCALE_SMOOTH
+                        );
+                lblImagen4.setIcon(new ImageIcon(img));
+                lblImagen4.setToolTipText("Imagen seleccionada: " + imagenSeleccionadaODR.getAbsolutePath());
+            } else {
+                lblImagen4.setIcon(null);
+                lblImagen4.setToolTipText(null);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al obtener imagen: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_jButton19ActionPerformed
 
     private void txtNacionalidad4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidad4KeyTyped
@@ -6504,7 +6707,6 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JPanel ModificarODR;
     private javax.swing.JPanel ModificarOficial;
     private javax.swing.JPanel MostrarEnfermeras;
-    private javax.swing.JPanel MostrarODR;
     private javax.swing.JPanel añadirODR;
     private javax.swing.JComboBox<String> cmbCargo;
     private javax.swing.JComboBox<String> cmbCargo2;
@@ -6861,8 +7063,9 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JTable tablaCoordinadores;
     private javax.swing.JTable tablaEnfermeras;
     private javax.swing.JTable tablaGuardias;
-    private javax.swing.JTable tablaGuardias1;
+    private javax.swing.JPanel tablaODR;
     private javax.swing.JTable tablaOficial;
+    private javax.swing.JTable tablaRegistradoras;
     private javax.swing.JComboBox<String> txtCargoMod;
     private javax.swing.JComboBox<String> txtCargoMod1;
     private javax.swing.JTextField txtCedula;

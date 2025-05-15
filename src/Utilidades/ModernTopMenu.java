@@ -61,15 +61,15 @@ public class ModernTopMenu extends JPanel {
     
     
     ArrayList<MenuItem> cdaItems = new ArrayList<>();
-    cdaItems.add(new MenuItem("Agregar CDA", 9)); // AgregarCDA
+    cdaItems.add(new MenuItem("Agregar coordinadora", 9)); // AgregarCDA
     
-    cdaItems.add(new MenuItem("Mostrar CDA", 11)); // mostrarCoordinadora
-    menuStructure.put("CDA", cdaItems);
+    cdaItems.add(new MenuItem("Mostrar coordinadora", 11)); // mostrarCoordinadora
+    menuStructure.put("Coordinadora", cdaItems);
     
     ArrayList<MenuItem> ofrItems = new ArrayList<>();
-    ofrItems.add(new MenuItem("Agregar registradora", 9)); // AgregarCDA
+    ofrItems.add(new MenuItem("Agregar registradora", 12)); // AgregarCDA
     
-    ofrItems.add(new MenuItem("Mostrar registradora", 11)); // mostrarCoordinadora
+    ofrItems.add(new MenuItem("Mostrar registradora", 13)); // mostrarCoordinadora
     menuStructure.put("Registradora", ofrItems);
     
     ArrayList<MenuItem> configItems = new ArrayList<>();
