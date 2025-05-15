@@ -52,6 +52,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import Model.Entities.PersonalControl;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -121,7 +122,6 @@ public class Director extends javax.swing.JFrame {
     public Director() {
         initComponents();
 
-        // Continuamos con el resto de tu código original
         txtFechaContratacion.setEditable(false);
         txtFechaContratacion.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
         txtFechaContratacion2.setEditable(false);
@@ -147,7 +147,6 @@ public class Director extends javax.swing.JFrame {
         txtFechaContratacionMod2.setText(LocalDate.now().toString());
         ToolTipManager.sharedInstance().setInitialDelay(10);
 
-        // Inicialización de controladores
         guardiaController = GuardiaController.getInstancia();
         enfermeraController = EnfermeraController.getInstancia();
         coordinadorController = CoordinadorDeActividadesController.getInstancia();
@@ -159,12 +158,10 @@ public class Director extends javax.swing.JFrame {
         jDateChooserFinContrato = new JDateChooser();
         jDateChooserFinContrato.setDateFormatString("dd/MM/yyyy");
 
-        // Establecer fecha mínima (mañana)
         Calendar calendario = Calendar.getInstance();
         calendario.add(Calendar.DAY_OF_MONTH, 1); // Fecha mínima = mañana
         jDateChooserFinContrato.setMinSelectableDate(calendario.getTime());
 
-        // Establecer fecha por defecto (opcional: 1 mes después de hoy)
         calendario.add(Calendar.MONTH, 1);
         jDateChooserFinContrato.setDate(calendario.getTime());
 
@@ -174,7 +171,7 @@ public class Director extends javax.swing.JFrame {
         actualizarTablaCDA();
         actualizarTablaOficiales();
         actualizarTablaODR();
-        
+        actualizarTablaPDC();
 
         // Configurar el tabbed pane (ocultar las pestañas pero mantener la funcionalidad)
         tabPrincipal.setUI(null);  // Oculta las pestañas del tabbedPane
@@ -245,6 +242,9 @@ public class Director extends javax.swing.JFrame {
         jPopupMenu5 = new javax.swing.JPopupMenu();
         modificarODR = new javax.swing.JMenuItem();
         EliminarODR = new javax.swing.JMenuItem();
+        jPopupMenu6 = new javax.swing.JPopupMenu();
+        modificarOPC = new javax.swing.JMenuItem();
+        eliminarPDC = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         tabPrincipal = new javax.swing.JTabbedPane();
         Director = new javax.swing.JPanel();
@@ -764,7 +764,7 @@ public class Director extends javax.swing.JFrame {
         jLabel166 = new javax.swing.JLabel();
         jLabel167 = new javax.swing.JLabel();
         modPDC = new javax.swing.JPanel();
-        ModificarNurse1 = new javax.swing.JPanel();
+        modPersonal = new javax.swing.JPanel();
         jPanel38 = new RoundedPanel(30);
         jSeparator115 = new javax.swing.JSeparator();
         jSeparator116 = new javax.swing.JSeparator();
@@ -890,6 +890,22 @@ public class Director extends javax.swing.JFrame {
             }
         });
         jPopupMenu5.add(EliminarODR);
+
+        modificarOPC.setText("jMenuItem1");
+        modificarOPC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modificarOPCActionPerformed(evt);
+            }
+        });
+        jPopupMenu6.add(modificarOPC);
+
+        eliminarPDC.setText("jMenuItem2");
+        eliminarPDC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarPDCActionPerformed(evt);
+            }
+        });
+        jPopupMenu6.add(eliminarPDC);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -3700,8 +3716,8 @@ public class Director extends javax.swing.JFrame {
 
         modPDC.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        ModificarNurse1.setBackground(new java.awt.Color(20, 25, 40));
-        ModificarNurse1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        modPersonal.setBackground(new java.awt.Color(20, 25, 40));
+        modPersonal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel38.setBackground(new java.awt.Color(29, 35, 51));
         jPanel38.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -3912,14 +3928,14 @@ public class Director extends javax.swing.JFrame {
         jLabel180.setText("Primer nombre:");
         jPanel38.add(jLabel180, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, 20));
 
-        ModificarNurse1.add(jPanel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
+        modPersonal.add(jPanel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
 
         jLabel181.setFont(new java.awt.Font("Arial", 2, 10)); // NOI18N
         jLabel181.setForeground(new java.awt.Color(153, 0, 0));
         jLabel181.setText("NINGUN CAMPO DEBE ESTAR VACIO AL MODIFICAR, A EXCEPCIÓN DEL SEGUNDO NOMBRE.");
-        ModificarNurse1.add(jLabel181, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 10, -1, 30));
+        modPersonal.add(jLabel181, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 10, -1, 30));
 
-        modPDC.add(ModificarNurse1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -5, 1100, 590));
+        modPDC.add(modPersonal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -5, 1100, 590));
 
         tabPrincipal.addTab("modPDC", modPDC);
 
@@ -3944,7 +3960,7 @@ public class Director extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        personalTabla.setComponentPopupMenu(jPopupMenu2);
+        personalTabla.setComponentPopupMenu(jPopupMenu6);
         jScrollPane6.setViewportView(personalTabla);
         if (personalTabla.getColumnModel().getColumnCount() > 0) {
             personalTabla.getColumnModel().getColumn(0).setResizable(false);
@@ -4048,7 +4064,7 @@ public class Director extends javax.swing.JFrame {
         tablaOficial.getColumnModel().getColumn(0).setPreferredWidth(85);
         tablaOficial.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
     }
-    
+
     // Métodos para Oficiales en la vista Director
     private void cargarTablaPDC() {
         DefaultTableModel modelo = new DefaultTableModel() {
@@ -4438,8 +4454,8 @@ public class Director extends javax.swing.JFrame {
         lblImagenMod3.setIcon(null);
         rutaImagenOficialMod = null;
     }
-    
-     private void limpiarFormularioPDC() {
+
+    private void limpiarFormularioPDC() {
         txtPrimerNombre5.setText("");
         txtSegundoNombre5.setText("");
         txtPrimerApellido5.setText("");
@@ -5175,7 +5191,7 @@ public class Director extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    
+
     private void cargarDatosEnfermeraParaModificar(Enfermera enfermera) {
         if (enfermera == null) {
             return;
@@ -5216,6 +5232,49 @@ public class Director extends javax.swing.JFrame {
             }
         } else {
             lblImagenMod1.setIcon(new ImageIcon(getClass().getResource("/Resources/default_nurse.png")));
+        }
+    }
+
+    private void cargarDatosPDCParaModificar(PersonalControl pdc) {
+        if (pdc == null) {
+            return;
+        }
+
+        txtPrimerNombreMod5.setText(pdc.getPrimerNombre());
+        txtSegundoNombreMod5.setText(pdc.getSegundoNombre() != null ? pdc.getSegundoNombre() : "");
+        txtPrimerApellidoMod5.setText(pdc.getPrimerApellido());
+        txtSegundoApellidoMod5.setText(pdc.getSegundoApellido());
+        txtEdadMod5.setText(String.valueOf(pdc.getEdad()));
+        txtCedulaMod5.setText(pdc.getIdentificacion());
+        txtNacionalidadMod5.setText(pdc.getNacionalidad());
+        txtCorreoMod5.setText(pdc.getCorreo());
+        cmbTurnoMod5.setSelectedItem(pdc.getTurno());
+        txtFechaContratacionMod5.setText(pdc.getFechaContratacion().toString());
+
+        try {
+            dateFinContratoMod5.setDate(
+                    Date.from(pdc.getFechaFinContrato().atStartOfDay(ZoneId.systemDefault()).toInstant())
+            );
+        } catch (Exception e) {
+            dateFinContratoMod5.setDate(null);
+        }
+
+        // Cargar imagen existente
+        if (pdc.getRutaImagen() != null && !pdc.getRutaImagen().isEmpty()) {
+            File imagenExistente = new File(pdc.getRutaImagen());
+            if (imagenExistente.exists()) {
+                ImageIcon icon = new ImageIcon(imagenExistente.getAbsolutePath());
+                Image img = icon.getImage().getScaledInstance(
+                        lblImagenMod5.getWidth(),
+                        lblImagenMod5.getHeight(),
+                        Image.SCALE_SMOOTH
+                );
+                lblImagenMod5.setIcon(new ImageIcon(img));
+            } else {
+                lblImagenMod5.setIcon(new ImageIcon(getClass().getResource("/Resources/default_nurse.png")));
+            }
+        } else {
+            lblImagenMod5.setIcon(new ImageIcon(getClass().getResource("/Resources/default_nurse.png")));
         }
     }
 
@@ -5333,7 +5392,7 @@ public class Director extends javax.swing.JFrame {
         tablaCoordinadores.getColumnModel().getColumn(0).setPreferredWidth(85);
         tablaCoordinadores.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
     }
-    
+
     private void actualizarTablaPDC() {
         DefaultTableModel modelo = new DefaultTableModel() {
             @Override
@@ -7195,7 +7254,7 @@ public class Director extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this,
                             "Guardia eliminada con éxito",
                             "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    
+
                     actualizarTablaOficiales();
                 }
             } catch (Exception e) {
@@ -7460,8 +7519,7 @@ public class Director extends javax.swing.JFrame {
             switch (resultado) {
                 case 1: // Éxito
                     JOptionPane.showMessageDialog(this,
-                                "Registradora modificada exitosamente",
-                                
+                            "Registradora modificada exitosamente",
                             "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     actualizarTablaODR();
                     limpiarFormularioModificacionODR();
@@ -7503,7 +7561,7 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCorreoMod4KeyTyped
 
     private void jButton21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton21ActionPerformed
-         Object[] options = {"Usar Cámara", "Seleccionar Archivo", "Cancelar"};
+        Object[] options = {"Usar Cámara", "Seleccionar Archivo", "Cancelar"};
         int opcion = JOptionPane.showOptionDialog(this,
                 "¿Cómo desea obtener la imagen?",
                 "Seleccionar Imagen",
@@ -7584,7 +7642,7 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPrimerNombreMod4KeyTyped
 
     private void modificarODRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarODRActionPerformed
-         int fila = tablaRegistradoras.getSelectedRow();
+        int fila = tablaRegistradoras.getSelectedRow();
 
         if (fila < 0) {
             JOptionPane.showMessageDialog(this,
@@ -7620,7 +7678,7 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_modificarODRActionPerformed
 
     private void EliminarODRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarODRActionPerformed
-       int filaSeleccionada = tablaRegistradoras.getSelectedRow();
+        int filaSeleccionada = tablaRegistradoras.getSelectedRow();
 
         if (filaSeleccionada == -1) {
             JOptionPane.showMessageDialog(this,
@@ -7643,7 +7701,7 @@ public class Director extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this,
                             "Registradora eliminada con éxito",
                             "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    
+
                     actualizarTablaODR();
                 }
             } catch (Exception e) {
@@ -7655,7 +7713,7 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_EliminarODRActionPerformed
 
     private void jButton22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton22ActionPerformed
-         try {
+        try {
             // Obtener valores del formulario
             String primerNombre = txtPrimerNombre5.getText().trim();
             String segundoNombre = txtSegundoNombre5.getText().trim();
@@ -7687,19 +7745,16 @@ public class Director extends javax.swing.JFrame {
                 throw new IllegalArgumentException("Debe seleccionar una imagen válida del personal de control.");
             }
 
-            
             String nombreImagen = rutaImagenPDC.getName().toLowerCase();
             if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
                 throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
             }
-            
-            PersonalControl nuevoPersonal = PersonalControlController.getInstancia().registrarPersonalControl(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, cedula, nacionalidad, correo, turno, fechaFin, rutaImagenPDC);
 
-           
+            PersonalControl nuevoPersonal = PersonalControlController.getInstancia().registrarPersonalControl(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, cedula, nacionalidad, correo, turno, fechaFin, rutaImagenPDC);
 
             // Éxito
             limpiarFormularioPDC();
-             cargarTablaPDC();
+            cargarTablaPDC();
             JOptionPane.showMessageDialog(this, "Empleada registrada exitosamente.",
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
@@ -7758,7 +7813,7 @@ public class Director extends javax.swing.JFrame {
                 Image img = icono.getImage()
                         .getScaledInstance(lblImagen5.getWidth(), lblImagen5.getHeight(), Image.SCALE_SMOOTH);
                 lblImagen5.setIcon(new ImageIcon(img));
-                rutaImagenPDC = imagen; 
+                rutaImagenPDC = imagen;
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
@@ -7804,7 +7859,77 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPrimerNombre5KeyTyped
 
     private void jButton24ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton24ActionPerformed
-        // TODO add your handling code here:
+        try {
+            // 1. Preparar cambios
+            Map<String, Object> cambios = new HashMap<>();
+            cambios.put("primerNombre", txtPrimerNombreMod5.getText().trim());
+            cambios.put("segundoNombre", txtSegundoNombreMod5.getText().trim());
+            cambios.put("primerApellido", txtPrimerApellidoMod5.getText().trim());
+            cambios.put("segundoApellido", txtSegundoApellidoMod5.getText().trim());
+
+            // Validar edad antes de parsear
+            if (txtEdadMod5.getText().trim().isEmpty()) {
+                throw new IllegalArgumentException("La edad es obligatoria");
+            }
+            cambios.put("edad", Integer.parseInt(txtEdadMod5.getText().trim()));
+
+            cambios.put("nacionalidad", txtNacionalidadMod5.getText().trim());
+            cambios.put("correo", txtCorreoMod5.getText().trim());
+            cambios.put("turno", cmbTurnoMod5.getSelectedItem().toString());
+
+            // Validar fecha
+            if (dateFinContratoMod5.getDate() == null) {
+                throw new IllegalArgumentException("La fecha fin de contrato es obligatoria");
+            }
+            cambios.put("fechaFin", dateFinContratoMod5.getDate().toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate());
+
+            String cedulaOriginal = txtCedulaMod5.getText().trim();
+
+            // 2. Solo considerar como nueva imagen si el usuario seleccionó una explícitamente
+            File imagenModificada = imagenFueModificada ? rutaImagenPDCMod : null;
+
+            // 3. Llamar al controlador
+            int resultado = PersonalControlController.getInstancia()
+                    .modificarPersonalControl(cedulaOriginal, cambios, imagenModificada);
+
+            switch (resultado) {
+                case 1: // Éxito
+                    JOptionPane.showMessageDialog(this,
+                            "Empleada modificada exitosamente",
+                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    tabPrincipal.setSelectedComponent(mostrarPDC);
+                    cargarTablaPDC();
+                    break;
+
+                case 0:
+                    int opcion = JOptionPane.showConfirmDialog(this,
+                            "No se detectaron cambios. ¿Desea cancelar la modificación?",
+                            "Sin cambios",
+                            JOptionPane.YES_NO_OPTION);
+
+                    if (opcion == JOptionPane.YES_OPTION) {
+                        tabPrincipal.setSelectedComponent(mostrarPDC);
+                    }
+                    break;
+
+                case -1: // Error
+                    JOptionPane.showMessageDialog(this,
+                            "Error al guardar los cambios en la base de datos",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    break;
+            }
+
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error de validación:\n" + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al modificar empleada: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_jButton24ActionPerformed
 
     private void txtCorreoMod5FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreoMod5FocusLost
@@ -7854,6 +7979,76 @@ public class Director extends javax.swing.JFrame {
     private void txtPrimerNombreMod5KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreMod5KeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPrimerNombreMod5KeyTyped
+
+    private void modificarOPCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarOPCActionPerformed
+        int fila = personalTabla.getSelectedRow();
+
+        if (fila < 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Seleccione un registro de personal de control primero",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String cedula = personalTabla.getValueAt(fila, 4).toString(); // Ajusta el índice según tu tabla
+
+        try {
+            PersonalControl personal = PersonalControlController.getInstancia()
+                    .obtenerPersonalControlPorCedula(cedula);
+
+            if (personal != null) {
+                // Cargar datos en el formulario de modificación
+                cargarDatosPDCParaModificar(personal);
+
+                // Cambiar al panel de modificación
+                tabPrincipal.setSelectedComponent(modPDC);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "No se encontró el personal de control con cédula: " + cedula,
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar datos: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_modificarOPCActionPerformed
+
+    private void eliminarPDCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarPDCActionPerformed
+         int filaSeleccionada = personalTabla.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Seleccione una empleada primero",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String cedula = personalTabla.getValueAt(filaSeleccionada, 4).toString();
+
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de eliminar a la empleada con cédula " + cedula + "?",
+                "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            try {
+                boolean eliminado = PersonalControlController.getInstancia().eliminarPersonalControl(cedula);
+
+                if (eliminado) {
+                    JOptionPane.showMessageDialog(this,
+                            "Empleada eliminada con éxito",
+                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+                    actualizarTablaPDC();
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al eliminar: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_eliminarPDCActionPerformed
 
     /**
      * @param args the command line arguments
@@ -7913,7 +8108,6 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JMenuItem ModificarEnfermera;
     private javax.swing.JPanel ModificarGuardia;
     private javax.swing.JPanel ModificarNurse;
-    private javax.swing.JPanel ModificarNurse1;
     private javax.swing.JPanel ModificarODR;
     private javax.swing.JPanel ModificarOficial;
     private javax.swing.JPanel MostrarEnfermeras;
@@ -7944,6 +8138,7 @@ public class Director extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser dateFinContratoMod3;
     private com.toedter.calendar.JDateChooser dateFinContratoMod4;
     private com.toedter.calendar.JDateChooser dateFinContratoMod5;
+    private javax.swing.JMenuItem eliminarPDC;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
@@ -8191,6 +8386,7 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JPopupMenu jPopupMenu3;
     private javax.swing.JPopupMenu jPopupMenu4;
     private javax.swing.JPopupMenu jPopupMenu5;
+    private javax.swing.JPopupMenu jPopupMenu6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -8336,7 +8532,9 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JPanel modODR;
     private javax.swing.JMenuItem modOf;
     private javax.swing.JPanel modPDC;
+    private javax.swing.JPanel modPersonal;
     private javax.swing.JMenuItem modificarODR;
+    private javax.swing.JMenuItem modificarOPC;
     private javax.swing.JPanel modificarOficial;
     private javax.swing.JPanel mostrarCoordinadora;
     private javax.swing.JPanel mostrarODR;

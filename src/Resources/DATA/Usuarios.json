@@ -246,6 +246,19 @@
       "sexo": "Masculino",
       "nacionalidad": "sharlok",
       "identificacion": "3981238913"
+    },
+    {
+      "usuario": "pEAW¡#0Q%¡f",
+      "password": "bd2e376d95c4bac1661e3ad774d36ccf8812ca11cc6fe25ba6dd3480073135fe",
+      "rol": "PERSONAL_DE_CONTROL",
+      "primerNombre": "Pedro",
+      "segundoNombre": "",
+      "primerApellido": "Amaranta",
+      "segundoApellido": "Piumba",
+      "edad": 34,
+      "sexo": "Masculino",
+      "nacionalidad": "pium",
+      "identificacion": "13131313"
     }
   ]
 }

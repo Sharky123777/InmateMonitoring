@@ -119,37 +119,63 @@ public class PersonalControlController {
         try {
             System.out.println("=== INICIO MODIFICACIÓN ===");
 
+            // 1. Validar que el personal existe
             PersonalControl original = obtenerPersonalControlPorCedula(cedulaOriginal);
             if (original == null) {
                 throw new IllegalArgumentException("Personal de control no encontrado");
             }
 
-            // Debug: Mostrar valores originales y nuevos
-            System.out.println("Valores originales:");
-            System.out.println(original.toString());
-            System.out.println("Valores nuevos:");
-            cambios.forEach((k, v) -> System.out.println(k + ": " + v));
+            // 2. Validar campos obligatorios
+            validarCamposModificacion(cambios);
 
+            // 3. Validar edad
+            int edad = (int) cambios.get("edad");
+            validarEdad(edad);
+
+            // 4. Validar fechas
+            LocalDate fechaFin = (LocalDate) cambios.get("fechaFin");
+            validarFechasContrato(original.getFechaContratacion(), fechaFin);
+
+            // 5. Validar correo electrónico
+            String correo = (String) cambios.get("correo");
+            if (!correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+                throw new IllegalArgumentException("Correo electrónico no válido");
+            }
+
+            // 6. Validar turno
+            String turno = (String) cambios.get("turno");
+            if (!turno.equalsIgnoreCase("Diurno") && !turno.equalsIgnoreCase("Nocturno")) {
+                throw new IllegalArgumentException("Turno debe ser 'Diurno' o 'Nocturno'");
+            }
+
+            // 7. Validar imagen si se proporciona una nueva
+            if (nuevaImagen != null) {
+                validarImagen(nuevaImagen);
+            }
+
+            // 8. Verificar si hay cambios reales
             boolean hayCambios = verificarCambios(original, cambios, nuevaImagen);
-
             if (!hayCambios) {
                 System.out.println("No hay cambios reales - retornando 0");
                 return 0;
             }
 
-            System.out.println("Hay cambios reales - procediendo con modificación");
-
-            // Resto de la lógica de modificación...
-            boolean modificadoEnBD = personalControlDAO.modificarPersonalControl(cedulaOriginal,
+            // 9. Proceder con la modificación
+            boolean modificadoEnBD = personalControlDAO.modificarPersonalControl(
+                    cedulaOriginal,
                     construirPersonalControlModificado(cedulaOriginal, cambios, original),
-                    nuevaImagen);
+                    nuevaImagen
+            );
 
             return modificadoEnBD ? 1 : -1;
 
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error de validación: " + e.getMessage());
+            throw e; // Relanzar para que la vista pueda mostrar el mensaje
         } catch (Exception e) {
             System.out.println("Error en modificarPersonalControl: " + e.getMessage());
             e.printStackTrace();
-            throw e;
+            throw new RuntimeException("Error al modificar personal de control: " + e.getMessage(), e);
         }
     }
 
