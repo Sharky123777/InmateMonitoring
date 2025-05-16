@@ -34,11 +34,10 @@ public class Oficial extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         FechaSancion.getDateEditor().setEnabled(false);
         FechaCita.getDateEditor().setEnabled(false);
-        CitaMedicaController controller = new CitaMedicaController();
-        controller.cargarTodosLosPresos(TablaPresos);
-        controller.configurarTablaImagenes(TablaPresos);
-        controller.cargarTodosLosGuardias(tablaGuardias);
-        controller.configurarTablaImagenes(tablaGuardias);
+        sancionController.cargarTodosLosPresos(TablaPresos);
+        sancionController.configurarTablaImagenes(TablaPresos);
+        sancionController.cargarTodosLosGuardias(tablaGuardias);
+        sancionController.configurarTablaImagenes(tablaGuardias);
         
         InicializarMenu();
         ComboTipoSancion1.addActionListener(new ActionListener() {
@@ -656,6 +655,11 @@ public class Oficial extends javax.swing.JFrame {
         jPanel2.add(FechaCita, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 380, 30));
 
         JcomboHoraCita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "08:00", "08:20", "08:40", "09:00", "09:20", "09:40", "10:00", "10:20", "10:40", "11:00", "11:20", "11:40", "12:00", "12:20", "12:40", "13:00", "13:20", "13:40", "14:00", "14:20", "14:40", "15:00", "15:20", "15:40", "16:00", "16:20", "16:40", "17:00", "17:20", "17:40", "18:00", "18:20", "18:40", "19:00", "19:20", "19:40", "20:00" }));
+        JcomboHoraCita.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JcomboHoraCitaActionPerformed(evt);
+            }
+        });
         jPanel2.add(JcomboHoraCita, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 380, 30));
 
         jLabel62.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
@@ -934,14 +938,7 @@ public class Oficial extends javax.swing.JFrame {
     }//GEN-LAST:event_IdentificacionPresoCitaActionPerformed
 
     private void BotonActualizarInformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonActualizarInformacionActionPerformed
-        String contraseñaActual = ContraseñaActual.getText().trim();
-        String nuevaContraseña = NuevaContraseña.getText().trim();
-        String nuevoPrimerNombre = NuevoPrimerNombre.getText().trim();
-        String nuevoSegundoNombre = NuevoSegundoNombre.getText().trim();
-        String nuevoPrimerApellido = NuevoPrimerApellido.getText().trim();
-        String nuevoSegundoApellido = NuevoSegundoApellido.getText().trim();
-        String nuevaNacionalidad = NuevaNacionalidad.getText().trim();
-        String nuevoEmail = NuevoEmail.getText().trim();
+      
     }//GEN-LAST:event_BotonActualizarInformacionActionPerformed
 
     private void SubirNuevaFotoPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubirNuevaFotoPerfilActionPerformed
@@ -1021,31 +1018,26 @@ public class Oficial extends javax.swing.JFrame {
     }//GEN-LAST:event_botonIrPanelActualizarMouseClicked
 
     private void BotonBuscarPresoIdentificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonBuscarPresoIdentificacionActionPerformed
-        CitaMedicaController CitaMedicaController = new CitaMedicaController();
-        CitaMedicaController.buscarPresoPorIdentificacion(BarraDeBusquedaPreso.getText().trim(), TablaPresos);
+        sancionController.buscarPresoPorIdentificacion(BarraDeBusquedaPreso.getText().trim(), TablaPresos);
     }//GEN-LAST:event_BotonBuscarPresoIdentificacionActionPerformed
 
     private void BotonCargarTodosPresosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCargarTodosPresosActionPerformed
-        CitaMedicaController CitaMedicaController = new CitaMedicaController();
-        CitaMedicaController.cargarTodosLosPresos(TablaPresos);
+        sancionController.cargarTodosLosPresos(TablaPresos);
 
      }//GEN-LAST:event_BotonCargarTodosPresosActionPerformed
 
     private void BotonCargarTodosGuardiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCargarTodosGuardiasActionPerformed
-        CitaMedicaController CitaMedicaController = new CitaMedicaController();
-        CitaMedicaController.cargarTodosLosGuardias(tablaGuardias);
+        sancionController.cargarTodosLosGuardias(tablaGuardias);
     }//GEN-LAST:event_BotonCargarTodosGuardiasActionPerformed
 
     private void JcomboSeccion1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JcomboSeccion1ActionPerformed
         String seccionSeleccionada = JcomboSeccion1.getSelectedItem().toString();
-        CitaMedicaController citaMedicaController = new CitaMedicaController();
-        citaMedicaController.cargarDatosPresoEnTablaPorSeccion(seccionSeleccionada, TablaPresos);
+        sancionController.cargarDatosPresoEnTablaPorSeccion(seccionSeleccionada, TablaPresos);
 
     }//GEN-LAST:event_JcomboSeccion1ActionPerformed
 
     private void BotonBuscarGuardia1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonBuscarGuardia1ActionPerformed
-        CitaMedicaController citaMedicaController = new CitaMedicaController();
-        citaMedicaController.buscarGuardiaPorIdentificacion(BarraDeBusquedaGuardias.getText().trim(), tablaGuardias);
+        sancionController.buscarGuardiaPorIdentificacion(BarraDeBusquedaGuardias.getText().trim(), tablaGuardias);
     }//GEN-LAST:event_BotonBuscarGuardia1ActionPerformed
 
     private void jPanel7MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MouseEntered
@@ -1097,6 +1089,10 @@ public class Oficial extends javax.swing.JFrame {
     private void HoraSancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HoraSancionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_HoraSancionActionPerformed
+
+    private void JcomboHoraCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JcomboHoraCitaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JcomboHoraCitaActionPerformed
 
     /**
      * @param args the command line arguments

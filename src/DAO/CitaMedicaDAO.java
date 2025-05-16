@@ -20,6 +20,7 @@ public class CitaMedicaDAO {
 
     private static final String JSON_FILE = "src/Resources/DATA/citasMedicas.json";
     private Gson gson;
+    private static CitaMedicaDAO instancia;
 
     public CitaMedicaDAO() {
         gson = new GsonBuilder()
@@ -27,6 +28,13 @@ public class CitaMedicaDAO {
                 .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
                 .setPrettyPrinting()
                 .create();
+    }
+
+    public static synchronized CitaMedicaDAO getInstancia() {
+        if (instancia == null) {
+            instancia = new CitaMedicaDAO();
+        }
+        return instancia;
     }
 
     public List<CitaMedica> cargarTodas() {

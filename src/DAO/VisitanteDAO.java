@@ -1,7 +1,6 @@
 package DAO;
 
 import Model.Constants.EstadoVisitanteEnum;
-import Model.Entities.Visita;
 import Model.Entities.Visitante;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
