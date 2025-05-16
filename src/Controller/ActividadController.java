@@ -53,7 +53,7 @@ public class ActividadController {
         return actividadesActuales < limiteActividades;
     }
 
-    public boolean agregarActividad(String nombre, String tipo, Object dia, Object horario, String lugar, String cupoMaximoStr, Oficial responsable) {
+    public boolean agregarActividad(String nombre, String tipo, Object dia, Object horario, String lugar, String cupoMaximoStr, Oficial responsable, String descripcion) {
         try {
             Validador.validarActividadCompleta(nombre, tipo, dia, horario, lugar, cupoMaximoStr);
 
@@ -72,9 +72,19 @@ public class ActividadController {
             }
 
             int cupoMaximo = Integer.parseInt(cupoMaximoStr);
-
             String idActividad = actividadDAO.obtenerProximoIdActividad();
-            Actividad actividad = new Actividad(idActividad, nombre, tipo, dia.toString(), horario.toString(), lugar, cupoMaximo, responsable.getIdentificacion());
+
+            Actividad actividad = new Actividad(
+                    idActividad,
+                    nombre,
+                    tipo,
+                    dia.toString(),
+                    horario.toString(),
+                    lugar,
+                    cupoMaximo,
+                    responsable.getIdentificacion(),
+                    descripcion
+            );
 
             if (actividadDAO.agregarActividad(actividad)) {
                 Validador.mostrarInfo("Actividad agregada exitosamente");
@@ -102,7 +112,7 @@ public class ActividadController {
         if (actividadDAO.asignarPresoAActividad(idActividad, identificacionPr)) {
             cargarActividadesEnTabla(tablaGeneral);
             Validador.mostrarInfo("Preso asignado exitosamente a la actividad");
-            
+
             return true;
         } else {
             Validador.mostrarAdvertencia("No se pudo asignar el preso. Verifique el cupo o si ya está asignado");
@@ -137,7 +147,8 @@ public class ActividadController {
                 actividad.getCupoMaximo(),
                 actividad.getPresosInscritos(),
                 nombreOficial,
-                actividad.getEstado()
+                actividad.getEstado(),
+                actividad.getDescripcion()
             });
         }
     }
@@ -211,13 +222,14 @@ public class ActividadController {
                         preso.getEdad(),
                         preso.getIdentificacion(),
                         actividad.getHorario(),
-                        actividad.getEstado()
+                        actividad.getEstadoPreso(preso.getIdentificacion()) // Solo el estado
                     });
                 }
             } catch (Exception e) {
                 System.err.println("Error cargando preso " + idPreso + ": " + e.getMessage());
             }
         }
+
     }
 
     public List<Object[]> obtenerActividadesPorTipo(String tipo) {
@@ -284,7 +296,8 @@ public class ActividadController {
             Object horario,
             Object lugar,
             Object cupoMaximo,
-            String responsableOficial) {
+            String responsableOficial,
+            String descripcion) {
 
         if (actividadOriginal == null) {
             return false;
@@ -297,7 +310,9 @@ public class ActividadController {
                 lugar != null && !lugar.toString().equals("<Seleccione>") && !lugar.toString().equals(actividadOriginal.getLugar()),
                 cupoMaximo != null && !cupoMaximo.toString().equals("<Seleccione>")
                 && Integer.parseInt(cupoMaximo.toString()) != actividadOriginal.getCupoMaximo(),
-                !responsableOficial.trim().isEmpty() && !responsableOficial.equals(actividadOriginal.getResponsableOficial())
+                responsableOficial != null && !responsableOficial.trim().isEmpty()
+                && !responsableOficial.equals(actividadOriginal.getResponsableOficial()),
+                descripcion != null && !descripcion.trim().equals(actividadOriginal.getDescripcion())
         ).anyMatch(Boolean::booleanValue);
     }
 
@@ -307,10 +322,11 @@ public class ActividadController {
             Object horario,
             Object lugar,
             Object cupoMaximo,
-            String responsableOficial) {
+            String responsableOficial,
+            String descripcion) {
 
         try {
-            if (!hayCambiosActividad(actividadOriginal, nombre, dia, horario, lugar, cupoMaximo, responsableOficial)) {
+            if (!hayCambiosActividad(actividadOriginal, nombre, dia, horario, lugar, cupoMaximo, responsableOficial, descripcion)) {
                 Validador.mostrarAdvertencia("No hay cambios para guardar");
                 return false;
             }
@@ -324,8 +340,11 @@ public class ActividadController {
                     ? actividadOriginal.getLugar() : lugar.toString();
             int cupoFinal = (cupoMaximo == null || cupoMaximo.toString().equals("<Seleccione>"))
                     ? actividadOriginal.getCupoMaximo() : Integer.parseInt(cupoMaximo.toString());
-            String responsableFinal = responsableOficial.trim().isEmpty()
+            String responsableFinal = (responsableOficial == null || responsableOficial.trim().isEmpty())
                     ? actividadOriginal.getResponsableOficial() : responsableOficial.trim();
+
+            String descripcionFinal = (descripcion == null || descripcion.trim().isEmpty())
+                    ? actividadOriginal.getDescripcion() : descripcion.trim();
 
             if (!nombre.trim().isEmpty()) {
                 Validador.validarNombre(nombre);
@@ -339,7 +358,8 @@ public class ActividadController {
                 }
             }
 
-            if (!responsableOficial.trim().isEmpty()
+            if (responsableOficial != null
+                    && !responsableOficial.trim().isEmpty()
                     && !responsableOficial.equals(actividadOriginal.getResponsableOficial())) {
 
                 Oficial oficial = oficialDAO.obtenerOficialPorCedula(responsableOficial);
@@ -379,7 +399,9 @@ public class ActividadController {
                     horarioFinal,
                     lugarFinal,
                     cupoFinal,
-                    responsableFinal);
+                    responsableFinal,
+                    descripcionFinal
+            );
 
             if (resultado) {
                 Validador.mostrarInfo("Actividad actualizada correctamente");
@@ -394,4 +416,5 @@ public class ActividadController {
             return false;
         }
     }
+
 }

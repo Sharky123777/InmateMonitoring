@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Actividad {
 
-    private Map<String, EstadoActividadesPresoEnum> estadosPorPreso;
+    private Map<String, EstadoActividadesPresoEnum> estadosPorPreso = new HashMap<>();
     private String idActividad;
     private String nombre;
     private String tipo;
@@ -18,17 +18,22 @@ public class Actividad {
     private String horario;
     private String lugar;
     private int cupoMaximo;
-    private List<String> presosAsignadosIds;
+    private List<String> presosAsignadosIds = new ArrayList<>();
     private EstadoActividadesEnum estado;
     private int presosInscritos;
     private String responsableOficial;
+    private String descripcion;
 
+    // Constructor vacío
     public Actividad() {
-        this.estadosPorPreso = new HashMap<>(); // Inicialización en el constructor
+        this.estadosPorPreso = new HashMap<>();
+        this.presosAsignadosIds = new ArrayList<>();
     }
 
+    // Constructor con parámetros
     public Actividad(String idActividad, String nombre, String tipo, String dia,
-            String horario, String lugar, int cupoMaximo, String responsableOficial) {
+            String horario, String lugar, int cupoMaximo,
+            String responsableOficial, String descripcion) {
         this.idActividad = idActividad;
         this.nombre = nombre;
         this.tipo = tipo;
@@ -36,19 +41,41 @@ public class Actividad {
         this.horario = horario;
         this.lugar = lugar;
         this.cupoMaximo = cupoMaximo;
-        this.presosAsignadosIds = new ArrayList<>();
-        this.presosInscritos = presosInscritos;
-        this.estado = EstadoActividadesEnum.ACTIVA;
         this.responsableOficial = responsableOficial;
-    }
-    
-    public void setEstadoPreso(String presoId, EstadoActividadesPresoEnum estado) {
-    this.estadosPorPreso.put(presoId, estado);
-}
+        this.descripcion = descripcion;
 
-public EstadoActividadesPresoEnum getEstadoPreso(String presoId) {
-    return this.estadosPorPreso.getOrDefault(presoId, EstadoActividadesPresoEnum.ACTIVA);
-}
+        this.presosAsignadosIds = new ArrayList<>();
+        this.estadosPorPreso = new HashMap<>();
+        this.estado = EstadoActividadesEnum.ACTIVA;
+        this.presosInscritos = 0;
+    }
+
+    public void setEstadoPreso(String idPreso, EstadoActividadesPresoEnum nuevoEstado) {
+        if (this.estadosPorPreso == null) {
+            this.estadosPorPreso = new HashMap<>();
+        }
+        this.estadosPorPreso.put(idPreso, nuevoEstado);
+    }
+
+    public Map<String, EstadoActividadesPresoEnum> getEstadosPorPreso() {
+        return estadosPorPreso;
+    }
+
+    public void setEstadosPorPreso(Map<String, EstadoActividadesPresoEnum> estadosPorPreso) {
+        this.estadosPorPreso = estadosPorPreso;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public EstadoActividadesPresoEnum getEstadoPreso(String presoId) {
+        return this.estadosPorPreso.getOrDefault(presoId, EstadoActividadesPresoEnum.EN_PROCESO);
+    }
 
     public String getResponsableOficial() {
         return responsableOficial;
@@ -57,8 +84,6 @@ public EstadoActividadesPresoEnum getEstadoPreso(String presoId) {
     public void setResponsableOficial(String responsableOficial) {
         this.responsableOficial = responsableOficial;
     }
-
- 
 
     public int getPresosInscritos() {
         return presosInscritos;

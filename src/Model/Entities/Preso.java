@@ -50,7 +50,10 @@ private LocalDate fechaFuga;
         this.fotoPath = fotoPath;
         this.id = id;
         this.estado = EstadoPresoEnum.ACTIVO;
+        
     }
+    
+    
 
     public LocalDate getFechaLiberacion() {
         return fechaLiberacion;

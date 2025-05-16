@@ -2,17 +2,16 @@
   {
     "estadosPorPreso": {},
     "idActividad": "ACT-1",
-    "nombre": "Futbol sala",
+    "nombre": "Taller de Tejido y Manualidades",
     "tipo": "Recreativa",
     "dia": "Lunes",
-    "horario": "08:45 am - 10:15 am",
-    "lugar": "Cancha de Fútbol",
-    "cupoMaximo": 10,
-    "presosAsignadosIds": [
-      "1237440696"
-    ],
+    "horario": "07:00 am - 08:45 am",
+    "lugar": "Taller de Costura y Confección",
+    "cupoMaximo": 30,
+    "presosAsignadosIds": [],
     "estado": "ACTIVA",
-    "presosInscritos": 1,
-    "responsableOficial": "4243242424"
+    "presosInscritos": 0,
+    "responsableOficial": "18377137131",
+    "descripcion": "Actividad enfocada en el desarrollo de habilidades manuales,\ncreatividad y paciencia a través del tejido, bordado y\nelaboración de manualidades. Fomenta la concentración\ny puede convertirse en una herramienta de reintegración laboral"
   }
 ]

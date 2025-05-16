@@ -137,59 +137,66 @@ public class ActividadDAO {
         return false;
     }
 
-    public boolean actualizarActividad(String idOriginal,
-            String nuevoNombre,
-            String nuevoDia,
-            String nuevoHorario,
-            String nuevoLugar,
-            Integer nuevoCupoMaximo,
-            String nuevoResponsableOficial) {
-        List<Actividad> actividades = cargarActividades();
-        boolean encontrado = false;
+   public boolean actualizarActividad(String idOriginal,
+        String nuevoNombre,
+        String nuevoDia,
+        String nuevoHorario,
+        String nuevoLugar,
+        Integer nuevoCupoMaximo,
+        String nuevoResponsableOficial,
+        String nuevaDescripcion) {
 
-        for (Actividad actividad : actividades) {
-            if (actividad.getIdActividad().equals(idOriginal)) {
-                encontrado = true;
+    List<Actividad> actividades = cargarActividades();
+    boolean encontrado = false;
 
-                if (nuevoNombre != null) {
-                    actividad.setNombre(nuevoNombre);
-                }
-                if (nuevoDia != null) {
-                    actividad.setDia(nuevoDia);
-                }
-                if (nuevoHorario != null) {
-                    actividad.setHorario(nuevoHorario);
-                }
-                if (nuevoLugar != null) {
-                    actividad.setLugar(nuevoLugar);
-                }
-                if (nuevoCupoMaximo != null) {
-                    if (nuevoCupoMaximo < actividad.getPresosInscritos()) {
-                        JOptionPane.showMessageDialog(null,
-                                "El nuevo cupo no puede ser menor a la cantidad actual de presos inscritos ("
-                                + actividad.getPresosInscritos() + ").",
-                                "Error", JOptionPane.ERROR_MESSAGE);
-                        return false;
-                    }
-                    actividad.setCupoMaximo(nuevoCupoMaximo);
-                }
-                if (nuevoResponsableOficial != null) {
-                    actividad.setResponsableOficial(nuevoResponsableOficial);
-                }
-                break;
+    for (Actividad actividad : actividades) {
+        if (actividad.getIdActividad().equals(idOriginal)) {
+            encontrado = true;
+
+            if (nuevoNombre != null) {
+                actividad.setNombre(nuevoNombre);
             }
-        }
+            if (nuevoDia != null) {
+                actividad.setDia(nuevoDia);
+            }
+            if (nuevoHorario != null) {
+                actividad.setHorario(nuevoHorario);
+            }
+            if (nuevoLugar != null) {
+                actividad.setLugar(nuevoLugar);
+            }
+            if (nuevoCupoMaximo != null) {
+                if (nuevoCupoMaximo < actividad.getPresosInscritos()) {
+                    JOptionPane.showMessageDialog(null,
+                            "El nuevo cupo no puede ser menor a la cantidad actual de presos inscritos ("
+                            + actividad.getPresosInscritos() + ").",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+                actividad.setCupoMaximo(nuevoCupoMaximo);
+            }
+            if (nuevoResponsableOficial != null) {
+                actividad.setResponsableOficial(nuevoResponsableOficial);
+            }
+            if (nuevaDescripcion != null) {
+                actividad.setDescripcion(nuevaDescripcion);
+            }
 
-        if (!encontrado) {
-            JOptionPane.showMessageDialog(null,
-                    "Actividad no encontrada: " + idOriginal,
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+            break;
         }
-
-        return guardarActividades(actividades);
     }
 
+    if (!encontrado) {
+        JOptionPane.showMessageDialog(null,
+                "Actividad no encontrada: " + idOriginal,
+                "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+
+    return guardarActividades(actividades);
+}
+
+   
     public List<Actividad> buscarActividadesPorPreso(String identificacionP) {
         List<Actividad> actividades = cargarActividades();
         List<Actividad> resultado = new ArrayList<>();

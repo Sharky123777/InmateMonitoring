@@ -103,7 +103,7 @@ public class CambioEstadoActividad extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnActualizarEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarEstadoActionPerformed
-        EstadoActividadesEnum nuevoEstado = (EstadoActividadesEnum) nuevoEstadoComb.getSelectedItem();
+    EstadoActividadesEnum nuevoEstado = (EstadoActividadesEnum) nuevoEstadoComb.getSelectedItem();
     String idActividad = actividadSeleccionada.getIdActividad();
     
     if ("ACTIVA".equals(nuevoEstado) && 

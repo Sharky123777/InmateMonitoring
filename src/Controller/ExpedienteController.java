@@ -245,25 +245,20 @@ public class ExpedienteController {
         return delitoDAO.obtenerDescripcionDelito(idDelito);
     }
     
-    public ExpedienteJudicial actualizarExpedienteConDelitos(String identificacionPreso) {
-        List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(identificacionPreso);
-
-        List<ExpedienteJudicial> expedientes = expedienteDAO.buscarExpedientesPorPreso(identificacionPreso);
-        ExpedienteJudicial expediente = expedientes.stream()
-                .filter(e -> e.getEstado() == EstadoExpedienteEnum.ABIERTO)
-                .findFirst()
-                .orElse(null);
-
-        if (expediente == null) {
-            Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
-            expediente = new ExpedienteJudicial(preso);
-        }
-
-        expediente.setDelitos(delitos);
-        expedienteDAO.guardarExpediente(expediente);
-
-        return expediente;
+public ExpedienteJudicial actualizarExpedienteConDelitos(String identificacionPreso) {
+    ExpedienteJudicial expediente = expedienteDAO.obtenerExpedienteAbierto(identificacionPreso);
+    
+    if (expediente == null) {
+        Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
+        expediente = new ExpedienteJudicial(preso);
+        expediente.setDelitos(new ArrayList<>());
     }
+    
+    expedienteDAO.guardarExpediente(expediente);
+    
+    return expediente;
+}
+
 
     public void cargarTablaDelitos(List<Delito> delitos, JTable tabla) {
         DefaultTableModel model = (DefaultTableModel) tabla.getModel();
