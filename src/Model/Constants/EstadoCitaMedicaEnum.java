@@ -4,6 +4,7 @@ public enum EstadoCitaMedicaEnum {
 
     PENDIENTE,
     ATENDIDO,
-    CANCELADO
+    CANCELADO,
+    PRIORITARIO
 
 }

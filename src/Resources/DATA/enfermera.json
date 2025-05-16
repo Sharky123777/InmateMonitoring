@@ -44,6 +44,21 @@
       "sexo": "Femenino",
       "nacionalidad": "Colombiana",
       "identificacion": "31313213123"
+    },
+    {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-16",
+      "fechaFinContrato": "2025-05-22",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/389183183_1747421916510.jpeg",
+      "correo": "vivasm4g@gmail.com",
+      "primerNombre": "Sandra",
+      "segundoNombre": "",
+      "primerApellido": "Alcazar",
+      "segundoApellido": "Bernabidez",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Mexicana",
+      "identificacion": "389183183"
     }
   ]
 }

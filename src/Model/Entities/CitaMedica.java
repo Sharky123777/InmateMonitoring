@@ -2,6 +2,7 @@ package Model.Entities;
 
 import Model.Constants.EstadoCitaMedicaEnum;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class CitaMedica {
@@ -14,6 +15,9 @@ public class CitaMedica {
     private Preso preso;
     private Enfermera enfermera;
     private EstadoCitaMedicaEnum estado;
+    private String diagnostico;  
+    private String rutaHistoriaClinica;
+    private LocalDateTime fechaHoraAtencion;
 
     public CitaMedica(int id, LocalDate fecha, LocalTime hora, String motivo, Guardia guardia, Preso preso, Enfermera enfermera) {
         this.id = id;
@@ -24,6 +28,7 @@ public class CitaMedica {
         this.preso = preso;
         this.enfermera = enfermera;
         this.estado = EstadoCitaMedicaEnum.PENDIENTE;
+        this.diagnostico = ""; 
     }
 
     public int getId() {
@@ -90,4 +95,29 @@ public class CitaMedica {
         this.estado = estado;
 
     }
+
+    public String getDiagnostico() {
+        return diagnostico;
+    }
+
+    public void setDiagnostico(String diagnostico) {
+        this.diagnostico = diagnostico;
+    }
+    
+     public void setRutaHistoriaClinica(String rutaHistoriaClinica) {
+        this.rutaHistoriaClinica = rutaHistoriaClinica;
+    }
+
+    public String getRutaHistoriaClinica() {
+        return rutaHistoriaClinica;
+    }
+
+    public void setFechaHoraAtencion(LocalDateTime fechaHoraAtencion) {
+        this.fechaHoraAtencion = fechaHoraAtencion;
+    }
+
+    public LocalDateTime getFechaHoraAtencion() {
+        return fechaHoraAtencion;
+    }
+    
 }

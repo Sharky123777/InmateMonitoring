@@ -4,6 +4,7 @@
  */
 package View;
 
+import Controller.UsuarioController;
 import DAO.UsuarioDAO;
 import Model.Constants.RolEnum;
 import Model.Entities.Usuario;
@@ -23,12 +24,11 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
 
-       
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
 
-       
+        // Usamos toString() para mostrar los nombres formateados
         for (RolEnum rol : RolEnum.values()) {
-            model.addElement(rol.toString()); 
+            model.addElement(rol.toString());
         }
 
         RolCmbBox.setModel(model);
@@ -166,10 +166,11 @@ public class Login extends javax.swing.JFrame {
             case ENFERMERA:
                 vista = new Enfermera();
                 break;
+            default:
+                throw new IllegalArgumentException("Rol no soportado: " + usuario.getRol());
         }
 
         if (vista != null) {
-            
             if (vista instanceof PerfilUsuario) {
                 ((PerfilUsuario) vista).setUsuario(usuario);
             }
@@ -177,14 +178,13 @@ public class Login extends javax.swing.JFrame {
         }
     }
 
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            
-            String username = FieldUsuario.getText().trim();
-            String password = new String(Password.getPassword()).trim();
+        String username = FieldUsuario.getText().trim();
+        String password = new String(Password.getPassword()).trim();
+        String rolTexto = (String) RolCmbBox.getSelectedItem();
 
-            
+        try {
+            // Validación básica de campos
             if (username.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
                         "Por favor complete todos los campos",
@@ -193,43 +193,27 @@ public class Login extends javax.swing.JFrame {
                 return;
             }
 
-            
-            String rolTexto = (String) RolCmbBox.getSelectedItem();
-            RolEnum rolSeleccionado = null;
+            // Convertir texto del combo a RolEnum
+            RolEnum rol = RolEnum.fromDisplayText(rolTexto);
 
-           
-            for (RolEnum rol : RolEnum.values()) {
-                if (rol.toString().equals(rolTexto)) {
-                    rolSeleccionado = rol;
-                    break;
-                }
-            }
+            // Autenticar usando el controlador
+            Usuario usuario = UsuarioController.getInstancia().autenticarUsuario(username, password, rol);
 
-            if (rolSeleccionado == null) {
-                JOptionPane.showMessageDialog(this,
-                        "El rol seleccionado no es válido",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+            // Redirigir según rol
+            redirigirSegunRol(usuario);
+            this.dispose();
 
-            
-            UsuarioDAO usuarioDAO = UsuarioDAO.getInstancia();
-            Usuario usuarioAutenticado = usuarioDAO.validarCredenciales(username, password, rolSeleccionado);
-
-          
-            if (usuarioAutenticado != null) {
-                redirigirSegunRol(usuarioAutenticado);
-                this.dispose();
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        "Credenciales incorrectas. Verifique:\n"
-                        + "- Usuario y contraseña\n"
-                        + "- Que el rol seleccionado sea correcto\n"
-                        + "- Caracteres especiales (si los hay)",
-                        "Error de autenticación",
-                        JOptionPane.ERROR_MESSAGE);
-            }
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Rol no válido seleccionado: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (SecurityException e) {
+            String mensajeBloqueo = UsuarioController.getInstancia().obtenerMensajeBloqueo(username);
+            JOptionPane.showMessageDialog(this,
+                    e.getMessage() + "\n" + mensajeBloqueo,
+                    "Error de seguridad",
+                    JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Error inesperado: " + e.getMessage(),

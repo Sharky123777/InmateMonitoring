@@ -5,15 +5,20 @@ import Model.Constants.RolEnum;
 import Model.Entities.Usuario;
 import Utilidades.GeneradorCredenciales;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UsuarioController {
 
+    private static final int INTENTOS_MAXIMOS = 3;
     private static UsuarioController instancia;
     private final UsuarioDAO usuarioDAO;
+    private final Map<String, Integer> intentosPorUsuario;
 
     private UsuarioController() {
         this.usuarioDAO = UsuarioDAO.getInstancia();
+        this.intentosPorUsuario = new HashMap<>();
     }
 
     public static synchronized UsuarioController getInstancia() {
@@ -23,9 +28,41 @@ public class UsuarioController {
         return instancia;
     }
 
-    public Usuario autenticarUsuario(String usuario, String contrasena, RolEnum rol) {
-        // Dejamos que UsuarioDAO maneje toda la validación
-        return usuarioDAO.validarCredenciales(usuario, contrasena, rol);
+    public Usuario autenticarUsuario(String username, String password, RolEnum rol) {
+        if (!puedeIntentarLogin(username)) {
+            throw new SecurityException("Cuenta bloqueada temporalmente por muchos intentos fallidos");
+        }
+
+        Usuario usuario = usuarioDAO.validarCredenciales(username, password, rol);
+
+        if (usuario == null) {
+            registrarIntentoFallido(username);
+            throw new SecurityException("Credenciales incorrectas");
+        }
+
+        resetearIntentos(username);
+        return usuario;
+    }
+
+    private boolean puedeIntentarLogin(String username) {
+        int intentos = intentosPorUsuario.getOrDefault(username, 0);
+        return intentos < INTENTOS_MAXIMOS;
+    }
+
+    private void registrarIntentoFallido(String username) {
+        int intentos = intentosPorUsuario.getOrDefault(username, 0);
+        intentosPorUsuario.put(username, intentos + 1);
+    }
+
+    private void resetearIntentos(String username) {
+        intentosPorUsuario.remove(username);
+    }
+
+    public String obtenerMensajeBloqueo(String username) {
+        int intentos = intentosPorUsuario.getOrDefault(username, 0);
+        return String.format("Intentos fallidos: %d/%d. %s",
+                intentos, INTENTOS_MAXIMOS,
+                intentos >= INTENTOS_MAXIMOS ? "Cuenta temporalmente bloqueada" : "");
     }
 
     public boolean esDirector(Usuario usuario) {

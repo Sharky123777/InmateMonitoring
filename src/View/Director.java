@@ -83,8 +83,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import Utilidades.ModernTopMenu;
-import View.PerfilUsuario;
 import Model.Entities.Usuario;
+import View.PerfilUsuario;
 
 /**
  *
@@ -176,13 +176,13 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         actualizarTablaODR();
         actualizarTablaPDC();
 
-        // Configurar el tabbed pane (ocultar las pestañas pero mantener la funcionalidad)
-        tabPrincipal.setUI(null);  // Oculta las pestañas del tabbedPane
+        
+        tabPrincipal.setUI(null);  
 
-        // Crear y configurar el menú moderno
+        
         menuSuperior = new ModernTopMenu(tabPrincipal);
 
-        // Colores adaptados para combinar con [20,25,40] y [29,35,51]
+        
         menuSuperior.setColors(
                 new Color(29, 35, 51), // Azul principal (más claro)
                 new Color(41, 50, 65), // Azul hover (ligeramente más claro que el principal)
@@ -191,38 +191,36 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                 new Color(24, 30, 45) // Fondo desplegable (intermedio)
         );
 
-        // Añadir el menú al contenedor principal, en la parte superior
-        // NOTA: Es importante mantener el BorderLayout para que esto funcione correctamente
         getContentPane().setLayout(new BorderLayout());
 
-        // 1. Obtenemos el panel donde está el tabPrincipal actualmente
+        
         Component[] components = getContentPane().getComponents();
         JPanel mainPanel = null;
 
         for (Component comp : components) {
             if (comp instanceof JPanel && ((JPanel) comp).getComponentCount() > 0) {
-                // Guardamos una referencia al panel principal
+              
                 mainPanel = (JPanel) comp;
                 break;
             }
         }
 
-        // 2. Reorganizamos los componentes
+        
         if (mainPanel != null) {
-            // Eliminamos el panel principal del contentPane
+            
             getContentPane().remove(mainPanel);
 
-            // Añadimos el menú en la parte superior
+            
             getContentPane().add(menuSuperior, BorderLayout.NORTH);
 
-            // Añadimos de nuevo el panel principal en el centro
+           
             getContentPane().add(mainPanel, BorderLayout.CENTER);
         } else {
-            // Si no se encontró un panel, simplemente añadimos el menú arriba
+           
             getContentPane().add(menuSuperior, BorderLayout.NORTH);
         }
 
-        // Ajustar el tamaño del frame para acomodar el menú
+       
         pack();
     }
 
@@ -233,11 +231,11 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
 
     private void mostrarDatosUsuario() {
         if (usuario != null) {
-            // Mostrar información básica
+            
             lblNombre.setText(usuario.getPrimerNombre() + " " + usuario.getPrimerApellido());
             lblRol.setText(usuario.getRol().toString());
 
-            // Mostrar imagen
+            
             cargarImagenUsuario();
         }
     }
@@ -4226,7 +4224,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtCargoMod.setSelectedItem(guardia.getCargo());
         txtFechaContratacionMod.setText(guardia.getFechaInicioContrato().toString());
 
-        // Cargar fecha de inicio de contrato (CORRECCIÓN IMPORTANTE)
+        
         txtFechaContratacionMod2.setText(
                 guardia.getFechaInicioContrato().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
         );

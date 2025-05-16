@@ -11,6 +11,5 @@ import Model.Entities.Usuario;
  * @author gameV
  */
 public interface PerfilUsuario {
-
     void setUsuario(Usuario usuario);
 }
