@@ -26,6 +26,7 @@ import java.awt.Image;
 import java.io.File;
 import Model.Entities.Oficial;
 import java.time.LocalDate;
+import Model.Entities.Usuario;
 import Model.Entities.Guardia;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -82,14 +83,17 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import Utilidades.ModernTopMenu;
+import View.PerfilUsuario;
+import Model.Entities.Usuario;
 
 /**
  *
  * @author Sharlok
  */
-public class Director extends javax.swing.JFrame {
+public class Director extends javax.swing.JFrame implements PerfilUsuario {
 
     EnfermeraDAO enfermeraDAO = new EnfermeraDAO();
+    private Usuario usuario;
     private EnfermeraController enfermeraController;
     private OficialController oficialController;
     private OficialDeRegistroController oficialRegistro;
@@ -222,6 +226,37 @@ public class Director extends javax.swing.JFrame {
         pack();
     }
 
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+        mostrarDatosUsuario();
+    }
+
+    private void mostrarDatosUsuario() {
+        if (usuario != null) {
+            // Mostrar información básica
+            lblNombre.setText(usuario.getPrimerNombre() + " " + usuario.getPrimerApellido());
+            lblRol.setText(usuario.getRol().toString());
+
+            // Mostrar imagen
+            cargarImagenUsuario();
+        }
+    }
+
+    private void cargarImagenUsuario() {
+        try {
+            ImageIcon icon = new ImageIcon(usuario.getRutaImagen());
+            Image img = icon.getImage().getScaledInstance(
+                    lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_SMOOTH);
+            lblFoto.setIcon(new ImageIcon(img));
+        } catch (Exception e) {
+            cargarImagenPorDefecto();
+        }
+    }
+
+    private void cargarImagenPorDefecto() {
+        lblFoto.setIcon(new ImageIcon("src/Resources/default_avatar.png"));
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -247,6 +282,9 @@ public class Director extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         tabPrincipal = new javax.swing.JTabbedPane();
         Director = new javax.swing.JPanel();
+        lblNombre = new javax.swing.JLabel();
+        lblRol = new javax.swing.JLabel();
+        fotolbl = new javax.swing.JLabel();
         DisminuirSentencia = new javax.swing.JPanel();
         AñadirDelito = new javax.swing.JPanel();
         AñadirEnfermera = new javax.swing.JPanel();
@@ -913,6 +951,15 @@ public class Director extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Director.setBackground(new java.awt.Color(255, 255, 255));
+        Director.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblNombre.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+        Director.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 230, 210, 30));
+
+        lblRol.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+        Director.add(lblRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 270, 150, 20));
+        Director.add(fotolbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 30, 250, 190));
+
         tabPrincipal.addTab("Director", Director);
         tabPrincipal.addTab("DisminuirSentencia", DisminuirSentencia);
         tabPrincipal.addTab("AñadirDelito", AñadirDelito);
@@ -8015,7 +8062,7 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_modificarOPCActionPerformed
 
     private void eliminarPDCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarPDCActionPerformed
-         int filaSeleccionada = personalTabla.getSelectedRow();
+        int filaSeleccionada = personalTabla.getSelectedRow();
 
         if (filaSeleccionada == -1) {
             JOptionPane.showMessageDialog(this,
@@ -8138,6 +8185,7 @@ public class Director extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser dateFinContratoMod4;
     private com.toedter.calendar.JDateChooser dateFinContratoMod5;
     private javax.swing.JMenuItem eliminarPDC;
+    private javax.swing.JLabel fotolbl;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
@@ -8528,6 +8576,8 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JLabel lblImagenMod3;
     private javax.swing.JLabel lblImagenMod4;
     private javax.swing.JLabel lblImagenMod5;
+    private javax.swing.JLabel lblNombre;
+    private javax.swing.JLabel lblRol;
     private javax.swing.JPanel modODR;
     private javax.swing.JMenuItem modOf;
     private javax.swing.JPanel modPDC;

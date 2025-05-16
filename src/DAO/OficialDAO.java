@@ -196,7 +196,8 @@ public class OficialDAO {
                 oficial.getIdentificacion(),
                 usuario,
                 contrasenaEncriptada,
-                RolEnum.OFICIAL
+                RolEnum.OFICIAL,
+                oficial.getRutaImagen() // Usamos getRutaImagen()
         );
 
         guardarUsuario(nuevoUsuario);
@@ -209,15 +210,15 @@ public class OficialDAO {
         );
 
         if (correoEnviado) {
-            JOptionPane.showMessageDialog(null, 
-                "Oficial registrado exitosamente y credenciales enviadas al correo.",
-                "Éxito", 
-                JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                    "Oficial registrado exitosamente y credenciales enviadas al correo.",
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(null, 
-                "Oficial registrado pero hubo un error al enviar las credenciales por correo.",
-                "Advertencia", 
-                JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                    "Oficial registrado pero hubo un error al enviar las credenciales por correo.",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
         }
 
         return true;
@@ -389,18 +390,18 @@ public class OficialDAO {
     public List<Object[]> obtenerDatosOficialesParaTabla() {
         return obtenerOficiales().stream()
                 .map(o -> new Object[]{
-                    o.getPrimerNombre(),
-                    o.getSegundoNombre(),
-                    o.getPrimerApellido(),
-                    o.getSegundoApellido(),
-                    o.getEdad(),
-                    o.getIdentificacion(),
-                    o.getNacionalidad(),
-                    o.getCorreo(),
-                    o.getTurno(),
-                    o.getFechaContratacionFormateada(),
-                    o.getFechaFinContratoFormateada()
-                })
+            o.getPrimerNombre(),
+            o.getSegundoNombre(),
+            o.getPrimerApellido(),
+            o.getSegundoApellido(),
+            o.getEdad(),
+            o.getIdentificacion(),
+            o.getNacionalidad(),
+            o.getCorreo(),
+            o.getTurno(),
+            o.getFechaContratacionFormateada(),
+            o.getFechaFinContratoFormateada()
+        })
                 .collect(Collectors.toList());
     }
 

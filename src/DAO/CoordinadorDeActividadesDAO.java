@@ -168,7 +168,6 @@ public class CoordinadorDeActividadesDAO {
         coordinadores.add(coordinador);
         guardarListaCoordinadores(coordinadores);
 
-        // 6. Guardar usuario (CON CONTRASEÑA ENCRIPTADA)
         Usuario nuevoUsuario = new Usuario(
                 coordinador.getPrimerNombre(),
                 coordinador.getSegundoNombre(),
@@ -180,7 +179,8 @@ public class CoordinadorDeActividadesDAO {
                 coordinador.getIdentificacion(),
                 usuario,
                 contrasenaEncriptada,
-                RolEnum.COORDINADOR_DE_ACTIVIDADES
+                RolEnum.COORDINADOR_DE_ACTIVIDADES,
+                coordinador.getRutaImagen() // Usamos getRutaImagen()
         );
 
         guardarUsuario(nuevoUsuario);

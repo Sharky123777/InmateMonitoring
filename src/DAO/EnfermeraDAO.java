@@ -149,70 +149,66 @@ public class EnfermeraDAO {
         }
     }
 
-    
-   
-
     public boolean guardarEnfermera(Enfermera enfermera, File imagen) throws IOException {
-    // 1. Generar credenciales (sin encriptar para el correo)
-    UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
-    String usuario = credenciales.usuario;
-    String contrasena = credenciales.contrasena;
-    String contrasenaEncriptada = UsuarioController.getInstancia().encriptarContrasena(contrasena);
+        // 1. Generar credenciales (sin encriptar para el correo)
+        UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
+        String usuario = credenciales.usuario;
+        String contrasena = credenciales.contrasena;
+        String contrasenaEncriptada = UsuarioController.getInstancia().encriptarContrasena(contrasena);
 
-    // 2. Asignar credenciales a la enfermera (para mostrar en UI si es necesario)
-    enfermera.setUsuario(usuario);
-    enfermera.setContrasena(contrasenaEncriptada); // Guardamos la ENCRIPTADA
+        // 2. Asignar credenciales a la enfermera (para mostrar en UI si es necesario)
+        enfermera.setUsuario(usuario);
+        enfermera.setContrasena(contrasenaEncriptada); // Guardamos la ENCRIPTADA
 
-    // 3. Guardar imagen
-    String nombreImagen = enfermera.getIdentificacion() + "_"
-            + System.currentTimeMillis()
-            + imagen.getName().substring(imagen.getName().lastIndexOf("."));
+        // 3. Guardar imagen
+        String nombreImagen = enfermera.getIdentificacion() + "_"
+                + System.currentTimeMillis()
+                + imagen.getName().substring(imagen.getName().lastIndexOf("."));
 
-    String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-    Files.createDirectories(Paths.get(RUTA_IMAGENES));
-    Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
-    enfermera.setRutaImagen(rutaImagenFinal);
+        String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+        Files.createDirectories(Paths.get(RUTA_IMAGENES));
+        Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+        enfermera.setRutaImagen(rutaImagenFinal);
 
-    // 4. Guardar datos de enfermera
-    List<Enfermera> enfermeras = obtenerEnfermeras();
-    enfermeras.add(enfermera);
-    guardarListaEnfermeras(enfermeras);
+        // 4. Guardar datos de enfermera
+        List<Enfermera> enfermeras = obtenerEnfermeras();
+        enfermeras.add(enfermera);
+        guardarListaEnfermeras(enfermeras);
 
-    // 5. Guardar usuario en usuarios.json (CON CONTRASEÑA ENCRIPTADA)
-    Usuario nuevoUsuario = new Usuario(
-            enfermera.getPrimerNombre(),
-            enfermera.getSegundoNombre(),
-            enfermera.getPrimerApellido(),
-            enfermera.getSegundoApellido(),
-            enfermera.getEdad(),
-            enfermera.getSexo(),
-            enfermera.getNacionalidad(),
-            enfermera.getIdentificacion(),
-            usuario,
-            contrasenaEncriptada, // <- ESTA ES LA QUE SE GUARDA EN JSON
-            RolEnum.ENFERMERA
-    );
+        Usuario nuevoUsuario = new Usuario(
+                enfermera.getPrimerNombre(),
+                enfermera.getSegundoNombre(),
+                enfermera.getPrimerApellido(),
+                enfermera.getSegundoApellido(),
+                enfermera.getEdad(),
+                enfermera.getSexo(),
+                enfermera.getNacionalidad(),
+                enfermera.getIdentificacion(),
+                usuario,
+                contrasenaEncriptada,
+                RolEnum.ENFERMERA,
+                enfermera.getRutaImagen() // Usamos getRutaImagen()
+        );
 
-    guardarUsuario(nuevoUsuario);
+        guardarUsuario(nuevoUsuario);
 
-    // 6. Enviar correo (CON CONTRASEÑA SIN ENCRIPTAR)
-    boolean correoEnviado = EmailSender.getInstancia().enviarCredenciales(
-            enfermera.getCorreo(),
-            usuario,
-            contrasena, // <- ESTA VA SIN ENCRIPTAR AL CORREO
-            RolEnum.ENFERMERA
-    );
+        // 6. Enviar correo (CON CONTRASEÑA SIN ENCRIPTAR)
+        boolean correoEnviado = EmailSender.getInstancia().enviarCredenciales(
+                enfermera.getCorreo(),
+                usuario,
+                contrasena, // <- ESTA VA SIN ENCRIPTAR AL CORREO
+                RolEnum.ENFERMERA
+        );
 
-    if (!correoEnviado) {
-        JOptionPane.showMessageDialog(null, 
-           "Enfermera registrada pero hubo un error al enviar las credenciales por correo.",
-            "Advertencia",
-            JOptionPane.WARNING_MESSAGE);
-    } 
+        if (!correoEnviado) {
+            JOptionPane.showMessageDialog(null,
+                    "Enfermera registrada pero hubo un error al enviar las credenciales por correo.",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
+        }
 
-    return true;
-}
-    
+        return true;
+    }
 
     public List<Enfermera> obtenerEnfermeras() {
         List<Enfermera> enfermeras = new ArrayList<>();
@@ -250,36 +246,36 @@ public class EnfermeraDAO {
         return enfermeras;
     }
 
-   private void guardarListaEnfermeras(List<Enfermera> enfermeras) throws IOException {
-    JsonObject jsonObject = new JsonObject();
-    JsonArray enfermerasArray = new JsonArray();
+    private void guardarListaEnfermeras(List<Enfermera> enfermeras) throws IOException {
+        JsonObject jsonObject = new JsonObject();
+        JsonArray enfermerasArray = new JsonArray();
 
-    for (Enfermera enfermera : enfermeras) {
-        JsonObject enfermeraJson = new JsonObject();
-        // Solo guardamos datos básicos, no credenciales en este JSON
-        enfermeraJson.addProperty("turno", enfermera.getTurno());
-        enfermeraJson.addProperty("fechaContratacion", enfermera.getFechaContratacion().toString());
-        enfermeraJson.addProperty("fechaFinContrato", enfermera.getFechaFinContrato().toString());
-        enfermeraJson.addProperty("rutaImagen", enfermera.getRutaImagen());
-        enfermeraJson.addProperty("correo", enfermera.getCorreo());
-        enfermeraJson.addProperty("primerNombre", enfermera.getPrimerNombre());
-        enfermeraJson.addProperty("segundoNombre", enfermera.getSegundoNombre());
-        enfermeraJson.addProperty("primerApellido", enfermera.getPrimerApellido());
-        enfermeraJson.addProperty("segundoApellido", enfermera.getSegundoApellido());
-        enfermeraJson.addProperty("edad", enfermera.getEdad());
-        enfermeraJson.addProperty("sexo", enfermera.getSexo());
-        enfermeraJson.addProperty("nacionalidad", enfermera.getNacionalidad());
-        enfermeraJson.addProperty("identificacion", enfermera.getIdentificacion());
+        for (Enfermera enfermera : enfermeras) {
+            JsonObject enfermeraJson = new JsonObject();
+            // Solo guardamos datos básicos, no credenciales en este JSON
+            enfermeraJson.addProperty("turno", enfermera.getTurno());
+            enfermeraJson.addProperty("fechaContratacion", enfermera.getFechaContratacion().toString());
+            enfermeraJson.addProperty("fechaFinContrato", enfermera.getFechaFinContrato().toString());
+            enfermeraJson.addProperty("rutaImagen", enfermera.getRutaImagen());
+            enfermeraJson.addProperty("correo", enfermera.getCorreo());
+            enfermeraJson.addProperty("primerNombre", enfermera.getPrimerNombre());
+            enfermeraJson.addProperty("segundoNombre", enfermera.getSegundoNombre());
+            enfermeraJson.addProperty("primerApellido", enfermera.getPrimerApellido());
+            enfermeraJson.addProperty("segundoApellido", enfermera.getSegundoApellido());
+            enfermeraJson.addProperty("edad", enfermera.getEdad());
+            enfermeraJson.addProperty("sexo", enfermera.getSexo());
+            enfermeraJson.addProperty("nacionalidad", enfermera.getNacionalidad());
+            enfermeraJson.addProperty("identificacion", enfermera.getIdentificacion());
 
-        enfermerasArray.add(enfermeraJson);
+            enfermerasArray.add(enfermeraJson);
+        }
+
+        jsonObject.add("enfermeras", enfermerasArray);
+
+        try (Writer writer = new FileWriter(RUTA_JSON)) {
+            gson.toJson(jsonObject, writer);
+        }
     }
-
-    jsonObject.add("enfermeras", enfermerasArray);
-
-    try (Writer writer = new FileWriter(RUTA_JSON)) {
-        gson.toJson(jsonObject, writer);
-    }
-}
 
     public boolean puedeAgregarEnfermera(String turno) {
         List<Enfermera> enfermeras = obtenerEnfermeras();
@@ -330,41 +326,41 @@ public class EnfermeraDAO {
     }
 
     public boolean modificarEnfermera(String cedulaOriginal, Enfermera enfermeraModificada, File nuevaImagen) {
-    try {
-        List<Enfermera> enfermeras = obtenerEnfermeras();
+        try {
+            List<Enfermera> enfermeras = obtenerEnfermeras();
 
-        for (int i = 0; i < enfermeras.size(); i++) {
-            Enfermera e = enfermeras.get(i);
-            if (e.getIdentificacion().equals(cedulaOriginal)) {
-                // Manejo de la imagen
-                String rutaImagenFinal = e.getRutaImagen();
+            for (int i = 0; i < enfermeras.size(); i++) {
+                Enfermera e = enfermeras.get(i);
+                if (e.getIdentificacion().equals(cedulaOriginal)) {
+                    // Manejo de la imagen
+                    String rutaImagenFinal = e.getRutaImagen();
 
-                if (nuevaImagen != null && nuevaImagen.exists()) {
-                    String nombreImagen = enfermeraModificada.getIdentificacion() + "_" + System.currentTimeMillis()
-                            + nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
-                    rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-                    Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+                    if (nuevaImagen != null && nuevaImagen.exists()) {
+                        String nombreImagen = enfermeraModificada.getIdentificacion() + "_" + System.currentTimeMillis()
+                                + nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
+                        rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+                        Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+                    }
+
+                    // Mantener las credenciales originales
+                    enfermeraModificada.setUsuario(e.getUsuario());
+                    enfermeraModificada.setContrasena(e.getContrasena());
+                    enfermeraModificada.setRutaImagen(rutaImagenFinal);
+
+                    enfermeras.set(i, enfermeraModificada);
+
+                    guardarListaEnfermeras(enfermeras);
+                    return true;
                 }
-
-                // Mantener las credenciales originales
-                enfermeraModificada.setUsuario(e.getUsuario());
-                enfermeraModificada.setContrasena(e.getContrasena());
-                enfermeraModificada.setRutaImagen(rutaImagenFinal);
-
-                enfermeras.set(i, enfermeraModificada);
-
-                guardarListaEnfermeras(enfermeras);
-                return true;
             }
-        }
 
-        return false;
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(null, "Error al modificar enfermera: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-        return false;
+            return false;
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al modificar enfermera: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
-}
 
     public Enfermera obtenerEnfermeraPorCedula(String cedula) {
         return obtenerEnfermeras().stream()
@@ -385,52 +381,52 @@ public class EnfermeraDAO {
     }
 
     public List<Object[]> obtenerDatosEnfermerasParaTabla() {
-    return obtenerEnfermeras().stream()
-            .map(e -> new Object[]{
-                e.getPrimerNombre(),
-                e.getSegundoNombre(),
-                e.getPrimerApellido(),
-                e.getSegundoApellido(),
-                e.getEdad(),
-                e.getIdentificacion(),
-                e.getNacionalidad(),
-                e.getCorreo(),
-                e.getTurno(),
-                e.getFechaContratacionFormateada(), // Añadir fecha de inicio
-                e.getFechaFinContratoFormateada() // Cambiar a método formateado
-            })
-            .collect(Collectors.toList());
-}
+        return obtenerEnfermeras().stream()
+                .map(e -> new Object[]{
+            e.getPrimerNombre(),
+            e.getSegundoNombre(),
+            e.getPrimerApellido(),
+            e.getSegundoApellido(),
+            e.getEdad(),
+            e.getIdentificacion(),
+            e.getNacionalidad(),
+            e.getCorreo(),
+            e.getTurno(),
+            e.getFechaContratacionFormateada(), // Añadir fecha de inicio
+            e.getFechaFinContratoFormateada() // Cambiar a método formateado
+        })
+                .collect(Collectors.toList());
+    }
 
     public String[] getNombresColumnas() {
-    return new String[]{
-        "Primer Nombre",
-        "Segundo Nombre",
-        "Primer Apellido",
-        "Segundo Apellido",
-        "Edad",
-        "Cédula",
-        "Nacionalidad",
-        "Correo",
-        "Turno",
-        "Inicio Contrato", // Nueva columna
-        "Fin de Contrato"
-    };
-}
+        return new String[]{
+            "Primer Nombre",
+            "Segundo Nombre",
+            "Primer Apellido",
+            "Segundo Apellido",
+            "Edad",
+            "Cédula",
+            "Nacionalidad",
+            "Correo",
+            "Turno",
+            "Inicio Contrato", // Nueva columna
+            "Fin de Contrato"
+        };
+    }
 
-   public Class<?>[] getTiposColumnas() {
-    return new Class<?>[]{
-        String.class,
-        String.class,
-        String.class,
-        String.class,
-        Integer.class,
-        String.class,
-        String.class,
-        String.class,
-        String.class,
-        String.class, // Tipo para fecha inicio
-        String.class  // Tipo para fecha fin
-    };
-}
+    public Class<?>[] getTiposColumnas() {
+        return new Class<?>[]{
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+            Integer.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class, // Tipo para fecha inicio
+            String.class // Tipo para fecha fin
+        };
+    }
 }

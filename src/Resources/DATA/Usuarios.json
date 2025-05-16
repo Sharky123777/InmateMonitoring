@@ -259,6 +259,35 @@
       "sexo": "Masculino",
       "nacionalidad": "pium",
       "identificacion": "13131313"
+    },
+    {
+      "usuario": "bum",
+      "password": "pumchulita",
+      "rol": "DIRECTOR",
+      "rutaImagen": "src/Resources/imagenes_personal_control/1731318313_1747358323389.png",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Masculino",
+      "nacionalidad": "pepe",
+      "identificacion": "1731318313"
+    },
+    
+    {
+      "usuario": "1CZuv¡W¿",
+      "password": "a0af31edee574783a4b933d36c3ab56be01686ac75bd5a14a218ee50bd877fa4",
+      "rol": "PERSONAL_DE_CONTROL",
+      "rutaImagen": "src/Resources/imagenes_personal_control/1731318313_1747358323389.png",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Masculino",
+      "nacionalidad": "pepe",
+      "identificacion": "1731318313"
     }
   ]
 }

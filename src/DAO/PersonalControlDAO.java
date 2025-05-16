@@ -204,7 +204,8 @@ public class PersonalControlDAO {
                 personalControl.getIdentificacion(),
                 usuario,
                 contrasenaEncriptada,
-                RolEnum.PERSONAL_DE_CONTROL
+                RolEnum.PERSONAL_DE_CONTROL,
+                personalControl.getRutaImagen() // Usamos getRutaImagen()
         );
 
         guardarUsuario(nuevoUsuario);
