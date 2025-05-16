@@ -179,7 +179,6 @@ public class VisitanteDAO {
             String nuevoSegundoApellido,
             int nuevaEdad,
             String nuevoSexo,
-            String nuevaRelacionConPreso,
             File nuevaImagen) {
         List<Visitante> visitantes = cargarTodos();
         boolean encontrado = false;
@@ -205,9 +204,6 @@ public class VisitanteDAO {
                 }
                 if (nuevoSexo != null && !nuevoSexo.isEmpty()) {
                     visitante.setSexo(nuevoSexo);
-                }
-                if (nuevaRelacionConPreso != null && !nuevaRelacionConPreso.isEmpty()) {
-                    visitante.setRelacionConPreso(nuevaRelacionConPreso);
                 }
 
                 if (nuevaImagen != null) {
@@ -277,7 +273,7 @@ public class VisitanteDAO {
 
     public Visitante modificarDatosVisitanteYDevolver(String identificacion,
             String primerNombre, String segundoNombre, String primerApellido,
-            String segundoApellido, int edad, String sexo, String relacion,
+            String segundoApellido, int edad, String sexo,
             File imagen) {
 
         List<Visitante> visitantes = cargarTodos();
@@ -299,9 +295,6 @@ public class VisitanteDAO {
                 visitante.setEdad(edad);
                 if (sexo != null) {
                     visitante.setSexo(sexo);
-                }
-                if (relacion != null) {
-                    visitante.setRelacionConPreso(relacion);
                 }
 
                 if (imagen != null) {

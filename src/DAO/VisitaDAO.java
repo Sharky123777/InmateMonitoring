@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
@@ -27,7 +28,11 @@ public class VisitaDAO {
                 .setPrettyPrinting()
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
+                .registerTypeAdapter(new TypeToken<Map<Visitante, String>>() {
+                }.getType(),
+                        new VisitantesMapAdapter())
                 .create();
+
     }
 
     public static synchronized VisitaDAO getInstancia() {
@@ -218,7 +223,7 @@ public class VisitaDAO {
         for (Visita visita : todasVisitas) {
             if (visita.getEstado() != EstadoVisitaEnum.CANCELADA
                     && visita.getFechaVisita().equals(fecha)) {
-                for (Visitante visitante : visita.getVisitantes()) {
+                for (Visitante visitante : visita.getVisitantesConRelacion().keySet()) {
                     if (visitante.getIdentificacion().equals(identificacionVisitante)) {
                         return true;
                     }

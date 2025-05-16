@@ -4,7 +4,9 @@ import Model.Constants.EstadoVisitaEnum;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Visita {
 
@@ -15,18 +17,18 @@ public class Visita {
     private String tipoVisita;
     private String lugarVisita;
     private Preso preso;
-    private List<Visitante> visitantes;
+    private Map<Visitante, String> visitantesConRelacion;
     private EstadoVisitaEnum estado;
 
     public Visita(int id, LocalDate fechaVisita, LocalTime horaVisita, String tipoVisita,
-            String lugarVisita, Preso preso, List<Visitante> visitantes) {
+            String lugarVisita, Preso preso) {
         this.id = id;
         this.fechaVisita = fechaVisita;
         this.horaVisita = horaVisita;
         this.tipoVisita = tipoVisita;
         this.lugarVisita = lugarVisita;
         this.preso = preso;
-        this.visitantes = new ArrayList<>(visitantes);
+        this.visitantesConRelacion = new HashMap<>();
         this.estado = EstadoVisitaEnum.EN_PROCESO;
     }
 
@@ -90,12 +92,12 @@ public class Visita {
         this.preso = preso;
     }
 
-    public List<Visitante> getVisitantes() {
-        return visitantes;
+    public void agregarVisitante(Visitante visitante, String relacion) {
+        this.visitantesConRelacion.put(visitante, relacion);
     }
 
-    public void setVisitantes(List<Visitante> visitantes) {
-        this.visitantes = visitantes;
+    public Map<Visitante, String> getVisitantesConRelacion() {
+        return new HashMap<>(visitantesConRelacion);
     }
 
 }

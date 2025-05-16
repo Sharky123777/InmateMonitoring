@@ -169,7 +169,7 @@ public class ModificarVisitante extends javax.swing.JDialog {
 
             if (opcion == 0) {
                 nuevaImagen = controller.capturarImagenVisitante();
-            } else if (opcion == 1) { // Seleccionar archivo
+            } else if (opcion == 1) { 
                 nuevaImagen = controller.seleccionarImagen(this, getNuevaVistaPreviaVisitante());
             }
 
@@ -210,6 +210,7 @@ public class ModificarVisitante extends javax.swing.JDialog {
             String edadStr = getNuevaEdadVisitante().getText();
             String sexo = getNuevoSexoVisitante().getSelectedItem().toString();
 
+
             File imagen = nuevaImagenVisitante != null ? nuevaImagenVisitante : new File(visitante.getFotoPath());
 
             VisitaController controller = new VisitaController();
@@ -221,7 +222,6 @@ public class ModificarVisitante extends javax.swing.JDialog {
                     segundoApellido,
                     edadStr,
                     sexo,
-                    visitante.getRelacionConPreso(), 
                     imagen
             );
 

@@ -113,7 +113,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
             }
 
             String identificacion = TablaHistorialVisitantes.getValueAt(fila, 6).toString();
-            String identificacionPreso = TablaHistorialVisitantes.getValueAt(fila, 11).toString(); // Asumiendo que la columna 11 es la ID del preso
+            String identificacionPreso = TablaHistorialVisitantes.getValueAt(fila, 11).toString();
 
             Visitante visitante = new VisitanteDAO().buscarVisitantePorIdentificacion(identificacion);
 
@@ -340,6 +340,8 @@ public class PersonalDeControl extends javax.swing.JFrame {
         EdadVisitante = new javax.swing.JTextField();
         PrimerNombreVisitante = new javax.swing.JTextField();
         NacionalidadVisitante = new javax.swing.JComboBox<>();
+        jLabel25 = new javax.swing.JLabel();
+        RelacionConPresoVisitante = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         CantidadDeVisitantesCombo = new javax.swing.JComboBox<>();
         jLabel15 = new javax.swing.JLabel();
@@ -360,8 +362,6 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel51 = new javax.swing.JLabel();
         botonCancelarProceso = new javax.swing.JButton();
         jLabel60 = new javax.swing.JLabel();
-        jLabel25 = new javax.swing.JLabel();
-        RelacionConPresoVisitante = new javax.swing.JComboBox<>();
         jLabel22 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
@@ -726,7 +726,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 BotonGuardarVisitanteActionPerformed(evt);
             }
         });
-        jPanel9.add(BotonGuardarVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 450, 180, 30));
+        jPanel9.add(BotonGuardarVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 470, 180, 30));
 
         jLabel27.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel27.setForeground(new java.awt.Color(0, 0, 0));
@@ -755,6 +755,14 @@ public class PersonalDeControl extends javax.swing.JFrame {
             }
         });
         jPanel9.add(NacionalidadVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 382, 300, 30));
+
+        jLabel25.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel25.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel25.setText("Relación con el preso:");
+        jPanel9.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 430, -1, -1));
+
+        RelacionConPresoVisitante.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Esposa/Esposo", "Padre/Madre", "Hijo/Hija", "Hermano/Hermana", "Abuelo/Abuela", "Nieto/Nieta", "Tío/Tía", "Sobrino/Sobrina", "Primo/Prima", "Suegro/Suegra", "Yerno/Nuera", "Cuñado/Cuñada", "Amigo/Amiga", "Compañero de Trabajo", "Vecino/Vecina", "Conocido/Conocida", "Abogado/Abogada", "Asistente Social", "Representante Legal", "Sacerdote/Pastor", "Novio/Novia", "Tutor Legal", "Ex-Esposo/Ex-Esposa", "Familiar Político " }));
+        jPanel9.add(RelacionConPresoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 420, 280, 30));
 
         PanelGuardarVisita.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 520, 520));
 
@@ -817,7 +825,7 @@ public class PersonalDeControl extends javax.swing.JFrame {
                 BotonGuardarVisitaActionPerformed(evt);
             }
         });
-        PanelGuardarVisita.add(BotonGuardarVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 370, 180, 30));
+        PanelGuardarVisita.add(BotonGuardarVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 340, 180, 30));
 
         jPanel11.setBackground(new java.awt.Color(204, 204, 204));
         jPanel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
@@ -850,18 +858,10 @@ public class PersonalDeControl extends javax.swing.JFrame {
         jLabel60.setText("Guardar los datos de la visita primero");
         PanelGuardarVisita.add(jLabel60, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, -1, -1));
 
-        jLabel25.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel25.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel25.setText("Relación con el preso:");
-        PanelGuardarVisita.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 340, -1, -1));
-
-        RelacionConPresoVisitante.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Esposa/Esposo", "Padre/Madre", "Hijo/Hija", "Hermano/Hermana", "Abuelo/Abuela", "Nieto/Nieta", "Tío/Tía", "Sobrino/Sobrina", "Primo/Prima", "Suegro/Suegra", "Yerno/Nuera", "Cuñado/Cuñada", "Amigo/Amiga", "Compañero de Trabajo", "Vecino/Vecina", "Conocido/Conocida", "Abogado/Abogada", "Asistente Social", "Representante Legal", "Sacerdote/Pastor", "Novio/Novia", "Tutor Legal", "Ex-Esposo/Ex-Esposa", "Familiar Político " }));
-        PanelGuardarVisita.add(RelacionConPresoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 330, 240, 30));
-
         jLabel22.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel22.setForeground(new java.awt.Color(0, 0, 0));
         jLabel22.setText("Vista previa foto visitante");
-        PanelGuardarVisita.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 550, -1, -1));
+        PanelGuardarVisita.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 380, -1, -1));
 
         jPanel1.setBackground(new java.awt.Color(180, 180, 195));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());

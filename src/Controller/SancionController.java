@@ -15,6 +15,7 @@ import View.Oficial;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -158,7 +159,7 @@ public class SancionController {
 
     private void notificarCancelacionAVisitantes(Visita visita, String motivo) {
         try {
-            List<Visitante> visitantes = visita.getVisitantes();
+            List<Visitante> visitantes = new ArrayList<>(visita.getVisitantesConRelacion().keySet());
 
             for (Visitante visitante : visitantes) {
                 if (visitante.getEdad() >= 18

@@ -52,6 +52,7 @@ public class VisitaController {
     private VisitanteDAO visitanteDAO = VisitanteDAO.getInstancia();
     private PersonalDeControlDAO personalDeControlDAO = PersonalDeControlDAO.getInstancia();
     private SancionDAO sancionDAO = SancionDAO.getInstancia();
+    private List<String> relacionesTemporales = new ArrayList<>();
     private Visita visitaTemporal = null;
 
     public void limpiarCamposVisitante(PersonalDeControl view) {
@@ -306,6 +307,8 @@ public class VisitaController {
             }
 
             visitantesTemporales.add(visitanteExistente);
+            String relacion = view.getRelacionConPresoVisitante().getSelectedItem().toString();
+            relacionesTemporales.add(relacion);
             imagenesTemporales.add(new File(visitanteExistente.getFotoPath()));
         } else {
             if (!validarCamposVisitante(view, imagen, 0, visitantesTemporales)) {
@@ -319,15 +322,19 @@ public class VisitaController {
             int edad = Integer.parseInt(view.getEdadVisitante().getText().trim());
             String sexo = view.getSexoVisitante().getSelectedItem().toString();
             String nacionalidad = view.getNacionalidadVisitante().getSelectedItem().toString();
-            String relacion = view.getRelacionConPresoVisitante().getSelectedItem().toString();
             String email = view.getEmailVisitante().getText().trim();
 
-            Visitante nuevoVisitante = new Visitante(primerNombre, segundoNombre, primerApellido,
-                    segundoApellido, edad, sexo, nacionalidad, identificacion,
-                    relacion, imagen.getAbsolutePath(), email);
+            Visitante nuevoVisitante = new Visitante(
+                    primerNombre, segundoNombre, primerApellido,
+                    segundoApellido, edad, sexo, nacionalidad,
+                    identificacion, imagen.getAbsolutePath(), email
+            );
 
             visitantesTemporales.add(nuevoVisitante);
             imagenesTemporales.add(imagen);
+            String relacion = view.getRelacionConPresoVisitante().getSelectedItem().toString();
+            relacionesTemporales.add(relacion);
+
         }
 
         limpiarCamposVisitante(view);
@@ -355,6 +362,7 @@ public class VisitaController {
         if (imagenesTemporales != null) {
             imagenesTemporales.clear();
         }
+        relacionesTemporales.clear();
 
         visitaTemporal = null;
 
@@ -513,9 +521,9 @@ public class VisitaController {
                     horaVisita,
                     view.getTipoVisita().getSelectedItem().toString(),
                     view.getLugarVisita().getSelectedItem().toString(),
-                    preso,
-                    new ArrayList<>()
+                    preso
             );
+
             visitaTemporal.setEstado(EstadoVisitaEnum.EN_PROCESO);
 
             JOptionPane.showMessageDialog(null,
@@ -570,7 +578,11 @@ public class VisitaController {
             return;
         }
 
-        visitaTemporal.getVisitantes().addAll(visitantes);
+        for (int i = 0; i < visitantes.size(); i++) {
+            String relacion = relacionesTemporales.get(i);
+            visitaTemporal.agregarVisitante(visitantes.get(i), relacion);
+            visitanteDAO.guardarVisitante(visitantes.get(i), imagenes.get(i));
+        }
 
         visitaDAO.guardarVisita(visitaTemporal);
 
@@ -615,6 +627,7 @@ public class VisitaController {
         visitaTemporal = null;
         visitantes.clear();
         imagenes.clear();
+        relacionesTemporales.clear();
         view.getCantidadDeVisitantesCombo().setSelectedIndex(0);
     }
 
@@ -624,7 +637,7 @@ public class VisitaController {
 
         List<Visita> visitas = visitaDAO.cargarPorIdentificacionPreso(identificacionPreso);
         for (Visita visita : visitas) {
-            for (Visitante visitante : visita.getVisitantes()) {
+            for (Visitante visitante : visita.getVisitantesConRelacion().keySet()) {
                 modelo.addRow(new Object[]{
                     visita.getId(),
                     visitante.getIdentificacion(),
@@ -655,14 +668,14 @@ public class VisitaController {
             Map<String, Integer> contadorVisitas = new HashMap<>();
 
             for (Visita visita : visitas) {
-                for (Visitante visitante : visita.getVisitantes()) {
+                for (Visitante visitante : visita.getVisitantesConRelacion().keySet()) {
                     String idVisitante = visitante.getIdentificacion();
                     contadorVisitas.put(idVisitante, contadorVisitas.getOrDefault(idVisitante, 0) + 1);
                 }
             }
 
             for (Visita visita : visitas) {
-                for (Visitante visitante : visita.getVisitantes()) {
+                for (Visitante visitante : visita.getVisitantesConRelacion().keySet()) {
                     String idVisitante = visitante.getIdentificacion();
 
                     Visitante visitanteActual = visitanteDAO.buscarVisitantePorIdentificacion(idVisitante);
@@ -682,7 +695,7 @@ public class VisitaController {
                         visitanteActual.getIdentificacion(),
                         visitanteActual.getSexo(),
                         visitanteActual.getNacionalidad(),
-                        visitanteActual.getRelacionConPreso(),
+                        visita.getVisitantesConRelacion().get(visitante),
                         contadorVisitas.get(idVisitante),
                         identificacionPreso,
                         visitanteActual.getEstado().toString()
@@ -902,7 +915,6 @@ public class VisitaController {
             String segundoApellido,
             String edad,
             String sexo,
-            String relacion,
             File imagen) {
 
         if (!primerNombre.trim().isEmpty() && !primerNombre.equals(visitanteOriginal.getPrimerNombre())) {
@@ -957,12 +969,11 @@ public class VisitaController {
             String segundoApellido,
             String edad,
             String sexo,
-            String relacion,
             File imagen) {
 
         try {
             if (!hayCambiosVisitante(visitanteOriginal, primerNombre, segundoNombre, primerApellido,
-                    segundoApellido, edad, sexo, relacion, imagen)) {
+                    segundoApellido, edad, sexo, imagen)) {
                 mostrarError("No hay cambios para guardar");
                 return null;
             }
@@ -1030,7 +1041,6 @@ public class VisitaController {
                     segundoApellido.trim().isEmpty() ? visitanteOriginal.getSegundoApellido() : segundoApellido.trim(),
                     edad.trim().isEmpty() ? visitanteOriginal.getEdad() : Integer.parseInt(edad.trim()),
                     sexoFinal,
-                    visitanteOriginal.getRelacionConPreso(),
                     imagen != null ? imagen : new File(visitanteOriginal.getFotoPath())
             );
 
