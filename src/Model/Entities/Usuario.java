@@ -3,24 +3,35 @@ package Model.Entities;
 import Model.Constants.RolEnum;
 
 public class Usuario extends Persona {
+
     private String usuario;
     private String password;
     private RolEnum rol;
+    private String rutaImagen; // Nuevo campo para la imagen
 
-     // Constructor completo (con datos de persona)
-    public Usuario(String primerNombre, String segundoNombre, 
-                 String primerApellido, String segundoApellido,
-                 int edad, String sexo, String nacionalidad, 
-                 String identificacion,
-                 String usuario, String password, RolEnum rol) {
-        super(primerNombre, segundoNombre, primerApellido, segundoApellido, 
-              edad, sexo, nacionalidad, identificacion);
+    // Constructor actualizado
+    public Usuario(String primerNombre, String segundoNombre,
+            String primerApellido, String segundoApellido,
+            int edad, String sexo, String nacionalidad,
+            String identificacion,
+            String usuario, String password, RolEnum rol,
+            String rutaImagen) {
+        super(primerNombre, segundoNombre, primerApellido, segundoApellido,
+                edad, sexo, nacionalidad, identificacion);
         this.usuario = usuario;
         this.password = password;
         this.rol = rol;
+        this.rutaImagen = rutaImagen;
     }
 
-    
+    // Getters y Setters
+    public String getRutaImagen() {
+        return rutaImagen;
+    }
+
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
+    }
 
     public String getPassword() {
         return password;
@@ -47,5 +58,4 @@ public class Usuario extends Persona {
         this.usuario = usuario;
     }
 
-    
 }

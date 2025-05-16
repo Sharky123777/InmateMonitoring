@@ -113,22 +113,15 @@ public class OficialController {
             throw new IllegalArgumentException("Oficial no encontrado");
         }
 
-        // Debug: Mostrar valores originales y nuevos
-        System.out.println("Valores originales:");
-        System.out.println(original.toString());
-        System.out.println("Valores nuevos:");
-        cambios.forEach((k, v) -> System.out.println(k + ": " + v));
-        
+      
         boolean hayCambios = verificarCambios(original, cambios, nuevaImagen);
         
         if (!hayCambios) {
-            System.out.println("No hay cambios reales - retornando 0");
+         
             return 0;
         }
 
-        System.out.println("Hay cambios reales - procediendo con modificación");
-        
-        // Resto de la lógica de modificación...
+       
         boolean modificadoEnBD = oficialDAO.modificarOficial(cedulaOriginal, 
             construirOficialModificado(cedulaOriginal, cambios, original), 
             nuevaImagen);
@@ -145,7 +138,7 @@ public class OficialController {
     private boolean verificarCambios(Oficial original, Map<String, Object> cambios, File nuevaImagen) {
     boolean hayCambios = false;
     
-    // Comparar campos textuales
+   
     if (!Objects.equals(original.getPrimerNombre(), cambios.get("primerNombre"))) {
         hayCambios = true;
     }
@@ -174,7 +167,7 @@ public class OficialController {
         hayCambios = true;
     }
 
-    // Verificar imagen solo si se proporcionó una NUEVA imagen diferente a la original
+    
     if (nuevaImagen != null) {
         String rutaOriginal = "src/Resources/imagenes_oficiales/" + original.getIdentificacion()+ ".png";
         if (!nuevaImagen.getPath().equals(rutaOriginal)) {

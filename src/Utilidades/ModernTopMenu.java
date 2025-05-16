@@ -55,8 +55,8 @@ public class ModernTopMenu extends JPanel {
     menuStructure.put("Guardias", guardiasItems);
     
      ArrayList<MenuItem> oficialItems = new ArrayList<>();
-    oficialItems.add(new MenuItem("Agregar oficial", 15)); // AgregarCDA
-    oficialItems.add(new MenuItem("Mostrar oficial", 17)); // AgregarCDA
+    oficialItems.add(new MenuItem("Agregar oficial", 14)); // AgregarCDA
+    oficialItems.add(new MenuItem("Mostrar oficial", 16)); // AgregarCDA
     menuStructure.put("Oficial", oficialItems );
     
     

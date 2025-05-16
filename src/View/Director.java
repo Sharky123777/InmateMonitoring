@@ -26,6 +26,7 @@ import java.awt.Image;
 import java.io.File;
 import Model.Entities.Oficial;
 import java.time.LocalDate;
+import Model.Entities.Usuario;
 import Model.Entities.Guardia;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -82,14 +83,17 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import Utilidades.ModernTopMenu;
+import View.PerfilUsuario;
+import Model.Entities.Usuario;
 
 /**
  *
  * @author Sharlok
  */
-public class Director extends javax.swing.JFrame {
+public class Director extends javax.swing.JFrame implements PerfilUsuario {
 
     EnfermeraDAO enfermeraDAO = new EnfermeraDAO();
+    private Usuario usuario;
     private EnfermeraController enfermeraController;
     private OficialController oficialController;
     private OficialDeRegistroController oficialRegistro;
@@ -165,7 +169,6 @@ public class Director extends javax.swing.JFrame {
         calendario.add(Calendar.MONTH, 1);
         jDateChooserFinContrato.setDate(calendario.getTime());
 
-        // Actualización de tablas
         actualizarTablaGuardias();
         actualizarTablaEnfermeras();
         actualizarTablaCDA();
@@ -223,6 +226,37 @@ public class Director extends javax.swing.JFrame {
         pack();
     }
 
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+        mostrarDatosUsuario();
+    }
+
+    private void mostrarDatosUsuario() {
+        if (usuario != null) {
+            // Mostrar información básica
+            lblNombre.setText(usuario.getPrimerNombre() + " " + usuario.getPrimerApellido());
+            lblRol.setText(usuario.getRol().toString());
+
+            // Mostrar imagen
+            cargarImagenUsuario();
+        }
+    }
+
+    private void cargarImagenUsuario() {
+        try {
+            ImageIcon icon = new ImageIcon(usuario.getRutaImagen());
+            Image img = icon.getImage().getScaledInstance(
+                    fotolbl.getWidth(), fotolbl.getHeight(), Image.SCALE_SMOOTH);
+            fotolbl.setIcon(new ImageIcon(img));
+        } catch (Exception e) {
+            cargarImagenPorDefecto();
+        }
+    }
+
+    private void cargarImagenPorDefecto() {
+        lblFoto.setIcon(new ImageIcon("src/Resources/default_avatar.png"));
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -248,6 +282,13 @@ public class Director extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         tabPrincipal = new javax.swing.JTabbedPane();
         Director = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        fotolbl = new javax.swing.JLabel();
+        lblNombre = new javax.swing.JLabel();
+        lblRol = new javax.swing.JLabel();
+        jSeparator125 = new javax.swing.JSeparator();
+        jLabel20 = new javax.swing.JLabel();
+        jSeparator126 = new javax.swing.JSeparator();
         DisminuirSentencia = new javax.swing.JPanel();
         AñadirDelito = new javax.swing.JPanel();
         AñadirEnfermera = new javax.swing.JPanel();
@@ -902,6 +943,35 @@ public class Director extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Director.setBackground(new java.awt.Color(255, 255, 255));
+        Director.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel6.setBackground(new java.awt.Color(20, 25, 40));
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        fotolbl.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        jPanel6.add(fotolbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, 270, 190));
+
+        lblNombre.setBackground(new java.awt.Color(255, 255, 255));
+        lblNombre.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        lblNombre.setForeground(new java.awt.Color(255, 255, 255));
+        lblNombre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel6.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 300, 210, 30));
+
+        lblRol.setBackground(new java.awt.Color(255, 255, 255));
+        lblRol.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        lblRol.setForeground(new java.awt.Color(255, 255, 255));
+        lblRol.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel6.add(lblRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 340, 150, 20));
+        jPanel6.add(jSeparator125, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 360, 150, 20));
+
+        jLabel20.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel20.setText("LE DAMOS LA BIENVENIDA.");
+        jPanel6.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 60, -1, -1));
+        jPanel6.add(jSeparator126, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 330, 210, 20));
+
+        Director.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, 880, 450));
+
         tabPrincipal.addTab("Director", Director);
         tabPrincipal.addTab("DisminuirSentencia", DisminuirSentencia);
         tabPrincipal.addTab("AñadirDelito", AñadirDelito);
@@ -7986,7 +8056,7 @@ public class Director extends javax.swing.JFrame {
     }//GEN-LAST:event_modificarOPCActionPerformed
 
     private void eliminarPDCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarPDCActionPerformed
-         int filaSeleccionada = personalTabla.getSelectedRow();
+        int filaSeleccionada = personalTabla.getSelectedRow();
 
         if (filaSeleccionada == -1) {
             JOptionPane.showMessageDialog(this,
@@ -8098,6 +8168,7 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbTurnoMod4;
     private javax.swing.JComboBox<String> cmbTurnoMod5;
     private javax.swing.JMenuItem eliminarPDC;
+    private javax.swing.JLabel fotolbl;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
@@ -8217,6 +8288,7 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel181;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
@@ -8336,6 +8408,7 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel40;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
@@ -8380,6 +8453,8 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator122;
     private javax.swing.JSeparator jSeparator123;
     private javax.swing.JSeparator jSeparator124;
+    private javax.swing.JSeparator jSeparator125;
+    private javax.swing.JSeparator jSeparator126;
     private javax.swing.JSeparator jSeparator13;
     private javax.swing.JSeparator jSeparator14;
     private javax.swing.JSeparator jSeparator15;
@@ -8487,6 +8562,8 @@ public class Director extends javax.swing.JFrame {
     private javax.swing.JLabel lblImagenMod3;
     private javax.swing.JLabel lblImagenMod4;
     private javax.swing.JLabel lblImagenMod5;
+    private javax.swing.JLabel lblNombre;
+    private javax.swing.JLabel lblRol;
     private javax.swing.JPanel modODR;
     private javax.swing.JMenuItem modOf;
     private javax.swing.JPanel modPDC;

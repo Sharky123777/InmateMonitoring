@@ -27,19 +27,6 @@
       "identificacion": "91873819"
     },
     {
-      "usuario": "5xÑ4pYoñ\u0026",
-      "password": "56b2c625548977db5127ad3440ac39eb7f0a7a12f0ff6f230ab0aa6d6233eb71",
-      "rol": "COORDINADOR_DE_ACTIVIDADES",
-      "primerNombre": "q",
-      "segundoNombre": "s",
-      "primerApellido": "s",
-      "segundoApellido": "s",
-      "edad": 34,
-      "sexo": "Femenino",
-      "nacionalidad": "sd",
-      "identificacion": "1313131131"
-    },
-    {
       "usuario": "\u0026U4#s$\u0026d91",
       "password": "0f9a3f3a7858ccbaccd24ec36e36d1b73b801290d30398089fcc91185a668355",
       "rol": "COORDINADOR_DE_ACTIVIDADES",
@@ -209,32 +196,6 @@
       "identificacion": "3"
     },
     {
-      "usuario": "665BñFrñ",
-      "password": "082afac722e9ebcd2c24e53e49d8b2b4ffb4eca62df5c955cee47deda2ef3508",
-      "rol": "COORDINADOR_DE_ACTIVIDADES",
-      "primerNombre": "sS",
-      "segundoNombre": "S",
-      "primerApellido": "S",
-      "segundoApellido": "S",
-      "edad": 34,
-      "sexo": "Femenino",
-      "nacionalidad": "W",
-      "identificacion": "31873183"
-    },
-    {
-      "usuario": "5\u0026F$IYwR\u0026sW",
-      "password": "6454a839384e530f7e1a6426760fdf22686c9dfe4f264303acf6eb3c64151fe8",
-      "rol": "COORDINADOR_DE_ACTIVIDADES",
-      "primerNombre": "s",
-      "segundoNombre": "",
-      "primerApellido": "s",
-      "segundoApellido": "s",
-      "edad": 34,
-      "sexo": "Femenino",
-      "nacionalidad": "w",
-      "identificacion": "378123781"
-    },
-    {
       "usuario": "!Ñ%td%FY5\u0026",
       "password": "6d0a51d2d9b17742e7e381e7853aeb33544dcc861ba2fbeea5a1bd20fcea18ec",
       "rol": "PERSONAL_DE_CONTROL",
@@ -259,6 +220,48 @@
       "sexo": "Masculino",
       "nacionalidad": "pium",
       "identificacion": "13131313"
+    },
+    {
+      "usuario": "sharlok",
+      "password": "sharlok123",
+      "rol": "DIRECTOR",
+      "rutaImagen": "src/Resources/imagenes_personal_control/1731318313_1747358323389.png",
+      "primerNombre": "Sharlok",
+      "segundoNombre": "s",
+      "primerApellido": "Alcazar",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Masculino",
+      "nacionalidad": "pepe",
+      "identificacion": "1731318313"
+    },
+    {
+      "usuario": "1CZuv¡W¿",
+      "password": "a0af31edee574783a4b933d36c3ab56be01686ac75bd5a14a218ee50bd877fa4",
+      "rol": "PERSONAL_DE_CONTROL",
+      "rutaImagen": "src/Resources/imagenes_personal_control/1731318313_1747358323389.png",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Masculino",
+      "nacionalidad": "pepe",
+      "identificacion": "1731318313"
+    },
+    {
+      "usuario": "bYdB6!pi%MkR",
+      "password": "aab3c702837654819adf3a3549817526021ea0ca42c950edccd4d25a6f036cae",
+      "rol": "OFICIAL_DE_REGISTRO",
+      "rutaImagen": "src/Resources/imagenes_oficiales_registro/098765431_1747362633397.png",
+      "primerNombre": "Maria",
+      "segundoNombre": "Luz",
+      "primerApellido": "Leon",
+      "segundoApellido": "Mier",
+      "edad": 45,
+      "sexo": "Masculino",
+      "nacionalidad": "Colombiana",
+      "identificacion": "098765431"
     }
   ]
 }

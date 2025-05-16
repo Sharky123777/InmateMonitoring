@@ -45,11 +45,11 @@ public class OficialDeRegistroDAO {
         return instancia;
     }
 
-       private void crearDirectoriosSiNoExisten() {
+    private void crearDirectoriosSiNoExisten() {
         try {
             Files.createDirectories(Paths.get(RUTA_IMAGENES));
             Files.createDirectories(Paths.get(RUTA_JSON).getParent());
-            
+
             // Crear archivo JSON si no existe
             File archivoJson = new File(RUTA_JSON);
             if (!archivoJson.exists()) {
@@ -61,7 +61,6 @@ public class OficialDeRegistroDAO {
             System.err.println("Error al crear directorios/archivo: " + e.getMessage());
         }
     }
-
 
     private static class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
 
@@ -149,140 +148,140 @@ public class OficialDeRegistroDAO {
         }
     }
 
-   public boolean guardarOficial(OficialDeRegistro oficial, File imagen) throws IOException {
-    // Validaciones iniciales mejoradas
-    if (oficial == null) {
-        throw new IllegalArgumentException("El objeto oficial no puede ser null");
-    }
-    
-    if (imagen == null || !imagen.exists() || imagen.length() == 0) {
-        throw new IllegalArgumentException("La imagen proporcionada no es válida");
-    }
-
-    // Generar credenciales
-    UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
-    String usuario = credenciales.usuario;
-    String contrasena = credenciales.contrasena;
-    String contrasenaEncriptada = UsuarioController.getInstancia().encriptarContrasena(contrasena);
-
-    oficial.setUsuario(usuario);
-    oficial.setContrasena(contrasenaEncriptada);
-
-    // Guardar imagen con manejo de errores
-    String extension = imagen.getName().substring(imagen.getName().lastIndexOf("."));
-    String nombreImagen = oficial.getIdentificacion() + "_" + System.currentTimeMillis() + extension;
-    String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-    
-    try {
-        Files.createDirectories(Paths.get(RUTA_IMAGENES));
-        Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
-        oficial.setRutaImagen(rutaImagenFinal);
-    } catch (IOException e) {
-        System.err.println("Error al guardar imagen: " + e.getMessage());
-        throw new IOException("No se pudo guardar la imagen del oficial");
-    }
-
-    // Obtener y actualizar lista de oficiales
-    List<OficialDeRegistro> oficiales = obtenerOficiales();
-    
-    // Verificar duplicados
-    if (oficiales.stream().anyMatch(o -> o.getIdentificacion().equals(oficial.getIdentificacion()))) {
-        // Eliminar la imagen recién copiada si hay duplicado
-        Files.deleteIfExists(Paths.get(rutaImagenFinal));
-        throw new IllegalArgumentException("Ya existe un oficial con esta cédula");
-    }
-
-    oficiales.add(oficial);
-    
-    // Guardar la lista actualizada
-    try {
-        guardarListaOficiales(oficiales);
-        
-        // Crear y guardar usuario
-        Usuario nuevoUsuario = new Usuario(
-            oficial.getPrimerNombre(),
-            oficial.getSegundoNombre(),
-            oficial.getPrimerApellido(),
-            oficial.getSegundoApellido(),
-            oficial.getEdad(),
-            oficial.getSexo(),
-            oficial.getNacionalidad(),
-            oficial.getIdentificacion(),
-            usuario,
-            contrasenaEncriptada,
-            RolEnum.OFICIAL_DE_REGISTRO
-        );
-        
-        guardarUsuario(nuevoUsuario);
-
-        // Enviar correo (manejar posible error)
-        try {
-            EmailSender.getInstancia().enviarCredenciales(
-                oficial.getCorreo(),
-                usuario,
-                contrasena,
-                RolEnum.OFICIAL_DE_REGISTRO
-            );
-        } catch (Exception e) {
-            System.err.println("Error al enviar correo: " + e.getMessage());
-            JOptionPane.showMessageDialog(null, 
-                "Oficial registrado pero no se pudieron enviar las credenciales por correo",
-                "Advertencia", JOptionPane.WARNING_MESSAGE);
+    public boolean guardarOficial(OficialDeRegistro oficial, File imagen) throws IOException {
+        // Validaciones iniciales mejoradas
+        if (oficial == null) {
+            throw new IllegalArgumentException("El objeto oficial no puede ser null");
         }
+
+        if (imagen == null || !imagen.exists() || imagen.length() == 0) {
+            throw new IllegalArgumentException("La imagen proporcionada no es válida");
+        }
+
+        // Generar credenciales
+        UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
+        String usuario = credenciales.usuario;
+        String contrasena = credenciales.contrasena;
+        String contrasenaEncriptada = UsuarioController.getInstancia().encriptarContrasena(contrasena);
+
+        oficial.setUsuario(usuario);
+        oficial.setContrasena(contrasenaEncriptada);
+
+        // Guardar imagen con manejo de errores
+        String extension = imagen.getName().substring(imagen.getName().lastIndexOf("."));
+        String nombreImagen = oficial.getIdentificacion() + "_" + System.currentTimeMillis() + extension;
+        String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+
+        try {
+            Files.createDirectories(Paths.get(RUTA_IMAGENES));
+            Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+            oficial.setRutaImagen(rutaImagenFinal);
+        } catch (IOException e) {
+            System.err.println("Error al guardar imagen: " + e.getMessage());
+            throw new IOException("No se pudo guardar la imagen del oficial");
+        }
+
+        // Obtener y actualizar lista de oficiales
+        List<OficialDeRegistro> oficiales = obtenerOficiales();
+
+        // Verificar duplicados
+        if (oficiales.stream().anyMatch(o -> o.getIdentificacion().equals(oficial.getIdentificacion()))) {
+            // Eliminar la imagen recién copiada si hay duplicado
+            Files.deleteIfExists(Paths.get(rutaImagenFinal));
+            throw new IllegalArgumentException("Ya existe un oficial con esta cédula");
+        }
+
+        oficiales.add(oficial);
+
+        // Guardar la lista actualizada
+        try {
+            guardarListaOficiales(oficiales);
+
+            Usuario nuevoUsuario = new Usuario(
+                    oficial.getPrimerNombre(),
+                    oficial.getSegundoNombre(),
+                    oficial.getPrimerApellido(),
+                    oficial.getSegundoApellido(),
+                    oficial.getEdad(),
+                    oficial.getSexo(),
+                    oficial.getNacionalidad(),
+                    oficial.getIdentificacion(),
+                    usuario,
+                    contrasenaEncriptada,
+                    RolEnum.OFICIAL_DE_REGISTRO,
+                    oficial.getRutaImagen() 
+            );
+            
+            guardarUsuario(nuevoUsuario);
+
+            
+            try {
+                EmailSender.getInstancia().enviarCredenciales(
+                        oficial.getCorreo(),
+                        usuario,
+                        contrasena,
+                        RolEnum.OFICIAL_DE_REGISTRO
+                );
+            } catch (Exception e) {
+                System.err.println("Error al enviar correo: " + e.getMessage());
+                JOptionPane.showMessageDialog(null,
+                        "Oficial registrado pero no se pudieron enviar las credenciales por correo",
+                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }
+
+            return true;
+        } catch (IOException e) {
+            
+            Files.deleteIfExists(Paths.get(rutaImagenFinal));
+            throw e;
+        }
+    }
+
+    private void guardarListaOficiales(List<OficialDeRegistro> oficiales) throws IOException {
+      
+        if (oficiales == null) {
+            throw new IllegalArgumentException("La lista de oficiales no puede ser null");
+        }
+
         
-        return true;
-    } catch (IOException e) {
-        // Revertir cambios si falla
-        Files.deleteIfExists(Paths.get(rutaImagenFinal));
-        throw e;
-    }
-}
+        JsonObject jsonPrincipal = new JsonObject();
+        JsonArray jsonArrayOficiales = new JsonArray();
 
-private void guardarListaOficiales(List<OficialDeRegistro> oficiales) throws IOException {
-    // Validación adicional
-    if (oficiales == null) {
-        throw new IllegalArgumentException("La lista de oficiales no puede ser null");
-    }
+        for (OficialDeRegistro oficial : oficiales) {
+            JsonObject jsonOficial = new JsonObject();
 
-    // Crear estructura JSON completa
-    JsonObject jsonPrincipal = new JsonObject();
-    JsonArray jsonArrayOficiales = new JsonArray();
+            // Mapear todos los campos necesarios
+            jsonOficial.addProperty("primerNombre", oficial.getPrimerNombre());
+            jsonOficial.addProperty("segundoNombre", oficial.getSegundoNombre());
+            jsonOficial.addProperty("primerApellido", oficial.getPrimerApellido());
+            jsonOficial.addProperty("segundoApellido", oficial.getSegundoApellido());
+            jsonOficial.addProperty("edad", oficial.getEdad());
+            jsonOficial.addProperty("sexo", oficial.getSexo());
+            jsonOficial.addProperty("nacionalidad", oficial.getNacionalidad());
+            jsonOficial.addProperty("identificacion", oficial.getIdentificacion());
+            jsonOficial.addProperty("correo", oficial.getCorreo());
+            jsonOficial.addProperty("turno", oficial.getTurno());
+            jsonOficial.addProperty("fechaContratacion", oficial.getFechaContratacion().toString());
+            jsonOficial.addProperty("fechaFinContrato", oficial.getFechaFinContrato().toString());
+            jsonOficial.addProperty("rutaImagen", oficial.getRutaImagen());
+            jsonOficial.addProperty("usuario", oficial.getUsuario());
+            jsonOficial.addProperty("contrasena", oficial.getContrasena());
 
-    for (OficialDeRegistro oficial : oficiales) {
-        JsonObject jsonOficial = new JsonObject();
+            jsonArrayOficiales.add(jsonOficial);
+        }
+
+        jsonPrincipal.add("oficiales", jsonArrayOficiales);
+
         
-        // Mapear todos los campos necesarios
-        jsonOficial.addProperty("primerNombre", oficial.getPrimerNombre());
-        jsonOficial.addProperty("segundoNombre", oficial.getSegundoNombre());
-        jsonOficial.addProperty("primerApellido", oficial.getPrimerApellido());
-        jsonOficial.addProperty("segundoApellido", oficial.getSegundoApellido());
-        jsonOficial.addProperty("edad", oficial.getEdad());
-        jsonOficial.addProperty("sexo", oficial.getSexo());
-        jsonOficial.addProperty("nacionalidad", oficial.getNacionalidad());
-        jsonOficial.addProperty("identificacion", oficial.getIdentificacion());
-        jsonOficial.addProperty("correo", oficial.getCorreo());
-        jsonOficial.addProperty("turno", oficial.getTurno());
-        jsonOficial.addProperty("fechaContratacion", oficial.getFechaContratacion().toString());
-        jsonOficial.addProperty("fechaFinContrato", oficial.getFechaFinContrato().toString());
-        jsonOficial.addProperty("rutaImagen", oficial.getRutaImagen());
-        jsonOficial.addProperty("usuario", oficial.getUsuario());
-        jsonOficial.addProperty("contrasena", oficial.getContrasena());
-        
-        jsonArrayOficiales.add(jsonOficial);
+        Path path = Paths.get(RUTA_JSON);
+        try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+            gson.toJson(jsonPrincipal, writer);
+            System.out.println("Datos guardados correctamente en: " + path.toAbsolutePath());
+        } catch (IOException e) {
+            System.err.println("Error al escribir JSON: " + e.getMessage());
+            throw e;
+        }
     }
-
-    jsonPrincipal.add("oficiales", jsonArrayOficiales);
-
-    // Escribir con manejo de errores
-    Path path = Paths.get(RUTA_JSON);
-    try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
-        gson.toJson(jsonPrincipal, writer);
-        System.out.println("Datos guardados correctamente en: " + path.toAbsolutePath());
-    } catch (IOException e) {
-        System.err.println("Error al escribir JSON: " + e.getMessage());
-        throw e;
-    }
-}
 
     public List<OficialDeRegistro> obtenerOficiales() {
         List<OficialDeRegistro> oficiales = new ArrayList<>();
@@ -309,7 +308,7 @@ private void guardarListaOficiales(List<OficialDeRegistro> oficiales) throws IOE
                 }.getType();
                 return gson.fromJson(oficialesArray, tipoLista);
             } catch (JsonSyntaxException e) {
-                System.err.println("Formato JSON inválido. Creando nuevo archivo.");
+                
                 guardarListaOficiales(new ArrayList<>());
             }
         } catch (IOException e) {
@@ -319,8 +318,6 @@ private void guardarListaOficiales(List<OficialDeRegistro> oficiales) throws IOE
         }
         return oficiales;
     }
-
-   
 
     public boolean existeOficialConCedula(String cedula) {
         if (cedula == null || cedula.trim().isEmpty()) {
@@ -406,18 +403,18 @@ private void guardarListaOficiales(List<OficialDeRegistro> oficiales) throws IOE
     public List<Object[]> obtenerDatosOficialesParaTabla() {
         return obtenerOficiales().stream()
                 .map(o -> new Object[]{
-                    o.getPrimerNombre(),
-                    o.getSegundoNombre(),
-                    o.getPrimerApellido(),
-                    o.getSegundoApellido(),
-                    o.getEdad(),
-                    o.getIdentificacion(),
-                    o.getNacionalidad(),
-                    o.getCorreo(),
-                    o.getTurno(),
-                    o.getFechaContratacionFormateada(),
-                    o.getFechaFinContratoFormateada()
-                })
+            o.getPrimerNombre(),
+            o.getSegundoNombre(),
+            o.getPrimerApellido(),
+            o.getSegundoApellido(),
+            o.getEdad(),
+            o.getIdentificacion(),
+            o.getNacionalidad(),
+            o.getCorreo(),
+            o.getTurno(),
+            o.getFechaContratacionFormateada(),
+            o.getFechaFinContratoFormateada()
+        })
                 .collect(Collectors.toList());
     }
 

@@ -37,7 +37,7 @@ public class EnfermeraController {
         FrmCamara ventanaCamara = new FrmCamara();
         ventanaCamara.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Mostrar como diálogo modal
+        
         JDialog dialog = new JDialog();
         dialog.setModal(true);
         dialog.setContentPane(ventanaCamara.getContentPane());
@@ -45,7 +45,7 @@ public class EnfermeraController {
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
 
-        // Esperar hasta que se cierre
+
         while (dialog.isVisible()) {
             try {
                 Thread.sleep(100);
@@ -64,29 +64,29 @@ public class EnfermeraController {
             File imagen) throws IOException {
 
         try {
-            // Validación de cédula única
+            
             if (enfermeraDAO.existeEnfermeraConCedula(cedula)) {
                 throw new IllegalArgumentException("Ya existe una enfermera con la cédula " + cedula);
             }
 
-            // Validar campos obligatorios
+            
             validarCamposObligatorios(primerNombre, primerApellido, segundoApellido,
                     edad, cedula, nacionalidad, correo, turno);
 
-            // Validaciones adicionales
+            
             validarEdad(edad);
             validarFechasContrato(LocalDate.now(), fechaFinContrato);
             validarLimiteEnfermerasPorTurno(turno, null);
             validarImagen(imagen);
 
-            // Crear nueva enfermera
+            
             Enfermera nuevaEnfermera = new Enfermera(
                     primerNombre, segundoNombre, primerApellido, segundoApellido,
                     edad, "Femenino", nacionalidad, cedula, turno,
                     LocalDate.now(), fechaFinContrato, correo, "", ""
             );
 
-            // Guardar a través del DAO
+            
             boolean guardado = EnfermeraDAO.getInstancia().guardarEnfermera(nuevaEnfermera, imagen);
 
             if (guardado) {
@@ -95,10 +95,10 @@ public class EnfermeraController {
             throw new RuntimeException("No se pudo guardar la enfermera en la base de datos");
 
         } catch (IllegalArgumentException e) {
-            // Relanzar excepciones de validación
+           
             throw e;
         } catch (Exception e) {
-            // Capturar cualquier otra excepción y lanzarla como RuntimeException
+            
             throw new RuntimeException("Error al registrar enfermera: " + e.getMessage(), e);
         }
     }
@@ -108,7 +108,7 @@ public class EnfermeraController {
             throw new IllegalArgumentException("Debe proporcionar una imagen válida de la enfermera");
         }
 
-        // Validar extensión del archivo
+        
         String nombre = imagen.getName().toLowerCase();
         if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg") && !nombre.endsWith(".png")) {
             throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG");
@@ -117,21 +117,21 @@ public class EnfermeraController {
 
     public int modificarEnfermera(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
         try {
-            // 1. Verificar existencia de la enfermera
+            
             Enfermera original = obtenerEnfermeraPorCedula(cedulaOriginal);
             if (original == null) {
                 throw new IllegalArgumentException("Enfermera no encontrada con cédula: " + cedulaOriginal);
             }
 
-            // 2. Verificar si hay cambios reales
+            
             if (!verificarCambios(original, cambios, nuevaImagen)) {
-                return 0; // Código 0 = No hay cambios
+                return 0; 
             }
 
-            // 3. Validar campos modificados
+            
             validarCamposModificacion(cambios);
 
-            // 4. Extraer y validar datos
+          
             int edad = (int) cambios.get("edad");
             LocalDate fechaFin = (LocalDate) cambios.get("fechaFin");
             String turno = (String) cambios.get("turno");
@@ -140,10 +140,10 @@ public class EnfermeraController {
             validarFechasContrato(original.getFechaContratacion(), fechaFin);
             validarLimiteEnfermerasPorTurno(turno, cedulaOriginal);
 
-            // 5. Construir enfermera modificada
+            
             Enfermera enfermeraModificada = construirEnfermeraModificada(cedulaOriginal, cambios, original);
 
-            // 6. Ejecutar modificación
+            
             boolean resultado = enfermeraDAO.modificarEnfermera(cedulaOriginal, enfermeraModificada, nuevaImagen);
 
             return resultado ? 1 : -1; // 1=Éxito, -1=Error
@@ -156,7 +156,7 @@ public class EnfermeraController {
     }
 
     private boolean verificarCambios(Enfermera original, Map<String, Object> cambios, File nuevaImagen) {
-        // Verificar cambios en campos básicos
+        
         if (!original.getPrimerNombre().equals(cambios.get("primerNombre"))) {
             return true;
         }
@@ -185,7 +185,7 @@ public class EnfermeraController {
             return true;
         }
 
-        // Verificar si se cambió la imagen
+  
         return nuevaImagen != null;
     }
 
@@ -220,7 +220,7 @@ public class EnfermeraController {
         return imagen;
     }
 
-    // Métodos de consulta
+   
     public List<Enfermera> obtenerTodasEnfermeras() {
         return enfermeraDAO.obtenerEnfermeras();
     }
@@ -237,7 +237,7 @@ public class EnfermeraController {
         return enfermeraDAO.obtenerEnfermeraPorUsuario(usuario);
     }
 
-    // Métodos de validación
+
     private void validarLimiteEnfermerasPorTurno(String turno, String cedulaOriginal) {
         List<Enfermera> enfermeras = enfermeraDAO.obtenerEnfermeras();
         long count = enfermeras.stream()

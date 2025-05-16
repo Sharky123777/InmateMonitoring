@@ -1,3 +1,21 @@
 {
-  "oficiales": []
+  "oficiales": [
+    {
+      "primerNombre": "Maria",
+      "segundoNombre": "Luz",
+      "primerApellido": "Leon",
+      "segundoApellido": "Mier",
+      "edad": 45,
+      "sexo": "Masculino",
+      "nacionalidad": "Colombiana",
+      "identificacion": "098765431",
+      "correo": "Maria@gmail.com",
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-15",
+      "fechaFinContrato": "2025-05-17",
+      "rutaImagen": "src/Resources/imagenes_oficiales_registro/098765431_1747362633397.png",
+      "usuario": "bYdB6!pi%MkR",
+      "contrasena": "aab3c702837654819adf3a3549817526021ea0ca42c950edccd4d25a6f036cae"
+    }
+  ]
 }
