@@ -32,7 +32,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author gameV
  */
-public class Enfermera extends javax.swing.JFrame {
+public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
 
     /**
      * Creates new form Enfermera
@@ -45,6 +45,8 @@ public class Enfermera extends javax.swing.JFrame {
 
     public Enfermera() {
         initComponents();
+        setLocationRelativeTo(null);
+
         this.citaController = new CitaMedicaController();
         this.presoDAO = PresoDAO.getInstancia();
         configurarTablas();
@@ -76,7 +78,7 @@ public class Enfermera extends javax.swing.JFrame {
     }
 
     private void cargarImagenPorDefecto() {
-        // Cargar imagen por defecto (puedes cambiar la ruta)
+      
         try {
             ImageIcon icon = new ImageIcon("src/Resources/Images/default_user.png");
             Image img = icon.getImage().getScaledInstance(
@@ -104,7 +106,6 @@ public class Enfermera extends javax.swing.JFrame {
         modelo.setRowCount(0);
         modelo.setColumnIdentifiers(new String[]{"Foto", "ID", "Nombre Preso", "Identificación", "Fecha", "Hora", "Motivo", "Estado"});
 
-        // Corrección: Convertir la lista a stream primero
         List<CitaMedica> citas = CitaMedicaDAO.getInstancia()
                 .obtenerPorEnfermera(identificacionEnfermera)
                 .stream() // Añade esto para convertir a Stream
@@ -278,7 +279,7 @@ public class Enfermera extends javax.swing.JFrame {
         lblNombre.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lblNombre.setForeground(new java.awt.Color(255, 255, 255));
         lblNombre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jPanel2.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 340, 110, 20));
+        jPanel2.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 340, 130, 20));
         jPanel2.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 360, 130, 10));
         jPanel2.add(lblRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 290, 100, 20));
 

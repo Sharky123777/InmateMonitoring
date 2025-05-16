@@ -18,15 +18,15 @@ import javax.swing.JOptionPane;
  */
 public class Login extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Login
-     */
+    
     public Login() {
         initComponents();
+        setLocationRelativeTo(null);
+
 
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
 
-        // Usamos toString() para mostrar los nombres formateados
+       
         for (RolEnum rol : RolEnum.values()) {
             model.addElement(rol.toString());
         }
@@ -184,7 +184,7 @@ public class Login extends javax.swing.JFrame {
         String rolTexto = (String) RolCmbBox.getSelectedItem();
 
         try {
-            // Validación básica de campos
+           
             if (username.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
                         "Por favor complete todos los campos",
@@ -193,13 +193,13 @@ public class Login extends javax.swing.JFrame {
                 return;
             }
 
-            // Convertir texto del combo a RolEnum
+           
             RolEnum rol = RolEnum.fromDisplayText(rolTexto);
 
-            // Autenticar usando el controlador
+            
             Usuario usuario = UsuarioController.getInstancia().autenticarUsuario(username, password, rol);
 
-            // Redirigir según rol
+           
             redirigirSegunRol(usuario);
             this.dispose();
 

@@ -125,6 +125,8 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
 
     public Director() {
         initComponents();
+        setLocationRelativeTo(null);
+
 
         txtFechaContratacion.setEditable(false);
         txtFechaContratacion.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
