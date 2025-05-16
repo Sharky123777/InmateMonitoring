@@ -197,7 +197,7 @@ public class OficialDAO {
                 usuario,
                 contrasenaEncriptada,
                 RolEnum.OFICIAL,
-                oficial.getRutaImagen() // Usamos getRutaImagen()
+                oficial.getRutaImagen() 
         );
 
         guardarUsuario(nuevoUsuario);

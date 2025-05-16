@@ -39,19 +39,19 @@ public class EmailSender {
     }
 
     public boolean enviarCredenciales(String destinatario, String usuario, String contrasena, RolEnum rol) {
-        // Validación de campos obligatorios
+        
         if (destinatario == null || destinatario.isEmpty() || 
             usuario == null || usuario.isEmpty() || 
             contrasena == null || contrasena.isEmpty() || 
             rol == null) {
-            System.err.println("Error: Todos los campos son obligatorios");
+          
             JOptionPane.showMessageDialog(null, "Error: Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
-        // Validación de formato de correo
+       
         if (!destinatario.contains("@") || !destinatario.endsWith(".com")) {
-            System.err.println("Error: Formato de correo inválido");
+        
             JOptionPane.showMessageDialog(null, "Error: Formato de correo inválido", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -72,23 +72,23 @@ public class EmailSender {
             // Crear el cuerpo del mensaje como multipart/related
             MimeMultipart multipart = new MimeMultipart("related");
 
-            // Parte HTML (primero debe ir esta parte)
+            
             MimeBodyPart htmlPart = new MimeBodyPart();
             String htmlContent = construirMensajeHTML(usuario, contrasena, rol);
             htmlPart.setContent(htmlContent, "text/html; charset=utf-8");
             multipart.addBodyPart(htmlPart);
 
-            // Parte de la imagen (logo)
+            
             MimeBodyPart imagePart = new MimeBodyPart();
             try {
                 File logoFile = new File(logoPath);
                 if (logoFile.exists()) {
-                    // Cargar la imagen como bytes
+                    
                     byte[] imageData = Files.readAllBytes(logoFile.toPath());
                     
-                    // Configurar la parte de la imagen correctamente
+                   
                     imagePart.setContent(imageData, "image/png");
-                    imagePart.setContentID("<logo>"); // Debe coincidir con cid:logo en el HTML
+                    imagePart.setContentID("<logo>"); 
                     imagePart.setDisposition(MimeBodyPart.INLINE);
                     imagePart.setHeader("Content-Type", "image/png");
                     imagePart.setHeader("Content-ID", "<logo>");
@@ -96,7 +96,7 @@ public class EmailSender {
                     
                     multipart.addBodyPart(imagePart);
                 } else {
-                    System.err.println("Advertencia: Logo no encontrado en: " + logoPath);
+                   
                     JOptionPane.showMessageDialog(null, "El logo no se encontró en la ruta especificada", "Advertencia", JOptionPane.WARNING_MESSAGE);
                 }
             } catch (Exception e) {
@@ -106,8 +106,8 @@ public class EmailSender {
             message.setContent(multipart);
             Transport.send(message);
             
-            System.out.println("Correo enviado exitosamente a: " + destinatario);
-            JOptionPane.showMessageDialog(null, "Correo enviado exitosamente a: " + destinatario);
+           
+           
             return true;
         } catch (MessagingException e) {
             System.err.println("Error al enviar correo: " + e.getMessage());

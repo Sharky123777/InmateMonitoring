@@ -964,13 +964,13 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jPanel6.add(fotolbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, 270, 190));
 
         lblNombre.setBackground(new java.awt.Color(255, 255, 255));
-        lblNombre.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblNombre.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         lblNombre.setForeground(new java.awt.Color(255, 255, 255));
         lblNombre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jPanel6.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 300, 210, 30));
 
         lblRol.setBackground(new java.awt.Color(255, 255, 255));
-        lblRol.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblRol.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         lblRol.setForeground(new java.awt.Color(255, 255, 255));
         lblRol.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jPanel6.add(lblRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 340, 150, 20));

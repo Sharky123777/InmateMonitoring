@@ -23,12 +23,12 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
 
-        // Configurar modelo de String
+       
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
 
-        // Agregar las representaciones textuales de los roles
+       
         for (RolEnum rol : RolEnum.values()) {
-            model.addElement(rol.toString()); // Usa el método toString() que definiste
+            model.addElement(rol.toString()); 
         }
 
         RolCmbBox.setModel(model);
@@ -169,7 +169,7 @@ public class Login extends javax.swing.JFrame {
         }
 
         if (vista != null) {
-            // Configurar el usuario en la vista
+            
             if (vista instanceof PerfilUsuario) {
                 ((PerfilUsuario) vista).setUsuario(usuario);
             }
@@ -180,11 +180,11 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            // 1. Obtener credenciales del formulario
+            
             String username = FieldUsuario.getText().trim();
             String password = new String(Password.getPassword()).trim();
 
-            // 2. Validar campos vacíos
+            
             if (username.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
                         "Por favor complete todos los campos",
@@ -193,11 +193,11 @@ public class Login extends javax.swing.JFrame {
                 return;
             }
 
-            // 3. Obtener y convertir el rol seleccionado
+            
             String rolTexto = (String) RolCmbBox.getSelectedItem();
             RolEnum rolSeleccionado = null;
 
-            // Buscar el enum que corresponda al texto seleccionado
+           
             for (RolEnum rol : RolEnum.values()) {
                 if (rol.toString().equals(rolTexto)) {
                     rolSeleccionado = rol;
@@ -213,11 +213,11 @@ public class Login extends javax.swing.JFrame {
                 return;
             }
 
-            // 4. Autenticar usuario
+            
             UsuarioDAO usuarioDAO = UsuarioDAO.getInstancia();
             Usuario usuarioAutenticado = usuarioDAO.validarCredenciales(username, password, rolSeleccionado);
 
-            // 5. Redirigir según el rol
+          
             if (usuarioAutenticado != null) {
                 redirigirSegunRol(usuarioAutenticado);
                 this.dispose();

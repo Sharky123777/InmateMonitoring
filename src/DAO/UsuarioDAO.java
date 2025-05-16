@@ -39,16 +39,17 @@ public class UsuarioDAO {
             List<Usuario> usuarios = obtenerTodosUsuarios();
             for (Usuario u : usuarios) {
                 if (u.getUsuario().equals(usuario) && u.getRol() == rol) {
-                    // Verificar si la contraseña está encriptada (longitud típica de hash SHA-256)
+                    
                     boolean contraseñaEncriptada = u.getPassword().length() == 64;
 
                     if (contraseñaEncriptada) {
-                        // Comparar versiones encriptadas
+                      
                         if (GeneradorCredenciales.verificarContrasena(password, u.getPassword())) {
                             return u;
                         }
                     } else {
-                        // Comparar texto plano directamente
+                       
+                        
                         if (u.getPassword().equals(password)) {
                             return u;
                         }
@@ -63,10 +64,10 @@ public class UsuarioDAO {
 
     public boolean agregarUsuario(Usuario nuevoUsuario) {
         try {
-            // Leer usuarios existentes
+            
             List<Usuario> usuarios = obtenerTodosUsuarios();
 
-            // Verificar si el usuario ya existe
+           
             for (Usuario u : usuarios) {
                 if (u.getUsuario().equals(nuevoUsuario.getUsuario())
                         || u.getIdentificacion().equals(nuevoUsuario.getIdentificacion())) {
@@ -74,10 +75,10 @@ public class UsuarioDAO {
                 }
             }
 
-            // Agregar el nuevo usuario
+           
             usuarios.add(nuevoUsuario);
 
-            // Escribir de vuelta al archivo
+            
             try (FileWriter writer = new FileWriter(JSON_FILE)) {
                 JsonObject root = new JsonObject();
                 JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
@@ -87,7 +88,7 @@ public class UsuarioDAO {
 
             return true;
         } catch (Exception e) {
-            System.err.println("Error al agregar usuario: " + e.getMessage());
+          
             return false;
         }
     }
@@ -112,7 +113,7 @@ public class UsuarioDAO {
                     primerApellido, segundoApellido,
                     edad, sexo, nacionalidad, identificacion,
                     usuario, password, rol,
-                    rutaImagen // Añade este parámetro
+                    rutaImagen 
             );
         } catch (Exception e) {
             System.err.println("Error al crear usuario desde JSON: " + e.getMessage());
@@ -120,7 +121,7 @@ public class UsuarioDAO {
         }
     }
 
-    // Método auxiliar para obtener valores seguros del JSON
+    
     private String getStringSafe(JsonObject jsonObject, String key) {
         JsonElement element = jsonObject.get(key);
         return (element != null && !element.isJsonNull()) ? element.getAsString() : null;
@@ -145,7 +146,7 @@ public class UsuarioDAO {
 
             JsonElement jsonElement = JsonParser.parseReader(reader);
 
-            // Si el archivo no es un objeto JSON válido
+            
             if (!jsonElement.isJsonObject()) {
                 return new ArrayList<>();
             }
@@ -157,7 +158,7 @@ public class UsuarioDAO {
             }.getType();
             return gson.fromJson(usuariosArray, tipoLista);
         } catch (JsonSyntaxException e) {
-            // Si hay un error de sintaxis en el JSON, devolver lista vacía
+            
             return new ArrayList<>();
         }
     }

@@ -143,17 +143,17 @@ public class CoordinadorDeActividadesDAO {
 
     // En CoordinadorDeActividadesDAO.java
     public boolean guardarCoordinador(CoordinadorDeActividades coordinador, File imagen) throws IOException {
-        // 1. Generar credenciales
+      
         UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
         String usuario = credenciales.usuario;
         String contrasena = credenciales.contrasena;
         String contrasenaEncriptada = UsuarioController.getInstancia().encriptarContrasena(contrasena);
 
-        // 3. Asignar credenciales
+        
         coordinador.setUsuario(usuario);
         coordinador.setContrasena(contrasenaEncriptada); // AQUÍ GUARDAMOS LA CONTRASEÑA ENCRIPTADA
 
-        // 4. Guardar imagen
+        
         String nombreImagen = coordinador.getIdentificacion() + "_"
                 + System.currentTimeMillis()
                 + imagen.getName().substring(imagen.getName().lastIndexOf("."));
@@ -163,7 +163,7 @@ public class CoordinadorDeActividadesDAO {
         Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
         coordinador.setRutaImagen(rutaImagenFinal);
 
-        // 5. Guardar coordinador
+
         List<CoordinadorDeActividades> coordinadores = obtenerCoordinadores();
         coordinadores.add(coordinador);
         guardarListaCoordinadores(coordinadores);
@@ -185,11 +185,11 @@ public class CoordinadorDeActividadesDAO {
 
         guardarUsuario(nuevoUsuario);
 
-        // 7. Enviar correo (CON CONTRASEÑA SIN ENCRIPTAR)
+        
         return EmailSender.getInstancia().enviarCredenciales(
                 coordinador.getCorreo(),
                 usuario,
-                contrasena, // Usamos la contraseña original sin encriptar
+                contrasena, 
                 RolEnum.COORDINADOR_DE_ACTIVIDADES
         );
     }
@@ -306,7 +306,7 @@ public class CoordinadorDeActividadesDAO {
                 if (c.getIdentificacion().equals(cedulaOriginal)) {
                     String rutaImagenFinal = c.getRutaImagen();
 
-                    // Solo actualizar la imagen si se proporciona una nueva
+                    
                     if (nuevaImagen != null && nuevaImagen.exists()) {
                         String nombreImagen = coordinadorModificado.getIdentificacion() + "_" + System.currentTimeMillis()
                                 + nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
@@ -390,8 +390,8 @@ public class CoordinadorDeActividadesDAO {
             String.class,
             String.class,
             String.class,
-            String.class, // Tipo para fecha inicio
-            String.class // Tipo para fecha fin
+            String.class, 
+            String.class 
         };
     }
 }

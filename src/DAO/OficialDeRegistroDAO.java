@@ -209,12 +209,12 @@ public class OficialDeRegistroDAO {
                     usuario,
                     contrasenaEncriptada,
                     RolEnum.OFICIAL_DE_REGISTRO,
-                    oficial.getRutaImagen() // Usamos getRutaImagen()
+                    oficial.getRutaImagen() 
             );
             
             guardarUsuario(nuevoUsuario);
 
-            // Enviar correo (manejar posible error)
+            
             try {
                 EmailSender.getInstancia().enviarCredenciales(
                         oficial.getCorreo(),
@@ -231,19 +231,19 @@ public class OficialDeRegistroDAO {
 
             return true;
         } catch (IOException e) {
-            // Revertir cambios si falla
+            
             Files.deleteIfExists(Paths.get(rutaImagenFinal));
             throw e;
         }
     }
 
     private void guardarListaOficiales(List<OficialDeRegistro> oficiales) throws IOException {
-        // Validación adicional
+      
         if (oficiales == null) {
             throw new IllegalArgumentException("La lista de oficiales no puede ser null");
         }
 
-        // Crear estructura JSON completa
+        
         JsonObject jsonPrincipal = new JsonObject();
         JsonArray jsonArrayOficiales = new JsonArray();
 
@@ -272,7 +272,7 @@ public class OficialDeRegistroDAO {
 
         jsonPrincipal.add("oficiales", jsonArrayOficiales);
 
-        // Escribir con manejo de errores
+        
         Path path = Paths.get(RUTA_JSON);
         try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
             gson.toJson(jsonPrincipal, writer);
@@ -308,7 +308,7 @@ public class OficialDeRegistroDAO {
                 }.getType();
                 return gson.fromJson(oficialesArray, tipoLista);
             } catch (JsonSyntaxException e) {
-                System.err.println("Formato JSON inválido. Creando nuevo archivo.");
+                
                 guardarListaOficiales(new ArrayList<>());
             }
         } catch (IOException e) {

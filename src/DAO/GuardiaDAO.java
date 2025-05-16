@@ -37,7 +37,7 @@ public class GuardiaDAO {
 
     private void crearDirectoriosSiNoExisten() {
         try {
-            // Usar rutas relativas desde el directorio de trabajo
+
             Path directorioImagenes = Paths.get("Resources/imagenes_guardias");
             Path directorioDatos = Paths.get("Resources/DATA");
 
@@ -71,18 +71,16 @@ public class GuardiaDAO {
     }
 
     public boolean guardarGuardia(Guardia guardia, File imagen) throws IOException {
-        // Validar que la imagen existe (ya validado en controller)
+
         String nombreImagen = guardia.getIdentificacion() + "_"
                 + System.currentTimeMillis()
                 + imagen.getName().substring(imagen.getName().lastIndexOf("."));
 
         String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
 
-        // Copiar la imagen
         Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
         guardia.setRutaImagen(rutaImagenFinal);
 
-        // Guardar datos
         List<Guardia> guardias = obtenerGuardias();
         guardias.add(guardia);
         guardarListaGuardias(guardias);
@@ -115,7 +113,7 @@ public class GuardiaDAO {
                 }.getType();
                 return gson.fromJson(guardiasArray, tipoLista);
             } catch (JsonSyntaxException e) {
-                System.err.println("Formato JSON inválido. Creando nuevo archivo.");
+
                 guardarListaGuardias(new ArrayList<>());
             }
         } catch (IOException e) {
@@ -133,14 +131,12 @@ public class GuardiaDAO {
         for (Guardia guardia : guardias) {
             JsonObject guardiaJson = new JsonObject();
 
-            // Convertir rutas absolutas a relativas si es necesario
             String rutaImagen = guardia.getRutaImagen();
             if (rutaImagen != null && rutaImagen.startsWith("C:")) {
                 rutaImagen = rutaImagen.replace("C:\\Users\\gameV\\Documents\\NetBeansProjects\\InmateMonitorinG\\src\\", "src/");
                 rutaImagen = rutaImagen.replace("\\", "/"); // Normalizar separadores
             }
 
-            // Agregar todos los campos de manera organizada
             guardiaJson.addProperty("cargo", guardia.getCargo());
             guardiaJson.addProperty("turno", guardia.getTurno());
             guardiaJson.addProperty("fechaInicioContrato", guardia.getFechaInicioContrato().toString());
@@ -192,7 +188,7 @@ public class GuardiaDAO {
                     }
                 }
 
-                // Eliminar guardia
+                
                 guardias.removeIf(g -> g.getIdentificacion().equals(cedula));
                 guardarListaGuardias(guardias);
                 return true;
@@ -207,53 +203,44 @@ public class GuardiaDAO {
 
     public boolean modificarGuardia(String cedulaOriginal, Guardia guardiaModificado, File nuevaImagen) {
         try {
-            System.out.println("=== INICIO MODIFICACIÓN GUARDIA ===");
-            System.out.println("Cédula original: " + cedulaOriginal);
-            System.out.println("Nueva imagen proporcionada: " + (nuevaImagen != null ? nuevaImagen.getAbsolutePath() : "null"));
-
+            
             List<Guardia> guardias = obtenerGuardias();
-            System.out.println("Total guardias encontrados: " + guardias.size());
+           
 
             for (int i = 0; i < guardias.size(); i++) {
                 Guardia g = guardias.get(i);
-                System.out.println("Comparando con guardia: " + g.getIdentificacion());
+               
 
                 if (g.getIdentificacion().equals(cedulaOriginal)) {
-                    System.out.println("Guardia encontrado para modificar");
-
-                    // 1. Mantener ruta original
+                   
+                    
                     String rutaImagenFinal = g.getRutaImagen();
-                    System.out.println("Ruta imagen actual: " + rutaImagenFinal);
+                    
 
-                    // 2. Procesar nueva imagen solo si existe
+                    
                     if (nuevaImagen != null && nuevaImagen.exists()) {
-                        System.out.println("Procesando nueva imagen...");
-                        // ... código para manejar nueva imagen ...
+                        
                     } else {
-                        System.out.println("No se proporcionó nueva imagen o no existe. Manteniendo imagen actual.");
-                        // Mantener la ruta de imagen existente
+                       
                         rutaImagenFinal = g.getRutaImagen();
                     }
 
-                    // Actualizar datos
-                    System.out.println("Actualizando datos del guardia...");
-                    guardiaModificado.setRutaImagen(rutaImagenFinal); // <-- Asegúrate de establecer la ruta correcta
+                  
+                    guardiaModificado.setRutaImagen(rutaImagenFinal);
                     guardias.set(i, guardiaModificado);
 
-                    // Guardar cambios
-                    System.out.println("Guardando lista de guardias...");
+                 
                     guardarListaGuardias(guardias);
 
-                    System.out.println("=== MODIFICACIÓN EXITOSA ===");
+
                     return true;
                 }
             }
 
-            System.out.println("Guardia no encontrado para modificar");
+            
             return false;
         } catch (Exception e) {
-            System.err.println("=== ERROR EN MODIFICACIÓN ===");
-            System.err.println("Error: " + e.getMessage());
+           
             e.printStackTrace();
             throw new RuntimeException("Error al modificar guardia: " + e.getMessage(), e);
         }
@@ -319,8 +306,8 @@ public class GuardiaDAO {
             String.class,
             String.class,
             String.class,
-            String.class, // Tipo para fecha inicio
-            String.class // Tipo para fecha fin
+            String.class, 
+            String.class 
         };
     }
 }

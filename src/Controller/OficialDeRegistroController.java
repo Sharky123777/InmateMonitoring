@@ -39,7 +39,7 @@ public class OficialDeRegistroController {
         FrmCamara ventanaCamara = new FrmCamara();
         ventanaCamara.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Mostrar como diálogo modal
+        
         JDialog dialog = new JDialog();
         dialog.setModal(true);
         dialog.setContentPane(ventanaCamara.getContentPane());
@@ -47,7 +47,7 @@ public class OficialDeRegistroController {
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
 
-        // Esperar hasta que se cierre
+ 
         while (dialog.isVisible()) {
             try {
                 Thread.sleep(100);
@@ -60,7 +60,7 @@ public class OficialDeRegistroController {
         File imagenCapturada = ventanaCamara.getImagenCapturada();
 
         if (imagenCapturada != null) {
-            // Mover a un archivo temporal con nombre consistente
+            
             String tempDir = System.getProperty("java.io.tmpdir");
             String nombreTemp = "oficial_registro_" + System.currentTimeMillis() + ".jpg";
             File tempFile = new File(tempDir, nombreTemp);
@@ -69,13 +69,10 @@ public class OficialDeRegistroController {
                 Files.copy(imagenCapturada.toPath(), tempFile.toPath(),
                         StandardCopyOption.REPLACE_EXISTING);
 
-                // DEBUG: Información de la imagen capturada
-                System.out.println("Imagen capturada movida a: " + tempFile.getAbsolutePath());
-                System.out.println("Tamaño: " + tempFile.length() + " bytes");
-
+              
                 return tempFile;
             } catch (IOException e) {
-                System.err.println("Error al mover imagen capturada: " + e.getMessage());
+                
                 return null;
             }
         }
@@ -88,46 +85,40 @@ public class OficialDeRegistroController {
             String nacionalidad, String correo, String turno, LocalDate fechaFinContrato,
             File imagen) throws IOException {
 
-        // Debug: verificar parámetros
-        System.out.println("=== Parámetros recibidos ===");
-        System.out.println("Nombre: " + primerNombre + " " + primerApellido);
-        System.out.println("Cédula: " + cedula);
-        System.out.println("Imagen: " + (imagen != null ? imagen.getAbsolutePath() : "null"));
-
+     
         try {
-            // Validación de cédula única
+            
             if (oficialDAO.existeOficialConCedula(cedula)) {
                 throw new IllegalArgumentException("Ya existe un oficial con la cédula " + cedula);
             }
 
-            // Validar campos obligatorios
+
             validarCamposObligatorios(primerNombre, primerApellido, segundoApellido,
                     edad, cedula, nacionalidad, correo, turno);
 
-            // Validaciones adicionales
+
             validarEdad(edad);
             validarFechasContrato(LocalDate.now(), fechaFinContrato);
             validarImagen(imagen);
 
-            // Crear nuevo oficial
             OficialDeRegistro nuevoOficial = new OficialDeRegistro(
                     primerNombre,
                     segundoNombre,
                     primerApellido,
                     segundoApellido,
                     edad,
-                    "Masculino", // Valor por defecto o parámetro
+                    "Masculino",
                     nacionalidad,
                     cedula,
                     turno,
                     LocalDate.now(),
                     fechaFinContrato,
                     correo,
-                    "", // Usuario se asignará en el DAO
-                    "" // Contraseña se asignará en el DAO
+                    "", 
+                    "" 
             );
 
-            // Guardar a través del DAO
+           
             boolean guardado = oficialDAO.guardarOficial(nuevoOficial, imagen);
 
             if (guardado) {
@@ -137,10 +128,10 @@ public class OficialDeRegistroController {
             throw new RuntimeException("No se pudo guardar el oficial en la base de datos");
 
         } catch (IllegalArgumentException e) {
-            // Relanzar excepciones de validación
+            
             throw e;
         } catch (Exception e) {
-            // Capturar cualquier otra excepción
+
             System.err.println("Error al registrar oficial: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Error al registrar oficial: " + e.getMessage(), e);
@@ -148,50 +139,48 @@ public class OficialDeRegistroController {
     }
 
     private void validarImagen(File imagen) {
-        // DEBUG: Mostrar información de validación
+       
         if (imagen == null) {
-            System.out.println("Validación fallida: imagen es null");
+       
             throw new IllegalArgumentException("Debe proporcionar una imagen válida del oficial");
         }
 
         if (!imagen.exists()) {
-            System.out.println("Validación fallida: archivo no existe - " + imagen.getAbsolutePath());
+
             throw new IllegalArgumentException("La imagen proporcionada no existe en la ruta especificada");
         }
 
         if (imagen.length() == 0) {
-            System.out.println("Validación fallida: archivo vacío - " + imagen.getAbsolutePath());
+           
             throw new IllegalArgumentException("La imagen proporcionada está vacía o corrupta");
         }
 
-        // Validar extensión del archivo
+        
         String nombre = imagen.getName().toLowerCase();
         if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg") && !nombre.endsWith(".png")) {
-            System.out.println("Validación fallida: formato no válido - " + nombre);
+            
             throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG");
         }
 
-        // DEBUG: Validación exitosa
-        System.out.println("Validación de imagen exitosa: " + imagen.getAbsolutePath());
     }
 
     public int modificarOficial(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
         try {
-            // 1. Verificar existencia del oficial
+
             OficialDeRegistro original = obtenerOficialPorCedula(cedulaOriginal);
             if (original == null) {
                 throw new IllegalArgumentException("Oficial no encontrado con cédula: " + cedulaOriginal);
             }
 
-            // 2. Verificar si hay cambios reales
+           
             if (!verificarCambios(original, cambios, nuevaImagen)) {
-                return 0; // Código 0 = No hay cambios
+                return 0;
             }
 
-            // 3. Validar campos modificados
+  
             validarCamposModificacion(cambios);
 
-            // 4. Extraer y validar datos
+           
             int edad = (int) cambios.get("edad");
             LocalDate fechaFin = (LocalDate) cambios.get("fechaFin");
             String turno = (String) cambios.get("turno");
@@ -199,10 +188,10 @@ public class OficialDeRegistroController {
             validarEdad(edad);
             validarFechasContrato(original.getFechaContratacion(), fechaFin);
 
-            // 5. Construir oficial modificado
+            
             OficialDeRegistro oficialModificado = construirOficialModificado(cedulaOriginal, cambios, original);
 
-            // 6. Ejecutar modificación
+       
             boolean resultado = oficialDAO.modificarOficial(cedulaOriginal, oficialModificado, nuevaImagen);
 
             return resultado ? 1 : -1; // 1=Éxito, -1=Error
@@ -215,7 +204,7 @@ public class OficialDeRegistroController {
     }
 
     private boolean verificarCambios(OficialDeRegistro original, Map<String, Object> cambios, File nuevaImagen) {
-        // Verificar cambios en campos básicos
+       
         if (!original.getPrimerNombre().equals(cambios.get("primerNombre"))) {
             return true;
         }
@@ -244,7 +233,7 @@ public class OficialDeRegistroController {
             return true;
         }
 
-        // Verificar si se cambió la imagen
+
         return nuevaImagen != null;
     }
 
@@ -279,7 +268,6 @@ public class OficialDeRegistroController {
         return imagen;
     }
 
-    // Métodos de consulta
     public List<OficialDeRegistro> obtenerTodosOficiales() {
         return oficialDAO.obtenerOficiales();
     }
