@@ -15,7 +15,7 @@
     },
     {
       "usuario": "wq478*",
-      "password": "HG@9K\u0026T6",
+      "password": "wq478*",
       "rol": "ENFERMERA",
       "primerNombre": "w",
       "segundoNombre": "w",
@@ -184,7 +184,7 @@
     },
     {
       "usuario": "oE\u0026O9K¡cW",
-      "password": "fd257ecf95651303523e24789b433cd10b59c465d74897cc04d13f508d5ec58f",
+      "password": "password",
       "rol": "ENFERMERA",
       "primerNombre": "sS",
       "segundoNombre": "s",
@@ -262,6 +262,35 @@
       "sexo": "Masculino",
       "nacionalidad": "Colombiana",
       "identificacion": "098765431"
+    },
+    {
+      "usuario": "1\u0026?Y#mÑ8u",
+      "password": "56adbb834a598413cf7a9ed16e8feb6a3ee356a9eb8abc28653aa87c63fed5ab",
+      "rol": "ENFERMERA",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/389183183_1747421916510.jpeg",
+      "primerNombre": "Sandra",
+      "segundoNombre": "",
+      "primerApellido": "Alcazar",
+      "segundoApellido": "Bernabidez",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Mexicana",
+      "identificacion": "389183183"
+    },
+     {
+      "usuario": "gato",
+      "password": "gato2",
+      "rol": "DIRECTOR",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/389183183_1747421916510.jpeg",
+      "primerNombre": "Sandra",
+      "segundoNombre": "",
+      "primerApellido": "Alcazar",
+      "segundoApellido": "Bernabidez",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Mexicana",
+      "identificacion": "389183183"
     }
+    
   ]
 }
