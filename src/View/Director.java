@@ -246,8 +246,8 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         try {
             ImageIcon icon = new ImageIcon(usuario.getRutaImagen());
             Image img = icon.getImage().getScaledInstance(
-                    lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_SMOOTH);
-            lblFoto.setIcon(new ImageIcon(img));
+                    fotolbl.getWidth(), fotolbl.getHeight(), Image.SCALE_SMOOTH);
+            fotolbl.setIcon(new ImageIcon(img));
         } catch (Exception e) {
             cargarImagenPorDefecto();
         }
@@ -282,9 +282,13 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jPanel1 = new javax.swing.JPanel();
         tabPrincipal = new javax.swing.JTabbedPane();
         Director = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        fotolbl = new javax.swing.JLabel();
         lblNombre = new javax.swing.JLabel();
         lblRol = new javax.swing.JLabel();
-        fotolbl = new javax.swing.JLabel();
+        jSeparator125 = new javax.swing.JSeparator();
+        jLabel20 = new javax.swing.JLabel();
+        jSeparator126 = new javax.swing.JSeparator();
         DisminuirSentencia = new javax.swing.JPanel();
         AñadirDelito = new javax.swing.JPanel();
         AñadirEnfermera = new javax.swing.JPanel();
@@ -953,12 +957,32 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         Director.setBackground(new java.awt.Color(255, 255, 255));
         Director.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        lblNombre.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
-        Director.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 230, 210, 30));
+        jPanel6.setBackground(new java.awt.Color(20, 25, 40));
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        lblRol.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
-        Director.add(lblRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 270, 150, 20));
-        Director.add(fotolbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 30, 250, 190));
+        fotolbl.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        jPanel6.add(fotolbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, 270, 190));
+
+        lblNombre.setBackground(new java.awt.Color(255, 255, 255));
+        lblNombre.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblNombre.setForeground(new java.awt.Color(255, 255, 255));
+        lblNombre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel6.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 300, 210, 30));
+
+        lblRol.setBackground(new java.awt.Color(255, 255, 255));
+        lblRol.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblRol.setForeground(new java.awt.Color(255, 255, 255));
+        lblRol.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel6.add(lblRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 340, 150, 20));
+        jPanel6.add(jSeparator125, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 360, 150, 20));
+
+        jLabel20.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel20.setText("LE DAMOS LA BIENVENIDA.");
+        jPanel6.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 60, -1, -1));
+        jPanel6.add(jSeparator126, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 330, 210, 20));
+
+        Director.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, 880, 450));
 
         tabPrincipal.addTab("Director", Director);
         tabPrincipal.addTab("DisminuirSentencia", DisminuirSentencia);
@@ -8306,6 +8330,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
     private javax.swing.JLabel jLabel181;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
@@ -8425,6 +8450,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel40;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
@@ -8469,6 +8495,8 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
     private javax.swing.JSeparator jSeparator122;
     private javax.swing.JSeparator jSeparator123;
     private javax.swing.JSeparator jSeparator124;
+    private javax.swing.JSeparator jSeparator125;
+    private javax.swing.JSeparator jSeparator126;
     private javax.swing.JSeparator jSeparator13;
     private javax.swing.JSeparator jSeparator14;
     private javax.swing.JSeparator jSeparator15;

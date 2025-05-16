@@ -261,13 +261,13 @@
       "identificacion": "13131313"
     },
     {
-      "usuario": "bum",
-      "password": "pumchulita",
+      "usuario": "sharlok",
+      "password": "sharlok123",
       "rol": "DIRECTOR",
       "rutaImagen": "src/Resources/imagenes_personal_control/1731318313_1747358323389.png",
-      "primerNombre": "s",
+      "primerNombre": "Sharlok",
       "segundoNombre": "s",
-      "primerApellido": "s",
+      "primerApellido": "Alcazar",
       "segundoApellido": "s",
       "edad": 34,
       "sexo": "Masculino",
