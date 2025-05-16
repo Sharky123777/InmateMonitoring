@@ -183,9 +183,11 @@ public class SancionController {
     }
 
     private String determinarTurno(LocalTime hora) {
-        if (!hora.isBefore(LocalTime.of(8, 0)) && hora.isBefore(LocalTime.of(16, 20))) {
+        if (!hora.isBefore(LocalTime.of(0, 0)) && hora.isBefore(LocalTime.of(8, 0))) {
+            return "Nocturno";
+        } else if (!hora.isBefore(LocalTime.of(8, 0)) && hora.isBefore(LocalTime.of(20, 0))) {
             return "Diurno";
-        } else if (!hora.isBefore(LocalTime.of(16, 20)) && !hora.isAfter(LocalTime.of(20, 0))) {
+        } else if (!hora.isBefore(LocalTime.of(20, 0)) && !hora.isAfter(LocalTime.of(23, 59, 59))) {
             return "Nocturno";
         }
         return null;

@@ -4,7 +4,8 @@ import Controller.VisitaController;
 import Model.Constants.EstadoVisitaEnum;
 import Model.Entities.Visita;
 import javax.swing.JOptionPane;
-import com.toedter.calendar.JDateChooser;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 public class CambioEstadoVisita extends javax.swing.JDialog {
 
@@ -120,10 +121,36 @@ public class CambioEstadoVisita extends javax.swing.JDialog {
 
             EstadoVisitaEnum nuevoEstado = EstadoVisitaEnum.valueOf(estadoSeleccionado);
 
-            Visita visitaActualizada = controller.cambiarEstadoVisita(visita.getId(), nuevoEstado);
+            String razonCancelacion = null;
+
+            if (nuevoEstado == EstadoVisitaEnum.CANCELADA) {
+                int opcion = JOptionPane.showConfirmDialog(this,
+                        "¿Está seguro de que desea cancelar la visita?\n"
+                        + "Motivo: El visitante canceló la visita.",
+                        "Confirmación de cancelación",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.WARNING_MESSAGE);
+
+                if (opcion != JOptionPane.OK_OPTION) {
+                    return; 
+                }
+
+                razonCancelacion = "El visitante canceló la visita";
+            }
+
+            Visita visitaActualizada = controller.cambiarEstadoVisita(visita.getId(), nuevoEstado, razonCancelacion);
 
             if (visitaActualizada != null) {
                 controller.cargarHistorialVisitas(identificacionPreso, tablaVisitas);
+
+                if (nuevoEstado == EstadoVisitaEnum.CANCELADA) {
+                    controller.enviarCorreoCancelacionPorVisitante(visitaActualizada);
+                }
+
+                JOptionPane.showMessageDialog(this,
+                        "Estado de la visita actualizado correctamente.",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
                 regresarATabla1();
                 dispose();
             }

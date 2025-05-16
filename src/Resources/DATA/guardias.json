@@ -18,7 +18,7 @@
     },
     {
       "cargo": "Guardia jefe",
-      "turno": "Diurno",
+      "turno": "Nocturno",
       "fechaInicioContrato": "2025-05-14",
       "fechaFinContrato": "2025-06-10",
       "rutaImagen": "src/Resources/imagenes_guardias/4242423_1746813553188.png",

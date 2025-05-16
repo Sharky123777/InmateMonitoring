@@ -75,9 +75,15 @@ public class VisitaDAO {
     public void guardarVisita(Visita visita) {
         List<Visita> visitas = cargarTodas();
 
+        for (Visitante visitante : visita.getVisitantesConRelacion().keySet()) {
+            VisitanteDAO.getInstancia().guardarVisitante(visitante, null);
+        }
+
         if (visita.getId() == 0) {
             int nuevoId = obtenerProximoId(visitas);
             visita.setId(nuevoId);
+        } else {
+            visitas.removeIf(v -> v.getId() == visita.getId());
         }
 
         visitas.add(visita);
@@ -173,11 +179,23 @@ public class VisitaDAO {
     }
 
     public Visita modificarEstadoVisitaYDevolver(int id, EstadoVisitaEnum nuevoEstado) {
+        return modificarEstadoVisitaYDevolver(id, nuevoEstado, null);
+    }
+
+    public Visita modificarEstadoVisitaYDevolver(int id,
+            EstadoVisitaEnum nuevoEstado,
+            String razonCancelacion) {
         List<Visita> visitas = cargarTodas();
 
         for (Visita visita : visitas) {
             if (visita.getId() == id) {
                 visita.setEstado(nuevoEstado);
+
+                if (nuevoEstado == EstadoVisitaEnum.CANCELADA) {
+                    visita.setRazonCancelacion(razonCancelacion);
+                } else {
+                    visita.setRazonCancelacion(null);
+                }
 
                 if (guardarCambios(visitas)) {
                     return visita;

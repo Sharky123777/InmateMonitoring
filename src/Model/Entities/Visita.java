@@ -3,9 +3,7 @@ package Model.Entities;
 import Model.Constants.EstadoVisitaEnum;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Visita {
@@ -19,6 +17,7 @@ public class Visita {
     private Preso preso;
     private Map<Visitante, String> visitantesConRelacion;
     private EstadoVisitaEnum estado;
+    private String razonCancelacion;
 
     public Visita(int id, LocalDate fechaVisita, LocalTime horaVisita, String tipoVisita,
             String lugarVisita, Preso preso) {
@@ -30,6 +29,7 @@ public class Visita {
         this.preso = preso;
         this.visitantesConRelacion = new HashMap<>();
         this.estado = EstadoVisitaEnum.EN_PROCESO;
+        this.razonCancelacion = null;
     }
 
     public EstadoVisitaEnum getEstado() {
@@ -98,6 +98,14 @@ public class Visita {
 
     public Map<Visitante, String> getVisitantesConRelacion() {
         return new HashMap<>(visitantesConRelacion);
+    }
+
+    public String getRazonCancelacion() {
+        return razonCancelacion;
+    }
+
+    public void setRazonCancelacion(String razonCancelacion) {
+        this.razonCancelacion = razonCancelacion;
     }
 
 }

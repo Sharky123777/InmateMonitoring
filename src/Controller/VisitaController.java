@@ -327,7 +327,7 @@ public class VisitaController {
             Visitante nuevoVisitante = new Visitante(
                     primerNombre, segundoNombre, primerApellido,
                     segundoApellido, edad, sexo, nacionalidad,
-                    identificacion, imagen.getAbsolutePath(), email
+                    identificacion, imagen.getAbsolutePath(), email, 0
             );
 
             visitantesTemporales.add(nuevoVisitante);
@@ -539,19 +539,6 @@ public class VisitaController {
         }
     }
 
-    public void verificarVisitasVencidas() {
-        try {
-            int cantidad = visitaDAO.finalizarVisitasAutomaticamente();
-            if (cantidad > 0) {
-                System.out.println("[" + LocalDateTime.now() + "] Se finalizaron automáticamente "
-                        + cantidad + " visitas vencidas.");
-            }
-        } catch (Exception e) {
-            System.err.println("Error al finalizar visitas automáticamente: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
     public void guardarVisitaFinal(PersonalDeControl view, List<Visitante> visitantes, List<File> imagenes) {
         if (visitaTemporal == null) {
             mostrarError("Primero debe ingresar los datos de la visita.");
@@ -629,6 +616,19 @@ public class VisitaController {
         imagenes.clear();
         relacionesTemporales.clear();
         view.getCantidadDeVisitantesCombo().setSelectedIndex(0);
+    }
+    
+     public void verificarVisitasVencidas() {
+        try {
+            int cantidad = visitaDAO.finalizarVisitasAutomaticamente();
+            if (cantidad > 0) {
+                System.out.println("[" + LocalDateTime.now() + "] Se finalizaron automáticamente "
+                        + cantidad + " visitas vencidas.");
+            }
+        } catch (Exception e) {
+            System.err.println("Error al finalizar visitas automáticamente: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void cargarHistorialVisitas(String identificacionPreso, JTable tabla) {
@@ -900,14 +900,6 @@ public class VisitaController {
         tablaPresos.repaint();
     }
 
-    private void mostrarError(String mensaje) {
-        JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    public Preso buscarPresoPorIdentificacion(String identificacion) {
-        return PresoDAO.getInstancia().buscarPresoPorIdentificacion(identificacion);
-    }
-
     private boolean hayCambiosVisitante(Visitante visitanteOriginal,
             String primerNombre,
             String segundoNombre,
@@ -1117,7 +1109,11 @@ public class VisitaController {
         }
     }
 
-    public Visita cambiarEstadoVisita(int idVisita, EstadoVisitaEnum nuevoEstado) {
+    public Preso buscarPresoPorIdentificacion(String identificacion) {
+        return PresoDAO.getInstancia().buscarPresoPorIdentificacion(identificacion);
+    }
+
+    public Visita cambiarEstadoVisita(int idVisita, EstadoVisitaEnum nuevoEstado, String razonCancelacion) {
         if (nuevoEstado == null) {
             mostrarError("Debe seleccionar un estado válido");
             return null;
@@ -1129,22 +1125,13 @@ public class VisitaController {
             return null;
         }
 
-        if (nuevoEstado == EstadoVisitaEnum.FINALIZADA) {
-            if (visita.getEstado() != EstadoVisitaEnum.EN_PROCESO) {
-                LocalDate fechaActual = LocalDate.now();
-                LocalDate fechaVisita = visita.getFechaVisita();
-
-                if (!fechaActual.isAfter(fechaVisita)) {
-                    mostrarError("No puede finalizar una visita el mismo día o antes.\n"
-                            + "Fecha de la visita: " + fechaVisita + "\n"
-                            + "Puede finalizar a partir de: " + fechaVisita.plusDays(1));
-                    return null;
-                }
-            }
+        if (visita.getEstado() == nuevoEstado) {
+            mostrarError("La visita ya tiene el estado: " + nuevoEstado);
+            return null;
         }
 
-        if (visita.getEstado() == nuevoEstado) {
-            mostrarError("La visita ya tiene el estado: " + nuevoEstado.toString());
+        if (visita.getEstado() == EstadoVisitaEnum.FINALIZADA || visita.getEstado() == EstadoVisitaEnum.CANCELADA) {
+            mostrarError("No se puede modificar el estado de una visita que ya está FINALIZADA o CANCELADA.");
             return null;
         }
 
@@ -1160,11 +1147,15 @@ public class VisitaController {
             }
         }
 
-        Visita visitaActualizada = visitaDAO.modificarEstadoVisitaYDevolver(idVisita, nuevoEstado);
+        if (nuevoEstado == EstadoVisitaEnum.CANCELADA && razonCancelacion != null) {
+            visita.setRazonCancelacion(razonCancelacion);
+        }
+
+        Visita visitaActualizada = visitaDAO.modificarEstadoVisitaYDevolver(idVisita, nuevoEstado, razonCancelacion);
 
         if (visitaActualizada != null) {
             JOptionPane.showMessageDialog(null,
-                    "Estado de visita actualizado correctamente a: " + nuevoEstado.toString(),
+                    "Estado de visita actualizado correctamente a: " + nuevoEstado,
                     "Éxito",
                     JOptionPane.INFORMATION_MESSAGE);
             return visitaActualizada;
@@ -1238,6 +1229,26 @@ public class VisitaController {
         }
 
         return ventanaCamara.getImagenCapturada();
+    }
+
+    public void enviarCorreoCancelacionPorVisitante(Visita visita) {
+        if (visita == null || visita.getVisitantesConRelacion() == null) {
+            return;
+        }
+
+        for (Visitante visitante : visita.getVisitantesConRelacion().keySet()) {
+            if (visitante.getEdad() >= 18 && visitante.getEmail() != null && !visitante.getEmail().isEmpty()) {
+                EmailSender.getInstancia().enviarNotificacionCancelacion(
+                        visitante,
+                        visita,
+                        visita.getRazonCancelacion() != null
+                        ? visita.getRazonCancelacion() : "Cancelación por parte del visitante");
+            }
+        }
+    }
+
+    private void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
 }

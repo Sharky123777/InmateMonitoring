@@ -4,18 +4,18 @@ import Model.Constants.EstadoVisitanteEnum;
 
 public class Visitante extends Persona {
 
+    private int id;
     private String fotoPath;
     private String email;
-    private static int ultimoId = 0;
-    private int id;
     private EstadoVisitanteEnum estado;
     private String razonDeshabilitacion;
+    
 
     public Visitante(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
             int edad, String sexo, String nacionalidad, String identificacion,
-            String fotoPath, String email) {
+            String fotoPath, String email, int id) {
         super(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, sexo, nacionalidad, identificacion);
-        this.id = ++ultimoId;
+        this.id = id;
         this.fotoPath = fotoPath;
         this.email = email;
         this.estado = EstadoVisitanteEnum.HABILITADO;
@@ -44,14 +44,6 @@ public class Visitante extends Persona {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public static int getUltimoId() {
-        return ultimoId;
-    }
-
-    public static void setUltimoId(int ultimoId) {
-        Visitante.ultimoId = ultimoId;
     }
 
     public EstadoVisitanteEnum getEstado() {
