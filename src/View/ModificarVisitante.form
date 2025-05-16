@@ -212,47 +212,6 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JComboBox" name="NuevaRelacionConPresoVisitante">
-          <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="25">
-                <StringItem index="0" value="&lt; Seleccionar &gt;"/>
-                <StringItem index="1" value="Esposa/Esposo"/>
-                <StringItem index="2" value="Padre/Madre"/>
-                <StringItem index="3" value="Hijo/Hija"/>
-                <StringItem index="4" value="Hermano/Hermana"/>
-                <StringItem index="5" value="Abuelo/Abuela"/>
-                <StringItem index="6" value="Nieto/Nieta"/>
-                <StringItem index="7" value="T&#xed;o/T&#xed;a"/>
-                <StringItem index="8" value="Sobrino/Sobrina"/>
-                <StringItem index="9" value="Primo/Prima"/>
-                <StringItem index="10" value="Suegro/Suegra"/>
-                <StringItem index="11" value="Yerno/Nuera"/>
-                <StringItem index="12" value="Cu&#xf1;ado/Cu&#xf1;ada"/>
-                <StringItem index="13" value="Amigo/Amiga"/>
-                <StringItem index="14" value="Compa&#xf1;ero de Trabajo"/>
-                <StringItem index="15" value="Vecino/Vecina"/>
-                <StringItem index="16" value="Conocido/Conocida"/>
-                <StringItem index="17" value="Abogado/Abogada"/>
-                <StringItem index="18" value="Asistente Social"/>
-                <StringItem index="19" value="Representante Legal"/>
-                <StringItem index="20" value="Sacerdote/Pastor"/>
-                <StringItem index="21" value="Novio/Novia"/>
-                <StringItem index="22" value="Tutor Legal"/>
-                <StringItem index="23" value="Ex-Esposo/Ex-Esposa"/>
-                <StringItem index="24" value="Familiar Pol&#xed;tico "/>
-              </StringArray>
-            </Property>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-          </AuxValues>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="210" y="410" width="280" height="30"/>
-            </Constraint>
-          </Constraints>
-        </Component>
         <Component class="javax.swing.JButton" name="BotonModificarVisitante">
           <Properties>
             <Property name="text" type="java.lang.String" value="Modificar visitante"/>
@@ -262,7 +221,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="280" y="480" width="130" height="30"/>
+              <AbsoluteConstraints x="280" y="430" width="130" height="30"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -279,22 +238,6 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
               <AbsoluteConstraints x="50" y="120" width="-1" height="-1"/>
-            </Constraint>
-          </Constraints>
-        </Component>
-        <Component class="javax.swing.JLabel" name="jLabel66">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="14" style="1"/>
-            </Property>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="0" green="0" red="0" type="rgb"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Relaci&#xf3;n con el preso:"/>
-          </Properties>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="50" y="420" width="-1" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>

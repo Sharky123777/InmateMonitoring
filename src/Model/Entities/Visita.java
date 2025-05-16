@@ -16,12 +16,11 @@ public class Visita {
     private String lugarVisita;
     private Preso preso;
     private List<Visitante> visitantes;
-    private static int ultimoId = 0;
     private EstadoVisitaEnum estado;
 
     public Visita(int id, LocalDate fechaVisita, LocalTime horaVisita, String tipoVisita,
             String lugarVisita, Preso preso, List<Visitante> visitantes) {
-        this.id = ++ultimoId;
+        this.id = id;
         this.fechaVisita = fechaVisita;
         this.horaVisita = horaVisita;
         this.tipoVisita = tipoVisita;
@@ -99,11 +98,4 @@ public class Visita {
         this.visitantes = visitantes;
     }
 
-    public static int getUltimoId() {
-        return ultimoId;
-    }
-
-    public static void setUltimoId(int ultimoId) {
-        Visita.ultimoId = ultimoId;
-    }
 }
