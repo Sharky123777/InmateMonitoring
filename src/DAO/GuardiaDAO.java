@@ -188,7 +188,6 @@ public class GuardiaDAO {
                     }
                 }
 
-                
                 guardias.removeIf(g -> g.getIdentificacion().equals(cedula));
                 guardarListaGuardias(guardias);
                 return true;
@@ -203,44 +202,50 @@ public class GuardiaDAO {
 
     public boolean modificarGuardia(String cedulaOriginal, Guardia guardiaModificado, File nuevaImagen) {
         try {
-            
             List<Guardia> guardias = obtenerGuardias();
-           
+            boolean encontrado = false;
 
             for (int i = 0; i < guardias.size(); i++) {
                 Guardia g = guardias.get(i);
-               
 
                 if (g.getIdentificacion().equals(cedulaOriginal)) {
-                   
-                    
+                    // 1. Manejar la imagen si se proporciona una nueva
                     String rutaImagenFinal = g.getRutaImagen();
-                    
 
-                    
                     if (nuevaImagen != null && nuevaImagen.exists()) {
-                        
-                    } else {
-                       
-                        rutaImagenFinal = g.getRutaImagen();
+                        // Eliminar imagen anterior si existe
+                        if (rutaImagenFinal != null && !rutaImagenFinal.isEmpty()) {
+                            try {
+                                Files.deleteIfExists(Paths.get(rutaImagenFinal));
+                            } catch (IOException e) {
+                                System.err.println("Error al eliminar imagen anterior: " + e.getMessage());
+                            }
+                        }
+
+                        // Guardar nueva imagen
+                        String extension = nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
+                        String nombreImagen = guardiaModificado.getIdentificacion() + "_"
+                                + System.currentTimeMillis() + extension;
+                        rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+
+                        Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
                     }
 
-                  
+                    // 2. Actualizar el objeto guardia
                     guardiaModificado.setRutaImagen(rutaImagenFinal);
                     guardias.set(i, guardiaModificado);
-
-                 
-                    guardarListaGuardias(guardias);
-
-
-                    return true;
+                    encontrado = true;
+                    break;
                 }
             }
 
-            
+            if (encontrado) {
+                guardarListaGuardias(guardias);
+                return true;
+            }
             return false;
+
         } catch (Exception e) {
-           
             e.printStackTrace();
             throw new RuntimeException("Error al modificar guardia: " + e.getMessage(), e);
         }
@@ -306,8 +311,8 @@ public class GuardiaDAO {
             String.class,
             String.class,
             String.class,
-            String.class, 
-            String.class 
+            String.class,
+            String.class
         };
     }
 }

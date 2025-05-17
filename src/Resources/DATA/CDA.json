@@ -17,6 +17,24 @@
       "sexo": "Femenino",
       "nacionalidad": "Brasileña",
       "identificacion": "090831928"
+    },
+    {
+      "usuario": "RM#@uGm5S",
+      "contrasena": "0fbfc81da74a740afdb8e1b26d108718ad3ec36dbb4ed2d7b4830f4f311a5bf8",
+      "turno": "Diurno",
+      "cargo": "Oficial",
+      "fechaInicioContrato": "2025-05-17",
+      "fechaFinContrato": "2025-05-23",
+      "rutaImagen": "src/Resources/imagenes_CDA/098765432_1747504100571.jpg",
+      "correo": "babaa@gmail.com",
+      "primerNombre": "pa",
+      "segundoNombre": "ma",
+      "primerApellido": "Miau",
+      "segundoApellido": "ballerina",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "lo que parece",
+      "identificacion": "098765432"
     }
   ]
 }

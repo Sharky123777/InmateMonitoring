@@ -2,18 +2,18 @@
   "personal_control": [
     {
       "turno": "Diurno",
-      "fechaContratacion": "2025-05-15",
+      "fechaContratacion": "2025-05-17",
       "fechaFinContrato": "2025-05-23",
-      "rutaImagen": "src/Resources/imagenes_personal_control/1731318313_1747358323389.png",
-      "correo": "shar@gmail.com",
+      "rutaImagen": "src/Resources/imagenes_personal_control/09876513131_1747504003349.jpg",
+      "correo": "juan123@gmail.com",
       "primerNombre": "s",
       "segundoNombre": "s",
       "primerApellido": "s",
-      "segundoApellido": "s",
-      "edad": 34,
+      "segundoApellido": "ñ",
+      "edad": 45,
       "sexo": "Masculino",
-      "nacionalidad": "pepe",
-      "identificacion": "1731318313"
+      "nacionalidad": "novia",
+      "identificacion": "09876513131"
     }
   ]
 }

@@ -57,9 +57,9 @@ public class EmailSender {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
-            message.setSubject("Credenciales de Acceso - Sistema de Monitoreo de Reclusos");
+            message.setSubject("Credenciales de Acceso - Sistema de Monitoreo de Reclusas");
 
-            // Solo contenido HTML sin imágenes
+            
             String htmlContent = construirMensajeHTML(usuario, contrasena, rol);
             message.setContent(htmlContent, "text/html; charset=utf-8");
 
@@ -94,14 +94,14 @@ public class EmailSender {
                "</head>" +
                "<body>" +
                "<div class='header'>" +
-               "<h2>Sistema de Monitoreo de Reclusos</h2>" +
+               "<h2>Sistema de Monitoreo de Reclusas</h2>" +
                "</div>" +
                "<p>" + saludo + ",</p>" +
                "<p>Se han generado sus credenciales de acceso al sistema:</p>" +
                "<div class='credentials'>" +
                "<p><strong>Rol:</strong> " + rolFormateado + "</p>" +
                "<p><strong>Usuario:</strong> " + usuario + "</p>" +
-               "<p><strong>Contraseña temporal:</strong> " + contrasena + "</p>" +
+               "<p><strong>Contraseña: </strong> " + contrasena + "</p>" +
                "</div>" +
                "<p>Por motivos de seguridad, le recomendamos cambiar su contraseña después del primer inicio de sesión.</p>" +
                "<p>Si no solicitó estas credenciales, por favor contacte al administrador del sistema inmediatamente.</p>" +
@@ -118,17 +118,19 @@ public class EmailSender {
         
         switch (rol) {
             case DIRECTOR:
-                return "Estimado Director";
+                return "Estimada Directora";
             case OFICIAL:
+                return "Estimada Oficial";
             case OFICIAL_DE_REGISTRO:
+                return "Estimada oficial de registro";
             case PERSONAL_DE_CONTROL:
-                return "Estimado Oficial";
+                return "Estimada Oficial";
             case COORDINADOR_DE_ACTIVIDADES:
-                return "Estimado Coordinador";
+                return "Estimada Coordinadora";
             case ENFERMERA:
                 return "Estimada Enfermera";
             default:
-                return "Estimado Usuario";
+                return "Estimada Usuaria";
         }
     }
 

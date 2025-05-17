@@ -90,7 +90,7 @@ import View.PerfilUsuario;
  *
  * @author Sharlok
  */
-public class Director extends javax.swing.JFrame implements PerfilUsuario {
+public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
     EnfermeraDAO enfermeraDAO = new EnfermeraDAO();
     private Usuario usuario;
@@ -123,10 +123,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
     private String cedulaActualModificacion;
     private ModernTopMenu menuSuperior; // Declaración
 
-    public Director() {
+    public Directora() {
         initComponents();
         setLocationRelativeTo(null);
-
 
         txtFechaContratacion.setEditable(false);
         txtFechaContratacion.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
@@ -178,13 +177,10 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         actualizarTablaODR();
         actualizarTablaPDC();
 
-        
-        tabPrincipal.setUI(null);  
+        tabPrincipal.setUI(null);
 
-        
         menuSuperior = new ModernTopMenu(tabPrincipal);
 
-        
         menuSuperior.setColors(
                 new Color(29, 35, 51), // Azul principal (más claro)
                 new Color(41, 50, 65), // Azul hover (ligeramente más claro que el principal)
@@ -195,34 +191,29 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
 
         getContentPane().setLayout(new BorderLayout());
 
-        
         Component[] components = getContentPane().getComponents();
         JPanel mainPanel = null;
 
         for (Component comp : components) {
             if (comp instanceof JPanel && ((JPanel) comp).getComponentCount() > 0) {
-              
+
                 mainPanel = (JPanel) comp;
                 break;
             }
         }
 
-        
         if (mainPanel != null) {
-            
+
             getContentPane().remove(mainPanel);
 
-            
             getContentPane().add(menuSuperior, BorderLayout.NORTH);
 
-           
             getContentPane().add(mainPanel, BorderLayout.CENTER);
         } else {
-           
+
             getContentPane().add(menuSuperior, BorderLayout.NORTH);
         }
 
-       
         pack();
     }
 
@@ -233,11 +224,10 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
 
     private void mostrarDatosUsuario() {
         if (usuario != null) {
-            
+
             lblNombre.setText(usuario.getPrimerNombre() + " " + usuario.getPrimerApellido());
             lblRol.setText(usuario.getRol().toString());
 
-            
             cargarImagenUsuario();
         }
     }
@@ -4062,9 +4052,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
 
     }//GEN-LAST:event_txtCedulaActionPerformed
 
-   
-
- 
     private void cargarTablaOficiales() {
         DefaultTableModel modelo = new DefaultTableModel() {
             @Override
@@ -4094,9 +4081,8 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         List<Oficial> oficiales = OficialController.getInstancia().obtenerTodosOficiales();
 
         for (Oficial o : oficiales) {
-            ImageIcon icono = null; 
+            ImageIcon icono = null;
 
-            
             if (o.getRutaImagen() != null && !o.getRutaImagen().isEmpty()) {
                 try {
                     File file = new File(o.getRutaImagen());
@@ -4107,12 +4093,12 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                     }
                 } catch (Exception ex) {
                     System.err.println("Error cargando imagen para oficial " + o.getIdentificacion() + ": " + ex.getMessage());
-                    icono = null; 
+                    icono = null;
                 }
             }
 
             modelo.addRow(new Object[]{
-                icono, 
+                icono,
                 o.getPrimerNombre() + " " + (o.getSegundoNombre() != null ? o.getSegundoNombre() : ""),
                 o.getPrimerApellido() + " " + o.getSegundoApellido(),
                 o.getEdad(),
@@ -4131,7 +4117,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         tablaOficial.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
     }
 
-  
     private void cargarTablaPDC() {
         DefaultTableModel modelo = new DefaultTableModel() {
             @Override
@@ -4161,9 +4146,8 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         List<PersonalControl> PDC = PersonalControlController.getInstancia().obtenerTodosPersonalControl();
 
         for (PersonalControl p : PDC) {
-            ImageIcon icono = null; 
+            ImageIcon icono = null;
 
-          
             if (p.getRutaImagen() != null && !p.getRutaImagen().isEmpty()) {
                 try {
                     File file = new File(p.getRutaImagen());
@@ -4174,7 +4158,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                     }
                 } catch (Exception ex) {
                     System.err.println("Error cargando imagen para la empleada " + p.getIdentificacion() + ": " + ex.getMessage());
-                    icono = null; 
+                    icono = null;
                 }
             }
 
@@ -4222,7 +4206,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtCargoMod.setSelectedItem(guardia.getCargo());
         txtFechaContratacionMod.setText(guardia.getFechaInicioContrato().toString());
 
-        
         txtFechaContratacionMod2.setText(
                 guardia.getFechaInicioContrato().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
         );
@@ -4583,8 +4566,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate();
 
-            // Validar imagen (similar a EnfermeraController)
-            if (rutaImagenGuardia == null || !rutaImagenGuardia.exists()) {
+            if (lblFoto.getIcon() == null) {
                 throw new IllegalArgumentException("Debe seleccionar una imagen válida del guardia.");
             }
 
@@ -4804,9 +4786,8 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                 }
             }
 
-            // Mostrar previsualización si se seleccionó una imagen
+            // Modificar la parte final del método:
             if (nuevaImagen != null && nuevaImagen.exists()) {
-                // Escalar la imagen para que se ajuste al JLabel
                 ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
                 Image imagenEscalada = icono.getImage()
                         .getScaledInstance(
@@ -4815,14 +4796,18 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                                 Image.SCALE_SMOOTH
                         );
 
-                // Mostrar en el JLabel
-                lblFoto.setIcon(new ImageIcon(imagenEscalada));
+                // Determinar si es registro o modificación
+                if (tabPrincipal.getSelectedComponent() == AñadirGuardia) {
+                    lblFoto.setIcon(new ImageIcon(imagenEscalada));
+                    rutaImagenGuardia = nuevaImagen;
+                } else if (tabPrincipal.getSelectedComponent() == ModificarGuardia) {
+                    lblImagenMod.setIcon(new ImageIcon(imagenEscalada));
+                    rutaImagenGuardiaMod = nuevaImagen;
+                    imagenFueModificada = true;
+                }
 
-                // Guardar referencia al archivo para cuando se guarde
-                rutaImagenGuardiaMod = nuevaImagen;
-
-                // Mostrar tooltip con la ruta
-                lblFoto.setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
+                ((JLabel) (tabPrincipal.getSelectedComponent() == AñadirGuardia ? lblFoto : lblImagenMod))
+                        .setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
             }
 
         } catch (Exception e) {
@@ -4878,69 +4863,44 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
-            // Obtener valores del formulario
+            // Validar cédula
             String cedulaOriginal = txtCedulaMod.getText().trim();
-            String primerNombre = txtPrimerNombreMod.getText().trim();
-            String segundoNombre = txtSegundoNombreMod.getText().trim();
-            String primerApellido = txtPrimerApellidoMod.getText().trim();
-            String segundoApellido = txtSegundoApellidoMod.getText().trim();
-            String nacionalidad = txtNacionalidadMod.getText().trim();
-            String correo = txtCorreoMod.getText().trim();
-            String turno = cmbTurnoMod.getSelectedItem().toString();
-            String cargo = txtCargoMod.getSelectedItem().toString();
-
-            // Validar edad
-            int edad;
-            try {
-                edad = Integer.parseInt(txtEdadMod.getText().trim());
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("La edad debe ser un número válido.");
+            if (cedulaOriginal.isEmpty()) {
+                throw new IllegalArgumentException("La cédula no puede estar vacía");
             }
 
-            // Validar fecha fin
-            if (dateFinContratoMod.getDate() == null) {
-                throw new IllegalArgumentException("Seleccione una fecha de fin de contrato.");
-            }
-            LocalDate fechaFin = dateFinContratoMod.getDate().toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate();
-
-            // Validar imagen (si se seleccionó una nueva)
-            if (rutaImagenGuardiaMod != null) {
-                if (!rutaImagenGuardiaMod.exists()) {
-                    throw new IllegalArgumentException("La imagen seleccionada no existe.");
-                }
-                String nombreImagen = rutaImagenGuardiaMod.getName().toLowerCase();
-                if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
-                    throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
-                }
-            }
-
-            // Preparar cambios
+            // Obtener valores del formulario
             Map<String, Object> cambios = new HashMap<>();
-            cambios.put("primerNombre", primerNombre);
-            cambios.put("segundoNombre", segundoNombre);
-            cambios.put("primerApellido", primerApellido);
-            cambios.put("segundoApellido", segundoApellido);
-            cambios.put("edad", edad);
-            cambios.put("nacionalidad", nacionalidad);
-            cambios.put("correo", correo);
-            cambios.put("turno", turno);
-            cambios.put("cargo", cargo);
-            cambios.put("fechaFin", fechaFin);
+            cambios.put("primerNombre", txtPrimerNombreMod.getText().trim());
+            cambios.put("segundoNombre", txtSegundoNombreMod.getText().trim());
+            cambios.put("primerApellido", txtPrimerApellidoMod.getText().trim());
+            cambios.put("segundoApellido", txtSegundoApellidoMod.getText().trim());
+            cambios.put("edad", Integer.parseInt(txtEdadMod.getText().trim()));
+            cambios.put("nacionalidad", txtNacionalidadMod.getText().trim());
+            cambios.put("correo", txtCorreoMod.getText().trim());
+            cambios.put("turno", cmbTurnoMod.getSelectedItem().toString());
+            cambios.put("cargo", txtCargoMod.getSelectedItem().toString());
+            cambios.put("fechaFin", dateFinContratoMod.getDate().toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate());
+
+            // Determinar qué imagen enviar al controller
+            File imagenParaModificar = imagenFueModificada ? rutaImagenGuardiaMod : null;
 
             // Llamar al Controller
             boolean modificado = guardiaController.modificarGuardia(
                     cedulaOriginal,
                     cambios,
-                    rutaImagenGuardiaMod // Puede ser null
+                    imagenParaModificar
             );
 
             if (modificado) {
+                JOptionPane.showMessageDialog(this,
+                        "Guardia modificado exitosamente",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 limpiarFormularioModificacion();
                 actualizarTablaGuardias();
-                JOptionPane.showMessageDialog(this, "Guardia modificado exitosamente.",
-                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                throw new Exception("No se pudo modificar el guardia");
             }
 
         } catch (IllegalArgumentException e) {
@@ -4971,7 +4931,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
     }//GEN-LAST:event_txtCorreoModKeyTyped
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // Opciones para el diálogo
         Object[] options = {"Tomar Foto", "Seleccionar Archivo", "Cancelar"};
         int opcion = JOptionPane.showOptionDialog(
                 this,
@@ -4987,55 +4946,32 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         try {
             File nuevaImagen = null;
 
-            if (opcion == 0) { // Tomar Foto con cámara
+            if (opcion == 0) { // Tomar Foto
                 nuevaImagen = guardiaController.capturarImagenGuardia();
-            } else if (opcion == 1) { // Seleccionar archivo del sistema
+            } else if (opcion == 1) { // Seleccionar archivo
                 JFileChooser fileChooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter(
                         "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");
                 fileChooser.setFileFilter(filter);
                 fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 
-                int resultado = fileChooser.showOpenDialog(this);
-
-                if (resultado == JFileChooser.APPROVE_OPTION) {
+                if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                     nuevaImagen = fileChooser.getSelectedFile();
-
-                    // Validar extensión del archivo
-                    String nombreArchivo = nuevaImagen.getName().toLowerCase();
-                    if (!nombreArchivo.endsWith(".jpg")
-                            && !nombreArchivo.endsWith(".jpeg")
-                            && !nombreArchivo.endsWith(".png")) {
-                        JOptionPane.showMessageDialog(this,
-                                "Formato de imagen no válido. Use JPG, JPEG o PNG.",
-                                "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
                 }
             }
 
-            // Mostrar previsualización si se seleccionó una imagen
-            if (nuevaImagen != null && nuevaImagen.exists()) {
-                // Escalar la imagen para el JLabel
+            // Manejar la imagen seleccionada
+            if (nuevaImagen != null) {
                 ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
                 Image imagenEscalada = icono.getImage()
-                        .getScaledInstance(
-                                lblImagenMod.getWidth(),
-                                lblImagenMod.getHeight(),
-                                Image.SCALE_SMOOTH
-                        );
+                        .getScaledInstance(lblImagenMod.getWidth(), lblImagenMod.getHeight(), Image.SCALE_SMOOTH);
 
-                // Mostrar en el JLabel
                 lblImagenMod.setIcon(new ImageIcon(imagenEscalada));
-
-                // Guardar referencia al archivo para cuando se guarde
                 rutaImagenGuardiaMod = nuevaImagen;
-
-                // Mostrar tooltip con la ruta
                 lblImagenMod.setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
 
-                // Actualizar inmediatamente en el JSON (opcional)
-                // actualizarImagenEnJSON(nuevaImagen);
+                // Marcar que la imagen fue modificada
+                imagenFueModificada = true;
             }
 
         } catch (Exception e) {
@@ -8133,20 +8069,21 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Director.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Directora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Director.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Directora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Director.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Directora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Director.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Directora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Director().setVisible(true);
+                new Directora().setVisible(true);
             }
         });
     }

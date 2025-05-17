@@ -149,7 +149,7 @@ public class Login extends javax.swing.JFrame {
 
         switch (usuario.getRol()) {
             case DIRECTOR:
-                vista = new Director();
+                vista = new Directora();
                 break;
             case OFICIAL:
                 vista = new Oficial();

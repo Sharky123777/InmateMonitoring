@@ -1,3 +1,20 @@
 {
-  "guardias": []
+  "guardias": [
+    {
+      "cargo": "Guardia jefe",
+      "turno": "Diurno",
+      "fechaInicioContrato": "2025-05-17",
+      "fechaFinContrato": "2025-06-18",
+      "rutaImagen": "src/Resources/imagenes_guardias/1387173813_1747507097230.png",
+      "correo": "sha@gmail.com",
+      "primerNombre": "s",
+      "segundoNombre": "",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "frias",
+      "identificacion": "1387173813"
+    }
+  ]
 }

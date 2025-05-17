@@ -402,6 +402,62 @@
       "sexo": "Femenino",
       "nacionalidad": "Peruana",
       "identificacion": "0987664"
+    },
+    {
+      "usuario": "RM#@uGm5S",
+      "password": "0fbfc81da74a740afdb8e1b26d108718ad3ec36dbb4ed2d7b4830f4f311a5bf8",
+      "rol": "COORDINADOR_DE_ACTIVIDADES",
+      "rutaImagen": "src/Resources/imagenes_CDA/098765432_1747503722737.jpg",
+      "primerNombre": "mi",
+      "segundoNombre": "",
+      "primerApellido": "Miau",
+      "segundoApellido": "ballerina",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "lo que parece",
+      "identificacion": "098765432"
+    },
+    {
+      "usuario": "x?4KUK%xL",
+      "password": "652fe47d67f08a3808704e62a9376286f78bc96cacfcdeff66c5ae592b8ba299",
+      "rol": "OFICIAL_DE_REGISTRO",
+      "rutaImagen": "src/Resources/imagenes_oficiales_registro/3413131313_1747503856688.jpg",
+      "primerNombre": "mn",
+      "segundoNombre": "e",
+      "primerApellido": "e",
+      "segundoApellido": "e",
+      "edad": 45,
+      "sexo": "Masculino",
+      "nacionalidad": "pa",
+      "identificacion": "3413131313"
+    },
+    {
+      "usuario": "Rv3!o!eFm?k",
+      "password": "26ed01a1804097c22f8e8128a3f9e976ba06c8e9eeb45077d27e7434d042e72b",
+      "rol": "PERSONAL_DE_CONTROL",
+      "rutaImagen": "src/Resources/imagenes_personal_control/09876513131_1747504003349.jpg",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 45,
+      "sexo": "Masculino",
+      "nacionalidad": "novia",
+      "identificacion": "09876513131"
+    },
+    {
+      "usuario": "697d6lXjGt$\u0026",
+      "password": "319a5c5f74d669d1b966fb0a45708153ed77f63bbf25e9353bb29bf8740cf9d3",
+      "rol": "OFICIAL_DE_REGISTRO",
+      "rutaImagen": "src/Resources/imagenes_oficiales_registro/031931931_1747504688533.png",
+      "primerNombre": "pepe",
+      "segundoNombre": "beff",
+      "primerApellido": "oeoeoe",
+      "segundoApellido": "papanatas",
+      "edad": 34,
+      "sexo": "Masculino",
+      "nacionalidad": "veneca",
+      "identificacion": "031931931"
     }
   ]
 }
