@@ -141,27 +141,7 @@ public class OficialDAO {
         }
     }
 
-    private String generarContrasena() {
-        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder(8);
-
-        for (int i = 0; i < 8; i++) {
-            sb.append(caracteres.charAt(random.nextInt(caracteres.length())));
-        }
-
-        return sb.toString();
-    }
-
-    private String guardarImagenDesdeCamara(BufferedImage imagen, String identificacion) throws IOException {
-        String nombreImagen = identificacion + "_foto.jpg";
-        String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-
-        File outputFile = new File(rutaImagenFinal);
-        ImageIO.write(imagen, "jpg", outputFile);
-
-        return rutaImagenFinal;
-    }
+  
 
     public boolean guardarOficial(Oficial oficial, File imagen) throws IOException {
         UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
@@ -290,21 +270,7 @@ public class OficialDAO {
         }
     }
 
-    public boolean puedeAgregarOficial(String turno) {
-        List<Oficial> oficiales = obtenerOficiales();
-
-        // Límite total de 4 oficiales
-        if (oficiales.size() >= 4) {
-            return false;
-        }
-
-        // Límite de 2 por turno
-        long countPorTurno = oficiales.stream()
-                .filter(o -> o.getTurno().equalsIgnoreCase(turno))
-                .count();
-
-        return countPorTurno < 2;
-    }
+  
 
     public boolean existeOficialConCedula(String cedula) {
         if (cedula == null || cedula.trim().isEmpty()) {

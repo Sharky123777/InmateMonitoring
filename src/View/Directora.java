@@ -7129,7 +7129,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     }//GEN-LAST:event_txtCorreoMod3KeyTyped
 
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
-        // Opciones para el diálogo
         Object[] options = {"Tomar Foto", "Seleccionar Archivo", "Cancelar"};
         int opcion = JOptionPane.showOptionDialog(
                 this,
@@ -7144,60 +7143,52 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
         try {
             File nuevaImagen = null;
+            boolean operacionCancelada = true;
 
-            if (opcion == 0) { // Tomar Foto con cámara
+            if (opcion == 0) { // Tomar Foto
                 nuevaImagen = OficialController.getInstancia().capturarImagenOficial();
-            } else if (opcion == 1) { // Seleccionar archivo del sistema
+                operacionCancelada = (nuevaImagen == null);
+            } else if (opcion == 1) { // Seleccionar Archivo
                 JFileChooser fileChooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter(
                         "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");
                 fileChooser.setFileFilter(filter);
-                fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 
-                int resultado = fileChooser.showOpenDialog(this);
-
-                if (resultado == JFileChooser.APPROVE_OPTION) {
+                if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                     nuevaImagen = fileChooser.getSelectedFile();
-
-                    // Validar extensión del archivo
-                    String nombreArchivo = nuevaImagen.getName().toLowerCase();
-                    if (!nombreArchivo.endsWith(".jpg")
-                            && !nombreArchivo.endsWith(".jpeg")
-                            && !nombreArchivo.endsWith(".png")) {
-                        JOptionPane.showMessageDialog(this,
-                                "Formato de imagen no válido. Use JPG, JPEG o PNG.",
-                                "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
+                    operacionCancelada = false;
                 }
             }
 
-            // Mostrar previsualización si se seleccionó una imagen
-            if (nuevaImagen != null && nuevaImagen.exists()) {
-                // Escalar la imagen para el JLabel
-                ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
-                Image imagenEscalada = icono.getImage()
-                        .getScaledInstance(
-                                lblImagenMod3.getWidth(),
-                                lblImagenMod3.getHeight(),
-                                Image.SCALE_SMOOTH
-                        );
+            // Procesar imagen si se seleccionó
+            if (!operacionCancelada && nuevaImagen != null) {
+                // Validar formato
+                String nombre = nuevaImagen.getName().toLowerCase();
+                if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg") && !nombre.endsWith(".png")) {
+                    JOptionPane.showMessageDialog(this,
+                            "Formato de imagen no válido. Use JPG, JPEG o PNG.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-                // Mostrar en el JLabel
-                lblImagenMod3.setIcon(new ImageIcon(imagenEscalada));
-
-                // Guardar referencia al archivo
+                // Mostrar previsualización
+                ImageIcon icono = new ImageIcon(nuevaImagen.getPath());
+                Image img = icono.getImage().getScaledInstance(
+                        lblImagenMod3.getWidth(),
+                        lblImagenMod3.getHeight(),
+                        Image.SCALE_SMOOTH
+                );
+                lblImagenMod3.setIcon(new ImageIcon(img));
                 rutaImagenOficialMod = nuevaImagen;
-
-                // Mostrar tooltip con la ruta
-                lblImagenMod3.setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
+                imagenFueModificada = true;
             }
 
-        } catch (Exception e) {
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
-                    "Error al obtener imagen: " + e.getMessage(),
+                    "Error al procesar imagen: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            
+            ex.printStackTrace();
         }
     }//GEN-LAST:event_jButton17ActionPerformed
 

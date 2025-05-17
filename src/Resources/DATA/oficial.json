@@ -1,3 +1,19 @@
 {
-  "oficiales": []
+  "oficiales": [
+    {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-17",
+      "fechaFinContrato": "2025-11-03",
+      "rutaImagen": "src/Resources/imagenes_oficiales/3323131313_1747509370851.jpg",
+      "correo": "Pedro123@gmail.com",
+      "primerNombre": "p",
+      "segundoNombre": "mpagne",
+      "primerApellido": "Ma",
+      "segundoApellido": "ia",
+      "edad": 34,
+      "sexo": "Masculino",
+      "nacionalidad": "pepe",
+      "identificacion": "3323131313"
+    }
+  ]
 }

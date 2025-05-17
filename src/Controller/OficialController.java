@@ -105,78 +105,104 @@ public class OficialController {
     }
 
     public int modificarOficial(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
-    try {
-        System.out.println("=== INICIO MODIFICACIÓN ===");
-        
-        Oficial original = obtenerOficialPorCedula(cedulaOriginal);
-        if (original == null) {
-            throw new IllegalArgumentException("Oficial no encontrado");
+        try {
+            // Validar cédula original
+            if (cedulaOriginal == null || cedulaOriginal.trim().isEmpty()) {
+                throw new IllegalArgumentException("Cédula original es requerida");
+            }
+
+            // Validar cambios
+            if (cambios == null || cambios.isEmpty()) {
+                throw new IllegalArgumentException("No se proporcionaron cambios");
+            }
+
+            // Validar campos obligatorios
+            validarCamposModificacion(cambios);
+
+            Oficial original = obtenerOficialPorCedula(cedulaOriginal);
+            if (original == null) {
+                throw new IllegalArgumentException("Oficial no encontrado con cédula: " + cedulaOriginal);
+            }
+
+            // Verificar si hay cambios reales
+            boolean hayCambios = verificarCambios(original, cambios, nuevaImagen);
+
+            if (!hayCambios) {
+                return 0; // Código para "no hay cambios"
+            }
+
+            // Realizar la modificación
+            boolean exito = oficialDAO.modificarOficial(cedulaOriginal,
+                    construirOficialModificado(cedulaOriginal, cambios, original),
+                    nuevaImagen);
+
+            return exito ? 1 : -1;
+
+        } catch (IllegalArgumentException e) {
+            // Lanzar nuevamente para manejo en la UI
+            throw e;
+        } catch (Exception e) {
+            // Loggear error y lanzar una excepción controlada
+            System.err.println("Error al modificar oficial: " + e.getMessage());
+            throw new RuntimeException("Error interno al modificar oficial", e);
         }
-
-      
-        boolean hayCambios = verificarCambios(original, cambios, nuevaImagen);
-        
-        if (!hayCambios) {
-         
-            return 0;
-        }
-
-       
-        boolean modificadoEnBD = oficialDAO.modificarOficial(cedulaOriginal, 
-            construirOficialModificado(cedulaOriginal, cambios, original), 
-            nuevaImagen);
-        
-        return modificadoEnBD ? 1 : -1;
-
-    } catch (Exception e) {
-        System.out.println("Error en modificarOficial: " + e.getMessage());
-        e.printStackTrace();
-        throw e;
     }
-}
+
+    private void validarCamposModificacion(Map<String, Object> cambios) {
+        StringBuilder errores = new StringBuilder();
+
+        if (((String) cambios.get("primerNombre")).trim().isEmpty()) {
+            errores.append("- Primer nombre es obligatorio\n");
+        }
+        if (((String) cambios.get("primerApellido")).trim().isEmpty()) {
+            errores.append("- Primer apellido es obligatorio\n");
+        }
+        if (((String) cambios.get("segundoApellido")).trim().isEmpty()) {
+            errores.append("- Segundo apellido es obligatorio\n");
+        }
+        if (((String) cambios.get("nacionalidad")).trim().isEmpty()) {
+            errores.append("- Nacionalidad es obligatoria\n");
+        }
+        if (((String) cambios.get("correo")).trim().isEmpty()) {
+            errores.append("- Correo es obligatorio\n");
+        } else if (!((String) cambios.get("correo")).matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            errores.append("- Correo electrónico no válido\n");
+        }
+        if (((String) cambios.get("turno")).trim().isEmpty()) {
+            errores.append("- Turno es obligatorio\n");
+        }
+        if ((int) cambios.get("edad") <= 0) {
+            errores.append("- Edad debe ser un número positivo\n");
+        }
+
+        if (errores.length() > 0) {
+            throw new IllegalArgumentException(errores.toString());
+        }
+    }
 
     private boolean verificarCambios(Oficial original, Map<String, Object> cambios, File nuevaImagen) {
-    boolean hayCambios = false;
-    
-   
-    if (!Objects.equals(original.getPrimerNombre(), cambios.get("primerNombre"))) {
-        hayCambios = true;
-    }
-    if (!Objects.equals(original.getSegundoNombre(), cambios.get("segundoNombre"))) {
-        hayCambios = true;
-    }
-    if (!Objects.equals(original.getPrimerApellido(), cambios.get("primerApellido"))) {
-        hayCambios = true;
-    }
-    if (!Objects.equals(original.getSegundoApellido(), cambios.get("segundoApellido"))) {
-        hayCambios = true;
-    }
-    if (original.getEdad() != (int) cambios.get("edad")) {
-        hayCambios = true;
-    }
-    if (!Objects.equals(original.getNacionalidad(), cambios.get("nacionalidad"))) {
-        hayCambios = true;
-    }
-    if (!Objects.equals(original.getCorreo(), cambios.get("correo"))) {
-        hayCambios = true;
-    }
-    if (!Objects.equals(original.getTurno(), cambios.get("turno"))) {
-        hayCambios = true;
-    }
-    if (!Objects.equals(original.getFechaFinContrato(), cambios.get("fechaFin"))) {
-        hayCambios = true;
-    }
+        boolean hayCambios = false;
 
-    
-    if (nuevaImagen != null) {
-        String rutaOriginal = "src/Resources/imagenes_oficiales/" + original.getIdentificacion()+ ".png";
-        if (!nuevaImagen.getPath().equals(rutaOriginal)) {
+        // Verificar cambios en campos normales
+        if (!Objects.equals(original.getPrimerNombre(), cambios.get("primerNombre"))
+                || !Objects.equals(original.getSegundoNombre(), cambios.get("segundoNombre"))
+                || !Objects.equals(original.getPrimerApellido(), cambios.get("primerApellido"))
+                || !Objects.equals(original.getSegundoApellido(), cambios.get("segundoApellido"))
+                || original.getEdad() != (int) cambios.get("edad")
+                || !Objects.equals(original.getNacionalidad(), cambios.get("nacionalidad"))
+                || !Objects.equals(original.getCorreo(), cambios.get("correo"))
+                || !Objects.equals(original.getTurno(), cambios.get("turno"))
+                || !Objects.equals(original.getFechaFinContrato(), cambios.get("fechaFin"))) {
             hayCambios = true;
         }
+
+        // Verificar cambio de imagen (solo si se proporcionó una nueva)
+        if (nuevaImagen != null) {
+            hayCambios = true; // Siempre que haya nueva imagen, considerar como cambio
+        }
+
+        return hayCambios;
     }
-    
-    return hayCambios;
-}
 
     private Oficial construirOficialModificado(String cedulaOriginal,
             Map<String, Object> cambios, Oficial original) {
@@ -225,30 +251,6 @@ public class OficialController {
         return oficialDAO.obtenerOficialPorUsuario(usuario);
     }
 
-    private void validarCamposModificacion(Map<String, Object> cambios) {
-        StringBuilder errores = new StringBuilder();
-
-        if (((String) cambios.get("primerNombre")).trim().isEmpty()) {
-            errores.append("- Primer nombre es obligatorio\n");
-        }
-        if (((String) cambios.get("primerApellido")).trim().isEmpty()) {
-            errores.append("- Primer apellido es obligatorio\n");
-        }
-        if (((String) cambios.get("segundoApellido")).trim().isEmpty()) {
-            errores.append("- Segundo apellido es obligatorio\n");
-        }
-        if (((String) cambios.get("nacionalidad")).trim().isEmpty()) {
-            errores.append("- Nacionalidad es obligatoria\n");
-        }
-        if (((String) cambios.get("correo")).trim().isEmpty()) {
-            errores.append("- Correo es obligatorio\n");
-        }
-
-        if (errores.length() > 0) {
-            throw new IllegalArgumentException(errores.toString());
-        }
-    }
-
     private void validarCamposObligatorios(String primerNombre, String primerApellido,
             String segundoApellido, int edad, String cedula,
             String nacionalidad, String correo, String turno) {
@@ -272,7 +274,7 @@ public class OficialController {
         }
         if (correo == null || correo.trim().isEmpty()) {
             errores.add("Correo es obligatorio");
-        } else if (!correo.matches("^[\\w-]+(\\.[\\w-]+)@[\\w-]+(\\.[\\w-]+)(\\.[a-zA-Z]{2,})$")) {
+        } else if (!correo.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
             errores.add("Correo electrónico no válido");
         }
         if (turno == null || turno.trim().isEmpty()) {

@@ -458,6 +458,20 @@
       "sexo": "Masculino",
       "nacionalidad": "veneca",
       "identificacion": "031931931"
+    },
+    {
+      "usuario": "?6D1Bh!xOz\u0026k",
+      "password": "9193bf22a633a8724b5fe86e01bbe08b1ba8dc6c5501f17f50559db0216ed80f",
+      "rol": "OFICIAL",
+      "rutaImagen": "src/Resources/imagenes_oficiales/3323131313_1747508663980.jpg",
+      "primerNombre": "Shar",
+      "segundoNombre": "lok",
+      "primerApellido": "Ma",
+      "segundoApellido": "ia",
+      "edad": 34,
+      "sexo": "Masculino",
+      "nacionalidad": "pepe",
+      "identificacion": "3323131313"
     }
   ]
 }
