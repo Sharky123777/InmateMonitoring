@@ -4863,13 +4863,18 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
-            // Validar cédula
-            String cedulaOriginal = txtCedulaMod.getText().trim();
-            if (cedulaOriginal.isEmpty()) {
-                throw new IllegalArgumentException("La cédula no puede estar vacía");
-            }
-
             // Obtener valores del formulario
+            String cedulaOriginal = txtCedulaMod.getText().trim();
+
+            // Validar que la fecha no sea nula
+            if (dateFinContratoMod.getDate() == null) {
+                throw new IllegalArgumentException("Debe seleccionar una fecha de fin de contrato");
+            }
+            LocalDate fechaFin = dateFinContratoMod.getDate().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+
+            // Preparar cambios
             Map<String, Object> cambios = new HashMap<>();
             cambios.put("primerNombre", txtPrimerNombreMod.getText().trim());
             cambios.put("segundoNombre", txtSegundoNombreMod.getText().trim());
@@ -4880,13 +4885,12 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             cambios.put("correo", txtCorreoMod.getText().trim());
             cambios.put("turno", cmbTurnoMod.getSelectedItem().toString());
             cambios.put("cargo", txtCargoMod.getSelectedItem().toString());
-            cambios.put("fechaFin", dateFinContratoMod.getDate().toInstant()
-                    .atZone(ZoneId.systemDefault()).toLocalDate());
+            cambios.put("fechaFin", fechaFin);
 
             // Determinar qué imagen enviar al controller
             File imagenParaModificar = imagenFueModificada ? rutaImagenGuardiaMod : null;
 
-            // Llamar al Controller
+            // Llamar al Controller (que manejará todas las validaciones)
             boolean modificado = guardiaController.modificarGuardia(
                     cedulaOriginal,
                     cambios,
@@ -4899,10 +4903,11 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                         "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 limpiarFormularioModificacion();
                 actualizarTablaGuardias();
-            } else {
-                throw new Exception("No se pudo modificar el guardia");
             }
 
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "La edad debe ser un número válido",
+                    "Error de validación", JOptionPane.ERROR_MESSAGE);
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this, e.getMessage(),
                     "Error de validación", JOptionPane.ERROR_MESSAGE);

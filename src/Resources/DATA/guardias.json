@@ -7,14 +7,46 @@
       "fechaFinContrato": "2025-06-18",
       "rutaImagen": "src/Resources/imagenes_guardias/1387173813_1747507097230.png",
       "correo": "sha@gmail.com",
+      "primerNombre": "e",
+      "segundoNombre": "",
+      "primerApellido": "s",
+      "segundoApellido": "e",
+      "edad": 54,
+      "sexo": "Femenino",
+      "nacionalidad": "frias",
+      "identificacion": "1387173813"
+    },
+    {
+      "cargo": "Guardia jefe",
+      "turno": "Diurno",
+      "fechaInicioContrato": "2025-05-17",
+      "fechaFinContrato": "2025-06-18",
+      "rutaImagen": "src/Resources/imagenes_guardias/098765142_1747507946096.png",
+      "correo": "@gmail.com",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "emborracharme",
+      "identificacion": "098765142"
+    },
+    {
+      "cargo": "Guardia jefe",
+      "turno": "Diurno",
+      "fechaInicioContrato": "2025-05-17",
+      "fechaFinContrato": "2025-06-18",
+      "rutaImagen": "src/Resources/imagenes_guardias/3193139183_1747508318186.png",
+      "correo": "shar@gmail.com",
       "primerNombre": "s",
       "segundoNombre": "",
       "primerApellido": "s",
       "segundoApellido": "s",
       "edad": 34,
       "sexo": "Femenino",
-      "nacionalidad": "frias",
-      "identificacion": "1387173813"
+      "nacionalidad": "mi",
+      "identificacion": "3193139183"
     }
   ]
 }
