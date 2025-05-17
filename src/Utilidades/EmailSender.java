@@ -4,24 +4,17 @@ import Model.Constants.RolEnum;
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.util.Properties;
-import java.io.File;
 import javax.swing.JOptionPane;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class EmailSender {
     private static EmailSender instancia;
     private final String username;
     private final String password;
     private final Properties props;
-    private final String logoPath;
 
     private EmailSender() {
         this.username = "imsharlok@gmail.com";
         this.password = "aydondnxwjrjhagz";
-        
-       
-        this.logoPath = Paths.get(System.getProperty("user.dir"), "src", "Pictures", "inpecLooooogo.png").toString();
         
         this.props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -39,19 +32,16 @@ public class EmailSender {
     }
 
     public boolean enviarCredenciales(String destinatario, String usuario, String contrasena, RolEnum rol) {
-        
+        // Validaciones
         if (destinatario == null || destinatario.isEmpty() || 
             usuario == null || usuario.isEmpty() || 
             contrasena == null || contrasena.isEmpty() || 
             rol == null) {
-          
             JOptionPane.showMessageDialog(null, "Error: Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
-       
         if (!destinatario.contains("@") || !destinatario.endsWith(".com")) {
-        
             JOptionPane.showMessageDialog(null, "Error: Formato de correo inválido", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -69,45 +59,11 @@ public class EmailSender {
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
             message.setSubject("Credenciales de Acceso - Sistema de Monitoreo de Reclusos");
 
-            // Crear el cuerpo del mensaje como multipart/related
-            MimeMultipart multipart = new MimeMultipart("related");
-
-            
-            MimeBodyPart htmlPart = new MimeBodyPart();
+            // Solo contenido HTML sin imágenes
             String htmlContent = construirMensajeHTML(usuario, contrasena, rol);
-            htmlPart.setContent(htmlContent, "text/html; charset=utf-8");
-            multipart.addBodyPart(htmlPart);
+            message.setContent(htmlContent, "text/html; charset=utf-8");
 
-            
-            MimeBodyPart imagePart = new MimeBodyPart();
-            try {
-                File logoFile = new File(logoPath);
-                if (logoFile.exists()) {
-                    
-                    byte[] imageData = Files.readAllBytes(logoFile.toPath());
-                    
-                   
-                    imagePart.setContent(imageData, "image/png");
-                    imagePart.setContentID("<logo>"); 
-                    imagePart.setDisposition(MimeBodyPart.INLINE);
-                    imagePart.setHeader("Content-Type", "image/png");
-                    imagePart.setHeader("Content-ID", "<logo>");
-                    imagePart.setHeader("Content-Transfer-Encoding", "base64");
-                    
-                    multipart.addBodyPart(imagePart);
-                } else {
-                   
-                    JOptionPane.showMessageDialog(null, "El logo no se encontró en la ruta especificada", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                }
-            } catch (Exception e) {
-                System.err.println("Error al cargar el logo: " + e.getMessage());
-            }
-
-            message.setContent(multipart);
             Transport.send(message);
-            
-           
-           
             return true;
         } catch (MessagingException e) {
             System.err.println("Error al enviar correo: " + e.getMessage());
@@ -130,7 +86,6 @@ public class EmailSender {
                "<style>" +
                "body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }" +
                ".header { text-align: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }" +
-               ".logo { max-width: 200px; height: auto; display: block; margin: 0 auto 15px; }" +
                ".credentials { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; }" +
                ".footer { margin-top: 20px; font-size: 0.8em; color: #6c757d; text-align: center; }" +
                "h2 { color: #0056b3; margin-top: 0; }" +
@@ -139,7 +94,6 @@ public class EmailSender {
                "</head>" +
                "<body>" +
                "<div class='header'>" +
-               "<img src='cid:logo' alt='Logo INPEC' class='logo'/>" +
                "<h2>Sistema de Monitoreo de Reclusos</h2>" +
                "</div>" +
                "<p>" + saludo + ",</p>" +

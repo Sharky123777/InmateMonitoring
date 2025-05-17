@@ -277,7 +277,7 @@
       "nacionalidad": "Mexicana",
       "identificacion": "389183183"
     },
-     {
+    {
       "usuario": "gato",
       "password": "gato2",
       "rol": "DIRECTOR",
@@ -290,7 +290,118 @@
       "sexo": "Femenino",
       "nacionalidad": "Mexicana",
       "identificacion": "389183183"
+    },
+    {
+      "usuario": "@zcas¡eDT7",
+      "password": "057807c0678b4b1dee350c9cd6998b93c1856ae6dba9c10b3d8e7ebfbf2529f7",
+      "rol": "ENFERMERA",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/131371378_1747438470802.jpg",
+      "primerNombre": "Sharlok",
+      "segundoNombre": "",
+      "primerApellido": "Alcazar",
+      "segundoApellido": "Gutierrez",
+      "edad": 45,
+      "sexo": "Femenino",
+      "nacionalidad": "Colombiana",
+      "identificacion": "131371378"
+    },
+    {
+      "usuario": "?43\u0026En?L8",
+      "password": "0b2adad777b00e226a838625b5087aa849fb863fb817f52c11680b19d20e9ddf",
+      "rol": "ENFERMERA",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/098764321_1747439124247.png",
+      "primerNombre": "Sandra",
+      "segundoNombre": "",
+      "primerApellido": "Cires",
+      "segundoApellido": "Muñoz",
+      "edad": 43,
+      "sexo": "Femenino",
+      "nacionalidad": "Mexicana",
+      "identificacion": "098764321"
+    },
+    {
+      "usuario": "9l\u0026s?xsB",
+      "password": "2137f507db37f8993b41263e1f10a9ca356b7059a2177eda5f098cd9910a02d4",
+      "rol": "ENFERMERA",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/8318317831_1747439190736.png",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Mexicana",
+      "identificacion": "8318317831"
+    },
+    {
+      "usuario": "X20@%9ug",
+      "password": "82168ea72327a6a0f4a2371fecf5b6cef7ad86a5ede1cdb7ead1723f732c4181",
+      "rol": "ENFERMERA",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/317831631_1747439336017.png",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "e",
+      "edad": 31,
+      "sexo": "Femenino",
+      "nacionalidad": "mex",
+      "identificacion": "317831631"
+    },
+    {
+      "usuario": "B?OÑQwl8",
+      "password": "ed68737830fc1af353f63977db6098f19d423e4f878e02e2e488d678f950df51",
+      "rol": "ENFERMERA",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/31731631_1747439674552.png",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 23,
+      "sexo": "Femenino",
+      "nacionalidad": "pepe",
+      "identificacion": "31731631"
+    },
+    {
+      "usuario": "tz@5Q\u0026r?¿TS",
+      "password": "5345590c841725842ac96223529bcf8215582939ead10d8ac8772cc005227c07",
+      "rol": "ENFERMERA",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/6153163516_1747440030848.png",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "pe",
+      "identificacion": "6153163516"
+    },
+    {
+      "usuario": "U1jJ!E¡kso",
+      "password": "d1cbb8cde49e4d9f4c3d864c83786af17c79c1ba389d3540e3d52130c3471038",
+      "rol": "ENFERMERA",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/09988664_1747440347598.jpg",
+      "primerNombre": "Sharlok",
+      "segundoNombre": "",
+      "primerApellido": "Alcazar",
+      "segundoApellido": "Gutierrez",
+      "edad": 45,
+      "sexo": "Femenino",
+      "nacionalidad": "Mexicana",
+      "identificacion": "09988664"
+    },
+    {
+      "usuario": "0GjuTd6Ñ@",
+      "password": "ef2c06282807e70e1309ca53116de02d53aff3b19afaccd438fd334611e0064a",
+      "rol": "ENFERMERA",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/0987664_1747441282638.jpg",
+      "primerNombre": "Marta",
+      "segundoNombre": "Andrea",
+      "primerApellido": "Perez",
+      "segundoApellido": "Rivera",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Peruana",
+      "identificacion": "0987664"
     }
-    
   ]
 }

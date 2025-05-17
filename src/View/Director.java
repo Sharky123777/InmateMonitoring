@@ -4062,13 +4062,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
 
     }//GEN-LAST:event_txtCedulaActionPerformed
 
-    private void verificarFecha() {
-        System.out.println("Fecha seleccionada: " + jDateChooserFinContrato.getDate());
-        System.out.println("Componente null? " + (jDateChooserFinContrato == null));
-        System.out.println("Editor null? " + (jDateChooserFinContrato.getDateEditor() == null));
-    }
+   
 
-    // Métodos para Oficiales en la vista Director
+ 
     private void cargarTablaOficiales() {
         DefaultTableModel modelo = new DefaultTableModel() {
             @Override
@@ -4098,9 +4094,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         List<Oficial> oficiales = OficialController.getInstancia().obtenerTodosOficiales();
 
         for (Oficial o : oficiales) {
-            ImageIcon icono = null; // Inicialmente sin imagen
+            ImageIcon icono = null; 
 
-            // Intentar cargar la imagen solo si existe la ruta y el archivo
+            
             if (o.getRutaImagen() != null && !o.getRutaImagen().isEmpty()) {
                 try {
                     File file = new File(o.getRutaImagen());
@@ -4111,12 +4107,12 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                     }
                 } catch (Exception ex) {
                     System.err.println("Error cargando imagen para oficial " + o.getIdentificacion() + ": " + ex.getMessage());
-                    icono = null; // Asegurarse que sea null si hay error
+                    icono = null; 
                 }
             }
 
             modelo.addRow(new Object[]{
-                icono, // Puede ser null
+                icono, 
                 o.getPrimerNombre() + " " + (o.getSegundoNombre() != null ? o.getSegundoNombre() : ""),
                 o.getPrimerApellido() + " " + o.getSegundoApellido(),
                 o.getEdad(),
@@ -4135,7 +4131,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         tablaOficial.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
     }
 
-    // Métodos para Oficiales en la vista Director
+  
     private void cargarTablaPDC() {
         DefaultTableModel modelo = new DefaultTableModel() {
             @Override
@@ -4165,9 +4161,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         List<PersonalControl> PDC = PersonalControlController.getInstancia().obtenerTodosPersonalControl();
 
         for (PersonalControl p : PDC) {
-            ImageIcon icono = null; // Inicialmente sin imagen
+            ImageIcon icono = null; 
 
-            // Intentar cargar la imagen solo si existe la ruta y el archivo
+          
             if (p.getRutaImagen() != null && !p.getRutaImagen().isEmpty()) {
                 try {
                     File file = new File(p.getRutaImagen());
@@ -4178,7 +4174,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                     }
                 } catch (Exception ex) {
                     System.err.println("Error cargando imagen para la empleada " + p.getIdentificacion() + ": " + ex.getMessage());
-                    icono = null; // Asegurarse que sea null si hay error
+                    icono = null; 
                 }
             }
 

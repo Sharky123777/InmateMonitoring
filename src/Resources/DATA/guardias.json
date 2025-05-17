@@ -1,20 +1,3 @@
 {
-  "guardias": [
-    {
-      "cargo": "Guardia jefe",
-      "turno": "Diurno",
-      "fechaInicioContrato": "2025-05-15",
-      "fechaFinContrato": "2025-06-25",
-      "rutaImagen": "src/Resources/imagenes_guardias/271371231_1746558348565.jpg",
-      "correo": "s@gmail.com",
-      "primerNombre": "Manuela",
-      "segundoNombre": "Beatriz",
-      "primerApellido": "Jimenes",
-      "segundoApellido": "Marimon",
-      "edad": 34,
-      "sexo": "Femenino",
-      "nacionalidad": "Canadiense",
-      "identificacion": "271371231"
-    }
-  ]
+  "guardias": []
 }
