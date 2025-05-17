@@ -21,6 +21,7 @@ import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -36,6 +37,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
     ActividadController ac = ActividadController.getInstancia();
     private final PresoController presoController;
     private final PresoDAO presoDAO;
+
 
     private final DelitoDAO delitoDAO;
     private final ActividadDAO actividadDAO;
@@ -69,7 +71,32 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
         List<Object[]> presosParaActividades = ac.obtenerPresosParaActividades();
         cargarPresosAptosEnTabla(presosParaActividades);
 
+                actualizarLabelEstadisticas();
+
+        
+        
     }
+    
+    private void actualizarLabelEstadisticas() {
+    Map<String, Object> stats = actividadDAO.obtenerEstadisticasActividades();
+    
+    String texto = String.format(
+        "<html>"
+        + "<b>Estadísticas de Actividades:</b><br>"
+        + "Activas: %d (%.1f%%)<br>"
+        + "Canceladas: %d (%.1f%%)<br>"
+        + "<i>Total registradas: %d</i>"
+        + "</html>",
+        stats.get("totalActivas"),
+        stats.get("porcentajeActivas"),
+        stats.get("totalCanceladas"),
+        stats.get("porcentajeCanceladas"),
+        stats.get("totalGeneral")
+    );
+    
+    lblCantidadDeActividades.setText(texto); 
+}
+    
 
     private void cargarPresosAptosEnTabla(List<Object[]> presos) {
         DefaultTableModel modelo = (DefaultTableModel) TablaPresosCoor.getModel();
@@ -403,6 +430,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         tipoActividad = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
+        lblCantidadDeActividades = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         CrearActividad = new javax.swing.JPanel();
         jPanel4 = new RoundedPanel(30);
@@ -535,9 +563,8 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
         jSeparator52 = new javax.swing.JSeparator();
         jPanel6 = new RoundedPanel(30);
         jLabel64 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel68 = new javax.swing.JLabel();
         fotoPresoActividades = new javax.swing.JLabel();
+        jLabel68 = new javax.swing.JLabel();
         PresosEnActividad = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tablaPresosAsignadosActividad = new javax.swing.JTable();
@@ -655,17 +682,17 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
 
         actividadesTabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "id", "Nombre", "Tipo", "Día", "Horario", "Lugar", "Cupo maximo", "Inscritos", "Responsable", "Estado", "Descripcion"
+                "id", "Nombre", "Tipo", "Día", "Horario", "Lugar", "Cupo maximo", "Inscritos", "Responsable", "Estado"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -678,7 +705,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
             actividadesTabla.getColumnModel().getColumn(0).setPreferredWidth(5);
         }
 
-        ListaActividades.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, 1040, 370));
+        ListaActividades.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 1040, 390));
 
         jPanel2.setBackground(new java.awt.Color(180, 180, 195));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -689,7 +716,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("TIPO:");
-        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, 60, 20));
+        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 40, 60, 20));
 
         tipoActividad.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tipoActividad.setForeground(new java.awt.Color(255, 255, 255));
@@ -699,9 +726,9 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
                 tipoActividadActionPerformed(evt);
             }
         });
-        jPanel3.add(tipoActividad, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, 150, 40));
+        jPanel3.add(tipoActividad, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, 150, 40));
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 340, 80));
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 340, 90));
 
         jButton1.setBackground(new java.awt.Color(29, 35, 51));
         jButton1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -712,9 +739,13 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 20, 160, 40));
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 30, 180, 40));
 
-        ListaActividades.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 1020, 80));
+        lblCantidadDeActividades.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblCantidadDeActividades.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel2.add(lblCantidadDeActividades, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 10, 330, 70));
+
+        ListaActividades.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 1020, 90));
 
         jButton3.setText("Restablecer tabla");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -722,7 +753,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
-        ListaActividades.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 140, 30));
+        ListaActividades.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 150, 140, -1));
 
         CoordinadorDeActividades.addTab("actividades", ListaActividades);
 
@@ -800,7 +831,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
         CrearActividad.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 30, 420));
 
         jSeparator3.setForeground(new java.awt.Color(0, 0, 0));
-        CrearActividad.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 520, 1020, 40));
+        CrearActividad.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 520, 1020, 10));
 
         btnAñadirActividad.setBackground(new java.awt.Color(0, 102, 51));
         btnAñadirActividad.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -932,7 +963,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(TablaPresosCoor);
 
-        AsignadorPreso.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 1020, 440));
+        AsignadorPreso.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 1000, 410));
 
         jLabel2.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
@@ -1416,24 +1447,20 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
         jPanel6.setBackground(new java.awt.Color(29, 35, 51));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel64.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel64.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel64.setText("Total de actividades");
-        jPanel6.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, -1, 20));
+        jLabel64.setFont(new java.awt.Font("Arial", 1, 3)); // NOI18N
+        jLabel64.setForeground(new java.awt.Color(18, 18, 44));
+        jLabel64.setText("Actividades activas:");
+        jPanel6.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, -1, 20));
 
-        jLabel15.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
-        jPanel6.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, 150, 40));
+        fotoPresoActividades.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true));
+        jPanel6.add(fotoPresoActividades, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 150, 140));
 
-        ActividadesPreso.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 40, 420, 60));
+        ActividadesPreso.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 40, 260, 180));
 
         jLabel68.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel68.setForeground(new java.awt.Color(0, 0, 0));
         jLabel68.setText("Identificación:");
         ActividadesPreso.add(jLabel68, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 160, -1, 20));
-
-        fotoPresoActividades.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true));
-        ActividadesPreso.add(fotoPresoActividades, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 120, 120, 120));
 
         CoordinadorDeActividades.addTab("Actividades por preso", ActividadesPreso);
 
@@ -1491,7 +1518,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
         jLabel17.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(0, 0, 0));
         jLabel17.setText("ACTUALIZACIÓN DE DATOS");
-        ActualizarActividad.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 60, 210, 20));
+        ActualizarActividad.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 40, 210, 20));
 
         nuevoNombreAct.setBackground(new java.awt.Color(204, 204, 204));
         nuevoNombreAct.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -1563,7 +1590,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
 
         jLabel18.setForeground(new java.awt.Color(0, 0, 0));
         jLabel18.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
-        ActualizarActividad.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(-400, 320, 820, 390));
+        ActualizarActividad.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 820, 400));
 
         jLabel24.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel24.setForeground(new java.awt.Color(0, 0, 0));
@@ -1574,7 +1601,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
         jLabel105.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
         jLabel105.setForeground(new java.awt.Color(204, 0, 0));
         jLabel105.setText("Los campos que no desee modificar déjelos en blanco*");
-        ActualizarActividad.add(jLabel105, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 80, 290, 30));
+        ActualizarActividad.add(jLabel105, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 60, 290, 30));
 
         jButton2.setBackground(new java.awt.Color(0, 0, 0));
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
@@ -1765,6 +1792,9 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
                 limpiarFormularioActividad();
                 CoordinadorDeActividades.setSelectedIndex(0);
                 oficialSeleccionado = null;
+                
+                
+                
             } else {
                 JOptionPane.showMessageDialog(this,
                         "El oficial ya tiene una actividad en el mismo día y horario.",
@@ -1784,6 +1814,11 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
         horarioCom.setSelectedIndex(0);
         lugarCom.setSelectedIndex(0);
         cupoMax.setSelectedIndex(0);
+        descripcionArea.setText("");
+        lblNombreResponsable.setText("");
+        lblApellidoResponsable.setText("");
+        lblIdentificacionResponsable.setText("");
+        
 
     }//GEN-LAST:event_btnAñadirActividadActionPerformed
 
@@ -1830,6 +1865,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
             nuevoDiaAct.setSelectedIndex(0);
             nuevoHorarioAct.setSelectedIndex(0);
             nuevoLugarAct.setSelectedIndex(0);
+            
         }
 
     }
@@ -2055,7 +2091,6 @@ private boolean hayCambiosRealmente(Actividad actividad) {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
@@ -2155,6 +2190,7 @@ private boolean hayCambiosRealmente(Actividad actividad) {
     private javax.swing.JSeparator jSeparator85;
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JLabel lblApellidoResponsable;
+    private javax.swing.JLabel lblCantidadDeActividades;
     private javax.swing.JLabel lblIdentificacionResponsable;
     private javax.swing.JLabel lblNombreActividad;
     private javax.swing.JLabel lblNombreResponsable;

@@ -24,13 +24,11 @@ public class Actividad {
     private String responsableOficial;
     private String descripcion;
 
-    // Constructor vacío
     public Actividad() {
         this.estadosPorPreso = new HashMap<>();
         this.presosAsignadosIds = new ArrayList<>();
     }
 
-    // Constructor con parámetros
     public Actividad(String idActividad, String nombre, String tipo, String dia,
             String horario, String lugar, int cupoMaximo,
             String responsableOficial, String descripcion) {
@@ -50,12 +48,23 @@ public class Actividad {
         this.presosInscritos = 0;
     }
 
-    public void setEstadoPreso(String idPreso, EstadoActividadesPresoEnum nuevoEstado) {
-        if (this.estadosPorPreso == null) {
-            this.estadosPorPreso = new HashMap<>();
+   public void setEstadoPreso(String idPreso, EstadoActividadesPresoEnum nuevoEstado) {
+    estadosPorPreso.put(idPreso, nuevoEstado);
+    
+    // Actualizar contador de inscritos automáticamente
+    if (nuevoEstado == EstadoActividadesPresoEnum.FINALIZADA || 
+        nuevoEstado == EstadoActividadesPresoEnum.CANCELADA) {
+        // Solo reducir si antes estaba EN_PROCESO
+        if (estadosPorPreso.getOrDefault(idPreso, null) == EstadoActividadesPresoEnum.EN_PROCESO) {
+            if (presosInscritos > 0) {
+                presosInscritos--;
+            }
         }
-        this.estadosPorPreso.put(idPreso, nuevoEstado);
+    } else if (nuevoEstado == EstadoActividadesPresoEnum.EN_PROCESO) {
+        // Si cambia a EN_PROCESO, aumentar el contador
+        presosInscritos++;
     }
+}
 
     public Map<String, EstadoActividadesPresoEnum> getEstadosPorPreso() {
         return estadosPorPreso;
@@ -168,6 +177,19 @@ public class Actividad {
     public boolean tieneCupoDisponible() {
         return presosAsignadosIds.size() < cupoMaximo;
     }
+    
+    public void disminuirInscritosSiCorresponde(String idPreso, EstadoActividadesPresoEnum nuevoEstado) {
+    EstadoActividadesPresoEnum estadoActual = getEstadoPreso(idPreso);
+    if (estadoActual == EstadoActividadesPresoEnum.EN_PROCESO &&
+        (nuevoEstado == EstadoActividadesPresoEnum.FINALIZADA || nuevoEstado == EstadoActividadesPresoEnum.CANCELADA)) {
+        if (presosInscritos > 0) {
+            presosInscritos--;
+        }
+    }
+}
+
+    
+    
 
     public boolean asignarPreso(String idPreso) {
         if (tieneCupoDisponible() && !presosAsignadosIds.contains(idPreso)) {

@@ -110,5 +110,53 @@
       "fechaIngreso": "2025-05-15",
       "fechaSalidaCalculada": "2038-09-15"
     }
+  },
+  {
+    "id": 8,
+    "presoId": "1237440696",
+    "codigo": 399,
+    "nombre": "Peculado por uso",
+    "articuloLey": "Artículo 399",
+    "gravedad": "Baja",
+    "descripcion": "La detenida fue vista peculando por uso",
+    "fechaComision": "2025-05-15",
+    "sentencia": {
+      "años": 2,
+      "meses": 3,
+      "fechaIngreso": "2025-05-16",
+      "fechaSalidaCalculada": "2027-08-16"
+    }
+  },
+  {
+    "id": 9,
+    "presoId": "009988776",
+    "codigo": 240,
+    "nombre": "Hurto calificado",
+    "articuloLey": "Artículo 240",
+    "gravedad": "Baja",
+    "descripcion": "La reclusa hurto mientras regresaba a casa",
+    "fechaComision": "2025-05-08",
+    "sentencia": {
+      "años": 2,
+      "meses": 1,
+      "fechaIngreso": "2025-05-16",
+      "fechaSalidaCalculada": "2027-06-16"
+    }
+  },
+  {
+    "id": 10,
+    "presoId": "112233445",
+    "codigo": 244,
+    "nombre": "Extorsión",
+    "articuloLey": "Artículo 244 - Extorsión",
+    "gravedad": "Baja",
+    "descripcion": "Estuvo extorcionando gente",
+    "fechaComision": "2025-05-11",
+    "sentencia": {
+      "años": 2,
+      "meses": 1,
+      "fechaIngreso": "2025-05-17",
+      "fechaSalidaCalculada": "2027-06-17"
+    }
   }
 ]

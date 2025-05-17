@@ -332,12 +332,7 @@ public ExpedienteJudicial actualizarExpedienteConDelitos(String identificacionPr
         }
     }
     
-    
-    
-    
-    
-    
-    
+  
     public List<ExpedienteJudicial> obtenerHistorialExpedientes(String identificacionPreso) {
     try {
         Validador.validarFormatoIdentificacion(identificacionPreso);

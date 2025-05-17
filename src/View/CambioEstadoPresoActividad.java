@@ -1,4 +1,3 @@
-
 package View;
 
 import Controller.ActividadController;
@@ -9,12 +8,12 @@ import Model.Entities.Preso;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-
 public class CambioEstadoPresoActividad extends javax.swing.JDialog {
 
     private Preso preso;
 
     ActividadController ac = ActividadController.getInstancia();
+    
 
     public CambioEstadoPresoActividad(java.awt.Frame parent, boolean modal, Preso preso) {
         super(parent, modal);
@@ -56,7 +55,12 @@ public class CambioEstadoPresoActividad extends javax.swing.JDialog {
         jLabel1.setText("Estado:");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 70, -1));
 
-        nuevoEstadoPresoAct.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccione>", "EN_PROCESO", "FINALIZADA", "CANCELADA" }));
+        nuevoEstadoPresoAct.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccione>", "FINALIZADA", "CANCELADA" }));
+        nuevoEstadoPresoAct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nuevoEstadoPresoActActionPerformed(evt);
+            }
+        });
         jPanel1.add(nuevoEstadoPresoAct, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, 140, 40));
 
         btnCambiar.setBackground(new java.awt.Color(0, 51, 0));
@@ -99,77 +103,103 @@ public class CambioEstadoPresoActividad extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnCambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarActionPerformed
+String estadoSeleccionado = nuevoEstadoPresoAct.getSelectedItem().toString();
 
-        String estadoSeleccionado = nuevoEstadoPresoAct.getSelectedItem().toString();
+if (estadoSeleccionado.equals("<Seleccione>")) {
+    JOptionPane.showMessageDialog(this, "Por favor, seleccione un estado válido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    return;
+}
 
-        if (estadoSeleccionado.equals("<Seleccione>")) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione un estado válido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+EstadoActividadesPresoEnum nuevoEstado;
+try {
+    nuevoEstado = EstadoActividadesPresoEnum.valueOf(estadoSeleccionado);
+} catch (IllegalArgumentException e) {
+    JOptionPane.showMessageDialog(this, "Estado seleccionado no válido.", "Error", JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+List<Actividad> actividades = ActividadDAO.getInstancia().cargarActividades();
+
+for (Actividad act : actividades) {
+    if (act.getPresosAsignadosIds().contains(preso.getIdentificacion())) {
+        EstadoActividadesPresoEnum estadoActual = act.getEstadoPreso(preso.getIdentificacion());
+
+        // Validación de estados no permitidos
+        if ((estadoActual == EstadoActividadesPresoEnum.FINALIZADA || estadoActual == EstadoActividadesPresoEnum.CANCELADA)
+                && nuevoEstado == EstadoActividadesPresoEnum.EN_PROCESO) {
+            JOptionPane.showMessageDialog(this, 
+                "No se puede cambiar a EN_PROCESO porque la actividad ya fue FINALIZADA o CANCELADA.", 
+                "Operación no permitida", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        EstadoActividadesPresoEnum nuevoEstado;
-        try {
-            nuevoEstado = EstadoActividadesPresoEnum.valueOf(estadoSeleccionado);
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, "Estado seleccionado no válido.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        List<Actividad> actividades = ActividadDAO.getInstancia().cargarActividades();
-
-        for (Actividad act : actividades) {
-            if (act.getPresosAsignadosIds().contains(preso.getIdentificacion())) {
-                EstadoActividadesPresoEnum estadoActual = act.getEstadoPreso(preso.getIdentificacion());
-
-                if ((estadoActual == EstadoActividadesPresoEnum.FINALIZADA || estadoActual == EstadoActividadesPresoEnum.CANCELADA)
-                        && nuevoEstado == EstadoActividadesPresoEnum.EN_PROCESO) {
-                    JOptionPane.showMessageDialog(this, "No se puede cambiar a EN_PROCESO porque la actividad ya fue FINALIZADA o CANCELADA.", "Operación no permitida", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                act.setEstadoPreso(preso.getIdentificacion(), nuevoEstado); 
-                break;
+        // Si el nuevo estado es FINALIZADA o CANCELADA, remover al preso
+        if (nuevoEstado == EstadoActividadesPresoEnum.FINALIZADA || 
+            nuevoEstado == EstadoActividadesPresoEnum.CANCELADA) {
+            
+            // Remover al preso de la actividad
+            act.getPresosAsignadosIds().remove(preso.getIdentificacion());
+            
+            // Reducir el contador de inscritos
+            if (act.getPresosInscritos() > 0) {
+                act.setPresosInscritos(act.getPresosInscritos() - 1);
             }
         }
 
-        boolean guardado = ActividadDAO.getInstancia().guardarActividades(actividades); 
+        // Actualizar el estado del preso en la actividad
+        act.setEstadoPreso(preso.getIdentificacion(), nuevoEstado);
+        break;
+    }
+}
 
-        if (guardado) {
-            JOptionPane.showMessageDialog(this, "Estado del preso actualizado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "No se pudo guardar el cambio en el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+boolean guardado = ActividadDAO.getInstancia().guardarActividades(actividades);
 
-        this.dispose();
+if (guardado) {
+    JOptionPane.showMessageDialog(this, 
+        "Estado del preso actualizado correctamente. " + 
+        (nuevoEstado == EstadoActividadesPresoEnum.FINALIZADA || 
+         nuevoEstado == EstadoActividadesPresoEnum.CANCELADA ? 
+         "El preso ha sido removido de la actividad." : ""), 
+        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+} else {
+    JOptionPane.showMessageDialog(this, 
+        "No se pudo guardar el cambio en el archivo.", 
+        "Error", JOptionPane.ERROR_MESSAGE);
+}
 
-    
+this.dispose();
+
     }//GEN-LAST:event_btnCambiarActionPerformed
 
-    public static void main(String args[]) {
-    /* Set the Nimbus look and feel */
-    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-     */
-    try {
-        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-            if ("Nimbus".equals(info.getName())) {
-                javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                break;
-            }
-        }
-    } catch (ClassNotFoundException ex) {
-        java.util.logging.Logger.getLogger(CambioEstadoPresoActividad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (InstantiationException ex) {
-        java.util.logging.Logger.getLogger(CambioEstadoPresoActividad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (IllegalAccessException ex) {
-        java.util.logging.Logger.getLogger(CambioEstadoPresoActividad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-        java.util.logging.Logger.getLogger(CambioEstadoPresoActividad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    }
-    //</editor-fold>
+    private void nuevoEstadoPresoActActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoEstadoPresoActActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nuevoEstadoPresoActActionPerformed
 
-}
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(CambioEstadoPresoActividad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(CambioEstadoPresoActividad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(CambioEstadoPresoActividad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(CambioEstadoPresoActividad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCambiar;

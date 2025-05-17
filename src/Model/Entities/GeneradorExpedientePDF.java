@@ -12,26 +12,22 @@ import java.util.List;
 
 public class GeneradorExpedientePDF {
 
-    // Colores modernos
-    private static final BaseColor COLOR_PRIMARIO = new BaseColor(26, 54, 93); // Azul oscuro
-    private static final BaseColor COLOR_SECUNDARIO = new BaseColor(245, 245, 245); // Gris claro
-    private static final BaseColor COLOR_ALTO_RIESGO = new BaseColor(139, 0, 0); // Rojo oscuro
-    private static final BaseColor COLOR_EXITO = new BaseColor(0, 100, 0); // Verde oscuro
-    private static final BaseColor COLOR_FONDO_FOTO = new BaseColor(240, 240, 240); // Gris muy claro para fondo de foto
+    private static final BaseColor COLOR_PRIMARIO = new BaseColor(26, 54, 93); 
+    private static final BaseColor COLOR_SECUNDARIO = new BaseColor(245, 245, 245); 
+    private static final BaseColor COLOR_ALTO_RIESGO = new BaseColor(139, 0, 0); 
+    private static final BaseColor COLOR_EXITO = new BaseColor(0, 100, 0); 
+    private static final BaseColor COLOR_FONDO_FOTO = new BaseColor(240, 240, 240);
 
     public void generarPDFExpediente(Preso preso, ExpedienteJudicial expediente,
                                    List<Delito> delitos, Sentencia sentenciaTotal,
                                    String rutaDestino) throws Exception {
 
-        // Configuración del documento con márgenes más equilibrados
         Document document = new Document(PageSize.A4, 30, 30, 70, 30);
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(rutaDestino));
 
-        // Encabezado y pie de página modernizado
         writer.setPageEvent(new PdfPageEventHelper() {
             public void onEndPage(PdfWriter writer, Document document) {
                 try {
-                    // Encabezado moderno con degradado
                     PdfPTable header = new PdfPTable(1);
                     header.setTotalWidth(document.getPageSize().getWidth() - 60);
                     header.setLockedWidth(true);
@@ -46,7 +42,6 @@ public class GeneradorExpedientePDF {
 
                     header.writeSelectedRows(0, -1, 30, document.getPageSize().getHeight() - 20, writer.getDirectContent());
 
-                    // Pie de página minimalista
                     PdfPTable footer = new PdfPTable(1);
                     footer.setTotalWidth(document.getPageSize().getWidth() - 60);
                     footer.setLockedWidth(true);
@@ -71,19 +66,16 @@ public class GeneradorExpedientePDF {
 
         document.open();
 
-        // Fuentes mejoradas
         Font fontTitulo = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD, COLOR_PRIMARIO);
         Font fontSubtitulo = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, COLOR_PRIMARIO);
         Font fontNormal = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
         Font fontResaltado = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
         Font fontEtiqueta = new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.DARK_GRAY);
 
-        // Título centrado con línea decorativa
         Paragraph titulo = new Paragraph("EXPEDIENTE PENITENCIARIO", fontTitulo);
         titulo.setAlignment(Element.ALIGN_CENTER);
         titulo.setSpacingAfter(15);
         
-        // Línea decorativa bajo el título
         Paragraph linea = new Paragraph();
         linea.add(new Chunk(new LineSeparator(0.5f, 100, COLOR_PRIMARIO, Element.ALIGN_CENTER, -1)));
         linea.setSpacingAfter(20);
@@ -91,21 +83,17 @@ public class GeneradorExpedientePDF {
         document.add(titulo);
         document.add(linea);
 
-        // Sección de datos personales con diseño de tarjeta
         PdfPTable datosPersonales = new PdfPTable(2);
         datosPersonales.setWidthPercentage(100);
         datosPersonales.setWidths(new float[]{70, 30});
         datosPersonales.setSpacingBefore(10);
 
-        // Contenedor de datos con sombra (simulada con bordes)
         PdfPTable datosColumna = new PdfPTable(2);
         datosColumna.setWidthPercentage(100);
         datosColumna.setSpacingBefore(5);
 
-        // Título de sección con fondo
         agregarCeldaTituloModerno(datosColumna, "DATOS PERSONALES", fontSubtitulo, 2);
         
-        // Datos con mejor espaciado
         agregarCeldaDatosModerno(datosColumna, "Nombre completo:", preso.getNombresCompletos() + " " + preso.getApellidosCompletos(), 
                                fontEtiqueta, fontNormal);
         agregarCeldaDatosModerno(datosColumna, "Identificación:", preso.getIdentificacion(), 
@@ -113,7 +101,6 @@ public class GeneradorExpedientePDF {
         agregarCeldaDatosModerno(datosColumna, "Edad/Nacionalidad:", preso.getEdad() + " años / " + preso.getNacionalidad(), 
                                fontEtiqueta, fontNormal);
         
-        // Estado con estilo de badge moderno
         String estado = preso.getEstado().name();
         BaseColor colorEstado = preso.getEstado() == EstadoPresoEnum.FALLECIDO ? BaseColor.RED :
                                preso.getEstado() == EstadoPresoEnum.LIBERADO ? COLOR_EXITO : 
@@ -140,15 +127,12 @@ public class GeneradorExpedientePDF {
         datosCell.setBackgroundColor(COLOR_SECUNDARIO);
         datosPersonales.addCell(datosCell);
 
-        // Foto con marco moderno y sombra
         PdfPCell fotoCell;
         if (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty()) {
             try {
-                // Crear un contenedor para la foto con sombra
                 PdfPTable fotoContainer = new PdfPTable(1);
                 fotoContainer.setWidthPercentage(100);
                 
-                // Celda de fondo para el efecto de sombra
                 PdfPCell shadowCell = new PdfPCell();
                 shadowCell.setBackgroundColor(COLOR_FONDO_FOTO);
                 shadowCell.setBorder(Rectangle.BOX);
@@ -156,33 +140,26 @@ public class GeneradorExpedientePDF {
                 shadowCell.setBorderColor(BaseColor.LIGHT_GRAY);
                 shadowCell.setPadding(5);
                 
-                // Agregar la imagen
                 Image foto = Image.getInstance(preso.getFotoPath());
                 foto.scaleToFit(120, 150);
                 foto.setAlignment(Element.ALIGN_CENTER);
                 
-                // Aplicar efecto de borde redondeado
                 PdfContentByte canvas = writer.getDirectContentUnder();
-                float x = document.right() - 150; // Posición X ajustada
-                float y = document.top() - 228;    // Posición Y ajustada
+                float x = document.right() - 150; 
+                float y = document.top() - 228;    
                 
-                // Dibujar sombra
                 canvas.setColorFill(BaseColor.LIGHT_GRAY);
                 canvas.roundRectangle(x+2, y-2, 124, 154, 5);
                 canvas.fill();
                 
-                // Dibujar fondo blanco con borde redondeado
                 canvas.setColorFill(BaseColor.WHITE);
                 canvas.roundRectangle(x, y, 120, 150, 5);
                 canvas.fill();
                 
-                // Posicionar la imagen sobre el fondo
                 foto.setAbsolutePosition(x, y);
                 document.add(foto);
                 
-                // Texto bajo la foto
                 
-                // Crear celda para el texto
                 fotoCell = new PdfPCell();
                 fotoCell.setBorder(Rectangle.NO_BORDER);
                 
@@ -200,17 +177,14 @@ public class GeneradorExpedientePDF {
         document.add(datosPersonales);
         document.add(Chunk.NEWLINE);
 
-        // Sección de expediente con diseño de tarjeta
         PdfPTable tablaExpediente = new PdfPTable(2);
         tablaExpediente.setWidthPercentage(100);
         tablaExpediente.setSpacingBefore(10);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        // Título de sección con fondo
         agregarCeldaTituloModerno(tablaExpediente, "DATOS DEL EXPEDIENTE", fontSubtitulo, 2);
         
-        // Datos con mejor formato
         agregarCeldaDatosModerno(tablaExpediente, "Número de registro:", expediente.getNumeroRegistro(), 
                                fontEtiqueta, fontNormal);
         agregarCeldaDatosModerno(tablaExpediente, "Código de expediente:", expediente.getCodigoExpediente(), 
@@ -220,7 +194,6 @@ public class GeneradorExpedientePDF {
         agregarCeldaDatosModerno(tablaExpediente, "Juzgado:", expediente.getJuzgado(), 
                                fontEtiqueta, fontNormal);
                                
-        // Nivel de riesgo con color
         Phrase riesgoPhrase = new Phrase(expediente.getNivelRiesgo(), 
             new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, 
                    expediente.getNivelRiesgo().equalsIgnoreCase("Alto") ? COLOR_ALTO_RIESGO : BaseColor.BLACK));
@@ -234,7 +207,6 @@ public class GeneradorExpedientePDF {
         agregarCeldaDatosModerno(tablaExpediente, "Estado del expediente:", expediente.getEstado().toString(), 
                                fontEtiqueta, fontNormal);
 
-        // Aplicar estilo de tarjeta a la tabla completa
         PdfPCell expedienteContainer = new PdfPCell(tablaExpediente);
         expedienteContainer.setBorder(Rectangle.BOX);
         expedienteContainer.setBorderWidth(0.5f);
@@ -249,11 +221,9 @@ public class GeneradorExpedientePDF {
         document.add(expedienteWrapper);
         document.add(Chunk.NEWLINE);
 
-        // Sección de sentencia con diseño mejorado
         PdfPTable tablaSentencia = new PdfPTable(1);
         tablaSentencia.setWidthPercentage(100);
         
-        // Título de sección con fondo
         agregarCeldaTituloModerno(tablaSentencia, "SENTENCIA TOTAL", fontSubtitulo, 1);
 
         PdfPCell sentenciaCell = new PdfPCell();
@@ -277,29 +247,24 @@ public class GeneradorExpedientePDF {
 
         sentenciaCell.addElement(sentenciaPhrase);
         
-        // Barra de progreso simulada mejorada
         PdfPTable progressBar = new PdfPTable(1);
         progressBar.setWidthPercentage(100);
         
-        // Fondo de la barra de progreso
         PdfPCell progressBackground = new PdfPCell();
         progressBackground.setFixedHeight(10);
         progressBackground.setBackgroundColor(BaseColor.LIGHT_GRAY);
         progressBackground.setBorder(Rectangle.NO_BORDER);
         progressBar.addCell(progressBackground);
         
-        // Barra de progreso principal
         PdfPCell progressCell = new PdfPCell();
         progressCell.setFixedHeight(8);
         progressCell.setBackgroundColor(COLOR_PRIMARIO);
         progressCell.setBorder(Rectangle.NO_BORDER);
         
-        // Crear tabla para el efecto de progreso
         PdfPTable innerProgress = new PdfPTable(1);
         innerProgress.setWidthPercentage(100);
         innerProgress.addCell(progressCell);
         
-        // Posicionar la barra de progreso
         PdfPCell progressContainer = new PdfPCell(innerProgress);
         progressContainer.setBorder(Rectangle.NO_BORDER);
         progressContainer.setPaddingTop(1);
@@ -309,7 +274,6 @@ public class GeneradorExpedientePDF {
         sentenciaCell.addElement(progressBar);
         tablaSentencia.addCell(sentenciaCell);
 
-        // Aplicar estilo de tarjeta
         PdfPCell sentenciaContainer = new PdfPCell(tablaSentencia);
         sentenciaContainer.setBorder(Rectangle.BOX);
         sentenciaContainer.setBorderWidth(0.5f);
@@ -323,17 +287,14 @@ public class GeneradorExpedientePDF {
         document.add(sentenciaWrapper);
         document.add(Chunk.NEWLINE);
 
-        // Tabla de delitos con diseño moderno ahora con 5 columnas (añadiendo descripción)
         PdfPTable tablaDelitos = new PdfPTable(5);
         tablaDelitos.setWidthPercentage(100);
         tablaDelitos.setSpacingBefore(10);
         tablaDelitos.setHeaderRows(1);
 
-        // Ajustar los anchos de las columnas para dar más espacio a la descripción
-        float[] columnWidths = {20f, 15f, 12f, 15f, 38f}; // Porcentajes aproximados
+        float[] columnWidths = {20f, 15f, 12f, 15f, 38f}; 
         tablaDelitos.setWidths(columnWidths);
 
-        // Encabezados de tabla modernos
         agregarCeldaEncabezadoModerno(tablaDelitos, "Delito", fontEtiqueta);
         agregarCeldaEncabezadoModerno(tablaDelitos, "Fecha comisión", fontEtiqueta);
         agregarCeldaEncabezadoModerno(tablaDelitos, "Gravedad", fontEtiqueta);
@@ -343,23 +304,19 @@ public class GeneradorExpedientePDF {
         if (delitos != null && !delitos.isEmpty()) {
             boolean alternate = false;
             for (Delito delito : delitos) {
-                // Filas alternas para mejor legibilidad
                 BaseColor rowColor = alternate ? COLOR_SECUNDARIO : BaseColor.WHITE;
                 alternate = !alternate;
                 
-                // Celda de delito
                 PdfPCell delitoCell = new PdfPCell(new Phrase(delito.getNombre(), fontNormal));
                 delitoCell.setBackgroundColor(rowColor);
                 delitoCell.setPadding(6);
                 tablaDelitos.addCell(delitoCell);
                 
-                // Celda de fecha
                 PdfPCell fechaCell = new PdfPCell(new Phrase(delito.getFechaComision().format(formatter), fontNormal));
                 fechaCell.setBackgroundColor(rowColor);
                 fechaCell.setPadding(6);
                 tablaDelitos.addCell(fechaCell);
                 
-                // Celda de gravedad con color según nivel
                 Font gravedadFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD,
                     delito.getGravedad().equalsIgnoreCase("Alta") ? COLOR_ALTO_RIESGO : 
                     delito.getGravedad().equalsIgnoreCase("Media") ? COLOR_PRIMARIO : BaseColor.DARK_GRAY);
@@ -369,27 +326,22 @@ public class GeneradorExpedientePDF {
                 gravedadCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tablaDelitos.addCell(gravedadCell);
                 
-                // Celda de sentencia
                 PdfPCell sentenciaDelitoCell = new PdfPCell(new Phrase(delito.getSentencia().getSentenciaFormateada(), fontNormal));
                 sentenciaDelitoCell.setBackgroundColor(rowColor);
                 sentenciaDelitoCell.setPadding(6);
                 tablaDelitos.addCell(sentenciaDelitoCell);
                 
-                // Celda para la descripción con manejo de texto largo
                 PdfPCell descripcionCell = new PdfPCell();
                 descripcionCell.setBackgroundColor(rowColor);
                 descripcionCell.setPadding(6);
                 
                 String descripcion = delito.getDescripcion() != null ? delito.getDescripcion() : "Sin descripción";
                 
-                // Dividir el texto en párrafos si es muy largo
                 if (descripcion.length() > 150) {
-                    // Usamos Paragraph para manejar texto largo con saltos de línea automáticos
                     Paragraph descripcionParrafo = new Paragraph(descripcion, 
                         new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL, BaseColor.DARK_GRAY));
                     descripcionCell.addElement(descripcionParrafo);
                 } else {
-                    // Para texto corto, usamos Phrase normal
                     descripcionCell.setPhrase(new Phrase(descripcion, 
                         new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.DARK_GRAY)));
                 }
@@ -405,7 +357,6 @@ public class GeneradorExpedientePDF {
             tablaDelitos.addCell(noDelitos);
         }
 
-        // Aplicar estilo de tarjeta a la tabla de delitos
         PdfPCell delitosContainer = new PdfPCell(tablaDelitos);
         delitosContainer.setBorder(Rectangle.BOX);
         delitosContainer.setBorderWidth(0.5f);
@@ -421,7 +372,6 @@ public class GeneradorExpedientePDF {
         document.close();
     }
 
-    // Métodos auxiliares mejorados
     private void agregarCeldaTituloModerno(PdfPTable tabla, String texto, Font fuente, int colspan) {
         PdfPCell celda = new PdfPCell(new Phrase(texto, fuente));
         celda.setColspan(colspan);
@@ -458,11 +408,9 @@ public class GeneradorExpedientePDF {
     }
 
     private PdfPCell crearCeldaFotoPlaceholder(String texto, Font fuente) {
-        // Crear un contenedor con efecto de tarjeta moderna
         PdfPTable placeholderTable = new PdfPTable(1);
         placeholderTable.setWidthPercentage(100);
         
-        // Celda de fondo con sombra simulada
         PdfPCell shadowCell = new PdfPCell();
         shadowCell.setFixedHeight(150);
         shadowCell.setBackgroundColor(COLOR_FONDO_FOTO);
@@ -470,7 +418,6 @@ public class GeneradorExpedientePDF {
         shadowCell.setBorderWidth(1);
         shadowCell.setBorderColor(BaseColor.LIGHT_GRAY);
         
-        // Contenido centrado
         Phrase placeholderText = new Phrase(texto, new Font(fuente.getFamily(), fuente.getSize(), Font.ITALIC, BaseColor.DARK_GRAY));
         PdfPCell textCell = new PdfPCell(placeholderText);
         textCell.setBorder(Rectangle.NO_BORDER);

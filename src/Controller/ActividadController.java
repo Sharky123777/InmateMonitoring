@@ -5,6 +5,7 @@ import DAO.OficialDAO;
 import DAO.PresoDAO;
 import Model.Constants.EstadoActividadesEnum;
 import Model.Constants.EstadoActividadesPresoEnum;
+import Model.Constants.EstadoPresoEnum;
 import Model.Entities.Actividad;
 import Model.Entities.Oficial;
 import Model.Entities.Preso;
@@ -147,8 +148,7 @@ public class ActividadController {
                 actividad.getCupoMaximo(),
                 actividad.getPresosInscritos(),
                 nombreOficial,
-                actividad.getEstado(),
-                actividad.getDescripcion()
+                actividad.getEstado()
             });
         }
     }
@@ -222,7 +222,7 @@ public class ActividadController {
                         preso.getEdad(),
                         preso.getIdentificacion(),
                         actividad.getHorario(),
-                        actividad.getEstadoPreso(preso.getIdentificacion()) // Solo el estado
+                        actividad.getEstadoPreso(preso.getIdentificacion()) 
                     });
                 }
             } catch (Exception e) {
@@ -249,38 +249,42 @@ public class ActividadController {
                 actividad.getLugar(),
                 actividad.getCupoMaximo(),
                 actividad.getPresosInscritos(),
-                nombreOficial
+                nombreOficial,
+                actividad.getEstado()
             });
         }
 
         return filas;
     }
 
-    public List<Object[]> obtenerPresosParaActividades() {
-        List<Preso> presos = presoDAO.cargarTodos();
+   public List<Object[]> obtenerPresosParaActividades() {
+    List<Preso> presos = presoDAO.cargarTodos();
+    List<Object[]> filas = new ArrayList<>();
 
-        List<Object[]> filas = new ArrayList<>();
+    for (Preso preso : presos) {
+        if (preso.getEstado() == EstadoPresoEnum.ACTIVO &&
+            preso.getNivelDeRiesgo().equalsIgnoreCase("RIESGO BAJO") &&
+            !preso.isEnAislamiento()) {
+            
+            ImageIcon foto = pc.obtenerFotoPreso(preso);
 
-        for (Preso preso : presos) {
-            if (preso.getNivelDeRiesgo().equalsIgnoreCase("RIESGO BAJO") && !preso.isEnAislamiento()) {
-                ImageIcon foto = pc.obtenerFotoPreso(preso);
-
-                filas.add(new Object[]{
-                    foto,
-                    preso.getId(),
-                    preso.getNombresCompletos(),
-                    preso.getApellidosCompletos(),
-                    preso.getEdad(),
-                    preso.getIdentificacion(),
-                    preso.getNacionalidad(),
-                    preso.getSeccionAsignada(),
-                    preso.getCeldaAsignada()
-                });
-            }
+            filas.add(new Object[]{
+                foto,
+                preso.getId(),
+                preso.getNombresCompletos(),
+                preso.getApellidosCompletos(),
+                preso.getEdad(),
+                preso.getIdentificacion(),
+                preso.getNacionalidad(),
+                preso.getSeccionAsignada(),
+                preso.getCeldaAsignada()
+            });
         }
-
-        return filas;
     }
+
+    return filas;
+}
+
 
     public boolean actualizarEstadoActividad(String idActividad, EstadoActividadesEnum nuevoEstado) {
         return actividadDAO.actualizarEstadoActividad(idActividad, nuevoEstado);
@@ -289,6 +293,11 @@ public class ActividadController {
     public void actualizarEstadoPresosActividad(String idActividad, EstadoActividadesEnum estado) {
         actividadDAO.actualizarEstadoPresosActividad(idActividad, estado);
     }
+    public void actualizarEstadoPresoEnActividad(String idActividad, String idPreso, EstadoActividadesPresoEnum nuevoEstado) {
+    actividadDAO.actualizarEstadoPresoEnActividad(idActividad, idPreso, nuevoEstado);
+
+}
+
 
     public boolean hayCambiosActividad(Actividad actividadOriginal,
             String nombre,

@@ -1,7 +1,10 @@
 package DAO;
 
+import Controller.ActividadController;
+import Model.Constants.EstadoActividadesPresoEnum;
 import Model.Constants.EstadoExpedienteEnum;
 import Model.Constants.EstadoPresoEnum;
+import Model.Entities.Actividad;
 import Model.Entities.Celda;
 import Model.Entities.ExpedienteJudicial;
 import Model.Entities.Delito;
@@ -35,6 +38,7 @@ public class PresoDAO {
     private static IntentoFugaDAO intentoFugaDAO = IntentoFugaDAO.getInstancia();
     private static DelitoDAO delitoDAO = DelitoDAO.getInstancia();
     private static ExpedienteDAO expedienteDAO = ExpedienteDAO.getInstancia();
+    private static ActividadDAO actividadDAO = ActividadDAO.getInstancia();
     private static PresoDAO instancia;
 
     private static final String JSON_FILE = "src/Resources/DATA/presos.json/";
@@ -116,7 +120,6 @@ public class PresoDAO {
             System.err.println("Error: El preso no puede ser nulo");
             return false;
         }
-
         List<Preso> presos = cargarTodos();
 
         if (preso.getId() == 0) {
@@ -403,10 +406,13 @@ public class PresoDAO {
 
     public boolean cambiarEstadoPreso(String identificacion, EstadoPresoEnum nuevoEstado, LocalDate fechaCambio) {
         List<Preso> presos = cargarTodos();
+        ActividadController actividadController = ActividadController.getInstancia();
 
         for (Preso preso : presos) {
             if (preso.getIdentificacion().equals(identificacion)) {
                 EstadoPresoEnum estadoActual = preso.getEstado();
+
+                List<Actividad> actividadesPreso = actividadController.buscarActividadesPorPreso(identificacion);
 
                 preso.setEstado(nuevoEstado);
 
@@ -414,10 +420,18 @@ public class PresoDAO {
                     case FUGADO:
                         preso.setFechaFuga(fechaCambio);
                         intentoFugaDAO.registrarFuga(identificacion, fechaCambio);
+
+                        for (Actividad actividad : actividadesPreso) {
+                            actividadDAO.removerPresoDeActividad(actividad.getIdActividad(), identificacion);
+                        }
                         break;
 
                     case LIBERADO:
                         preso.setFechaLiberacion(fechaCambio);
+
+                        for (Actividad actividad : actividadesPreso) {
+                            actividadDAO.removerPresoDeActividad(actividad.getIdActividad(), identificacion);
+                        }
 
                         ExpedienteJudicial expedienteAbierto = expedienteDAO.obtenerExpedienteAbierto(identificacion);
                         if (expedienteAbierto != null) {
@@ -428,6 +442,10 @@ public class PresoDAO {
 
                     case FALLECIDO:
                         preso.setFechaDefuncion(fechaCambio);
+
+                        for (Actividad actividad : actividadesPreso) {
+                            actividadDAO.removerPresoDeActividad(actividad.getIdActividad(), identificacion);
+                        }
 
                         ExpedienteJudicial expedienteAbiertoFallecido = expedienteDAO.obtenerExpedienteAbierto(identificacion);
                         if (expedienteAbiertoFallecido != null) {

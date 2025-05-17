@@ -1,17 +1,42 @@
 [
   {
     "estadosPorPreso": {},
-    "idActividad": "ACT-1",
-    "nombre": "Taller de Tejido y Manualidades",
-    "tipo": "Recreativa",
-    "dia": "Lunes",
-    "horario": "07:00 am - 08:45 am",
-    "lugar": "Taller de Costura y Confección",
+    "idActividad": "ACT-4",
+    "nombre": "Cultivo de Huertos",
+    "tipo": "Laboral",
+    "dia": "Miercoles",
+    "horario": "02:00 pm - 04:15 pm",
+    "lugar": "Taller de Jardinería y Vivero",
     "cupoMaximo": 30,
-    "presosAsignadosIds": [],
+    "presosAsignadosIds": [
+      "112233445",
+      "223344556",
+      "445566778",
+      "334455667"
+    ],
     "estado": "ACTIVA",
+    "presosInscritos": 4,
+    "responsableOficial": "31313131",
+    "descripcion": "Actividad al aire libre donde los internos siembran vegetales y hierbas, promoviendo responsabilidad y sostenibilidad."
+  },
+  {
+    "estadosPorPreso": {
+      "112233445": "CANCELADA",
+      "223344556": "CANCELADA",
+      "445566778": "CANCELADA",
+      "334455667": "CANCELADA"
+    },
+    "idActividad": "ACT-5",
+    "nombre": "Tenis",
+    "tipo": "Recreativa",
+    "dia": "Miercoles",
+    "horario": "08:45 am - 10:15 am",
+    "lugar": "Taller de Costura y Confección",
+    "cupoMaximo": 10,
+    "presosAsignadosIds": [],
+    "estado": "CANCELADA",
     "presosInscritos": 0,
-    "responsableOficial": "18377137131",
-    "descripcion": "Actividad enfocada en el desarrollo de habilidades manuales,\ncreatividad y paciencia a través del tejido, bordado y\nelaboración de manualidades. Fomenta la concentración\ny puede convertirse en una herramienta de reintegración laboral"
+    "responsableOficial": "4243242424",
+    "descripcion": "lop"
   }
 ]

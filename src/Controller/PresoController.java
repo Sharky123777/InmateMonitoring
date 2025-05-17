@@ -7,6 +7,7 @@ import DAO.IntentoFugaDAO;
 import DAO.PresoDAO;
 import Model.Constants.EstadoExpedienteEnum;
 import Model.Constants.EstadoPresoEnum;
+import Model.Entities.Actividad;
 import Model.Entities.Celda;
 import Model.Entities.Delito;
 import Model.Entities.ExpedienteJudicial;
@@ -23,7 +24,6 @@ import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -84,7 +84,8 @@ public class PresoController {
             Object nivelSeguridad,
             Object aislamiento,
             Object nivelRiesgo,
-            Object imagen) {
+            Object imagen,
+            Object seccion) {
 
         return Stream.of(
                 !primerNombre.trim().isEmpty() && !primerNombre.equals(presoOriginal.getPrimerNombre()),
@@ -102,7 +103,8 @@ public class PresoController {
                 nivelRiesgo != null && !nivelRiesgo.toString().equals("<Seleccionar>")
                 && !nivelRiesgo.toString().equals(presoOriginal.getNivelDeRiesgo()),
                 aislamiento != null && aislamiento.toString().equalsIgnoreCase("Sí") != presoOriginal.isEnAislamiento(),
-                imagen != null
+                imagen != null,
+                seccion != null && !seccion.toString().equals("<Seleccionar>")
         ).anyMatch(Boolean::booleanValue);
     }
 
@@ -119,11 +121,12 @@ public class PresoController {
             Object nivelSeguridad,
             Object aislamiento,
             Object nivelRiesgo,
-            File selectedImageFile) {
+            File selectedImageFile,
+            Object seccion) {
 
         try {
             if (!hayCambios(presoOriginal, primerNombre, segundoNombre, primerApellido, segundoApellido,
-                    edad, estatura, peso, nacionalidad, grupoSanguineo, nivelSeguridad, aislamiento, nivelRiesgo, selectedImageFile)) {
+                    edad, estatura, peso, nacionalidad, grupoSanguineo, nivelSeguridad, aislamiento, nivelRiesgo, selectedImageFile, seccion)) {
                 Validador.mostrarAdvertencia("No hay cambios para guardar");
                 return false;
             }
@@ -164,14 +167,15 @@ public class PresoController {
                     peso.trim().isEmpty() ? presoOriginal.getPeso() : Float.parseFloat(peso.trim()),
                     grupoSanguineo == null || grupoSanguineo.toString().equals("<Seleccionar>")
                     ? presoOriginal.getGrupoSanguineo() : grupoSanguineo.toString(),
-                    presoOriginal.getSeccionAsignada(),
+                    seccion == null || seccion.toString().equals("<Seleccionar>")
+                    ? presoOriginal.getSeccionAsignada()
+                    : seccion.toString(),
                     nivelSeguridad == null || nivelSeguridad.toString().equals("<Seleccionar>")
                     ? presoOriginal.getNivelDeSeguridad() : nivelSeguridad.toString(),
                     aislamiento != null && aislamiento.toString().equalsIgnoreCase("Sí"),
                     nivelRiesgo == null || nivelRiesgo.toString().equals("<Seleccionar>")
                     ? presoOriginal.getNivelDeRiesgo() : nivelRiesgo.toString(),
-                    selectedImageFile != null ? selectedImageFile : new File(presoOriginal.getFotoPath())
-            );
+                    selectedImageFile != null ? selectedImageFile : new File(presoOriginal.getFotoPath()));
 
             if (resultado) {
                 Validador.mostrarInfo("Preso actualizado correctamente");
@@ -412,11 +416,9 @@ public class PresoController {
                 }
 
                 expedienteAbierto = expedienteDAO.crearExpedienteNuevoParaReincidencia(preso, List.of(nuevoDelito));
-            } 
-            else if (expedienteAbierto == null) {
+            } else if (expedienteAbierto == null) {
                 expedienteAbierto = expedienteDAO.crearExpedienteNuevoParaReincidencia(preso, List.of(nuevoDelito));
-            } 
-            else {
+            } else {
                 expedienteAbierto.agregarDelito(nuevoDelito);
                 expedienteDAO.actualizarExpediente(expedienteAbierto);
             }
@@ -456,7 +458,6 @@ public class PresoController {
 
             List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(identificacion);
             preso.setDelitos(delitos);
-
 
             return preso;
 
@@ -726,7 +727,6 @@ public class PresoController {
 
         List<Object[]> filas = new ArrayList<>();
 
-
         for (Preso preso : liberados) {
             ImageIcon foto = (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty())
                     ? cargarImagenPreso(preso.getFotoPath())
@@ -858,6 +858,8 @@ public class PresoController {
 
                 break;
         }
+        
+  
 
         return presoDAO.cambiarEstadoPreso(identificacion, nuevoEstado, fechaCambio);
     }
@@ -867,7 +869,13 @@ public class PresoController {
             throw new IllegalStateException("No se puede liberar un preso fugado");
         }
 
-        LocalDate finCondena = calcularFechaSalidaPreso(preso.getDelitos());
+        ExpedienteJudicial expedienteAbierto = expedienteDAO.obtenerExpedienteAbierto(preso.getIdentificacion());
+        if (expedienteAbierto == null) {
+            throw new IllegalStateException("No se encontró un expediente abierto para este preso.");
+        }
+
+        LocalDate finCondena = calcularFechaSalidaPreso(expedienteAbierto.getDelitos());
+
         if (fechaLiberacion.isBefore(finCondena)) {
             throw new IllegalArgumentException(String.format("No puede ser liberado antes de cumplir su condena.%nFin de condena: %s", finCondena.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
         }
