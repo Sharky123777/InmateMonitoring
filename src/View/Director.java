@@ -233,7 +233,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
 
     private void mostrarDatosUsuario() {
         if (usuario != null) {
-            // Mostrar información básica
+           
             lblNombre.setText(usuario.getPrimerNombre() + " " + usuario.getPrimerApellido());
             lblRol.setText(usuario.getRol().toString());
 
