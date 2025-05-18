@@ -11,6 +11,7 @@ import Model.Entities.Delito;
 import Model.Entities.ExpedienteJudicial;
 import Model.Entities.Preso;
 import Model.Entities.Sentencia;
+import Model.Entities.Usuario;
 import Utilidades.Validador;
 import java.awt.Color;
 import java.awt.Component;
@@ -49,7 +50,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
 
-public class OficialDeRegistro extends javax.swing.JFrame {
+public class OficialDeRegistro extends javax.swing.JFrame  implements PerfilUsuario{
 
     private JLabel registroNum = new JLabel();
     private JLabel codExpe = new JLabel();
@@ -83,6 +84,9 @@ public class OficialDeRegistro extends javax.swing.JFrame {
     private final PresoController presoController;
     private final Validador validador;
     private final CeldaDAO celdaDAO;
+    
+    private Usuario usuario;
+
 
     public OficialDeRegistro() {
         this.celdaDAO = CeldaDAO.getInstancia();
@@ -154,6 +158,50 @@ public class OficialDeRegistro extends javax.swing.JFrame {
         });
 
     }
+    
+    
+  
+        
+     
+    
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+        mostrarDatosUsuario();
+    }
+
+    private void mostrarDatosUsuario() {
+        if (usuario != null) {
+            nombreODR.setText(usuario.getPrimerNombre());
+            ApellidoODR.setText(usuario.getPrimerApellido());
+            IdentificacionODR.setText(usuario.getIdentificacion());
+            EdadODR.setText(usuario.getIdentificacion());
+            SexoODR.setText(usuario.getSexo());
+            NacionalidadODR.setText(usuario.getNacionalidad());
+            
+
+            cargarImagenUsuario();
+        }
+    }
+
+    private void cargarImagenUsuario() {
+        try {
+            ImageIcon icon = new ImageIcon(usuario.getRutaImagen());
+            Image img = icon.getImage().getScaledInstance(
+                    LabelFotoOficialDeRegistro.getWidth(), LabelFotoOficialDeRegistro.getHeight(), Image.SCALE_SMOOTH);
+            LabelFotoOficialDeRegistro.setIcon(new ImageIcon(img));
+        } catch (Exception e) {
+            cargarImagenPorDefecto();
+        }
+    }
+
+    private void cargarImagenPorDefecto() {
+        lblFoto.setIcon(new ImageIcon("src/Resources/default_avatar.png"));
+    }
+        
+
+    
+    
+    
 
     private void actualizarEstadisticasCompletas() {
         String estadisticas = presoController.obtenerEstadisticasPresosHorizontal();
@@ -943,33 +991,25 @@ Actualizar.addActionListener(e -> {
         jLabel50 = new javax.swing.JLabel();
         jLabel51 = new javax.swing.JLabel();
         jLabel52 = new javax.swing.JLabel();
-        jLabel53 = new javax.swing.JLabel();
         jLabel54 = new javax.swing.JLabel();
         jSeparator34 = new javax.swing.JSeparator();
         jSeparator36 = new javax.swing.JSeparator();
         jSeparator37 = new javax.swing.JSeparator();
         jSeparator38 = new javax.swing.JSeparator();
         jSeparator39 = new javax.swing.JSeparator();
-        jSeparator40 = new javax.swing.JSeparator();
         ApellidoODR = new javax.swing.JLabel();
         IdentificacionODR = new javax.swing.JLabel();
         EdadODR = new javax.swing.JLabel();
         SexoODR = new javax.swing.JLabel();
         NacionalidadODR = new javax.swing.JLabel();
         nombreODR = new javax.swing.JLabel();
+        jLabel61 = new javax.swing.JLabel();
+        jSeparator48 = new javax.swing.JSeparator();
         jPanel18 = new RoundedPanel(30);
         jPanel20 = new RoundedPanel(26);
         LabelFotoOficialDeRegistro = new javax.swing.JLabel();
         jLabel44 = new javax.swing.JLabel();
-        LabelRango = new javax.swing.JLabel();
-        jSeparator33 = new javax.swing.JSeparator();
-        jLabel46 = new javax.swing.JLabel();
-        LabelNumeroPlaca = new javax.swing.JLabel();
-        jLabel47 = new javax.swing.JLabel();
-        LabelTurno = new javax.swing.JLabel();
-        jSeparator35 = new javax.swing.JSeparator();
         jLabel49 = new javax.swing.JLabel();
-        jSeparator41 = new javax.swing.JSeparator();
         cerrarSesionODR = new javax.swing.JButton();
         jLabel48 = new javax.swing.JLabel();
         btnActualizarInfoODR = new javax.swing.JButton();
@@ -2041,7 +2081,7 @@ Actualizar.addActionListener(e -> {
 
         jPanel21.setBackground(new java.awt.Color(29, 35, 51));
         jPanel21.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel19.add(jPanel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 20));
+        jPanel19.add(jPanel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 530, 20));
 
         jLabel45.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel45.setForeground(new java.awt.Color(0, 0, 0));
@@ -2060,13 +2100,8 @@ Actualizar.addActionListener(e -> {
 
         jLabel52.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel52.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel52.setText("Sexo:");
-        jPanel19.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 50, -1));
-
-        jLabel53.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel53.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel53.setText("Nacionalidad:");
-        jPanel19.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 100, -1));
+        jLabel52.setText("Genero:");
+        jPanel19.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 70, -1));
 
         jLabel54.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel54.setForeground(new java.awt.Color(0, 0, 0));
@@ -2074,30 +2109,27 @@ Actualizar.addActionListener(e -> {
         jPanel19.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 150, -1));
 
         jSeparator34.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel19.add(jSeparator34, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 410, 10));
+        jPanel19.add(jSeparator34, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 450, 10));
 
         jSeparator36.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel19.add(jSeparator36, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 410, 10));
+        jPanel19.add(jSeparator36, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 440, 10));
 
         jSeparator37.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel19.add(jSeparator37, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 410, 10));
+        jPanel19.add(jSeparator37, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 440, 10));
 
         jSeparator38.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel19.add(jSeparator38, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, 410, 10));
+        jPanel19.add(jSeparator38, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, 440, 10));
 
         jSeparator39.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel19.add(jSeparator39, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 410, 10));
-
-        jSeparator40.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel19.add(jSeparator40, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 410, 10));
+        jPanel19.add(jSeparator39, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 440, 10));
 
         ApellidoODR.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         ApellidoODR.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel19.add(ApellidoODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, 260, 30));
+        jPanel19.add(ApellidoODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, 320, 30));
 
         IdentificacionODR.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         IdentificacionODR.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel19.add(IdentificacionODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 130, 280, 30));
+        jPanel19.add(IdentificacionODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 130, 290, 30));
 
         EdadODR.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         EdadODR.setForeground(new java.awt.Color(0, 0, 0));
@@ -2105,7 +2137,7 @@ Actualizar.addActionListener(e -> {
 
         SexoODR.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         SexoODR.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel19.add(SexoODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 210, 330, 30));
+        jPanel19.add(SexoODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 330, 30));
 
         NacionalidadODR.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         NacionalidadODR.setForeground(new java.awt.Color(0, 0, 0));
@@ -2113,9 +2145,17 @@ Actualizar.addActionListener(e -> {
 
         nombreODR.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         nombreODR.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel19.add(nombreODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, 260, 30));
+        jPanel19.add(nombreODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, 330, 30));
 
-        Perfil.add(jPanel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 110, 490, 330));
+        jLabel61.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel61.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel61.setText("Nacionalidad:");
+        jPanel19.add(jLabel61, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 100, -1));
+
+        jSeparator48.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel19.add(jSeparator48, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 440, 10));
+
+        Perfil.add(jPanel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 130, 530, 330));
 
         jPanel18.setBackground(new java.awt.Color(180, 180, 195));
         jPanel18.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -2130,34 +2170,12 @@ Actualizar.addActionListener(e -> {
         jLabel44.setFont(new java.awt.Font("Arial", 2, 15)); // NOI18N
         jLabel44.setForeground(new java.awt.Color(102, 102, 102));
         jLabel44.setText("Oficial De Registro");
-        jPanel18.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 230, -1, 20));
-        jPanel18.add(LabelRango, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 280, 140, 20));
+        jPanel18.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, -1, 20));
 
-        jSeparator33.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel18.add(jSeparator33, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 220, 10));
-
-        jLabel46.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        jLabel46.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel46.setText("Numero de placa");
-        jPanel18.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, 130, -1));
-        jPanel18.add(LabelNumeroPlaca, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 330, 80, 20));
-
-        jLabel47.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        jLabel47.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel47.setText("Turno");
-        jPanel18.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, -1, -1));
-        jPanel18.add(LabelTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 390, 130, 20));
-
-        jSeparator35.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel18.add(jSeparator35, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, 220, 10));
-
-        jLabel49.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
+        jLabel49.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         jLabel49.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel49.setText("Rango");
-        jPanel18.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 50, -1));
-
-        jSeparator41.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel18.add(jSeparator41, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, 220, 10));
+        jLabel49.setText("Cargo");
+        jPanel18.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 230, 50, -1));
 
         cerrarSesionODR.setText("Cerrar sesión");
         cerrarSesionODR.addActionListener(new java.awt.event.ActionListener() {
@@ -2165,14 +2183,14 @@ Actualizar.addActionListener(e -> {
                 cerrarSesionODRActionPerformed(evt);
             }
         });
-        jPanel18.add(cerrarSesionODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 440, 110, -1));
+        jPanel18.add(cerrarSesionODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 410, 110, -1));
 
-        Perfil.add(jPanel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, 310, 490));
+        Perfil.add(jPanel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, 310, 460));
 
         jLabel48.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel48.setForeground(new java.awt.Color(0, 0, 0));
         jLabel48.setText("INFORMACIÓN PERSONAL");
-        Perfil.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 70, 220, -1));
+        Perfil.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 90, 220, -1));
 
         btnActualizarInfoODR.setText("Actualizar información");
         btnActualizarInfoODR.addActionListener(new java.awt.event.ActionListener() {
@@ -2180,7 +2198,7 @@ Actualizar.addActionListener(e -> {
                 btnActualizarInfoODRActionPerformed(evt);
             }
         });
-        Perfil.add(btnActualizarInfoODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 480, 160, 40));
+        Perfil.add(btnActualizarInfoODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 510, 160, 40));
 
         OficialDeRegistroView.addTab("Perfil", Perfil);
 
@@ -4262,9 +4280,6 @@ Actualizar.addActionListener(e -> {
     private javax.swing.JLabel Juzgado;
     private javax.swing.JLabel LabelFOTO;
     private javax.swing.JLabel LabelFotoOficialDeRegistro;
-    private javax.swing.JLabel LabelNumeroPlaca;
-    private javax.swing.JLabel LabelRango;
-    private javax.swing.JLabel LabelTurno;
     private com.toedter.components.JSpinField MesD;
     private com.toedter.components.JSpinField Meses;
     private javax.swing.JLabel NacionalidadODR;
@@ -4375,15 +4390,12 @@ Actualizar.addActionListener(e -> {
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel45;
-    private javax.swing.JLabel jLabel46;
-    private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel52;
-    private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel56;
@@ -4392,6 +4404,7 @@ Actualizar.addActionListener(e -> {
     private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel60;
+    private javax.swing.JLabel jLabel61;
     private javax.swing.JLabel jLabel62;
     private javax.swing.JLabel jLabel64;
     private javax.swing.JLabel jLabel65;
@@ -4486,22 +4499,19 @@ Actualizar.addActionListener(e -> {
     private javax.swing.JSeparator jSeparator28;
     private javax.swing.JSeparator jSeparator29;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator33;
     private javax.swing.JSeparator jSeparator34;
-    private javax.swing.JSeparator jSeparator35;
     private javax.swing.JSeparator jSeparator36;
     private javax.swing.JSeparator jSeparator37;
     private javax.swing.JSeparator jSeparator38;
     private javax.swing.JSeparator jSeparator39;
     private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JSeparator jSeparator40;
-    private javax.swing.JSeparator jSeparator41;
     private javax.swing.JSeparator jSeparator42;
     private javax.swing.JSeparator jSeparator43;
     private javax.swing.JSeparator jSeparator44;
     private javax.swing.JSeparator jSeparator45;
     private javax.swing.JSeparator jSeparator46;
     private javax.swing.JSeparator jSeparator47;
+    private javax.swing.JSeparator jSeparator48;
     private javax.swing.JSeparator jSeparator49;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator50;

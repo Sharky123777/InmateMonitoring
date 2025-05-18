@@ -112,7 +112,6 @@ public class ActividadController {
     public boolean asignarPresoAActividad(String idActividad, String identificacionPr, JTable tablaGeneral) {
         if (actividadDAO.asignarPresoAActividad(idActividad, identificacionPr)) {
             cargarActividadesEnTabla(tablaGeneral);
-            Validador.mostrarInfo("Preso asignado exitosamente a la actividad");
 
             return true;
         } else {

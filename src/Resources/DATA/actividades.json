@@ -1,6 +1,9 @@
 [
   {
-    "estadosPorPreso": {},
+    "estadosPorPreso": {
+      "112233445": "FINALIZADA",
+      "223344556": "FINALIZADA"
+    },
     "idActividad": "ACT-4",
     "nombre": "Cultivo de Huertos",
     "tipo": "Laboral",
@@ -9,12 +12,11 @@
     "lugar": "Taller de Jardinería y Vivero",
     "cupoMaximo": 30,
     "presosAsignadosIds": [
-      "112233445",
-      "223344556",
-      "445566778"
+      "445566778",
+      "112233445"
     ],
     "estado": "ACTIVA",
-    "presosInscritos": 3,
+    "presosInscritos": 2,
     "responsableOficial": "31313131",
     "descripcion": "Actividad al aire libre donde los internos siembran vegetales y hierbas, promoviendo responsabilidad y sostenibilidad."
   },
@@ -32,9 +34,11 @@
     "horario": "08:45 am - 10:15 am",
     "lugar": "Taller de Costura y Confección",
     "cupoMaximo": 10,
-    "presosAsignadosIds": [],
-    "estado": "CANCELADA",
-    "presosInscritos": 0,
+    "presosAsignadosIds": [
+      "112233445"
+    ],
+    "estado": "ACTIVA",
+    "presosInscritos": 1,
     "responsableOficial": "4243242424",
     "descripcion": "En esta actividad se realizaran cosas"
   }

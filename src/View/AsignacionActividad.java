@@ -16,7 +16,7 @@ public AsignacionActividad(java.awt.Frame parent, boolean modal, Preso preso, JT
     initComponents();
     setLocationRelativeTo(parent);
 
-    this.tablaGeneral = tablaGeneral; // guarda la referencia para actualizarla luego
+    this.tablaGeneral = tablaGeneral; 
 
     controller.cargarActividadesDisponiblesEnTabla(actividadesAsignacionTabla, preso.getIdentificacion());
     identiPreso.setText(preso.getIdentificacion());
@@ -160,7 +160,7 @@ public AsignacionActividad(java.awt.Frame parent, boolean modal, Preso preso, JT
                 String idActividad = (String) actividadesAsignacionTabla.getValueAt(i, 1);
                 String identificacionPreso = identiPreso.getText();
                 boolean asignado = controller.asignarPresoAActividad(idActividad, identificacionPreso, tablaGeneral);
-                
+                      
                 controller.cargarActividadesEnTabla(tablaGeneral);
                 this.dispose();
                 
