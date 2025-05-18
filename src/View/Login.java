@@ -4,10 +4,12 @@
  */
 package View;
 
+import Controller.UsuarioController;
 import DAO.UsuarioDAO;
 import Model.Constants.RolEnum;
 import Model.Entities.Usuario;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -16,16 +18,20 @@ import javax.swing.JOptionPane;
  */
 public class Login extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Login
-     */
+    
     public Login() {
         initComponents();
+        setLocationRelativeTo(null);
 
-        RolCmbBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{
-            RolEnum.DIRECTOR.toString(), "OFICIAL", "PERSONAL_DE_CONTROL", "OFICIAL_DE_REGISTRO", "ENFERMERA","COORDINADOR_DE_ACTIVIDADES,"
-        }));
 
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+
+       
+        for (RolEnum rol : RolEnum.values()) {
+            model.addElement(rol.toString());
+        }
+
+        RolCmbBox.setModel(model);
     }
 
     /**
@@ -122,42 +128,82 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void redirigirSegunRol(Usuario usuario) {
+        JFrame vista = null;
 
-        String usuarios = FieldUsuario.getText();
-        String contraseña = new String(Password.getPassword());
-        String rolTexto = (String) RolCmbBox.getSelectedItem();
-        RolEnum rolSeleccionado = RolEnum.valueOf(rolTexto);
+        switch (usuario.getRol()) {
+            case DIRECTOR:
+                vista = new Directora();
+                break;
+            case OFICIAL:
+                vista = new Oficial();
+                break;
+            case OFICIAL_DE_REGISTRO:
+                vista = new OficialDeRegistro();
+                break;
+            case PERSONAL_DE_CONTROL:
+                vista = new PersonalDeControl();
+                break;
+            case COORDINADOR_DE_ACTIVIDADES:
+                vista = new CoordinadorDeActividades();
+                break;
+            case ENFERMERA:
+                vista = new Enfermera();
+                break;
+            default:
+                throw new IllegalArgumentException("Rol no soportado: " + usuario.getRol());
+        }
 
-        UsuarioDAO usuarioDAO = UsuarioDAO.getInstancia();
-        Usuario usuario = usuarioDAO.validarCredenciales(usuarios, contraseña, rolSeleccionado);
-
-        if (usuario != null) {
-            
-
-            switch (usuario.getRol()) {
-                case DIRECTOR:
-                    new Director().setVisible(true);
-                    break;
-                case OFICIAL:
-                    new Oficial().setVisible(true);
-                    break;
-                case PERSONAL_DE_CONTROL:
-                    new PersonalDeControl().setVisible(true);
-                    break;
-                case OFICIAL_DE_REGISTRO:
-                    new OficialDeRegistro().setVisible(true);
-                    break;
-                case ENFERMERA:
-                    new Enfermera().setVisible(true);
-                    break;
+        if (vista != null) {
+            if (vista instanceof PerfilUsuario) {
+                ((PerfilUsuario) vista).setUsuario(usuario);
             }
+            vista.setVisible(true);
+        }
+    }
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String username = FieldUsuario.getText().trim();
+        String password = new String(Password.getPassword()).trim();
+        String rolTexto = (String) RolCmbBox.getSelectedItem();
+
+        try {
+           
+            if (username.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Por favor complete todos los campos",
+                        "Validación",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+           
+            RolEnum rol = RolEnum.fromDisplayText(rolTexto);
+
+            
+            Usuario usuario = UsuarioController.getInstancia().autenticarUsuario(username, password, rol);
+
+           
+            redirigirSegunRol(usuario);
             this.dispose();
-        } else {
+
+        } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this,
-                    "Credenciales incorrectas o rol no coincide",
-                    "Error de Login",
+                    "Rol no válido seleccionado: " + e.getMessage(),
+                    "Error",
                     JOptionPane.ERROR_MESSAGE);
+        } catch (SecurityException e) {
+            String mensajeBloqueo = UsuarioController.getInstancia().obtenerMensajeBloqueo(username);
+            JOptionPane.showMessageDialog(this,
+                    e.getMessage() + "\n" + mensajeBloqueo,
+                    "Error de seguridad",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error inesperado: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

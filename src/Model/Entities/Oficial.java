@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 public class Oficial extends Persona {
     private String usuario;
     private String contrasena;
-    private String turno; // "Diurno" o "Nocturno"
+    private String turno; 
     
     @SerializedName("fechaContratacion")
     private LocalDate fechaContratacion;

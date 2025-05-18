@@ -1,49 +1,49 @@
 {
-    "oficiales": [
-        {
-            "turno": "Diurno",
-            "fechaContratacion": "2025-05-12",
-            "fechaFinContrato": "2025-05-16",
-            "rutaImagen": "src/Resources/imagenes_oficiales/18377137131_1747071359037.jpg",
-            "correo": "jonasGarcia@gmail.com",
-            "primerNombre": "Celina",
-            "segundoNombre": "Jonas",
-            "primerApellido": "García",
-            "segundoApellido": "López",
-            "edad": 44,
-            "sexo": "Femenino",
-            "nacionalidad": "Argentina",
-            "identificacion": "183771371"
-        },
-        {
-            "turno": "Diurno",
-            "fechaContratacion": "2025-05-12",
-            "fechaFinContrato": "2025-05-30",
-            "rutaImagen": "src/Resources/imagenes_oficiales/4243242424_1747180306737.png",
-            "correo": "lucianaSofia@gmail.com",
-            "primerNombre": "Luciana",
-            "segundoNombre": "Sofia",
-            "primerApellido": "Tonjedo",
-            "segundoApellido": "Perez",
-            "edad": 34,
-            "sexo": "Femenino",
-            "nacionalidad": "Japonesa",
-            "identificacion": "4243242424"
-        },
-        {
-            "turno": "Diurno",
-            "fechaContratacion": "2025-05-12",
-            "fechaFinContrato": "2025-05-22",
-            "rutaImagen": "src/Resources/imagenes_oficiales/31313131_1747065850753.jpg",
-            "correo": "lauraMartinez@gmail.com",
-            "primerNombre": "Laura",
-            "segundoNombre": "Isabel",
-            "primerApellido": "Martinez",
-            "segundoApellido": "Gomez",
-            "edad": 34,
-            "sexo": "Femenino",
-            "nacionalidad": "Mexicana",
-            "identificacion": "31313131"
-        }
-    ]
+  "oficiales": [
+    {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-17",
+      "fechaFinContrato": "2025-11-03",
+      "rutaImagen": "src/Resources/imagenes_oficiales/3323131313_1747509478752.png",
+      "correo": "Pedro123@gmail.com",
+      "primerNombre": "p",
+      "segundoNombre": "mpagne",
+      "primerApellido": "Ma",
+      "segundoApellido": "ia",
+      "edad": 34,
+      "sexo": "Masculino",
+      "nacionalidad": "pepe",
+      "identificacion": "3323131313"
+    },
+    {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-17",
+      "fechaFinContrato": "2025-05-23",
+      "rutaImagen": "src/Resources/imagenes_oficiales/103193813_1747524802564.jpg",
+      "correo": "Maria123@gmail.com",
+      "primerNombre": "Sharlok",
+      "segundoNombre": "Maia",
+      "primerApellido": "Alcazar",
+      "segundoApellido": "Gutierrez",
+      "edad": 45,
+      "sexo": "Masculino",
+      "nacionalidad": "pepe",
+      "identificacion": "103193813"
+    },
+    {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-17",
+      "fechaFinContrato": "2025-05-20",
+      "rutaImagen": "src/Resources/imagenes_oficiales/313131313_1747525106094.png",
+      "correo": "maria231@gmail.com",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "backstarber",
+      "identificacion": "313131313"
+    }
+  ]
 }

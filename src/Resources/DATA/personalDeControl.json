@@ -1,19 +1,19 @@
-[
-  {
-    "id": 1,
-    "turno": "Diurno",
-    "fechaInicioContrato": "2025-04-01",
-    "fechaFinContrato": "2026-04-30",
-    "fotoPath": "C:\\Users\\nicol\\OneDrive\\Escritorio\\InmateMonitoring\\src\\Resources\\Images\\personal_1.jpg",
-    "correo": "Erika123@gmail.com",
-    "cargo": "Personal de control",
-    "primerNombre": "Erika",
-    "segundoNombre": "Andrea",
-    "primerApellido": "Torres",
-    "segundoApellido": "Jurado",
-    "edad": 21,
-    "sexo": "Femenino",
-    "nacionalidad": "Colombia",
-    "identificacion": "1762346778"
-  }
-]
+{
+  "personal_control": [
+    {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-17",
+      "fechaFinContrato": "2025-05-23",
+      "rutaImagen": "src/Resources/imagenes_personal_control/09876513131.png",
+      "correo": "juan1234@gmail.com",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "ñ",
+      "edad": 45,
+      "sexo": "Femenino",
+      "nacionalidad": "novia",
+      "identificacion": "09876513131"
+    }
+  ]
+}

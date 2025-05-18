@@ -4,24 +4,17 @@ import Model.Constants.RolEnum;
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.util.Properties;
-import java.io.File;
 import javax.swing.JOptionPane;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class EmailSender {
     private static EmailSender instancia;
     private final String username;
     private final String password;
     private final Properties props;
-    private final String logoPath;
 
     private EmailSender() {
         this.username = "imsharlok@gmail.com";
         this.password = "aydondnxwjrjhagz";
-        
-       
-        this.logoPath = Paths.get(System.getProperty("user.dir"), "src", "Pictures", "inpecLooooogo.png").toString();
         
         this.props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -39,19 +32,16 @@ public class EmailSender {
     }
 
     public boolean enviarCredenciales(String destinatario, String usuario, String contrasena, RolEnum rol) {
-        // Validación de campos obligatorios
+        // Validaciones
         if (destinatario == null || destinatario.isEmpty() || 
             usuario == null || usuario.isEmpty() || 
             contrasena == null || contrasena.isEmpty() || 
             rol == null) {
-            System.err.println("Error: Todos los campos son obligatorios");
             JOptionPane.showMessageDialog(null, "Error: Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
-        // Validación de formato de correo
         if (!destinatario.contains("@") || !destinatario.endsWith(".com")) {
-            System.err.println("Error: Formato de correo inválido");
             JOptionPane.showMessageDialog(null, "Error: Formato de correo inválido", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -67,47 +57,13 @@ public class EmailSender {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
-            message.setSubject("Credenciales de Acceso - Sistema de Monitoreo de Reclusos");
+            message.setSubject("Credenciales de Acceso - Sistema de Monitoreo de Reclusas");
 
-            // Crear el cuerpo del mensaje como multipart/related
-            MimeMultipart multipart = new MimeMultipart("related");
-
-            // Parte HTML (primero debe ir esta parte)
-            MimeBodyPart htmlPart = new MimeBodyPart();
-            String htmlContent = construirMensajeHTML(usuario, contrasena, rol);
-            htmlPart.setContent(htmlContent, "text/html; charset=utf-8");
-            multipart.addBodyPart(htmlPart);
-
-            // Parte de la imagen (logo)
-            MimeBodyPart imagePart = new MimeBodyPart();
-            try {
-                File logoFile = new File(logoPath);
-                if (logoFile.exists()) {
-                    // Cargar la imagen como bytes
-                    byte[] imageData = Files.readAllBytes(logoFile.toPath());
-                    
-                    // Configurar la parte de la imagen correctamente
-                    imagePart.setContent(imageData, "image/png");
-                    imagePart.setContentID("<logo>"); // Debe coincidir con cid:logo en el HTML
-                    imagePart.setDisposition(MimeBodyPart.INLINE);
-                    imagePart.setHeader("Content-Type", "image/png");
-                    imagePart.setHeader("Content-ID", "<logo>");
-                    imagePart.setHeader("Content-Transfer-Encoding", "base64");
-                    
-                    multipart.addBodyPart(imagePart);
-                } else {
-                    System.err.println("Advertencia: Logo no encontrado en: " + logoPath);
-                    JOptionPane.showMessageDialog(null, "El logo no se encontró en la ruta especificada", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                }
-            } catch (Exception e) {
-                System.err.println("Error al cargar el logo: " + e.getMessage());
-            }
-
-            message.setContent(multipart);
-            Transport.send(message);
             
-            System.out.println("Correo enviado exitosamente a: " + destinatario);
-            JOptionPane.showMessageDialog(null, "Correo enviado exitosamente a: " + destinatario);
+            String htmlContent = construirMensajeHTML(usuario, contrasena, rol);
+            message.setContent(htmlContent, "text/html; charset=utf-8");
+
+            Transport.send(message);
             return true;
         } catch (MessagingException e) {
             System.err.println("Error al enviar correo: " + e.getMessage());
@@ -130,7 +86,6 @@ public class EmailSender {
                "<style>" +
                "body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }" +
                ".header { text-align: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }" +
-               ".logo { max-width: 200px; height: auto; display: block; margin: 0 auto 15px; }" +
                ".credentials { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; }" +
                ".footer { margin-top: 20px; font-size: 0.8em; color: #6c757d; text-align: center; }" +
                "h2 { color: #0056b3; margin-top: 0; }" +
@@ -139,15 +94,14 @@ public class EmailSender {
                "</head>" +
                "<body>" +
                "<div class='header'>" +
-               "<img src='cid:logo' alt='Logo INPEC' class='logo'/>" +
-               "<h2>Sistema de Monitoreo de Reclusos</h2>" +
+               "<h2>Sistema de Monitoreo de Reclusas</h2>" +
                "</div>" +
                "<p>" + saludo + ",</p>" +
                "<p>Se han generado sus credenciales de acceso al sistema:</p>" +
                "<div class='credentials'>" +
                "<p><strong>Rol:</strong> " + rolFormateado + "</p>" +
                "<p><strong>Usuario:</strong> " + usuario + "</p>" +
-               "<p><strong>Contraseña temporal:</strong> " + contrasena + "</p>" +
+               "<p><strong>Contraseña: </strong> " + contrasena + "</p>" +
                "</div>" +
                "<p>Por motivos de seguridad, le recomendamos cambiar su contraseña después del primer inicio de sesión.</p>" +
                "<p>Si no solicitó estas credenciales, por favor contacte al administrador del sistema inmediatamente.</p>" +
@@ -164,17 +118,19 @@ public class EmailSender {
         
         switch (rol) {
             case DIRECTOR:
-                return "Estimado Director";
+                return "Estimada Directora";
             case OFICIAL:
+                return "Estimada Oficial";
             case OFICIAL_DE_REGISTRO:
+                return "Estimada oficial de registro";
             case PERSONAL_DE_CONTROL:
-                return "Estimado Oficial";
+                return "Estimada Oficial";
             case COORDINADOR_DE_ACTIVIDADES:
-                return "Estimado Coordinador";
+                return "Estimada Coordinadora";
             case ENFERMERA:
                 return "Estimada Enfermera";
             default:
-                return "Estimado Usuario";
+                return "Estimada Usuaria";
         }
     }
 
