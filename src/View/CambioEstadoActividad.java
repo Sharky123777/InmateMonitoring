@@ -2,10 +2,14 @@
 package View;
 
 import Controller.ActividadController;
+import DAO.ActividadDAO;
 import DAO.OficialDAO;
 import Model.Constants.EstadoActividadesEnum;
+import Model.Constants.EstadoActividadesPresoEnum;
 import Model.Entities.Actividad;
 import Model.Entities.Oficial;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 
@@ -14,6 +18,7 @@ public class CambioEstadoActividad extends javax.swing.JDialog {
     private final OficialDAO oficialDAO = OficialDAO.getInstancia();
     private Actividad actividadSeleccionada;
     private ActividadController actividadController;
+    private ActividadDAO actividadDAO = ActividadDAO.getInstancia();
     
     public CambioEstadoActividad(java.awt.Frame parent, boolean modal, Actividad actividad) {
         super(parent, modal);
@@ -59,6 +64,11 @@ public class CambioEstadoActividad extends javax.swing.JDialog {
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 30));
 
         nuevoEstadoComb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccione>", "ACTIVA", "CANCELADA" }));
+        nuevoEstadoComb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nuevoEstadoCombActionPerformed(evt);
+            }
+        });
         jPanel1.add(nuevoEstadoComb, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 100, 140, 30));
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -103,38 +113,83 @@ public class CambioEstadoActividad extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnActualizarEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarEstadoActionPerformed
-        EstadoActividadesEnum nuevoEstado = (EstadoActividadesEnum) nuevoEstadoComb.getSelectedItem();
+    String estadoSeleccionado = (String) nuevoEstadoComb.getSelectedItem();
+    EstadoActividadesEnum nuevoEstado = EstadoActividadesEnum.valueOf(estadoSeleccionado);
     String idActividad = actividadSeleccionada.getIdActividad();
     
-    if ("ACTIVA".equals(nuevoEstado) && 
-        "CANCELADA".equals(actividadSeleccionada.getEstado())) {
-        Model.Entities.Oficial responsable = oficialDAO.obtenerOficialPorCedula(actividadSeleccionada.getResponsableOficial());
-        
-        if (responsable != null) {
-            if (!actividadController.puedeAgregarActividad(responsable)) {
-                JOptionPane.showMessageDialog(this, 
-                    "El responsable ya tiene el límite máximo de actividades (2). No se puede reactivar esta actividad.", 
-                    "Error", JOptionPane.ERROR_MESSAGE);
+    if ("CANCELADA".equals(nuevoEstado.name())) {
+        int presosEnActividad = actividadSeleccionada.getPresosAsignadosIds().size();
+        if (presosEnActividad > 0) {
+            int confirm = JOptionPane.showConfirmDialog(this, 
+                "Esta actividad tiene " + presosEnActividad + " presos asignados. ¿Desea cancelarla?\n" +
+                "Se removerán los presos de esta actividad específica.",
+                "Confirmar cancelación", JOptionPane.YES_NO_OPTION);
+            if (confirm != JOptionPane.YES_OPTION) {
                 return;
             }
         }
     }
     
-    if (actividadController.actualizarEstadoActividad(idActividad, nuevoEstado)) {
-        JOptionPane.showMessageDialog(this, "Estado de la actividad actualizado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+    if ("ACTIVA".equals(nuevoEstado.name()) && 
+        "CANCELADA".equals(actividadSeleccionada.getEstado())) {
+        Model.Entities.Oficial responsable = oficialDAO.obtenerOficialPorCedula(actividadSeleccionada.getResponsableOficial());
         
-        if ("CANCELADA".equals(nuevoEstado)) {
-            actividadController.actualizarEstadoPresosActividad(idActividad, EstadoActividadesEnum.CANCELADA);
+        if (responsable != null && !actividadController.puedeAgregarActividad(responsable)) {
+            JOptionPane.showMessageDialog(this, 
+                "El responsable ya tiene el límite máximo de actividades (2).", 
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    }
+    
+    try {
+        actividadSeleccionada.setEstado(nuevoEstado);
+        
+        if ("CANCELADA".equals(nuevoEstado.name())) {
+            List<String> idsPresos = new ArrayList<>(actividadSeleccionada.getPresosAsignadosIds());
+            
+            for (String idPreso : idsPresos) {
+                actividadSeleccionada.getEstadosPorPreso().put(idPreso, EstadoActividadesPresoEnum.CANCELADA);
+                
+                actividadSeleccionada.getPresosAsignadosIds().remove(idPreso);
+            }
+            
+            actividadSeleccionada.setPresosInscritos(0);
         }
         
-        this.dispose();
-    } else {
-        JOptionPane.showMessageDialog(this, "Error al actualizar el estado de la actividad", "Error", JOptionPane.ERROR_MESSAGE);
+        List<Actividad> actividades = actividadDAO.cargarActividades();
+        
+        for (int i = 0; i < actividades.size(); i++) {
+            if (actividades.get(i).getIdActividad().equals(idActividad)) {
+                actividades.set(i, actividadSeleccionada);
+                break;
+            }
+        }
+        
+        if (actividadDAO.guardarActividades(actividades)) {
+            JOptionPane.showMessageDialog(this, 
+                "Actividad actualizada: " + nuevoEstado + 
+                ("CANCELADA".equals(nuevoEstado.name()) ? "\nPresos removidos correctamente." : ""), 
+                "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+        } else {
+            throw new Exception("Error al guardar los cambios");
+        }
+        
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, 
+            "Error: " + ex.getMessage(), 
+            "Error", JOptionPane.ERROR_MESSAGE);
+    
         }    }//GEN-LAST:event_btnActualizarEstadoActionPerformed
 
     private void btnCancealarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancealarActionPerformed
 this.dispose();
     }//GEN-LAST:event_btnCancealarActionPerformed
+
+    private void nuevoEstadoCombActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoEstadoCombActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nuevoEstadoCombActionPerformed
 
   
     public static void main(String args[]) {

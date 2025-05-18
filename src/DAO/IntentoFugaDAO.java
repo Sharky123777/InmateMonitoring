@@ -111,7 +111,6 @@ public class IntentoFugaDAO {
     public void registrarReingreso(String identificacionPreso, LocalDate fechaReingreso) {
     List<IntentoFuga> intentos = cargarIntentos();
     
-    // Buscar la fuga más reciente sin reingreso
     for (IntentoFuga intento : intentos) {
         if (intento.getIdentificacionPreso().equals(identificacionPreso) && 
             intento.getFechaReingreso() == null) {

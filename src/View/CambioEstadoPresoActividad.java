@@ -1,26 +1,28 @@
-
 package View;
 
 import Controller.ActividadController;
 import DAO.ActividadDAO;
+import Model.Constants.EstadoActividadesPresoEnum;
+import Model.Entities.Actividad;
 import Model.Entities.Preso;
-
+import java.util.List;
+import javax.swing.JOptionPane;
 
 public class CambioEstadoPresoActividad extends javax.swing.JDialog {
 
+    private Preso preso;
+
     ActividadController ac = ActividadController.getInstancia();
-    ActividadDAO aO = ActividadDAO.getInstancia();
     
-    
+
     public CambioEstadoPresoActividad(java.awt.Frame parent, boolean modal, Preso preso) {
         super(parent, modal);
+        this.preso = preso;
+        this.setLocationRelativeTo(null);
+
         initComponents();
     }
 
-   
-    
-    
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -29,7 +31,7 @@ public class CambioEstadoPresoActividad extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        nuevoEstadoPresoAct = new javax.swing.JComboBox<>();
         btnCambiar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
@@ -53,12 +55,22 @@ public class CambioEstadoPresoActividad extends javax.swing.JDialog {
         jLabel1.setText("Estado:");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 70, -1));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccione>", "ACTIVO", "COMPLETADA", "INACTIVO", "SUSPENDIDO", "FALLECIDO" }));
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, 140, 40));
+        nuevoEstadoPresoAct.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccione>", "FINALIZADA", "CANCELADA" }));
+        nuevoEstadoPresoAct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nuevoEstadoPresoActActionPerformed(evt);
+            }
+        });
+        jPanel1.add(nuevoEstadoPresoAct, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, 140, 40));
 
         btnCambiar.setBackground(new java.awt.Color(0, 51, 0));
         btnCambiar.setForeground(new java.awt.Color(255, 255, 255));
         btnCambiar.setText("Actualizar");
+        btnCambiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCambiarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnCambiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 100, 30));
 
         btnCancelar.setBackground(new java.awt.Color(51, 0, 0));
@@ -86,13 +98,83 @@ public class CambioEstadoPresoActividad extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-     this.dispose();
+        this.dispose();
 
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    
-    
-    
+    private void btnCambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarActionPerformed
+String estadoSeleccionado = nuevoEstadoPresoAct.getSelectedItem().toString();
+
+if (estadoSeleccionado.equals("<Seleccione>")) {
+    JOptionPane.showMessageDialog(this, "Por favor, seleccione un estado válido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    return;
+}
+
+EstadoActividadesPresoEnum nuevoEstado;
+try {
+    nuevoEstado = EstadoActividadesPresoEnum.valueOf(estadoSeleccionado);
+} catch (IllegalArgumentException e) {
+    JOptionPane.showMessageDialog(this, "Estado seleccionado no válido.", "Error", JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+List<Actividad> actividades = ActividadDAO.getInstancia().cargarActividades();
+
+for (Actividad act : actividades) {
+    if (act.getPresosAsignadosIds().contains(preso.getIdentificacion())) {
+        EstadoActividadesPresoEnum estadoActual = act.getEstadoPreso(preso.getIdentificacion());
+
+        // Validación de estados no permitidos
+        if ((estadoActual == EstadoActividadesPresoEnum.FINALIZADA || estadoActual == EstadoActividadesPresoEnum.CANCELADA)
+                && nuevoEstado == EstadoActividadesPresoEnum.EN_PROCESO) {
+            JOptionPane.showMessageDialog(this, 
+                "No se puede cambiar a EN_PROCESO porque la actividad ya fue FINALIZADA o CANCELADA.", 
+                "Operación no permitida", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Si el nuevo estado es FINALIZADA o CANCELADA, remover al preso
+        if (nuevoEstado == EstadoActividadesPresoEnum.FINALIZADA || 
+            nuevoEstado == EstadoActividadesPresoEnum.CANCELADA) {
+            
+            // Remover al preso de la actividad
+            act.getPresosAsignadosIds().remove(preso.getIdentificacion());
+            
+            // Reducir el contador de inscritos
+            if (act.getPresosInscritos() > 0) {
+                act.setPresosInscritos(act.getPresosInscritos() - 1);
+            }
+        }
+
+        // Actualizar el estado del preso en la actividad
+        act.setEstadoPreso(preso.getIdentificacion(), nuevoEstado);
+        break;
+    }
+}
+
+boolean guardado = ActividadDAO.getInstancia().guardarActividades(actividades);
+
+if (guardado) {
+    JOptionPane.showMessageDialog(this, 
+        "Estado del preso actualizado correctamente. " + 
+        (nuevoEstado == EstadoActividadesPresoEnum.FINALIZADA || 
+         nuevoEstado == EstadoActividadesPresoEnum.CANCELADA ? 
+         "El preso ha sido removido de la actividad." : ""), 
+        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+} else {
+    JOptionPane.showMessageDialog(this, 
+        "No se pudo guardar el cambio en el archivo.", 
+        "Error", JOptionPane.ERROR_MESSAGE);
+}
+
+this.dispose();
+
+    }//GEN-LAST:event_btnCambiarActionPerformed
+
+    private void nuevoEstadoPresoActActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoEstadoPresoActActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nuevoEstadoPresoActActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -117,17 +199,15 @@ public class CambioEstadoPresoActividad extends javax.swing.JDialog {
         }
         //</editor-fold>
 
-       
-       
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCambiar;
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JComboBox<String> nuevoEstadoPresoAct;
     // End of variables declaration//GEN-END:variables
 }

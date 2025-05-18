@@ -1,0 +1,55 @@
+{
+  "oficiales": [
+    {
+      "primerNombre": "Carla",
+      "segundoNombre": "Luz",
+      "primerApellido": "Leon",
+      "segundoApellido": "Mier",
+      "edad": 45,
+      "sexo": "Masculino",
+      "nacionalidad": "Colombiana",
+      "identificacion": "098765431",
+      "correo": "Maria@gmail.com",
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-15",
+      "fechaFinContrato": "2025-05-17",
+      "rutaImagen": "src/Resources/imagenes_oficiales_registro/098765431_1747362633397.png",
+      "usuario": "bYdB6!pi%MkR",
+      "contrasena": "aab3c702837654819adf3a3549817526021ea0ca42c950edccd4d25a6f036cae"
+    },
+    {
+      "primerNombre": "pepe",
+      "segundoNombre": "beff",
+      "primerApellido": "oeoeoe",
+      "segundoApellido": "papanatas",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Hondureña",
+      "identificacion": "031931931",
+      "correo": "diurno@gmail.com",
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-17",
+      "fechaFinContrato": "2025-05-22",
+      "rutaImagen": "src/Resources/imagenes_oficiales_registro/031931931_1747504688533.png",
+      "usuario": "697d6lXjGt$\u0026",
+      "contrasena": "319a5c5f74d669d1b966fb0a45708153ed77f63bbf25e9353bb29bf8740cf9d3"
+    },
+    {
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "papaNatas",
+      "identificacion": "31783613",
+      "correo": "shar@gmail.com",
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-17",
+      "fechaFinContrato": "2025-05-28",
+      "rutaImagen": "src/Resources/imagenes_oficiales_registro/31783613_1747527344316.png",
+      "usuario": "iw\u0026oKfJ0¡Ñ",
+      "contrasena": "6682cbd36eee2f4f3e40e4c4753f3f4202886cb84b272e572cc2fd7affc7ce35"
+    }
+  ]
+}

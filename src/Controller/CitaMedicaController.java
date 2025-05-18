@@ -8,20 +8,25 @@ import Model.Entities.CitaMedica;
 import Model.Entities.Enfermera;
 import Model.Entities.Guardia;
 import Model.Entities.Preso;
-import View.Oficial;
+import Model.Constants.EstadoCitaMedicaEnum;
+import java.io.File;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class CitaMedicaController {
-
-    private CitaMedicaDAO citaMedicaDAO = CitaMedicaDAO.getInstancia();
-    private PresoDAO presoDAO = PresoDAO.getInstancia();
-    private GuardiaDAO guardiaDAO = GuardiaDAO.getInstancia();
-    private EnfermeraDAO enfermeraDAO = EnfermeraDAO.getInstancia();
+    private final CitaMedicaDAO citaMedicaDAO = CitaMedicaDAO.getInstancia();
+    private final PresoDAO presoDAO = PresoDAO.getInstancia();
+    private final GuardiaDAO guardiaDAO = GuardiaDAO.getInstancia();
+    private final EnfermeraDAO enfermeraDAO = EnfermeraDAO.getInstancia();
 
     private void mostrarError(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
@@ -31,52 +36,162 @@ public class CitaMedicaController {
         JOptionPane.showMessageDialog(null, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public void limpiarCamposCita(Oficial view) {
-        view.getIdentificacionPresoCita().setText("");
-        view.getIdentificacionGuardia().setText("");
-        view.getMotivoCita().setText("");
-        view.getFechaCita().setDate(null);
-        view.getComboHoraCita().setSelectedIndex(0);
+    public boolean agendarCita(String identificacionPreso, String identificacionGuardia, 
+                             String motivo, LocalDate fecha, LocalTime hora) {
+        if (!validarCamposCita(identificacionPreso, identificacionGuardia, motivo, fecha, hora)) {
+            return false;
+        }
+
+        Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
+        Guardia guardia = guardiaDAO.obtenerGuardiaPorCedula(identificacionGuardia);
+        
+        if (preso == null || guardia == null) {
+            mostrarError("Preso o guardia no encontrado");
+            return false;
+        }
+
+        String turno = determinarTurno(hora);
+        Enfermera enfermera = enfermeraDAO.obtenerEnfermeras().stream()
+                .filter(e -> e.getTurno().equalsIgnoreCase(turno))
+                .findFirst()
+                .orElse(null);
+
+        if (enfermera == null) {
+            mostrarError("No hay enfermeras disponibles para el turno " + turno);
+            return false;
+        }
+
+        CitaMedica nuevaCita = new CitaMedica(0, fecha, hora, motivo, guardia, preso, enfermera);
+        boolean resultado = citaMedicaDAO.guardarCita(nuevaCita);
+        
+        if (resultado) {
+            mostrarExito("Cita agendada exitosamente");
+        } else {
+            mostrarError("Error al guardar la cita");
+        }
+        
+        return resultado;
     }
 
-    public boolean agendarCita(Oficial view) {
-        if (!validarCamposCita(view)) {
+    public boolean atenderCita(int idCita, String diagnostico) {
+        if (diagnostico == null || diagnostico.trim().isEmpty()) {
+            mostrarError("Debe ingresar un diagnóstico");
+            return false;
+        }
+        
+        boolean resultado = citaMedicaDAO.actualizarDiagnostico(idCita, diagnostico, diagnostico);
+        
+        if (resultado) {
+            mostrarExito("Cita atendida exitosamente");
+        } else {
+            mostrarError("Error al atender la cita");
+        }
+        
+        return resultado;
+    }
+
+    public boolean marcarComoPrioritario(int idCita) {
+        boolean resultado = citaMedicaDAO.marcarComoPrioritario(idCita);
+        
+        if (resultado) {
+            mostrarExito("Cita marcada como prioritaria");
+        } else {
+            mostrarError("Error al marcar como prioritaria");
+        }
+        
+        return resultado;
+    }
+    
+     public void cargarHistorialAtendidos(JTable tabla, String identificacionEnfermera) {
+        DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+        modelo.setRowCount(0);
+
+        List<CitaMedica> citas = citaMedicaDAO.obtenerPorEnfermera(identificacionEnfermera).stream()
+                .filter(c -> c.getEstado() == EstadoCitaMedicaEnum.ATENDIDO)
+                .collect(Collectors.toList());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        
+        for (CitaMedica cita : citas) {
+            modelo.addRow(new Object[]{
+                cita.getId(),
+                cita.getPreso().getNombreCompleto(),
+                cita.getPreso().getIdentificacion(),
+                cita.getFechaHoraAtencion() != null ? 
+                    cita.getFechaHoraAtencion().format(formatter) : "No registrada",
+                cita.getMotivo(),
+                cita.getDiagnostico(),
+                cita.getRutaHistoriaClinica() != null ? 
+                    new File(cita.getRutaHistoriaClinica()).getName() : "Sin archivo"
+            });
+        }
+    }
+
+    public boolean cancelarCita(int idCita) {
+        boolean resultado = citaMedicaDAO.cancelarCita(idCita);
+        
+        if (resultado) {
+            mostrarExito("Cita cancelada exitosamente");
+        } else {
+            mostrarError("Error al cancelar la cita");
+        }
+        
+        return resultado;
+    }
+
+    public void cargarCitasPendientes(JTable tabla, String identificacionEnfermera) {
+        DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+        modelo.setRowCount(0);
+
+        List<CitaMedica> citas = citaMedicaDAO.obtenerPorEnfermera(identificacionEnfermera).stream()
+                .filter(c -> c.getEstado() == EstadoCitaMedicaEnum.PENDIENTE || 
+                            c.getEstado() == EstadoCitaMedicaEnum.PRIORITARIO)
+                .collect(Collectors.toList());
+
+        for (CitaMedica cita : citas) {
+            modelo.addRow(new Object[]{
+                cita.getId(),
+                cita.getPreso().getNombreCompleto(),
+                cita.getPreso().getIdentificacion(),
+                cita.getFecha(),
+                cita.getHora(),
+                cita.getMotivo(),
+                cita.getEstado()
+            });
+        }
+    }
+
+  
+
+    public Preso obtenerPresoDeCita(int idCita) {
+        CitaMedica cita = citaMedicaDAO.buscarPorId(idCita);
+        return cita != null ? cita.getPreso() : null;
+    }
+
+    private boolean validarCamposCita(String identificacionPreso, String identificacionGuardia, 
+                                    String motivo, LocalDate fecha, LocalTime hora) {
+        if (identificacionPreso == null || identificacionPreso.trim().isEmpty()) {
+            mostrarError("Debe ingresar la identificación del preso");
             return false;
         }
 
-        String identificacionPreso = view.getIdentificacionPresoCita().getText().trim();
-        String identificacionGuardia = view.getIdentificacionGuardia().getText().trim();
-        String motivoCita = view.getMotivoCita().getText().trim();
-        Date fechaSeleccionada = view.getFechaCita().getDate();
-        String horaSeleccionada = view.getComboHoraCita().getSelectedItem().toString();
-
-        if (!identificacionPreso.matches("\\d+")) {
-            mostrarError("La identificación del preso debe contener solo números");
+        if (identificacionGuardia == null || identificacionGuardia.trim().isEmpty()) {
+            mostrarError("Debe ingresar la identificación del guardia");
             return false;
         }
 
-        if (!identificacionPreso.matches("\\d{6,10}")) {
-            mostrarError("La identificación debe contener entre 6 y 10 dígitos numéricos.");
+        if (motivo == null || motivo.trim().isEmpty()) {
+            mostrarError("Debe especificar el motivo de la cita");
             return false;
         }
 
-        if (!identificacionGuardia.matches("\\d+")) {
-            mostrarError("La identificación del preso debe contener solo números");
+        if (fecha == null) {
+            mostrarError("Debe seleccionar una fecha para la cita");
             return false;
         }
 
-        if (!identificacionGuardia.matches("\\d{6,10}")) {
-            mostrarError("La identificación debe contener entre 6 y 10 dígitos numéricos.");
-            return false;
-        }
-
-        LocalDate fecha = fechaSeleccionada.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalTime hora;
-
-        try {
-            hora = LocalTime.parse(horaSeleccionada);
-        } catch (Exception e) {
-            mostrarError("Formato de hora inválido");
+        if (hora == null) {
+            mostrarError("Debe seleccionar una hora para la cita");
             return false;
         }
 
@@ -85,101 +200,49 @@ public class CitaMedicaController {
             return false;
         }
 
-        Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
-        if (preso == null) {
-            mostrarError("No se encontró ningún preso con esa identificación");
-            return false;
-        }
-
-        Guardia guardia = guardiaDAO.obtenerGuardiaPorCedula(identificacionGuardia);
-        if (guardia == null) {
-            mostrarError("No se encontró ningún guardia con esa identificación");
-            return false;
-        }
-
-        CitaMedica citaExistente = citaMedicaDAO.buscarCitaPorPresoFechaYHora(identificacionPreso, fecha, hora);
-        if (citaExistente != null) {
-            mostrarError("Ya existe una cita para este preso en la misma fecha y hora");
-            return false;
-        }
-
-        String turno = determinarTurno(hora);
-        if (turno == null) {
-            mostrarError("La hora seleccionada no corresponde a un turno válido (8:00-16:00 o 16:20-20:00)");
-            return false;
-        }
-
-        if (!guardia.getTurno().equalsIgnoreCase(turno)) {
-            mostrarError("El guardia no está disponible en el turno " + turno);
-            return false;
-        }
-
-        Enfermera enfermera = asignarEnfermera(turno);
-        if (enfermera == null) {
-            mostrarError("No hay enfermeras disponibles para el turno " + turno);
-            return false;
-        }
-
-        CitaMedica nuevaCita = new CitaMedica(0, fecha, hora, motivoCita, guardia, preso, enfermera);
-        boolean exito = citaMedicaDAO.guardarCita(nuevaCita);
-
-        if (exito) {
-            mostrarExito("Cita agendada exitosamente");
-            limpiarCamposCita(view);
-            return true;
-        } else {
-            mostrarError("Error al guardar la cita en la base de datos");
-            return false;
-        }
-    }
-
-    private boolean validarCamposCita(Oficial view) {
-        if (view.getIdentificacionPresoCita().getText().trim().isEmpty()) {
-            mostrarError("Debe ingresar la identificación del preso");
-            return false;
-        }
-
-        if (view.getIdentificacionGuardia().getText().trim().isEmpty()) {
-            mostrarError("Debe ingresar la identificación del guardia");
-            return false;
-        }
-
-        if (view.getMotivoCita().getText().trim().isEmpty()) {
-            mostrarError("Debe especificar el motivo de la cita");
-            return false;
-        }
-
-        if (view.getFechaCita().getDate() == null) {
-            mostrarError("Debe seleccionar una fecha para la cita");
-            return false;
-        }
-
-        if (view.getComboHoraCita().getSelectedItem() == null
-                || view.getComboHoraCita().getSelectedItem().toString().equals("< Seleccionar >")) {
-            mostrarError("Debe seleccionar una hora para la cita");
-            return false;
-        }
-
         return true;
     }
 
     private String determinarTurno(LocalTime hora) {
-        if (!hora.isBefore(LocalTime.of(8, 0)) && !hora.isAfter(LocalTime.of(16, 0))) {
+        if (!hora.isBefore(LocalTime.of(8, 0)) && hora.isBefore(LocalTime.of(16, 0))) {
             return "Diurno";
-        } else if (!hora.isBefore(LocalTime.of(16, 20)) && !hora.isAfter(LocalTime.of(20, 0))) {
+        } else if (!hora.isBefore(LocalTime.of(16, 0)) && hora.isBefore(LocalTime.of(24, 0))) {
             return "Nocturno";
         }
         return null;
     }
+    
+    public CitaMedica obtenerCitaPorId(int idCita) {
+        return citaMedicaDAO.buscarPorId(idCita);
+    }
 
-    private Enfermera asignarEnfermera(String turno) {
-        List<Enfermera> enfermeras = enfermeraDAO.obtenerEnfermeras();
-        for (Enfermera enf : enfermeras) {
-            if (enf.getTurno() != null && enf.getTurno().equalsIgnoreCase(turno)) {
-                return enf;
-            }
+    public boolean cancelarCita(int idCita, String razon) {
+        boolean resultado = citaMedicaDAO.cancelarCita(idCita, razon);
+        
+        if (resultado) {
+            mostrarExito("Cita cancelada exitosamente. Razón: " + razon);
+        } else {
+            mostrarError("Error al cancelar la cita");
         }
-        return null;
+        
+        return resultado;
+    }
+    
+      public boolean atenderCita(int idCita, String diagnostico, String rutaArchivo) {
+        if (diagnostico == null || diagnostico.trim().isEmpty()) {
+            mostrarError("Debe ingresar un diagnóstico");
+            return false;
+        }
+        
+        boolean resultado = citaMedicaDAO.actualizarDiagnostico(idCita, diagnostico, rutaArchivo);
+        
+        if (resultado) {
+            mostrarExito("Consulta registrada correctamente - " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+        } else {
+            mostrarError("Error al registrar la consulta");
+        }
+        
+        return resultado;
     }
 
 }

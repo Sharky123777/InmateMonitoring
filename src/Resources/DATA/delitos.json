@@ -2,193 +2,161 @@
   {
     "id": 1,
     "presoId": "1237440696",
-    "codigo": 265,
-    "nombre": "Daño en bien ajeno",
-    "articuloLey": "Artículo 265",
+    "codigo": 131,
+    "nombre": "Omisión de socorro",
+    "articuloLey": "Artículo 131",
     "gravedad": "Baja",
-    "descripcion": "Se metio en un bien ajeno a destruir todo",
-    "fechaComision": "2025-05-01",
+    "descripcion": "La interna fue privada de la libertad por el delito de\nomisión de socorro, tras presenciar un accidente donde\nuna persona quedó gravemente herida. A pesar de estar\nen condiciones de brindar ayuda o alertar a las autoridades,\ndecidió abandonar el lugar sin ofrecer asistencia alguna.\n\nSu omisión representó una vulneración al deber legal y\nhumano de auxilio, poniendo en peligro la vida de otra\npersona por su indiferencia.",
+    "fechaComision": "2024-05-02",
     "sentencia": {
-      "años": 3,
-      "meses": 0,
-      "fechaIngreso": "2025-05-12",
-      "fechaSalidaCalculada": "2028-05-12"
+      "años": 1,
+      "meses": 2,
+      "fechaIngreso": "2025-05-15",
+      "fechaSalidaCalculada": "2026-07-15"
     }
   },
   {
     "id": 2,
     "presoId": "1237440696",
-    "codigo": 189,
-    "nombre": "Violación de habitación ajena",
-    "articuloLey": "Artículo 189",
-    "gravedad": "Media",
-    "descripcion": "Violo la habitacion ajena, entro\npor que tenia frio",
-    "fechaComision": "2022-05-11",
+    "codigo": 246,
+    "nombre": "Fraude",
+    "articuloLey": "Artículo 246 - Fraude",
+    "gravedad": "Baja",
+    "descripcion": "La interna fue privada de la libertad por el delito de\nfraude, al haber engañado de forma deliberada a varias\npersonas mediante la falsificación de documentos y la\nmanipulación de información financiera.\n\nUtilizó estos medios para obtener beneficios económicos\npersonales, afectando el patrimonio de terceros y generando\npérdidas significativas a las víctimas involucradas.\n\nSu conducta violó la confianza depositada en ella y constituyó\nun acto doloso con ánimo de lucro a costa del perjuicio ajeno.",
+    "fechaComision": "2025-05-13",
     "sentencia": {
-      "años": 1,
+      "años": 2,
       "meses": 4,
-      "fechaIngreso": "2025-05-12",
-      "fechaSalidaCalculada": "2026-09-12"
+      "fechaIngreso": "2025-05-15",
+      "fechaSalidaCalculada": "2027-09-15"
     }
   },
   {
     "id": 3,
-    "presoId": "1237440696",
-    "codigo": 233,
-    "nombre": "Inasistencia alimentaria",
-    "articuloLey": "Artículo 233",
+    "presoId": "112233445",
+    "codigo": 240,
+    "nombre": "Hurto agravado",
+    "articuloLey": "Artículo 240",
     "gravedad": "Media",
-    "descripcion": "No pago la manutencion de sus hijos",
-    "fechaComision": "2025-05-01",
+    "descripcion": "La interna fue privada de la libertad por el delito de\nhurto agravado, al haber sustraído bienes ajenos sin\nautorización y con ánimo de lucro, aprovechando circunstancias\nespeciales que agravaron la conducta delictiva.\n\nEntre los factores agravantes se encuentra el uso de medios\nfraudulentos y la afectación a personas en situación de\nvulnerabilidad, lo cual incrementó la gravedad del hecho.\n\nEl acto cometido generó un perjuicio económico considerable\na la víctima y vulneró la tranquilidad y seguridad de la comunidad.",
+    "fechaComision": "2025-05-08",
     "sentencia": {
-      "años": 5,
-      "meses": 4,
-      "fechaIngreso": "2025-05-12",
-      "fechaSalidaCalculada": "2030-09-12"
+      "años": 0,
+      "meses": 10,
+      "fechaIngreso": "2025-05-15",
+      "fechaSalidaCalculada": "2026-03-15"
     }
   },
   {
     "id": 4,
-    "presoId": "1237440696",
-    "codigo": 131,
-    "nombre": "Omisión de socorro",
-    "articuloLey": "Artículo 131",
-    "gravedad": "Media",
-    "descripcion": "Presencio un accudente y se fue corriendo",
+    "presoId": "223344556",
+    "codigo": 220,
+    "nombre": "Injuria",
+    "articuloLey": "Artículo 220",
+    "gravedad": "Baja",
+    "descripcion": "La reclusa fue condenada por el delito de\ninjuria, al haber realizado manifestaciones verbales\ny expresiones ofensivas que atentaron contra el\nbuen nombre, la dignidad y el honor de otra persona.\n\nEl hecho ocurrió en un contexto donde se hicieron\nacusaciones infundadas con el objetivo de desprestigiar\ny afectar moralmente a la víctima.\n\nDicho comportamiento fue considerado una violación\na la integridad moral y emocional de la persona afectada,\nlo cual constituye una falta grave contra la convivencia\ny el respeto entre ciudadanos.",
     "fechaComision": "2023-05-06",
     "sentencia": {
-      "años": 0,
-      "meses": 4,
-      "fechaIngreso": "2025-05-12",
-      "fechaSalidaCalculada": "2025-09-12"
+      "años": 3,
+      "meses": 5,
+      "fechaIngreso": "2025-05-15",
+      "fechaSalidaCalculada": "2028-10-15"
     }
   },
   {
     "id": 5,
-    "presoId": "1237440696",
-    "codigo": 111,
-    "nombre": "Lesiones personales leves",
-    "articuloLey": "Artículo 111",
-    "gravedad": "Media",
-    "descripcion": "Multiples lesiones con alta gravedad",
-    "fechaComision": "2025-05-05",
+    "presoId": "334455667",
+    "codigo": 343,
+    "nombre": "Terrorismo",
+    "articuloLey": "Artículo 343",
+    "gravedad": "Alta",
+    "descripcion": "La interna fue condenada por el delito de\nterrorismo, al participar activamente en actos\ndestinados a sembrar miedo, alterar el orden público\ny atentar contra la seguridad del Estado y de la población civil.\n\nFormó parte de una organización que planeó y ejecutó\nacciones violentas con fines ideológicos, políticos o\nreligiosos, utilizando medios ilícitos para provocar\npánico colectivo y desestabilizar las instituciones.\n\nSu conducta fue calificada como una amenaza grave\na la seguridad nacional, al haber contribuido directa\no indirectamente a actividades que ponen en riesgo\nla vida, la integridad y la libertad de las personas.",
+    "fechaComision": "2025-05-14",
     "sentencia": {
-      "años": 1,
-      "meses": 4,
-      "fechaIngreso": "2025-05-12",
-      "fechaSalidaCalculada": "2026-09-12"
+      "años": 4,
+      "meses": 3,
+      "fechaIngreso": "2025-05-15",
+      "fechaSalidaCalculada": "2029-08-15"
     }
   },
   {
     "id": 6,
-    "presoId": "1237440696",
-    "codigo": 289,
-    "nombre": "Falsedad en documento privado",
-    "articuloLey": "Artículo 289",
+    "presoId": "334455667",
+    "codigo": 269,
+    "nombre": "Acceso abusivo a sistema informático",
+    "articuloLey": "Artículo 269",
     "gravedad": "Media",
-    "descripcion": "Falsifico un  documento para ir al concierto\n de un cantante famoso",
-    "fechaComision": "2023-05-19",
+    "descripcion": "La interna fue condenada por el delito de\nabuso excesivo de un sistema informático, al haber\naccedido, manipulado y explotado de forma indebida\nplataformas tecnológicas con el fin de obtener\ninformación confidencial y causar perjuicio a terceros.\n\nUtilizó sus conocimientos en informática para vulnerar\nla seguridad de sistemas protegidos, alterar datos,\ny realizar operaciones no autorizadas que afectaron\nla integridad y el funcionamiento normal de redes\ninstitucionales y privadas.\n\nSu conducta representó una violación grave a la\nconfianza digital, afectando derechos de terceros\ny comprometiendo la seguridad informática de\nentidades públicas y/o privadas.",
+    "fechaComision": "2025-05-08",
     "sentencia": {
-      "años": 1,
-      "meses": 4,
-      "fechaIngreso": "2025-05-12",
-      "fechaSalidaCalculada": "2026-09-12"
+      "años": 2,
+      "meses": 0,
+      "fechaIngreso": "2025-05-15",
+      "fechaSalidaCalculada": "2027-05-15"
     }
   },
   {
     "id": 7,
-    "presoId": "1237440696",
-    "codigo": 296,
-    "nombre": "Usurpación de derechos",
-    "articuloLey": "Artículo 296",
+    "presoId": "445566778",
+    "codigo": 104,
+    "nombre": "Homicidio agravado",
+    "articuloLey": "Artículo 104",
     "gravedad": "Alta",
-    "descripcion": "Rompia los derechos de las personas",
-    "fechaComision": "2025-05-03",
+    "descripcion": "La interna fue condenada por el delito de\nhomicidio agravado, al haber causado la muerte\nde otra persona de manera intencional, con plena\nconciencia y voluntad.\n\nEl hecho se agravó por concurrir circunstancias\nespeciales como la premeditación, la sevicia,\nla relación de confianza con la víctima o la\ncomisión del acto en presencia de menores.\n\nEste delito evidencia una afectación directa\na la vida humana, considerado uno de los\nmás graves dentro del orden penal, por\nsu impacto social y la violencia implicada\nen su ejecución.",
+    "fechaComision": "2025-05-01",
     "sentencia": {
-      "años": 2,
-      "meses": 6,
-      "fechaIngreso": "2025-05-12",
-      "fechaSalidaCalculada": "2027-11-12"
+      "años": 13,
+      "meses": 4,
+      "fechaIngreso": "2025-05-15",
+      "fechaSalidaCalculada": "2038-09-15"
     }
   },
   {
     "id": 8,
     "presoId": "1237440696",
-    "codigo": 490,
-    "nombre": "Estafa",
-    "articuloLey": "Artículo 490",
-    "gravedad": "Media",
-    "descripcion": "Frecuentaba casinos y pagaba con billetes falsos",
-    "fechaComision": "2025-05-01",
+    "codigo": 399,
+    "nombre": "Peculado por uso",
+    "articuloLey": "Artículo 399",
+    "gravedad": "Baja",
+    "descripcion": "La detenida fue vista peculando por uso",
+    "fechaComision": "2025-05-15",
     "sentencia": {
-      "años": 4,
-      "meses": 6,
-      "fechaIngreso": "2025-05-12",
-      "fechaSalidaCalculada": "2029-11-12"
+      "años": 2,
+      "meses": 3,
+      "fechaIngreso": "2025-05-16",
+      "fechaSalidaCalculada": "2027-08-16"
     }
   },
   {
     "id": 9,
-    "presoId": "1237440696",
-    "codigo": 319,
-    "nombre": "Contrabando",
-    "articuloLey": "Artículo 319 - Contrabando",
-    "gravedad": "Alta",
-    "descripcion": "Contrabandeaba marihuana y decia que ere cilantro",
-    "fechaComision": "2024-05-23",
+    "presoId": "009988776",
+    "codigo": 240,
+    "nombre": "Hurto calificado",
+    "articuloLey": "Artículo 240",
+    "gravedad": "Baja",
+    "descripcion": "La reclusa hurto mientras regresaba a casa",
+    "fechaComision": "2025-05-08",
     "sentencia": {
-      "años": 3,
-      "meses": 8,
-      "fechaIngreso": "2025-05-12",
-      "fechaSalidaCalculada": "2029-01-12"
+      "años": 2,
+      "meses": 1,
+      "fechaIngreso": "2025-05-16",
+      "fechaSalidaCalculada": "2027-06-16"
     }
   },
   {
     "id": 10,
-    "presoId": "1237440696",
-    "codigo": 103,
-    "nombre": "Homicidio",
-    "articuloLey": "Artículo 103",
-    "gravedad": "Media",
-    "descripcion": "Mato a una persona, por que no habia desayunado",
-    "fechaComision": "2025-05-10",
+    "presoId": "112233445",
+    "codigo": 244,
+    "nombre": "Extorsión",
+    "articuloLey": "Artículo 244 - Extorsión",
+    "gravedad": "Baja",
+    "descripcion": "Estuvo extorcionando gente",
+    "fechaComision": "2025-05-11",
     "sentencia": {
-      "años": 3,
-      "meses": 5,
-      "fechaIngreso": "2025-05-12",
-      "fechaSalidaCalculada": "2028-10-12"
-    }
-  },
-  {
-    "id": 11,
-    "presoId": "1234565432",
-    "codigo": 101,
-    "nombre": "Genocidio",
-    "articuloLey": "Artículo 101",
-    "gravedad": "Alta",
-    "descripcion": "Mato a casi toda su familia xd",
-    "fechaComision": "2025-05-05",
-    "sentencia": {
-      "años": 4,
-      "meses": 0,
-      "fechaIngreso": "2025-05-12",
-      "fechaSalidaCalculada": "2029-05-12"
-    }
-  },
-  {
-    "id": 12,
-    "presoId": "123456789",
-    "codigo": 265,
-    "nombre": "Daño en bien ajeno",
-    "articuloLey": "Artículo 265",
-    "gravedad": "Media",
-    "descripcion": "Daño el bien ajeno",
-    "fechaComision": "2025-05-06",
-    "sentencia": {
-      "años": 1,
-      "meses": 0,
-      "fechaIngreso": "2025-05-12",
-      "fechaSalidaCalculada": "2026-05-12"
+      "años": 2,
+      "meses": 1,
+      "fechaIngreso": "2025-05-17",
+      "fechaSalidaCalculada": "2027-06-17"
     }
   }
 ]

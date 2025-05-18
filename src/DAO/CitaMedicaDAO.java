@@ -1,34 +1,36 @@
 package DAO;
 
-import Model.Constants.EstadoCitaMedicaEnum;
 import Model.Entities.CitaMedica;
+import Model.Constants.EstadoCitaMedicaEnum;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import Model.Entities.LocalDateAdapter;
-import java.time.LocalTime;
+import java.util.stream.Collectors;
 
 public class CitaMedicaDAO {
 
-    private static final String JSON_FILE = "src/Resources/DATA/citasMedicas.json";
-    private Gson gson;
+    private static final String JSON_FILE = "src/Resources/DATA/citasmedicas.json";
     private static CitaMedicaDAO instancia;
-
-    public CitaMedicaDAO() {
-        gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-                .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
-                .setPrettyPrinting()
-                .create();
-    }
+    private final Gson gson;
 
     public static synchronized CitaMedicaDAO getInstancia() {
         if (instancia == null) {
@@ -37,35 +39,24 @@ public class CitaMedicaDAO {
         return instancia;
     }
 
-    public List<CitaMedica> cargarTodas() {
-        File archivo = new File(JSON_FILE);
+    private CitaMedicaDAO() {
+        this.gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                .create();
 
-        if (!archivo.exists()) {
-            try {
-                archivo.createNewFile();
-                guardarTodas(new ArrayList<>());
-            } catch (IOException e) {
-                System.err.println("Error al crear el archivo de citas: " + e.getMessage());
-                return new ArrayList<>();
-            }
-        }
-
-        try (FileReader reader = new FileReader(archivo)) {
-            Type listType = new TypeToken<List<CitaMedica>>() {
-            }.getType();
-            List<CitaMedica> citas = gson.fromJson(reader, listType);
-            return citas != null ? citas : new ArrayList<>();
-        } catch (IOException e) {
-            System.err.println("Error al leer el archivo de citas: " + e.getMessage());
-            return new ArrayList<>();
-        }
     }
 
-    public void guardarTodas(List<CitaMedica> citas) {
-        try (FileWriter writer = new FileWriter(JSON_FILE)) {
-            gson.toJson(citas, writer);
+    public List<CitaMedica> cargarTodas() {
+        try (Reader reader = new FileReader(JSON_FILE)) {
+            Type tipoLista = new TypeToken<ArrayList<CitaMedica>>() {
+            }.getType();
+            List<CitaMedica> citas = gson.fromJson(reader, tipoLista);
+            return citas != null ? citas : new ArrayList<>();
         } catch (IOException e) {
-            System.err.println("Error al guardar las citas: " + e.getMessage());
+            return new ArrayList<>();
         }
     }
 
@@ -73,56 +64,137 @@ public class CitaMedicaDAO {
         List<CitaMedica> citas = cargarTodas();
 
         if (cita.getId() == 0) {
-            cita.setId(obtenerProximoId(citas));
+            int maxId = citas.stream().mapToInt(CitaMedica::getId).max().orElse(0);
+            cita.setId(maxId + 1);
         }
 
-        if (cita.getEstado() == null) {
-            cita.setEstado(EstadoCitaMedicaEnum.PENDIENTE);
-        }
-
-        for (int i = 0; i < citas.size(); i++) {
-            if (citas.get(i).getId() == cita.getId()) {
-                citas.set(i, cita);
-                guardarTodas(citas);
-                return true;
-            }
-        }
-
+        citas.removeIf(c -> c.getId() == cita.getId());
         citas.add(cita);
-        guardarTodas(citas);
-        return true;
+
+        return guardarTodas(citas);
     }
 
-    public boolean eliminarCita(int id) {
-        List<CitaMedica> citas = cargarTodas();
-        boolean removed = citas.removeIf(c -> c.getId() == id);
-        if (removed) {
-            guardarTodas(citas);
+    private boolean guardarTodas(List<CitaMedica> citas) {
+        try (Writer writer = new FileWriter(JSON_FILE)) {
+            gson.toJson(citas, writer);
+            return true;
+        } catch (IOException e) {
+            return false;
         }
-        return removed;
+    }
+
+    public List<CitaMedica> obtenerPorPreso(String identificacionPreso) {
+        return cargarTodas().stream()
+                .filter(c -> c.getPreso().getIdentificacion().equals(identificacionPreso))
+                .collect(Collectors.toList());
+    }
+
+    public List<CitaMedica> obtenerPorEstado(EstadoCitaMedicaEnum estado) {
+        return cargarTodas().stream()
+                .filter(c -> c.getEstado() == estado)
+                .collect(Collectors.toList());
     }
 
     public CitaMedica buscarPorId(int id) {
-        List<CitaMedica> citas = cargarTodas();
-        for (CitaMedica c : citas) {
-            if (c.getId() == id) {
-                return c;
-            }
-        }
-        return null;
+        return cargarTodas().stream()
+                .filter(c -> c.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 
-    public CitaMedica buscarCitaPorPresoFechaYHora(String identificacionPreso, LocalDate fecha, LocalTime hora) {
-        List<CitaMedica> citas = cargarTodas();
-        for (CitaMedica cita : citas) {
-            if (cita.getPreso().getIdentificacion().equals(identificacionPreso) && cita.getFecha().equals(fecha) && cita.getHora().equals(hora)) {
-                return cita;
-            }
-        }
-        return null;
+    public List<CitaMedica> obtenerPorEnfermera(String identificacionEnfermera) {
+        return cargarTodas().stream()
+                .filter(c -> c.getEnfermera().getIdentificacion().equals(identificacionEnfermera))
+                .collect(Collectors.toList());
     }
 
-    private int obtenerProximoId(List<CitaMedica> citas) {
-        return citas.stream().mapToInt(CitaMedica::getId).max().orElse(0) + 1;
+    public boolean actualizarDiagnostico(int idCita, String diagnostico, String rutaArchivo) {
+        CitaMedica cita = buscarPorId(idCita);
+        if (cita != null) {
+            cita.setDiagnostico(diagnostico);
+            cita.setRutaHistoriaClinica(rutaArchivo);
+            cita.setFechaHoraAtencion(LocalDateTime.now());
+            cita.setEstado(EstadoCitaMedicaEnum.ATENDIDO);
+            return guardarCita(cita);
+        }
+        return false;
     }
+
+    private static class LocalDateTimeAdapter implements JsonSerializer<LocalDateTime>,
+            JsonDeserializer<LocalDateTime> {
+
+        @Override
+        public JsonElement serialize(LocalDateTime src, Type typeOfSrc,
+                JsonSerializationContext context) {
+            return new JsonPrimitive(src.toString());
+        }
+
+        @Override
+        public LocalDateTime deserialize(JsonElement json, Type typeOfT,
+                JsonDeserializationContext context) throws JsonParseException {
+            return LocalDateTime.parse(json.getAsString());
+        }
+    }
+
+    public boolean marcarComoPrioritario(int idCita) {
+        CitaMedica cita = buscarPorId(idCita);
+        if (cita != null) {
+            cita.setEstado(EstadoCitaMedicaEnum.PRIORITARIO);
+            return guardarCita(cita);
+        }
+        return false;
+    }
+
+    public boolean cancelarCita(int idCita) {
+        CitaMedica cita = buscarPorId(idCita);
+        if (cita != null) {
+            cita.setEstado(EstadoCitaMedicaEnum.CANCELADO);
+            return guardarCita(cita);
+        }
+        return false;
+    }
+
+    // Adapters para LocalDate y LocalTime
+    private static class LocalDateAdapter implements com.google.gson.JsonSerializer<LocalDate>,
+            com.google.gson.JsonDeserializer<LocalDate> {
+
+        @Override
+        public com.google.gson.JsonElement serialize(LocalDate src, Type typeOfSrc,
+                com.google.gson.JsonSerializationContext context) {
+            return new com.google.gson.JsonPrimitive(src.toString());
+        }
+
+        @Override
+        public LocalDate deserialize(com.google.gson.JsonElement json, Type typeOfT,
+                com.google.gson.JsonDeserializationContext context) throws com.google.gson.JsonParseException {
+            return LocalDate.parse(json.getAsString());
+        }
+    }
+
+    private static class LocalTimeAdapter implements com.google.gson.JsonSerializer<LocalTime>,
+            com.google.gson.JsonDeserializer<LocalTime> {
+
+        @Override
+        public com.google.gson.JsonElement serialize(LocalTime src, Type typeOfSrc,
+                com.google.gson.JsonSerializationContext context) {
+            return new com.google.gson.JsonPrimitive(src.toString());
+        }
+
+        @Override
+        public LocalTime deserialize(com.google.gson.JsonElement json, Type typeOfT,
+                com.google.gson.JsonDeserializationContext context) throws com.google.gson.JsonParseException {
+            return LocalTime.parse(json.getAsString());
+        }
+    }
+
+    public boolean cancelarCita(int idCita, String razon) {
+        CitaMedica cita = buscarPorId(idCita);
+        if (cita != null) {
+            cita.setEstado(EstadoCitaMedicaEnum.CANCELADO);
+            cita.setDiagnostico("CANCELADA - Razón: " + razon);
+            return guardarCita(cita);
+        }
+        return false;
+    }
+
 }

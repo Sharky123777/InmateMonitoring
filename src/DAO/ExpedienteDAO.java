@@ -67,7 +67,6 @@ public class ExpedienteDAO {
                 .orElse(null);
     }
 
-    // NUEVO MÉTODO: Buscar todos los expedientes asociados a un preso
     public List<ExpedienteJudicial> buscarExpedientesPorPreso(String identificacionPreso) {
         return cargarTodos().stream()
                 .filter(e -> e.getPreso() != null && e.getPreso().getIdentificacion().equals(identificacionPreso))
@@ -178,21 +177,28 @@ public class ExpedienteDAO {
     private String generarCodigoUnico() {
         return "EXP-" + System.currentTimeMillis();
     }
-
-    public Sentencia calcularSentenciaTotal(List<Delito> delitos) {
-        if (delitos == null || delitos.isEmpty()) {
-            return new Sentencia(0, 0, LocalDate.now());
-        }
-
-        LocalDate fechaIngreso = delitos.get(0).getSentencia().getFechaIngreso();
-        Sentencia total = new Sentencia(0, 0, fechaIngreso);
-
-        for (Delito delito : delitos) {
-            total.sumarSentencia(delito.getSentencia());
-        }
-
-        return total;
+public Sentencia calcularSentenciaTotal(List<Delito> delitos) {
+    if (delitos == null || delitos.isEmpty()) {
+        return new Sentencia(0, 0, LocalDate.now());
     }
+
+    LocalDate fechaIngresoMasReciente = delitos.get(0).getSentencia().getFechaIngreso();
+    for (Delito delito : delitos) {
+        LocalDate fechaDelito = delito.getSentencia().getFechaIngreso();
+        if (fechaDelito.isAfter(fechaIngresoMasReciente)) {
+            fechaIngresoMasReciente = fechaDelito;
+        }
+    }
+
+    Sentencia sentenciaTotal = new Sentencia(0, 0, fechaIngresoMasReciente);
+    for (Delito delito : delitos) {
+        sentenciaTotal.sumarSentencia(delito.getSentencia());
+    }
+
+    return sentenciaTotal;
+}    
+    
+    
     
     public ExpedienteJudicial obtenerExpedienteAbierto(String identificacionPreso) {
     return buscarExpedientesPorPreso(identificacionPreso).stream()

@@ -241,10 +241,7 @@ public void validarIdentificacionUnica(String identificacion) {
         if (nombre == null || nombre.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "El nombre de la actividad no puede estar vacío");
         }
-
-        if (!Pattern.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]{2,50}$", nombre)) {
-            throw new IllegalArgumentException("El nombre de la actividad solo puede contener letras y espacios (2-50 caracteres)");
-        }
+  
     }
 
     public static void validarTipoActividad(String tipo) {
@@ -266,7 +263,7 @@ public void validarIdentificacionUnica(String identificacion) {
 
         String valor = dia.toString().trim().toLowerCase();
         List<String> diasValidos = List.of(
-                "lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"
+                "lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"
         );
 
         if (!diasValidos.contains(valor)) {

@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Actividad {
 
-    private Map<String, EstadoActividadesPresoEnum> estadosPorPreso;
+    private Map<String, EstadoActividadesPresoEnum> estadosPorPreso = new HashMap<>();
     private String idActividad;
     private String nombre;
     private String tipo;
@@ -18,17 +18,20 @@ public class Actividad {
     private String horario;
     private String lugar;
     private int cupoMaximo;
-    private List<String> presosAsignadosIds;
+    private List<String> presosAsignadosIds = new ArrayList<>();
     private EstadoActividadesEnum estado;
     private int presosInscritos;
     private String responsableOficial;
+    private String descripcion;
 
     public Actividad() {
-        this.estadosPorPreso = new HashMap<>(); // Inicialización en el constructor
+        this.estadosPorPreso = new HashMap<>();
+        this.presosAsignadosIds = new ArrayList<>();
     }
 
     public Actividad(String idActividad, String nombre, String tipo, String dia,
-            String horario, String lugar, int cupoMaximo, String responsableOficial) {
+            String horario, String lugar, int cupoMaximo,
+            String responsableOficial, String descripcion) {
         this.idActividad = idActividad;
         this.nombre = nombre;
         this.tipo = tipo;
@@ -36,19 +39,52 @@ public class Actividad {
         this.horario = horario;
         this.lugar = lugar;
         this.cupoMaximo = cupoMaximo;
-        this.presosAsignadosIds = new ArrayList<>();
-        this.presosInscritos = presosInscritos;
-        this.estado = EstadoActividadesEnum.ACTIVA;
         this.responsableOficial = responsableOficial;
+        this.descripcion = descripcion;
+
+        this.presosAsignadosIds = new ArrayList<>();
+        this.estadosPorPreso = new HashMap<>();
+        this.estado = EstadoActividadesEnum.ACTIVA;
+        this.presosInscritos = 0;
     }
+
+   public void setEstadoPreso(String idPreso, EstadoActividadesPresoEnum nuevoEstado) {
+    estadosPorPreso.put(idPreso, nuevoEstado);
     
-    public void setEstadoPreso(String presoId, EstadoActividadesPresoEnum estado) {
-    this.estadosPorPreso.put(presoId, estado);
+    // Actualizar contador de inscritos automáticamente
+    if (nuevoEstado == EstadoActividadesPresoEnum.FINALIZADA || 
+        nuevoEstado == EstadoActividadesPresoEnum.CANCELADA) {
+        // Solo reducir si antes estaba EN_PROCESO
+        if (estadosPorPreso.getOrDefault(idPreso, null) == EstadoActividadesPresoEnum.EN_PROCESO) {
+            if (presosInscritos > 0) {
+                presosInscritos--;
+            }
+        }
+    } else if (nuevoEstado == EstadoActividadesPresoEnum.EN_PROCESO) {
+        // Si cambia a EN_PROCESO, aumentar el contador
+        presosInscritos++;
+    }
 }
 
-public EstadoActividadesPresoEnum getEstadoPreso(String presoId) {
-    return this.estadosPorPreso.getOrDefault(presoId, EstadoActividadesPresoEnum.ACTIVA);
-}
+    public Map<String, EstadoActividadesPresoEnum> getEstadosPorPreso() {
+        return estadosPorPreso;
+    }
+
+    public void setEstadosPorPreso(Map<String, EstadoActividadesPresoEnum> estadosPorPreso) {
+        this.estadosPorPreso = estadosPorPreso;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public EstadoActividadesPresoEnum getEstadoPreso(String presoId) {
+        return this.estadosPorPreso.getOrDefault(presoId, EstadoActividadesPresoEnum.EN_PROCESO);
+    }
 
     public String getResponsableOficial() {
         return responsableOficial;
@@ -57,8 +93,6 @@ public EstadoActividadesPresoEnum getEstadoPreso(String presoId) {
     public void setResponsableOficial(String responsableOficial) {
         this.responsableOficial = responsableOficial;
     }
-
- 
 
     public int getPresosInscritos() {
         return presosInscritos;
@@ -143,6 +177,19 @@ public EstadoActividadesPresoEnum getEstadoPreso(String presoId) {
     public boolean tieneCupoDisponible() {
         return presosAsignadosIds.size() < cupoMaximo;
     }
+    
+    public void disminuirInscritosSiCorresponde(String idPreso, EstadoActividadesPresoEnum nuevoEstado) {
+    EstadoActividadesPresoEnum estadoActual = getEstadoPreso(idPreso);
+    if (estadoActual == EstadoActividadesPresoEnum.EN_PROCESO &&
+        (nuevoEstado == EstadoActividadesPresoEnum.FINALIZADA || nuevoEstado == EstadoActividadesPresoEnum.CANCELADA)) {
+        if (presosInscritos > 0) {
+            presosInscritos--;
+        }
+    }
+}
+
+    
+    
 
     public boolean asignarPreso(String idPreso) {
         if (tieneCupoDisponible() && !presosAsignadosIds.contains(idPreso)) {

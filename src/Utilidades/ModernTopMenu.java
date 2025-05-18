@@ -55,17 +55,28 @@ public class ModernTopMenu extends JPanel {
     menuStructure.put("Guardias", guardiasItems);
     
      ArrayList<MenuItem> oficialItems = new ArrayList<>();
-    oficialItems.add(new MenuItem("Agregar oficial", 15)); // AgregarCDA
-    oficialItems.add(new MenuItem("Mostrar oficial", 17)); // AgregarCDA
+    oficialItems.add(new MenuItem("Agregar oficial", 14)); // AgregarCDA
+    oficialItems.add(new MenuItem("Mostrar oficial", 16)); // AgregarCDA
     menuStructure.put("Oficial", oficialItems );
     
     
     ArrayList<MenuItem> cdaItems = new ArrayList<>();
-    cdaItems.add(new MenuItem("Agregar CDA", 9)); // AgregarCDA
+    cdaItems.add(new MenuItem("Agregar coordinadora", 9)); // AgregarCDA
     
-    cdaItems.add(new MenuItem("Mostrar CDA", 11)); // mostrarCoordinadora
-    menuStructure.put("CDA", cdaItems);
+    cdaItems.add(new MenuItem("Mostrar coordinadora", 11)); // mostrarCoordinadora
+    menuStructure.put("Coordinadora", cdaItems);
     
+    ArrayList<MenuItem> ofrItems = new ArrayList<>();
+    ofrItems.add(new MenuItem("Agregar registradora", 12)); // AgregarCDA
+    
+    ofrItems.add(new MenuItem("Mostrar registradora", 13)); // mostrarCoordinadora
+    menuStructure.put("Registradora", ofrItems);
+    
+    ArrayList<MenuItem> pdcItems = new ArrayList<>();
+    pdcItems.add(new MenuItem("Agregar personal de control", 19)); // AgregarCDA
+    
+    pdcItems.add(new MenuItem("Mostrar personal de control", 21)); // mostrarCoordinadora
+    menuStructure.put("Personal de control", pdcItems);
     
     ArrayList<MenuItem> configItems = new ArrayList<>();
     configItems.add(new MenuItem("Cambiar credenciales", 18));

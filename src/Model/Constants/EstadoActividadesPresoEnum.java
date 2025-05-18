@@ -4,8 +4,8 @@ package Model.Constants;
 
 public enum EstadoActividadesPresoEnum {
     
-    ACTIVA,
+    EN_PROCESO,
     FINALIZADA,
     CANCELADA
-    
 }
+

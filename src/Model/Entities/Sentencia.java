@@ -32,6 +32,22 @@ import java.time.Period;
 
     calcularFechaSalida();
 }
+   
+   public void restarSentencia(Sentencia otra) {
+    int totalMesesActual = this.años * 12 + this.meses;
+    int totalMesesARestar = otra.getAños() * 12 + otra.getMeses();
+
+    if (totalMesesARestar > totalMesesActual) {
+        throw new IllegalArgumentException("No se puede restar una sentencia mayor a la actual");
+    }
+
+    int totalMesesRestantes = totalMesesActual - totalMesesARestar;
+    this.años = totalMesesRestantes / 12;
+    this.meses = totalMesesRestantes % 12;
+
+    calcularFechaSalida();
+}
+
 
 
     private void calcularFechaSalida() {
