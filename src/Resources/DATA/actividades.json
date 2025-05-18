@@ -11,11 +11,10 @@
     "presosAsignadosIds": [
       "112233445",
       "223344556",
-      "445566778",
-      "334455667"
+      "445566778"
     ],
     "estado": "ACTIVA",
-    "presosInscritos": 4,
+    "presosInscritos": 3,
     "responsableOficial": "31313131",
     "descripcion": "Actividad al aire libre donde los internos siembran vegetales y hierbas, promoviendo responsabilidad y sostenibilidad."
   },
@@ -37,6 +36,6 @@
     "estado": "CANCELADA",
     "presosInscritos": 0,
     "responsableOficial": "4243242424",
-    "descripcion": "lop"
+    "descripcion": "En esta actividad se realizaran cosas"
   }
 ]

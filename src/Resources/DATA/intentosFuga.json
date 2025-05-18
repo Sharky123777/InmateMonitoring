@@ -32,5 +32,9 @@
     "identificacionPreso": "223344556",
     "fechaFuga": "2025-05-17",
     "fechaReingreso": "2025-05-17"
+  },
+  {
+    "identificacionPreso": "334455667",
+    "fechaFuga": "2025-05-17"
   }
 ]

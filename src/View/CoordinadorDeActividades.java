@@ -38,7 +38,6 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
     private final PresoController presoController;
     private final PresoDAO presoDAO;
 
-
     private final DelitoDAO delitoDAO;
     private final ActividadDAO actividadDAO;
     private final CeldaDAO celdaDAO;
@@ -56,6 +55,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
         inicializarMenuActividadesGeneral();
         this.setLocationRelativeTo(null);
         soloLetras(NombreAct);
+        soloLetras(nuevoNombreAct);
 
         ActividadController controlador = ActividadController.getInstancia();
         controlador.cargarActividadesEnTabla(actividadesTabla);
@@ -71,32 +71,29 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
         List<Object[]> presosParaActividades = ac.obtenerPresosParaActividades();
         cargarPresosAptosEnTabla(presosParaActividades);
 
-                actualizarLabelEstadisticas();
+        actualizarLabelEstadisticas();
 
-        
-        
     }
-    
+
     private void actualizarLabelEstadisticas() {
-    Map<String, Object> stats = actividadDAO.obtenerEstadisticasActividades();
-    
-    String texto = String.format(
-        "<html>"
-        + "<b>Estadísticas de Actividades:</b><br>"
-        + "Activas: %d (%.1f%%)<br>"
-        + "Canceladas: %d (%.1f%%)<br>"
-        + "<i>Total registradas: %d</i>"
-        + "</html>",
-        stats.get("totalActivas"),
-        stats.get("porcentajeActivas"),
-        stats.get("totalCanceladas"),
-        stats.get("porcentajeCanceladas"),
-        stats.get("totalGeneral")
-    );
-    
-    lblCantidadDeActividades.setText(texto); 
-}
-    
+        Map<String, Object> stats = actividadDAO.obtenerEstadisticasActividades();
+
+        String texto = String.format(
+                "<html>"
+                + "<b>Estadísticas de Actividades:</b><br>"
+                + "Activas: %d (%.1f%%)<br>"
+                + "Canceladas: %d (%.1f%%)<br>"
+                + "<i>Total registradas: %d</i>"
+                + "</html>",
+                stats.get("totalActivas"),
+                stats.get("porcentajeActivas"),
+                stats.get("totalCanceladas"),
+                stats.get("porcentajeCanceladas"),
+                stats.get("totalGeneral")
+        );
+
+        lblCantidadDeActividades.setText(texto);
+    }
 
     private void cargarPresosAptosEnTabla(List<Object[]> presos) {
         DefaultTableModel modelo = (DefaultTableModel) TablaPresosCoor.getModel();
@@ -603,6 +600,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
         nombreO = new javax.swing.JLabel();
         IdentiO = new javax.swing.JLabel();
         ApellidoO = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -1580,17 +1578,18 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
 
         btnActualizarActividad.setBackground(new java.awt.Color(21, 21, 39));
         btnActualizarActividad.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btnActualizarActividad.setForeground(new java.awt.Color(255, 255, 255));
         btnActualizarActividad.setText("Actualizar");
         btnActualizarActividad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnActualizarActividadActionPerformed(evt);
             }
         });
-        ActualizarActividad.add(btnActualizarActividad, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 530, 210, 40));
+        ActualizarActividad.add(btnActualizarActividad, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 540, 160, 40));
 
         jLabel18.setForeground(new java.awt.Color(0, 0, 0));
         jLabel18.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
-        ActualizarActividad.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 820, 400));
+        ActualizarActividad.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 100, 880, 420));
 
         jLabel24.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel24.setForeground(new java.awt.Color(0, 0, 0));
@@ -1601,7 +1600,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
         jLabel105.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
         jLabel105.setForeground(new java.awt.Color(204, 0, 0));
         jLabel105.setText("Los campos que no desee modificar déjelos en blanco*");
-        ActualizarActividad.add(jLabel105, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 60, 290, 30));
+        ActualizarActividad.add(jLabel105, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 60, 290, 30));
 
         jButton2.setBackground(new java.awt.Color(0, 0, 0));
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
@@ -1656,6 +1655,17 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
 
         ApellidoO.setForeground(new java.awt.Color(0, 0, 0));
         ActualizarActividad.add(ApellidoO, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 330, 210, 20));
+
+        jButton4.setBackground(new java.awt.Color(40, 6, 6));
+        jButton4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jButton4.setForeground(new java.awt.Color(255, 255, 255));
+        jButton4.setText("Cancelar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        ActualizarActividad.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 540, 150, 40));
 
         CoordinadorDeActividades.addTab("Actualizar actividad", ActualizarActividad);
 
@@ -1720,6 +1730,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
 
     private void btnRegresarListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarListaActionPerformed
         CoordinadorDeActividades.setSelectedIndex(0);
+        limpiarFormularioActividad();
 
     }//GEN-LAST:event_btnRegresarListaActionPerformed
 
@@ -1776,10 +1787,56 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
             String cupoMaximo = (String) cupoMax.getSelectedItem();
             String descripcion = descripcionArea.getText().trim();
 
+            if (nombre.isEmpty() && tipo.equalsIgnoreCase("<Seleccione>") && dia.equals("<Seleccionar>")
+                    && horario.equals("<Seleccionar>") && lugar.equalsIgnoreCase("<Seleccione>") && cupoMaximo.equalsIgnoreCase("<Seleccione>")
+                    && descripcion.isEmpty()) {
+
+                JOptionPane.showMessageDialog(null, "No hay cambios para guardar");
+                return;
+            }
+
+            if (nombre.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El nombre de la actividad no puede estar vacío", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (tipo == null || tipo.equalsIgnoreCase("<Seleccione>")) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar un tipo de actividad", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (dia == null || dia.toString().equalsIgnoreCase("<Seleccionar>")) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar un día válido", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (horario == null || horario.toString().equalsIgnoreCase("<Seleccionar>")) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar un horario válido", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (lugar == null || lugar.equalsIgnoreCase("<Seleccione>")) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar un lugar válido", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (cupoMaximo == null || cupoMaximo.equalsIgnoreCase("<Seleccione>")) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar un cupo máximo", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (descripcion.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "La descripción no puede estar vacía", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             if (oficialSeleccionado == null) {
-                JOptionPane.showMessageDialog(this,
+                JOptionPane.showMessageDialog(
+                        this,
                         "Debe seleccionar un oficial responsable antes de añadir la actividad.",
-                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+                        "Advertencia",
+                        JOptionPane.WARNING_MESSAGE
+                );
                 return;
             }
 
@@ -1792,14 +1849,9 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
                 limpiarFormularioActividad();
                 CoordinadorDeActividades.setSelectedIndex(0);
                 oficialSeleccionado = null;
-                
-                
-                
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        "El oficial ya tiene una actividad en el mismo día y horario.",
-                        "Error", JOptionPane.ERROR_MESSAGE);
+
             }
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Error al agregar actividad: " + e.getMessage(),
@@ -1818,7 +1870,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
         lblNombreResponsable.setText("");
         lblApellidoResponsable.setText("");
         lblIdentificacionResponsable.setText("");
-        
+
 
     }//GEN-LAST:event_btnAñadirActividadActionPerformed
 
@@ -1858,6 +1910,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
     private void limpiarCamposActualizacion() {
         if (actividadSeleccionada != null) {
             nuevoNombreAct.setText("");
+            nuevaDescripcion.setText("");
             nuevoCupoAct.setSelectedIndex(0);
             nombreO.setText("");
             ApellidoO.setText("");
@@ -1865,21 +1918,20 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
             nuevoDiaAct.setSelectedIndex(0);
             nuevoHorarioAct.setSelectedIndex(0);
             nuevoLugarAct.setSelectedIndex(0);
-            
+
         }
 
     }
 
-private boolean hayCambiosRealmente(Actividad actividad) {
-    return !nuevoNombreAct.getText().isEmpty()
-            || !nuevoDiaAct.getSelectedItem().equals("<Seleccione>")
-            || !nuevoHorarioAct.getSelectedItem().equals("<Seleccione>")
-            || !nuevoLugarAct.getSelectedItem().equals("<Seleccione>")
-            || !nuevoCupoAct.getSelectedItem().equals("<Seleccione>")
-            || !nuevaDescripcion.getText().trim().isEmpty()
-            || oficialSeleccionado != null; 
-}
-
+    private boolean hayCambiosRealmente(Actividad actividad) {
+        return !nuevoNombreAct.getText().isEmpty()
+                || !nuevoDiaAct.getSelectedItem().equals("<Seleccione>")
+                || !nuevoHorarioAct.getSelectedItem().equals("<Seleccione>")
+                || !nuevoLugarAct.getSelectedItem().equals("<Seleccione>")
+                || !nuevoCupoAct.getSelectedItem().equals("<Seleccione>")
+                || !nuevaDescripcion.getText().trim().isEmpty()
+                || oficialSeleccionado != null;
+    }
 
 
     private void btnActualizarActividadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActividadActionPerformed
@@ -1895,8 +1947,6 @@ private boolean hayCambiosRealmente(Actividad actividad) {
                         "Información", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
-
-     
 
             ActividadController controller = ActividadController.getInstancia();
             boolean actualizado = controller.actualizarActividad(
@@ -2000,6 +2050,23 @@ private boolean hayCambiosRealmente(Actividad actividad) {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+
+        int respuesta = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro que desea cancelar la actualización?",
+                "Confirmar cancelación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+            limpiarCamposActualizacion();
+            CoordinadorDeActividades.setSelectedIndex(0);
+        }
+
+    }//GEN-LAST:event_jButton4ActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -2077,6 +2144,7 @@ private boolean hayCambiosRealmente(Actividad actividad) {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel100;
