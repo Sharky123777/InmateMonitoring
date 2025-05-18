@@ -1,6 +1,6 @@
 package Controller;
 
-import DAO.PersonalDeControlDAO;
+import DAO.PersonalControlDAO;
 import DAO.PresoDAO;
 import DAO.SancionDAO;
 import DAO.VisitaDAO;
@@ -50,7 +50,7 @@ public class VisitaController {
 
     private VisitaDAO visitaDAO = VisitaDAO.getInstancia();
     private VisitanteDAO visitanteDAO = VisitanteDAO.getInstancia();
-    private PersonalDeControlDAO personalDeControlDAO = PersonalDeControlDAO.getInstancia();
+    private PersonalControlDAO personalDeControlDAO = PersonalControlDAO.getInstancia();
     private SancionDAO sancionDAO = SancionDAO.getInstancia();
     private List<String> relacionesTemporales = new ArrayList<>();
     private Visita visitaTemporal = null;

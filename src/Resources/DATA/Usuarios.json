@@ -514,6 +514,20 @@
       "sexo": "Femenino",
       "nacionalidad": "papaNatas",
       "identificacion": "31783613"
+    },
+    {
+      "usuario": "YxwerQ4@$b",
+      "password": "ffc6aa5c3a339451adae0b709282a6cbc78a1016deeb9d1ffd7b244b9c14f49f",
+      "rol": "PERSONAL_DE_CONTROL",
+      "rutaImagen": "src/Resources/imagenes_personal_control/6715433345_1747596980609.jpg",
+      "primerNombre": "nicolle",
+      "segundoNombre": "Andrea",
+      "primerApellido": "Rivera",
+      "segundoApellido": "Montes",
+      "edad": 30,
+      "sexo": "Femenino",
+      "nacionalidad": "Colombiana",
+      "identificacion": "6715433345"
     }
   ]
 }
