@@ -119,6 +119,8 @@ public class CoordinadorDeActividades extends javax.swing.JFrame {
                 if (filaSeleccionada == -1) {
                     throw new Exception("Seleccione un preso primero");
                 }
+                
+                System.out.println("Se selecciono un preso");
 
                 Preso preso = presoController.obtenerPresoDesdeTabla(filaSeleccionada, TablaPresosCoor);
 
