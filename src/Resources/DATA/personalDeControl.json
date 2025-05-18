@@ -4,14 +4,14 @@
       "turno": "Diurno",
       "fechaContratacion": "2025-05-17",
       "fechaFinContrato": "2025-05-23",
-      "rutaImagen": "src/Resources/imagenes_personal_control/09876513131_1747504003349.jpg",
-      "correo": "juan123@gmail.com",
+      "rutaImagen": "src/Resources/imagenes_personal_control/09876513131.png",
+      "correo": "juan1234@gmail.com",
       "primerNombre": "s",
       "segundoNombre": "s",
       "primerApellido": "s",
       "segundoApellido": "ñ",
       "edad": 45,
-      "sexo": "Masculino",
+      "sexo": "Femenino",
       "nacionalidad": "novia",
       "identificacion": "09876513131"
     }

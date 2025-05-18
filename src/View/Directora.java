@@ -1311,7 +1311,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 jButton8ActionPerformed(evt);
             }
         });
-        jPanel10.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 280, -1, -1));
+        jPanel10.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 280, -1, -1));
 
         jLabel53.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel53.setForeground(new java.awt.Color(255, 255, 255));
@@ -3821,7 +3821,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         jPanel38.add(jPanel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 40, 310, 220));
 
         jLabel168.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel168.setText("Modificar foto de la enfermera:");
+        jLabel168.setText("Modificar foto de la empleada:");
         jPanel38.add(jLabel168, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 20, -1, -1));
 
         jLabel169.setForeground(new java.awt.Color(255, 255, 255));
@@ -4408,7 +4408,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         dateFinContrato1.setDate(null);
         txtFechaContratacion1.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         lblImagen1.setIcon(null);
-        rutaImagenEnfermera = null; // Limpiar variable de registro
+        rutaImagenEnfermera = null; 
     }
 
     private void limpiarFormularioEnfermeraMod() {
@@ -5890,6 +5890,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                             "Enfermera modificada exitosamente",
                             "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     tabPrincipal.setSelectedComponent(MostrarEnfermeras);
+                    limpiarFormularioEnfermeraMod();
                     actualizarTablaEnfermeras();
                     break;
 
@@ -7948,7 +7949,50 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     }//GEN-LAST:event_txtCorreoMod5KeyTyped
 
     private void jButton25ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton25ActionPerformed
-        // TODO add your handling code here:
+      Object[] options = {"Usar Cámara", "Seleccionar Archivo", "Cancelar"};
+    int opcion = JOptionPane.showOptionDialog(this,
+            "¿Cómo desea obtener la imagen?",
+            "Seleccionar Imagen",
+            JOptionPane.YES_NO_CANCEL_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            options[0]);
+
+    try {
+        File nuevaImagen = null;
+
+        if (opcion == 0) {
+            nuevaImagen = PersonalControlController.getInstancia().capturarImagenPDC();
+            imagenFueModificada = (nuevaImagen != null);
+        } else if (opcion == 1) {
+            JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                    "Imágenes", "jpg", "png", "jpeg");
+            fileChooser.setFileFilter(filter);
+
+            if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                nuevaImagen = fileChooser.getSelectedFile();
+                imagenFueModificada = true;
+            }
+        }
+
+        if (nuevaImagen != null) {
+            ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
+            Image imagenEscalada = icono.getImage()
+                    .getScaledInstance(
+                            lblImagenMod5.getWidth(),
+                            lblImagenMod5.getHeight(),
+                            Image.SCALE_SMOOTH
+                    );
+            lblImagenMod5.setIcon(new ImageIcon(imagenEscalada));
+            rutaImagenPDCMod = nuevaImagen;
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+                "Error al obtener imagen: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_jButton25ActionPerformed
 
     private void txtNacionalidadMod5KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadMod5KeyTyped

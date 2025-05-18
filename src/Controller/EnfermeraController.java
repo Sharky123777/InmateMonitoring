@@ -77,6 +77,7 @@ public class EnfermeraController {
             validarEdad(edad);
             validarFechasContrato(LocalDate.now(), fechaFinContrato);
             validarLimiteEnfermerasPorTurno(turno, null);
+            validarCedula(cedula);
             validarImagen(imagen);
 
             
@@ -114,6 +115,12 @@ public class EnfermeraController {
             throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG");
         }
     }
+    
+    private void validarCedula(String cedula) {
+    if (cedula.length() < 8 || cedula.length() > 10) {
+        throw new IllegalArgumentException("La cédula debe tener entre 8 y 10 dígitos");
+    }
+}
 
     public int modificarEnfermera(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
         try {

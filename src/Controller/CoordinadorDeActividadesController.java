@@ -101,6 +101,7 @@ public class CoordinadorDeActividadesController {
         validarCamposObligatorios(primerNombre, primerApellido, segundoApellido,
                 edad, cedula, nacionalidad, correo, turno, cargo);
         validarEdad(edad);
+        validarCedula(cedula);
         validarFechasContrato(LocalDate.now(), fechaFinContrato);
 
         if (imagenSeleccionadaCDA == null) {
@@ -272,6 +273,12 @@ public class CoordinadorDeActividadesController {
             throw new IllegalArgumentException("Coordinador no encontrado con cédula: " + cedula);
         }
         return original;
+    }
+
+    private void validarCedula(String cedula) {
+        if (cedula.length() < 8 || cedula.length() > 10) {
+            throw new IllegalArgumentException("La cédula debe tener entre 8 y 10 dígitos");
+        }
     }
 
     private void validarCamposModificados(Map<String, Object> cambios) {

@@ -149,8 +149,6 @@ public class PersonalControlDAO {
         }
     }
 
-   
-
     public boolean guardarPersonalControl(PersonalControl personalControl, File imagen) throws IOException {
         UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
         String usuario = credenciales.usuario;
@@ -278,8 +276,6 @@ public class PersonalControlDAO {
         }
     }
 
-    
-
     public boolean existePersonalControlConCedula(String cedula) {
         if (cedula == null || cedula.trim().isEmpty()) {
             return false;
@@ -319,9 +315,24 @@ public class PersonalControlDAO {
                     String rutaImagenFinal = p.getRutaImagen();
 
                     if (nuevaImagen != null && nuevaImagen.exists()) {
-                        String nombreImagen = personalControlModificado.getIdentificacion() + "_" + System.currentTimeMillis()
-                                + nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
+                        // Eliminar la imagen anterior si existe
+                        if (rutaImagenFinal != null && !rutaImagenFinal.isEmpty()) {
+                            try {
+                                Files.deleteIfExists(Paths.get(rutaImagenFinal));
+                            } catch (IOException e) {
+                                System.err.println("No se pudo eliminar la imagen anterior: " + e.getMessage());
+                            }
+                        }
+
+                        // Crear nueva imagen
+                        String extension = nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
+                        String nombreImagen = personalControlModificado.getIdentificacion() + extension;
                         rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+
+                        // Asegurar que el directorio existe
+                        Files.createDirectories(Paths.get(RUTA_IMAGENES));
+
+                        // Copiar la nueva imagen
                         Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
                     }
 

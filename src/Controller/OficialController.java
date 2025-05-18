@@ -70,6 +70,7 @@ public class OficialController {
                     edad, cedula, nacionalidad, correo, turno);
 
             validarEdad(edad);
+            validarCedula(cedula);
             validarFechasContrato(LocalDate.now(), fechaFinContrato);
             validarImagen(imagen);
 
@@ -225,14 +226,10 @@ public class OficialController {
         );
     }
 
-    private File validarYProcesarImagen(String rutaImagen) {
-        if (rutaImagen == null || rutaImagen.trim().isEmpty()) {
-            throw new IllegalArgumentException("Debe seleccionar una imagen del oficial");
+    private void validarCedula(String cedula) {
+        if (cedula.length() < 8 || cedula.length() > 10) {
+            throw new IllegalArgumentException("La cédula debe tener entre 8 y 10 dígitos");
         }
-
-        File imagen = new File(rutaImagen);
-        validarImagen(imagen);
-        return imagen;
     }
 
     public List<Oficial> obtenerTodosOficiales() {

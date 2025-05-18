@@ -60,58 +60,49 @@ public class GuardiaController {
     }
 
     public Guardia registrarGuardia(
-            String primerNombre, String segundoNombre,
-            String primerApellido, String segundoApellido,
-            int edad, String cedula, String nacionalidad,
-            String correo, String turno,
-            LocalDate fechaFinContrato,
-            String cargo,
-            File imagen) throws IOException {
+        String primerNombre, String segundoNombre,
+        String primerApellido, String segundoApellido,
+        int edad, String cedula, String nacionalidad,
+        String correo, String turno,
+        LocalDate fechaFinContrato,
+        String cargo,
+        File imagen) throws IOException, IllegalArgumentException {
 
-        try {
-
-            // Validación de cédula única (agregar al inicio)
-            if (guardiaDAO.existeGuardia(cedula)) {
-                throw new IllegalArgumentException("Ya existe una guardia con la cédula " + cedula);
-            }
-            // Validaciones básicas
-            validarCamposObligatorios(primerNombre, primerApellido, segundoApellido,
-                    edad, cedula, nacionalidad, correo, turno, cargo);
-            validarEdad(edad);
-            validarImagen(imagen); // Validación obligatoria de imagen
-
-            // Fecha de inicio siempre es hoy
-            LocalDate fechaInicio = LocalDate.now();
-
-            // Si fechaFinContrato es null, establecerla como hoy + 1 día (mínimo)
-            if (fechaFinContrato == null) {
-                fechaFinContrato = fechaInicio.plusDays(1);
-            }
-
-            // Validación robusta de fechas
-            validarFechasContrato(fechaInicio, fechaFinContrato);
-
-            // Crear y guardar el guardia
-            Guardia nuevoGuardia = new Guardia(
-                    primerNombre, segundoNombre, primerApellido, segundoApellido,
-                    edad, cedula, nacionalidad, correo, turno, fechaFinContrato, cargo);
-
-            boolean guardado = guardiaDAO.guardarGuardia(nuevoGuardia, imagen);
-
-            if (guardado) {
-                return guardiaDAO.obtenerGuardiaPorCedula(cedula);
-            }
-            throw new RuntimeException("No se pudo guardar la guardia en la base de datos");
-
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
-            throw e;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error inesperado al registrar la guardia: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            throw e;
-        }
+    // Validación de cédula única
+    if (guardiaDAO.existeGuardia(cedula)) {
+        throw new IllegalArgumentException("Ya existe una guardia con la cédula " + cedula);
     }
+
+    // Validaciones básicas
+    validarCamposObligatorios(primerNombre, primerApellido, segundoApellido,
+            edad, cedula, nacionalidad, correo, turno, cargo);
+    validarEdad(edad);
+    validarCedula(cedula);
+    validarImagen(imagen);
+
+    // Fecha de inicio siempre es hoy
+    LocalDate fechaInicio = LocalDate.now();
+
+    // Si fechaFinContrato es null, establecerla como hoy + 1 día (mínimo)
+    if (fechaFinContrato == null) {
+        fechaFinContrato = fechaInicio.plusDays(1);
+    }
+
+    // Validación robusta de fechas
+    validarFechasContrato(fechaInicio, fechaFinContrato);
+
+    // Crear y guardar el guardia
+    Guardia nuevoGuardia = new Guardia(
+            primerNombre, segundoNombre, primerApellido, segundoApellido,
+            edad, cedula, nacionalidad, correo, turno, fechaFinContrato, cargo);
+
+    boolean guardado = guardiaDAO.guardarGuardia(nuevoGuardia, imagen);
+
+    if (guardado) {
+        return guardiaDAO.obtenerGuardiaPorCedula(cedula);
+    }
+    throw new RuntimeException("No se pudo guardar la guardia en la base de datos");
+}
 
     public boolean modificarGuardia(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
         try {
@@ -313,6 +304,12 @@ public class GuardiaController {
             throw new IllegalArgumentException("La edad debe estar entre 18 y 70 años");
         }
     }
+    
+    private void validarCedula(String cedula) {
+    if (cedula.length() < 8 || cedula.length() > 10) {
+        throw new IllegalArgumentException("La cédula debe tener entre 8 y 10 dígitos");
+    }
+}
 
     public DefaultTableModel obtenerModeloTabla() {
         String[] columnas = {

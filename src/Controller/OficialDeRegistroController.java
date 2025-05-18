@@ -39,7 +39,6 @@ public class OficialDeRegistroController {
         FrmCamara ventanaCamara = new FrmCamara();
         ventanaCamara.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        
         JDialog dialog = new JDialog();
         dialog.setModal(true);
         dialog.setContentPane(ventanaCamara.getContentPane());
@@ -47,7 +46,6 @@ public class OficialDeRegistroController {
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
 
- 
         while (dialog.isVisible()) {
             try {
                 Thread.sleep(100);
@@ -60,7 +58,7 @@ public class OficialDeRegistroController {
         File imagenCapturada = ventanaCamara.getImagenCapturada();
 
         if (imagenCapturada != null) {
-            
+
             String tempDir = System.getProperty("java.io.tmpdir");
             String nombreTemp = "oficial_registro_" + System.currentTimeMillis() + ".jpg";
             File tempFile = new File(tempDir, nombreTemp);
@@ -69,10 +67,9 @@ public class OficialDeRegistroController {
                 Files.copy(imagenCapturada.toPath(), tempFile.toPath(),
                         StandardCopyOption.REPLACE_EXISTING);
 
-              
                 return tempFile;
             } catch (IOException e) {
-                
+
                 return null;
             }
         }
@@ -85,19 +82,17 @@ public class OficialDeRegistroController {
             String nacionalidad, String correo, String turno, LocalDate fechaFinContrato,
             File imagen) throws IOException {
 
-     
         try {
-            
+
             if (oficialDAO.existeOficialConCedula(cedula)) {
                 throw new IllegalArgumentException("Ya existe un oficial con la cédula " + cedula);
             }
 
-
             validarCamposObligatorios(primerNombre, primerApellido, segundoApellido,
                     edad, cedula, nacionalidad, correo, turno);
 
-
             validarEdad(edad);
+            validarCedula(cedula);
             validarFechasContrato(LocalDate.now(), fechaFinContrato);
             validarImagen(imagen);
 
@@ -114,11 +109,10 @@ public class OficialDeRegistroController {
                     LocalDate.now(),
                     fechaFinContrato,
                     correo,
-                    "", 
-                    "" 
+                    "",
+                    ""
             );
 
-           
             boolean guardado = oficialDAO.guardarOficial(nuevoOficial, imagen);
 
             if (guardado) {
@@ -128,7 +122,7 @@ public class OficialDeRegistroController {
             throw new RuntimeException("No se pudo guardar el oficial en la base de datos");
 
         } catch (IllegalArgumentException e) {
-            
+
             throw e;
         } catch (Exception e) {
 
@@ -138,10 +132,16 @@ public class OficialDeRegistroController {
         }
     }
 
+    private void validarCedula(String cedula) {
+        if (cedula.length() < 8 || cedula.length() > 10) {
+            throw new IllegalArgumentException("La cédula debe tener entre 8 y 10 dígitos");
+        }
+    }
+
     private void validarImagen(File imagen) {
-       
+
         if (imagen == null) {
-       
+
             throw new IllegalArgumentException("Debe proporcionar una imagen válida del oficial");
         }
 
@@ -151,14 +151,13 @@ public class OficialDeRegistroController {
         }
 
         if (imagen.length() == 0) {
-           
+
             throw new IllegalArgumentException("La imagen proporcionada está vacía o corrupta");
         }
 
-        
         String nombre = imagen.getName().toLowerCase();
         if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg") && !nombre.endsWith(".png")) {
-            
+
             throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG");
         }
 
@@ -172,15 +171,12 @@ public class OficialDeRegistroController {
                 throw new IllegalArgumentException("Oficial no encontrado con cédula: " + cedulaOriginal);
             }
 
-           
             if (!verificarCambios(original, cambios, nuevaImagen)) {
                 return 0;
             }
 
-  
             validarCamposModificacion(cambios);
 
-           
             int edad = (int) cambios.get("edad");
             LocalDate fechaFin = (LocalDate) cambios.get("fechaFin");
             String turno = (String) cambios.get("turno");
@@ -188,10 +184,8 @@ public class OficialDeRegistroController {
             validarEdad(edad);
             validarFechasContrato(original.getFechaContratacion(), fechaFin);
 
-            
             OficialDeRegistro oficialModificado = construirOficialModificado(cedulaOriginal, cambios, original);
 
-       
             boolean resultado = oficialDAO.modificarOficial(cedulaOriginal, oficialModificado, nuevaImagen);
 
             return resultado ? 1 : -1; // 1=Éxito, -1=Error
@@ -204,7 +198,7 @@ public class OficialDeRegistroController {
     }
 
     private boolean verificarCambios(OficialDeRegistro original, Map<String, Object> cambios, File nuevaImagen) {
-       
+
         if (!original.getPrimerNombre().equals(cambios.get("primerNombre"))) {
             return true;
         }
@@ -232,7 +226,6 @@ public class OficialDeRegistroController {
         if (!original.getFechaFinContrato().equals(cambios.get("fechaFin"))) {
             return true;
         }
-
 
         return nuevaImagen != null;
     }
