@@ -35,6 +35,24 @@
       "sexo": "Femenino",
       "nacionalidad": "lo que parece",
       "identificacion": "098765432"
+    },
+    {
+      "usuario": "Qyd2Ñ6@w@S",
+      "contrasena": "c8c0cda9f8a322e5e688b4042eb30b62539cca2167cbf398e29bb2244cc865a6",
+      "turno": "Diurno",
+      "cargo": "Coordinadora mañana",
+      "fechaInicioContrato": "2025-05-17",
+      "fechaFinContrato": "2025-05-22",
+      "rutaImagen": "src/Resources/imagenes_CDA/313718317_1747525708621.png",
+      "correo": "shar@gmail.com",
+      "primerNombre": "d",
+      "segundoNombre": "d",
+      "primerApellido": "d",
+      "segundoApellido": "d",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Marciana",
+      "identificacion": "313718317"
     }
   ]
 }

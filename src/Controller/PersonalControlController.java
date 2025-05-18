@@ -74,7 +74,7 @@ public class PersonalControlController {
 
             PersonalControl nuevoPersonalControl = new PersonalControl(
                     primerNombre, segundoNombre, primerApellido, segundoApellido,
-                    edad, "Masculino", nacionalidad, cedula, turno,
+                    edad, "Femenino", nacionalidad, cedula, turno,
                     LocalDate.now(), fechaFinContrato, correo, "", ""
             );
 
@@ -229,7 +229,7 @@ public class PersonalControlController {
                 (String) cambios.get("primerApellido"),
                 (String) cambios.get("segundoApellido"),
                 (int) cambios.get("edad"),
-                "Masculino",
+                "Femenino",
                 (String) cambios.get("nacionalidad"),
                 cedulaOriginal,
                 (String) cambios.get("turno"),

@@ -149,27 +149,7 @@ public class PersonalControlDAO {
         }
     }
 
-    private String generarContrasena() {
-        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder(8);
-
-        for (int i = 0; i < 8; i++) {
-            sb.append(caracteres.charAt(random.nextInt(caracteres.length())));
-        }
-
-        return sb.toString();
-    }
-
-    private String guardarImagenDesdeCamara(BufferedImage imagen, String identificacion) throws IOException {
-        String nombreImagen = identificacion + "_foto.jpg";
-        String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-
-        File outputFile = new File(rutaImagenFinal);
-        ImageIO.write(imagen, "jpg", outputFile);
-
-        return rutaImagenFinal;
-    }
+   
 
     public boolean guardarPersonalControl(PersonalControl personalControl, File imagen) throws IOException {
         UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
@@ -298,21 +278,7 @@ public class PersonalControlDAO {
         }
     }
 
-    public boolean puedeAgregarPersonalControl(String turno) {
-        List<PersonalControl> personalControlList = obtenerPersonalControl();
-
-        // Límite total de 4 personal de control
-        if (personalControlList.size() >= 4) {
-            return false;
-        }
-
-        // Límite de 2 por turno
-        long countPorTurno = personalControlList.stream()
-                .filter(p -> p.getTurno().equalsIgnoreCase(turno))
-                .count();
-
-        return countPorTurno < 2;
-    }
+    
 
     public boolean existePersonalControlConCedula(String cedula) {
         if (cedula == null || cedula.trim().isEmpty()) {

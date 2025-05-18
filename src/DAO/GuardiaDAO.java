@@ -178,7 +178,7 @@ public class GuardiaDAO {
                     .findFirst();
 
             if (guardiaAEliminar.isPresent()) {
-                // Eliminar imagen asociada si existe
+              
                 if (guardiaAEliminar.get().getRutaImagen() != null
                         && !guardiaAEliminar.get().getRutaImagen().isEmpty()) {
                     try {

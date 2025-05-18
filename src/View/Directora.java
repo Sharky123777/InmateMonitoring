@@ -147,6 +147,14 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         txtSexo2.setText("Femenino");
         txtSexoMod2.setEditable(false);
         txtSexoMod2.setText("Femenino");
+        txtSexoMod3.setEditable(false);
+        txtSexoMod3.setText("Femenino");
+        txtSexo3.setEditable(false);
+        txtSexo3.setText("Femenino");
+        txtSexo4.setEditable(false);
+        txtSexo4.setText("Femenino");
+        txtSexoMod4.setEditable(false);
+        txtSexoMod4.setText("Femenino");
         txtFechaContratacion1.setText(LocalDate.now().toString());
         ToolTipManager.sharedInstance().setInitialDelay(10);
         txtFechaContratacionMod2.setText(LocalDate.now().toString());
@@ -906,7 +914,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         });
         jPopupMenu3.add(BorrarOf);
 
-        modificarODR.setText("jMenuItem1");
+        modificarODR.setText("Modificar");
         modificarODR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 modificarODRActionPerformed(evt);
@@ -914,7 +922,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         });
         jPopupMenu5.add(modificarODR);
 
-        EliminarODR.setText("jMenuItem1");
+        EliminarODR.setText("Eliminar");
         EliminarODR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 EliminarODRActionPerformed(evt);
@@ -922,7 +930,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         });
         jPopupMenu5.add(EliminarODR);
 
-        modificarOPC.setText("jMenuItem1");
+        modificarOPC.setText("Modificar");
         modificarOPC.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 modificarOPCActionPerformed(evt);
@@ -930,7 +938,8 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         });
         jPopupMenu6.add(modificarOPC);
 
-        eliminarPDC.setText("jMenuItem2");
+        eliminarPDC.setText("Eliminar");
+        eliminarPDC.setToolTipText("");
         eliminarPDC.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 eliminarPDCActionPerformed(evt);

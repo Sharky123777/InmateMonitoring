@@ -4,7 +4,7 @@
       "turno": "Diurno",
       "fechaContratacion": "2025-05-17",
       "fechaFinContrato": "2025-11-03",
-      "rutaImagen": "src/Resources/imagenes_oficiales/3323131313_1747509370851.jpg",
+      "rutaImagen": "src/Resources/imagenes_oficiales/3323131313_1747509478752.png",
       "correo": "Pedro123@gmail.com",
       "primerNombre": "p",
       "segundoNombre": "mpagne",
@@ -14,6 +14,36 @@
       "sexo": "Masculino",
       "nacionalidad": "pepe",
       "identificacion": "3323131313"
+    },
+    {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-17",
+      "fechaFinContrato": "2025-05-23",
+      "rutaImagen": "src/Resources/imagenes_oficiales/103193813_1747524802564.jpg",
+      "correo": "Maria123@gmail.com",
+      "primerNombre": "Sharlok",
+      "segundoNombre": "Maia",
+      "primerApellido": "Alcazar",
+      "segundoApellido": "Gutierrez",
+      "edad": 45,
+      "sexo": "Masculino",
+      "nacionalidad": "pepe",
+      "identificacion": "103193813"
+    },
+    {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-17",
+      "fechaFinContrato": "2025-05-20",
+      "rutaImagen": "src/Resources/imagenes_oficiales/313131313_1747525106094.png",
+      "correo": "maria231@gmail.com",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "backstarber",
+      "identificacion": "313131313"
     }
   ]
 }

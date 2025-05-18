@@ -19,6 +19,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
+import DAO.LocalDateAdapter;
+import DAO.LocalTimeAdapter;
 import javax.swing.JOptionPane;
 
 public class OficialDeRegistroDAO {
@@ -62,41 +64,7 @@ public class OficialDeRegistroDAO {
         }
     }
 
-    private static class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
-
-        private final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
-
-        @Override
-        public JsonElement serialize(LocalDate date, Type typeOfSrc, JsonSerializationContext context) {
-            return new JsonPrimitive(date.format(formatter));
-        }
-
-        @Override
-        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-                throws JsonParseException {
-            return LocalDate.parse(json.getAsString(), formatter);
-        }
-    }
-
-    private String generarUsuarioUnico(String primerNombre, String primerApellido, List<Usuario> usuariosExistentes) {
-        Random random = new Random();
-        String usuarioBase = primerNombre + primerApellido;
-        String caracteresEspeciales = "!@#$%^&*";
-
-        while (true) {
-            int numeroRandom = random.nextInt(1000) + 1;
-            char caracterEspecial = caracteresEspeciales.charAt(random.nextInt(caracteresEspeciales.length()));
-
-            String usuarioGenerado = usuarioBase + numeroRandom + caracterEspecial;
-
-            boolean existe = usuariosExistentes.stream()
-                    .anyMatch(u -> u.getUsuario().equalsIgnoreCase(usuarioGenerado));
-
-            if (!existe) {
-                return usuarioGenerado;
-            }
-        }
-    }
+    
 
     private void guardarUsuario(Usuario usuario) throws IOException {
         List<Usuario> usuarios = obtenerTodosUsuarios();

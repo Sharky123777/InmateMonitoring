@@ -263,10 +263,7 @@ public class CoordinadorDeActividadesDAO {
         }
     }
 
-    public boolean puedeAgregarCoordinador() {
-        List<CoordinadorDeActividades> coordinadores = obtenerCoordinadores();
-        return coordinadores.size() < 2;
-    }
+   
 
     public boolean existeCoordinadorConCedula(String cedula) {
         if (cedula == null || cedula.trim().isEmpty()) {

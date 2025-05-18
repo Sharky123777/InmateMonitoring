@@ -418,20 +418,6 @@
       "identificacion": "098765432"
     },
     {
-      "usuario": "x?4KUK%xL",
-      "password": "652fe47d67f08a3808704e62a9376286f78bc96cacfcdeff66c5ae592b8ba299",
-      "rol": "OFICIAL_DE_REGISTRO",
-      "rutaImagen": "src/Resources/imagenes_oficiales_registro/3413131313_1747503856688.jpg",
-      "primerNombre": "mn",
-      "segundoNombre": "e",
-      "primerApellido": "e",
-      "segundoApellido": "e",
-      "edad": 45,
-      "sexo": "Masculino",
-      "nacionalidad": "pa",
-      "identificacion": "3413131313"
-    },
-    {
       "usuario": "Rv3!o!eFm?k",
       "password": "26ed01a1804097c22f8e8128a3f9e976ba06c8e9eeb45077d27e7434d042e72b",
       "rol": "PERSONAL_DE_CONTROL",
@@ -472,6 +458,62 @@
       "sexo": "Masculino",
       "nacionalidad": "pepe",
       "identificacion": "3323131313"
+    },
+    {
+      "usuario": "%q?ñ7CsBij",
+      "password": "4a8caf6ec25f724d4955f0ce1cfc046f03b678dc1aa4e79d270c485d152729a2",
+      "rol": "OFICIAL",
+      "rutaImagen": "src/Resources/imagenes_oficiales/103193813_1747524802564.jpg",
+      "primerNombre": "Sharlok",
+      "segundoNombre": "Maia",
+      "primerApellido": "Alcazar",
+      "segundoApellido": "Gutierrez",
+      "edad": 45,
+      "sexo": "Masculino",
+      "nacionalidad": "pepe",
+      "identificacion": "103193813"
+    },
+    {
+      "usuario": "OgÑl%AR1o9KW",
+      "password": "d2d6b5ad69c16f399da437c4fe5f2a6a5e3ba67a86a212ddea6f8a67f8fcc42a",
+      "rol": "OFICIAL",
+      "rutaImagen": "src/Resources/imagenes_oficiales/313131313_1747525106094.png",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "backstarber",
+      "identificacion": "313131313"
+    },
+    {
+      "usuario": "Qyd2Ñ6@w@S",
+      "password": "c8c0cda9f8a322e5e688b4042eb30b62539cca2167cbf398e29bb2244cc865a6",
+      "rol": "COORDINADOR_DE_ACTIVIDADES",
+      "rutaImagen": "src/Resources/imagenes_CDA/313718317_1747525708621.png",
+      "primerNombre": "d",
+      "segundoNombre": "d",
+      "primerApellido": "d",
+      "segundoApellido": "d",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Marciana",
+      "identificacion": "313718317"
+    },
+    {
+      "usuario": "iw\u0026oKfJ0¡Ñ",
+      "password": "6682cbd36eee2f4f3e40e4c4753f3f4202886cb84b272e572cc2fd7affc7ce35",
+      "rol": "OFICIAL_DE_REGISTRO",
+      "rutaImagen": "src/Resources/imagenes_oficiales_registro/31783613_1747525740057.png",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "papaNatas",
+      "identificacion": "31783613"
     }
   ]
 }

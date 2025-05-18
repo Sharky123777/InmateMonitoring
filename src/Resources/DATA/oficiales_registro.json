@@ -18,23 +18,6 @@
       "contrasena": "aab3c702837654819adf3a3549817526021ea0ca42c950edccd4d25a6f036cae"
     },
     {
-      "primerNombre": "mn",
-      "segundoNombre": "e",
-      "primerApellido": "e",
-      "segundoApellido": "e",
-      "edad": 45,
-      "sexo": "Masculino",
-      "nacionalidad": "pa",
-      "identificacion": "3413131313",
-      "correo": "marta@gmail.com",
-      "turno": "Diurno",
-      "fechaContratacion": "2025-05-17",
-      "fechaFinContrato": "2025-05-23",
-      "rutaImagen": "src/Resources/imagenes_oficiales_registro/3413131313_1747503884532.jpg",
-      "usuario": "x?4KUK%xL",
-      "contrasena": "652fe47d67f08a3808704e62a9376286f78bc96cacfcdeff66c5ae592b8ba299"
-    },
-    {
       "primerNombre": "pepe",
       "segundoNombre": "beff",
       "primerApellido": "oeoeoe",
@@ -50,6 +33,23 @@
       "rutaImagen": "src/Resources/imagenes_oficiales_registro/031931931_1747504688533.png",
       "usuario": "697d6lXjGt$\u0026",
       "contrasena": "319a5c5f74d669d1b966fb0a45708153ed77f63bbf25e9353bb29bf8740cf9d3"
+    },
+    {
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "papaNatas",
+      "identificacion": "31783613",
+      "correo": "shar@gmail.com",
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-17",
+      "fechaFinContrato": "2025-05-28",
+      "rutaImagen": "src/Resources/imagenes_oficiales_registro/31783613_1747527344316.png",
+      "usuario": "iw\u0026oKfJ0¡Ñ",
+      "contrasena": "6682cbd36eee2f4f3e40e4c4753f3f4202886cb84b272e572cc2fd7affc7ce35"
     }
   ]
 }
