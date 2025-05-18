@@ -2,6 +2,7 @@ package View;
 
 import Controller.VisitaController;
 import Model.Entities.Visitante;
+import java.awt.Image;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -36,7 +37,6 @@ public class ModificarVisitante extends javax.swing.JDialog {
         getNuevaEdadVisitante().setText("");
 
         getNuevoSexoVisitante().setSelectedIndex(0);
-        getNuevaRelacionConPresoVisitante().setSelectedIndex(0);
 
         getNuevaVistaPreviaVisitante().setIcon(null);
     }
@@ -59,10 +59,8 @@ public class ModificarVisitante extends javax.swing.JDialog {
         jLabel63 = new javax.swing.JLabel();
         NuevoSexoVisitante = new javax.swing.JComboBox<>();
         jLabel64 = new javax.swing.JLabel();
-        NuevaRelacionConPresoVisitante = new javax.swing.JComboBox<>();
         BotonModificarVisitante = new javax.swing.JButton();
         jLabel65 = new javax.swing.JLabel();
-        jLabel66 = new javax.swing.JLabel();
         NuevaImagenVisitante = new javax.swing.JButton();
         jPanel16 = new javax.swing.JPanel();
         NuevaVistaPreviaVisitante = new javax.swing.JLabel();
@@ -118,26 +116,18 @@ public class ModificarVisitante extends javax.swing.JDialog {
         jLabel64.setText("Vista previa foto");
         jPanel8.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 100, -1, -1));
 
-        NuevaRelacionConPresoVisitante.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Esposa/Esposo", "Padre/Madre", "Hijo/Hija", "Hermano/Hermana", "Abuelo/Abuela", "Nieto/Nieta", "Tío/Tía", "Sobrino/Sobrina", "Primo/Prima", "Suegro/Suegra", "Yerno/Nuera", "Cuñado/Cuñada", "Amigo/Amiga", "Compañero de Trabajo", "Vecino/Vecina", "Conocido/Conocida", "Abogado/Abogada", "Asistente Social", "Representante Legal", "Sacerdote/Pastor", "Novio/Novia", "Tutor Legal", "Ex-Esposo/Ex-Esposa", "Familiar Político " }));
-        jPanel8.add(NuevaRelacionConPresoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 410, 280, 30));
-
         BotonModificarVisitante.setText("Modificar visitante");
         BotonModificarVisitante.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BotonModificarVisitanteActionPerformed(evt);
             }
         });
-        jPanel8.add(BotonModificarVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 480, 130, 30));
+        jPanel8.add(BotonModificarVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 430, 130, 30));
 
         jLabel65.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel65.setForeground(new java.awt.Color(0, 0, 0));
         jLabel65.setText("Primer nombre:");
         jPanel8.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, -1, -1));
-
-        jLabel66.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel66.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel66.setText("Relación con el preso:");
-        jPanel8.add(jLabel66, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 420, -1, -1));
 
         NuevaImagenVisitante.setText("Selecionar nueva foto");
         NuevaImagenVisitante.addActionListener(new java.awt.event.ActionListener() {
@@ -161,8 +151,47 @@ public class ModificarVisitante extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void NuevaImagenVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevaImagenVisitanteActionPerformed
-        VisitaController controller = new VisitaController();
-        nuevaImagenVisitante = controller.seleccionarImagen(this, getNuevaVistaPreviaVisitante());
+        Object[] options = {"Tomar Foto", "Seleccionar Archivo", "Cancelar"};
+        int opcion = JOptionPane.showOptionDialog(
+                this,
+                "¿Cómo desea obtener la nueva imagen del visitante?",
+                "Seleccionar Imagen",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+        try {
+            File nuevaImagen = null;
+            VisitaController controller = new VisitaController();
+
+            if (opcion == 0) {
+                nuevaImagen = controller.capturarImagenVisitante();
+            } else if (opcion == 1) { 
+                nuevaImagen = controller.seleccionarImagen(this, getNuevaVistaPreviaVisitante());
+            }
+
+            if (nuevaImagen != null && nuevaImagen.exists()) {
+                ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
+                Image imagenEscalada = icono.getImage().getScaledInstance(
+                        getNuevaVistaPreviaVisitante().getWidth(),
+                        getNuevaVistaPreviaVisitante().getHeight(),
+                        Image.SCALE_SMOOTH
+                );
+                getNuevaVistaPreviaVisitante().setIcon(new ImageIcon(imagenEscalada));
+                getNuevaVistaPreviaVisitante().setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
+
+                nuevaImagenVisitante = nuevaImagen;
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al obtener imagen: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_NuevaImagenVisitanteActionPerformed
 
     private void BotonModificarVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonModificarVisitanteActionPerformed
@@ -180,7 +209,7 @@ public class ModificarVisitante extends javax.swing.JDialog {
             String segundoApellido = getNuevoSegundoApellidoVisitante().getText();
             String edadStr = getNuevaEdadVisitante().getText();
             String sexo = getNuevoSexoVisitante().getSelectedItem().toString();
-            String relacionConPreso = getNuevaRelacionConPresoVisitante().getSelectedItem().toString();
+
 
             File imagen = nuevaImagenVisitante != null ? nuevaImagenVisitante : new File(visitante.getFotoPath());
 
@@ -193,16 +222,11 @@ public class ModificarVisitante extends javax.swing.JDialog {
                     segundoApellido,
                     edadStr,
                     sexo,
-                    relacionConPreso,
                     imagen
             );
 
             if (visitanteActualizado != null) {
                 controller.cargarHistorialVisitantes(identificacionPreso, tablaVisitantes);
-
-                PersonalDeControl padre = (PersonalDeControl) this.getParent();
-                padre.getTabbedPDC().setSelectedIndex(1);
-
                 dispose();
             }
         } catch (Exception e) {
@@ -210,6 +234,7 @@ public class ModificarVisitante extends javax.swing.JDialog {
                     "Error al modificar visitante: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
+
     }//GEN-LAST:event_BotonModificarVisitanteActionPerformed
 
     /**
@@ -246,7 +271,6 @@ public class ModificarVisitante extends javax.swing.JDialog {
     private javax.swing.JButton BotonModificarVisitante;
     private javax.swing.JTextField NuevaEdadVisitante;
     private javax.swing.JButton NuevaImagenVisitante;
-    private javax.swing.JComboBox<String> NuevaRelacionConPresoVisitante;
     private javax.swing.JLabel NuevaVistaPreviaVisitante;
     private javax.swing.JTextField NuevoPrimerApellidoVisitante;
     private javax.swing.JTextField NuevoPrimerNombreVisitante;
@@ -261,7 +285,6 @@ public class ModificarVisitante extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel64;
     private javax.swing.JLabel jLabel65;
-    private javax.swing.JLabel jLabel66;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JSeparator jSeparator11;
@@ -289,10 +312,6 @@ public class ModificarVisitante extends javax.swing.JDialog {
 
     public JComboBox<String> getNuevoSexoVisitante() {
         return NuevoSexoVisitante;
-    }
-
-    public JComboBox<String> getNuevaRelacionConPresoVisitante() {
-        return NuevaRelacionConPresoVisitante;
     }
 
     public JLabel getNuevaVistaPreviaVisitante() {

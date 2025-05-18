@@ -14,6 +14,21 @@
       "sexo": "Femenino",
       "nacionalidad": "novia",
       "identificacion": "09876513131"
+    },
+    {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-18",
+      "fechaFinContrato": "2025-05-24",
+      "rutaImagen": "src/Resources/imagenes_personal_control/6715433345_1747596980609.jpg",
+      "correo": "nicollelopez081@gmail.com",
+      "primerNombre": "nicolle",
+      "segundoNombre": "Andrea",
+      "primerApellido": "Rivera",
+      "segundoApellido": "Montes",
+      "edad": 30,
+      "sexo": "Femenino",
+      "nacionalidad": "Colombiana",
+      "identificacion": "6715433345"
     }
   ]
 }

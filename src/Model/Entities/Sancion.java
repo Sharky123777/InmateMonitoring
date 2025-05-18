@@ -9,20 +9,52 @@ public class Sancion {
     private String motivo;
     private LocalDate fechaSancion;
     private LocalTime hora;
-    private String duracionEnHoras;
     private String tipoSancion;
     private Preso preso;
     private Guardia guardia;
+    private int diasDuracion;
 
-    public Sancion(int id, String motivo, LocalDate fechaSancion, LocalTime hora, String duracionEnHoras, String tipoSancion, Preso preso, Guardia guardia) {
+    public Sancion(int id, String motivo, LocalDate fechaSancion, LocalTime hora,
+            String tipoSancion, Preso preso, Guardia guardia) {
         this.id = id;
         this.motivo = motivo;
         this.fechaSancion = fechaSancion;
         this.hora = hora;
-        this.duracionEnHoras = duracionEnHoras;
         this.tipoSancion = tipoSancion;
         this.preso = preso;
         this.guardia = guardia;
+        this.diasDuracion = calcularDuracionPorTipo(tipoSancion);
+    }
+
+    private int calcularDuracionPorTipo(String tipoSancion) {
+        switch (tipoSancion) {
+            case "Amonestación verbal":
+                return 1;
+            case "Suspensión de visitas":
+                return 7;
+            case "Aislamiento":
+                return 10;
+            default:
+                return 1;
+        }
+    }
+
+    public int getDuracionBase() {
+        return this.diasDuracion;
+    }
+
+    public boolean esDeTipo(String tipo) {
+        return this.tipoSancion.equals(tipo);
+    }
+
+    public boolean esAislamiento() {
+        return "Aislamiento".equals(this.tipoSancion);
+    }
+
+    public boolean estaActiva() {
+        LocalDate hoy = LocalDate.now();
+        LocalDate fechaFin = fechaSancion.plusDays(diasDuracion);
+        return !hoy.isBefore(fechaSancion) && !hoy.isAfter(fechaFin);
     }
 
     public int getId() {
@@ -57,20 +89,13 @@ public class Sancion {
         this.hora = hora;
     }
 
-    public String getDuracionEnHoras() {
-        return duracionEnHoras;
-    }
-
-    public void setDuracionEnHoras(String duracionEnHoras) {
-        this.duracionEnHoras = duracionEnHoras;
-    }
-
     public String getTipoSancion() {
         return tipoSancion;
     }
 
     public void setTipoSancion(String tipoSancion) {
         this.tipoSancion = tipoSancion;
+        this.diasDuracion = calcularDuracionPorTipo(tipoSancion);
     }
 
     public Preso getPreso() {
@@ -87,5 +112,13 @@ public class Sancion {
 
     public void setGuardia(Guardia guardia) {
         this.guardia = guardia;
+    }
+
+    public int getDiasDuracion() {
+        return diasDuracion;
+    }
+
+    public void setDiasDuracion(int diasDuracion) {
+        this.diasDuracion = diasDuracion;
     }
 }

@@ -5,13 +5,13 @@ import Model.Entities.LocalTimeAdapter;
 import Model.Entities.Sancion;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.*;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SancionDAO {
 
@@ -129,4 +129,74 @@ public class SancionDAO {
         return sancionesFiltradas;
     }
 
+    public List<Sancion> obtenerSancionesPorPresoFechaYHora(String idPreso, LocalDate fecha, LocalTime hora) {
+        return cargarTodas().stream()
+                .filter(s -> s.getPreso() != null
+                && s.getPreso().getIdentificacion().equals(idPreso)
+                && s.getFechaSancion().equals(fecha)
+                && s.getHora().equals(hora))
+                .collect(Collectors.toList());
+    }
+
+    public boolean actualizarSancion(Sancion sancionActualizada) {
+        List<Sancion> sanciones = cargarTodas();
+        boolean encontrado = false;
+
+        for (int i = 0; i < sanciones.size(); i++) {
+            if (sanciones.get(i).getId() == sancionActualizada.getId()) {
+                sanciones.set(i, sancionActualizada);
+                encontrado = true;
+                break;
+            }
+        }
+
+        if (encontrado) {
+            guardarTodas(sanciones);
+            return true;
+        }
+        return false;
+    }
+
+    public Sancion buscarPorId(int id) {
+        return cargarTodas().stream()
+                .filter(s -> s.getId() == id)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public List<Sancion> obtenerSancionesActivasPorPreso(String identificacionPreso) {
+        List<Sancion> sanciones = cargarPorIdentificacionPreso(identificacionPreso);
+        LocalDate hoy = LocalDate.now();
+
+        return sanciones.stream()
+                .filter(sancion -> {
+                    LocalDate fechaFin = sancion.getFechaSancion().plusDays(sancion.getDiasDuracion());
+                    return !hoy.isBefore(sancion.getFechaSancion()) && !hoy.isAfter(fechaFin);
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<Sancion> obtenerSancionesPorPresoYFecha(String identificacionPreso, LocalDate fecha) {
+        List<Sancion> sanciones = cargarPorIdentificacionPreso(identificacionPreso);
+        return sanciones.stream()
+                .filter(sancion -> sancion.getFechaSancion().equals(fecha))
+                .collect(Collectors.toList());
+    }
+
+    public int obtenerDuracionAcumuladaPorTipo(String identificacionPreso, String tipoSancion) {
+        List<Sancion> sanciones = cargarPorIdentificacionPreso(identificacionPreso);
+        return sanciones.stream()
+                .filter(s -> s.esDeTipo(tipoSancion))
+                .filter(s -> s.estaActiva())
+                .mapToInt(Sancion::getDuracionBase)
+                .sum();
+    }
+
+    public int obtenerDuracionTotalSancionesActivas(String identificacionPreso) {
+        List<Sancion> sanciones = cargarPorIdentificacionPreso(identificacionPreso);
+        return sanciones.stream()
+                .filter(Sancion::estaActiva)
+                .mapToInt(Sancion::getDuracionBase)
+                .sum();
+    }
 }
