@@ -35,7 +35,7 @@
     {
       "cargo": "Guardia jefe",
       "turno": "Diurno",
-      "fechaInicioContrato": "2025-05-17",
+      "fechaInicioContrato": "2025-05-18",
       "fechaFinContrato": "2025-06-18",
       "rutaImagen": "src/Resources/imagenes_guardias/3193139183_1747508318186.png",
       "correo": "shar@gmail.com",
@@ -45,8 +45,24 @@
       "segundoApellido": "s",
       "edad": 34,
       "sexo": "Femenino",
-      "nacionalidad": "mi",
+      "nacionalidad": "Estadounidense",
       "identificacion": "3193139183"
+    },
+    {
+      "cargo": "Guardia jefe",
+      "turno": "Diurno",
+      "fechaInicioContrato": "2025-05-18",
+      "fechaFinContrato": "2025-06-19",
+      "rutaImagen": "src/Resources/imagenes_guardias/098765432_1747586402653.png",
+      "correo": "viva@gmail.com",
+      "primerNombre": "Maria",
+      "segundoNombre": "Antonieta",
+      "primerApellido": "De las nieves",
+      "segundoApellido": "Perez",
+      "edad": 45,
+      "sexo": "Femenino",
+      "nacionalidad": "Guatemalteca",
+      "identificacion": "098765432"
     }
   ]
 }

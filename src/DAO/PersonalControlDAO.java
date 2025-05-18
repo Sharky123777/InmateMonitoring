@@ -79,25 +79,7 @@ public class PersonalControlDAO {
         }
     }
 
-    private String generarUsuarioUnico(String primerNombre, String primerApellido, List<Usuario> usuariosExistentes) {
-        Random random = new Random();
-        String usuarioBase = primerNombre + primerApellido;
-        String caracteresEspeciales = "!@#$%^&*";
-
-        while (true) {
-            int numeroRandom = random.nextInt(1000) + 1;
-            char caracterEspecial = caracteresEspeciales.charAt(random.nextInt(caracteresEspeciales.length()));
-
-            String usuarioGenerado = usuarioBase + numeroRandom + caracterEspecial;
-
-            boolean existe = usuariosExistentes.stream()
-                    .anyMatch(u -> u.getUsuario().equalsIgnoreCase(usuarioGenerado));
-
-            if (!existe) {
-                return usuarioGenerado;
-            }
-        }
-    }
+    
 
     private void guardarUsuario(Usuario usuario) throws IOException {
         List<Usuario> usuarios = obtenerTodosUsuarios();
