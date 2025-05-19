@@ -6,13 +6,13 @@
       "fechaFinContrato": "2025-11-03",
       "rutaImagen": "src/Resources/imagenes_oficiales/3323131313_1747509478752.png",
       "correo": "Pedro123@gmail.com",
-      "primerNombre": "p",
+      "primerNombre": "pp",
       "segundoNombre": "mpagne",
       "primerApellido": "Ma",
       "segundoApellido": "ia",
       "edad": 34,
-      "sexo": "Masculino",
-      "nacionalidad": "pepe",
+      "sexo": "Femenino",
+      "nacionalidad": "Afgana",
       "identificacion": "3323131313"
     },
     {
@@ -26,8 +26,8 @@
       "primerApellido": "Alcazar",
       "segundoApellido": "Gutierrez",
       "edad": 45,
-      "sexo": "Masculino",
-      "nacionalidad": "pepe",
+      "sexo": "Femenino",
+      "nacionalidad": "Afgana",
       "identificacion": "103193813"
     },
     {
@@ -42,7 +42,7 @@
       "segundoApellido": "s",
       "edad": 34,
       "sexo": "Femenino",
-      "nacionalidad": "backstarber",
+      "nacionalidad": "Afgana",
       "identificacion": "313131313"
     }
   ]

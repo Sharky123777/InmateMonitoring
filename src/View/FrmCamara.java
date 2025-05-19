@@ -146,7 +146,6 @@ public class FrmCamara extends javax.swing.JFrame {
 
         jPanel1.add(mostrarCamara, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 640, 360));
 
-        TomarFoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/icons8-camera-55.png"))); // NOI18N
         TomarFoto.setText("Tomar foto");
         TomarFoto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,7 +170,6 @@ public class FrmCamara extends javax.swing.JFrame {
         });
         jPanel1.add(btnApagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 20, 150, 50));
 
-        btnGuardarFoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/icons8-checkmark-40.png"))); // NOI18N
         btnGuardarFoto.setText("SELECCIONAR ESTA FOTO");
         btnGuardarFoto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

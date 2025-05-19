@@ -5,6 +5,7 @@ import Model.Entities.CoordinadorDeActividades;
 import Model.Constants.RolEnum;
 import Utilidades.EmailSender;
 import Model.Entities.Usuario;
+import Utilidades.JsonValidator;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import java.awt.image.BufferedImage;
@@ -143,17 +144,15 @@ public class CoordinadorDeActividadesDAO {
 
     // En CoordinadorDeActividadesDAO.java
     public boolean guardarCoordinador(CoordinadorDeActividades coordinador, File imagen) throws IOException {
-      
+
         UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
         String usuario = credenciales.usuario;
         String contrasena = credenciales.contrasena;
         String contrasenaEncriptada = UsuarioController.getInstancia().encriptarContrasena(contrasena);
 
-        
         coordinador.setUsuario(usuario);
         coordinador.setContrasena(contrasenaEncriptada); // AQUÍ GUARDAMOS LA CONTRASEÑA ENCRIPTADA
 
-        
         String nombreImagen = coordinador.getIdentificacion() + "_"
                 + System.currentTimeMillis()
                 + imagen.getName().substring(imagen.getName().lastIndexOf("."));
@@ -162,7 +161,6 @@ public class CoordinadorDeActividadesDAO {
         Files.createDirectories(Paths.get(RUTA_IMAGENES));
         Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
         coordinador.setRutaImagen(rutaImagenFinal);
-
 
         List<CoordinadorDeActividades> coordinadores = obtenerCoordinadores();
         coordinadores.add(coordinador);
@@ -185,50 +183,44 @@ public class CoordinadorDeActividadesDAO {
 
         guardarUsuario(nuevoUsuario);
 
-        
         return EmailSender.getInstancia().enviarCredenciales(
                 coordinador.getCorreo(),
                 usuario,
-                contrasena, 
+                contrasena,
                 RolEnum.COORDINADOR_DE_ACTIVIDADES
         );
     }
 
     public List<CoordinadorDeActividades> obtenerCoordinadores() {
-        List<CoordinadorDeActividades> coordinadores = new ArrayList<>();
-        File archivo = new File(RUTA_JSON);
-
-        try {
-            if (!archivo.exists() || archivo.length() == 0) {
-                guardarListaCoordinadores(new ArrayList<>());
-                return coordinadores;
-            }
-
-            String contenido = new String(Files.readAllBytes(archivo.toPath()));
-
-            if (contenido.trim().isEmpty()) {
-                guardarListaCoordinadores(new ArrayList<>());
-                return coordinadores;
-            }
-
-            try {
-                JsonObject jsonObject = JsonParser.parseString(contenido).getAsJsonObject();
-                JsonArray coordinadoresArray = jsonObject.getAsJsonArray("coordinadores");
-
-                Type tipoLista = new TypeToken<List<CoordinadorDeActividades>>() {
-                }.getType();
-                return gson.fromJson(coordinadoresArray, tipoLista);
-            } catch (JsonSyntaxException e) {
-                System.err.println("Formato JSON inválido. Creando nuevo archivo.");
-                guardarListaCoordinadores(new ArrayList<>());
-            }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null,
-                    "Error al leer/escribir archivo: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+    List<CoordinadorDeActividades> coordinadores = new ArrayList<>();
+    
+    try {
+        JsonObject jsonObject = JsonValidator.getInstancia().validarArchivoJson(RUTA_JSON);
+        
+        if (!JsonValidator.getInstancia().validarJsonArray(jsonObject, "coordinadores")) {
+            JOptionPane.showMessageDialog(null, 
+                "El archivo " + new File(RUTA_JSON).getName() + 
+                " no contiene el array 'coordinadores' o está mal formado.",
+                "Error en estructura JSON", JOptionPane.WARNING_MESSAGE);
+            return coordinadores;
         }
-        return coordinadores;
+        
+        JsonArray coordinadoresArray = jsonObject.getAsJsonArray("coordinadores");
+        Type tipoLista = new TypeToken<List<CoordinadorDeActividades>>() {}.getType();
+        return gson.fromJson(coordinadoresArray, tipoLista);
+        
+    } catch (JsonParseException e) {
+        JOptionPane.showMessageDialog(null,
+            "Error en archivo " + new File(RUTA_JSON).getName() + ": " + e.getMessage(),
+            "Error de JSON", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null,
+            "Error inesperado al procesar " + new File(RUTA_JSON).getName() + ": " + e.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
     }
+    
+    return coordinadores;
+}
 
     private void guardarListaCoordinadores(List<CoordinadorDeActividades> coordinadores) throws IOException {
         JsonObject jsonObject = new JsonObject();
@@ -262,8 +254,6 @@ public class CoordinadorDeActividadesDAO {
             gson.toJson(jsonObject, writer);
         }
     }
-
-   
 
     public boolean existeCoordinadorConCedula(String cedula) {
         if (cedula == null || cedula.trim().isEmpty()) {
@@ -303,7 +293,6 @@ public class CoordinadorDeActividadesDAO {
                 if (c.getIdentificacion().equals(cedulaOriginal)) {
                     String rutaImagenFinal = c.getRutaImagen();
 
-                    
                     if (nuevaImagen != null && nuevaImagen.exists()) {
                         String nombreImagen = coordinadorModificado.getIdentificacion() + "_" + System.currentTimeMillis()
                                 + nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
@@ -387,8 +376,8 @@ public class CoordinadorDeActividadesDAO {
             String.class,
             String.class,
             String.class,
-            String.class, 
-            String.class 
+            String.class,
+            String.class
         };
     }
 }

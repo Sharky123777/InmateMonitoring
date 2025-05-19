@@ -19,17 +19,17 @@
     {
       "cargo": "Guardia jefe",
       "turno": "Diurno",
-      "fechaInicioContrato": "2025-05-17",
+      "fechaInicioContrato": "2025-05-18",
       "fechaFinContrato": "2025-06-18",
       "rutaImagen": "src/Resources/imagenes_guardias/098765142_1747507946096.png",
       "correo": "@gmail.com",
       "primerNombre": "s",
       "segundoNombre": "s",
       "primerApellido": "s",
-      "segundoApellido": "s",
+      "segundoApellido": "sl",
       "edad": 34,
       "sexo": "Femenino",
-      "nacionalidad": "emborracharme",
+      "nacionalidad": "Afgana",
       "identificacion": "098765142"
     },
     {

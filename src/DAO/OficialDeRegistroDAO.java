@@ -64,9 +64,7 @@ public class OficialDeRegistroDAO {
         }
     }
 
-    
-
-    private void guardarUsuario(Usuario usuario) throws IOException {
+    public void guardarUsuario(Usuario usuario) throws IOException {
         List<Usuario> usuarios = obtenerTodosUsuarios();
         usuarios.removeIf(u -> u.getUsuario().equals(usuario.getUsuario()));
         usuarios.add(usuario);
@@ -316,40 +314,6 @@ public class OficialDeRegistroDAO {
         }
     }
 
-    public boolean modificarOficial(String cedulaOriginal, OficialDeRegistro oficialModificado, File nuevaImagen) {
-        try {
-            List<OficialDeRegistro> oficiales = obtenerOficiales();
-
-            for (int i = 0; i < oficiales.size(); i++) {
-                OficialDeRegistro o = oficiales.get(i);
-                if (o.getIdentificacion().equals(cedulaOriginal)) {
-                    String rutaImagenFinal = o.getRutaImagen();
-
-                    if (nuevaImagen != null && nuevaImagen.exists()) {
-                        String nombreImagen = oficialModificado.getIdentificacion() + "_" + System.currentTimeMillis()
-                                + nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
-                        rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-                        Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
-                    }
-
-                    oficialModificado.setUsuario(o.getUsuario());
-                    oficialModificado.setContrasena(o.getContrasena());
-                    oficialModificado.setRutaImagen(rutaImagenFinal);
-
-                    oficiales.set(i, oficialModificado);
-
-                    guardarListaOficiales(oficiales);
-                    return true;
-                }
-            }
-
-            return false;
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error al modificar oficial: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-    }
 
     public OficialDeRegistro obtenerOficialPorCedula(String cedula) {
         return obtenerOficiales().stream()
@@ -417,4 +381,39 @@ public class OficialDeRegistroDAO {
             String.class
         };
     }
+    
+
+    
+    public boolean modificarOficial(String cedulaOriginal, OficialDeRegistro oficialModificado, File nuevaImagen) {
+    try {
+        List<OficialDeRegistro> oficiales = obtenerOficiales();
+        
+        for (int i = 0; i < oficiales.size(); i++) {
+            OficialDeRegistro o = oficiales.get(i);
+            if (o.getIdentificacion().equals(cedulaOriginal)) {
+                
+                // Manejo de imagen
+                String rutaImagenFinal = o.getRutaImagen();
+                if (nuevaImagen != null && nuevaImagen.exists()) {
+                    String extension = nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
+                    String nombreImagen = oficialModificado.getIdentificacion() + "_" + System.currentTimeMillis() + extension;
+                    rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+                    Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+                }
+                
+                // Actualizar datos
+                oficialModificado.setRutaImagen(rutaImagenFinal);
+                oficiales.set(i, oficialModificado);
+                
+                guardarListaOficiales(oficiales);
+                return true;
+            }
+        }
+        return false;
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(null, "Error al modificar oficial: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+}
 }

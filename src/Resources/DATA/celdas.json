@@ -32758,5 +32758,7565 @@
     "tipo": "Seccion C",
     "capacidadMaxima": 2,
     "ocupada": false
+  },
+  {
+    "idCelda": 5461,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5462,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5463,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5464,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5465,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5466,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5467,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5468,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5469,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5470,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5471,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5472,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5473,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5474,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5475,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5476,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5477,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5478,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5479,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5480,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5481,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5482,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5483,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5484,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5485,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5486,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5487,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5488,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5489,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5490,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5491,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5492,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5493,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5494,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5495,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5496,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5497,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5498,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5499,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5500,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5501,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5502,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5503,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5504,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5505,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5506,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5507,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5508,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5509,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5510,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5511,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5512,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5513,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5514,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5515,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5516,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5517,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5518,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5519,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5520,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5521,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5522,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5523,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5524,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5525,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5526,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5527,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5528,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5529,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5530,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5531,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5532,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5533,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5534,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5535,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5536,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5537,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5538,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5539,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5540,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5541,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5542,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5543,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5544,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5545,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5546,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5547,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5548,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5549,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5550,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5551,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5552,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5553,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5554,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5555,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5556,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5557,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5558,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5559,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5560,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5561,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5562,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5563,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5564,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5565,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5566,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5567,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5568,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5569,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5570,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5571,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5572,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5573,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5574,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5575,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5576,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5577,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5578,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5579,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5580,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5581,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5582,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5583,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5584,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5585,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5586,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5587,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5588,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5589,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5590,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5591,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5592,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5593,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5594,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5595,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5596,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5597,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5598,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5599,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5600,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5601,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5602,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5603,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5604,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5605,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5606,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5607,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5608,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5609,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5610,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5611,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5612,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5613,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5614,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5615,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5616,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5617,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5618,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5619,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5620,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5621,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5622,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5623,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5624,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5625,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5626,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5627,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5628,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5629,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5630,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5631,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5632,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5633,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5634,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5635,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5636,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5637,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5638,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5639,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5640,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5641,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5642,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5643,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5644,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5645,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5646,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5647,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5648,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5649,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5650,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5651,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5652,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5653,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5654,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5655,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5656,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5657,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5658,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5659,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5660,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5661,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5662,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5663,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5664,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5665,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5666,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5667,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5668,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5669,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5670,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5671,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5672,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5673,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5674,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5675,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5676,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5677,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5678,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5679,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5680,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5681,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5682,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5683,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5684,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5685,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5686,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5687,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5688,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5689,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5690,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5691,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5692,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5693,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5694,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5695,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5696,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5697,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5698,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5699,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5700,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5701,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5702,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5703,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5704,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5705,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5706,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5707,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5708,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5709,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5710,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5711,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5712,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5713,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5714,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5715,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5716,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5717,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5718,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5719,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5720,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5721,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5722,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5723,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5724,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5725,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5726,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5727,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5728,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5729,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5730,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5731,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5732,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5733,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5734,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5735,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5736,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5737,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5738,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5739,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5740,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5741,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5742,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5743,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5744,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5745,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5746,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5747,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5748,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5749,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5750,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5751,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5752,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5753,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5754,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5755,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5756,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5757,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5758,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5759,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5760,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5761,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5762,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5763,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5764,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5765,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5766,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5767,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5768,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5769,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5770,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5771,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5772,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5773,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5774,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5775,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5776,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5777,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5778,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5779,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5780,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5781,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5782,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5783,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5784,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5785,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5786,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5787,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5788,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5789,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5790,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5791,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5792,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5793,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5794,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5795,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5796,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5797,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5798,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5799,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5800,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5801,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5802,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5803,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5804,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5805,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5806,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5807,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5808,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5809,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5810,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5811,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5812,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5813,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5814,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5815,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5816,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5817,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5818,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5819,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5820,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5821,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5822,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5823,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5824,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5825,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5826,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5827,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5828,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5829,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5830,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5831,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5832,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5833,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5834,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5835,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5836,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5837,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5838,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5839,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5840,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5841,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5842,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5843,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5844,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5845,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5846,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5847,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5848,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5849,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5850,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5851,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5852,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5853,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5854,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5855,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5856,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5857,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5858,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5859,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5860,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5861,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5862,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5863,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5864,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5865,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5866,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5867,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5868,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5869,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5870,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5871,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5872,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5873,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5874,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5875,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5876,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5877,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5878,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5879,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5880,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5881,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5882,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5883,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5884,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5885,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5886,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5887,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5888,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5889,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5890,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5891,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5892,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5893,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5894,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5895,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5896,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5897,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5898,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5899,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5900,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5901,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5902,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5903,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5904,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5905,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5906,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5907,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5908,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5909,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5910,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5911,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5912,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5913,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5914,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5915,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5916,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5917,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5918,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5919,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5920,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5921,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5922,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5923,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5924,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5925,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5926,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5927,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5928,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5929,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5930,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5931,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5932,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5933,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5934,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5935,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5936,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5937,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5938,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5939,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5940,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5941,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5942,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5943,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5944,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5945,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5946,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5947,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5948,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5949,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5950,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5951,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5952,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5953,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5954,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5955,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5956,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5957,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5958,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5959,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5960,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5961,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5962,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5963,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5964,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5965,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5966,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5967,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5968,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5969,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5970,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5971,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5972,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5973,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5974,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5975,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5976,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5977,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5978,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5979,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5980,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5981,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5982,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5983,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5984,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5985,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5986,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5987,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5988,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5989,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5990,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5991,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5992,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5993,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5994,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5995,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5996,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5997,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5998,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 5999,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6000,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6001,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6002,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6003,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6004,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6005,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6006,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6007,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6008,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6009,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6010,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6011,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6012,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6013,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6014,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6015,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6016,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6017,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6018,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6019,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6020,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6021,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6022,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6023,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6024,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6025,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6026,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6027,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6028,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6029,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6030,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6031,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6032,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6033,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6034,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6035,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6036,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6037,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6038,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6039,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6040,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6041,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6042,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6043,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6044,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6045,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6046,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6047,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6048,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6049,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6050,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6051,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6052,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6053,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6054,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6055,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6056,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6057,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6058,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6059,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6060,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6061,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6062,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6063,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6064,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6065,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6066,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6067,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6068,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6069,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6070,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6071,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6072,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6073,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6074,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6075,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6076,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6077,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6078,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6079,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6080,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6081,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6082,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6083,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6084,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6085,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6086,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6087,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6088,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6089,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6090,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6091,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6092,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6093,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6094,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6095,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6096,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6097,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6098,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6099,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6100,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6101,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6102,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6103,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6104,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6105,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6106,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6107,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6108,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6109,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6110,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6111,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6112,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6113,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6114,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6115,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6116,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6117,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6118,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6119,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6120,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6121,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6122,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6123,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6124,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6125,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6126,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6127,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6128,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6129,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6130,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6131,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6132,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6133,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6134,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6135,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6136,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6137,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6138,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6139,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6140,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6141,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6142,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6143,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6144,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6145,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6146,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6147,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6148,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6149,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6150,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6151,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6152,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6153,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6154,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6155,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6156,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6157,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6158,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6159,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6160,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6161,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6162,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6163,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6164,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6165,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6166,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6167,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6168,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6169,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6170,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6171,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6172,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6173,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6174,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6175,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6176,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6177,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6178,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6179,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6180,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6181,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6182,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6183,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6184,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6185,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6186,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6187,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6188,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6189,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6190,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6191,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6192,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6193,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6194,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6195,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6196,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6197,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6198,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6199,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6200,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6201,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6202,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6203,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6204,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6205,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6206,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6207,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6208,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6209,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6210,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6211,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6212,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6213,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6214,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6215,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6216,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6217,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6218,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6219,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6220,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6221,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6222,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6223,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6224,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6225,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6226,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6227,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6228,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6229,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6230,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6231,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6232,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6233,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6234,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6235,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6236,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6237,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6238,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6239,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6240,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6241,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6242,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6243,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6244,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6245,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6246,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6247,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6248,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6249,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6250,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6251,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6252,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6253,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6254,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6255,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6256,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6257,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6258,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6259,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6260,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6261,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6262,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6263,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6264,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6265,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6266,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6267,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6268,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6269,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6270,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6271,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6272,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6273,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6274,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6275,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6276,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6277,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6278,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6279,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6280,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6281,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6282,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6283,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6284,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6285,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6286,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6287,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6288,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6289,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6290,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6291,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6292,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6293,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6294,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6295,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6296,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6297,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6298,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6299,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6300,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6301,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6302,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6303,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6304,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6305,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6306,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6307,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6308,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6309,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6310,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6311,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6312,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6313,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6314,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6315,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6316,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6317,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6318,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6319,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6320,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6321,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6322,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6323,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6324,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6325,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6326,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6327,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6328,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6329,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6330,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6331,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6332,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6333,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6334,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6335,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6336,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6337,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6338,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6339,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6340,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6341,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6342,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6343,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6344,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6345,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6346,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6347,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6348,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6349,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6350,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6351,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6352,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6353,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6354,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6355,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6356,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6357,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6358,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6359,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6360,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6361,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6362,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6363,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6364,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6365,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6366,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6367,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6368,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6369,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6370,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6371,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6372,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6373,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6374,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6375,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6376,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6377,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6378,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6379,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6380,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6381,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6382,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6383,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6384,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6385,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6386,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6387,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6388,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6389,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6390,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6391,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6392,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6393,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6394,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6395,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6396,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6397,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6398,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6399,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6400,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6401,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6402,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6403,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6404,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6405,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6406,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6407,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6408,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6409,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6410,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6411,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6412,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6413,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6414,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6415,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6416,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6417,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6418,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6419,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6420,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6421,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6422,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6423,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6424,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6425,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6426,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6427,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6428,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6429,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6430,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6431,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6432,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6433,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6434,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6435,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6436,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6437,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6438,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6439,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6440,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6441,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6442,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6443,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6444,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6445,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6446,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6447,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6448,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6449,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6450,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6451,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6452,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6453,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6454,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6455,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6456,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6457,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6458,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6459,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6460,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6461,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6462,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6463,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6464,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6465,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6466,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6467,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6468,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6469,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6470,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6471,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6472,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6473,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6474,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6475,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6476,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6477,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6478,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6479,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6480,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6481,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6482,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6483,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6484,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6485,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6486,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6487,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6488,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6489,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6490,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6491,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6492,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6493,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6494,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6495,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6496,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6497,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6498,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6499,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6500,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6501,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6502,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6503,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6504,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6505,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6506,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6507,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6508,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6509,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6510,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6511,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6512,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6513,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6514,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6515,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6516,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6517,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6518,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6519,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6520,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6521,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6522,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6523,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6524,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6525,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6526,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6527,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6528,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6529,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6530,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6531,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6532,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6533,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6534,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6535,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6536,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6537,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6538,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6539,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6540,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6541,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6542,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6543,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6544,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6545,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6546,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6547,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6548,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6549,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6550,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6551,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6552,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6553,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6554,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6555,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6556,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6557,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6558,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6559,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6560,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6561,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6562,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6563,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6564,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6565,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6566,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6567,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6568,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6569,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6570,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6571,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6572,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6573,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6574,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6575,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6576,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6577,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6578,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6579,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6580,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6581,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6582,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6583,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6584,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6585,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6586,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6587,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6588,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6589,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6590,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6591,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6592,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6593,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6594,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6595,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6596,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6597,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6598,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6599,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6600,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6601,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6602,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6603,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6604,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6605,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6606,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6607,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6608,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6609,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6610,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6611,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6612,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6613,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6614,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6615,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6616,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6617,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6618,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6619,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6620,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6621,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6622,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6623,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6624,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6625,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6626,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6627,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6628,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6629,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6630,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6631,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6632,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6633,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6634,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6635,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6636,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6637,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6638,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6639,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6640,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6641,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6642,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6643,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6644,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6645,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6646,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6647,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6648,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6649,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6650,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6651,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6652,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6653,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6654,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6655,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6656,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6657,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6658,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6659,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6660,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6661,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6662,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6663,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6664,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6665,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6666,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6667,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6668,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6669,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6670,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6671,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6672,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6673,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6674,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6675,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6676,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6677,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6678,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6679,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6680,
+    "tipo": "Seccion A",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6681,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6682,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6683,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6684,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6685,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6686,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6687,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6688,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6689,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6690,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6691,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6692,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6693,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6694,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6695,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6696,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6697,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6698,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6699,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6700,
+    "tipo": "Seccion B",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6701,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6702,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6703,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6704,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6705,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6706,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6707,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6708,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6709,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6710,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6711,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6712,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6713,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6714,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6715,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6716,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6717,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6718,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6719,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
+  },
+  {
+    "idCelda": 6720,
+    "tipo": "Seccion C",
+    "capacidadMaxima": 2,
+    "ocupada": false
   }
 ]

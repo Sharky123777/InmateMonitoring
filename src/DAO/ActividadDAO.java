@@ -218,14 +218,14 @@ public class ActividadDAO {
 
                 if (act.getPresosAsignadosIds().contains(identificacionP)) {
                     JOptionPane.showMessageDialog(null,
-                            "Este preso ya está asignado a esta actividad.",
+                            "Esta presa ya está asignada a esta actividad.",
                             "Advertencia", JOptionPane.WARNING_MESSAGE);
                     return false;
                 }
 
                 if (!puedeAsignarActividadAPreso(identificacionP)) {
                     JOptionPane.showMessageDialog(null,
-                            "Este preso ha alcanzado el límite de actividades permitidas.",
+                            "Esta presa ha alcanzado el límite de actividades permitidas.",
                             "Advertencia", JOptionPane.WARNING_MESSAGE);
                     return false;
                 }
@@ -235,7 +235,7 @@ public class ActividadDAO {
 
                 if (guardarActividades(actividades)) {
                     JOptionPane.showMessageDialog(null,
-                            "Preso asignado a la actividad correctamente.",
+                            "Presa asignada a la actividad correctamente.",
                             "Información", JOptionPane.INFORMATION_MESSAGE);
                     cargarActividades();
                     
@@ -257,13 +257,13 @@ public class ActividadDAO {
                     act.setPresosInscritos(act.getPresosInscritos() - 1);
                     if (guardarActividades(actividades)) {
                         JOptionPane.showMessageDialog(null,
-                                "Preso removido de la actividad correctamente.",
+                                "Presa removida de la actividad correctamente.",
                                 "Información", JOptionPane.INFORMATION_MESSAGE);
                         return true;
                     }
                 } else {
                     JOptionPane.showMessageDialog(null,
-                            "El preso no estaba asignado a esta actividad.",
+                            "El presa no estaba asignada a esta actividad.",
                             "Advertencia", JOptionPane.WARNING_MESSAGE);
                     return false;
                 }
