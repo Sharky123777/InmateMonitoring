@@ -326,4 +326,85 @@ public class EmailSender {
             + "</body>"
             + "</html>";
 }
+    
+    public boolean enviarCredencialesActualizadas(String destinatario, String usuario, String contrasena, RolEnum rol) {
+    if (destinatario == null || destinatario.isEmpty()
+            || usuario == null || usuario.isEmpty()
+            || contrasena == null || contrasena.isEmpty()
+            || rol == null) {
+        JOptionPane.showMessageDialog(null, "Error: Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+
+    if (!destinatario.contains("@") || !destinatario.endsWith(".com")) {
+        JOptionPane.showMessageDialog(null, "Error: Formato de correo inválido", "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+
+    try {
+        Session session = Session.getInstance(props,
+                new Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(username));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
+        message.setSubject("Actualización de Credenciales - Sistema de Monitoreo de Reclusas");
+
+        String htmlContent = construirMensajeHTMLActualizacion(usuario, contrasena, rol);
+        message.setContent(htmlContent, "text/html; charset=utf-8");
+
+        Transport.send(message);
+        return true;
+    } catch (MessagingException e) {
+        System.err.println("Error al enviar correo: " + e.getMessage());
+        JOptionPane.showMessageDialog(null, "Error al enviar correo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
+    } catch (Exception e) {
+        System.err.println("Error inesperado al enviar correo: " + e.getMessage());
+        JOptionPane.showMessageDialog(null, "Error inesperado al enviar correo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+}
+
+private String construirMensajeHTMLActualizacion(String usuario, String contrasena, RolEnum rol) {
+    String saludo = obtenerSaludoPorRol(rol);
+    String rolFormateado = formatearRol(rol);
+
+    return "<!DOCTYPE html>"
+            + "<html>"
+            + "<head>"
+            + "<style>"
+            + "body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }"
+            + ".header { text-align: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }"
+            + ".credentials { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; }"
+            + ".footer { margin-top: 20px; font-size: 0.8em; color: #6c757d; text-align: center; }"
+            + "h2 { color: #0056b3; margin-top: 0; }"
+            + "strong { color: #343a40; }"
+            + "</style>"
+            + "</head>"
+            + "<body>"
+            + "<div class='header'>"
+            + "<h2>Sistema de Monitoreo de Reclusas</h2>"
+            + "</div>"
+            + "<p>" + saludo + ",</p>"
+            + "<p>Sus credenciales de acceso al sistema han sido actualizadas exitosamente. A continuación, encontrará sus nuevos datos:</p>"
+            + "<div class='credentials'>"
+            + "<p><strong>Rol:</strong> " + rolFormateado + "</p>"
+            + "<p><strong>Usuario:</strong> " + usuario + "</p>"
+            + "<p><strong>Contraseña: </strong> " + contrasena + "</p>"
+            + "</div>"
+            + "<p>Le recomendamos cambiar su contraseña después del próximo inicio de sesión por seguridad.</p>"
+            + "<p>Si usted no solicitó esta actualización, por favor contacte al administrador del sistema de inmediato.</p>"
+            + "<div class='footer'>"
+            + "<p>Este es un mensaje automático, por favor no responda a este correo.</p>"
+            + "<p>&copy; " + java.time.Year.now().getValue() + " Sistema de Monitoreo de Reclusos. Todos los derechos reservados.</p>"
+            + "</div>"
+            + "</body>"
+            + "</html>";
+}
+
 }

@@ -7,20 +7,15 @@ import Utilidades.EmailSender;
 import Model.Entities.Usuario;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-import javax.imageio.ImageIO;
 import DAO.LocalDateAdapter;
-import DAO.LocalTimeAdapter;
+import Utilidades.GeneradorCredenciales;
 import javax.swing.JOptionPane;
 
 public class OficialDeRegistroDAO {
@@ -52,11 +47,9 @@ public class OficialDeRegistroDAO {
             Files.createDirectories(Paths.get(RUTA_IMAGENES));
             Files.createDirectories(Paths.get(RUTA_JSON).getParent());
 
-            // Crear archivo JSON si no existe
             File archivoJson = new File(RUTA_JSON);
             if (!archivoJson.exists()) {
                 archivoJson.createNewFile();
-                // Inicializar con estructura básica
                 Files.write(Paths.get(RUTA_JSON), "{\"oficiales\":[]}".getBytes());
             }
         } catch (IOException e) {
@@ -93,8 +86,7 @@ public class OficialDeRegistroDAO {
         }
 
         try (FileReader reader = new FileReader(archivo)) {
-            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
-            JsonArray usuariosArray = jsonObject.getAsJsonArray("usuarios");
+            JsonArray usuariosArray = JsonParser.parseReader(reader).getAsJsonArray();
 
             Type tipoLista = new TypeToken<List<Usuario>>() {
             }.getType();
@@ -115,7 +107,6 @@ public class OficialDeRegistroDAO {
     }
 
     public boolean guardarOficial(OficialDeRegistro oficial, File imagen) throws IOException {
-        // Validaciones iniciales mejoradas
         if (oficial == null) {
             throw new IllegalArgumentException("El objeto oficial no puede ser null");
         }
@@ -124,7 +115,6 @@ public class OficialDeRegistroDAO {
             throw new IllegalArgumentException("La imagen proporcionada no es válida");
         }
 
-        // Generar credenciales
         UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
         String usuario = credenciales.usuario;
         String contrasena = credenciales.contrasena;
@@ -133,7 +123,6 @@ public class OficialDeRegistroDAO {
         oficial.setUsuario(usuario);
         oficial.setContrasena(contrasenaEncriptada);
 
-        // Guardar imagen con manejo de errores
         String extension = imagen.getName().substring(imagen.getName().lastIndexOf("."));
         String nombreImagen = oficial.getIdentificacion() + "_" + System.currentTimeMillis() + extension;
         String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
@@ -147,19 +136,15 @@ public class OficialDeRegistroDAO {
             throw new IOException("No se pudo guardar la imagen del oficial");
         }
 
-        // Obtener y actualizar lista de oficiales
         List<OficialDeRegistro> oficiales = obtenerOficiales();
 
-        // Verificar duplicados
         if (oficiales.stream().anyMatch(o -> o.getIdentificacion().equals(oficial.getIdentificacion()))) {
-            // Eliminar la imagen recién copiada si hay duplicado
             Files.deleteIfExists(Paths.get(rutaImagenFinal));
             throw new IllegalArgumentException("Ya existe un oficial con esta cédula");
         }
 
         oficiales.add(oficial);
 
-        // Guardar la lista actualizada
         try {
             guardarListaOficiales(oficiales);
 
@@ -175,12 +160,11 @@ public class OficialDeRegistroDAO {
                     usuario,
                     contrasenaEncriptada,
                     RolEnum.OFICIAL_DE_REGISTRO,
-                    oficial.getRutaImagen() 
+                    oficial.getRutaImagen()
             );
-            
+
             guardarUsuario(nuevoUsuario);
 
-            
             try {
                 EmailSender.getInstancia().enviarCredenciales(
                         oficial.getCorreo(),
@@ -197,26 +181,22 @@ public class OficialDeRegistroDAO {
 
             return true;
         } catch (IOException e) {
-            
+
             Files.deleteIfExists(Paths.get(rutaImagenFinal));
             throw e;
         }
     }
 
     private void guardarListaOficiales(List<OficialDeRegistro> oficiales) throws IOException {
-      
         if (oficiales == null) {
             throw new IllegalArgumentException("La lista de oficiales no puede ser null");
         }
 
-        
-        JsonObject jsonPrincipal = new JsonObject();
         JsonArray jsonArrayOficiales = new JsonArray();
 
         for (OficialDeRegistro oficial : oficiales) {
             JsonObject jsonOficial = new JsonObject();
 
-            // Mapear todos los campos necesarios
             jsonOficial.addProperty("primerNombre", oficial.getPrimerNombre());
             jsonOficial.addProperty("segundoNombre", oficial.getSegundoNombre());
             jsonOficial.addProperty("primerApellido", oficial.getPrimerApellido());
@@ -231,58 +211,46 @@ public class OficialDeRegistroDAO {
             jsonOficial.addProperty("fechaFinContrato", oficial.getFechaFinContrato().toString());
             jsonOficial.addProperty("rutaImagen", oficial.getRutaImagen());
             jsonOficial.addProperty("usuario", oficial.getUsuario());
-            jsonOficial.addProperty("contrasena", oficial.getContrasena());
+
+            String contrasenaEncriptada = GeneradorCredenciales.encriptarContrasena(oficial.getContrasena());
+            jsonOficial.addProperty("contrasena", contrasenaEncriptada);
 
             jsonArrayOficiales.add(jsonOficial);
+
         }
 
-        jsonPrincipal.add("oficiales", jsonArrayOficiales);
-
-        
         Path path = Paths.get(RUTA_JSON);
         try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
-            gson.toJson(jsonPrincipal, writer);
-            System.out.println("Datos guardados correctamente en: " + path.toAbsolutePath());
+            gson.toJson(jsonArrayOficiales, writer);
+            System.out.println("Datos guardados como array correctamente en: " + path.toAbsolutePath());
         } catch (IOException e) {
-            System.err.println("Error al escribir JSON: " + e.getMessage());
+            System.err.println("Error al escribir JSON como array: " + e.getMessage());
             throw e;
         }
     }
 
     public List<OficialDeRegistro> obtenerOficiales() {
-        List<OficialDeRegistro> oficiales = new ArrayList<>();
         File archivo = new File(RUTA_JSON);
 
         try {
             if (!archivo.exists() || archivo.length() == 0) {
-                guardarListaOficiales(new ArrayList<>());
-                return oficiales;
+                return new ArrayList<>();
             }
 
-            String contenido = new String(Files.readAllBytes(archivo.toPath()));
+            String contenido = Files.readString(archivo.toPath()).trim();
 
-            if (contenido.trim().isEmpty()) {
-                guardarListaOficiales(new ArrayList<>());
-                return oficiales;
+            if (contenido.isEmpty() || contenido.equals("[]")) {
+                return new ArrayList<>();
             }
 
-            try {
-                JsonObject jsonObject = JsonParser.parseString(contenido).getAsJsonObject();
-                JsonArray oficialesArray = jsonObject.getAsJsonArray("oficiales");
+            Type tipoLista = new TypeToken<List<OficialDeRegistro>>() {
+            }.getType();
+            return gson.fromJson(contenido, tipoLista);
 
-                Type tipoLista = new TypeToken<List<OficialDeRegistro>>() {
-                }.getType();
-                return gson.fromJson(oficialesArray, tipoLista);
-            } catch (JsonSyntaxException e) {
-                
-                guardarListaOficiales(new ArrayList<>());
-            }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null,
-                    "Error al leer/escribir archivo: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            System.err.println("Error al leer oficiales como array: " + e.getMessage());
+            return new ArrayList<>();
         }
-        return oficiales;
     }
 
     public boolean existeOficialConCedula(String cedula) {
@@ -313,7 +281,6 @@ public class OficialDeRegistroDAO {
             return false;
         }
     }
-
 
     public OficialDeRegistro obtenerOficialPorCedula(String cedula) {
         return obtenerOficiales().stream()
@@ -381,39 +348,36 @@ public class OficialDeRegistroDAO {
             String.class
         };
     }
-    
 
-    
     public boolean modificarOficial(String cedulaOriginal, OficialDeRegistro oficialModificado, File nuevaImagen) {
-    try {
-        List<OficialDeRegistro> oficiales = obtenerOficiales();
-        
-        for (int i = 0; i < oficiales.size(); i++) {
-            OficialDeRegistro o = oficiales.get(i);
-            if (o.getIdentificacion().equals(cedulaOriginal)) {
-                
-                // Manejo de imagen
-                String rutaImagenFinal = o.getRutaImagen();
-                if (nuevaImagen != null && nuevaImagen.exists()) {
-                    String extension = nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
-                    String nombreImagen = oficialModificado.getIdentificacion() + "_" + System.currentTimeMillis() + extension;
-                    rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-                    Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+        try {
+            List<OficialDeRegistro> oficiales = obtenerOficiales();
+
+            for (int i = 0; i < oficiales.size(); i++) {
+                OficialDeRegistro o = oficiales.get(i);
+                if (o.getIdentificacion().equals(cedulaOriginal)) {
+
+                    String rutaImagenFinal = o.getRutaImagen();
+                    if (nuevaImagen != null && nuevaImagen.exists()) {
+                        String extension = nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
+                        String nombreImagen = oficialModificado.getIdentificacion() + "_" + System.currentTimeMillis() + extension;
+                        rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+                        Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+                    }
+
+                    oficialModificado.setRutaImagen(rutaImagenFinal);
+                    oficiales.set(i, oficialModificado);
+
+                    guardarListaOficiales(oficiales);
+
+                    return true;
                 }
-                
-                // Actualizar datos
-                oficialModificado.setRutaImagen(rutaImagenFinal);
-                oficiales.set(i, oficialModificado);
-                
-                guardarListaOficiales(oficiales);
-                return true;
             }
+            return false;
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al modificar oficial: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
-        return false;
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(null, "Error al modificar oficial: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-        return false;
     }
-}
 }

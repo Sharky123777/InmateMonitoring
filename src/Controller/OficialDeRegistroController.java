@@ -3,9 +3,11 @@ package Controller;
 import DAO.OficialDeRegistroDAO;
 import DAO.UsuarioDAO;
 import Model.Constants.RolEnum;
+import Model.Constants.SincronizadorJson;
 import Model.Entities.OficialDeRegistro;
 import Model.Entities.Usuario;
 import Utilidades.EmailSender;
+import Utilidades.GeneradorCredenciales;
 import View.FrmCamara;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -14,6 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -252,16 +256,6 @@ public class OficialDeRegistroController {
         );
     }
 
-    private File validarYProcesarImagen(String rutaImagen) {
-        if (rutaImagen == null || rutaImagen.trim().isEmpty()) {
-            throw new IllegalArgumentException("Debe seleccionar una imagen del oficial");
-        }
-
-        File imagen = new File(rutaImagen);
-        validarImagen(imagen);
-        return imagen;
-    }
-
     public List<OficialDeRegistro> obtenerTodosOficiales() {
         return oficialDAO.obtenerOficiales();
     }
@@ -367,75 +361,47 @@ public class OficialDeRegistroController {
                 throw new IllegalArgumentException("Oficial no encontrado con cédula: " + cedulaOriginal);
             }
 
-            Integer edad = null;
-            if (cambios.containsKey("edad")) {
-                try {
-                    edad = Integer.parseInt(cambios.get("edad").toString());
-                } catch (NumberFormatException e) {
-                    throw new IllegalArgumentException("La edad debe ser un número válido");
-                }
-            }
-
             OficialDeRegistro modificado = new OficialDeRegistro(
-                    cambios.get("primerNombre") != null ? cambios.get("primerNombre").toString() : original.getPrimerNombre(),
-                    cambios.get("segundoNombre") != null ? cambios.get("segundoNombre").toString() : original.getSegundoNombre(),
-                    cambios.get("primerApellido") != null ? cambios.get("primerApellido").toString() : original.getPrimerApellido(),
-                    cambios.get("segundoApellido") != null ? cambios.get("segundoApellido").toString() : original.getSegundoApellido(),
-                    edad != null ? edad : original.getEdad(),
+                    cambios.getOrDefault("primerNombre", original.getPrimerNombre()).toString(),
+                    cambios.getOrDefault("segundoNombre", original.getSegundoNombre()).toString(),
+                    cambios.getOrDefault("primerApellido", original.getPrimerApellido()).toString(),
+                    cambios.getOrDefault("segundoApellido", original.getSegundoApellido()).toString(),
+                    cambios.containsKey("edad") ? Integer.parseInt(cambios.get("edad").toString()) : original.getEdad(),
                     original.getSexo(),
-                    cambios.get("nacionalidad") != null ? cambios.get("nacionalidad").toString() : original.getNacionalidad(),
-                    cambios.get("identificacion") != null ? cambios.get("identificacion").toString() : original.getIdentificacion(),
+                    cambios.getOrDefault("nacionalidad", original.getNacionalidad()).toString(),
+                    cambios.getOrDefault("identificacion", original.getIdentificacion()).toString(),
                     original.getTurno(),
                     original.getFechaContratacion(),
                     original.getFechaFinContrato(),
                     original.getCorreo(),
-                    cambios.get("nuevoUsuario") != null ? cambios.get("nuevoUsuario").toString() : original.getUsuario(),
-                    cambios.containsKey("nuevaContraseña")
-                    ? cambios.get("nuevaContraseña").toString()
-                    : original.getContrasena()
+                    cambios.getOrDefault("nuevoUsuario", original.getUsuario()).toString(),
+                    cambios.containsKey("nuevaContraseña") ? cambios.get("nuevaContraseña").toString() : original.getContrasena()
             );
 
-            boolean hayCambiosReales = !modificado.equals(original) || nuevaImagen != null;
+            boolean exitoOficial = OficialDeRegistroDAO.getInstancia()
+                    .modificarOficial(cedulaOriginal, modificado, nuevaImagen);
 
-            if (hayCambiosReales) {
-                boolean exito = OficialDeRegistroDAO.getInstancia()
-                        .modificarOficial(cedulaOriginal, modificado, nuevaImagen);
-                if (!exito) {
-                    return -1;
-                }
+            if (!exitoOficial) {
+                return -1;
             }
+
+            SincronizadorJson.sincronizarConUsuarios(modificado);
 
             if (cambios.containsKey("nuevoUsuario") || cambios.containsKey("nuevaContraseña")) {
-                String nuevoUsuario = modificado.getUsuario();
-                String nuevaContra = cambios.containsKey("nuevaContraseña")
-                        ? cambios.get("nuevaContraseña").toString()
-                        : null;
-
-                boolean credencialesActualizadas = UsuarioDAO.getInstancia().modificarCredenciales(
+                boolean credencialesOk = usuarioDAO.modificarCredenciales(
                         original.getUsuario(),
-                        nuevoUsuario,
-                        nuevaContra
+                        cambios.containsKey("nuevoUsuario") ? cambios.get("nuevoUsuario").toString() : null,
+                        cambios.containsKey("nuevaContraseña") ? cambios.get("nuevaContraseña").toString() : null,
+                        original.getCorreo(), 
+                        RolEnum.OFICIAL_DE_REGISTRO 
                 );
 
-                if (!credencialesActualizadas) {
+                if (!credencialesOk) {
                     return -1;
-                }
-
-                if (original.getCorreo() != null && !original.getCorreo().isEmpty()) {
-                    try {
-                        EmailSender.getInstancia().enviarCredenciales(
-                                original.getCorreo(),
-                                nuevoUsuario,
-                                nuevaContra != null ? nuevaContra : "*** No modificada ***",
-                                RolEnum.OFICIAL_DE_REGISTRO
-                        );
-                    } catch (Exception e) {
-                        System.err.println("Error enviando correo: " + e.getMessage());
-                    }
                 }
             }
 
-            return hayCambiosReales ? 1 : 0;
+            return 1;
 
         } catch (IllegalArgumentException e) {
             throw e;
@@ -444,45 +410,53 @@ public class OficialDeRegistroController {
         }
     }
 
-    public int modificarCredencialesOficial(String cedulaOriginal, String nuevoUsuario, String nuevaContra) {
-        try {
-            OficialDeRegistro oficial = obtenerOficialPorCedula(cedulaOriginal);
-            if (oficial == null) {
-                throw new IllegalArgumentException("Oficial no encontrado");
-            }
+public int modificarCredencialesOficial(String cedulaOriginal, String nuevoUsuario, String nuevaContra) {
+    try {
+        OficialDeRegistro oficial = obtenerOficialPorCedula(cedulaOriginal);
+        if (oficial == null) throw new IllegalArgumentException("Oficial no encontrado");
 
-            if ((nuevoUsuario == null || nuevoUsuario.isEmpty() || nuevoUsuario.equals(oficial.getUsuario()))
-                    && (nuevaContra == null || nuevaContra.isEmpty())) {
-                return 0;
-            }
+        nuevoUsuario = nuevoUsuario != null ? nuevoUsuario.toLowerCase() : null;
+        
+        boolean cambioUsuario = nuevoUsuario != null && !nuevoUsuario.equals(oficial.getUsuario().toLowerCase());
+        boolean cambioContra = nuevaContra != null && !nuevaContra.isEmpty();
 
-            String nuevaContraEncriptada = (nuevaContra != null && !nuevaContra.isEmpty())
-                    ? UsuarioController.getInstancia().encriptarContrasena(nuevaContra)
-                    : null;
+        if (!cambioUsuario && !cambioContra) return 0;
 
-            boolean resultado = UsuarioDAO.getInstancia().modificarCredenciales(
-                    oficial.getUsuario(),
-                    nuevoUsuario != null && !nuevoUsuario.isEmpty() ? nuevoUsuario : null,
-                    nuevaContraEncriptada
-            );
-
-            if (resultado && oficial.getCorreo() != null && !oficial.getCorreo().isEmpty()) {
-                EmailSender.getInstancia().enviarCredenciales(
-                        oficial.getCorreo(),
-                        nuevoUsuario != null && !nuevoUsuario.isEmpty() ? nuevoUsuario : oficial.getUsuario(),
-                        nuevaContra != null && !nuevaContra.isEmpty() ? nuevaContra : "*** No modificada ***",
-                        RolEnum.OFICIAL_DE_REGISTRO
-                );
-            }
-
-            return resultado ? 1 : -1;
-        } catch (Exception e) {
-            throw new RuntimeException("Error al modificar credenciales: " + e.getMessage(), e);
+        if (cambioContra) {
+            oficial.setContrasena(GeneradorCredenciales.encriptarContrasena(nuevaContra));
         }
+        if (cambioUsuario) {
+            oficial.setUsuario(nuevoUsuario);
+        }
+
+        boolean exito = OficialDeRegistroDAO.getInstancia()
+                        .modificarOficial(cedulaOriginal, oficial, null);
+        if (!exito) return -1;
+
+        SincronizadorJson.sincronizarConUsuarios(oficial);
+
+        boolean credencialesOk = UsuarioDAO.getInstancia().modificarCredenciales(
+            oficial.getUsuario(),
+            cambioUsuario ? nuevoUsuario : null,
+            cambioContra ? nuevaContra : null,
+            oficial.getCorreo(),
+            RolEnum.OFICIAL_DE_REGISTRO
+        );
+
+        return credencialesOk ? 1 : -1;
+    } catch (Exception e) {
+        throw new RuntimeException("Error al modificar credenciales: " + e.getMessage(), e);
     }
+}
+
 
     public Usuario obtenerUsuarioPorIdentificacion(String identificacion) {
-    return usuarioDAO.obtenerUsuarioPorIdentificacion(identificacion);
-}
+        try {
+            return usuarioDAO.obtenerUsuarioPorIdentificacion(identificacion);
+        } catch (IOException ex) {
+            Logger.getLogger(OficialDeRegistroController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
 
 }
