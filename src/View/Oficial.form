@@ -1128,45 +1128,44 @@
                 <Component class="javax.swing.JComboBox" name="JcomboHoraCita">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="38">
+                      <StringArray count="37">
                         <StringItem index="0" value="&lt; Seleccionar &gt;"/>
-                        <StringItem index="1" value="08:00"/>
-                        <StringItem index="2" value="08:20"/>
-                        <StringItem index="3" value="08:40"/>
-                        <StringItem index="4" value="09:00"/>
-                        <StringItem index="5" value="09:20"/>
-                        <StringItem index="6" value="09:40"/>
-                        <StringItem index="7" value="10:00"/>
-                        <StringItem index="8" value="10:20"/>
-                        <StringItem index="9" value="10:40"/>
-                        <StringItem index="10" value="11:00"/>
-                        <StringItem index="11" value="11:20"/>
-                        <StringItem index="12" value="11:40"/>
-                        <StringItem index="13" value="12:00"/>
-                        <StringItem index="14" value="12:20"/>
-                        <StringItem index="15" value="12:40"/>
-                        <StringItem index="16" value="13:00"/>
-                        <StringItem index="17" value="13:20"/>
-                        <StringItem index="18" value="13:40"/>
-                        <StringItem index="19" value="14:00"/>
-                        <StringItem index="20" value="14:20"/>
-                        <StringItem index="21" value="14:40"/>
-                        <StringItem index="22" value="15:00"/>
-                        <StringItem index="23" value="15:20"/>
-                        <StringItem index="24" value="15:40"/>
-                        <StringItem index="25" value="16:00"/>
-                        <StringItem index="26" value="16:20"/>
-                        <StringItem index="27" value="16:40"/>
-                        <StringItem index="28" value="17:00"/>
-                        <StringItem index="29" value="17:20"/>
-                        <StringItem index="30" value="17:40"/>
-                        <StringItem index="31" value="18:00"/>
-                        <StringItem index="32" value="18:20"/>
-                        <StringItem index="33" value="18:40"/>
-                        <StringItem index="34" value="19:00"/>
-                        <StringItem index="35" value="19:20"/>
-                        <StringItem index="36" value="19:40"/>
-                        <StringItem index="37" value="20:00"/>
+                        <StringItem index="1" value="07:00"/>
+                        <StringItem index="2" value="07:20"/>
+                        <StringItem index="3" value="07:40"/>
+                        <StringItem index="4" value="08:00"/>
+                        <StringItem index="5" value="08:20"/>
+                        <StringItem index="6" value="08:40"/>
+                        <StringItem index="7" value="09:00"/>
+                        <StringItem index="8" value="09:20"/>
+                        <StringItem index="9" value="09:40"/>
+                        <StringItem index="10" value="10:00"/>
+                        <StringItem index="11" value="10:20"/>
+                        <StringItem index="12" value="10:40"/>
+                        <StringItem index="13" value="11:00"/>
+                        <StringItem index="14" value="11:20"/>
+                        <StringItem index="15" value="11:40"/>
+                        <StringItem index="16" value="12:00"/>
+                        <StringItem index="17" value="12:20"/>
+                        <StringItem index="18" value="12:40"/>
+                        <StringItem index="19" value="13:00"/>
+                        <StringItem index="20" value="13:20"/>
+                        <StringItem index="21" value="13:40"/>
+                        <StringItem index="22" value="14:00"/>
+                        <StringItem index="23" value="14:20"/>
+                        <StringItem index="24" value="14:40"/>
+                        <StringItem index="25" value="15:00"/>
+                        <StringItem index="26" value="15:20"/>
+                        <StringItem index="27" value="15:40"/>
+                        <StringItem index="28" value="16:00"/>
+                        <StringItem index="29" value="16:20"/>
+                        <StringItem index="30" value="16:40"/>
+                        <StringItem index="31" value="17:00"/>
+                        <StringItem index="32" value="17:20"/>
+                        <StringItem index="33" value="17:40"/>
+                        <StringItem index="34" value="18:00"/>
+                        <StringItem index="35" value="18:20"/>
+                        <StringItem index="36" value="18:40"/>
                       </StringArray>
                     </Property>
                   </Properties>

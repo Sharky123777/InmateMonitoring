@@ -23,6 +23,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class CitaMedicaController {
+
     private final CitaMedicaDAO citaMedicaDAO = CitaMedicaDAO.getInstancia();
     private final PresoDAO presoDAO = PresoDAO.getInstancia();
     private final GuardiaDAO guardiaDAO = GuardiaDAO.getInstancia();
@@ -36,40 +37,52 @@ public class CitaMedicaController {
         JOptionPane.showMessageDialog(null, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public boolean agendarCita(String identificacionPreso, String identificacionGuardia, 
-                             String motivo, LocalDate fecha, LocalTime hora) {
+    public boolean agendarCita(String identificacionPreso, String identificacionGuardia,
+            String motivo, LocalDate fecha, LocalTime hora) {
+
         if (!validarCamposCita(identificacionPreso, identificacionGuardia, motivo, fecha, hora)) {
             return false;
         }
 
         Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
         Guardia guardia = guardiaDAO.obtenerGuardiaPorCedula(identificacionGuardia);
-        
-        if (preso == null || guardia == null) {
-            mostrarError("Preso o guardia no encontrado");
+
+        if (preso == null) {
+            mostrarError("Preso no encontrado");
+            return false;
+        }
+        if (guardia == null) {
+            mostrarError("Guardia no encontrado");
             return false;
         }
 
-        String turno = determinarTurno(hora);
+        String turnoCita = determinarTurno(hora);
+
+        if (!turnoCita.equalsIgnoreCase(guardia.getTurno())) {
+            mostrarError("El guardia no está en el turno correspondiente a la hora de la cita");
+            return false;
+        }
+
         Enfermera enfermera = enfermeraDAO.obtenerEnfermeras().stream()
-                .filter(e -> e.getTurno().equalsIgnoreCase(turno))
+                .filter(e -> e.getTurno().equalsIgnoreCase(turnoCita))
                 .findFirst()
                 .orElse(null);
 
         if (enfermera == null) {
-            mostrarError("No hay enfermeras disponibles para el turno " + turno);
+            mostrarError("No hay enfermeras disponibles para el turno " + turnoCita);
             return false;
         }
 
         CitaMedica nuevaCita = new CitaMedica(0, fecha, hora, motivo, guardia, preso, enfermera);
+
         boolean resultado = citaMedicaDAO.guardarCita(nuevaCita);
-        
+
         if (resultado) {
-            mostrarExito("Cita agendada exitosamente");
+            mostrarExito("Cita agendada exitosamente para la enfermera " + enfermera.getNombreCompleto());
         } else {
             mostrarError("Error al guardar la cita");
         }
-        
+
         return resultado;
     }
 
@@ -78,31 +91,31 @@ public class CitaMedicaController {
             mostrarError("Debe ingresar un diagnóstico");
             return false;
         }
-        
+
         boolean resultado = citaMedicaDAO.actualizarDiagnostico(idCita, diagnostico, diagnostico);
-        
+
         if (resultado) {
             mostrarExito("Cita atendida exitosamente");
         } else {
             mostrarError("Error al atender la cita");
         }
-        
+
         return resultado;
     }
 
     public boolean marcarComoPrioritario(int idCita) {
         boolean resultado = citaMedicaDAO.marcarComoPrioritario(idCita);
-        
+
         if (resultado) {
             mostrarExito("Cita marcada como prioritaria");
         } else {
             mostrarError("Error al marcar como prioritaria");
         }
-        
+
         return resultado;
     }
-    
-     public void cargarHistorialAtendidos(JTable tabla, String identificacionEnfermera) {
+
+    public void cargarHistorialAtendidos(JTable tabla, String identificacionEnfermera) {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
         modelo.setRowCount(0);
 
@@ -111,31 +124,31 @@ public class CitaMedicaController {
                 .collect(Collectors.toList());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        
+
         for (CitaMedica cita : citas) {
             modelo.addRow(new Object[]{
                 cita.getId(),
                 cita.getPreso().getNombreCompleto(),
                 cita.getPreso().getIdentificacion(),
-                cita.getFechaHoraAtencion() != null ? 
-                    cita.getFechaHoraAtencion().format(formatter) : "No registrada",
+                cita.getFechaHoraAtencion() != null
+                ? cita.getFechaHoraAtencion().format(formatter) : "No registrada",
                 cita.getMotivo(),
                 cita.getDiagnostico(),
-                cita.getRutaHistoriaClinica() != null ? 
-                    new File(cita.getRutaHistoriaClinica()).getName() : "Sin archivo"
+                cita.getRutaHistoriaClinica() != null
+                ? new File(cita.getRutaHistoriaClinica()).getName() : "Sin archivo"
             });
         }
     }
 
     public boolean cancelarCita(int idCita) {
         boolean resultado = citaMedicaDAO.cancelarCita(idCita);
-        
+
         if (resultado) {
             mostrarExito("Cita cancelada exitosamente");
         } else {
             mostrarError("Error al cancelar la cita");
         }
-        
+
         return resultado;
     }
 
@@ -144,8 +157,8 @@ public class CitaMedicaController {
         modelo.setRowCount(0);
 
         List<CitaMedica> citas = citaMedicaDAO.obtenerPorEnfermera(identificacionEnfermera).stream()
-                .filter(c -> c.getEstado() == EstadoCitaMedicaEnum.PENDIENTE || 
-                            c.getEstado() == EstadoCitaMedicaEnum.PRIORITARIO)
+                .filter(c -> c.getEstado() == EstadoCitaMedicaEnum.PENDIENTE
+                || c.getEstado() == EstadoCitaMedicaEnum.PRIORITARIO)
                 .collect(Collectors.toList());
 
         for (CitaMedica cita : citas) {
@@ -161,15 +174,13 @@ public class CitaMedicaController {
         }
     }
 
-  
-
     public Preso obtenerPresoDeCita(int idCita) {
         CitaMedica cita = citaMedicaDAO.buscarPorId(idCita);
         return cita != null ? cita.getPreso() : null;
     }
 
-    private boolean validarCamposCita(String identificacionPreso, String identificacionGuardia, 
-                                    String motivo, LocalDate fecha, LocalTime hora) {
+    private boolean validarCamposCita(String identificacionPreso, String identificacionGuardia,
+            String motivo, LocalDate fecha, LocalTime hora) {
         if (identificacionPreso == null || identificacionPreso.trim().isEmpty()) {
             mostrarError("Debe ingresar la identificación del preso");
             return false;
@@ -204,44 +215,44 @@ public class CitaMedicaController {
     }
 
     private String determinarTurno(LocalTime hora) {
-        if (!hora.isBefore(LocalTime.of(8, 0)) && hora.isBefore(LocalTime.of(16, 0))) {
+        if (!hora.isBefore(LocalTime.of(7, 0)) && hora.isBefore(LocalTime.of(16, 40))) {
             return "Diurno";
-        } else if (!hora.isBefore(LocalTime.of(16, 0)) && hora.isBefore(LocalTime.of(24, 0))) {
+        } else if (!hora.isBefore(LocalTime.of(17, 0)) && hora.isBefore(LocalTime.of(18, 40).plusMinutes(1))) {
             return "Nocturno";
         }
         return null;
     }
-    
+
     public CitaMedica obtenerCitaPorId(int idCita) {
         return citaMedicaDAO.buscarPorId(idCita);
     }
 
     public boolean cancelarCita(int idCita, String razon) {
         boolean resultado = citaMedicaDAO.cancelarCita(idCita, razon);
-        
+
         if (resultado) {
             mostrarExito("Cita cancelada exitosamente. Razón: " + razon);
         } else {
             mostrarError("Error al cancelar la cita");
         }
-        
+
         return resultado;
     }
-    
-      public boolean atenderCita(int idCita, String diagnostico, String rutaArchivo) {
+
+    public boolean atenderCita(int idCita, String diagnostico, String rutaArchivo) {
         if (diagnostico == null || diagnostico.trim().isEmpty()) {
             mostrarError("Debe ingresar un diagnóstico");
             return false;
         }
-        
+
         boolean resultado = citaMedicaDAO.actualizarDiagnostico(idCita, diagnostico, rutaArchivo);
-        
+
         if (resultado) {
             mostrarExito("Consulta registrada correctamente - " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
         } else {
             mostrarError("Error al registrar la consulta");
         }
-        
+
         return resultado;
     }
 

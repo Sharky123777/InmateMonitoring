@@ -13,6 +13,10 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -26,9 +30,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Oficial extends javax.swing.JFrame implements PerfilUsuario {
 
-    private File imagenOficialSeleccionada;
     private String presoSeleccionadoIdentificacion;
     private final SancionController sancionController = new SancionController();
+    private final CitaMedicaController citaMedicaController = new CitaMedicaController();
     private Usuario usuario;
 
     public Oficial() {
@@ -664,7 +668,7 @@ public class Oficial extends javax.swing.JFrame implements PerfilUsuario {
         jPanel2.add(jSeparator10, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 50, 390, 20));
         jPanel2.add(FechaCita, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 380, 30));
 
-        JcomboHoraCita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "08:00", "08:20", "08:40", "09:00", "09:20", "09:40", "10:00", "10:20", "10:40", "11:00", "11:20", "11:40", "12:00", "12:20", "12:40", "13:00", "13:20", "13:40", "14:00", "14:20", "14:40", "15:00", "15:20", "15:40", "16:00", "16:20", "16:40", "17:00", "17:20", "17:40", "18:00", "18:20", "18:40", "19:00", "19:20", "19:40", "20:00" }));
+        JcomboHoraCita.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "07:00", "07:20", "07:40", "08:00", "08:20", "08:40", "09:00", "09:20", "09:40", "10:00", "10:20", "10:40", "11:00", "11:20", "11:40", "12:00", "12:20", "12:40", "13:00", "13:20", "13:40", "14:00", "14:20", "14:40", "15:00", "15:20", "15:40", "16:00", "16:20", "16:40", "17:00", "17:20", "17:40", "18:00", "18:20", "18:40" }));
         JcomboHoraCita.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JcomboHoraCitaActionPerformed(evt);
@@ -994,13 +998,35 @@ public class Oficial extends javax.swing.JFrame implements PerfilUsuario {
 
 
     private void BotonAsignarSancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonAsignarSancionActionPerformed
-        SancionController controller = new SancionController();
-        controller.registrarSancion(this);
+        sancionController.registrarSancion(this);
     }//GEN-LAST:event_BotonAsignarSancionActionPerformed
 
 
     private void botonAgendarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgendarCitaActionPerformed
-    }//GEN-LAST:event_botonAgendarCitaActionPerformed
+        String identificacionPreso = IdentificacionPresoCita.getText().trim();
+        String identificacionGuardia = IdentificacionGuardia.getText();
+        String motivo = MotivoCita.getText().trim();
+
+        if (FechaCita.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Por favor selecciona una fecha válida.");
+            return;
+        }
+        LocalDate fecha = FechaCita.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        String horaSeleccionada = (String) JcomboHoraCita.getSelectedItem();
+        if (horaSeleccionada == null || horaSeleccionada.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor selecciona una hora válida.");
+            return;
+        }
+        LocalTime hora;
+        try {
+            hora = LocalTime.parse(horaSeleccionada);
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(this, "Formato de hora inválido.");
+            return;
+        }
+
+        citaMedicaController.agendarCita(identificacionPreso, identificacionGuardia, motivo, fecha, hora);    }//GEN-LAST:event_botonAgendarCitaActionPerformed
 
     private void BarraDeBusquedaGuardiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BarraDeBusquedaGuardiasActionPerformed
         // TODO add your handling code here:

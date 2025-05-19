@@ -1,3 +1,116 @@
 [
- 
+  {
+    "id": 1,
+    "fecha": "2025-05-20",
+    "hora": "07:00",
+    "motivo": "Tiene colicos",
+    "guardia": {
+      "correo": "@gmail.com",
+      "turno": "Diurno",
+      "fechaInicioContrato": "2025-05-18",
+      "fechaFinContrato": "2025-06-18",
+      "rutaImagen": "src/Resources/imagenes_guardias/098765142_1747507946096.png",
+      "cargo": "Guardia jefe",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "sl",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Afgana",
+      "identificacion": "098765142"
+    },
+    "preso": {
+      "estatura": 1.8,
+      "peso": 50.0,
+      "delitos": [
+        {
+          "id": 1,
+          "presoId": "1237440696",
+          "codigo": 131,
+          "nombre": "Omisión de socorro",
+          "articuloLey": "Artículo 131",
+          "gravedad": "Baja",
+          "descripcion": "La interna fue privada de la libertad por el delito de\nomisión de socorro, tras presenciar un accidente donde\nuna persona quedó gravemente herida. A pesar de estar\nen condiciones de brindar ayuda o alertar a las autoridades,\ndecidió abandonar el lugar sin ofrecer asistencia alguna.\n\nSu omisión representó una vulneración al deber legal y\nhumano de auxilio, poniendo en peligro la vida de otra\npersona por su indiferencia.",
+          "fechaComision": "2024-05-02",
+          "sentencia": {
+            "años": 1,
+            "meses": 2,
+            "fechaIngreso": "2025-05-15",
+            "fechaSalidaCalculada": "2026-07-15"
+          }
+        },
+        {
+          "id": 2,
+          "presoId": "1237440696",
+          "codigo": 246,
+          "nombre": "Fraude",
+          "articuloLey": "Artículo 246 - Fraude",
+          "gravedad": "Baja",
+          "descripcion": "La interna fue privada de la libertad por el delito de\nfraude, al haber engañado de forma deliberada a varias\npersonas mediante la falsificación de documentos y la\nmanipulación de información financiera.\n\nUtilizó estos medios para obtener beneficios económicos\npersonales, afectando el patrimonio de terceros y generando\npérdidas significativas a las víctimas involucradas.\n\nSu conducta violó la confianza depositada en ella y constituyó\nun acto doloso con ánimo de lucro a costa del perjuicio ajeno.",
+          "fechaComision": "2025-05-13",
+          "sentencia": {
+            "años": 2,
+            "meses": 4,
+            "fechaIngreso": "2025-05-15",
+            "fechaSalidaCalculada": "2027-09-15"
+          }
+        },
+        {
+          "id": 8,
+          "presoId": "1237440696",
+          "codigo": 399,
+          "nombre": "Peculado por uso",
+          "articuloLey": "Artículo 399",
+          "gravedad": "Baja",
+          "descripcion": "La detenida fue vista peculando por uso",
+          "fechaComision": "2025-05-15",
+          "sentencia": {
+            "años": 2,
+            "meses": 3,
+            "fechaIngreso": "2025-05-16",
+            "fechaSalidaCalculada": "2027-08-16"
+          }
+        }
+      ],
+      "nivelDeSeguridad": "Medio",
+      "seccionAsignada": "Sección C",
+      "condicion": "En espera",
+      "celdaAsignada": "CELD-42",
+      "enAislamiento": false,
+      "nivelDeRiesgo": "Riesgo medio",
+      "numeroDeVisitas": 0,
+      "grupoSanguineo": "A+",
+      "fotoPath": "src/Resources/imagenes_presos/preso_1.jpg",
+      "estado": "ACTIVO",
+      "id": 1,
+      "actividadesAsignadasIds": [],
+      "actividadesCanceladasIds": [],
+      "primerNombre": "Luz",
+      "segundoNombre": "Dari",
+      "primerApellido": "Crespo",
+      "segundoApellido": "Gomez",
+      "edad": 19,
+      "sexo": "F",
+      "nacionalidad": "Suiza",
+      "identificacion": "1237440696"
+    },
+    "enfermera": {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-16",
+      "fechaFinContrato": "2025-05-22",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/389183183_1747503293809.png",
+      "correo": "vivasm4g@gmail.com",
+      "primerNombre": "Sharlok",
+      "segundoNombre": "Maia",
+      "primerApellido": "Alcazar",
+      "segundoApellido": "Bernabidez",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Yemení",
+      "identificacion": "389183183"
+    },
+    "estado": "PENDIENTE",
+    "diagnostico": ""
+  }
 ]
