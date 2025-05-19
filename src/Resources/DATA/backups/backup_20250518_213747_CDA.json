@@ -1,0 +1,22 @@
+
+  "coordinadores": [
+    {
+      "usuario": "W5gakb@UñkR",
+      "contrasena": "ad17ae46be1194e2257da40da5fdd4d1e1e81beb0529bf4ee1953593035bb0cb",
+      "turno": "Diurno",
+      "cargo": "Coordinadora mañana",
+      "fechaInicioContrato": "2025-05-18",
+      "fechaFinContrato": "2025-05-31",
+      "rutaImagen": "src/Resources/imagenes_CDA/1378137813_1747622162545.png",
+      "correo": "papa@gmail.com",
+      "primerNombre": "S",
+      "segundoNombre": "S",
+      "primerApellido": "S",
+      "segundoApellido": "S",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Afgana",
+      "identificacion": "1378137813"
+    }
+  ]
+}
