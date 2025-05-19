@@ -115,31 +115,25 @@ public class HistorialExpedienteDialog extends javax.swing.JDialog {
                 .obtenerHistorialExpedientes(identificacionPreso);
     }
 
-  
+    
 
-    private List<ExpedienteJudicial> getExpedientesPagina() {
-        int inicio = 1;
-        int fin = 1;
-        return todosExpedientes.subList(inicio, fin);
-    }
+private void actualizarTabla() {
+    DefaultTableModel modelo = (DefaultTableModel) tblExpedientes.getModel();
+    modelo.setRowCount(0);
 
-    private void actualizarTabla() {
-        DefaultTableModel modelo = (DefaultTableModel) tblExpedientes.getModel();
-        modelo.setRowCount(0);
+    if (todosExpedientes != null && !todosExpedientes.isEmpty()) {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        if (todosExpedientes != null && !todosExpedientes.isEmpty()) {
-            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-            for (ExpedienteJudicial exp : getExpedientesPagina()) {
-                modelo.addRow(new Object[]{
-                    exp.getCodigoExpediente(),
-                    exp.getFechaApertura().format(fmt),
-                    exp.getEstado(),
-                    "Ver Detalle"
-                });
-            }
+        for (ExpedienteJudicial exp : todosExpedientes) {
+            modelo.addRow(new Object[]{
+                exp.getCodigoExpediente(),
+                exp.getFechaApertura().format(fmt),
+                exp.getEstado(),
+                "Ver Detalle"
+            });
         }
     }
+}
 
     class ButtonRenderer extends JButton implements TableCellRenderer {
 
@@ -183,7 +177,7 @@ public class HistorialExpedienteDialog extends javax.swing.JDialog {
 
                 expedienteController.cargarTablaDelitos(delitos, tablaExpediente);
 
-                tabbedPane.setSelectedIndex(8);
+                tabbedPane.setSelectedIndex(6);
                 dispose();
             } else {
                 JOptionPane.showMessageDialog(HistorialExpedienteDialog.this,
@@ -286,7 +280,6 @@ public class HistorialExpedienteDialog extends javax.swing.JDialog {
 
         txtEstadoReclusa.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         txtEstadoReclusa.setForeground(new java.awt.Color(0, 0, 0));
-        txtEstadoReclusa.setText("jLabel5");
         jPanel1.add(txtEstadoReclusa, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 110, 320, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

@@ -44,35 +44,35 @@ public class FrmCamara extends javax.swing.JFrame {
     int contador = 0;
 
     public FrmCamara() {
-       initComponents();
-    setLocationRelativeTo(null);
-    
-    // Configuración inicial de la cámara
-    webcam = Webcam.getDefault();
-    if (webcam == null) {
-        JOptionPane.showMessageDialog(this, 
-            "No se encontró ninguna cámara disponible", 
-            "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-    
-    // Configurar tamaño antes de abrir
-    webcam.setViewSize(WebcamResolution.VGA.getSize());
-    
-    // Configurar el panel de la cámara
-    webcamPanel = new WebcamPanel(webcam, new Dimension(640, 480), false);
-    webcamPanel.setFillArea(true);
-    webcamPanel.setFPSDisplayed(true);
-    
-    // Reemplazar el panel existente
-    mostrarCamara.removeAll();
-    mostrarCamara.setLayout(new BorderLayout());
-    mostrarCamara.add(webcamPanel, BorderLayout.CENTER);
-    mostrarCamara.revalidate();
-    mostrarCamara.repaint();
-    
-    // Iniciar en estado apagado
-    apagarBotones();
+        initComponents();
+        setLocationRelativeTo(null);
+
+        // Configuración inicial de la cámara
+        webcam = Webcam.getDefault();
+        if (webcam == null) {
+            JOptionPane.showMessageDialog(this,
+                    "No se encontró ninguna cámara disponible",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Configurar tamaño antes de abrir
+        webcam.setViewSize(WebcamResolution.VGA.getSize());
+
+        // Configurar el panel de la cámara
+        webcamPanel = new WebcamPanel(webcam, new Dimension(640, 480), false);
+        webcamPanel.setFillArea(true);
+        webcamPanel.setFPSDisplayed(true);
+
+        // Reemplazar el panel existente
+        mostrarCamara.removeAll();
+        mostrarCamara.setLayout(new BorderLayout());
+        mostrarCamara.add(webcamPanel, BorderLayout.CENTER);
+        mostrarCamara.revalidate();
+        mostrarCamara.repaint();
+
+        // Iniciar en estado apagado
+        apagarBotones();
 
     }
 
@@ -94,8 +94,6 @@ public class FrmCamara extends javax.swing.JFrame {
         btnGuardarFoto.setText("SELECCIONAR FOTO");
         btnPrender.setText("INICIAR CAMARA");
     }
-    
-    
 
     public void prenderBotones() {
         btnApagar.setEnabled(true);
@@ -225,27 +223,26 @@ public class FrmCamara extends javax.swing.JFrame {
 
     }//GEN-LAST:event_TomarFotoActionPerformed
 
-    
+
     private void btnPrenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrenderActionPerformed
         textoBotonesCuandoCargaCamara();
-    
-    
-    SwingUtilities.invokeLater(() -> {
-        try {
-            if (!webcam.isOpen()) {
-                webcam.open();
+
+        SwingUtilities.invokeLater(() -> {
+            try {
+                if (!webcam.isOpen()) {
+                    webcam.open();
+                }
+                webcamPanel.start();
+                prenderBotones();
+                textoBotonesCuandoCargoCamara();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al iniciar la cámara: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
-            webcamPanel.start();
-            prenderBotones();
-            textoBotonesCuandoCargoCamara();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error al iniciar la cámara: " + e.getMessage(), 
-                "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    });
-    
-    btnPrender.setEnabled(false);
+        });
+
+        btnPrender.setEnabled(false);
     }//GEN-LAST:event_btnPrenderActionPerformed
 
     private void btnApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApagarActionPerformed
@@ -255,16 +252,17 @@ public class FrmCamara extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnApagarActionPerformed
 
+    
     @Override
-public void dispose() {
-    if (webcamPanel != null) {
-        webcamPanel.stop();
+    public void dispose() {
+        if (webcamPanel != null) {
+            webcamPanel.stop();
+        }
+        if (webcam != null && webcam.isOpen()) {
+            webcam.close();
+        }
+        super.dispose();
     }
-    if (webcam != null && webcam.isOpen()) {
-        webcam.close();
-    }
-    super.dispose();
-}
 
     private void btnGuardarFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarFotoActionPerformed
         int pregunta = JOptionPane.showConfirmDialog(this,
@@ -273,12 +271,12 @@ public void dispose() {
 
         if (pregunta == 0) {
             try {
-                
+
                 imagenCapturada = File.createTempFile("enfermera_", ".jpg");
                 ImageIO.write(imagenBuffer, "jpg", imagenCapturada);
 
                 JOptionPane.showMessageDialog(this, "Foto capturada con éxito");
-                this.dispose(); 
+                this.dispose();
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this,
                         "Error al guardar la imagen: " + e.getMessage(),

@@ -79,25 +79,7 @@ public class PersonalControlDAO {
         }
     }
 
-    private String generarUsuarioUnico(String primerNombre, String primerApellido, List<Usuario> usuariosExistentes) {
-        Random random = new Random();
-        String usuarioBase = primerNombre + primerApellido;
-        String caracteresEspeciales = "!@#$%^&*";
-
-        while (true) {
-            int numeroRandom = random.nextInt(1000) + 1;
-            char caracterEspecial = caracteresEspeciales.charAt(random.nextInt(caracteresEspeciales.length()));
-
-            String usuarioGenerado = usuarioBase + numeroRandom + caracterEspecial;
-
-            boolean existe = usuariosExistentes.stream()
-                    .anyMatch(u -> u.getUsuario().equalsIgnoreCase(usuarioGenerado));
-
-            if (!existe) {
-                return usuarioGenerado;
-            }
-        }
-    }
+    
 
     private void guardarUsuario(Usuario usuario) throws IOException {
         List<Usuario> usuarios = obtenerTodosUsuarios();
@@ -147,28 +129,6 @@ public class PersonalControlDAO {
             jsonObject.add("usuarios", usuariosArray);
             gson.toJson(jsonObject, writer);
         }
-    }
-
-    private String generarContrasena() {
-        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder(8);
-
-        for (int i = 0; i < 8; i++) {
-            sb.append(caracteres.charAt(random.nextInt(caracteres.length())));
-        }
-
-        return sb.toString();
-    }
-
-    private String guardarImagenDesdeCamara(BufferedImage imagen, String identificacion) throws IOException {
-        String nombreImagen = identificacion + "_foto.jpg";
-        String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-
-        File outputFile = new File(rutaImagenFinal);
-        ImageIO.write(imagen, "jpg", outputFile);
-
-        return rutaImagenFinal;
     }
 
     public boolean guardarPersonalControl(PersonalControl personalControl, File imagen) throws IOException {
@@ -298,22 +258,6 @@ public class PersonalControlDAO {
         }
     }
 
-    public boolean puedeAgregarPersonalControl(String turno) {
-        List<PersonalControl> personalControlList = obtenerPersonalControl();
-
-        // Límite total de 4 personal de control
-        if (personalControlList.size() >= 4) {
-            return false;
-        }
-
-        // Límite de 2 por turno
-        long countPorTurno = personalControlList.stream()
-                .filter(p -> p.getTurno().equalsIgnoreCase(turno))
-                .count();
-
-        return countPorTurno < 2;
-    }
-
     public boolean existePersonalControlConCedula(String cedula) {
         if (cedula == null || cedula.trim().isEmpty()) {
             return false;
@@ -353,9 +297,24 @@ public class PersonalControlDAO {
                     String rutaImagenFinal = p.getRutaImagen();
 
                     if (nuevaImagen != null && nuevaImagen.exists()) {
-                        String nombreImagen = personalControlModificado.getIdentificacion() + "_" + System.currentTimeMillis()
-                                + nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
+                        // Eliminar la imagen anterior si existe
+                        if (rutaImagenFinal != null && !rutaImagenFinal.isEmpty()) {
+                            try {
+                                Files.deleteIfExists(Paths.get(rutaImagenFinal));
+                            } catch (IOException e) {
+                                System.err.println("No se pudo eliminar la imagen anterior: " + e.getMessage());
+                            }
+                        }
+
+                        // Crear nueva imagen
+                        String extension = nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
+                        String nombreImagen = personalControlModificado.getIdentificacion() + extension;
                         rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+
+                        // Asegurar que el directorio existe
+                        Files.createDirectories(Paths.get(RUTA_IMAGENES));
+
+                        // Copiar la nueva imagen
                         Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
                     }
 

@@ -60,166 +60,159 @@ public class GuardiaController {
     }
 
     public Guardia registrarGuardia(
-    String primerNombre, String segundoNombre,
-    String primerApellido, String segundoApellido,
-    int edad, String cedula, String nacionalidad,
-    String correo, String turno,
-    LocalDate fechaFinContrato,
-    String cargo,
-    File imagen) throws IOException {
+        String primerNombre, String segundoNombre,
+        String primerApellido, String segundoApellido,
+        int edad, String cedula, String nacionalidad,
+        String correo, String turno,
+        LocalDate fechaFinContrato,
+        String cargo,
+        File imagen) throws IOException, IllegalArgumentException {
 
-    try {
-        
-        
-    // Validación de cédula única (agregar al inicio)
+    // Validación de cédula única
     if (guardiaDAO.existeGuardia(cedula)) {
         throw new IllegalArgumentException("Ya existe una guardia con la cédula " + cedula);
     }
-        // Validaciones básicas
-        validarCamposObligatorios(primerNombre, primerApellido, segundoApellido,
-                edad, cedula, nacionalidad, correo, turno, cargo);
-        validarEdad(edad);
-        validarImagen(imagen); // Validación obligatoria de imagen
 
-        // Fecha de inicio siempre es hoy
-        LocalDate fechaInicio = LocalDate.now();
-        
-        // Si fechaFinContrato es null, establecerla como hoy + 1 día (mínimo)
-        if (fechaFinContrato == null) {
-            fechaFinContrato = fechaInicio.plusDays(1);
-        }
-        
-        // Validación robusta de fechas
-        validarFechasContrato(fechaInicio, fechaFinContrato);
+    // Validaciones básicas
+    validarCamposObligatorios(primerNombre, primerApellido, segundoApellido,
+            edad, cedula, nacionalidad, correo, turno, cargo);
+    validarEdad(edad);
+    validarCedula(cedula);
+    validarImagen(imagen);
 
-        // Crear y guardar el guardia
-        Guardia nuevoGuardia = new Guardia(
-                primerNombre, segundoNombre, primerApellido, segundoApellido,
-                edad, cedula, nacionalidad, correo, turno, fechaFinContrato, cargo);
+    // Fecha de inicio siempre es hoy
+    LocalDate fechaInicio = LocalDate.now();
 
-        boolean guardado = guardiaDAO.guardarGuardia(nuevoGuardia, imagen);
-
-        if (guardado) {
-            return guardiaDAO.obtenerGuardiaPorCedula(cedula);
-        }
-        throw new RuntimeException("No se pudo guardar la guardia en la base de datos");
-        
-    } catch (IllegalArgumentException e) {
-        JOptionPane.showMessageDialog(null, e.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
-        throw e;
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error inesperado al registrar la guardia: " + e.getMessage(), 
-            "Error", JOptionPane.ERROR_MESSAGE);
-        throw e;
+    // Si fechaFinContrato es null, establecerla como hoy + 1 día (mínimo)
+    if (fechaFinContrato == null) {
+        fechaFinContrato = fechaInicio.plusDays(1);
     }
+
+    // Validación robusta de fechas
+    validarFechasContrato(fechaInicio, fechaFinContrato);
+
+    // Crear y guardar el guardia
+    Guardia nuevoGuardia = new Guardia(
+            primerNombre, segundoNombre, primerApellido, segundoApellido,
+            edad, cedula, nacionalidad, correo, turno, fechaFinContrato, cargo);
+
+    boolean guardado = guardiaDAO.guardarGuardia(nuevoGuardia, imagen);
+
+    if (guardado) {
+        return guardiaDAO.obtenerGuardiaPorCedula(cedula);
+    }
+    throw new RuntimeException("No se pudo guardar la guardia en la base de datos");
 }
 
     public boolean modificarGuardia(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
-    try {
-        // Validar parámetros básicos
-        if (cedulaOriginal == null || cedulaOriginal.trim().isEmpty()) {
-            throw new IllegalArgumentException("La cédula original no puede estar vacía");
-        }
+        try {
+            // Validar parámetros básicos
+            if (cedulaOriginal == null || cedulaOriginal.trim().isEmpty()) {
+                throw new IllegalArgumentException("La cédula original no puede estar vacía");
+            }
 
-        // Obtener guardia original
-        Guardia original = guardiaDAO.obtenerGuardiaPorCedula(cedulaOriginal);
-        if (original == null) {
-            throw new IllegalArgumentException("No se encontró una guardia con la cédula: " + cedulaOriginal);
-        }
+            // Obtener guardia original
+            Guardia original = guardiaDAO.obtenerGuardiaPorCedula(cedulaOriginal);
+            if (original == null) {
+                throw new IllegalArgumentException("No se encontró una guardia con la cédula: " + cedulaOriginal);
+            }
 
-        // Validar que se proporcione una imagen (nueva o mantener la existente)
-        if (nuevaImagen == null && original.getRutaImagen() == null) {
+            // Validar que se mantenga la imagen existente o se proporcione una nueva
+            if (nuevaImagen == null && original.getRutaImagen() == null) {
+                throw new IllegalArgumentException("Debe seleccionar una imagen de la guardia");
+            }
+
+            // Validar campos modificados
+            validarCamposModificacion(cambios);
+
+            // Validar edad si fue modificada
+            if (cambios.containsKey("edad")) {
+                validarEdad((int) cambios.get("edad"));
+            }
+
+            // Obtener fecha fin (modificada o original)
+            LocalDate fechaFin = cambios.containsKey("fechaFin")
+                    ? (LocalDate) cambios.get("fechaFin") : original.getFechaFinContrato();
+
+            // Validación robusta de fechas
+            if (fechaFin == null) {
+                throw new IllegalArgumentException("La fecha de fin de contrato no puede estar vacía");
+            }
+            validarFechasContrato(original.getFechaInicioContrato(), fechaFin);
+
+            // Validar imagen si fue modificada
+            if (nuevaImagen != null) {
+                validarImagen(nuevaImagen);
+            }
+
+            // Crear guardia modificado
+            Guardia guardiaModificado = new Guardia(
+                    (String) cambios.getOrDefault("primerNombre", original.getPrimerNombre()),
+                    (String) cambios.getOrDefault("segundoNombre", original.getSegundoNombre()),
+                    (String) cambios.getOrDefault("primerApellido", original.getPrimerApellido()),
+                    (String) cambios.getOrDefault("segundoApellido", original.getSegundoApellido()),
+                    (int) cambios.getOrDefault("edad", original.getEdad()),
+                    cedulaOriginal, // Mantener la cédula original
+                    (String) cambios.getOrDefault("nacionalidad", original.getNacionalidad()),
+                    (String) cambios.getOrDefault("correo", original.getCorreo()),
+                    (String) cambios.getOrDefault("turno", original.getTurno()),
+                    fechaFin,
+                    (String) cambios.getOrDefault("cargo", original.getCargo())
+            );
+
+            // Llamar al DAO para modificar
+            return guardiaDAO.modificarGuardia(cedulaOriginal, guardiaModificado, nuevaImagen);
+
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado al modificar guardia: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    private void validarImagen(File imagen) {
+        if (imagen == null) {
             throw new IllegalArgumentException("Debe seleccionar una imagen de la guardia");
         }
 
-        // Validar campos modificados
-        validarCamposModificacion(cambios);
-        
-        // Validar edad si fue modificada
-        if (cambios.containsKey("edad")) {
-            validarEdad((int) cambios.get("edad"));
+        if (!imagen.exists()) {
+            throw new IllegalArgumentException("La imagen seleccionada no existe en la ruta especificada");
         }
 
-        // Obtener fecha fin (modificada o original)
-        LocalDate fechaFin = cambios.containsKey("fechaFin") ? 
-            (LocalDate) cambios.get("fechaFin") : original.getFechaFinContrato();
-        
-        // Validar fechas (manteniendo la fecha inicio ORIGINAL que no se puede modificar)
-        validarFechasContrato(original.getFechaInicioContrato(), fechaFin);
-
-        // Validar imagen si fue modificada
-        if (nuevaImagen != null) {
-            validarImagen(nuevaImagen);
+        // Validar extensión del archivo
+        String nombre = imagen.getName().toLowerCase();
+        if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg") && !nombre.endsWith(".png")) {
+            throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG");
         }
 
-        // Crear guardia modificado
-        Guardia guardiaModificado = new Guardia(
-                (String) cambios.getOrDefault("primerNombre", original.getPrimerNombre()),
-                (String) cambios.getOrDefault("segundoNombre", original.getSegundoNombre()),
-                (String) cambios.getOrDefault("primerApellido", original.getPrimerApellido()),
-                (String) cambios.getOrDefault("segundoApellido", original.getSegundoApellido()),
-                (int) cambios.getOrDefault("edad", original.getEdad()),
-                cedulaOriginal, // Mantener la cédula original
-                (String) cambios.getOrDefault("nacionalidad", original.getNacionalidad()),
-                (String) cambios.getOrDefault("correo", original.getCorreo()),
-                (String) cambios.getOrDefault("turno", original.getTurno()),
-                fechaFin,
-                (String) cambios.getOrDefault("cargo", original.getCargo())
-        );
-
-        // Llamar al DAO para modificar
-        return guardiaDAO.modificarGuardia(cedulaOriginal, guardiaModificado, nuevaImagen);
-
-    } catch (IllegalArgumentException e) {
-        JOptionPane.showMessageDialog(null, e.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
-        return false;
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error inesperado al modificar guardia: " + e.getMessage(), 
-            "Error", JOptionPane.ERROR_MESSAGE);
-        return false;
-    }
-}
-
-private void validarImagen(File imagen) {
-    if (imagen == null) {
-        throw new IllegalArgumentException("Debe seleccionar una imagen de la guardia");
-    }
-    
-    if (!imagen.exists()) {
-        throw new IllegalArgumentException("La imagen seleccionada no existe en la ruta especificada");
+        // Validar tamaño mínimo (opcional)
+        long sizeInBytes = imagen.length();
+        long sizeInKB = sizeInBytes / 1024;
+        if (sizeInKB < 10) { // 10KB como mínimo
+            throw new IllegalArgumentException("La imagen es demasiado pequeña (mínimo 10KB)");
+        }
     }
 
-    // Validar extensión del archivo
-    String nombre = imagen.getName().toLowerCase();
-    if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg") && !nombre.endsWith(".png")) {
-        throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG");
-    }
+    private void validarFechasContrato(LocalDate inicio, LocalDate fin) {
+        if (inicio == null) {
+            throw new IllegalArgumentException("La fecha de inicio no puede ser nula");
+        }
+        if (fin == null) {
+            throw new IllegalArgumentException("La fecha de fin no puede ser nula");
+        }
 
-    // Validar tamaño mínimo (opcional)
-    long sizeInBytes = imagen.length();
-    long sizeInKB = sizeInBytes / 1024;
-    if (sizeInKB < 10) { // 10KB como mínimo
-        throw new IllegalArgumentException("La imagen es demasiado pequeña (mínimo 10KB)");
+        // Validar que fin sea estrictamente posterior a inicio
+        if (fin.isBefore(inicio) || fin.isEqual(inicio)) {
+            String mensaje = String.format(
+                    "Fecha inválida:\nFin: %s\nInicio: %s\nLa fecha de fin debe ser posterior a la de inicio",
+                    fin.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                    inicio.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            throw new IllegalArgumentException(mensaje);
+        }
     }
-}
-
-private void validarFechasContrato(LocalDate inicio, LocalDate fin) {
-    if (inicio == null) {
-        throw new IllegalArgumentException("La fecha de inicio no puede ser nula");
-    }
-    if (fin == null) {
-        throw new IllegalArgumentException("La fecha de fin no puede ser nula");
-    }
-
-    // Validar que fin sea estrictamente posterior a inicio
-    if (fin.isBefore(inicio) || fin.isEqual(inicio)) {
-        String mensaje = String.format(
-            "Fecha inválida:\nFin: %s\nInicio: %s\nLa fecha de fin debe ser posterior a la de inicio",
-            fin.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-            inicio.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        throw new IllegalArgumentException(mensaje);
-    }
-}
 
     // Métodos de consulta
     public List<Guardia> obtenerTodosGuardias() {
@@ -306,13 +299,17 @@ private void validarFechasContrato(LocalDate inicio, LocalDate fin) {
         }
     }
 
-  
-
     private void validarEdad(int edad) {
         if (edad < 18 || edad > 70) {
             throw new IllegalArgumentException("La edad debe estar entre 18 y 70 años");
         }
     }
+    
+    private void validarCedula(String cedula) {
+    if (cedula.length() < 8 || cedula.length() > 10) {
+        throw new IllegalArgumentException("La cédula debe tener entre 8 y 10 dígitos");
+    }
+}
 
     public DefaultTableModel obtenerModeloTabla() {
         String[] columnas = {
@@ -353,9 +350,9 @@ private void validarFechasContrato(LocalDate inicio, LocalDate fin) {
     }
 
     private String formatFecha(LocalDate fecha) {
-    return fecha.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-}
-    
+        return fecha.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
     private ImageIcon obtenerImagenGuardia(Guardia guardia) {
         if (guardia.getRutaImagen() != null && !guardia.getRutaImagen().isEmpty()) {
             try {

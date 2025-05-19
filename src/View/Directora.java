@@ -90,7 +90,7 @@ import View.PerfilUsuario;
  *
  * @author Sharlok
  */
-public class Director extends javax.swing.JFrame implements PerfilUsuario {
+public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
     EnfermeraDAO enfermeraDAO = new EnfermeraDAO();
     private Usuario usuario;
@@ -123,10 +123,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
     private String cedulaActualModificacion;
     private ModernTopMenu menuSuperior; // Declaración
 
-    public Director() {
+    public Directora() {
         initComponents();
         setLocationRelativeTo(null);
-
 
         txtFechaContratacion.setEditable(false);
         txtFechaContratacion.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
@@ -148,6 +147,14 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSexo2.setText("Femenino");
         txtSexoMod2.setEditable(false);
         txtSexoMod2.setText("Femenino");
+        txtSexoMod3.setEditable(false);
+        txtSexoMod3.setText("Femenino");
+        txtSexo3.setEditable(false);
+        txtSexo3.setText("Femenino");
+        txtSexo4.setEditable(false);
+        txtSexo4.setText("Femenino");
+        txtSexoMod4.setEditable(false);
+        txtSexoMod4.setText("Femenino");
         txtFechaContratacion1.setText(LocalDate.now().toString());
         ToolTipManager.sharedInstance().setInitialDelay(10);
         txtFechaContratacionMod2.setText(LocalDate.now().toString());
@@ -178,51 +185,43 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         actualizarTablaODR();
         actualizarTablaPDC();
 
-        
-        tabPrincipal.setUI(null);  
+        tabPrincipal.setUI(null);
 
-        
         menuSuperior = new ModernTopMenu(tabPrincipal);
 
-        
         menuSuperior.setColors(
-                new Color(29, 35, 51), // Azul principal (más claro)
-                new Color(41, 50, 65), // Azul hover (ligeramente más claro que el principal)
-                Color.WHITE, // Texto blanco
-                new Color(20, 25, 40), // Fondo oscuro (más oscuro de los dos)
-                new Color(24, 30, 45) // Fondo desplegable (intermedio)
+                new Color(29, 35, 51),
+                new Color(41, 50, 65),
+                Color.WHITE,
+                new Color(20, 25, 40),
+                new Color(24, 30, 45)
         );
 
         getContentPane().setLayout(new BorderLayout());
 
-        
         Component[] components = getContentPane().getComponents();
         JPanel mainPanel = null;
 
         for (Component comp : components) {
             if (comp instanceof JPanel && ((JPanel) comp).getComponentCount() > 0) {
-              
+
                 mainPanel = (JPanel) comp;
                 break;
             }
         }
 
-        
         if (mainPanel != null) {
-            
+
             getContentPane().remove(mainPanel);
 
-            
             getContentPane().add(menuSuperior, BorderLayout.NORTH);
 
-           
             getContentPane().add(mainPanel, BorderLayout.CENTER);
         } else {
-           
+
             getContentPane().add(menuSuperior, BorderLayout.NORTH);
         }
 
-       
         pack();
     }
 
@@ -233,11 +232,10 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
 
     private void mostrarDatosUsuario() {
         if (usuario != null) {
-            
+
             lblNombre.setText(usuario.getPrimerNombre() + " " + usuario.getPrimerApellido());
             lblRol.setText(usuario.getRol().toString());
 
-            
             cargarImagenUsuario();
         }
     }
@@ -317,7 +315,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jSeparator33 = new javax.swing.JSeparator();
         jButton6 = new javax.swing.JButton();
         jLabel38 = new javax.swing.JLabel();
-        txtNacionalidad1 = new javax.swing.JTextField();
         txtSexo1 = new javax.swing.JTextField();
         jLabel39 = new javax.swing.JLabel();
         jLabel40 = new javax.swing.JLabel();
@@ -332,6 +329,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoNombre1 = new javax.swing.JTextField();
         txtPrimerNombre1 = new javax.swing.JTextField();
         jLabel45 = new javax.swing.JLabel();
+        cmbNacionalidad1 = new javax.swing.JComboBox<>();
         jLabel34 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
         ModificarNurse = new javax.swing.JPanel();
@@ -360,7 +358,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jSeparator44 = new javax.swing.JSeparator();
         jButton8 = new javax.swing.JButton();
         jLabel53 = new javax.swing.JLabel();
-        txtNacionalidadMod1 = new javax.swing.JTextField();
         txtSexoMod1 = new javax.swing.JTextField();
         jLabel54 = new javax.swing.JLabel();
         jLabel55 = new javax.swing.JLabel();
@@ -375,6 +372,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoNombreMod1 = new javax.swing.JTextField();
         txtPrimerNombreMod1 = new javax.swing.JTextField();
         jLabel60 = new javax.swing.JLabel();
+        cmbNacionalidadMod1 = new javax.swing.JComboBox<>();
         jLabel95 = new javax.swing.JLabel();
         MostrarEnfermeras = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -410,7 +408,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         txtSexo = new javax.swing.JTextField();
-        txtNacionalidad = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -423,6 +420,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtPrimerApellido = new javax.swing.JTextField();
         txtPrimerNombre = new javax.swing.JTextField();
         txtSegundoNombre = new javax.swing.JTextField();
+        cmbNacionalidad = new javax.swing.JComboBox<>();
         jLabel90 = new javax.swing.JLabel();
         jLabel91 = new javax.swing.JLabel();
         ModificarGuardia = new javax.swing.JPanel();
@@ -454,7 +452,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jButton4 = new javax.swing.JButton();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
-        txtNacionalidadMod = new javax.swing.JTextField();
         txtSexoMod = new javax.swing.JTextField();
         jLabel23 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
@@ -469,6 +466,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoNombreMod = new javax.swing.JTextField();
         txtPrimerNombreMod = new javax.swing.JTextField();
         jLabel29 = new javax.swing.JLabel();
+        cmbNacionalidadMod = new javax.swing.JComboBox<>();
         jLabel94 = new javax.swing.JLabel();
         ListaDeGuardias = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -502,7 +500,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jSeparator54 = new javax.swing.JSeparator();
         jButton10 = new javax.swing.JButton();
         jLabel67 = new javax.swing.JLabel();
-        txtNacionalidad2 = new javax.swing.JTextField();
         txtSexo2 = new javax.swing.JTextField();
         jLabel68 = new javax.swing.JLabel();
         jLabel69 = new javax.swing.JLabel();
@@ -517,6 +514,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoNombre2 = new javax.swing.JTextField();
         txtPrimerNombre2 = new javax.swing.JTextField();
         jLabel74 = new javax.swing.JLabel();
+        cmbNacionalidad2 = new javax.swing.JComboBox<>();
         jLabel52 = new javax.swing.JLabel();
         jLabel66 = new javax.swing.JLabel();
         ModificarCoordinador = new javax.swing.JPanel();
@@ -549,7 +547,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jButton12 = new javax.swing.JButton();
         jLabel81 = new javax.swing.JLabel();
         jLabel82 = new javax.swing.JLabel();
-        txtNacionalidadMod2 = new javax.swing.JTextField();
         txtSexoMod2 = new javax.swing.JTextField();
         jLabel83 = new javax.swing.JLabel();
         jLabel84 = new javax.swing.JLabel();
@@ -564,6 +561,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoNombreMod2 = new javax.swing.JTextField();
         txtPrimerNombreMod2 = new javax.swing.JTextField();
         jLabel89 = new javax.swing.JLabel();
+        cmbNacionalidadMod2 = new javax.swing.JComboBox<>();
         jLabel96 = new javax.swing.JLabel();
         mostrarCoordinadora = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -595,7 +593,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jSeparator94 = new javax.swing.JSeparator();
         jButton19 = new javax.swing.JButton();
         jLabel131 = new javax.swing.JLabel();
-        txtNacionalidad4 = new javax.swing.JTextField();
         txtSexo4 = new javax.swing.JTextField();
         jLabel132 = new javax.swing.JLabel();
         jLabel133 = new javax.swing.JLabel();
@@ -610,12 +607,12 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoNombre4 = new javax.swing.JTextField();
         txtPrimerNombre4 = new javax.swing.JTextField();
         jLabel138 = new javax.swing.JLabel();
+        cmbNacionalidad4 = new javax.swing.JComboBox<>();
         jLabel139 = new javax.swing.JLabel();
         jLabel140 = new javax.swing.JLabel();
         mostrarODR = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tablaRegistradoras = new javax.swing.JTable();
-        jButton13 = new javax.swing.JButton();
         AñadirOficial = new javax.swing.JPanel();
         jPanel9 = new RoundedPanel(30);
         jSeparator31 = new javax.swing.JSeparator();
@@ -642,7 +639,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jSeparator74 = new javax.swing.JSeparator();
         jButton15 = new javax.swing.JButton();
         jLabel104 = new javax.swing.JLabel();
-        txtNacionalidad3 = new javax.swing.JTextField();
         txtSexo3 = new javax.swing.JTextField();
         jLabel105 = new javax.swing.JLabel();
         jLabel106 = new javax.swing.JLabel();
@@ -657,6 +653,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoNombre3 = new javax.swing.JTextField();
         txtPrimerNombre3 = new javax.swing.JTextField();
         jLabel111 = new javax.swing.JLabel();
+        cmbNacionalidad3 = new javax.swing.JComboBox<>();
         jLabel112 = new javax.swing.JLabel();
         jLabel113 = new javax.swing.JLabel();
         ModificarOficial = new javax.swing.JPanel();
@@ -686,7 +683,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jSeparator84 = new javax.swing.JSeparator();
         jButton17 = new javax.swing.JButton();
         jLabel119 = new javax.swing.JLabel();
-        txtNacionalidadMod3 = new javax.swing.JTextField();
         txtSexoMod3 = new javax.swing.JTextField();
         jLabel120 = new javax.swing.JLabel();
         jLabel121 = new javax.swing.JLabel();
@@ -701,6 +697,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoNombreMod3 = new javax.swing.JTextField();
         txtPrimerNombreMod3 = new javax.swing.JTextField();
         jLabel126 = new javax.swing.JLabel();
+        cmbNacionalidadMod3 = new javax.swing.JComboBox<>();
         jLabel127 = new javax.swing.JLabel();
         mostrarOficial = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -733,7 +730,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jSeparator104 = new javax.swing.JSeparator();
         jButton21 = new javax.swing.JButton();
         jLabel146 = new javax.swing.JLabel();
-        txtNacionalidadMod4 = new javax.swing.JTextField();
         txtSexoMod4 = new javax.swing.JTextField();
         jLabel147 = new javax.swing.JLabel();
         jLabel148 = new javax.swing.JLabel();
@@ -748,6 +744,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoNombreMod4 = new javax.swing.JTextField();
         txtPrimerNombreMod4 = new javax.swing.JTextField();
         jLabel153 = new javax.swing.JLabel();
+        cmbNacionalidadMod4 = new javax.swing.JComboBox<>();
         jLabel154 = new javax.swing.JLabel();
         aggPDC = new javax.swing.JPanel();
         AñadirEnfermera2 = new javax.swing.JPanel();
@@ -776,7 +773,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jSeparator114 = new javax.swing.JSeparator();
         jButton23 = new javax.swing.JButton();
         jLabel158 = new javax.swing.JLabel();
-        txtNacionalidad5 = new javax.swing.JTextField();
         txtSexo5 = new javax.swing.JTextField();
         jLabel159 = new javax.swing.JLabel();
         jLabel160 = new javax.swing.JLabel();
@@ -791,6 +787,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoNombre5 = new javax.swing.JTextField();
         txtPrimerNombre5 = new javax.swing.JTextField();
         jLabel165 = new javax.swing.JLabel();
+        cmbNacionalidad5 = new javax.swing.JComboBox<>();
         jLabel166 = new javax.swing.JLabel();
         jLabel167 = new javax.swing.JLabel();
         modPDC = new javax.swing.JPanel();
@@ -820,7 +817,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jSeparator124 = new javax.swing.JSeparator();
         jButton25 = new javax.swing.JButton();
         jLabel173 = new javax.swing.JLabel();
-        txtNacionalidadMod5 = new javax.swing.JTextField();
         txtSexoMod5 = new javax.swing.JTextField();
         jLabel174 = new javax.swing.JLabel();
         jLabel175 = new javax.swing.JLabel();
@@ -835,6 +831,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoNombreMod5 = new javax.swing.JTextField();
         txtPrimerNombreMod5 = new javax.swing.JTextField();
         jLabel180 = new javax.swing.JLabel();
+        cmbNacionalidadMod5 = new javax.swing.JComboBox<>();
         jLabel181 = new javax.swing.JLabel();
         mostrarPDC = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -904,7 +901,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         });
         jPopupMenu3.add(BorrarOf);
 
-        modificarODR.setText("jMenuItem1");
+        modificarODR.setText("Modificar");
         modificarODR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 modificarODRActionPerformed(evt);
@@ -912,7 +909,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         });
         jPopupMenu5.add(modificarODR);
 
-        EliminarODR.setText("jMenuItem1");
+        EliminarODR.setText("Eliminar");
         EliminarODR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 EliminarODRActionPerformed(evt);
@@ -920,7 +917,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         });
         jPopupMenu5.add(EliminarODR);
 
-        modificarOPC.setText("jMenuItem1");
+        modificarOPC.setText("Modificar");
         modificarOPC.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 modificarOPCActionPerformed(evt);
@@ -928,7 +925,8 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         });
         jPopupMenu6.add(modificarOPC);
 
-        eliminarPDC.setText("jMenuItem2");
+        eliminarPDC.setText("Eliminar");
+        eliminarPDC.setToolTipText("");
         eliminarPDC.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 eliminarPDCActionPerformed(evt);
@@ -939,7 +937,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(20, 25, 40));
+        jPanel1.setBackground(new java.awt.Color(29, 35, 51));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Director.setBackground(new java.awt.Color(255, 255, 255));
@@ -1079,16 +1077,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel38.setText("Nacionalidad:");
         jPanel7.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, 90, -1));
 
-        txtNacionalidad1.setBackground(new java.awt.Color(29, 35, 51));
-        txtNacionalidad1.setForeground(new java.awt.Color(255, 255, 255));
-        txtNacionalidad1.setBorder(null);
-        txtNacionalidad1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNacionalidad1KeyTyped(evt);
-            }
-        });
-        jPanel7.add(txtNacionalidad1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 210, 30));
-
         txtSexo1.setEditable(false);
         txtSexo1.setBackground(new java.awt.Color(29, 35, 51));
         txtSexo1.setForeground(new java.awt.Color(255, 255, 255));
@@ -1199,6 +1187,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel45.setText("Primer nombre:");
         jPanel7.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, -1, 20));
 
+        cmbNacionalidad1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Afgana", "Alemana", "Andorrana", "Angoleña", "Antiguana", "Argentina", "Armenia", "Arubeña", "Australiana", "Austriaca", "Azerbaiyana", "Bahameña", "Bahreiní", "Bangladesí", "Barbadense", "Belga", "Beliceña", "Bermudeña", "Bielorrusa", "Birmana", "Boliviana", "Bosnia", "Botsuana", "Brasileña", "Británica", "Bruneana", "Búlgara", "Burundesa", "Butanesa", "Caboverdiana", "Camboyana", "Camerunesa", "Canadiense", "Catarí", "Centroafricana", "Chadiana", "Checa", "Chilena", "China", "Chipriota", "Colombiana", "Comorense", "Congoleña", "Costarricense", "Croata", "Cubana", "Danesa", "Dominiquesa", "Ecuatoguineana", "Ecuatoriana", "Egipcia", "Emiratí", "Eritrea", "Eslovaca", "Eslovena", "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa", "Fiyiana", "Francesa", "Gabonesa", "Galesa", "Gambiana", "Georgiana", "Ghanesa", "Granadina", "Griega", "Groenlandesa", "Guatemalteca", "Guineana", "Guineana Ecuatorial", "Guyanesa", "Haitiana", "Hondureña", "Hongkonesa", "Húngara", "India", "Indonésa", "Iraní", "Iraquí", "Irlandesa", "Islandesa", "Israelí", "Italiana", "Jamaicana", "Japonesa", "Jordana", "Kazaja", "Keniana", "Kirguisa", "Kiribatiana", "Kosovar", "Kuwaití", "Laosiana", "Lesotense", "Letona", "Libanesa", "Liberiana", "Libia", "Liechtensteiniana", "Lituana", "Luxemburguesa", "Macedonia", "Madagascariense", "Malasia", "Malauí", "Maldiva", "Malgache", "Maltesa", "Marfileña", "Marroquí", "Mauriciana", "Mauritana", "Mexicana", "Micronesia", "Moldava", "Monegasca", "Mongola", "Montenegrina", "Mozambiqueña", "Namibia", "Nauruana", "Nepalí", "Neozelandesa", "Nicaragüense", "Nigeriana", "Norteamericana", "Norcoreana", "Norirlandesa", "Noruega", "Omana", "Neerlandesa", "Pakistaní", "Palauana", "Palestina", "Panameña", "Papú", "Paraguaya", "Peruana", "Polaca", "Portuguesa", "Puertorriqueña", "Ruandesa", "Rumana", "Rusa", "Salomonense", "Salvadoreña", "Samoana", "Sanmarinense", "Santaluciana", "Santomense", "Saudí", "Escocesa", "Senegalesa", "Serbia", "Seychellense", "Sierraleonesa", "Singapurense", "Siria", "Somalí", "Sudafricana", "Sudanesa", "Sueca", "Suiza", "Surcoreana", "Surinamesa", "Suazi", "Tailandesa", "Taiwanesa", "Tanzana", "Tayika", "Timorense", "Togolesa", "Tongana", "Trinitense", "Tunecina", "Turca", "Turcomana", "Tuvaluana", "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeka", "Vanuatuense", "Vaticana", "Venezolana", "Vietnamita", "Yemení", "Yugoslava", "Zambiana", "Zimbabuense" }));
+        jPanel7.add(cmbNacionalidad1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 210, -1));
+
         AñadirEnfermera.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
 
         jLabel34.setFont(new java.awt.Font("Arial", 2, 13)); // NOI18N
@@ -1274,7 +1265,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel51.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel51.setForeground(new java.awt.Color(255, 255, 255));
         jLabel51.setText("Correo:");
-        jPanel10.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 340, -1, -1));
+        jPanel10.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 340, -1, -1));
 
         txtCorreoMod1.setBackground(new java.awt.Color(29, 35, 51));
         txtCorreoMod1.setForeground(new java.awt.Color(255, 255, 255));
@@ -1298,22 +1289,12 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                 jButton8ActionPerformed(evt);
             }
         });
-        jPanel10.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 280, -1, -1));
+        jPanel10.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 280, -1, -1));
 
         jLabel53.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel53.setForeground(new java.awt.Color(255, 255, 255));
         jLabel53.setText("Nacionalidad:");
         jPanel10.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 300, 90, -1));
-
-        txtNacionalidadMod1.setBackground(new java.awt.Color(29, 35, 51));
-        txtNacionalidadMod1.setForeground(new java.awt.Color(255, 255, 255));
-        txtNacionalidadMod1.setBorder(null);
-        txtNacionalidadMod1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNacionalidadMod1KeyTyped(evt);
-            }
-        });
-        jPanel10.add(txtNacionalidadMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 210, 30));
 
         txtSexoMod1.setEditable(false);
         txtSexoMod1.setBackground(new java.awt.Color(29, 35, 51));
@@ -1423,6 +1404,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel60.setForeground(new java.awt.Color(255, 255, 255));
         jLabel60.setText("Primer nombre:");
         jPanel10.add(jLabel60, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, 20));
+
+        cmbNacionalidadMod1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Afgana", "Alemana", "Andorrana", "Angoleña", "Antiguana", "Argentina", "Armenia", "Arubeña", "Australiana", "Austriaca", "Azerbaiyana", "Bahameña", "Bahreiní", "Bangladesí", "Barbadense", "Belga", "Beliceña", "Bermudeña", "Bielorrusa", "Birmana", "Boliviana", "Bosnia", "Botsuana", "Brasileña", "Británica", "Bruneana", "Búlgara", "Burundesa", "Butanesa", "Caboverdiana", "Camboyana", "Camerunesa", "Canadiense", "Catarí", "Centroafricana", "Chadiana", "Checa", "Chilena", "China", "Chipriota", "Colombiana", "Comorense", "Congoleña", "Costarricense", "Croata", "Cubana", "Danesa", "Dominiquesa", "Ecuatoguineana", "Ecuatoriana", "Egipcia", "Emiratí", "Eritrea", "Eslovaca", "Eslovena", "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa", "Fiyiana", "Francesa", "Gabonesa", "Galesa", "Gambiana", "Georgiana", "Ghanesa", "Granadina", "Griega", "Groenlandesa", "Guatemalteca", "Guineana", "Guineana Ecuatorial", "Guyanesa", "Haitiana", "Hondureña", "Hongkonesa", "Húngara", "India", "Indonésa", "Iraní", "Iraquí", "Irlandesa", "Islandesa", "Israelí", "Italiana", "Jamaicana", "Japonesa", "Jordana", "Kazaja", "Keniana", "Kirguisa", "Kiribatiana", "Kosovar", "Kuwaití", "Laosiana", "Lesotense", "Letona", "Libanesa", "Liberiana", "Libia", "Liechtensteiniana", "Lituana", "Luxemburguesa", "Macedonia", "Madagascariense", "Malasia", "Malauí", "Maldiva", "Malgache", "Maltesa", "Marfileña", "Marroquí", "Mauriciana", "Mauritana", "Mexicana", "Micronesia", "Moldava", "Monegasca", "Mongola", "Montenegrina", "Mozambiqueña", "Namibia", "Nauruana", "Nepalí", "Neozelandesa", "Nicaragüense", "Nigeriana", "Norteamericana", "Norcoreana", "Norirlandesa", "Noruega", "Omana", "Neerlandesa", "Pakistaní", "Palauana", "Palestina", "Panameña", "Papú", "Paraguaya", "Peruana", "Polaca", "Portuguesa", "Puertorriqueña", "Ruandesa", "Rumana", "Rusa", "Salomonense", "Salvadoreña", "Samoana", "Sanmarinense", "Santaluciana", "Santomense", "Saudí", "Escocesa", "Senegalesa", "Serbia", "Seychellense", "Sierraleonesa", "Singapurense", "Siria", "Somalí", "Sudafricana", "Sudanesa", "Sueca", "Suiza", "Surcoreana", "Surinamesa", "Suazi", "Tailandesa", "Taiwanesa", "Tanzana", "Tayika", "Timorense", "Togolesa", "Tongana", "Trinitense", "Tunecina", "Turca", "Turcomana", "Tuvaluana", "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeka", "Vanuatuense", "Vaticana", "Venezolana", "Vietnamita", "Yemení", "Yugoslava", "Zambiana", "Zimbabuense" }));
+        jPanel10.add(cmbNacionalidadMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 210, -1));
 
         ModificarNurse.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
 
@@ -1594,16 +1578,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSexo.setBorder(null);
         jPanel3.add(txtSexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 250, 260, 30));
 
-        txtNacionalidad.setBackground(new java.awt.Color(29, 35, 51));
-        txtNacionalidad.setForeground(new java.awt.Color(255, 255, 255));
-        txtNacionalidad.setBorder(null);
-        txtNacionalidad.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNacionalidadKeyTyped(evt);
-            }
-        });
-        jPanel3.add(txtNacionalidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 290, 220, 30));
-
         jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Segundo Apellido:");
@@ -1701,6 +1675,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
             }
         });
         jPanel3.add(txtSegundoNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 50, 190, 30));
+
+        cmbNacionalidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Afgana", "Alemana", "Andorrana", "Angoleña", "Antiguana", "Argentina", "Armenia", "Arubeña", "Australiana", "Austriaca", "Azerbaiyana", "Bahameña", "Bahreiní", "Bangladesí", "Barbadense", "Belga", "Beliceña", "Bermudeña", "Bielorrusa", "Birmana", "Boliviana", "Bosnia", "Botsuana", "Brasileña", "Británica", "Bruneana", "Búlgara", "Burundesa", "Butanesa", "Caboverdiana", "Camboyana", "Camerunesa", "Canadiense", "Catarí", "Centroafricana", "Chadiana", "Checa", "Chilena", "China", "Chipriota", "Colombiana", "Comorense", "Congoleña", "Costarricense", "Croata", "Cubana", "Danesa", "Dominiquesa", "Ecuatoguineana", "Ecuatoriana", "Egipcia", "Emiratí", "Eritrea", "Eslovaca", "Eslovena", "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa", "Fiyiana", "Francesa", "Gabonesa", "Galesa", "Gambiana", "Georgiana", "Ghanesa", "Granadina", "Griega", "Groenlandesa", "Guatemalteca", "Guineana", "Guineana Ecuatorial", "Guyanesa", "Haitiana", "Hondureña", "Hongkonesa", "Húngara", "India", "Indonésa", "Iraní", "Iraquí", "Irlandesa", "Islandesa", "Israelí", "Italiana", "Jamaicana", "Japonesa", "Jordana", "Kazaja", "Keniana", "Kirguisa", "Kiribatiana", "Kosovar", "Kuwaití", "Laosiana", "Lesotense", "Letona", "Libanesa", "Liberiana", "Libia", "Liechtensteiniana", "Lituana", "Luxemburguesa", "Macedonia", "Madagascariense", "Malasia", "Malauí", "Maldiva", "Malgache", "Maltesa", "Marfileña", "Marroquí", "Mauriciana", "Mauritana", "Mexicana", "Micronesia", "Moldava", "Monegasca", "Mongola", "Montenegrina", "Mozambiqueña", "Namibia", "Nauruana", "Nepalí", "Neozelandesa", "Nicaragüense", "Nigeriana", "Norteamericana", "Norcoreana", "Norirlandesa", "Noruega", "Omana", "Neerlandesa", "Pakistaní", "Palauana", "Palestina", "Panameña", "Papú", "Paraguaya", "Peruana", "Polaca", "Portuguesa", "Puertorriqueña", "Ruandesa", "Rumana", "Rusa", "Salomonense", "Salvadoreña", "Samoana", "Sanmarinense", "Santaluciana", "Santomense", "Saudí", "Escocesa", "Senegalesa", "Serbia", "Seychellense", "Sierraleonesa", "Singapurense", "Siria", "Somalí", "Sudafricana", "Sudanesa", "Sueca", "Suiza", "Surcoreana", "Surinamesa", "Suazi", "Tailandesa", "Taiwanesa", "Tanzana", "Tayika", "Timorense", "Togolesa", "Tongana", "Trinitense", "Tunecina", "Turca", "Turcomana", "Tuvaluana", "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeka", "Vanuatuense", "Vaticana", "Venezolana", "Vietnamita", "Yemení", "Yugoslava", "Zambiana", "Zimbabuense" }));
+        jPanel3.add(cmbNacionalidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 210, -1));
 
         AñadirGuardia.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
 
@@ -1817,16 +1794,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel22.setText("Nacionalidad:");
         jPanel4.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 300, 90, -1));
 
-        txtNacionalidadMod.setBackground(new java.awt.Color(29, 35, 51));
-        txtNacionalidadMod.setForeground(new java.awt.Color(255, 255, 255));
-        txtNacionalidadMod.setBorder(null);
-        txtNacionalidadMod.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNacionalidadModKeyTyped(evt);
-            }
-        });
-        jPanel4.add(txtNacionalidadMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 210, 30));
-
         txtSexoMod.setEditable(false);
         txtSexoMod.setBackground(new java.awt.Color(29, 35, 51));
         txtSexoMod.setForeground(new java.awt.Color(255, 255, 255));
@@ -1937,6 +1904,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel29.setForeground(new java.awt.Color(255, 255, 255));
         jLabel29.setText("Primer nombre:");
         jPanel4.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, 20));
+
+        cmbNacionalidadMod.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Afgana", "Alemana", "Andorrana", "Angoleña", "Antiguana", "Argentina", "Armenia", "Arubeña", "Australiana", "Austriaca", "Azerbaiyana", "Bahameña", "Bahreiní", "Bangladesí", "Barbadense", "Belga", "Beliceña", "Bermudeña", "Bielorrusa", "Birmana", "Boliviana", "Bosnia", "Botsuana", "Brasileña", "Británica", "Bruneana", "Búlgara", "Burundesa", "Butanesa", "Caboverdiana", "Camboyana", "Camerunesa", "Canadiense", "Catarí", "Centroafricana", "Chadiana", "Checa", "Chilena", "China", "Chipriota", "Colombiana", "Comorense", "Congoleña", "Costarricense", "Croata", "Cubana", "Danesa", "Dominiquesa", "Ecuatoguineana", "Ecuatoriana", "Egipcia", "Emiratí", "Eritrea", "Eslovaca", "Eslovena", "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa", "Fiyiana", "Francesa", "Gabonesa", "Galesa", "Gambiana", "Georgiana", "Ghanesa", "Granadina", "Griega", "Groenlandesa", "Guatemalteca", "Guineana", "Guineana Ecuatorial", "Guyanesa", "Haitiana", "Hondureña", "Hongkonesa", "Húngara", "India", "Indonésa", "Iraní", "Iraquí", "Irlandesa", "Islandesa", "Israelí", "Italiana", "Jamaicana", "Japonesa", "Jordana", "Kazaja", "Keniana", "Kirguisa", "Kiribatiana", "Kosovar", "Kuwaití", "Laosiana", "Lesotense", "Letona", "Libanesa", "Liberiana", "Libia", "Liechtensteiniana", "Lituana", "Luxemburguesa", "Macedonia", "Madagascariense", "Malasia", "Malauí", "Maldiva", "Malgache", "Maltesa", "Marfileña", "Marroquí", "Mauriciana", "Mauritana", "Mexicana", "Micronesia", "Moldava", "Monegasca", "Mongola", "Montenegrina", "Mozambiqueña", "Namibia", "Nauruana", "Nepalí", "Neozelandesa", "Nicaragüense", "Nigeriana", "Norteamericana", "Norcoreana", "Norirlandesa", "Noruega", "Omana", "Neerlandesa", "Pakistaní", "Palauana", "Palestina", "Panameña", "Papú", "Paraguaya", "Peruana", "Polaca", "Portuguesa", "Puertorriqueña", "Ruandesa", "Rumana", "Rusa", "Salomonense", "Salvadoreña", "Samoana", "Sanmarinense", "Santaluciana", "Santomense", "Saudí", "Escocesa", "Senegalesa", "Serbia", "Seychellense", "Sierraleonesa", "Singapurense", "Siria", "Somalí", "Sudafricana", "Sudanesa", "Sueca", "Suiza", "Surcoreana", "Surinamesa", "Suazi", "Tailandesa", "Taiwanesa", "Tanzana", "Tayika", "Timorense", "Togolesa", "Tongana", "Trinitense", "Tunecina", "Turca", "Turcomana", "Tuvaluana", "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeka", "Vanuatuense", "Vaticana", "Venezolana", "Vietnamita", "Yemení", "Yugoslava", "Zambiana", "Zimbabuense" }));
+        jPanel4.add(cmbNacionalidadMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 210, -1));
 
         ModificarGuardia.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
 
@@ -2096,16 +2066,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel67.setText("Nacionalidad:");
         jPanel12.add(jLabel67, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 300, 90, -1));
 
-        txtNacionalidad2.setBackground(new java.awt.Color(29, 35, 51));
-        txtNacionalidad2.setForeground(new java.awt.Color(255, 255, 255));
-        txtNacionalidad2.setBorder(null);
-        txtNacionalidad2.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNacionalidad2KeyTyped(evt);
-            }
-        });
-        jPanel12.add(txtNacionalidad2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 210, 30));
-
         txtSexo2.setEditable(false);
         txtSexo2.setBackground(new java.awt.Color(29, 35, 51));
         txtSexo2.setForeground(new java.awt.Color(255, 255, 255));
@@ -2215,6 +2175,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel74.setForeground(new java.awt.Color(255, 255, 255));
         jLabel74.setText("Primer nombre:");
         jPanel12.add(jLabel74, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, 20));
+
+        cmbNacionalidad2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Afgana", "Alemana", "Andorrana", "Angoleña", "Antiguana", "Argentina", "Armenia", "Arubeña", "Australiana", "Austriaca", "Azerbaiyana", "Bahameña", "Bahreiní", "Bangladesí", "Barbadense", "Belga", "Beliceña", "Bermudeña", "Bielorrusa", "Birmana", "Boliviana", "Bosnia", "Botsuana", "Brasileña", "Británica", "Bruneana", "Búlgara", "Burundesa", "Butanesa", "Caboverdiana", "Camboyana", "Camerunesa", "Canadiense", "Catarí", "Centroafricana", "Chadiana", "Checa", "Chilena", "China", "Chipriota", "Colombiana", "Comorense", "Congoleña", "Costarricense", "Croata", "Cubana", "Danesa", "Dominiquesa", "Ecuatoguineana", "Ecuatoriana", "Egipcia", "Emiratí", "Eritrea", "Eslovaca", "Eslovena", "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa", "Fiyiana", "Francesa", "Gabonesa", "Galesa", "Gambiana", "Georgiana", "Ghanesa", "Granadina", "Griega", "Groenlandesa", "Guatemalteca", "Guineana", "Guineana Ecuatorial", "Guyanesa", "Haitiana", "Hondureña", "Hongkonesa", "Húngara", "India", "Indonésa", "Iraní", "Iraquí", "Irlandesa", "Islandesa", "Israelí", "Italiana", "Jamaicana", "Japonesa", "Jordana", "Kazaja", "Keniana", "Kirguisa", "Kiribatiana", "Kosovar", "Kuwaití", "Laosiana", "Lesotense", "Letona", "Libanesa", "Liberiana", "Libia", "Liechtensteiniana", "Lituana", "Luxemburguesa", "Macedonia", "Madagascariense", "Malasia", "Malauí", "Maldiva", "Malgache", "Maltesa", "Marfileña", "Marroquí", "Mauriciana", "Mauritana", "Mexicana", "Micronesia", "Moldava", "Monegasca", "Mongola", "Montenegrina", "Mozambiqueña", "Namibia", "Nauruana", "Nepalí", "Neozelandesa", "Nicaragüense", "Nigeriana", "Norteamericana", "Norcoreana", "Norirlandesa", "Noruega", "Omana", "Neerlandesa", "Pakistaní", "Palauana", "Palestina", "Panameña", "Papú", "Paraguaya", "Peruana", "Polaca", "Portuguesa", "Puertorriqueña", "Ruandesa", "Rumana", "Rusa", "Salomonense", "Salvadoreña", "Samoana", "Sanmarinense", "Santaluciana", "Santomense", "Saudí", "Escocesa", "Senegalesa", "Serbia", "Seychellense", "Sierraleonesa", "Singapurense", "Siria", "Somalí", "Sudafricana", "Sudanesa", "Sueca", "Suiza", "Surcoreana", "Surinamesa", "Suazi", "Tailandesa", "Taiwanesa", "Tanzana", "Tayika", "Timorense", "Togolesa", "Tongana", "Trinitense", "Tunecina", "Turca", "Turcomana", "Tuvaluana", "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeka", "Vanuatuense", "Vaticana", "Venezolana", "Vietnamita", "Yemení", "Yugoslava", "Zambiana", "Zimbabuense" }));
+        jPanel12.add(cmbNacionalidad2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 210, -1));
 
         AgregarCDA.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
 
@@ -2335,15 +2298,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel82.setText("Nacionalidad:");
         jPanel15.add(jLabel82, new org.netbeans.lib.awtextra.AbsoluteConstraints(57, 300, 90, -1));
 
-        txtNacionalidadMod2.setBackground(new java.awt.Color(29, 35, 51));
-        txtNacionalidadMod2.setBorder(null);
-        txtNacionalidadMod2.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNacionalidadMod2KeyTyped(evt);
-            }
-        });
-        jPanel15.add(txtNacionalidadMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 210, 30));
-
         txtSexoMod2.setEditable(false);
         txtSexoMod2.setBackground(new java.awt.Color(29, 35, 51));
         txtSexoMod2.setText("Femenino");
@@ -2447,6 +2401,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel89.setForeground(new java.awt.Color(255, 255, 255));
         jLabel89.setText("Primer nombre:");
         jPanel15.add(jLabel89, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, -1, 20));
+
+        cmbNacionalidadMod2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Afgana", "Alemana", "Andorrana", "Angoleña", "Antiguana", "Argentina", "Armenia", "Arubeña", "Australiana", "Austriaca", "Azerbaiyana", "Bahameña", "Bahreiní", "Bangladesí", "Barbadense", "Belga", "Beliceña", "Bermudeña", "Bielorrusa", "Birmana", "Boliviana", "Bosnia", "Botsuana", "Brasileña", "Británica", "Bruneana", "Búlgara", "Burundesa", "Butanesa", "Caboverdiana", "Camboyana", "Camerunesa", "Canadiense", "Catarí", "Centroafricana", "Chadiana", "Checa", "Chilena", "China", "Chipriota", "Colombiana", "Comorense", "Congoleña", "Costarricense", "Croata", "Cubana", "Danesa", "Dominiquesa", "Ecuatoguineana", "Ecuatoriana", "Egipcia", "Emiratí", "Eritrea", "Eslovaca", "Eslovena", "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa", "Fiyiana", "Francesa", "Gabonesa", "Galesa", "Gambiana", "Georgiana", "Ghanesa", "Granadina", "Griega", "Groenlandesa", "Guatemalteca", "Guineana", "Guineana Ecuatorial", "Guyanesa", "Haitiana", "Hondureña", "Hongkonesa", "Húngara", "India", "Indonésa", "Iraní", "Iraquí", "Irlandesa", "Islandesa", "Israelí", "Italiana", "Jamaicana", "Japonesa", "Jordana", "Kazaja", "Keniana", "Kirguisa", "Kiribatiana", "Kosovar", "Kuwaití", "Laosiana", "Lesotense", "Letona", "Libanesa", "Liberiana", "Libia", "Liechtensteiniana", "Lituana", "Luxemburguesa", "Macedonia", "Madagascariense", "Malasia", "Malauí", "Maldiva", "Malgache", "Maltesa", "Marfileña", "Marroquí", "Mauriciana", "Mauritana", "Mexicana", "Micronesia", "Moldava", "Monegasca", "Mongola", "Montenegrina", "Mozambiqueña", "Namibia", "Nauruana", "Nepalí", "Neozelandesa", "Nicaragüense", "Nigeriana", "Norteamericana", "Norcoreana", "Norirlandesa", "Noruega", "Omana", "Neerlandesa", "Pakistaní", "Palauana", "Palestina", "Panameña", "Papú", "Paraguaya", "Peruana", "Polaca", "Portuguesa", "Puertorriqueña", "Ruandesa", "Rumana", "Rusa", "Salomonense", "Salvadoreña", "Samoana", "Sanmarinense", "Santaluciana", "Santomense", "Saudí", "Escocesa", "Senegalesa", "Serbia", "Seychellense", "Sierraleonesa", "Singapurense", "Siria", "Somalí", "Sudafricana", "Sudanesa", "Sueca", "Suiza", "Surcoreana", "Surinamesa", "Suazi", "Tailandesa", "Taiwanesa", "Tanzana", "Tayika", "Timorense", "Togolesa", "Tongana", "Trinitense", "Tunecina", "Turca", "Turcomana", "Tuvaluana", "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeka", "Vanuatuense", "Vaticana", "Venezolana", "Vietnamita", "Yemení", "Yugoslava", "Zambiana", "Zimbabuense" }));
+        jPanel15.add(cmbNacionalidadMod2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 210, -1));
 
         ModificarCoordinador.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
 
@@ -2605,16 +2562,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel131.setText("Nacionalidad:");
         jPanel27.add(jLabel131, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, 90, -1));
 
-        txtNacionalidad4.setBackground(new java.awt.Color(29, 35, 51));
-        txtNacionalidad4.setForeground(new java.awt.Color(255, 255, 255));
-        txtNacionalidad4.setBorder(null);
-        txtNacionalidad4.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNacionalidad4KeyTyped(evt);
-            }
-        });
-        jPanel27.add(txtNacionalidad4, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 210, 30));
-
         txtSexo4.setEditable(false);
         txtSexo4.setBackground(new java.awt.Color(29, 35, 51));
         txtSexo4.setForeground(new java.awt.Color(255, 255, 255));
@@ -2725,6 +2672,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel138.setText("Primer nombre:");
         jPanel27.add(jLabel138, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, -1, 20));
 
+        cmbNacionalidad4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Afgana", "Alemana", "Andorrana", "Angoleña", "Antiguana", "Argentina", "Armenia", "Arubeña", "Australiana", "Austriaca", "Azerbaiyana", "Bahameña", "Bahreiní", "Bangladesí", "Barbadense", "Belga", "Beliceña", "Bermudeña", "Bielorrusa", "Birmana", "Boliviana", "Bosnia", "Botsuana", "Brasileña", "Británica", "Bruneana", "Búlgara", "Burundesa", "Butanesa", "Caboverdiana", "Camboyana", "Camerunesa", "Canadiense", "Catarí", "Centroafricana", "Chadiana", "Checa", "Chilena", "China", "Chipriota", "Colombiana", "Comorense", "Congoleña", "Costarricense", "Croata", "Cubana", "Danesa", "Dominiquesa", "Ecuatoguineana", "Ecuatoriana", "Egipcia", "Emiratí", "Eritrea", "Eslovaca", "Eslovena", "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa", "Fiyiana", "Francesa", "Gabonesa", "Galesa", "Gambiana", "Georgiana", "Ghanesa", "Granadina", "Griega", "Groenlandesa", "Guatemalteca", "Guineana", "Guineana Ecuatorial", "Guyanesa", "Haitiana", "Hondureña", "Hongkonesa", "Húngara", "India", "Indonésa", "Iraní", "Iraquí", "Irlandesa", "Islandesa", "Israelí", "Italiana", "Jamaicana", "Japonesa", "Jordana", "Kazaja", "Keniana", "Kirguisa", "Kiribatiana", "Kosovar", "Kuwaití", "Laosiana", "Lesotense", "Letona", "Libanesa", "Liberiana", "Libia", "Liechtensteiniana", "Lituana", "Luxemburguesa", "Macedonia", "Madagascariense", "Malasia", "Malauí", "Maldiva", "Malgache", "Maltesa", "Marfileña", "Marroquí", "Mauriciana", "Mauritana", "Mexicana", "Micronesia", "Moldava", "Monegasca", "Mongola", "Montenegrina", "Mozambiqueña", "Namibia", "Nauruana", "Nepalí", "Neozelandesa", "Nicaragüense", "Nigeriana", "Norteamericana", "Norcoreana", "Norirlandesa", "Noruega", "Omana", "Neerlandesa", "Pakistaní", "Palauana", "Palestina", "Panameña", "Papú", "Paraguaya", "Peruana", "Polaca", "Portuguesa", "Puertorriqueña", "Ruandesa", "Rumana", "Rusa", "Salomonense", "Salvadoreña", "Samoana", "Sanmarinense", "Santaluciana", "Santomense", "Saudí", "Escocesa", "Senegalesa", "Serbia", "Seychellense", "Sierraleonesa", "Singapurense", "Siria", "Somalí", "Sudafricana", "Sudanesa", "Sueca", "Suiza", "Surcoreana", "Surinamesa", "Suazi", "Tailandesa", "Taiwanesa", "Tanzana", "Tayika", "Timorense", "Togolesa", "Tongana", "Trinitense", "Tunecina", "Turca", "Turcomana", "Tuvaluana", "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeka", "Vanuatuense", "Vaticana", "Venezolana", "Vietnamita", "Yemení", "Yugoslava", "Zambiana", "Zimbabuense" }));
+        jPanel27.add(cmbNacionalidad4, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 210, -1));
+
         AñadirEnfermera1.add(jPanel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
 
         jLabel139.setFont(new java.awt.Font("Arial", 2, 13)); // NOI18N
@@ -2737,7 +2687,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel140.setText("TODOS LOS DATOS SON DE CARACTER OBLIGATORIO A EXCEPCIÓN DEL SEGUNDO NOMBRE.");
         AñadirEnfermera1.add(jLabel140, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 20, -1, 30));
 
-        añadirODR.add(AñadirEnfermera1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 580));
+        añadirODR.add(AñadirEnfermera1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 590));
 
         tabPrincipal.addTab("AggODR", añadirODR);
 
@@ -2780,15 +2730,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         }
 
         mostrarODR.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1080, 550));
-
-        jButton13.setBackground(new java.awt.Color(255, 255, 255));
-        jButton13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/icons8-sign-out-40.png"))); // NOI18N
-        jButton13.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton13ActionPerformed(evt);
-            }
-        });
-        mostrarODR.add(jButton13, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 0, 50, 50));
 
         tabPrincipal.addTab("MostrarODR", mostrarODR);
 
@@ -2894,16 +2835,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel104.setForeground(new java.awt.Color(255, 255, 255));
         jLabel104.setText("Nacionalidad:");
         jPanel9.add(jLabel104, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, 90, -1));
-
-        txtNacionalidad3.setBackground(new java.awt.Color(29, 35, 51));
-        txtNacionalidad3.setForeground(new java.awt.Color(255, 255, 255));
-        txtNacionalidad3.setBorder(null);
-        txtNacionalidad3.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNacionalidad3KeyTyped(evt);
-            }
-        });
-        jPanel9.add(txtNacionalidad3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 210, 30));
 
         txtSexo3.setEditable(false);
         txtSexo3.setBackground(new java.awt.Color(29, 35, 51));
@@ -3015,6 +2946,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel111.setText("Primer nombre:");
         jPanel9.add(jLabel111, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, -1, 20));
 
+        cmbNacionalidad3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Afgana", "Alemana", "Andorrana", "Angoleña", "Antiguana", "Argentina", "Armenia", "Arubeña", "Australiana", "Austriaca", "Azerbaiyana", "Bahameña", "Bahreiní", "Bangladesí", "Barbadense", "Belga", "Beliceña", "Bermudeña", "Bielorrusa", "Birmana", "Boliviana", "Bosnia", "Botsuana", "Brasileña", "Británica", "Bruneana", "Búlgara", "Burundesa", "Butanesa", "Caboverdiana", "Camboyana", "Camerunesa", "Canadiense", "Catarí", "Centroafricana", "Chadiana", "Checa", "Chilena", "China", "Chipriota", "Colombiana", "Comorense", "Congoleña", "Costarricense", "Croata", "Cubana", "Danesa", "Dominiquesa", "Ecuatoguineana", "Ecuatoriana", "Egipcia", "Emiratí", "Eritrea", "Eslovaca", "Eslovena", "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa", "Fiyiana", "Francesa", "Gabonesa", "Galesa", "Gambiana", "Georgiana", "Ghanesa", "Granadina", "Griega", "Groenlandesa", "Guatemalteca", "Guineana", "Guineana Ecuatorial", "Guyanesa", "Haitiana", "Hondureña", "Hongkonesa", "Húngara", "India", "Indonésa", "Iraní", "Iraquí", "Irlandesa", "Islandesa", "Israelí", "Italiana", "Jamaicana", "Japonesa", "Jordana", "Kazaja", "Keniana", "Kirguisa", "Kiribatiana", "Kosovar", "Kuwaití", "Laosiana", "Lesotense", "Letona", "Libanesa", "Liberiana", "Libia", "Liechtensteiniana", "Lituana", "Luxemburguesa", "Macedonia", "Madagascariense", "Malasia", "Malauí", "Maldiva", "Malgache", "Maltesa", "Marfileña", "Marroquí", "Mauriciana", "Mauritana", "Mexicana", "Micronesia", "Moldava", "Monegasca", "Mongola", "Montenegrina", "Mozambiqueña", "Namibia", "Nauruana", "Nepalí", "Neozelandesa", "Nicaragüense", "Nigeriana", "Norteamericana", "Norcoreana", "Norirlandesa", "Noruega", "Omana", "Neerlandesa", "Pakistaní", "Palauana", "Palestina", "Panameña", "Papú", "Paraguaya", "Peruana", "Polaca", "Portuguesa", "Puertorriqueña", "Ruandesa", "Rumana", "Rusa", "Salomonense", "Salvadoreña", "Samoana", "Sanmarinense", "Santaluciana", "Santomense", "Saudí", "Escocesa", "Senegalesa", "Serbia", "Seychellense", "Sierraleonesa", "Singapurense", "Siria", "Somalí", "Sudafricana", "Sudanesa", "Sueca", "Suiza", "Surcoreana", "Surinamesa", "Suazi", "Tailandesa", "Taiwanesa", "Tanzana", "Tayika", "Timorense", "Togolesa", "Tongana", "Trinitense", "Tunecina", "Turca", "Turcomana", "Tuvaluana", "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeka", "Vanuatuense", "Vaticana", "Venezolana", "Vietnamita", "Yemení", "Yugoslava", "Zambiana", "Zimbabuense" }));
+        jPanel9.add(cmbNacionalidad3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 210, -1));
+
         AñadirOficial.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
 
         jLabel112.setFont(new java.awt.Font("Arial", 2, 13)); // NOI18N
@@ -3122,16 +3056,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel119.setForeground(new java.awt.Color(255, 255, 255));
         jLabel119.setText("Nacionalidad:");
         jPanel24.add(jLabel119, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 300, 90, -1));
-
-        txtNacionalidadMod3.setBackground(new java.awt.Color(29, 35, 51));
-        txtNacionalidadMod3.setForeground(new java.awt.Color(255, 255, 255));
-        txtNacionalidadMod3.setBorder(null);
-        txtNacionalidadMod3.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNacionalidadMod3KeyTyped(evt);
-            }
-        });
-        jPanel24.add(txtNacionalidadMod3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 210, 30));
 
         txtSexoMod3.setEditable(false);
         txtSexoMod3.setBackground(new java.awt.Color(29, 35, 51));
@@ -3241,6 +3165,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel126.setForeground(new java.awt.Color(255, 255, 255));
         jLabel126.setText("Primer nombre:");
         jPanel24.add(jLabel126, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, 20));
+
+        cmbNacionalidadMod3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Afgana", "Alemana", "Andorrana", "Angoleña", "Antiguana", "Argentina", "Armenia", "Arubeña", "Australiana", "Austriaca", "Azerbaiyana", "Bahameña", "Bahreiní", "Bangladesí", "Barbadense", "Belga", "Beliceña", "Bermudeña", "Bielorrusa", "Birmana", "Boliviana", "Bosnia", "Botsuana", "Brasileña", "Británica", "Bruneana", "Búlgara", "Burundesa", "Butanesa", "Caboverdiana", "Camboyana", "Camerunesa", "Canadiense", "Catarí", "Centroafricana", "Chadiana", "Checa", "Chilena", "China", "Chipriota", "Colombiana", "Comorense", "Congoleña", "Costarricense", "Croata", "Cubana", "Danesa", "Dominiquesa", "Ecuatoguineana", "Ecuatoriana", "Egipcia", "Emiratí", "Eritrea", "Eslovaca", "Eslovena", "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa", "Fiyiana", "Francesa", "Gabonesa", "Galesa", "Gambiana", "Georgiana", "Ghanesa", "Granadina", "Griega", "Groenlandesa", "Guatemalteca", "Guineana", "Guineana Ecuatorial", "Guyanesa", "Haitiana", "Hondureña", "Hongkonesa", "Húngara", "India", "Indonésa", "Iraní", "Iraquí", "Irlandesa", "Islandesa", "Israelí", "Italiana", "Jamaicana", "Japonesa", "Jordana", "Kazaja", "Keniana", "Kirguisa", "Kiribatiana", "Kosovar", "Kuwaití", "Laosiana", "Lesotense", "Letona", "Libanesa", "Liberiana", "Libia", "Liechtensteiniana", "Lituana", "Luxemburguesa", "Macedonia", "Madagascariense", "Malasia", "Malauí", "Maldiva", "Malgache", "Maltesa", "Marfileña", "Marroquí", "Mauriciana", "Mauritana", "Mexicana", "Micronesia", "Moldava", "Monegasca", "Mongola", "Montenegrina", "Mozambiqueña", "Namibia", "Nauruana", "Nepalí", "Neozelandesa", "Nicaragüense", "Nigeriana", "Norteamericana", "Norcoreana", "Norirlandesa", "Noruega", "Omana", "Neerlandesa", "Pakistaní", "Palauana", "Palestina", "Panameña", "Papú", "Paraguaya", "Peruana", "Polaca", "Portuguesa", "Puertorriqueña", "Ruandesa", "Rumana", "Rusa", "Salomonense", "Salvadoreña", "Samoana", "Sanmarinense", "Santaluciana", "Santomense", "Saudí", "Escocesa", "Senegalesa", "Serbia", "Seychellense", "Sierraleonesa", "Singapurense", "Siria", "Somalí", "Sudafricana", "Sudanesa", "Sueca", "Suiza", "Surcoreana", "Surinamesa", "Suazi", "Tailandesa", "Taiwanesa", "Tanzana", "Tayika", "Timorense", "Togolesa", "Tongana", "Trinitense", "Tunecina", "Turca", "Turcomana", "Tuvaluana", "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeka", "Vanuatuense", "Vaticana", "Venezolana", "Vietnamita", "Yemení", "Yugoslava", "Zambiana", "Zimbabuense" }));
+        jPanel24.add(cmbNacionalidadMod3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 210, -1));
 
         modificarOficial.add(jPanel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
 
@@ -3390,16 +3317,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel146.setText("Nacionalidad:");
         jPanel30.add(jLabel146, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 300, 90, -1));
 
-        txtNacionalidadMod4.setBackground(new java.awt.Color(29, 35, 51));
-        txtNacionalidadMod4.setForeground(new java.awt.Color(255, 255, 255));
-        txtNacionalidadMod4.setBorder(null);
-        txtNacionalidadMod4.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNacionalidadMod4KeyTyped(evt);
-            }
-        });
-        jPanel30.add(txtNacionalidadMod4, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 210, 30));
-
         txtSexoMod4.setEditable(false);
         txtSexoMod4.setBackground(new java.awt.Color(29, 35, 51));
         txtSexoMod4.setForeground(new java.awt.Color(255, 255, 255));
@@ -3509,6 +3426,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel153.setText("Primer nombre:");
         jPanel30.add(jLabel153, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, 20));
 
+        cmbNacionalidadMod4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Afgana", "Alemana", "Andorrana", "Angoleña", "Antiguana", "Argentina", "Armenia", "Arubeña", "Australiana", "Austriaca", "Azerbaiyana", "Bahameña", "Bahreiní", "Bangladesí", "Barbadense", "Belga", "Beliceña", "Bermudeña", "Bielorrusa", "Birmana", "Boliviana", "Bosnia", "Botsuana", "Brasileña", "Británica", "Bruneana", "Búlgara", "Burundesa", "Butanesa", "Caboverdiana", "Camboyana", "Camerunesa", "Canadiense", "Catarí", "Centroafricana", "Chadiana", "Checa", "Chilena", "China", "Chipriota", "Colombiana", "Comorense", "Congoleña", "Costarricense", "Croata", "Cubana", "Danesa", "Dominiquesa", "Ecuatoguineana", "Ecuatoriana", "Egipcia", "Emiratí", "Eritrea", "Eslovaca", "Eslovena", "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa", "Fiyiana", "Francesa", "Gabonesa", "Galesa", "Gambiana", "Georgiana", "Ghanesa", "Granadina", "Griega", "Groenlandesa", "Guatemalteca", "Guineana", "Guineana Ecuatorial", "Guyanesa", "Haitiana", "Hondureña", "Hongkonesa", "Húngara", "India", "Indonésa", "Iraní", "Iraquí", "Irlandesa", "Islandesa", "Israelí", "Italiana", "Jamaicana", "Japonesa", "Jordana", "Kazaja", "Keniana", "Kirguisa", "Kiribatiana", "Kosovar", "Kuwaití", "Laosiana", "Lesotense", "Letona", "Libanesa", "Liberiana", "Libia", "Liechtensteiniana", "Lituana", "Luxemburguesa", "Macedonia", "Madagascariense", "Malasia", "Malauí", "Maldiva", "Malgache", "Maltesa", "Marfileña", "Marroquí", "Mauriciana", "Mauritana", "Mexicana", "Micronesia", "Moldava", "Monegasca", "Mongola", "Montenegrina", "Mozambiqueña", "Namibia", "Nauruana", "Nepalí", "Neozelandesa", "Nicaragüense", "Nigeriana", "Norteamericana", "Norcoreana", "Norirlandesa", "Noruega", "Omana", "Neerlandesa", "Pakistaní", "Palauana", "Palestina", "Panameña", "Papú", "Paraguaya", "Peruana", "Polaca", "Portuguesa", "Puertorriqueña", "Ruandesa", "Rumana", "Rusa", "Salomonense", "Salvadoreña", "Samoana", "Sanmarinense", "Santaluciana", "Santomense", "Saudí", "Escocesa", "Senegalesa", "Serbia", "Seychellense", "Sierraleonesa", "Singapurense", "Siria", "Somalí", "Sudafricana", "Sudanesa", "Sueca", "Suiza", "Surcoreana", "Surinamesa", "Suazi", "Tailandesa", "Taiwanesa", "Tanzana", "Tayika", "Timorense", "Togolesa", "Tongana", "Trinitense", "Tunecina", "Turca", "Turcomana", "Tuvaluana", "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeka", "Vanuatuense", "Vaticana", "Venezolana", "Vietnamita", "Yemení", "Yugoslava", "Zambiana", "Zimbabuense" }));
+        jPanel30.add(cmbNacionalidadMod4, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 210, -1));
+
         modODR.add(jPanel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
 
         jLabel154.setFont(new java.awt.Font("Arial", 2, 10)); // NOI18N
@@ -3516,7 +3436,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel154.setText("NINGUN CAMPO DEBE ESTAR VACIO AL MODIFICAR, A EXCEPCIÓN DEL SEGUNDO NOMBRE.");
         modODR.add(jLabel154, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 10, -1, 30));
 
-        ModificarODR.add(modODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 580));
+        ModificarODR.add(modODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 610));
 
         tabPrincipal.addTab("ModificarODR", ModificarODR);
 
@@ -3624,16 +3544,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel158.setForeground(new java.awt.Color(255, 255, 255));
         jLabel158.setText("Nacionalidad:");
         jPanel35.add(jLabel158, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, 90, -1));
-
-        txtNacionalidad5.setBackground(new java.awt.Color(29, 35, 51));
-        txtNacionalidad5.setForeground(new java.awt.Color(255, 255, 255));
-        txtNacionalidad5.setBorder(null);
-        txtNacionalidad5.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNacionalidad5KeyTyped(evt);
-            }
-        });
-        jPanel35.add(txtNacionalidad5, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 210, 30));
 
         txtSexo5.setEditable(false);
         txtSexo5.setBackground(new java.awt.Color(29, 35, 51));
@@ -3745,6 +3655,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel165.setText("Primer nombre:");
         jPanel35.add(jLabel165, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, -1, 20));
 
+        cmbNacionalidad5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Afgana", "Alemana", "Andorrana", "Angoleña", "Antiguana", "Argentina", "Armenia", "Arubeña", "Australiana", "Austriaca", "Azerbaiyana", "Bahameña", "Bahreiní", "Bangladesí", "Barbadense", "Belga", "Beliceña", "Bermudeña", "Bielorrusa", "Birmana", "Boliviana", "Bosnia", "Botsuana", "Brasileña", "Británica", "Bruneana", "Búlgara", "Burundesa", "Butanesa", "Caboverdiana", "Camboyana", "Camerunesa", "Canadiense", "Catarí", "Centroafricana", "Chadiana", "Checa", "Chilena", "China", "Chipriota", "Colombiana", "Comorense", "Congoleña", "Costarricense", "Croata", "Cubana", "Danesa", "Dominiquesa", "Ecuatoguineana", "Ecuatoriana", "Egipcia", "Emiratí", "Eritrea", "Eslovaca", "Eslovena", "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa", "Fiyiana", "Francesa", "Gabonesa", "Galesa", "Gambiana", "Georgiana", "Ghanesa", "Granadina", "Griega", "Groenlandesa", "Guatemalteca", "Guineana", "Guineana Ecuatorial", "Guyanesa", "Haitiana", "Hondureña", "Hongkonesa", "Húngara", "India", "Indonésa", "Iraní", "Iraquí", "Irlandesa", "Islandesa", "Israelí", "Italiana", "Jamaicana", "Japonesa", "Jordana", "Kazaja", "Keniana", "Kirguisa", "Kiribatiana", "Kosovar", "Kuwaití", "Laosiana", "Lesotense", "Letona", "Libanesa", "Liberiana", "Libia", "Liechtensteiniana", "Lituana", "Luxemburguesa", "Macedonia", "Madagascariense", "Malasia", "Malauí", "Maldiva", "Malgache", "Maltesa", "Marfileña", "Marroquí", "Mauriciana", "Mauritana", "Mexicana", "Micronesia", "Moldava", "Monegasca", "Mongola", "Montenegrina", "Mozambiqueña", "Namibia", "Nauruana", "Nepalí", "Neozelandesa", "Nicaragüense", "Nigeriana", "Norteamericana", "Norcoreana", "Norirlandesa", "Noruega", "Omana", "Neerlandesa", "Pakistaní", "Palauana", "Palestina", "Panameña", "Papú", "Paraguaya", "Peruana", "Polaca", "Portuguesa", "Puertorriqueña", "Ruandesa", "Rumana", "Rusa", "Salomonense", "Salvadoreña", "Samoana", "Sanmarinense", "Santaluciana", "Santomense", "Saudí", "Escocesa", "Senegalesa", "Serbia", "Seychellense", "Sierraleonesa", "Singapurense", "Siria", "Somalí", "Sudafricana", "Sudanesa", "Sueca", "Suiza", "Surcoreana", "Surinamesa", "Suazi", "Tailandesa", "Taiwanesa", "Tanzana", "Tayika", "Timorense", "Togolesa", "Tongana", "Trinitense", "Tunecina", "Turca", "Turcomana", "Tuvaluana", "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeka", "Vanuatuense", "Vaticana", "Venezolana", "Vietnamita", "Yemení", "Yugoslava", "Zambiana", "Zimbabuense" }));
+        jPanel35.add(cmbNacionalidad5, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 210, -1));
+
         AñadirEnfermera2.add(jPanel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
 
         jLabel166.setFont(new java.awt.Font("Arial", 2, 13)); // NOI18N
@@ -3799,7 +3712,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jPanel38.add(jPanel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 40, 310, 220));
 
         jLabel168.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel168.setText("Modificar foto de la enfermera:");
+        jLabel168.setText("Modificar foto de la empleada:");
         jPanel38.add(jLabel168, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 20, -1, -1));
 
         jLabel169.setForeground(new java.awt.Color(255, 255, 255));
@@ -3854,16 +3767,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel173.setForeground(new java.awt.Color(255, 255, 255));
         jLabel173.setText("Nacionalidad:");
         jPanel38.add(jLabel173, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 300, 90, -1));
-
-        txtNacionalidadMod5.setBackground(new java.awt.Color(29, 35, 51));
-        txtNacionalidadMod5.setForeground(new java.awt.Color(255, 255, 255));
-        txtNacionalidadMod5.setBorder(null);
-        txtNacionalidadMod5.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNacionalidadMod5KeyTyped(evt);
-            }
-        });
-        jPanel38.add(txtNacionalidadMod5, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 210, 30));
 
         txtSexoMod5.setEditable(false);
         txtSexoMod5.setBackground(new java.awt.Color(29, 35, 51));
@@ -3974,6 +3877,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         jLabel180.setText("Primer nombre:");
         jPanel38.add(jLabel180, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, 20));
 
+        cmbNacionalidadMod5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Afgana", "Alemana", "Andorrana", "Angoleña", "Antiguana", "Argentina", "Armenia", "Arubeña", "Australiana", "Austriaca", "Azerbaiyana", "Bahameña", "Bahreiní", "Bangladesí", "Barbadense", "Belga", "Beliceña", "Bermudeña", "Bielorrusa", "Birmana", "Boliviana", "Bosnia", "Botsuana", "Brasileña", "Británica", "Bruneana", "Búlgara", "Burundesa", "Butanesa", "Caboverdiana", "Camboyana", "Camerunesa", "Canadiense", "Catarí", "Centroafricana", "Chadiana", "Checa", "Chilena", "China", "Chipriota", "Colombiana", "Comorense", "Congoleña", "Costarricense", "Croata", "Cubana", "Danesa", "Dominiquesa", "Ecuatoguineana", "Ecuatoriana", "Egipcia", "Emiratí", "Eritrea", "Eslovaca", "Eslovena", "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa", "Fiyiana", "Francesa", "Gabonesa", "Galesa", "Gambiana", "Georgiana", "Ghanesa", "Granadina", "Griega", "Groenlandesa", "Guatemalteca", "Guineana", "Guineana Ecuatorial", "Guyanesa", "Haitiana", "Hondureña", "Hongkonesa", "Húngara", "India", "Indonésa", "Iraní", "Iraquí", "Irlandesa", "Islandesa", "Israelí", "Italiana", "Jamaicana", "Japonesa", "Jordana", "Kazaja", "Keniana", "Kirguisa", "Kiribatiana", "Kosovar", "Kuwaití", "Laosiana", "Lesotense", "Letona", "Libanesa", "Liberiana", "Libia", "Liechtensteiniana", "Lituana", "Luxemburguesa", "Macedonia", "Madagascariense", "Malasia", "Malauí", "Maldiva", "Malgache", "Maltesa", "Marfileña", "Marroquí", "Mauriciana", "Mauritana", "Mexicana", "Micronesia", "Moldava", "Monegasca", "Mongola", "Montenegrina", "Mozambiqueña", "Namibia", "Nauruana", "Nepalí", "Neozelandesa", "Nicaragüense", "Nigeriana", "Norteamericana", "Norcoreana", "Norirlandesa", "Noruega", "Omana", "Neerlandesa", "Pakistaní", "Palauana", "Palestina", "Panameña", "Papú", "Paraguaya", "Peruana", "Polaca", "Portuguesa", "Puertorriqueña", "Ruandesa", "Rumana", "Rusa", "Salomonense", "Salvadoreña", "Samoana", "Sanmarinense", "Santaluciana", "Santomense", "Saudí", "Escocesa", "Senegalesa", "Serbia", "Seychellense", "Sierraleonesa", "Singapurense", "Siria", "Somalí", "Sudafricana", "Sudanesa", "Sueca", "Suiza", "Surcoreana", "Surinamesa", "Suazi", "Tailandesa", "Taiwanesa", "Tanzana", "Tayika", "Timorense", "Togolesa", "Tongana", "Trinitense", "Tunecina", "Turca", "Turcomana", "Tuvaluana", "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeka", "Vanuatuense", "Vaticana", "Venezolana", "Vietnamita", "Yemení", "Yugoslava", "Zambiana", "Zimbabuense" }));
+        jPanel38.add(cmbNacionalidadMod5, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 210, -1));
+
         modPersonal.add(jPanel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 890, 520));
 
         jLabel181.setFont(new java.awt.Font("Arial", 2, 10)); // NOI18N
@@ -4027,7 +3933,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
 
         tabPrincipal.addTab("ShowPDC", mostrarPDC);
 
-        jPanel1.add(tabPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 650));
+        jPanel1.add(tabPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 640));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 670));
 
@@ -4038,13 +3944,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
 
     }//GEN-LAST:event_txtCedulaActionPerformed
 
-    private void verificarFecha() {
-        System.out.println("Fecha seleccionada: " + jDateChooserFinContrato.getDate());
-        System.out.println("Componente null? " + (jDateChooserFinContrato == null));
-        System.out.println("Editor null? " + (jDateChooserFinContrato.getDateEditor() == null));
-    }
-
-    // Métodos para Oficiales en la vista Director
     private void cargarTablaOficiales() {
         DefaultTableModel modelo = new DefaultTableModel() {
             @Override
@@ -4074,9 +3973,8 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         List<Oficial> oficiales = OficialController.getInstancia().obtenerTodosOficiales();
 
         for (Oficial o : oficiales) {
-            ImageIcon icono = null; // Inicialmente sin imagen
+            ImageIcon icono = null;
 
-            // Intentar cargar la imagen solo si existe la ruta y el archivo
             if (o.getRutaImagen() != null && !o.getRutaImagen().isEmpty()) {
                 try {
                     File file = new File(o.getRutaImagen());
@@ -4087,12 +3985,12 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                     }
                 } catch (Exception ex) {
                     System.err.println("Error cargando imagen para oficial " + o.getIdentificacion() + ": " + ex.getMessage());
-                    icono = null; // Asegurarse que sea null si hay error
+                    icono = null;
                 }
             }
 
             modelo.addRow(new Object[]{
-                icono, // Puede ser null
+                icono,
                 o.getPrimerNombre() + " " + (o.getSegundoNombre() != null ? o.getSegundoNombre() : ""),
                 o.getPrimerApellido() + " " + o.getSegundoApellido(),
                 o.getEdad(),
@@ -4111,7 +4009,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         tablaOficial.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
     }
 
-    // Métodos para Oficiales en la vista Director
     private void cargarTablaPDC() {
         DefaultTableModel modelo = new DefaultTableModel() {
             @Override
@@ -4141,9 +4038,8 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         List<PersonalControl> PDC = PersonalControlController.getInstancia().obtenerTodosPersonalControl();
 
         for (PersonalControl p : PDC) {
-            ImageIcon icono = null; // Inicialmente sin imagen
+            ImageIcon icono = null;
 
-            // Intentar cargar la imagen solo si existe la ruta y el archivo
             if (p.getRutaImagen() != null && !p.getRutaImagen().isEmpty()) {
                 try {
                     File file = new File(p.getRutaImagen());
@@ -4154,12 +4050,12 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                     }
                 } catch (Exception ex) {
                     System.err.println("Error cargando imagen para la empleada " + p.getIdentificacion() + ": " + ex.getMessage());
-                    icono = null; // Asegurarse que sea null si hay error
+                    icono = null;
                 }
             }
 
             modelo.addRow(new Object[]{
-                icono, // Puede ser null
+                icono,
                 p.getPrimerNombre() + " " + (p.getSegundoNombre() != null ? p.getSegundoNombre() : ""),
                 p.getPrimerApellido() + " " + p.getSegundoApellido(),
                 p.getEdad(),
@@ -4196,13 +4092,12 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoApellidoMod.setText(guardia.getSegundoApellido());
         txtEdadMod.setText(String.valueOf(guardia.getEdad()));
         txtCedulaMod.setText(guardia.getIdentificacion());
-        txtNacionalidadMod.setText(guardia.getNacionalidad());
+        cmbNacionalidadMod.setSelectedItem(guardia.getNacionalidad());
         txtCorreoMod.setText(guardia.getCorreo());
         cmbTurnoMod.setSelectedItem(guardia.getTurno());
         txtCargoMod.setSelectedItem(guardia.getCargo());
         txtFechaContratacionMod.setText(guardia.getFechaInicioContrato().toString());
 
-        
         txtFechaContratacionMod2.setText(
                 guardia.getFechaInicioContrato().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
         );
@@ -4215,7 +4110,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
             dateFinContratoMod.setDate(null);
         }
 
-        // Manejo seguro de la imagen
         cargarImagenGuardia(guardia.getRutaImagen());
     }
 
@@ -4235,7 +4129,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                     return;
                 }
             }
-            // Imagen por defecto si no hay imagen o no se puede cargar
+
             lblImagenMod.setIcon(new ImageIcon(getClass().getResource("/Resources/default_guard.png")));
             rutaImagenGuardia = null;
         } catch (Exception e) {
@@ -4252,7 +4146,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoApellidoMod.setText("");
         txtEdadMod.setText("");
         txtCedulaMod.setText("");
-        txtNacionalidadMod.setText("");
+        cmbNacionalidadMod.setSelectedIndex(0);
         txtCorreoMod.setText("");
         cmbTurnoMod.setSelectedIndex(0);
         dateFinContratoMod.setDate(null);
@@ -4262,125 +4156,85 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
     }
 
     private void limpiarFormularioCDA() {
-        // Limpiar campos de texto
+
         txtCedula2.setText("");
         txtPrimerNombre2.setText("");
         txtSegundoNombre2.setText("");
         txtPrimerApellido2.setText("");
         txtSegundoApellido2.setText("");
         txtEdad2.setText("");
-        txtNacionalidad2.setText("");
+        cmbNacionalidad2.setSelectedIndex(0);
         txtCorreo2.setText("");
         txtFechaContratacion2.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
 
-        // Limpiar comboboxes
         cmbTurno2.setSelectedIndex(0);
         cmbCargo2.setSelectedIndex(0);
 
-        // Limpiar fecha
         dateFinContrato2.setDate(null);
 
-        // Limpiar imagen
         lblImagen2.setIcon(null);
         imagenSeleccionadaCDA = null;
     }
 
     private void limpiarFormularioODR() {
-        // Limpiar campos de texto
+
         txtCedula4.setText("");
         txtPrimerNombre4.setText("");
         txtSegundoNombre4.setText("");
         txtPrimerApellido4.setText("");
         txtSegundoApellido4.setText("");
         txtEdad4.setText("");
-        txtNacionalidad4.setText("");
+        cmbNacionalidad4.setSelectedIndex(0);
         txtCorreo4.setText("");
         txtFechaContratacion4.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
 
-        // Limpiar comboboxes
         cmbTurno4.setSelectedIndex(0);
 
-        // Limpiar fecha
         dateFinContrato4.setDate(null);
 
-        // Limpiar imagen
         lblImagen4.setIcon(null);
         imagenSeleccionadaCDA = null;
     }
 
     private void limpiarFormularioModificacionODR() {
-        // Limpiar campos de texto
+
         txtCedulaMod4.setText("");
         txtPrimerNombreMod4.setText("");
         txtSegundoNombreMod4.setText("");
         txtPrimerApellidoMod4.setText("");
         txtSegundoApellidoMod4.setText("");
         txtEdadMod4.setText("");
-        txtNacionalidadMod4.setText("");
+        cmbNacionalidadMod4.setSelectedIndex(0);
         txtCorreoMod4.setText("");
         txtFechaContratacionMod4.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
 
-        // Limpiar comboboxes
         cmbTurnoMod4.setSelectedIndex(0);
 
-        // Limpiar fecha
         dateFinContratoMod4.setDate(null);
 
-        // Limpiar imagen
         lblImagenMod4.setIcon(null);
         imagenSeleccionadaModODR = null;
     }
 
     private void limpiarFormularioModificacionCDA() {
-        // Limpiar campos de texto
+
         txtCedulaMod2.setText("");
         txtPrimerNombreMod2.setText("");
         txtSegundoNombreMod2.setText("");
         txtPrimerApellidoMod2.setText("");
         txtSegundoApellidoMod2.setText("");
         txtEdadMod2.setText("");
-        txtNacionalidadMod2.setText("");
+        cmbNacionalidadMod2.setSelectedIndex(0);
         txtCorreoMod2.setText("");
         txtFechaContratacionMod2.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
 
-        // Limpiar comboboxes
         cmbTurnoMod2.setSelectedIndex(0);
         txtCargoMod1.setSelectedIndex(0);
 
-        // Limpiar fecha
         dateFinContratoMod2.setDate(null);
 
-        // Limpiar imagen
         lblImagenMod2.setIcon(null);
         imagenSeleccionadaModCDA = null;
-    }
-
-    private class ImagenRenderer extends DefaultTableCellRenderer {
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column) {
-            if (value != null && value instanceof String) {
-                String rutaImagen = (String) value;
-                try {
-
-                    ImageIcon icono = new ImageIcon(rutaImagen);
-                    Image img = icono.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
-                    setIcon(new ImageIcon(img));
-                } catch (Exception e) {
-                    setIcon(null);
-                    setText("(Imagen no encontrada)");
-                }
-            } else {
-                setIcon(null);
-                setText("(Sin imagen)");
-            }
-
-            setHorizontalAlignment(JLabel.CENTER);
-            setVerticalAlignment(JLabel.CENTER);
-
-            return this;
-        }
     }
 
     private void limpiarFormularioEnfermera() {
@@ -4390,13 +4244,13 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoApellido1.setText("");
         txtEdad1.setText("");
         txtCedula1.setText("");
-        txtNacionalidad1.setText("");
+        cmbNacionalidad.setSelectedIndex(0);
         txtCorreo1.setText("");
         cmbTurno1.setSelectedIndex(0);
         dateFinContrato1.setDate(null);
         txtFechaContratacion1.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         lblImagen1.setIcon(null);
-        rutaImagenEnfermera = null; // Limpiar variable de registro
+        rutaImagenEnfermera = null;
     }
 
     private void limpiarFormularioEnfermeraMod() {
@@ -4406,7 +4260,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoApellidoMod1.setText("");
         txtEdadMod1.setText("");
         txtCedulaMod1.setText("");
-        txtNacionalidadMod1.setText("");
+        cmbNacionalidad1.setSelectedIndex(0);
         txtCorreoMod1.setText("");
         cmbTurnoMod1.setSelectedIndex(0);
         dateFinContratoMod1.setDate(null);
@@ -4426,7 +4280,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoApellidoMod3.setText(oficial.getSegundoApellido());
         txtEdadMod3.setText(String.valueOf(oficial.getEdad()));
         txtCedulaMod3.setText(oficial.getIdentificacion());
-        txtNacionalidadMod3.setText(oficial.getNacionalidad());
+        cmbNacionalidad3.setSelectedItem(oficial.getNacionalidad());
         txtCorreoMod3.setText(oficial.getCorreo());
         cmbTurnoMod3.setSelectedItem(oficial.getTurno());
         txtFechaContratacionMod3.setText(oficial.getFechaContratacion().toString());
@@ -4476,7 +4330,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoApellido3.setText("");
         txtEdad3.setText("");
         txtCedula3.setText("");
-        txtNacionalidad3.setText("");
+        cmbNacionalidad3.setSelectedIndex(0);
         txtCorreo3.setText("");
         cmbTurno3.setSelectedIndex(0);
         dateFinContrato3.setDate(null);
@@ -4492,7 +4346,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoApellidoMod3.setText("");
         txtEdadMod3.setText("");
         txtCedulaMod3.setText("");
-        txtNacionalidadMod3.setText("");
+        cmbTurnoMod3.setSelectedItem(0);
         txtCorreoMod3.setText("");
         cmbTurnoMod3.setSelectedIndex(0);
         dateFinContratoMod3.setDate(null);
@@ -4508,7 +4362,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoApellido5.setText("");
         txtEdad5.setText("");
         txtCedula5.setText("");
-        txtNacionalidad5.setText("");
+        cmbNacionalidad5.setSelectedIndex(0);
         txtCorreo5.setText("");
         cmbTurno5.setSelectedIndex(0);
         dateFinContrato5.setDate(null);
@@ -4524,7 +4378,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoApellidoMod5.setText("");
         txtEdadMod5.setText("");
         txtCedulaMod5.setText("");
-        txtNacionalidadMod5.setText("");
+        cmbNacionalidadMod5.setSelectedIndex(0);
         txtCorreoMod5.setText("");
         cmbTurnoMod5.setSelectedIndex(0);
         dateFinContratoMod5.setDate(null);
@@ -4542,7 +4396,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
             String primerApellido = txtPrimerApellido.getText().trim();
             String segundoApellido = txtSegundoApellido.getText().trim();
             String cedula = txtCedula.getText().trim();
-            String nacionalidad = txtNacionalidad.getText().trim();
+            String nacionalidad = cmbNacionalidad.getSelectedItem().toString();
             String correo = txtCorreo.getText().trim();
             String turno = cmbTurno.getSelectedItem().toString();
             String cargo = cmbCargo.getSelectedItem().toString();
@@ -4563,8 +4417,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate();
 
-            // Validar imagen (similar a EnfermeraController)
-            if (rutaImagenGuardia == null || !rutaImagenGuardia.exists()) {
+            if (lblFoto.getIcon() == null) {
                 throw new IllegalArgumentException("Debe seleccionar una imagen válida del guardia.");
             }
 
@@ -4727,7 +4580,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoApellido.setText("");
         txtEdad.setText("");
         txtCedula.setText("");
-        txtNacionalidad.setText("");
+        cmbNacionalidad.setSelectedIndex(0);
         txtCorreo.setText("");
         cmbTurno.setSelectedIndex(0);
         cmbCargo.setSelectedIndex(0);
@@ -4784,9 +4637,8 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                 }
             }
 
-            // Mostrar previsualización si se seleccionó una imagen
+            // Modificar la parte final del método:
             if (nuevaImagen != null && nuevaImagen.exists()) {
-                // Escalar la imagen para que se ajuste al JLabel
                 ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
                 Image imagenEscalada = icono.getImage()
                         .getScaledInstance(
@@ -4795,14 +4647,18 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                                 Image.SCALE_SMOOTH
                         );
 
-                // Mostrar en el JLabel
-                lblFoto.setIcon(new ImageIcon(imagenEscalada));
+                // Determinar si es registro o modificación
+                if (tabPrincipal.getSelectedComponent() == AñadirGuardia) {
+                    lblFoto.setIcon(new ImageIcon(imagenEscalada));
+                    rutaImagenGuardia = nuevaImagen;
+                } else if (tabPrincipal.getSelectedComponent() == ModificarGuardia) {
+                    lblImagenMod.setIcon(new ImageIcon(imagenEscalada));
+                    rutaImagenGuardiaMod = nuevaImagen;
+                    imagenFueModificada = true;
+                }
 
-                // Guardar referencia al archivo para cuando se guarde
-                rutaImagenGuardiaMod = nuevaImagen;
-
-                // Mostrar tooltip con la ruta
-                lblFoto.setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
+                ((JLabel) (tabPrincipal.getSelectedComponent() == AñadirGuardia ? lblFoto : lblImagenMod))
+                        .setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
             }
 
         } catch (Exception e) {
@@ -4860,69 +4716,49 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         try {
             // Obtener valores del formulario
             String cedulaOriginal = txtCedulaMod.getText().trim();
-            String primerNombre = txtPrimerNombreMod.getText().trim();
-            String segundoNombre = txtSegundoNombreMod.getText().trim();
-            String primerApellido = txtPrimerApellidoMod.getText().trim();
-            String segundoApellido = txtSegundoApellidoMod.getText().trim();
-            String nacionalidad = txtNacionalidadMod.getText().trim();
-            String correo = txtCorreoMod.getText().trim();
-            String turno = cmbTurnoMod.getSelectedItem().toString();
-            String cargo = txtCargoMod.getSelectedItem().toString();
 
-            // Validar edad
-            int edad;
-            try {
-                edad = Integer.parseInt(txtEdadMod.getText().trim());
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("La edad debe ser un número válido.");
-            }
-
-            // Validar fecha fin
+            // Validar que la fecha no sea nula
             if (dateFinContratoMod.getDate() == null) {
-                throw new IllegalArgumentException("Seleccione una fecha de fin de contrato.");
+                throw new IllegalArgumentException("Debe seleccionar una fecha de fin de contrato");
             }
             LocalDate fechaFin = dateFinContratoMod.getDate().toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate();
 
-            // Validar imagen (si se seleccionó una nueva)
-            if (rutaImagenGuardiaMod != null) {
-                if (!rutaImagenGuardiaMod.exists()) {
-                    throw new IllegalArgumentException("La imagen seleccionada no existe.");
-                }
-                String nombreImagen = rutaImagenGuardiaMod.getName().toLowerCase();
-                if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
-                    throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
-                }
-            }
-
             // Preparar cambios
             Map<String, Object> cambios = new HashMap<>();
-            cambios.put("primerNombre", primerNombre);
-            cambios.put("segundoNombre", segundoNombre);
-            cambios.put("primerApellido", primerApellido);
-            cambios.put("segundoApellido", segundoApellido);
-            cambios.put("edad", edad);
-            cambios.put("nacionalidad", nacionalidad);
-            cambios.put("correo", correo);
-            cambios.put("turno", turno);
-            cambios.put("cargo", cargo);
+            cambios.put("primerNombre", txtPrimerNombreMod.getText().trim());
+            cambios.put("segundoNombre", txtSegundoNombreMod.getText().trim());
+            cambios.put("primerApellido", txtPrimerApellidoMod.getText().trim());
+            cambios.put("segundoApellido", txtSegundoApellidoMod.getText().trim());
+            cambios.put("edad", Integer.parseInt(txtEdadMod.getText().trim()));
+            cambios.put("nacionalidad", cmbNacionalidadMod.getSelectedItem().toString());
+            cambios.put("correo", txtCorreoMod.getText().trim());
+            cambios.put("turno", cmbTurnoMod.getSelectedItem().toString());
+            cambios.put("cargo", txtCargoMod.getSelectedItem().toString());
             cambios.put("fechaFin", fechaFin);
 
-            // Llamar al Controller
+            // Determinar qué imagen enviar al controller
+            File imagenParaModificar = imagenFueModificada ? rutaImagenGuardiaMod : null;
+
+            // Llamar al Controller (que manejará todas las validaciones)
             boolean modificado = guardiaController.modificarGuardia(
                     cedulaOriginal,
                     cambios,
-                    rutaImagenGuardiaMod // Puede ser null
+                    imagenParaModificar
             );
 
             if (modificado) {
+                JOptionPane.showMessageDialog(this,
+                        "Guardia modificado exitosamente",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 limpiarFormularioModificacion();
                 actualizarTablaGuardias();
-                JOptionPane.showMessageDialog(this, "Guardia modificado exitosamente.",
-                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
             }
 
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "La edad debe ser un número válido",
+                    "Error de validación", JOptionPane.ERROR_MESSAGE);
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this, e.getMessage(),
                     "Error de validación", JOptionPane.ERROR_MESSAGE);
@@ -4951,7 +4787,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
     }//GEN-LAST:event_txtCorreoModKeyTyped
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // Opciones para el diálogo
         Object[] options = {"Tomar Foto", "Seleccionar Archivo", "Cancelar"};
         int opcion = JOptionPane.showOptionDialog(
                 this,
@@ -4967,55 +4802,32 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         try {
             File nuevaImagen = null;
 
-            if (opcion == 0) { // Tomar Foto con cámara
+            if (opcion == 0) { // Tomar Foto
                 nuevaImagen = guardiaController.capturarImagenGuardia();
-            } else if (opcion == 1) { // Seleccionar archivo del sistema
+            } else if (opcion == 1) { // Seleccionar archivo
                 JFileChooser fileChooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter(
                         "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");
                 fileChooser.setFileFilter(filter);
                 fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 
-                int resultado = fileChooser.showOpenDialog(this);
-
-                if (resultado == JFileChooser.APPROVE_OPTION) {
+                if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                     nuevaImagen = fileChooser.getSelectedFile();
-
-                    // Validar extensión del archivo
-                    String nombreArchivo = nuevaImagen.getName().toLowerCase();
-                    if (!nombreArchivo.endsWith(".jpg")
-                            && !nombreArchivo.endsWith(".jpeg")
-                            && !nombreArchivo.endsWith(".png")) {
-                        JOptionPane.showMessageDialog(this,
-                                "Formato de imagen no válido. Use JPG, JPEG o PNG.",
-                                "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
                 }
             }
 
-            // Mostrar previsualización si se seleccionó una imagen
-            if (nuevaImagen != null && nuevaImagen.exists()) {
-                // Escalar la imagen para el JLabel
+            // Manejar la imagen seleccionada
+            if (nuevaImagen != null) {
                 ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
                 Image imagenEscalada = icono.getImage()
-                        .getScaledInstance(
-                                lblImagenMod.getWidth(),
-                                lblImagenMod.getHeight(),
-                                Image.SCALE_SMOOTH
-                        );
+                        .getScaledInstance(lblImagenMod.getWidth(), lblImagenMod.getHeight(), Image.SCALE_SMOOTH);
 
-                // Mostrar en el JLabel
                 lblImagenMod.setIcon(new ImageIcon(imagenEscalada));
-
-                // Guardar referencia al archivo para cuando se guarde
                 rutaImagenGuardiaMod = nuevaImagen;
-
-                // Mostrar tooltip con la ruta
                 lblImagenMod.setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
 
-                // Actualizar inmediatamente en el JSON (opcional)
-                // actualizarImagenEnJSON(nuevaImagen);
+                // Marcar que la imagen fue modificada
+                imagenFueModificada = true;
             }
 
         } catch (Exception e) {
@@ -5132,7 +4944,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
             String primerApellido = txtPrimerApellido1.getText().trim();
             String segundoApellido = txtSegundoApellido1.getText().trim();
             String cedula = txtCedula1.getText().trim();
-            String nacionalidad = txtNacionalidad1.getText().trim();
+            String nacionalidad = cmbNacionalidad1.getSelectedItem().toString();
             String correo = txtCorreo1.getText().trim();
             String turno = cmbTurno1.getSelectedItem().toString();
 
@@ -5198,7 +5010,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
             txtPrimerApellidoMod2.setText(coordinador.getPrimerApellido());
             txtSegundoApellidoMod2.setText(coordinador.getSegundoApellido());
             txtEdadMod2.setText(String.valueOf(coordinador.getEdad()));
-            txtNacionalidadMod2.setText(coordinador.getNacionalidad());
+            cmbNacionalidadMod2.setSelectedItem(coordinador.getNacionalidad());
             txtCorreoMod2.setText(coordinador.getCorreo());
             txtFechaContratacionMod2.setText(coordinador.getFechaInicioContrato().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
 
@@ -5249,7 +5061,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoApellidoMod1.setText(enfermera.getSegundoApellido());
         txtEdadMod1.setText(String.valueOf(enfermera.getEdad()));
         txtCedulaMod1.setText(enfermera.getIdentificacion());
-        txtNacionalidadMod1.setText(enfermera.getNacionalidad());
+        cmbNacionalidadMod1.setSelectedItem(enfermera.getNacionalidad());
         txtCorreoMod1.setText(enfermera.getCorreo());
         cmbTurnoMod1.setSelectedItem(enfermera.getTurno());
         txtFechaContratacionMod1.setText(enfermera.getFechaContratacion().toString());
@@ -5292,7 +5104,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoApellidoMod5.setText(pdc.getSegundoApellido());
         txtEdadMod5.setText(String.valueOf(pdc.getEdad()));
         txtCedulaMod5.setText(pdc.getIdentificacion());
-        txtNacionalidadMod5.setText(pdc.getNacionalidad());
+
         txtCorreoMod5.setText(pdc.getCorreo());
         cmbTurnoMod5.setSelectedItem(pdc.getTurno());
         txtFechaContratacionMod5.setText(pdc.getFechaContratacion().toString());
@@ -5304,6 +5116,8 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         } catch (Exception e) {
             dateFinContratoMod5.setDate(null);
         }
+
+        cmbNacionalidadMod5.setSelectedItem(pdc.getNacionalidad());
 
         // Cargar imagen existente
         if (pdc.getRutaImagen() != null && !pdc.getRutaImagen().isEmpty()) {
@@ -5335,9 +5149,9 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         txtSegundoApellidoMod4.setText(odr.getSegundoApellido());
         txtEdadMod4.setText(String.valueOf(odr.getEdad()));
         txtCedulaMod4.setText(odr.getIdentificacion());
-        txtNacionalidadMod4.setText(odr.getNacionalidad());
         txtCorreoMod4.setText(odr.getCorreo());
         cmbTurnoMod4.setSelectedItem(odr.getTurno());
+
         txtFechaContratacionMod4.setText(odr.getFechaContratacion().toString());
 
         try {
@@ -5348,7 +5162,8 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
             dateFinContratoMod4.setDate(null);
         }
 
-        // Cargar imagen existente
+        cmbNacionalidad4.setSelectedItem(odr.getTurno());
+
         if (odr.getRutaImagen() != null && !odr.getRutaImagen().isEmpty()) {
             File imagenExistente = new File(odr.getRutaImagen());
             if (imagenExistente.exists()) {
@@ -5892,7 +5707,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                 throw new IllegalArgumentException("La edad debe ser un número válido");
             }
 
-            cambios.put("nacionalidad", txtNacionalidadMod1.getText().trim());
+            cambios.put("nacionalidad", cmbNacionalidadMod1.getSelectedItem().toString());
             cambios.put("correo", txtCorreoMod1.getText().trim());
             cambios.put("turno", cmbTurnoMod1.getSelectedItem().toString());
 
@@ -5920,6 +5735,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                             "Enfermera modificada exitosamente",
                             "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     tabPrincipal.setSelectedComponent(MostrarEnfermeras);
+                    limpiarFormularioEnfermeraMod();
                     actualizarTablaEnfermeras();
                     break;
 
@@ -6165,7 +5981,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
             String segundoApellido = txtSegundoApellido2.getText().trim();
             int edad = Integer.parseInt(txtEdad2.getText().trim());
             String cedula = txtCedula2.getText().trim();
-            String nacionalidad = txtNacionalidad2.getText().trim();
+            String nacionalidad = cmbNacionalidad2.getSelectedItem().toString();
             String correo = txtCorreo2.getText().trim();
             String turno = cmbTurno2.getSelectedItem().toString();
             String cargo = cmbCargo2.getSelectedItem().toString();
@@ -6194,17 +6010,14 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
             actualizarTablaCDA();
 
         } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error de validación: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Error de validación: " + e.getMessage());
+            e.printStackTrace(); // Opcional: imprime el stack trace completo
         } catch (RuntimeException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al guardar el coordinador: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Error al guardar el coordinador: " + e.getMessage());
+            e.printStackTrace(); // Opcional: imprime el stack trace completo
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error de E/S: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Error de E/S: " + e.getMessage());
+            e.printStackTrace(); // Opcional: imprime el stack trace completo
         }
     }//GEN-LAST:event_jButton9ActionPerformed
 
@@ -6334,7 +6147,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                 throw new IllegalArgumentException("La edad debe ser un número válido");
             }
 
-            cambios.put("nacionalidad", txtNacionalidadMod2.getText().trim());
+            cambios.put("nacionalidad", cmbNacionalidadMod2.getSelectedItem().toString());
             cambios.put("correo", txtCorreoMod2.getText().trim());
             cambios.put("turno", cmbTurnoMod2.getSelectedItem().toString());
             cambios.put("cargo", txtCargoMod1.getSelectedItem().toString());
@@ -6535,17 +6348,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         }
     }//GEN-LAST:event_txtSegundoApellido1KeyTyped
 
-    private void txtNacionalidad1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidad1KeyTyped
-        char c = evt.getKeyChar();
-        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
-            if (c != '\b') {
-                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_txtNacionalidad1KeyTyped
-
     private void txtPrimerNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreKeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
@@ -6589,16 +6391,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
             }
         }
     }//GEN-LAST:event_txtSegundoApellidoKeyTyped
-
-    private void txtNacionalidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadKeyTyped
-        char c = evt.getKeyChar();
-        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume();
-            if (c != '\b') {
-                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_txtNacionalidadKeyTyped
 
     private void txtPrimerNombreMod1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreMod1KeyTyped
         char c = evt.getKeyChar();
@@ -6644,17 +6436,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         }
     }//GEN-LAST:event_txtSegundoApellidoMod1KeyTyped
 
-    private void txtNacionalidadMod1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadMod1KeyTyped
-        char c = evt.getKeyChar();
-        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
-            if (c != '\b') {
-                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_txtNacionalidadMod1KeyTyped
-
     private void txtPrimerNombreModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreModKeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
@@ -6698,17 +6479,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
             }
         }
     }//GEN-LAST:event_txtSegundoApellidoModKeyTyped
-
-    private void txtNacionalidadModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadModKeyTyped
-        char c = evt.getKeyChar();
-        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
-            if (c != '\b') {
-                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_txtNacionalidadModKeyTyped
 
     private void txtPrimerNombre2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombre2KeyTyped
         char c = evt.getKeyChar();
@@ -6754,17 +6524,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         }
     }//GEN-LAST:event_txtSegundoApellido2KeyTyped
 
-    private void txtNacionalidad2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidad2KeyTyped
-        char c = evt.getKeyChar();
-        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
-            if (c != '\b') {
-                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_txtNacionalidad2KeyTyped
-
     private void txtPrimerNombreMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreMod2KeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
@@ -6808,17 +6567,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
             }
         }
     }//GEN-LAST:event_txtSegundoApellidoMod2KeyTyped
-
-    private void txtNacionalidadMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadMod2KeyTyped
-        char c = evt.getKeyChar();
-        if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
-            if (c != '\b') {
-                JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_txtNacionalidadMod2KeyTyped
 
     private void txtFechaContratacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaContratacionActionPerformed
         // TODO add your handling code here:
@@ -6909,11 +6657,10 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
             String primerApellido = txtPrimerApellido3.getText().trim();
             String segundoApellido = txtSegundoApellido3.getText().trim();
             String cedula = txtCedula3.getText().trim();
-            String nacionalidad = txtNacionalidad3.getText().trim();
+            String nacionalidad = cmbNacionalidad3.getSelectedItem().toString();
             String correo = txtCorreo3.getText().trim();
             String turno = cmbTurno3.getSelectedItem().toString();
 
-            // Validar edad
             int edad;
             try {
                 edad = Integer.parseInt(txtEdad3.getText().trim());
@@ -6921,7 +6668,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                 throw new IllegalArgumentException("La edad debe ser un número válido.");
             }
 
-            // Validar fecha fin
             if (dateFinContrato3.getDate() == null) {
                 throw new IllegalArgumentException("Seleccione una fecha de fin de contrato.");
             }
@@ -6929,18 +6675,15 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate();
 
-            // Validar imagen
             if (rutaImagenOficial == null || !rutaImagenOficial.exists()) {
                 throw new IllegalArgumentException("Debe seleccionar una imagen válida del oficial.");
             }
 
-            // Validar formato de imagen
             String nombreImagen = rutaImagenOficial.getName().toLowerCase();
             if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
                 throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
             }
 
-            // Llamar al Controller
             Oficial nuevoOficial = OficialController.getInstancia().registrarOficial(
                     primerNombre,
                     segundoNombre,
@@ -6955,7 +6698,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                     rutaImagenOficial
             );
 
-            // Éxito
             limpiarFormularioOficial();
             cargarTablaOficiales();
             JOptionPane.showMessageDialog(this, "Oficial registrado exitosamente.",
@@ -6984,7 +6726,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
     }//GEN-LAST:event_txtCorreo3KeyTyped
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
-        // Mostrar opciones al usuario (cámara o selección de archivo)
+
         Object[] options = {"Tomar Foto", "Seleccionar Archivo", "Cancelar"};
         int opcion = JOptionPane.showOptionDialog(
                 this,
@@ -7000,15 +6742,14 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         try {
             File nuevaImagen = null;
 
-            if (opcion == 0) { // Tomar Foto con cámara
+            if (opcion == 0) {
                 nuevaImagen = OficialController.getInstancia().capturarImagenOficial();
-            } else if (opcion == 1) { // Seleccionar archivo del sistema
+            } else if (opcion == 1) {
                 JFileChooser fileChooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter(
                         "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");
                 fileChooser.setFileFilter(filter);
 
-                // Configurar el directorio inicial
                 fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 
                 int resultado = fileChooser.showOpenDialog(this);
@@ -7016,7 +6757,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                 if (resultado == JFileChooser.APPROVE_OPTION) {
                     nuevaImagen = fileChooser.getSelectedFile();
 
-                    // Validar extensión del archivo
                     String nombreArchivo = nuevaImagen.getName().toLowerCase();
                     if (!nombreArchivo.endsWith(".jpg")
                             && !nombreArchivo.endsWith(".jpeg")
@@ -7029,9 +6769,8 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                 }
             }
 
-            // Mostrar previsualización si se seleccionó una imagen
             if (nuevaImagen != null && nuevaImagen.exists()) {
-                // Escalar la imagen para que se ajuste al JLabel
+
                 ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
                 Image imagenEscalada = icono.getImage()
                         .getScaledInstance(
@@ -7040,13 +6779,10 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                                 Image.SCALE_SMOOTH
                         );
 
-                // Mostrar en el JLabel
                 lblImagen3.setIcon(new ImageIcon(imagenEscalada));
 
-                // Guardar referencia al archivo
                 rutaImagenOficial = nuevaImagen;
 
-                // Mostrar tooltip con la ruta
                 lblImagen3.setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
             }
 
@@ -7057,10 +6793,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
             e.printStackTrace();
         }
     }//GEN-LAST:event_jButton15ActionPerformed
-
-    private void txtNacionalidad3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidad3KeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNacionalidad3KeyTyped
 
     private void txtCedula3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedula3ActionPerformed
         // TODO add your handling code here:
@@ -7096,14 +6828,14 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
 
     private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
         try {
-            // 1. Preparar cambios
+
             Map<String, Object> cambios = new HashMap<>();
             cambios.put("primerNombre", txtPrimerNombreMod3.getText().trim());
             cambios.put("segundoNombre", txtSegundoNombreMod3.getText().trim());
             cambios.put("primerApellido", txtPrimerApellidoMod3.getText().trim());
             cambios.put("segundoApellido", txtSegundoApellidoMod3.getText().trim());
             cambios.put("edad", Integer.parseInt(txtEdadMod3.getText().trim()));
-            cambios.put("nacionalidad", txtNacionalidadMod3.getText().trim());
+            cambios.put("nacionalidad", cmbNacionalidadMod3.getSelectedItem().toString());
             cambios.put("correo", txtCorreoMod3.getText().trim());
             cambios.put("turno", cmbTurnoMod3.getSelectedItem().toString());
             cambios.put("fechaFin", dateFinContratoMod3.getDate().toInstant()
@@ -7111,16 +6843,13 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
 
             String cedulaOriginal = txtCedulaMod3.getText().trim();
 
-            // 2. Solo considerar como nueva imagen si el usuario seleccionó una explícitamente
             File imagenModificada = imagenFueModificada ? rutaImagenOficialMod : null;
 
-            // 3. Llamar al controlador
             int resultado = OficialController.getInstancia().modificarOficial(
                     cedulaOriginal, cambios, imagenModificada);
 
-            // 4. Manejar resultados
             switch (resultado) {
-                case 1: // Éxito
+                case 1:
                     JOptionPane.showMessageDialog(this,
                             "Oficial modificado exitosamente",
                             "Éxito", JOptionPane.INFORMATION_MESSAGE);
@@ -7139,7 +6868,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                     }
                     break;
 
-                case -1: // Error
+                case -1:
                     throw new RuntimeException("Error desconocido al modificar oficial");
             }
 
@@ -7162,7 +6891,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
     }//GEN-LAST:event_txtCorreoMod3KeyTyped
 
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
-        // Opciones para el diálogo
         Object[] options = {"Tomar Foto", "Seleccionar Archivo", "Cancelar"};
         int opcion = JOptionPane.showOptionDialog(
                 this,
@@ -7177,66 +6905,52 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
 
         try {
             File nuevaImagen = null;
+            boolean operacionCancelada = true;
 
-            if (opcion == 0) { // Tomar Foto con cámara
+            if (opcion == 0) {
                 nuevaImagen = OficialController.getInstancia().capturarImagenOficial();
-            } else if (opcion == 1) { // Seleccionar archivo del sistema
+                operacionCancelada = (nuevaImagen == null);
+            } else if (opcion == 1) {
                 JFileChooser fileChooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter(
                         "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");
                 fileChooser.setFileFilter(filter);
-                fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 
-                int resultado = fileChooser.showOpenDialog(this);
-
-                if (resultado == JFileChooser.APPROVE_OPTION) {
+                if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                     nuevaImagen = fileChooser.getSelectedFile();
-
-                    // Validar extensión del archivo
-                    String nombreArchivo = nuevaImagen.getName().toLowerCase();
-                    if (!nombreArchivo.endsWith(".jpg")
-                            && !nombreArchivo.endsWith(".jpeg")
-                            && !nombreArchivo.endsWith(".png")) {
-                        JOptionPane.showMessageDialog(this,
-                                "Formato de imagen no válido. Use JPG, JPEG o PNG.",
-                                "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
+                    operacionCancelada = false;
                 }
             }
 
-            // Mostrar previsualización si se seleccionó una imagen
-            if (nuevaImagen != null && nuevaImagen.exists()) {
-                // Escalar la imagen para el JLabel
-                ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
-                Image imagenEscalada = icono.getImage()
-                        .getScaledInstance(
-                                lblImagenMod3.getWidth(),
-                                lblImagenMod3.getHeight(),
-                                Image.SCALE_SMOOTH
-                        );
+            if (!operacionCancelada && nuevaImagen != null) {
 
-                // Mostrar en el JLabel
-                lblImagenMod3.setIcon(new ImageIcon(imagenEscalada));
+                String nombre = nuevaImagen.getName().toLowerCase();
+                if (!nombre.endsWith(".jpg") && !nombre.endsWith(".jpeg") && !nombre.endsWith(".png")) {
+                    JOptionPane.showMessageDialog(this,
+                            "Formato de imagen no válido. Use JPG, JPEG o PNG.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-                // Guardar referencia al archivo
+                ImageIcon icono = new ImageIcon(nuevaImagen.getPath());
+                Image img = icono.getImage().getScaledInstance(
+                        lblImagenMod3.getWidth(),
+                        lblImagenMod3.getHeight(),
+                        Image.SCALE_SMOOTH
+                );
+                lblImagenMod3.setIcon(new ImageIcon(img));
                 rutaImagenOficialMod = nuevaImagen;
-
-                // Mostrar tooltip con la ruta
-                lblImagenMod3.setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
+                imagenFueModificada = true;
             }
 
-        } catch (Exception e) {
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
-                    "Error al obtener imagen: " + e.getMessage(),
+                    "Error al procesar imagen: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+
+            ex.printStackTrace();
         }
     }//GEN-LAST:event_jButton17ActionPerformed
-
-    private void txtNacionalidadMod3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadMod3KeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNacionalidadMod3KeyTyped
 
     private void txtCedulaMod3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaMod3ActionPerformed
         // TODO add your handling code here:
@@ -7326,7 +7040,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
 
                 cargarDatosOficialParaModificar(oficial);
 
-                // Cambiar al panel de modificación (asegúrate que el nombre sea correcto)
                 tabPrincipal.setSelectedComponent(ModificarOficial);
             } else {
                 JOptionPane.showMessageDialog(this,
@@ -7349,11 +7062,10 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
             String primerApellido = txtPrimerApellido4.getText().trim();
             String segundoApellido = txtSegundoApellido4.getText().trim();
             String cedula = txtCedula4.getText().trim();
-            String nacionalidad = txtNacionalidad4.getText().trim();
+            String nacionalidad = cmbNacionalidad4.getSelectedItem().toString();
             String correo = txtCorreo4.getText().trim();
             String turno = cmbTurno4.getSelectedItem().toString();
 
-            // Validar edad
             int edad;
             try {
                 edad = Integer.parseInt(txtEdad4.getText().trim());
@@ -7496,10 +7208,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         }
     }//GEN-LAST:event_jButton19ActionPerformed
 
-    private void txtNacionalidad4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidad4KeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNacionalidad4KeyTyped
-
     private void txtCedula4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedula4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCedula4ActionPerformed
@@ -7541,7 +7249,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
             cambios.put("primerApellido", txtPrimerApellidoMod4.getText().trim());
             cambios.put("segundoApellido", txtSegundoApellidoMod4.getText().trim());
             cambios.put("edad", Integer.parseInt(txtEdadMod4.getText().trim()));
-            cambios.put("nacionalidad", txtNacionalidadMod4.getText().trim());
+            cambios.put("nacionalidad", cmbNacionalidadMod4.getSelectedItem().toString());
             cambios.put("correo", txtCorreoMod4.getText().trim());
             cambios.put("turno", cmbTurnoMod4.getSelectedItem().toString());
             cambios.put("fechaFin", dateFinContratoMod4.getDate().toInstant()
@@ -7644,10 +7352,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton21ActionPerformed
-
-    private void txtNacionalidadMod4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadMod4KeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNacionalidadMod4KeyTyped
 
     private void txtCedulaMod4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaMod4ActionPerformed
         // TODO add your handling code here:
@@ -7760,7 +7464,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
             String primerApellido = txtPrimerApellido5.getText().trim();
             String segundoApellido = txtSegundoApellido5.getText().trim();
             String cedula = txtCedula5.getText().trim();
-            String nacionalidad = txtNacionalidad5.getText().trim();
+            String nacionalidad = cmbNacionalidad5.getSelectedItem().toString();
             String correo = txtCorreo5.getText().trim();
             String turno = cmbTurno5.getSelectedItem().toString();
 
@@ -7862,10 +7566,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
         }
     }//GEN-LAST:event_jButton23ActionPerformed
 
-    private void txtNacionalidad5KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidad5KeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNacionalidad5KeyTyped
-
     private void txtCedula5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedula5ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCedula5ActionPerformed
@@ -7913,7 +7613,7 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
             }
             cambios.put("edad", Integer.parseInt(txtEdadMod5.getText().trim()));
 
-            cambios.put("nacionalidad", txtNacionalidadMod5.getText().trim());
+            cambios.put("nacionalidad", cmbNacionalidadMod5.getSelectedItem().toString());
             cambios.put("correo", txtCorreoMod5.getText().trim());
             cambios.put("turno", cmbTurnoMod5.getSelectedItem().toString());
 
@@ -7981,12 +7681,51 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
     }//GEN-LAST:event_txtCorreoMod5KeyTyped
 
     private void jButton25ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton25ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton25ActionPerformed
+        Object[] options = {"Usar Cámara", "Seleccionar Archivo", "Cancelar"};
+        int opcion = JOptionPane.showOptionDialog(this,
+                "¿Cómo desea obtener la imagen?",
+                "Seleccionar Imagen",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
 
-    private void txtNacionalidadMod5KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNacionalidadMod5KeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNacionalidadMod5KeyTyped
+        try {
+            File nuevaImagen = null;
+
+            if (opcion == 0) {
+                nuevaImagen = PersonalControlController.getInstancia().capturarImagenPDC();
+                imagenFueModificada = (nuevaImagen != null);
+            } else if (opcion == 1) {
+                JFileChooser fileChooser = new JFileChooser();
+                FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                        "Imágenes", "jpg", "png", "jpeg");
+                fileChooser.setFileFilter(filter);
+
+                if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                    nuevaImagen = fileChooser.getSelectedFile();
+                    imagenFueModificada = true;
+                }
+            }
+
+            if (nuevaImagen != null) {
+                ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
+                Image imagenEscalada = icono.getImage()
+                        .getScaledInstance(
+                                lblImagenMod5.getWidth(),
+                                lblImagenMod5.getHeight(),
+                                Image.SCALE_SMOOTH
+                        );
+                lblImagenMod5.setIcon(new ImageIcon(imagenEscalada));
+                rutaImagenPDCMod = nuevaImagen;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al obtener imagen: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton25ActionPerformed
 
     private void txtCedulaMod5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaMod5ActionPerformed
         // TODO add your handling code here:
@@ -8107,20 +7846,21 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Director.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Directora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Director.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Directora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Director.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Directora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Director.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Directora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Director().setVisible(true);
+                new Directora().setVisible(true);
             }
         });
     }
@@ -8155,6 +7895,18 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
     private javax.swing.JPanel añadirODR;
     private javax.swing.JComboBox<String> cmbCargo;
     private javax.swing.JComboBox<String> cmbCargo2;
+    private javax.swing.JComboBox<String> cmbNacionalidad;
+    private javax.swing.JComboBox<String> cmbNacionalidad1;
+    private javax.swing.JComboBox<String> cmbNacionalidad2;
+    private javax.swing.JComboBox<String> cmbNacionalidad3;
+    private javax.swing.JComboBox<String> cmbNacionalidad4;
+    private javax.swing.JComboBox<String> cmbNacionalidad5;
+    private javax.swing.JComboBox<String> cmbNacionalidadMod;
+    private javax.swing.JComboBox<String> cmbNacionalidadMod1;
+    private javax.swing.JComboBox<String> cmbNacionalidadMod2;
+    private javax.swing.JComboBox<String> cmbNacionalidadMod3;
+    private javax.swing.JComboBox<String> cmbNacionalidadMod4;
+    private javax.swing.JComboBox<String> cmbNacionalidadMod5;
     private javax.swing.JComboBox<String> cmbTurno;
     private javax.swing.JComboBox<String> cmbTurno1;
     private javax.swing.JComboBox<String> cmbTurno2;
@@ -8632,18 +8384,6 @@ public class Director extends javax.swing.JFrame implements PerfilUsuario {
     private javax.swing.JTextField txtFechaContratacionMod3;
     private javax.swing.JTextField txtFechaContratacionMod4;
     private javax.swing.JTextField txtFechaContratacionMod5;
-    private javax.swing.JTextField txtNacionalidad;
-    private javax.swing.JTextField txtNacionalidad1;
-    private javax.swing.JTextField txtNacionalidad2;
-    private javax.swing.JTextField txtNacionalidad3;
-    private javax.swing.JTextField txtNacionalidad4;
-    private javax.swing.JTextField txtNacionalidad5;
-    private javax.swing.JTextField txtNacionalidadMod;
-    private javax.swing.JTextField txtNacionalidadMod1;
-    private javax.swing.JTextField txtNacionalidadMod2;
-    private javax.swing.JTextField txtNacionalidadMod3;
-    private javax.swing.JTextField txtNacionalidadMod4;
-    private javax.swing.JTextField txtNacionalidadMod5;
     private javax.swing.JTextField txtPrimerApellido;
     private javax.swing.JTextField txtPrimerApellido1;
     private javax.swing.JTextField txtPrimerApellido2;

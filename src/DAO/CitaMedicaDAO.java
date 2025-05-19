@@ -40,13 +40,13 @@ public class CitaMedicaDAO {
     }
 
     private CitaMedicaDAO() {
-         this.gson = new GsonBuilder()
+        this.gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                 .create();
-    
+
     }
 
     public List<CitaMedica> cargarTodas() {
@@ -107,7 +107,8 @@ public class CitaMedicaDAO {
                 .filter(c -> c.getEnfermera().getIdentificacion().equals(identificacionEnfermera))
                 .collect(Collectors.toList());
     }
- public boolean actualizarDiagnostico(int idCita, String diagnostico, String rutaArchivo) {
+
+    public boolean actualizarDiagnostico(int idCita, String diagnostico, String rutaArchivo) {
         CitaMedica cita = buscarPorId(idCita);
         if (cita != null) {
             cita.setDiagnostico(diagnostico);
@@ -119,22 +120,21 @@ public class CitaMedicaDAO {
         return false;
     }
 
-    
-    private static class LocalDateTimeAdapter implements JsonSerializer<LocalDateTime>, 
+    private static class LocalDateTimeAdapter implements JsonSerializer<LocalDateTime>,
             JsonDeserializer<LocalDateTime> {
+
         @Override
-        public JsonElement serialize(LocalDateTime src, Type typeOfSrc, 
+        public JsonElement serialize(LocalDateTime src, Type typeOfSrc,
                 JsonSerializationContext context) {
             return new JsonPrimitive(src.toString());
         }
 
         @Override
-        public LocalDateTime deserialize(JsonElement json, Type typeOfT, 
+        public LocalDateTime deserialize(JsonElement json, Type typeOfT,
                 JsonDeserializationContext context) throws JsonParseException {
             return LocalDateTime.parse(json.getAsString());
         }
     }
-
 
     public boolean marcarComoPrioritario(int idCita) {
         CitaMedica cita = buscarPorId(idCita);

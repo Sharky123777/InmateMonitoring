@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
 public class VisitaDAO {
@@ -26,7 +28,11 @@ public class VisitaDAO {
                 .setPrettyPrinting()
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
+                .registerTypeAdapter(new TypeToken<Map<Visitante, String>>() {
+                }.getType(),
+                        new VisitantesMapAdapter())
                 .create();
+
     }
 
     public static synchronized VisitaDAO getInstancia() {
@@ -69,9 +75,15 @@ public class VisitaDAO {
     public void guardarVisita(Visita visita) {
         List<Visita> visitas = cargarTodas();
 
+        for (Visitante visitante : visita.getVisitantesConRelacion().keySet()) {
+            VisitanteDAO.getInstancia().guardarVisitante(visitante, null);
+        }
+
         if (visita.getId() == 0) {
             int nuevoId = obtenerProximoId(visitas);
             visita.setId(nuevoId);
+        } else {
+            visitas.removeIf(v -> v.getId() == visita.getId());
         }
 
         visitas.add(visita);
@@ -167,11 +179,23 @@ public class VisitaDAO {
     }
 
     public Visita modificarEstadoVisitaYDevolver(int id, EstadoVisitaEnum nuevoEstado) {
+        return modificarEstadoVisitaYDevolver(id, nuevoEstado, null);
+    }
+
+    public Visita modificarEstadoVisitaYDevolver(int id,
+            EstadoVisitaEnum nuevoEstado,
+            String razonCancelacion) {
         List<Visita> visitas = cargarTodas();
 
         for (Visita visita : visitas) {
             if (visita.getId() == id) {
                 visita.setEstado(nuevoEstado);
+
+                if (nuevoEstado == EstadoVisitaEnum.CANCELADA) {
+                    visita.setRazonCancelacion(razonCancelacion);
+                } else {
+                    visita.setRazonCancelacion(null);
+                }
 
                 if (guardarCambios(visitas)) {
                     return visita;
@@ -217,7 +241,7 @@ public class VisitaDAO {
         for (Visita visita : todasVisitas) {
             if (visita.getEstado() != EstadoVisitaEnum.CANCELADA
                     && visita.getFechaVisita().equals(fecha)) {
-                for (Visitante visitante : visita.getVisitantes()) {
+                for (Visitante visitante : visita.getVisitantesConRelacion().keySet()) {
                     if (visitante.getIdentificacion().equals(identificacionVisitante)) {
                         return true;
                     }
@@ -225,6 +249,42 @@ public class VisitaDAO {
             }
         }
         return false;
+    }
+
+    public List<Visita> obtenerVisitasParaFinalizar() {
+        LocalDate hoy = LocalDate.now();
+        LocalTime horaActual = LocalTime.now();
+
+        return cargarTodas().stream()
+                .filter(visita -> visita.getEstado() == EstadoVisitaEnum.EN_PROCESO)
+                .filter(visita -> {
+                    if (visita.getFechaVisita().isBefore(hoy)) {
+                        return true;
+                    }
+                    if (visita.getFechaVisita().equals(hoy)) {
+                        LocalTime horaFinVisita = visita.getHoraVisita().plusHours(1);
+                        return horaActual.isAfter(horaFinVisita);
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public int finalizarVisitasAutomaticamente() {
+        List<Visita> visitasAFinalizar = obtenerVisitasParaFinalizar();
+        if (visitasAFinalizar.isEmpty()) {
+            return 0;
+        }
+
+        List<Visita> todasVisitas = cargarTodas();
+        for (Visita visita : todasVisitas) {
+            if (visitasAFinalizar.stream().anyMatch(v -> v.getId() == visita.getId())) {
+                visita.setEstado(EstadoVisitaEnum.FINALIZADA);
+            }
+        }
+
+        guardarTodas(todasVisitas);
+        return visitasAFinalizar.size();
     }
 
 }

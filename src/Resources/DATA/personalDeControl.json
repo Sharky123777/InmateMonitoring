@@ -2,18 +2,33 @@
   "personal_control": [
     {
       "turno": "Diurno",
-      "fechaContratacion": "2025-05-15",
+      "fechaContratacion": "2025-05-17",
       "fechaFinContrato": "2025-05-23",
-      "rutaImagen": "src/Resources/imagenes_personal_control/1731318313_1747358323389.png",
-      "correo": "shar@gmail.com",
+      "rutaImagen": "src/Resources/imagenes_personal_control/09876513131.png",
+      "correo": "juan1234@gmail.com",
       "primerNombre": "s",
       "segundoNombre": "s",
       "primerApellido": "s",
-      "segundoApellido": "s",
-      "edad": 34,
-      "sexo": "Masculino",
-      "nacionalidad": "pepe",
-      "identificacion": "1731318313"
+      "segundoApellido": "ñ",
+      "edad": 45,
+      "sexo": "Femenino",
+      "nacionalidad": "novia",
+      "identificacion": "09876513131"
+    },
+    {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-18",
+      "fechaFinContrato": "2025-05-24",
+      "rutaImagen": "src/Resources/imagenes_personal_control/6715433345_1747596980609.jpg",
+      "correo": "nicollelopez081@gmail.com",
+      "primerNombre": "nicolle",
+      "segundoNombre": "Andrea",
+      "primerApellido": "Rivera",
+      "segundoApellido": "Montes",
+      "edad": 30,
+      "sexo": "Femenino",
+      "nacionalidad": "Colombiana",
+      "identificacion": "6715433345"
     }
   ]
 }

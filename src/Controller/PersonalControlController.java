@@ -69,12 +69,13 @@ public class PersonalControlController {
             validarCamposObligatorios(primerNombre, primerApellido, segundoApellido, edad, cedula, nacionalidad, correo, turno, fechaFinContrato);
 
             validarEdad(edad);
+            validarCedula(cedula);
             validarFechasContrato(LocalDate.now(), fechaFinContrato);
             validarImagen(imagen);
 
             PersonalControl nuevoPersonalControl = new PersonalControl(
                     primerNombre, segundoNombre, primerApellido, segundoApellido,
-                    edad, "Masculino", nacionalidad, cedula, turno,
+                    edad, "Femenino", nacionalidad, cedula, turno,
                     LocalDate.now(), fechaFinContrato, correo, "", ""
             );
 
@@ -90,6 +91,29 @@ public class PersonalControlController {
         } catch (Exception e) {
             throw new RuntimeException("Error al registrar personal de control: " + e.getMessage(), e);
         }
+    }
+
+    public File capturarImagenPDC() {
+        FrmCamara ventanaCamara = new FrmCamara();
+        ventanaCamara.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JDialog dialog = new JDialog();
+        dialog.setModal(true);
+        dialog.setContentPane(ventanaCamara.getContentPane());
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+
+        while (dialog.isVisible()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return null;
+            }
+        }
+
+        return ventanaCamara.getImagenCapturada();
     }
 
     private void validarImagen(File imagen) {
@@ -117,48 +141,40 @@ public class PersonalControlController {
 
     public int modificarPersonalControl(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
         try {
-           
+
             PersonalControl original = obtenerPersonalControlPorCedula(cedulaOriginal);
             if (original == null) {
                 throw new IllegalArgumentException("Personal de control no encontrado");
             }
 
-         
             validarCamposModificacion(cambios);
 
-    
             int edad = (int) cambios.get("edad");
             validarEdad(edad);
 
-           
             LocalDate fechaFin = (LocalDate) cambios.get("fechaFin");
             validarFechasContrato(original.getFechaContratacion(), fechaFin);
 
-            
             String correo = (String) cambios.get("correo");
             if (!correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
                 throw new IllegalArgumentException("Correo electrónico no válido");
             }
 
-           
             String turno = (String) cambios.get("turno");
             if (!turno.equalsIgnoreCase("Diurno") && !turno.equalsIgnoreCase("Nocturno")) {
                 throw new IllegalArgumentException("Turno debe ser 'Diurno' o 'Nocturno'");
             }
 
-            
             if (nuevaImagen != null) {
                 validarImagen(nuevaImagen);
             }
 
-           
             boolean hayCambios = verificarCambios(original, cambios, nuevaImagen);
             if (!hayCambios) {
                 System.out.println("No hay cambios reales - retornando 0");
                 return 0;
             }
 
-            
             boolean modificadoEnBD = personalControlDAO.modificarPersonalControl(
                     cedulaOriginal,
                     construirPersonalControlModificado(cedulaOriginal, cambios, original),
@@ -168,10 +184,10 @@ public class PersonalControlController {
             return modificadoEnBD ? 1 : -1;
 
         } catch (IllegalArgumentException e) {
-          
-            throw e; 
+
+            throw e;
         } catch (Exception e) {
-            
+
             e.printStackTrace();
             throw new RuntimeException("Error al modificar personal de control: " + e.getMessage(), e);
         }
@@ -180,7 +196,6 @@ public class PersonalControlController {
     private boolean verificarCambios(PersonalControl original, Map<String, Object> cambios, File nuevaImagen) {
         boolean hayCambios = false;
 
-        
         if (!Objects.equals(original.getPrimerNombre(), cambios.get("primerNombre"))) {
             hayCambios = true;
         }
@@ -209,12 +224,9 @@ public class PersonalControlController {
             hayCambios = true;
         }
 
-        
         if (nuevaImagen != null) {
-            String rutaOriginal = "src/Resources/imagenes_personal_control/" + original.getIdentificacion() + ".png";
-            if (!nuevaImagen.getPath().equals(rutaOriginal)) {
-                hayCambios = true;
-            }
+            // Siempre hay cambios si se proporciona una nueva imagen
+            hayCambios = true;
         }
 
         return hayCambios;
@@ -229,7 +241,7 @@ public class PersonalControlController {
                 (String) cambios.get("primerApellido"),
                 (String) cambios.get("segundoApellido"),
                 (int) cambios.get("edad"),
-                "Masculino",
+                "Femenino",
                 (String) cambios.get("nacionalidad"),
                 cedulaOriginal,
                 (String) cambios.get("turno"),
@@ -241,14 +253,10 @@ public class PersonalControlController {
         );
     }
 
-    private File validarYProcesarImagen(String rutaImagen) {
-        if (rutaImagen == null || rutaImagen.trim().isEmpty()) {
-            throw new IllegalArgumentException("Debe seleccionar una imagen del personal de control");
+    private void validarCedula(String cedula) {
+        if (cedula.length() < 8 || cedula.length() > 10) {
+            throw new IllegalArgumentException("La cédula debe tener entre 8 y 10 dígitos");
         }
-
-        File imagen = new File(rutaImagen);
-        validarImagen(imagen);
-        return imagen;
     }
 
     public List<PersonalControl> obtenerTodosPersonalControl() {
@@ -298,7 +306,6 @@ public class PersonalControlController {
 
         List<String> errores = new ArrayList<>();
 
-       
         if (primerNombre == null || primerNombre.trim().isEmpty()) {
             errores.add("Primer nombre es obligatorio");
         } else if (primerNombre.length() > 50) {
@@ -317,21 +324,18 @@ public class PersonalControlController {
             errores.add("Segundo apellido no puede exceder 50 caracteres");
         }
 
-        
         if (cedula == null || cedula.trim().isEmpty()) {
             errores.add("Cédula es obligatoria");
         } else if (!cedula.matches("^[0-9]{6,20}$")) {
             errores.add("Cédula debe contener solo números (6-20 dígitos)");
         }
 
-        
         if (nacionalidad == null || nacionalidad.trim().isEmpty()) {
             errores.add("Nacionalidad es obligatoria");
         } else if (nacionalidad.length() > 50) {
             errores.add("Nacionalidad no puede exceder 50 caracteres");
         }
 
-       
         if (correo == null || correo.trim().isEmpty()) {
             errores.add("Correo es obligatorio");
         } else if (!correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
@@ -340,19 +344,16 @@ public class PersonalControlController {
             errores.add("Correo no puede exceder 100 caracteres");
         }
 
-        
         if (turno == null || turno.trim().isEmpty()) {
             errores.add("Turno es obligatorio");
         } else if (!turno.equalsIgnoreCase("Diurno") && !turno.equalsIgnoreCase("Nocturno")) {
             errores.add("Turno debe ser 'Diurno' o 'Nocturno'");
         }
 
-        
         if (edad <= 0) {
             errores.add("Edad debe ser un número positivo");
         }
 
-        
         if (fechaFinContrato == null) {
             errores.add("Fecha fin de contrato es obligatoria");
         }
