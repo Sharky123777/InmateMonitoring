@@ -15,6 +15,8 @@ public class Preso extends Persona {
     private String condicion;
     private String celdaAsignada;
     private boolean enAislamiento = false;
+    private boolean enVisita = false;
+    private boolean enActividad = false;
     private String nivelDeRiesgo;
     private int numeroDeVisitas = 0;
     private String grupoSanguineo;
@@ -32,7 +34,7 @@ private LocalDate fechaFuga;
             int edad, String sexo, String nacionalidad, String identificacion,
             float estatura, float peso, List<Delito> delitos,
             String nivelDeSeguridad, String seccionAsignada, String condicion,
-            String celdaAsignada, boolean enAislamiento, String nivelDeRiesgo,
+            String celdaAsignada, boolean enAislamiento, boolean enVisita, boolean enActividad, String nivelDeRiesgo,
             int numeroDeVisitas, String grupoSanguineo, String fotoPath, int id) {
 
         super(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, sexo, nacionalidad, identificacion);
@@ -44,6 +46,8 @@ private LocalDate fechaFuga;
         this.condicion = condicion;
         this.celdaAsignada = celdaAsignada;
         this.enAislamiento = enAislamiento;
+        this.enVisita = enVisita;
+        this.enActividad = enActividad;
         this.nivelDeRiesgo = nivelDeRiesgo;
         this.numeroDeVisitas = numeroDeVisitas;
         this.grupoSanguineo = grupoSanguineo;
@@ -51,7 +55,25 @@ private LocalDate fechaFuga;
         this.id = id;
         this.estado = EstadoPresoEnum.ACTIVO;
         
+        
     }
+
+    public boolean isEnVisita() {
+        return enVisita;
+    }
+
+    public void setEnVisita(boolean enVisita) {
+        this.enVisita = enVisita;
+    }
+
+    public boolean isEnActividad() {
+        return enActividad;
+    }
+
+    public void setEnActividad(boolean enActividad) {
+        this.enActividad = enActividad;
+    }
+    
     
     
 

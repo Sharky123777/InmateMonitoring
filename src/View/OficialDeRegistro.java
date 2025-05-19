@@ -2165,7 +2165,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         jLabel44.setFont(new java.awt.Font("Arial", 2, 15)); // NOI18N
         jLabel44.setForeground(new java.awt.Color(102, 102, 102));
         jLabel44.setText("Oficial De Registro");
-        jPanel18.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 280, -1, 20));
+        jPanel18.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 270, -1, 20));
 
         jLabel49.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         jLabel49.setForeground(new java.awt.Color(0, 0, 0));

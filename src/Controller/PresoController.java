@@ -329,7 +329,7 @@ public class PresoController {
                     Float.parseFloat(estaturaStr), Float.parseFloat(pesoStr),
                     new ArrayList<>(),
                     nivelSeguridad.toString(), seccionStr, "En espera",
-                    celdaAsignada.getNombreFormateado(), false,
+                    celdaAsignada.getNombreFormateado(), false, false, false,
                     nivelRiesgo.toString(), 0, grupoSanguineo.toString(), null, 0
             );
 

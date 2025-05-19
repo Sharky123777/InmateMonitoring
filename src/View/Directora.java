@@ -6034,17 +6034,14 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             actualizarTablaCDA();
 
         } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error de validación: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Error de validación: " + e.getMessage());
+            e.printStackTrace(); // Opcional: imprime el stack trace completo
         } catch (RuntimeException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al guardar el coordinador: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Error al guardar el coordinador: " + e.getMessage());
+            e.printStackTrace(); // Opcional: imprime el stack trace completo
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error de E/S: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Error de E/S: " + e.getMessage());
+            e.printStackTrace(); // Opcional: imprime el stack trace completo
         }
     }//GEN-LAST:event_jButton9ActionPerformed
 

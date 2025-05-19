@@ -40,5 +40,19 @@
     "sexo": "Femenino",
     "nacionalidad": "Andorrana",
     "identificacion": "444555667"
+  },
+  {
+    "usuario": "coordinador",
+    "password": "134144f0ce2c90db7a41fe28710e91fbce0ede1c8bf8b5afddcc2ddbaad8555d",
+    "rol": "COORDINADOR_DE_ACTIVIDADES",
+    "rutaImagen": "src/Resources/imagenes_CDA/555444554_1747685786941.jpg",
+    "primerNombre": "ds",
+    "segundoNombre": "dsf",
+    "primerApellido": "f",
+    "segundoApellido": "w",
+    "edad": 4,
+    "sexo": "Femenino",
+    "nacionalidad": "Andorrana",
+    "identificacion": "555444554"
   }
 ]

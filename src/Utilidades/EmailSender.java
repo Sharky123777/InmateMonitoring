@@ -397,7 +397,6 @@ private String construirMensajeHTMLActualizacion(String usuario, String contrase
             + "<p><strong>Usuario:</strong> " + usuario + "</p>"
             + "<p><strong>Contraseña: </strong> " + contrasena + "</p>"
             + "</div>"
-            + "<p>Le recomendamos cambiar su contraseña después del próximo inicio de sesión por seguridad.</p>"
             + "<p>Si usted no solicitó esta actualización, por favor contacte al administrador del sistema de inmediato.</p>"
             + "<div class='footer'>"
             + "<p>Este es un mensaje automático, por favor no responda a este correo.</p>"

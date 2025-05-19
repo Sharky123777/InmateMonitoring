@@ -1,15 +1,20 @@
 package Controller;
 
 import DAO.CoordinadorDeActividadesDAO;
+import DAO.UsuarioDAO;
 import Model.Entities.CoordinadorDeActividades;
 import Model.Entities.Usuario;
 import Model.Constants.RolEnum;
+import Model.Entities.SincronizadorJson;
+import Utilidades.GeneradorCredenciales;
 import View.FrmCamara;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -17,6 +22,7 @@ import javax.swing.JOptionPane;
 
 public class CoordinadorDeActividadesController {
 
+    private static UsuarioDAO usuarioDAO = UsuarioDAO.getInstancia();
     private static CoordinadorDeActividadesController instancia;
     private final CoordinadorDeActividadesDAO coordinadorDAO;
     private FrmCamara ventanaCamara;
@@ -455,4 +461,118 @@ public class CoordinadorDeActividadesController {
             throw new IllegalArgumentException("La imagen es demasiado grande (máximo 5MB)");
         }
     }
+
+    public int modificarCoordinadorConCredenciales(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
+        try {
+            CoordinadorDeActividades original = obtenerCoordinadorPorCedula(cedulaOriginal);
+            if (original == null) {
+                throw new IllegalArgumentException("Coordinador no encontrado con cédula: " + cedulaOriginal);
+            }
+
+            CoordinadorDeActividades modificado = new CoordinadorDeActividades(
+                    cambios.getOrDefault("primerNombre", original.getPrimerNombre()).toString(),
+                    cambios.getOrDefault("segundoNombre", original.getSegundoNombre()).toString(),
+                    cambios.getOrDefault("primerApellido", original.getPrimerApellido()).toString(),
+                    cambios.getOrDefault("segundoApellido", original.getSegundoApellido()).toString(),
+                    cambios.containsKey("edad") ? Integer.parseInt(cambios.get("edad").toString()) : original.getEdad(),
+                    original.getSexo(),
+                    cambios.getOrDefault("nacionalidad", original.getNacionalidad()).toString(),
+                    cambios.getOrDefault("identificacion", original.getIdentificacion()).toString(),
+                    original.getCorreo(),
+                    original.getTurno(),
+                    original.getFechaInicioContrato(),
+                    original.getFechaFinContrato(),
+                    cambios.getOrDefault("nuevoUsuario", original.getUsuario()).toString(),
+                    cambios.containsKey("nuevaContraseña") ? cambios.get("nuevaContraseña").toString() : original.getContrasena(),
+                    cambios.getOrDefault("cargo", original.getCargo()).toString() // agregado
+            );
+
+            boolean exitoCoordinador = CoordinadorDeActividadesDAO.getInstancia()
+                    .modificarCoordinador(cedulaOriginal, modificado, nuevaImagen);
+
+            if (!exitoCoordinador) {
+                return -1;
+            }
+
+            SincronizadorJson.sincronizarConUsuarios(modificado);
+
+            if (cambios.containsKey("nuevoUsuario") || cambios.containsKey("nuevaContraseña")) {
+                boolean credencialesOk = usuarioDAO.modificarCredenciales(
+                        original.getUsuario(),
+                        cambios.containsKey("nuevoUsuario") ? cambios.get("nuevoUsuario").toString() : null,
+                        cambios.containsKey("nuevaContraseña") ? cambios.get("nuevaContraseña").toString() : null,
+                        original.getCorreo(),
+                        RolEnum.COORDINADOR_DE_ACTIVIDADES
+                );
+
+                if (!credencialesOk) {
+                    return -1;
+                }
+            }
+
+            return 1;
+
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al modificar coordinador: " + e.getMessage(), e);
+        }
+    }
+
+    public int modificarCredencialesCoordinador(String cedulaOriginal, String nuevoUsuario, String nuevaContra) {
+        try {
+            CoordinadorDeActividades coordinador = obtenerCoordinadorPorCedula(cedulaOriginal);
+            if (coordinador == null) {
+                throw new IllegalArgumentException("Coordinador no encontrado");
+            }
+
+            nuevoUsuario = nuevoUsuario != null ? nuevoUsuario.toLowerCase() : null;
+
+            boolean cambioUsuario = nuevoUsuario != null && !nuevoUsuario.equals(coordinador.getUsuario().toLowerCase());
+            boolean cambioContra = nuevaContra != null && !nuevaContra.isEmpty();
+
+            if (!cambioUsuario && !cambioContra) {
+                return 0;
+            }
+
+            if (cambioContra) {
+                coordinador.setContrasena(GeneradorCredenciales.encriptarContrasena(nuevaContra));
+            }
+            if (cambioUsuario) {
+                coordinador.setUsuario(nuevoUsuario);
+            }
+
+            boolean exito = CoordinadorDeActividadesDAO.getInstancia()
+                    .modificarCoordinador(cedulaOriginal, coordinador, null);
+            if (!exito) {
+                return -1;
+            }
+
+            SincronizadorJson.sincronizarConUsuarios(coordinador);
+
+            boolean credencialesOk = UsuarioDAO.getInstancia().modificarCredenciales(
+                    coordinador.getUsuario(),
+                    cambioUsuario ? nuevoUsuario : null,
+                    cambioContra ? nuevaContra : null,
+                    coordinador.getCorreo(),
+                    RolEnum.COORDINADOR_DE_ACTIVIDADES
+            );
+
+            return credencialesOk ? 1 : -1;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al modificar credenciales de coordinador: " + e.getMessage(), e);
+        }
+    }
+    
+    
+    public Usuario obtenerUsuarioPorIdentificacion(String identificacion) {
+        try {
+            return usuarioDAO.obtenerUsuarioPorIdentificacion(identificacion);
+        } catch (IOException ex) {
+            Logger.getLogger(OficialDeRegistroController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+
 }

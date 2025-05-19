@@ -3,7 +3,7 @@ package Controller;
 import DAO.OficialDeRegistroDAO;
 import DAO.UsuarioDAO;
 import Model.Constants.RolEnum;
-import Model.Constants.SincronizadorJson;
+import Model.Entities.SincronizadorJson;
 import Model.Entities.OficialDeRegistro;
 import Model.Entities.Usuario;
 import Utilidades.EmailSender;

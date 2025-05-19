@@ -5,11 +5,13 @@ import Model.Entities.CoordinadorDeActividades;
 import Model.Constants.RolEnum;
 import Utilidades.EmailSender;
 import Model.Entities.Usuario;
+import Utilidades.GeneradorCredenciales;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -75,10 +77,7 @@ public class CoordinadorDeActividadesDAO {
         usuarios.add(usuario);
 
         try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
-            JsonObject jsonObject = new JsonObject();
-            JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
-            jsonObject.add("usuarios", usuariosArray);
-            gson.toJson(jsonObject, writer);
+            gson.toJson(usuarios, writer);
         }
     }
 
@@ -98,12 +97,23 @@ public class CoordinadorDeActividadesDAO {
         }
 
         try (FileReader reader = new FileReader(archivo)) {
-            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
-            JsonArray usuariosArray = jsonObject.getAsJsonArray("usuarios");
+            JsonElement elemento = JsonParser.parseReader(reader);
 
-            Type tipoLista = new TypeToken<List<Usuario>>() {
-            }.getType();
-            return gson.fromJson(usuariosArray, tipoLista);
+            if (elemento.isJsonArray()) {
+                Type tipoLista = new TypeToken<List<Usuario>>() {
+                }.getType();
+                return gson.fromJson(elemento, tipoLista);
+            } else if (elemento.isJsonObject()) {
+                JsonObject jsonObject = elemento.getAsJsonObject();
+                if (jsonObject.has("usuarios")) {
+                    JsonArray usuariosArray = jsonObject.getAsJsonArray("usuarios");
+                    Type tipoLista = new TypeToken<List<Usuario>>() {
+                    }.getType();
+                    return gson.fromJson(usuariosArray, tipoLista);
+                }
+            }
+
+            return new ArrayList<>();
         }
     }
 
@@ -119,41 +129,16 @@ public class CoordinadorDeActividadesDAO {
         }
     }
 
-    private String generarContrasena() {
-        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder(8);
-
-        for (int i = 0; i < 8; i++) {
-            sb.append(caracteres.charAt(random.nextInt(caracteres.length())));
-        }
-
-        return sb.toString();
-    }
-
-    private String guardarImagenDesdeCamara(BufferedImage imagen, String identificacion) throws IOException {
-        String nombreImagen = identificacion + "_foto.jpg";
-        String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-
-        File outputFile = new File(rutaImagenFinal);
-        ImageIO.write(imagen, "jpg", outputFile);
-
-        return rutaImagenFinal;
-    }
-
-    // En CoordinadorDeActividadesDAO.java
     public boolean guardarCoordinador(CoordinadorDeActividades coordinador, File imagen) throws IOException {
-      
+
         UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
         String usuario = credenciales.usuario;
         String contrasena = credenciales.contrasena;
         String contrasenaEncriptada = UsuarioController.getInstancia().encriptarContrasena(contrasena);
 
-        
         coordinador.setUsuario(usuario);
-        coordinador.setContrasena(contrasenaEncriptada); // AQUÍ GUARDAMOS LA CONTRASEÑA ENCRIPTADA
+        coordinador.setContrasena(contrasenaEncriptada);
 
-        
         String nombreImagen = coordinador.getIdentificacion() + "_"
                 + System.currentTimeMillis()
                 + imagen.getName().substring(imagen.getName().lastIndexOf("."));
@@ -162,7 +147,6 @@ public class CoordinadorDeActividadesDAO {
         Files.createDirectories(Paths.get(RUTA_IMAGENES));
         Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
         coordinador.setRutaImagen(rutaImagenFinal);
-
 
         List<CoordinadorDeActividades> coordinadores = obtenerCoordinadores();
         coordinadores.add(coordinador);
@@ -180,90 +164,85 @@ public class CoordinadorDeActividadesDAO {
                 usuario,
                 contrasenaEncriptada,
                 RolEnum.COORDINADOR_DE_ACTIVIDADES,
-                coordinador.getRutaImagen() // Usamos getRutaImagen()
+                coordinador.getRutaImagen()
         );
 
         guardarUsuario(nuevoUsuario);
 
-        
         return EmailSender.getInstancia().enviarCredenciales(
                 coordinador.getCorreo(),
                 usuario,
-                contrasena, 
+                contrasena,
                 RolEnum.COORDINADOR_DE_ACTIVIDADES
         );
     }
 
     public List<CoordinadorDeActividades> obtenerCoordinadores() {
-        List<CoordinadorDeActividades> coordinadores = new ArrayList<>();
         File archivo = new File(RUTA_JSON);
 
         try {
             if (!archivo.exists() || archivo.length() == 0) {
-                guardarListaCoordinadores(new ArrayList<>());
-                return coordinadores;
+                return new ArrayList<>();
             }
 
-            String contenido = new String(Files.readAllBytes(archivo.toPath()));
+            String contenido = Files.readString(archivo.toPath()).trim();
 
-            if (contenido.trim().isEmpty()) {
-                guardarListaCoordinadores(new ArrayList<>());
-                return coordinadores;
+            if (contenido.isEmpty() || contenido.equals("[]")) {
+                return new ArrayList<>();
             }
 
-            try {
-                JsonObject jsonObject = JsonParser.parseString(contenido).getAsJsonObject();
-                JsonArray coordinadoresArray = jsonObject.getAsJsonArray("coordinadores");
+            Type tipoLista = new TypeToken<List<CoordinadorDeActividades>>() {
+            }.getType();
+            return gson.fromJson(contenido, tipoLista);
 
-                Type tipoLista = new TypeToken<List<CoordinadorDeActividades>>() {
-                }.getType();
-                return gson.fromJson(coordinadoresArray, tipoLista);
-            } catch (JsonSyntaxException e) {
-                System.err.println("Formato JSON inválido. Creando nuevo archivo.");
-                guardarListaCoordinadores(new ArrayList<>());
-            }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null,
-                    "Error al leer/escribir archivo: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            System.err.println("Error al leer coordinadores como array: " + e.getMessage());
+            return new ArrayList<>();
         }
-        return coordinadores;
     }
 
     private void guardarListaCoordinadores(List<CoordinadorDeActividades> coordinadores) throws IOException {
-        JsonObject jsonObject = new JsonObject();
-        JsonArray coordinadoresArray = new JsonArray();
+        if (coordinadores == null) {
+            throw new IllegalArgumentException("La lista de coordinadores no puede ser null");
+        }
+
+        JsonArray jsonArrayCoordinadores = new JsonArray();
 
         for (CoordinadorDeActividades coordinador : coordinadores) {
-            JsonObject coordinadorJson = new JsonObject();
-            coordinadorJson.addProperty("usuario", coordinador.getUsuario());
-            coordinadorJson.addProperty("contrasena", coordinador.getContrasena());
-            coordinadorJson.addProperty("turno", coordinador.getTurno());
-            coordinadorJson.addProperty("cargo", coordinador.getCargo());
-            coordinadorJson.addProperty("fechaInicioContrato", coordinador.getFechaInicioContrato().toString());
-            coordinadorJson.addProperty("fechaFinContrato", coordinador.getFechaFinContrato().toString());
-            coordinadorJson.addProperty("rutaImagen", coordinador.getRutaImagen());
-            coordinadorJson.addProperty("correo", coordinador.getCorreo());
-            coordinadorJson.addProperty("primerNombre", coordinador.getPrimerNombre());
-            coordinadorJson.addProperty("segundoNombre", coordinador.getSegundoNombre());
-            coordinadorJson.addProperty("primerApellido", coordinador.getPrimerApellido());
-            coordinadorJson.addProperty("segundoApellido", coordinador.getSegundoApellido());
-            coordinadorJson.addProperty("edad", coordinador.getEdad());
-            coordinadorJson.addProperty("sexo", coordinador.getSexo());
-            coordinadorJson.addProperty("nacionalidad", coordinador.getNacionalidad());
-            coordinadorJson.addProperty("identificacion", coordinador.getIdentificacion());
+            JsonObject jsonCoordinador = new JsonObject();
 
-            coordinadoresArray.add(coordinadorJson);
+            jsonCoordinador.addProperty("primerNombre", coordinador.getPrimerNombre());
+            jsonCoordinador.addProperty("segundoNombre", coordinador.getSegundoNombre());
+            jsonCoordinador.addProperty("primerApellido", coordinador.getPrimerApellido());
+            jsonCoordinador.addProperty("segundoApellido", coordinador.getSegundoApellido());
+            jsonCoordinador.addProperty("edad", coordinador.getEdad());
+            jsonCoordinador.addProperty("sexo", coordinador.getSexo());
+            jsonCoordinador.addProperty("nacionalidad", coordinador.getNacionalidad());
+            jsonCoordinador.addProperty("identificacion", coordinador.getIdentificacion());
+
+            jsonCoordinador.addProperty("correo", coordinador.getCorreo());
+            jsonCoordinador.addProperty("turno", coordinador.getTurno());
+            jsonCoordinador.addProperty("cargo", coordinador.getCargo());
+            jsonCoordinador.addProperty("fechaInicioContrato", coordinador.getFechaInicioContrato().toString());
+            jsonCoordinador.addProperty("fechaFinContrato", coordinador.getFechaFinContrato().toString());
+            jsonCoordinador.addProperty("rutaImagen", coordinador.getRutaImagen());
+            jsonCoordinador.addProperty("usuario", coordinador.getUsuario());
+
+            String contrasenaEncriptada = GeneradorCredenciales.encriptarContrasena(coordinador.getContrasena());
+            jsonCoordinador.addProperty("contrasena", contrasenaEncriptada);
+
+            jsonArrayCoordinadores.add(jsonCoordinador);
         }
 
-        jsonObject.add("coordinadores", coordinadoresArray);
-
-        try (Writer writer = new FileWriter(RUTA_JSON)) {
-            gson.toJson(jsonObject, writer);
+        Path path = Paths.get(RUTA_JSON);
+        try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+            gson.toJson(jsonArrayCoordinadores, writer);
+            System.out.println("Datos de coordinadores guardados como array correctamente en: " + path.toAbsolutePath());
+        } catch (IOException e) {
+            System.err.println("Error al escribir JSON de coordinadores como array: " + e.getMessage());
+            throw e;
         }
     }
-
-   
 
     public boolean existeCoordinadorConCedula(String cedula) {
         if (cedula == null || cedula.trim().isEmpty()) {
@@ -303,7 +282,6 @@ public class CoordinadorDeActividadesDAO {
                 if (c.getIdentificacion().equals(cedulaOriginal)) {
                     String rutaImagenFinal = c.getRutaImagen();
 
-                    
                     if (nuevaImagen != null && nuevaImagen.exists()) {
                         String nombreImagen = coordinadorModificado.getIdentificacion() + "_" + System.currentTimeMillis()
                                 + nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
@@ -387,8 +365,8 @@ public class CoordinadorDeActividadesDAO {
             String.class,
             String.class,
             String.class,
-            String.class, 
-            String.class 
+            String.class,
+            String.class
         };
     }
 }
