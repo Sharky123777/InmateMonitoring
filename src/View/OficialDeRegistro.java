@@ -2,10 +2,12 @@ package View;
 
 import Controller.PresoController;
 import Controller.ExpedienteController;
+import Controller.OficialDeRegistroController;
 import DAO.CeldaDAO;
 import DAO.DelitoDAO;
 import DAO.ExpedienteDAO;
 import DAO.PresoDAO;
+import DAO.UsuarioDAO;
 import Model.Constants.EstadoPresoEnum;
 import Model.Entities.Delito;
 import Model.Entities.ExpedienteJudicial;
@@ -34,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -50,7 +53,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
 
-public class OficialDeRegistro extends javax.swing.JFrame  implements PerfilUsuario{
+public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuario {
 
     private JLabel registroNum = new JLabel();
     private JLabel codExpe = new JLabel();
@@ -71,6 +74,11 @@ public class OficialDeRegistro extends javax.swing.JFrame  implements PerfilUsua
 
     private List<Delito> delitosTemporales = new ArrayList<>();
 
+    private OficialDeRegistroController oficialRegistro = OficialDeRegistroController.getInstancia();
+    public boolean imagenFueModificada;
+    private File imagenSeleccionadaModODR;
+
+    
     private Preso presoOriginal;
     CeldaDAO celda = new CeldaDAO();
     private int delitoActual = 1;
@@ -79,14 +87,14 @@ public class OficialDeRegistro extends javax.swing.JFrame  implements PerfilUsua
     private File selectedImageFile;
     private ExpedienteDAO expedienteDAO;
     private final DelitoDAO delitoDAO = DelitoDAO.getInstancia();
+    private final UsuarioDAO usuarioDAO = UsuarioDAO.getInstancia();
 
     private final ExpedienteController expedienteController;
     private final PresoController presoController;
     private final Validador validador;
     private final CeldaDAO celdaDAO;
-    
-    private Usuario usuario;
 
+    private Usuario usuario;
 
     public OficialDeRegistro() {
         this.celdaDAO = CeldaDAO.getInstancia();
@@ -101,7 +109,7 @@ public class OficialDeRegistro extends javax.swing.JFrame  implements PerfilUsua
         inicializarMenuDelitos();
         cargarDelitosConCodigoYArticulo();
         this.setLocationRelativeTo(null);
-        OficialDeRegistroView.setSelectedIndex(3);
+        OficialDeRegistroView.setSelectedIndex(0);
 
         cargarTodosLosPresos();
         presoController.configurarTablaImagenes(TablaPresos);
@@ -156,28 +164,22 @@ public class OficialDeRegistro extends javax.swing.JFrame  implements PerfilUsua
                 actualizarEstadoBoton();
             }
         });
+    }
 
-    }
-    
-    
-  
-        
-     
-    
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-        mostrarDatosUsuario();
-    }
+   public void setUsuario(Usuario usuario) {
+    this.usuario = usuarioDAO.obtenerUsuarioPorIdentificacion(usuario.getIdentificacion()); // recarga desde JSON
+    mostrarDatosUsuario();
+}
+
 
     private void mostrarDatosUsuario() {
         if (usuario != null) {
-            nombreODR.setText(usuario.getPrimerNombre());
-            ApellidoODR.setText(usuario.getPrimerApellido());
+            nombreODR.setText(usuario.getNombresCompletos());
+            ApellidoODR.setText(usuario.getApellidosCompletos());
             IdentificacionODR.setText(usuario.getIdentificacion());
-            EdadODR.setText(usuario.getIdentificacion());
+            EdadODR.setText(usuario.getEdad() + "");
             SexoODR.setText(usuario.getSexo());
             NacionalidadODR.setText(usuario.getNacionalidad());
-            
 
             cargarImagenUsuario();
         }
@@ -197,11 +199,6 @@ public class OficialDeRegistro extends javax.swing.JFrame  implements PerfilUsua
     private void cargarImagenPorDefecto() {
         lblFoto.setIcon(new ImageIcon("src/Resources/default_avatar.png"));
     }
-        
-
-    
-    
-    
 
     private void actualizarEstadisticasCompletas() {
         String estadisticas = presoController.obtenerEstadisticasPresosHorizontal();
@@ -244,7 +241,7 @@ public class OficialDeRegistro extends javax.swing.JFrame  implements PerfilUsua
 
         tablaInactivos.setComponentPopupMenu(ppMenuInactivos);
 
-                verInfoGeneralInactivo.addActionListener(e -> {
+        verInfoGeneralInactivo.addActionListener(e -> {
             int fila = tablaInactivos.getSelectedRow();
             if (fila == -1) {
                 JOptionPane.showMessageDialog(this, "Seleccione un preso primero", "Error", JOptionPane.ERROR_MESSAGE);
@@ -280,49 +277,47 @@ public class OficialDeRegistro extends javax.swing.JFrame  implements PerfilUsua
             }
         });
 
-        
-      historicoExp.addActionListener(e -> {
-    int fila = tablaInactivos.getSelectedRow();
-    if (fila >= 0) {
-        String identificacion = tablaInactivos.getValueAt(fila, 5).toString();
+        historicoExp.addActionListener(e -> {
+            int fila = tablaInactivos.getSelectedRow();
+            if (fila >= 0) {
+                String identificacion = tablaInactivos.getValueAt(fila, 5).toString();
 
-        HistorialExpedienteDialog dialog = new HistorialExpedienteDialog(
-                null,
-                identificacion,
-                expedienteController,
-                OficialDeRegistroView,
-                lblFechaSalida,
-                RegistroNum,
-                CodExpe,
-                FechaAper,
-                Estado,
-                Juzgado,
-                nivelRiesgExp,
-                nom,
-                ape,
-                edad,
-                identi,
-                naciona,
-                fotoPresoExpediente,
-                tablaExpediente,
-                sentenciaTotaal,
-                panelEstadoEspecialPreso,
-                lblMensajeEspecialPreso,
-                txtReclusa,
-                txtIdentificacionReclusa,
-                txtEstadoReclusa
-        );
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
-    } else {
-        JOptionPane.showMessageDialog(this, "Seleccione un preso primero", "Aviso", JOptionPane.WARNING_MESSAGE);
-    }
-});
-
+                HistorialExpedienteDialog dialog = new HistorialExpedienteDialog(
+                        null,
+                        identificacion,
+                        expedienteController,
+                        OficialDeRegistroView,
+                        lblFechaSalida,
+                        RegistroNum,
+                        CodExpe,
+                        FechaAper,
+                        Estado,
+                        Juzgado,
+                        nivelRiesgExp,
+                        nom,
+                        ape,
+                        edad,
+                        identi,
+                        naciona,
+                        fotoPresoExpediente,
+                        tablaExpediente,
+                        sentenciaTotaal,
+                        panelEstadoEspecialPreso,
+                        lblMensajeEspecialPreso,
+                        txtReclusa,
+                        txtIdentificacionReclusa,
+                        txtEstadoReclusa
+                );
+                dialog.setLocationRelativeTo(null);
+                dialog.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Seleccione un preso primero", "Aviso", JOptionPane.WARNING_MESSAGE);
+            }
+        });
 
     }
-    
-        public void inicializarMenuPresos() {
+
+    public void inicializarMenuPresos() {
 
         JMenu cambiarEstadoMenu = new JMenu("Cambiar Estado");
 
@@ -375,26 +370,26 @@ public class OficialDeRegistro extends javax.swing.JFrame  implements PerfilUsua
             }
         });
 
-Actualizar.addActionListener(e -> {
-    int fila = TablaPresos.getSelectedRow();
-    if (fila == -1) {
-        JOptionPane.showMessageDialog(this, "Seleccione un preso", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+        Actualizar.addActionListener(e -> {
+            int fila = TablaPresos.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this, "Seleccione un preso", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-    String id = TablaPresos.getValueAt(fila, 5).toString();
-    Preso preso = new PresoDAO().buscarPresoPorIdentificacion(id);
+            String id = TablaPresos.getValueAt(fila, 5).toString();
+            Preso preso = new PresoDAO().buscarPresoPorIdentificacion(id);
 
-    if (preso != null) {
-        presoOriginal = preso; 
-        System.out.println("Seleccionado: " + preso.getIdentificacion());
-        cargarDatosPresoEnFormularioActualizacion(preso);
-        OficialDeRegistroView.setSelectedIndex(0);
-        TabbedAñadirInformacionGeneral.setSelectedIndex(3);
-    } else {
-        JOptionPane.showMessageDialog(this, "Preso no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
-    }
-});
+            if (preso != null) {
+                presoOriginal = preso;
+                System.out.println("Seleccionado: " + preso.getIdentificacion());
+                cargarDatosPresoEnFormularioActualizacion(preso);
+                OficialDeRegistroView.setSelectedIndex(0);
+                TabbedAñadirInformacionGeneral.setSelectedIndex(3);
+            } else {
+                JOptionPane.showMessageDialog(this, "Preso no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
         AñadirDelito.addActionListener(e -> {
             int fila = TablaPresos.getSelectedRow();
@@ -599,8 +594,6 @@ Actualizar.addActionListener(e -> {
         }
 
     }
-
-
 
     private void cargarDatosPresoEnFormularioActualizacion(Preso preso) {
         this.delitosTemporales = new ArrayList<>();
@@ -1013,6 +1006,7 @@ Actualizar.addActionListener(e -> {
         cerrarSesionODR = new javax.swing.JButton();
         jLabel48 = new javax.swing.JLabel();
         btnActualizarInfoODR = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         DatosPersonalesPreso = new javax.swing.JPanel();
         jLabel68 = new javax.swing.JLabel();
         jLabel69 = new javax.swing.JLabel();
@@ -1079,7 +1073,7 @@ Actualizar.addActionListener(e -> {
         jSeparator73 = new javax.swing.JSeparator();
         jLabel104 = new javax.swing.JLabel();
         jLabel102 = new javax.swing.JLabel();
-        nuevoCorreo = new javax.swing.JTextField();
+        nuevoUsuario = new javax.swing.JTextField();
         jSeparator75 = new javax.swing.JSeparator();
         jLabel103 = new javax.swing.JLabel();
         jSeparator76 = new javax.swing.JSeparator();
@@ -2177,13 +2171,15 @@ Actualizar.addActionListener(e -> {
         jLabel49.setText("Cargo");
         jPanel18.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 230, 50, -1));
 
+        cerrarSesionODR.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        cerrarSesionODR.setForeground(new java.awt.Color(255, 255, 255));
         cerrarSesionODR.setText("Cerrar sesión");
         cerrarSesionODR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cerrarSesionODRActionPerformed(evt);
             }
         });
-        jPanel18.add(cerrarSesionODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 410, 110, -1));
+        jPanel18.add(cerrarSesionODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 397, 150, 40));
 
         Perfil.add(jPanel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, 310, 460));
 
@@ -2192,6 +2188,8 @@ Actualizar.addActionListener(e -> {
         jLabel48.setText("INFORMACIÓN PERSONAL");
         Perfil.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 90, 220, -1));
 
+        btnActualizarInfoODR.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        btnActualizarInfoODR.setForeground(new java.awt.Color(255, 255, 255));
         btnActualizarInfoODR.setText("Actualizar información");
         btnActualizarInfoODR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2199,6 +2197,14 @@ Actualizar.addActionListener(e -> {
             }
         });
         Perfil.add(btnActualizarInfoODR, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 510, 160, 40));
+
+        jButton2.setText("jButton2");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        Perfil.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 60, 120, -1));
 
         OficialDeRegistroView.addTab("Perfil", Perfil);
 
@@ -2446,15 +2452,15 @@ Actualizar.addActionListener(e -> {
         jLabel98.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel98.setForeground(new java.awt.Color(0, 0, 0));
         jLabel98.setText("DATOS PERSONALES");
-        jPanel27.add(jLabel98, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 60, -1, -1));
+        jPanel27.add(jLabel98, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 40, -1, -1));
 
         jLabel99.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel99.setForeground(new java.awt.Color(0, 0, 0));
         jLabel99.setText("Segundo nombre:");
-        jPanel27.add(jLabel99, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, -1, -1));
+        jPanel27.add(jLabel99, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 150, -1, -1));
 
         jSeparator69.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel27.add(jSeparator69, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 350, 10));
+        jPanel27.add(jSeparator69, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, 110, 10));
 
         nuevoPrimerNombre.setBackground(new java.awt.Color(204, 204, 204));
         nuevoPrimerNombre.setForeground(new java.awt.Color(0, 0, 0));
@@ -2464,15 +2470,15 @@ Actualizar.addActionListener(e -> {
                 nuevoPrimerNombreActionPerformed(evt);
             }
         });
-        jPanel27.add(nuevoPrimerNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 110, 230, 30));
+        jPanel27.add(nuevoPrimerNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 230, 30));
 
         jLabel100.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel100.setForeground(new java.awt.Color(0, 0, 0));
         jLabel100.setText("Segundo apellido:");
-        jPanel27.add(jLabel100, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, -1, -1));
+        jPanel27.add(jLabel100, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 230, -1, -1));
 
         jSeparator70.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel27.add(jSeparator70, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 260, 350, 10));
+        jPanel27.add(jSeparator70, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 250, 110, 10));
 
         primerNuevoApellido.setBackground(new java.awt.Color(204, 204, 204));
         primerNuevoApellido.setForeground(new java.awt.Color(0, 0, 0));
@@ -2482,61 +2488,61 @@ Actualizar.addActionListener(e -> {
                 primerNuevoApellidoActionPerformed(evt);
             }
         });
-        jPanel27.add(primerNuevoApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 190, 230, 30));
+        jPanel27.add(primerNuevoApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 180, 230, 30));
 
         nuevaEdad.setBackground(new java.awt.Color(204, 204, 204));
         nuevaEdad.setForeground(new java.awt.Color(0, 0, 0));
         nuevaEdad.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel27.add(nuevaEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 270, 280, 30));
+        jPanel27.add(nuevaEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 260, 230, 30));
 
         jLabel101.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel101.setForeground(new java.awt.Color(0, 0, 0));
         jLabel101.setText("Edad: ");
-        jPanel27.add(jLabel101, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 280, -1, -1));
+        jPanel27.add(jLabel101, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 270, -1, -1));
 
         jSeparator71.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel27.add(jSeparator71, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, 350, 10));
+        jPanel27.add(jSeparator71, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 290, 100, 10));
 
         nuevaIdenti.setBackground(new java.awt.Color(204, 204, 204));
         nuevaIdenti.setForeground(new java.awt.Color(0, 0, 0));
         nuevaIdenti.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel27.add(nuevaIdenti, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 310, 240, 30));
+        jPanel27.add(nuevaIdenti, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 300, 230, 30));
 
         jLabel96.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel96.setForeground(new java.awt.Color(0, 0, 0));
         jLabel96.setText("Identificación:");
-        jPanel27.add(jLabel96, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, -1, 20));
+        jPanel27.add(jLabel96, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, -1, 20));
 
         jSeparator72.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel27.add(jSeparator72, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 340, 350, 10));
+        jPanel27.add(jSeparator72, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 330, 110, 10));
 
         jLabel95.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel95.setForeground(new java.awt.Color(0, 0, 0));
         jLabel95.setText("Nacionalidad: ");
-        jPanel27.add(jLabel95, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 360, -1, -1));
+        jPanel27.add(jLabel95, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 350, -1, -1));
 
         jSeparator73.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel27.add(jSeparator73, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, 100, 10));
+        jPanel27.add(jSeparator73, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 370, 100, 10));
 
         jLabel104.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel104.setForeground(new java.awt.Color(0, 0, 0));
         jLabel104.setText("CUENTA");
-        jPanel27.add(jLabel104, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 60, -1, -1));
+        jPanel27.add(jLabel104, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 40, -1, -1));
 
         jLabel102.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel102.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel102.setText("Correo Electronico:");
+        jLabel102.setText("Usuario:");
         jPanel27.add(jLabel102, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 110, -1, -1));
 
-        nuevoCorreo.setBackground(new java.awt.Color(204, 204, 204));
-        nuevoCorreo.setForeground(new java.awt.Color(0, 0, 0));
-        nuevoCorreo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        nuevoCorreo.addActionListener(new java.awt.event.ActionListener() {
+        nuevoUsuario.setBackground(new java.awt.Color(204, 204, 204));
+        nuevoUsuario.setForeground(new java.awt.Color(0, 0, 0));
+        nuevoUsuario.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        nuevoUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nuevoCorreoActionPerformed(evt);
+                nuevoUsuarioActionPerformed(evt);
             }
         });
-        jPanel27.add(nuevoCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 100, 250, 30));
+        jPanel27.add(nuevoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 100, 260, 30));
 
         jSeparator75.setForeground(new java.awt.Color(0, 0, 0));
         jPanel27.add(jSeparator75, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 130, 120, 10));
@@ -2557,10 +2563,10 @@ Actualizar.addActionListener(e -> {
                 nuevaContraActionPerformed(evt);
             }
         });
-        jPanel27.add(nuevaContra, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 150, 260, 30));
+        jPanel27.add(nuevaContra, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 160, 260, 30));
 
         LabelFOTO.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true));
-        jPanel27.add(LabelFOTO, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 280, 120, 140));
+        jPanel27.add(LabelFOTO, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 260, 140, 160));
 
         Actualizarimagenodr.setText("Actualizar foto");
         Actualizarimagenodr.addActionListener(new java.awt.event.ActionListener() {
@@ -2568,7 +2574,7 @@ Actualizar.addActionListener(e -> {
                 ActualizarimagenodrActionPerformed(evt);
             }
         });
-        jPanel27.add(Actualizarimagenodr, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 240, -1, -1));
+        jPanel27.add(Actualizarimagenodr, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 220, -1, -1));
 
         jPanel29.setBackground(new java.awt.Color(29, 35, 51));
         jPanel29.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -2643,18 +2649,18 @@ Actualizar.addActionListener(e -> {
         jLabel112.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel112.setForeground(new java.awt.Color(0, 0, 0));
         jLabel112.setText("Primer nombre:");
-        jPanel27.add(jLabel112, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, -1, -1));
+        jPanel27.add(jLabel112, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, -1, -1));
 
         jSeparator83.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel27.add(jSeparator83, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 350, 10));
+        jPanel27.add(jSeparator83, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 130, 110, 10));
 
         jLabel113.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel113.setForeground(new java.awt.Color(0, 0, 0));
         jLabel113.setText("Primer apellido:");
-        jPanel27.add(jLabel113, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 200, -1, -1));
+        jPanel27.add(jLabel113, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 190, -1, -1));
 
         jSeparator85.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel27.add(jSeparator85, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, 350, 10));
+        jPanel27.add(jSeparator85, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 210, 110, 10));
 
         segundoNuevoApellido1.setBackground(new java.awt.Color(204, 204, 204));
         segundoNuevoApellido1.setForeground(new java.awt.Color(0, 0, 0));
@@ -2664,7 +2670,7 @@ Actualizar.addActionListener(e -> {
                 segundoNuevoApellido1ActionPerformed(evt);
             }
         });
-        jPanel27.add(segundoNuevoApellido1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 230, 230, 30));
+        jPanel27.add(segundoNuevoApellido1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 220, 230, 30));
 
         nuevoSegundoNombre.setBackground(new java.awt.Color(204, 204, 204));
         nuevoSegundoNombre.setForeground(new java.awt.Color(0, 0, 0));
@@ -2674,7 +2680,7 @@ Actualizar.addActionListener(e -> {
                 nuevoSegundoNombreActionPerformed(evt);
             }
         });
-        jPanel27.add(nuevoSegundoNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, 230, 30));
+        jPanel27.add(nuevoSegundoNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 140, 230, 30));
 
         cbxNacionalidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccione>", "Afgana", "Alemana", "Americana", "Andorrana", "Angoleña", "Antiguana", "Árabe Saudita", "Argelina", "Argentina", "Armenia", "Arubeña", "Australiana", "Austriaca", "Azerbaiyana", "Bahameña", "Bahreiní", "Bangladesí", "Barbadense", "Belga", "Beliceña", "Beninesa", "Bermudeña", "Bielorrusa", "Birmana", "Boliviana", "Bosnia", "Botsuana", "Brasileña", "Británica", "Bruneana", "Búlgara", "Burkinesa", "Burundesa", "Butanesa", "Cabo Verdiana", "Camboyana", "Camerunesa", "Canadiense", "Catari", "Centroafricana", "Chadiana", "Checa", "Chilena", "China", "Chipriota", "Colombiana", "Comorense", "Congoleña", "Costarricense", "Croata", "Cubana", "Danesa", "Dominicana", "Ecuatoriana", "Egipcia", "Emiratí", "Eritrea", "Eslovaca", "Eslovena", "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa", "Fiyiana", "Francesa", "Gabonesa", "Galesa", "Gambiana", "Georgiana", "Ghanesa", "Gibraltareña", "Granadina", "Griega", "Guatemalteca", "Guineana", "Guineana-Bisáu", "Guineana Ecuatorial", "Guyanesa", "Haitiana", "Hondureña", "Hongkonesa", "Húngara", "India", "Indonesa", "Iraní", "Iraquí", "Irlandesa", "Islandesa", "Israelí", "Italiana", "Jamaicana", "Japonesa", "Jordana", "Kazaja", "Keniata", "Kirguisa", "Kiribatiana", "Kuwaití", "Laosiana", "Lesotense", "Letona", "Libanesa", "Liberiana", "Libia", "Liechtensteiniana", "Lituana", "Luxemburguesa", "Macedonia", "Malasia", "Malauí", "Maldiva", "Malgache", "Maliense", "Maltesa", "Marfileña", "Marroquí", "Marshallesa", "Mauriciana", "Mauritana", "Mexicana", "Micronesia", "Moldava", "Monegasca", "Mongola", "Montenegrina", "Mozambiqueña", "Namibia", "Nauruana", "Nepalí", "Nicaragüense", "Nigeriana", "Nigerina", "Norcoreana", "Noruega", "Neozelandesa", "Omana", "Neerlandesa (Holandesa)", "Paquistaní", "Palaosiana", "Panameña", "Papú", "Paraguaya", "Peruana", "Polaca", "Portuguesa", "Puertorriqueña", "Ruandesa", "Rumana", "Rusa", "Saharaui", "Salomonense", "Salvadoreña", "Samoana", "Sanmarinense", "Santotomense", "Saudí", "Senegalesa", "Serbia", "Seychellense", "Sierraleonesa", "Singapurense", "Siria", "Somalí", "Sri Lanka", "Sudafricana", "Sudanesa", "Sueca", "Suiza", "Surcoreana", "Surinamense", "Suazi", "Tailandesa", "Taiwanesa", "Tayika", "Tanzana", "Timorense", "Togolesa", "Tongana", "Trinitense", "Tunecina", "Turca", "Turkmena", "Tuvaluana", "Ucraniana", "Ugandesa", "Uruguaya", "Uzbeca", "Vanuatuense", "Venezolana", "Vietnamita", "Yemení", "Yibutiana", "Zambiana", "Zimbabuense" }));
         jPanel27.add(cbxNacionalidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 350, 240, 30));
@@ -3226,7 +3232,7 @@ Actualizar.addActionListener(e -> {
                     nuevoNivelRiesgoCombo.getSelectedItem(),
                     selectedImageFile,
                     nuevaSeccion.getSelectedItem()
-                    );
+            );
 
             if (actualizado) {
                 cargarTodosLosPresos();
@@ -3278,13 +3284,47 @@ Actualizar.addActionListener(e -> {
         // TODO add your handling code here:
     }//GEN-LAST:event_nuevaContraActionPerformed
 
-    private void nuevoCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoCorreoActionPerformed
+    private void nuevoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoUsuarioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_nuevoCorreoActionPerformed
+    }//GEN-LAST:event_nuevoUsuarioActionPerformed
 
     private void ActualizarimagenodrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ActualizarimagenodrActionPerformed
 
-// TODO add your handling code here:
+        JFileChooser selectorImagen = new JFileChooser();
+        selectorImagen.setDialogTitle("Seleccionar Foto del Oficial");
+
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter(
+                "Imágenes (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif");
+        selectorImagen.setFileFilter(filtro);
+
+        int resultado = selectorImagen.showOpenDialog(this);
+
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            imagenSeleccionadaModODR = selectorImagen.getSelectedFile();
+            imagenFueModificada = true;
+
+            try {
+                BufferedImage imagenOriginal = ImageIO.read(imagenSeleccionadaModODR);
+
+                Image imagenEscalada = imagenOriginal.getScaledInstance(
+                        LabelFOTO.getWidth(),
+                        LabelFOTO.getHeight(),
+                        Image.SCALE_SMOOTH);
+
+                LabelFOTO.setIcon(new ImageIcon(imagenEscalada));
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al cargar la imagen: " + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+
+                imagenSeleccionadaModODR = null;
+                imagenFueModificada = false;
+                LabelFOTO.setIcon(null);
+            }
+        }
+
+
     }//GEN-LAST:event_ActualizarimagenodrActionPerformed
 
     private void PanelPerfilTituloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PanelPerfilTituloMouseClicked
@@ -3329,52 +3369,52 @@ Actualizar.addActionListener(e -> {
     }//GEN-LAST:event_PanelAñadirPresoTituloMouseExited
 
     private void btnBuscarIdentificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarIdentificacionActionPerformed
-  try {
-        String idBuscado = identificacionB.getText().trim();
-        
-        if (idBuscado.isEmpty() || idBuscado.equals("Buscar preso por identificación")) {
-            JOptionPane.showMessageDialog(this, 
-                "Debe ingresar una identificación para buscar",
-                "Campo vacío",
-                JOptionPane.WARNING_MESSAGE);
-            identificacionB.requestFocus();
-            return; 
-        }
+        try {
+            String idBuscado = identificacionB.getText().trim();
 
-        Preso preso = presoController.buscarPreso(idBuscado);
-        DefaultTableModel model = (DefaultTableModel) TablaPresos.getModel();
-        model.setRowCount(0);
+            if (idBuscado.isEmpty() || idBuscado.equals("Buscar preso por identificación")) {
+                JOptionPane.showMessageDialog(this,
+                        "Debe ingresar una identificación para buscar",
+                        "Campo vacío",
+                        JOptionPane.WARNING_MESSAGE);
+                identificacionB.requestFocus();
+                return;
+            }
 
-        if (preso != null) {
-            ImageIcon foto = presoController.obtenerFotoPreso(preso);
-            model.addRow(new Object[]{
-                foto,
-                preso.getId(),
-                preso.getNombresCompletos(),
-                preso.getApellidosCompletos(),
-                preso.getEdad(),
-                preso.getIdentificacion(),
-                preso.getNacionalidad(),
-                preso.getSeccionAsignada(),
-                preso.getCeldaAsignada(),
-                preso.getEstado()
-            });
-            
-            TablaPresos.setRowSelectionInterval(0, 0);
-            TablaPresos.scrollRectToVisible(TablaPresos.getCellRect(0, 0, true));
-        } else {
+            Preso preso = presoController.buscarPreso(idBuscado);
+            DefaultTableModel model = (DefaultTableModel) TablaPresos.getModel();
+            model.setRowCount(0);
+
+            if (preso != null) {
+                ImageIcon foto = presoController.obtenerFotoPreso(preso);
+                model.addRow(new Object[]{
+                    foto,
+                    preso.getId(),
+                    preso.getNombresCompletos(),
+                    preso.getApellidosCompletos(),
+                    preso.getEdad(),
+                    preso.getIdentificacion(),
+                    preso.getNacionalidad(),
+                    preso.getSeccionAsignada(),
+                    preso.getCeldaAsignada(),
+                    preso.getEstado()
+                });
+
+                TablaPresos.setRowSelectionInterval(0, 0);
+                TablaPresos.scrollRectToVisible(TablaPresos.getCellRect(0, 0, true));
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "No se encontró ningún preso con la identificación: " + idBuscado,
+                        "Búsqueda sin resultados",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
-                "No se encontró ningún preso con la identificación: " + idBuscado,
-                "Búsqueda sin resultados",
-                JOptionPane.INFORMATION_MESSAGE);
+                    "Error al buscar preso: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this,
-            "Error al buscar preso: " + e.getMessage(),
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
 
 
     }//GEN-LAST:event_btnBuscarIdentificacionActionPerformed
@@ -3555,7 +3595,7 @@ Actualizar.addActionListener(e -> {
             );
 
             if (exito) {
-               
+
                 limpiarFormularioCompleto();
                 cargarTodosLosPresos();
                 cargarPresosInactivos();
@@ -4015,18 +4055,19 @@ Actualizar.addActionListener(e -> {
     }//GEN-LAST:event_btnActualizarInfoODRActionPerformed
 
     private void cerrarSesionODRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarSesionODRActionPerformed
- int respuesta = JOptionPane.showConfirmDialog(
-        this,
-        "¿Está seguro de que desea cerrar sesión?",
-        "Confirmar cierre de sesión",
-        JOptionPane.YES_NO_OPTION,
-        JOptionPane.QUESTION_MESSAGE
+       int respuesta = JOptionPane.showConfirmDialog(
+            this,
+            "¿Está seguro de que desea cerrar sesión?",
+            "Confirmar cierre de sesión",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
     );
 
     if (respuesta == JOptionPane.YES_OPTION) {
-        Login login = new Login(); 
+        this.usuario.setUsuario(null); 
+        Login login = new Login();
         login.setVisible(true);
-        this.dispose(); 
+        this.dispose();
     }
 
     }//GEN-LAST:event_cerrarSesionODRActionPerformed
@@ -4045,18 +4086,110 @@ Actualizar.addActionListener(e -> {
 
     private void btnActualilzarODRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualilzarODRActionPerformed
         try {
+            String cedulaOriginal = usuario.getIdentificacion();
+            if (cedulaOriginal.isEmpty()) {
+                throw new IllegalArgumentException("Cédula original no especificada");
+            }
 
-            String nvNombre = nuevoPrimerNombre.getText();
-            String nvSNombre = nuevoSegundoNombre.getText();
-            String nvApellido = primerNuevoApellido.getText();
-            String nvSApellido = segundoNuevoApellido1.getText();
-            int nvedad = Integer.parseInt(nuevaEdad.getText());
-            Object nvNacionalidad = cbxNacionalidad.getSelectedItem();
+            Map<String, Object> cambios = new HashMap<>();
 
+            if (!nuevoPrimerNombre.getText().trim().isEmpty()) {
+                cambios.put("primerNombre", nuevoPrimerNombre.getText().trim());
+            }
+            if (!nuevoSegundoNombre.getText().trim().isEmpty()) {
+                cambios.put("segundoNombre", nuevoSegundoNombre.getText().trim());
+            }
+            if (!primerNuevoApellido.getText().trim().isEmpty()) {
+                cambios.put("primerApellido", primerNuevoApellido.getText().trim());
+            }
+            if (!segundoNuevoApellido1.getText().trim().isEmpty()) {
+                cambios.put("segundoApellido", segundoNuevoApellido1.getText().trim());
+            }
+            if (!nuevaEdad.getText().trim().isEmpty()) {
+                try {
+                    cambios.put("edad", Integer.parseInt(nuevaEdad.getText().trim()));
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException("La edad debe ser un número válido");
+                }
+            }
+            if (!nuevaIdenti.getText().trim().isEmpty()) {
+                cambios.put("identificacion", nuevaIdenti.getText().trim());
+            }
+            if (cbxNacionalidad.getSelectedItem() != null) {
+                cambios.put("nacionalidad", cbxNacionalidad.getSelectedItem().toString());
+            }
+
+            if (!nuevoUsuario.getText().trim().isEmpty()) {
+                cambios.put("nuevoUsuario", nuevoUsuario.getText().trim());
+            }
+            if (!nuevaContra.getText().trim().isEmpty()) {
+                cambios.put("nuevaContraseña", nuevaContra.getText().trim());
+            }
+
+            File imagenModificada = imagenFueModificada ? imagenSeleccionadaModODR : null;
+
+            int resultado = OficialDeRegistroController.getInstancia()
+                    .modificarOficialConCredenciales(cedulaOriginal, cambios, imagenModificada);
+
+            switch (resultado) {
+                case 1:
+                    String mensaje = "¡Actualización exitosa!";
+                    if (cambios.containsKey("nuevoUsuario") || cambios.containsKey("nuevaContraseña")) {
+                        mensaje += "\nCredenciales enviadas al correo registrado";
+                    }
+                    JOptionPane.showMessageDialog(this, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    String nuevaIdentificacion = cambios.containsKey("identificacion")
+                            ? cambios.get("identificacion").toString()
+                            : cedulaOriginal;
+
+                    Usuario usuarioActualizado = OficialDeRegistroController.getInstancia()
+                            .obtenerUsuarioPorIdentificacion(nuevaIdentificacion);
+
+                    setUsuario(usuarioActualizado);
+                    
+                    mostrarDatosUsuario();
+
+                    limpiarFormulario();
+
+                    OficialDeRegistroView.setSelectedIndex(1);
+                    break;
+
+                case 0:
+                    JOptionPane.showMessageDialog(this,
+                            "No se detectaron cambios diferentes a los actuales",
+                            "Información", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+
+                case -1:
+                    throw new RuntimeException("Error al guardar en la base de datos");
+            }
+
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al intentar actualizar");
+            JOptionPane.showMessageDialog(this,
+                    "Error crítico: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
+
+
     }//GEN-LAST:event_btnActualilzarODRActionPerformed
+
+    private void limpiarFormulario() {
+        nuevoPrimerNombre.setText("");
+        nuevoSegundoNombre.setText("");
+        primerNuevoApellido.setText("");
+        segundoNuevoApellido1.setText("");
+        nuevaEdad.setText("");
+        nuevaIdenti.setText("");
+        nuevoUsuario.setText("");
+        nuevaContra.setText("");
+        cbxNacionalidad.setSelectedIndex(0);
+        lblFoto.setIcon(null);
+        imagenSeleccionadaModODR = null;
+        imagenFueModificada = false;
+    }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         OficialDeRegistroView.setSelectedIndex(3);
@@ -4174,39 +4307,50 @@ Actualizar.addActionListener(e -> {
 
     private void comboInactivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboInactivosActionPerformed
         try {
-        DefaultTableModel model = (DefaultTableModel) tablaInactivos.getModel();
-        model.setRowCount(0);
-        
-        String seleccion = comboInactivos.getSelectedItem().toString();
-        List<Object[]> filasPresos = new ArrayList<>();
-        
-        switch(seleccion) {
-            case "LIBERADAS":
-                filasPresos.addAll(presoController.obtenerPresosPorEstado(EstadoPresoEnum.LIBERADO));
-                break;
-            case "FALLECIDAS":
-                filasPresos.addAll(presoController.obtenerPresosPorEstado(EstadoPresoEnum.FALLECIDO));
-                break;
-            case "TODAS":
-                filasPresos.addAll(presoController.obtenerPresosPorEstado(EstadoPresoEnum.LIBERADO));
-                filasPresos.addAll(presoController.obtenerPresosPorEstado(EstadoPresoEnum.FALLECIDO));
-                break;
+            DefaultTableModel model = (DefaultTableModel) tablaInactivos.getModel();
+            model.setRowCount(0);
+
+            String seleccion = comboInactivos.getSelectedItem().toString();
+            List<Object[]> filasPresos = new ArrayList<>();
+
+            switch (seleccion) {
+                case "LIBERADAS":
+                    filasPresos.addAll(presoController.obtenerPresosPorEstado(EstadoPresoEnum.LIBERADO));
+                    break;
+                case "FALLECIDAS":
+                    filasPresos.addAll(presoController.obtenerPresosPorEstado(EstadoPresoEnum.FALLECIDO));
+                    break;
+                case "TODAS":
+                    filasPresos.addAll(presoController.obtenerPresosPorEstado(EstadoPresoEnum.LIBERADO));
+                    filasPresos.addAll(presoController.obtenerPresosPorEstado(EstadoPresoEnum.FALLECIDO));
+                    break;
+            }
+
+            filasPresos.sort((a, b) -> ((String) b[2]).compareTo((String) a[2]));
+
+            for (Object[] fila : filasPresos) {
+                model.addRow(fila);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "Error al cargar presos: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
-        
-        filasPresos.sort((a, b) -> ((String)b[2]).compareTo((String)a[2]));
-        
-        for (Object[] fila : filasPresos) {
-            model.addRow(fila);
-        }
-        
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null,
-            "Error al cargar presos: " + e.getMessage(),
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
-    }
 
     }//GEN-LAST:event_comboInactivosActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+  
+        if (usuario != null) {
+            usuario = usuarioDAO.obtenerUsuarioPorIdentificacion(usuario.getIdentificacion());
+            mostrarDatosUsuario();
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay usuario cargado para actualizar.");
+        }
+
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -4335,6 +4479,7 @@ Actualizar.addActionListener(e -> {
     private javax.swing.JLabel identi1;
     private javax.swing.JTextField identificacionB;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
@@ -4569,7 +4714,6 @@ Actualizar.addActionListener(e -> {
     private javax.swing.JComboBox<String> nuevaNacionalidadField;
     private javax.swing.JComboBox<String> nuevaSeccion;
     private javax.swing.JComboBox<String> nuevoAislamientoCombo;
-    private javax.swing.JTextField nuevoCorreo;
     private javax.swing.JComboBox<String> nuevoGrupoSanguineoCombo;
     private javax.swing.JComboBox<String> nuevoNivelRiesgoCombo;
     private javax.swing.JComboBox<String> nuevoNivelSeguridadCombo;
@@ -4580,6 +4724,7 @@ Actualizar.addActionListener(e -> {
     private javax.swing.JTextField nuevoSegundoApellidoField;
     private javax.swing.JTextField nuevoSegundoNombre;
     private javax.swing.JTextField nuevoSegundoNombreField;
+    private javax.swing.JTextField nuevoUsuario;
     private javax.swing.JPanel panelEstadoEspecialPreso;
     private javax.swing.JLabel peso;
     private javax.swing.JPopupMenu ppMenuDelito;

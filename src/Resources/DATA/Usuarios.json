@@ -570,6 +570,48 @@
       "sexo": "Femenino",
       "nacionalidad": "Afgana",
       "identificacion": "889966332"
+    },
+    {
+      "usuario": "hola",
+      "password": "6220ccf375c48ef9cd41610134db6896643c88927a4377cdd3bfa026c80a77e9",
+      "rol": "OFICIAL_DE_REGISTRO",
+      "rutaImagen": "src/Resources/imagenes_oficiales_registro/333333333_1747608390566.jpg",
+      "primerNombre": "KO",
+      "segundoNombre": "KA",
+      "primerApellido": "CO",
+      "segundoApellido": "LA",
+      "edad": 33,
+      "sexo": "Femenino",
+      "nacionalidad": "Afgana",
+      "identificacion": "333333333"
+    },
+    {
+      "usuario": "azul",
+      "password": "04e93a6c567b5de0a38cbec25ac2731fe2e7d7e7492db94586c31d428ad19530",
+      "rol": "OFICIAL_DE_REGISTRO",
+      "rutaImagen": "src/Resources/imagenes_oficiales_registro/222222222_1747611091513.jpg",
+      "primerNombre": "LOP",
+      "segundoNombre": "DSD",
+      "primerApellido": "EWEW",
+      "segundoApellido": "EWEW",
+      "edad": 44,
+      "sexo": "Femenino",
+      "nacionalidad": "Afgana",
+      "identificacion": "222222222"
+    },
+    {
+      "usuario": "cuenta",
+      "password": "a53bc582779c9029be3e30d6035d1a024c79a0a9230875135d10360ed59852d8",
+      "rol": "OFICIAL_DE_REGISTRO",
+      "rutaImagen": "src/Resources/imagenes_oficiales_registro/666666666_1747612170342.jpg",
+      "primerNombre": "Simona",
+      "segundoNombre": "Bianca",
+      "primerApellido": "Banliquest",
+      "segundoApellido": "Sems",
+      "edad": 30,
+      "sexo": "Femenino",
+      "nacionalidad": "Afgana",
+      "identificacion": "666666666"
     }
   ]
 }
