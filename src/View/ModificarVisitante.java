@@ -27,6 +27,12 @@ public class ModificarVisitante extends javax.swing.JDialog {
         this.identificacionPreso = identificacionPreso;
         cargarDatosVisitante();
         setLocationRelativeTo(parent);
+        
+        soloLetras(NuevoPrimerNombreVisitante);
+        soloLetras(NuevoSegundoNombreVisitante);
+        soloLetras(NuevoPrimerApellidoVisitante);
+        soloLetras(NuevoSegundoApellidoVisitante);
+        soloNumeros(NuevaEdadVisitante);
     }
 
     private void cargarDatosVisitante() {
@@ -105,11 +111,11 @@ public class ModificarVisitante extends javax.swing.JDialog {
 
         jLabel63.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel63.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel63.setText("Sexo:");
+        jLabel63.setText("Genero:");
         jPanel8.add(jLabel63, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 370, -1, -1));
 
         NuevoSexoVisitante.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "Femenino", "Masculino" }));
-        jPanel8.add(NuevoSexoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 360, 390, 30));
+        jPanel8.add(NuevoSexoVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 360, 370, 30));
 
         jLabel64.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel64.setForeground(new java.awt.Color(0, 0, 0));
@@ -169,7 +175,7 @@ public class ModificarVisitante extends javax.swing.JDialog {
 
             if (opcion == 0) {
                 nuevaImagen = controller.capturarImagenVisitante();
-            } else if (opcion == 1) { 
+            } else if (opcion == 1) {
                 nuevaImagen = controller.seleccionarImagen(this, getNuevaVistaPreviaVisitante());
             }
 
@@ -210,7 +216,6 @@ public class ModificarVisitante extends javax.swing.JDialog {
             String edadStr = getNuevaEdadVisitante().getText();
             String sexo = getNuevoSexoVisitante().getSelectedItem().toString();
 
-
             File imagen = nuevaImagenVisitante != null ? nuevaImagenVisitante : new File(visitante.getFotoPath());
 
             VisitaController controller = new VisitaController();
@@ -236,6 +241,29 @@ public class ModificarVisitante extends javax.swing.JDialog {
         }
 
     }//GEN-LAST:event_BotonModificarVisitanteActionPerformed
+    public void soloNumeros(JTextField campo) {
+        campo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                char c = evt.getKeyChar();
+                if (!Character.isDigit(c) && c != '\b') {
+                    evt.consume();
+                    JOptionPane.showMessageDialog(null, "Solo se permiten números.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+    }
+
+    public void soloLetras(JTextField campo) {
+        campo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                char c = evt.getKeyChar();
+                if (!Character.isLetter(c) && !Character.isWhitespace(c) && c != '\b') {
+                    evt.consume();
+                    JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+    }
 
     /**
      * @param args the command line arguments

@@ -28,7 +28,7 @@ public class Visita {
         this.lugarVisita = lugarVisita;
         this.preso = preso;
         this.visitantesConRelacion = new HashMap<>();
-        this.estado = EstadoVisitaEnum.EN_PROCESO;
+        this.estado = EstadoVisitaEnum.PROGRAMADA;
         this.razonCancelacion = null;
     }
 

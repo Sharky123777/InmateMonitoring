@@ -342,16 +342,26 @@ public class SancionController {
     }
 
     public void buscarPresoPorIdentificacion(String identificacion, JTable tabla) {
-        DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
-        modelo.setRowCount(0);
 
         if (identificacion.isEmpty()) {
             mostrarError("Ingrese una identificación para buscar");
             return;
         }
 
+        if (!identificacion.matches("^[0-9]+$")) {
+            mostrarError("La identificación solo debe contener números");
+            return;
+        }
+
+        if (identificacion.startsWith("-")) {
+            mostrarError("La identificación no puede ser negativa");
+            return;
+        }
+
         Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
         if (preso != null) {
+            DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+            modelo.setRowCount(0);
             ImageIcon foto = cargarImagen(preso.getFotoPath());
             modelo.addRow(new Object[]{
                 foto,
@@ -505,15 +515,14 @@ public class SancionController {
             return;
         }
 
-        DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
-        modelo.setRowCount(0);
-
         List<Guardia> guardias = guardiaDAO.obtenerGuardias();
         boolean encontrado = false;
 
         for (Guardia guardia : guardias) {
             if (guardia.getIdentificacion().equalsIgnoreCase(identificacion)) {
                 ImageIcon foto = cargarImagen(guardia.getRutaImagen());
+                DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+                modelo.setRowCount(0);
 
                 modelo.addRow(new Object[]{
                     foto,
