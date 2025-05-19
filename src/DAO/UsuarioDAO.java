@@ -162,5 +162,60 @@ public class UsuarioDAO {
             return new ArrayList<>();
         }
     }
+    
+    public boolean modificarCredenciales(String usuarioOriginal, String nuevoUsuario, String nuevaContrasena) throws IOException {
+    List<Usuario> usuarios = obtenerTodosUsuarios();
+    boolean modificado = false;
+
+    for (Usuario usuario : usuarios) {
+        if (usuario.getUsuario().equals(usuarioOriginal)) {
+            if (nuevoUsuario != null && !nuevoUsuario.isEmpty()) {
+                if (usuarios.stream().anyMatch(u -> u.getUsuario().equals(nuevoUsuario) && !nuevoUsuario.equals(usuarioOriginal))) {
+                    throw new IllegalArgumentException("El nombre de usuario ya está en uso");
+                }
+                usuario.setUsuario(nuevoUsuario);
+            }
+            
+            if (nuevaContrasena != null && !nuevaContrasena.isEmpty()) {
+                String contrasenaEncriptada = GeneradorCredenciales.encriptarContrasena(nuevaContrasena);
+                usuario.setPassword(contrasenaEncriptada);
+            }
+            
+            modificado = true;
+            break;
+        }
+    }
+
+    if (modificado) {
+        guardarUsuarios(usuarios);
+        return true;
+    }
+    
+    return false;
+}
+
+private void guardarUsuarios(List<Usuario> usuarios) throws IOException {
+    try (FileWriter writer = new FileWriter(JSON_FILE)) {
+        JsonObject root = new JsonObject();
+        JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
+        root.add("usuarios", usuariosArray);
+        gson.toJson(root, writer);
+    }
+}
+
+public Usuario obtenerUsuarioPorIdentificacion(String identificacion) {
+    try {
+        List<Usuario> usuarios = obtenerTodosUsuarios();
+        for (Usuario u : usuarios) {
+            if (u.getIdentificacion().equals(identificacion)) {
+                return u;
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+
 
 }

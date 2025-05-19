@@ -22,6 +22,7 @@ public class OficialDeRegistroController {
 
     private static OficialDeRegistroController instancia;
     private final OficialDeRegistroDAO oficialDAO;
+    private final UsuarioDAO usuarioDAO = UsuarioDAO.getInstancia();
     private FrmCamara ventanaCamara;
 
     private OficialDeRegistroController() {
@@ -277,7 +278,6 @@ public class OficialDeRegistroController {
         return oficialDAO.obtenerOficialPorUsuario(usuario);
     }
 
-    // Métodos de validación
     private void validarCamposModificacion(Map<String, Object> cambios) {
         StringBuilder errores = new StringBuilder();
 
@@ -359,4 +359,130 @@ public class OficialDeRegistroController {
             throw new IllegalArgumentException("La edad debe ser un número valido");
         }
     }
+
+    public int modificarOficialConCredenciales(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
+        try {
+            OficialDeRegistro original = obtenerOficialPorCedula(cedulaOriginal);
+            if (original == null) {
+                throw new IllegalArgumentException("Oficial no encontrado con cédula: " + cedulaOriginal);
+            }
+
+            Integer edad = null;
+            if (cambios.containsKey("edad")) {
+                try {
+                    edad = Integer.parseInt(cambios.get("edad").toString());
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException("La edad debe ser un número válido");
+                }
+            }
+
+            OficialDeRegistro modificado = new OficialDeRegistro(
+                    cambios.get("primerNombre") != null ? cambios.get("primerNombre").toString() : original.getPrimerNombre(),
+                    cambios.get("segundoNombre") != null ? cambios.get("segundoNombre").toString() : original.getSegundoNombre(),
+                    cambios.get("primerApellido") != null ? cambios.get("primerApellido").toString() : original.getPrimerApellido(),
+                    cambios.get("segundoApellido") != null ? cambios.get("segundoApellido").toString() : original.getSegundoApellido(),
+                    edad != null ? edad : original.getEdad(),
+                    original.getSexo(),
+                    cambios.get("nacionalidad") != null ? cambios.get("nacionalidad").toString() : original.getNacionalidad(),
+                    cambios.get("identificacion") != null ? cambios.get("identificacion").toString() : original.getIdentificacion(),
+                    original.getTurno(),
+                    original.getFechaContratacion(),
+                    original.getFechaFinContrato(),
+                    original.getCorreo(),
+                    cambios.get("nuevoUsuario") != null ? cambios.get("nuevoUsuario").toString() : original.getUsuario(),
+                    cambios.containsKey("nuevaContraseña")
+                    ? cambios.get("nuevaContraseña").toString()
+                    : original.getContrasena()
+            );
+
+            boolean hayCambiosReales = !modificado.equals(original) || nuevaImagen != null;
+
+            if (hayCambiosReales) {
+                boolean exito = OficialDeRegistroDAO.getInstancia()
+                        .modificarOficial(cedulaOriginal, modificado, nuevaImagen);
+                if (!exito) {
+                    return -1;
+                }
+            }
+
+            if (cambios.containsKey("nuevoUsuario") || cambios.containsKey("nuevaContraseña")) {
+                String nuevoUsuario = modificado.getUsuario();
+                String nuevaContra = cambios.containsKey("nuevaContraseña")
+                        ? cambios.get("nuevaContraseña").toString()
+                        : null;
+
+                boolean credencialesActualizadas = UsuarioDAO.getInstancia().modificarCredenciales(
+                        original.getUsuario(),
+                        nuevoUsuario,
+                        nuevaContra
+                );
+
+                if (!credencialesActualizadas) {
+                    return -1;
+                }
+
+                if (original.getCorreo() != null && !original.getCorreo().isEmpty()) {
+                    try {
+                        EmailSender.getInstancia().enviarCredenciales(
+                                original.getCorreo(),
+                                nuevoUsuario,
+                                nuevaContra != null ? nuevaContra : "*** No modificada ***",
+                                RolEnum.OFICIAL_DE_REGISTRO
+                        );
+                    } catch (Exception e) {
+                        System.err.println("Error enviando correo: " + e.getMessage());
+                    }
+                }
+            }
+
+            return hayCambiosReales ? 1 : 0;
+
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al modificar oficial: " + e.getMessage(), e);
+        }
+    }
+
+    public int modificarCredencialesOficial(String cedulaOriginal, String nuevoUsuario, String nuevaContra) {
+        try {
+            OficialDeRegistro oficial = obtenerOficialPorCedula(cedulaOriginal);
+            if (oficial == null) {
+                throw new IllegalArgumentException("Oficial no encontrado");
+            }
+
+            if ((nuevoUsuario == null || nuevoUsuario.isEmpty() || nuevoUsuario.equals(oficial.getUsuario()))
+                    && (nuevaContra == null || nuevaContra.isEmpty())) {
+                return 0;
+            }
+
+            String nuevaContraEncriptada = (nuevaContra != null && !nuevaContra.isEmpty())
+                    ? UsuarioController.getInstancia().encriptarContrasena(nuevaContra)
+                    : null;
+
+            boolean resultado = UsuarioDAO.getInstancia().modificarCredenciales(
+                    oficial.getUsuario(),
+                    nuevoUsuario != null && !nuevoUsuario.isEmpty() ? nuevoUsuario : null,
+                    nuevaContraEncriptada
+            );
+
+            if (resultado && oficial.getCorreo() != null && !oficial.getCorreo().isEmpty()) {
+                EmailSender.getInstancia().enviarCredenciales(
+                        oficial.getCorreo(),
+                        nuevoUsuario != null && !nuevoUsuario.isEmpty() ? nuevoUsuario : oficial.getUsuario(),
+                        nuevaContra != null && !nuevaContra.isEmpty() ? nuevaContra : "*** No modificada ***",
+                        RolEnum.OFICIAL_DE_REGISTRO
+                );
+            }
+
+            return resultado ? 1 : -1;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al modificar credenciales: " + e.getMessage(), e);
+        }
+    }
+
+    public Usuario obtenerUsuarioPorIdentificacion(String identificacion) {
+    return usuarioDAO.obtenerUsuarioPorIdentificacion(identificacion);
+}
+
 }
