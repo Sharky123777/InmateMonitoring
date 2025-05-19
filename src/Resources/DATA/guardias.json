@@ -63,6 +63,22 @@
       "sexo": "Femenino",
       "nacionalidad": "Guatemalteca",
       "identificacion": "098765432"
+    },
+    {
+      "cargo": "Guardia jefe",
+      "turno": "Diurno",
+      "fechaInicioContrato": "2025-05-19",
+      "fechaFinContrato": "2025-06-20",
+      "rutaImagen": "src/Resources/imagenes_guardias/000000000_1747659969058.jpg",
+      "correo": "luzdaricrespo@gmail.com",
+      "primerNombre": "Camila",
+      "segundoNombre": "Luciana",
+      "primerApellido": "Piromatica",
+      "segundoApellido": "Frin",
+      "edad": 30,
+      "sexo": "Femenino",
+      "nacionalidad": "Argentina",
+      "identificacion": "000000000"
     }
   ]
 }
