@@ -1,6 +1,7 @@
 package View;
 
 import Controller.CitaMedicaController;
+import Controller.OficialController;
 import Controller.SancionController;
 import DAO.PresoDAO;
 import Model.Entities.Preso;
@@ -17,6 +18,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -34,6 +37,8 @@ public class Oficial extends javax.swing.JFrame implements PerfilUsuario {
     private final SancionController sancionController = new SancionController();
     private final CitaMedicaController citaMedicaController = new CitaMedicaController();
     private Usuario usuario;
+    public boolean imagenFueModificada;
+    private File imagenSeleccionadaModOficial;
 
     public Oficial() {
         initComponents();
@@ -49,6 +54,8 @@ public class Oficial extends javax.swing.JFrame implements PerfilUsuario {
         soloLetras(NuevoSegundoNombre);
         soloLetras(NuevoPrimerApellido);
         soloLetras(NuevoSegundoApellido);
+        soloNumeros(IdentificacionPresoCita);
+        soloNumeros(IdentificacionGuardia);
         soloNumeros(BarraDeBusquedaPreso);
         soloNumeros(BarraDeBusquedaGuardias);
         soloNumeros(IdentificacionPresoSancion);
@@ -868,7 +875,7 @@ public class Oficial extends javax.swing.JFrame implements PerfilUsuario {
         jLabel69.setText("Fecha de la sanción:");
         jPanel3.add(jLabel69, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, -1, -1));
 
-        HoraSancion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00" }));
+        HoraSancion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "< Seleccionar >", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00" }));
         HoraSancion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 HoraSancionActionPerformed(evt);
@@ -1118,11 +1125,136 @@ public class Oficial extends javax.swing.JFrame implements PerfilUsuario {
     }//GEN-LAST:event_NuevaEdadActionPerformed
 
     private void SubirNuevaFotoPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubirNuevaFotoPerfilActionPerformed
+        JFileChooser selectorImagen = new JFileChooser();
+        selectorImagen.setDialogTitle("Seleccionar Nueva Foto del Personal de Control");
 
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter(
+                "Imágenes (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif");
+        selectorImagen.setFileFilter(filtro);
+
+        int resultado = selectorImagen.showOpenDialog(this);
+
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            imagenSeleccionadaModOficial = selectorImagen.getSelectedFile();
+            imagenFueModificada = true;
+
+            try {
+                BufferedImage imagenOriginal = ImageIO.read(imagenSeleccionadaModOficial);
+
+                Image imagenEscalada = imagenOriginal.getScaledInstance(
+                        VistaPreviaNuevaFoto.getWidth(),
+                        VistaPreviaNuevaFoto.getHeight(),
+                        Image.SCALE_SMOOTH);
+
+                VistaPreviaNuevaFoto.setIcon(new ImageIcon(imagenEscalada));
+                JOptionPane.showMessageDialog(this, "Nueva foto cargada correctamente");
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al cargar la imagen: " + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+
+                imagenSeleccionadaModOficial = null;
+                imagenFueModificada = false;
+                VistaPreviaNuevaFoto.setIcon(null);
+            }
+        }
     }//GEN-LAST:event_SubirNuevaFotoPerfilActionPerformed
 
     private void BotonActualizarInformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonActualizarInformacionActionPerformed
+try {
+            String cedulaOriginal = usuario.getIdentificacion();
+            if (cedulaOriginal.isEmpty()) {
+                throw new IllegalArgumentException("Cédula original no especificada");
+            }
 
+            Model.Entities.Oficial oficialExistente = OficialController.getInstancia()
+                    .obtenerOficialPorCedula(cedulaOriginal);
+
+            if (oficialExistente == null) {
+                throw new IllegalArgumentException("No se encontró personal registrado con cédula: " + cedulaOriginal);
+            }
+
+            Map<String, Object> cambios = new HashMap<>();
+
+            if (!NuevoPrimerNombre.getText().trim().isEmpty()) {
+                cambios.put("primerNombre", NuevoPrimerNombre.getText().trim());
+            }
+            if (!NuevoSegundoNombre.getText().trim().isEmpty()) {
+                cambios.put("segundoNombre", NuevoSegundoNombre.getText().trim());
+            }
+            if (!NuevoPrimerApellido.getText().trim().isEmpty()) {
+                cambios.put("primerApellido", NuevoPrimerApellido.getText().trim());
+            }
+            if (!NuevoSegundoApellido.getText().trim().isEmpty()) {
+                cambios.put("segundoApellido", NuevoSegundoApellido.getText().trim());
+            }
+            if (!NuevaEdad.getText().trim().isEmpty()) {
+                try {
+                    cambios.put("edad", Integer.parseInt(NuevaEdad.getText().trim()));
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException("La edad debe ser un número válido");
+                }
+            }
+
+            if (NuevaNacionalidad.getSelectedItem() != null) {
+                String nacionalidadSeleccionada = NuevaNacionalidad.getSelectedItem().toString();
+                if (!nacionalidadSeleccionada.equalsIgnoreCase("<Seleccione>")) {
+                    cambios.put("nacionalidad", nacionalidadSeleccionada);
+                }
+            }
+
+            if (!NuevoUsuarioOficial.getText().trim().isEmpty()) {
+                cambios.put("nuevoUsuario", NuevoUsuarioOficial.getText().trim());
+            }
+            if (!NuevaContraseñaOficial.getText().trim().isEmpty()) {
+                cambios.put("nuevaContraseña", NuevaContraseñaOficial.getText().trim());
+            }
+
+            File imagenModificada = imagenFueModificada ? imagenSeleccionadaModOficial : null;
+
+            int resultado = OficialController.getInstancia()
+                    .modificarOficialConCredenciales(cedulaOriginal, cambios, imagenModificada);
+
+            switch (resultado) {
+                case 1:
+                    String mensaje = "¡Actualización exitosa!";
+                    if (cambios.containsKey("nuevoUsuario") || cambios.containsKey("nuevaContraseña")) {
+                        mensaje += "\nCredenciales enviadas al correo registrado";
+                    }
+                    JOptionPane.showMessageDialog(this, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    String nuevaIdentificacion = cambios.containsKey("identificacion")
+                            ? cambios.get("identificacion").toString()
+                            : cedulaOriginal;
+
+                    Usuario usuarioActualizado = OficialController.getInstancia()
+                            .obtenerUsuarioPorIdentificacion(nuevaIdentificacion);
+
+                    setUsuario(usuarioActualizado);
+
+                    mostrarDatosUsuario();
+
+                    TabbedOficial.setSelectedIndex(0);
+                    break;
+
+                case 0:
+                    JOptionPane.showMessageDialog(this,
+                            "No se detectaron cambios diferentes a los actuales",
+                            "Información", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+
+                case -1:
+                    throw new RuntimeException("Error al guardar en la base de datos");
+            }
+
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error crítico: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_BotonActualizarInformacionActionPerformed
 
     private void CerrarSesionBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CerrarSesionBotonActionPerformed

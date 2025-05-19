@@ -6,10 +6,13 @@ import Model.Constants.RolEnum;
 import Model.Entities.PersonalControl;
 import Model.Entities.Usuario;
 import Utilidades.EmailSender;
+import Utilidades.GeneradorCredenciales;
 import View.FrmCamara;
+import com.itextpdf.text.log.Logger;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.System.Logger.Level;
 import java.time.LocalDate;
 import java.util.*;
 import javax.swing.JDialog;
@@ -21,6 +24,7 @@ public class PersonalControlController {
     private static PersonalControlController instancia;
     private final PersonalControlDAO personalControlDAO;
     private FrmCamara ventanaCamara;
+    private final UsuarioDAO usuarioDAO = UsuarioDAO.getInstancia();
 
     private PersonalControlController() {
         this.personalControlDAO = PersonalControlDAO.getInstancia();
@@ -386,4 +390,108 @@ public class PersonalControlController {
             throw new IllegalArgumentException("La edad debe ser un número positivo");
         }
     }
+
+    public int modificarPersonalControlConCredenciales(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
+        try {
+            PersonalControl original = obtenerPersonalControlPorCedula(cedulaOriginal);
+            if (original == null) {
+                throw new IllegalArgumentException("Personal de control no encontrado con cédula: " + cedulaOriginal);
+            }
+
+            PersonalControl modificado = new PersonalControl(
+                    cambios.getOrDefault("primerNombre", original.getPrimerNombre()).toString(),
+                    cambios.getOrDefault("segundoNombre", original.getSegundoNombre()).toString(),
+                    cambios.getOrDefault("primerApellido", original.getPrimerApellido()).toString(),
+                    cambios.getOrDefault("segundoApellido", original.getSegundoApellido()).toString(),
+                    cambios.containsKey("edad") ? Integer.parseInt(cambios.get("edad").toString()) : original.getEdad(),
+                    original.getSexo(),
+                    cambios.getOrDefault("nacionalidad", original.getNacionalidad()).toString(),
+                    cambios.getOrDefault("identificacion", original.getIdentificacion()).toString(),
+                    cambios.getOrDefault("turno", original.getTurno()).toString(),
+                    original.getFechaContratacion(),
+                    cambios.containsKey("fechaFin") ? (LocalDate) cambios.get("fechaFin") : original.getFechaFinContrato(),
+                    cambios.getOrDefault("correo", original.getCorreo()).toString(),
+                    cambios.getOrDefault("nuevoUsuario", original.getUsuario()).toString(),
+                    cambios.containsKey("nuevaContraseña") ? cambios.get("nuevaContraseña").toString() : original.getContrasena()
+            );
+
+            boolean exito = personalControlDAO.modificarPersonalControl(cedulaOriginal, modificado, nuevaImagen);
+            if (!exito) {
+                return -1;
+            }
+
+            if (cambios.containsKey("nuevoUsuario") || cambios.containsKey("nuevaContraseña")) {
+                boolean credencialesOk = UsuarioDAO.getInstancia().modificarCredenciales(
+                        original.getUsuario(),
+                        cambios.containsKey("nuevoUsuario") ? cambios.get("nuevoUsuario").toString() : null,
+                        cambios.containsKey("nuevaContraseña") ? cambios.get("nuevaContraseña").toString() : null,
+                        original.getCorreo(),
+                        RolEnum.PERSONAL_DE_CONTROL
+                );
+
+                if (!credencialesOk) {
+                    return -1;
+                }
+            }
+
+            return 1;
+
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al modificar personal de control: " + e.getMessage(), e);
+        }
+    }
+
+    public int modificarCredencialesPersonalControl(String cedulaOriginal, String nuevoUsuario, String nuevaContra) {
+        try {
+            PersonalControl pdc = obtenerPersonalControlPorCedula(cedulaOriginal);
+            if (pdc == null) {
+                throw new IllegalArgumentException("Personal de control no encontrado");
+            }
+
+            nuevoUsuario = nuevoUsuario != null ? nuevoUsuario.toLowerCase() : null;
+
+            boolean cambioUsuario = nuevoUsuario != null && !nuevoUsuario.equalsIgnoreCase(pdc.getUsuario());
+            boolean cambioContra = nuevaContra != null && !nuevaContra.isEmpty();
+
+            if (!cambioUsuario && !cambioContra) {
+                return 0;
+            }
+
+            if (cambioContra) {
+                pdc.setContrasena(GeneradorCredenciales.encriptarContrasena(nuevaContra));
+            }
+            if (cambioUsuario) {
+                pdc.setUsuario(nuevoUsuario);
+            }
+
+            boolean exito = personalControlDAO.modificarPersonalControl(cedulaOriginal, pdc, null);
+            if (!exito) {
+                return -1;
+            }
+
+            boolean credencialesOk = UsuarioDAO.getInstancia().modificarCredenciales(
+                    pdc.getUsuario(),
+                    cambioUsuario ? nuevoUsuario : null,
+                    cambioContra ? nuevaContra : null,
+                    pdc.getCorreo(),
+                    RolEnum.PERSONAL_DE_CONTROL
+            );
+
+            return credencialesOk ? 1 : -1;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al modificar credenciales: " + e.getMessage(), e);
+        }
+    }
+
+    public Usuario obtenerUsuarioPorIdentificacion(String identificacion) {
+        try {
+            return usuarioDAO.obtenerUsuarioPorIdentificacion(identificacion);
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(PersonalControlController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
 }

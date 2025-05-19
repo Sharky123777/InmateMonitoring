@@ -4,6 +4,10 @@ import DAO.GuardiaDAO;
 import DAO.PresoDAO;
 import DAO.SancionDAO;
 import DAO.VisitaDAO;
+import Model.Constants.EstadoPresoEnum;
+import static Model.Constants.EstadoPresoEnum.FALLECIDO;
+import static Model.Constants.EstadoPresoEnum.FUGADO;
+import static Model.Constants.EstadoPresoEnum.LIBERADO;
 import Model.Constants.EstadoVisitaEnum;
 import Model.Entities.Guardia;
 import Model.Entities.Preso;
@@ -106,6 +110,21 @@ public class SancionController {
                 return false;
             }
 
+            if (preso.getEstado() != EstadoPresoEnum.ACTIVO) {
+                String mensajeEstado = switch (preso.getEstado()) {
+                    case FALLECIDO ->
+                        "No se pueden registrar visitas para presos fallecidos";
+                    case LIBERADO ->
+                        "No se pueden registrar visitas para presos liberados";
+                    case FUGADO ->
+                        "No se pueden registrar visitas para presos fugados";
+                    default ->
+                        "El preso no puede recibir visitas en su estado actual: " + preso.getEstado();
+                };
+                mostrarError(mensajeEstado);
+                return false;
+            }
+
             Guardia guardia = new GuardiaDAO().obtenerGuardiaPorCedula(identificacionGuardia);
             if (guardia == null) {
                 mostrarError("Guardia no encontrado.");
@@ -199,11 +218,9 @@ public class SancionController {
     }
 
     private String determinarTurno(LocalTime hora) {
-        if (!hora.isBefore(LocalTime.of(0, 0)) && hora.isBefore(LocalTime.of(8, 0))) {
-            return "Nocturno";
-        } else if (!hora.isBefore(LocalTime.of(8, 0)) && hora.isBefore(LocalTime.of(20, 0))) {
+        if (!hora.isBefore(LocalTime.of(7, 0)) && hora.isBefore(LocalTime.of(16, 0))) {
             return "Diurno";
-        } else if (!hora.isBefore(LocalTime.of(20, 0)) && !hora.isAfter(LocalTime.of(23, 59, 59))) {
+        } else if (!hora.isBefore(LocalTime.of(17, 0)) && hora.isBefore(LocalTime.of(18, 0))) {
             return "Nocturno";
         }
         return null;

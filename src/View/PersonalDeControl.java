@@ -12,13 +12,16 @@ import Model.Entities.Visitante;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -35,8 +38,9 @@ public class PersonalDeControl extends javax.swing.JFrame implements PerfilUsuar
     private List<Visitante> visitantesTemporales = new ArrayList<>();
     private File imagenVisitanteSeleccionada;
     private File imagenVisitanteNuevaSeleccionada;
-    private File nuevaImagenSeleccionada;
     private List<File> imagenesTemporales = new ArrayList<>();
+    public boolean imagenFueModificada;
+    private File imagenSeleccionadaModPC;
     private Usuario usuario;
     int cantidadTotal;
 
@@ -1225,61 +1229,134 @@ public class PersonalDeControl extends javax.swing.JFrame implements PerfilUsuar
 
     private void BotonActualizarInformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonActualizarInformacionActionPerformed
         try {
-            String nuevoPrimerNombre = NuevoPrimerNombre.getText();
-            String nuevoSegundoNombre = NuevoSegundoNombre.getText();
-            String nuevoPrimerApellido = NuevoPrimerApellido.getText();
-            String nuevoSegundoApellido = NuevoSegundoApellido.getText();
-            int nuevaEdad = Integer.parseInt(NuevaEdad.getText());
-
             String cedulaOriginal = usuario.getIdentificacion();
+            if (cedulaOriginal.isEmpty()) {
+                throw new IllegalArgumentException("Cédula original no especificada");
+            }
+
+            Model.Entities.PersonalControl personalExistente = PersonalControlController.getInstancia()
+                    .obtenerPersonalControlPorCedula(cedulaOriginal);
+
+            if (personalExistente == null) {
+                throw new IllegalArgumentException("No se encontró personal registrado con cédula: " + cedulaOriginal);
+            }
 
             Map<String, Object> cambios = new HashMap<>();
-            cambios.put("primerNombre", nuevoPrimerNombre);
-            cambios.put("segundoNombre", nuevoSegundoNombre);
-            cambios.put("primerApellido", nuevoPrimerApellido);
-            cambios.put("segundoApellido", nuevoSegundoApellido);
-            cambios.put("edad", nuevaEdad);
 
-            File nuevaImagen = nuevaImagenSeleccionada;
-
-            int resultado = PersonalControlController.getInstancia().modificarPersonalControl(
-                    cedulaOriginal,
-                    cambios,
-                    nuevaImagen
-            );
-
-            if (resultado == 1) {
-                JOptionPane.showMessageDialog(this, "Información actualizada correctamente");
-            } else if (resultado == 0) {
-                JOptionPane.showMessageDialog(this, "No se realizaron cambios");
-            } else {
-                JOptionPane.showMessageDialog(this, "Error al actualizar la información", "Error", JOptionPane.ERROR_MESSAGE);
+            if (!NuevoPrimerNombre.getText().trim().isEmpty()) {
+                cambios.put("primerNombre", NuevoPrimerNombre.getText().trim());
             }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "La edad debe ser un número válido", "Error", JOptionPane.ERROR_MESSAGE);
+            if (!NuevoSegundoNombre.getText().trim().isEmpty()) {
+                cambios.put("segundoNombre", NuevoSegundoNombre.getText().trim());
+            }
+            if (!NuevoPrimerApellido.getText().trim().isEmpty()) {
+                cambios.put("primerApellido", NuevoPrimerApellido.getText().trim());
+            }
+            if (!NuevoSegundoApellido.getText().trim().isEmpty()) {
+                cambios.put("segundoApellido", NuevoSegundoApellido.getText().trim());
+            }
+            if (!NuevaEdad.getText().trim().isEmpty()) {
+                try {
+                    cambios.put("edad", Integer.parseInt(NuevaEdad.getText().trim()));
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException("La edad debe ser un número válido");
+                }
+            }
+
+            if (NuevaNacionalidad.getSelectedItem() != null) {
+                String nacionalidadSeleccionada = NuevaNacionalidad.getSelectedItem().toString();
+                if (!nacionalidadSeleccionada.equalsIgnoreCase("<Seleccione>")) {
+                    cambios.put("nacionalidad", nacionalidadSeleccionada);
+                }
+            }
+
+            if (!NuevoUsuarioPDC.getText().trim().isEmpty()) {
+                cambios.put("nuevoUsuario", NuevoUsuarioPDC.getText().trim());
+            }
+            if (!NuevaContraseñaPDC.getText().trim().isEmpty()) {
+                cambios.put("nuevaContraseña", NuevaContraseñaPDC.getText().trim());
+            }
+
+            File imagenModificada = imagenFueModificada ? imagenSeleccionadaModPC : null;
+
+            int resultado = PersonalControlController.getInstancia()
+                    .modificarPersonalControlConCredenciales(cedulaOriginal, cambios, imagenModificada);
+
+            switch (resultado) {
+                case 1:
+                    String mensaje = "¡Actualización exitosa!";
+                    if (cambios.containsKey("nuevoUsuario") || cambios.containsKey("nuevaContraseña")) {
+                        mensaje += "\nCredenciales enviadas al correo registrado";
+                    }
+                    JOptionPane.showMessageDialog(this, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    String nuevaIdentificacion = cambios.containsKey("identificacion")
+                            ? cambios.get("identificacion").toString()
+                            : cedulaOriginal;
+
+                    Usuario usuarioActualizado = PersonalControlController.getInstancia()
+                            .obtenerUsuarioPorIdentificacion(nuevaIdentificacion);
+
+                    setUsuario(usuarioActualizado);
+
+                    mostrarDatosUsuario();
+
+                    TabbedPDC.setSelectedIndex(0);
+                    break;
+
+                case 0:
+                    JOptionPane.showMessageDialog(this,
+                            "No se detectaron cambios diferentes a los actuales",
+                            "Información", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+
+                case -1:
+                    throw new RuntimeException("Error al guardar en la base de datos");
+            }
+
         } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al actualizar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Error crítico: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }//GEN-LAST:event_BotonActualizarInformacionActionPerformed
 
     private void SubirNuevaFotoPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubirNuevaFotoPerfilActionPerformed
-        try {
-            File nuevaImagen = PersonalControlController.getInstancia().capturarImagenPersonalControl();
+        JFileChooser selectorImagen = new JFileChooser();
+        selectorImagen.setDialogTitle("Seleccionar Nueva Foto del Personal de Control");
 
-            if (nuevaImagen != null) {
-                ImageIcon icono = controller.cargarImagen(nuevaImagen.getAbsolutePath());
-                if (icono != null) {
-                    VistaPreviaNuevaFoto.setIcon(icono);
-                    nuevaImagenSeleccionada = nuevaImagen;
-                    JOptionPane.showMessageDialog(this, "Nueva foto cargada correctamente");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error al procesar la imagen", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter(
+                "Imágenes (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif");
+        selectorImagen.setFileFilter(filtro);
+
+        int resultado = selectorImagen.showOpenDialog(this);
+
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            imagenSeleccionadaModPC = selectorImagen.getSelectedFile();
+            imagenFueModificada = true;
+
+            try {
+                BufferedImage imagenOriginal = ImageIO.read(imagenSeleccionadaModPC);
+
+                Image imagenEscalada = imagenOriginal.getScaledInstance(
+                        VistaPreviaNuevaFoto.getWidth(),
+                        VistaPreviaNuevaFoto.getHeight(),
+                        Image.SCALE_SMOOTH);
+
+                VistaPreviaNuevaFoto.setIcon(new ImageIcon(imagenEscalada));
+                JOptionPane.showMessageDialog(this, "Nueva foto cargada correctamente");
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al cargar la imagen: " + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+
+                imagenSeleccionadaModPC = null;
+                imagenFueModificada = false;
+                VistaPreviaNuevaFoto.setIcon(null);
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al capturar la imagen: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_SubirNuevaFotoPerfilActionPerformed
 
