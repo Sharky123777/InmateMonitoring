@@ -31,7 +31,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author gameV
+ * @author Sharlok Alcazar
  */
 public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
 
@@ -644,59 +644,101 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       if (citaSeleccionada == null) {
-        return;
-    }
+        if (citaSeleccionada == null) {
+            return;
+        }
 
-    String diagnostico = txtAreaDiagnostico.getText();
-    if (diagnostico.trim().isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Debe ingresar un diagnóstico", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+        String diagnostico = txtAreaDiagnostico.getText();
+        if (diagnostico.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar un diagnóstico", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    // Actualizar peso y estatura del preso
-    try {
-        double nuevoPeso = Double.parseDouble(txtPesoPresa.getText());
-        double nuevaEstatura = Double.parseDouble(txtEstaturaPresa.getText());
+        // Actualizar peso y estatura del preso
+        try {
+            double nuevoPeso = Double.parseDouble(txtPesoPresa.getText());
+            double nuevaEstatura = Double.parseDouble(txtEstaturaPresa.getText());
 
-        Preso preso = citaSeleccionada.getPreso();
-        preso.setPeso((float) nuevoPeso);
-        preso.setEstatura((float) nuevaEstatura);
-        presoDAO.actualizarPreso(preso);
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this,
-                "Peso y estatura deben ser valores numéricos válidos",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+            Preso preso = citaSeleccionada.getPreso();
+            preso.setPeso((float) nuevoPeso);
+            preso.setEstatura((float) nuevaEstatura);
+            presoDAO.actualizarPreso(preso);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Peso y estatura deben ser valores numéricos válidos",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    // Crear objeto con los datos actualizados
-    CitaMedica citaActualizada = new CitaMedica();
-    citaActualizada.setId(citaSeleccionada.getId());
-    citaActualizada.setDiagnostico(diagnostico);
-    citaActualizada.setEstado(EstadoCitaMedicaEnum.ATENDIDO);
-    citaActualizada.setRutaHistoriaClinica(archivoHistoriaClinica != null ? 
-        archivoHistoriaClinica.getAbsolutePath() : null);
+        // Configurar la cita
+        citaSeleccionada.setDiagnostico(diagnostico);
+        citaSeleccionada.setEstado(EstadoCitaMedicaEnum.ATENDIDO);
+        citaSeleccionada.setFechaHoraAtencion(LocalDateTime.now());
 
-    // Llamar al controlador para actualizar
-    if (citaController.actualizarCita(citaActualizada)) {
-        // Generar PDF (aquí iría tu código para generar el PDF)
-        
-        JOptionPane.showMessageDialog(this,
-                "Consulta guardada exitosamente\nFecha: " +
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
-                "Éxito",
-                JOptionPane.INFORMATION_MESSAGE);
+        // Guardar la receta
+        String receta = recetaTextPane.getText();
+        citaSeleccionada.setReceta(receta);
 
-        cargarCitasPendientes();
-        cargarHistorialAtendidos();
-        jTabbedPane1.setSelectedComponent(atendidos);
-    } else {
-        JOptionPane.showMessageDialog(this, 
-                "Error al guardar los datos de la consulta", 
-                "Error", JOptionPane.ERROR_MESSAGE);
-    }
+        // Generar el PDF de historia clínica
+        try {
+            // Mostrar diálogo para seleccionar ubicación del PDF
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Guardar Historia Clínica");
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Documentos PDF", "pdf"));
+
+            // Sugerir nombre de archivo basado en preso y fecha
+            String nombreArchivo = "HistoriaClinica_"
+                    + citaSeleccionada.getPreso().getIdentificacion() + "_"
+                    + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm")) + ".pdf";
+            fileChooser.setSelectedFile(new File(nombreArchivo));
+
+            int userSelection = fileChooser.showSaveDialog(this);
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File archivoPDF = fileChooser.getSelectedFile();
+
+                // Asegurar extensión .pdf
+                if (!archivoPDF.getName().toLowerCase().endsWith(".pdf")) {
+                    archivoPDF = new File(archivoPDF.getAbsolutePath() + ".pdf");
+                }
+
+                // Generar el PDF
+                GeneradorHistoriaClinica.generarPDF(citaSeleccionada, archivoPDF);
+
+                // Guardar la ruta del PDF en la cita
+                citaSeleccionada.setRutaHistoriaClinica(archivoPDF.getAbsolutePath());
+
+                JOptionPane.showMessageDialog(this,
+                        "Historia clínica generada exitosamente en:\n"
+                        + archivoPDF.getAbsolutePath(),
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                // El usuario canceló, no generamos PDF pero seguimos con el proceso
+                JOptionPane.showMessageDialog(this,
+                        "Consulta guardada sin generar PDF",
+                        "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al generar PDF: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+
+        // Llamar al controlador para actualizar
+        if (citaController.actualizarCita(citaSeleccionada)) {
+            cargarCitasPendientes();
+            cargarHistorialAtendidos();
+            jTabbedPane1.setSelectedComponent(atendidos);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Error al guardar los datos de la consulta",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void AtenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AtenderActionPerformed

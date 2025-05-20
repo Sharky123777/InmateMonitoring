@@ -8,7 +8,7 @@ import Model.Entities.Usuario;
 
 /**
  *
- * @author gameV
+ * @author Sharlok Alcazar
  */
 public interface PerfilUsuario {
     void setUsuario(Usuario usuario);

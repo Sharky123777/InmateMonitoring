@@ -88,7 +88,7 @@ import View.PerfilUsuario;
 
 /**
  *
- * @author Sharlok
+ * @author Sharlok Alcazar
  */
 public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 

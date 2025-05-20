@@ -129,7 +129,7 @@ public class CitaMedicaController {
         tabla.setRowHeight(60);
     }
     
-      public boolean actualizarCita(CitaMedica citaActualizada) {
+     public boolean actualizarCita(CitaMedica citaActualizada) {
     try {
         // Obtener la cita existente
         CitaMedica citaExistente = citaMedicaDAO.buscarPorId(citaActualizada.getId());
