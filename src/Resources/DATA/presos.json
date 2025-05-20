@@ -77,6 +77,22 @@
           "fechaIngreso": "2025-05-15",
           "fechaSalidaCalculada": "2026-03-15"
         }
+      },
+      {
+        "id": 10,
+        "presoId": "112233445",
+        "codigo": 244,
+        "nombre": "Extorsión",
+        "articuloLey": "Artículo 244 - Extorsión",
+        "gravedad": "Baja",
+        "descripcion": "Estuvo extorcionando gente",
+        "fechaComision": "2025-05-11",
+        "sentencia": {
+          "años": 2,
+          "meses": 1,
+          "fechaIngreso": "2025-05-17",
+          "fechaSalidaCalculada": "2027-06-17"
+        }
       }
     ],
     "nivelDeSeguridad": "Bajo",

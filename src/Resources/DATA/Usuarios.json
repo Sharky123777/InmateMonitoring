@@ -780,6 +780,34 @@
       "sexo": "Femenino",
       "nacionalidad": "Afgana",
       "identificacion": "1378137813"
+    },
+    {
+      "usuario": "Ol2ñTySy?!",
+      "password": "d2999353c179fd8f8f878c58167728abeb0f4c20ed084b17d9d9907c6bb7f2ed",
+      "rol": "ENFERMERA",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/137131313_1747766856887.png",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Afgana",
+      "identificacion": "137131313"
+    },
+    {
+      "usuario": "c#C6P#gX8XFg",
+      "password": "d2aacc59c425d0b02b1aeae3e074ab2300dca7fb40de0bab2e330ca16b4ef7b3",
+      "rol": "ENFERMERA",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/123456789_1747768938541.jpg",
+      "primerNombre": "Samantha",
+      "segundoNombre": "",
+      "primerApellido": "Pabon",
+      "segundoApellido": "Mejia",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Malasia",
+      "identificacion": "123456789"
     }
   ]
 }

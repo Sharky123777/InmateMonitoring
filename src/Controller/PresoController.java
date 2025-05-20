@@ -623,6 +623,8 @@ public class PresoController {
     public Preso buscarPreso(String identificacion) throws Exception {
         return presoDAO.buscarPresoPorIdentificacion(identificacion);
     }
+    
+    
 
     private ImageIcon cargarImagenPreso(String path) {
         try {

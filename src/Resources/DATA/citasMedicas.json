@@ -1,3 +1,314 @@
 [
- 
+  {
+    "id": 1,
+    "fecha": "2025-05-20",
+    "hora": "10:30",
+    "motivo": "Dolor de cabeza persistente",
+    "guardia": {
+      "edad": 0,
+      "identificacion": "987654321"
+    },
+    "preso": {
+      "estatura": 1.65,
+      "peso": 65.5,
+      "enAislamiento": false,
+      "numeroDeVisitas": 0,
+      "grupoSanguineo": "A+",
+      "fotoPath": "src/Resources/imagenes_presos/123456789.jpg",
+      "id": 0,
+      "primerNombre": "Maria",
+      "segundoNombre": "Isabel",
+      "primerApellido": "Gomez",
+      "segundoApellido": "Lopez",
+      "edad": 32,
+      "identificacion": "123456789"
+    },
+    "enfermera": {
+      "turno": "Diurno",
+      "edad": 0,
+      "identificacion": "456789123"
+    },
+    "estado": "PENDIENTE"
+  },
+  {
+    "id": 2,
+    "fecha": "2025-05-24",
+    "hora": "08:20",
+    "motivo": "bobo",
+    "guardia": {
+      "correo": "viva@gmail.com",
+      "turno": "Diurno",
+      "fechaInicioContrato": "2025-05-18",
+      "fechaFinContrato": "2025-06-19",
+      "rutaImagen": "src/Resources/imagenes_guardias/098765432_1747586402653.png",
+      "cargo": "Guardia jefe",
+      "primerNombre": "Maria",
+      "segundoNombre": "Antonieta",
+      "primerApellido": "De las nieves",
+      "segundoApellido": "Perez",
+      "edad": 45,
+      "sexo": "Femenino",
+      "nacionalidad": "Guatemalteca",
+      "identificacion": "098765432"
+    },
+    "preso": {
+      "estatura": 2.0,
+      "peso": 60.0,
+      "delitos": [
+        {
+          "id": 3,
+          "presoId": "112233445",
+          "codigo": 240,
+          "nombre": "Hurto agravado",
+          "articuloLey": "Artículo 240",
+          "gravedad": "Media",
+          "descripcion": "La interna fue privada de la libertad por el delito de\nhurto agravado, al haber sustraído bienes ajenos sin\nautorización y con ánimo de lucro, aprovechando circunstancias\nespeciales que agravaron la conducta delictiva.\n\nEntre los factores agravantes se encuentra el uso de medios\nfraudulentos y la afectación a personas en situación de\nvulnerabilidad, lo cual incrementó la gravedad del hecho.\n\nEl acto cometido generó un perjuicio económico considerable\na la víctima y vulneró la tranquilidad y seguridad de la comunidad.",
+          "fechaComision": "2025-05-08",
+          "sentencia": {
+            "años": 0,
+            "meses": 10,
+            "fechaIngreso": "2025-05-15",
+            "fechaSalidaCalculada": "2026-03-15"
+          }
+        },
+        {
+          "id": 10,
+          "presoId": "112233445",
+          "codigo": 244,
+          "nombre": "Extorsión",
+          "articuloLey": "Artículo 244 - Extorsión",
+          "gravedad": "Baja",
+          "descripcion": "Estuvo extorcionando gente",
+          "fechaComision": "2025-05-11",
+          "sentencia": {
+            "años": 2,
+            "meses": 1,
+            "fechaIngreso": "2025-05-17",
+            "fechaSalidaCalculada": "2027-06-17"
+          }
+        }
+      ],
+      "nivelDeSeguridad": "Bajo",
+      "seccionAsignada": "Sección C",
+      "condicion": "En espera",
+      "celdaAsignada": "CELD-44",
+      "enAislamiento": false,
+      "nivelDeRiesgo": "Riesgo bajo",
+      "numeroDeVisitas": 0,
+      "grupoSanguineo": "O+",
+      "fotoPath": "src/Resources/imagenes_presos/preso_2.jpg",
+      "estado": "ACTIVO",
+      "id": 2,
+      "actividadesAsignadasIds": [],
+      "actividadesCanceladasIds": [],
+      "fechaLiberacion": "2026-03-15",
+      "primerNombre": "Andrea",
+      "segundoNombre": "Lines",
+      "primerApellido": "Jurado",
+      "segundoApellido": "Guerrero",
+      "edad": 33,
+      "sexo": "F",
+      "nacionalidad": "Turca",
+      "identificacion": "112233445"
+    },
+    "enfermera": {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-16",
+      "fechaFinContrato": "2025-05-22",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/389183183_1747503293809.png",
+      "correo": "vivasm4g@gmail.com",
+      "primerNombre": "Sharlok",
+      "segundoNombre": "Maia",
+      "primerApellido": "Alcazar",
+      "segundoApellido": "Bernabidez",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Yemení",
+      "identificacion": "389183183"
+    },
+    "estado": "PENDIENTE",
+    "diagnostico": ""
+  },
+  {
+    "id": 3,
+    "fecha": "2025-05-24",
+    "hora": "08:20",
+    "motivo": "jadhajd",
+    "guardia": {
+      "correo": "@gmail.com",
+      "turno": "Diurno",
+      "fechaInicioContrato": "2025-05-18",
+      "fechaFinContrato": "2025-06-18",
+      "rutaImagen": "src/Resources/imagenes_guardias/098765142_1747507946096.png",
+      "cargo": "Guardia jefe",
+      "primerNombre": "s",
+      "segundoNombre": "s",
+      "primerApellido": "s",
+      "segundoApellido": "sl",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Afgana",
+      "identificacion": "098765142"
+    },
+    "preso": {
+      "estatura": 2.0,
+      "peso": 60.0,
+      "delitos": [
+        {
+          "id": 3,
+          "presoId": "112233445",
+          "codigo": 240,
+          "nombre": "Hurto agravado",
+          "articuloLey": "Artículo 240",
+          "gravedad": "Media",
+          "descripcion": "La interna fue privada de la libertad por el delito de\nhurto agravado, al haber sustraído bienes ajenos sin\nautorización y con ánimo de lucro, aprovechando circunstancias\nespeciales que agravaron la conducta delictiva.\n\nEntre los factores agravantes se encuentra el uso de medios\nfraudulentos y la afectación a personas en situación de\nvulnerabilidad, lo cual incrementó la gravedad del hecho.\n\nEl acto cometido generó un perjuicio económico considerable\na la víctima y vulneró la tranquilidad y seguridad de la comunidad.",
+          "fechaComision": "2025-05-08",
+          "sentencia": {
+            "años": 0,
+            "meses": 10,
+            "fechaIngreso": "2025-05-15",
+            "fechaSalidaCalculada": "2026-03-15"
+          }
+        },
+        {
+          "id": 10,
+          "presoId": "112233445",
+          "codigo": 244,
+          "nombre": "Extorsión",
+          "articuloLey": "Artículo 244 - Extorsión",
+          "gravedad": "Baja",
+          "descripcion": "Estuvo extorcionando gente",
+          "fechaComision": "2025-05-11",
+          "sentencia": {
+            "años": 2,
+            "meses": 1,
+            "fechaIngreso": "2025-05-17",
+            "fechaSalidaCalculada": "2027-06-17"
+          }
+        }
+      ],
+      "nivelDeSeguridad": "Bajo",
+      "seccionAsignada": "Sección C",
+      "condicion": "En espera",
+      "celdaAsignada": "CELD-44",
+      "enAislamiento": false,
+      "nivelDeRiesgo": "Riesgo bajo",
+      "numeroDeVisitas": 0,
+      "grupoSanguineo": "O+",
+      "fotoPath": "src/Resources/imagenes_presos/preso_2.jpg",
+      "estado": "ACTIVO",
+      "id": 2,
+      "actividadesAsignadasIds": [],
+      "actividadesCanceladasIds": [],
+      "fechaLiberacion": "2026-03-15",
+      "primerNombre": "Andrea",
+      "segundoNombre": "Lines",
+      "primerApellido": "Jurado",
+      "segundoApellido": "Guerrero",
+      "edad": 33,
+      "sexo": "F",
+      "nacionalidad": "Turca",
+      "identificacion": "112233445"
+    },
+    "enfermera": {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-20",
+      "fechaFinContrato": "2025-05-24",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/123456789_1747768938541.jpg",
+      "correo": "haider32108@gmail.com",
+      "primerNombre": "Samantha",
+      "segundoNombre": "",
+      "primerApellido": "Pabon",
+      "segundoApellido": "Mejia",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Malasia",
+      "identificacion": "123456789"
+    },
+    "estado": "ATENDIDO",
+    "diagnostico": "popoo",
+    "fechaHoraAtencion": "2025-05-20T14:26:14.014652500"
+  },
+  {
+    "id": 4,
+    "fecha": "2025-05-31",
+    "hora": "09:20",
+    "motivo": "papanatas",
+    "guardia": {
+      "correo": "viva@gmail.com",
+      "turno": "Diurno",
+      "fechaInicioContrato": "2025-05-18",
+      "fechaFinContrato": "2025-06-19",
+      "rutaImagen": "src/Resources/imagenes_guardias/098765432_1747586402653.png",
+      "cargo": "Guardia jefe",
+      "primerNombre": "Maria",
+      "segundoNombre": "Antonieta",
+      "primerApellido": "De las nieves",
+      "segundoApellido": "Perez",
+      "edad": 45,
+      "sexo": "Femenino",
+      "nacionalidad": "Guatemalteca",
+      "identificacion": "098765432"
+    },
+    "preso": {
+      "estatura": 1.7,
+      "peso": 70.0,
+      "delitos": [
+        {
+          "id": 4,
+          "presoId": "223344556",
+          "codigo": 220,
+          "nombre": "Injuria",
+          "articuloLey": "Artículo 220",
+          "gravedad": "Baja",
+          "descripcion": "La reclusa fue condenada por el delito de\ninjuria, al haber realizado manifestaciones verbales\ny expresiones ofensivas que atentaron contra el\nbuen nombre, la dignidad y el honor de otra persona.\n\nEl hecho ocurrió en un contexto donde se hicieron\nacusaciones infundadas con el objetivo de desprestigiar\ny afectar moralmente a la víctima.\n\nDicho comportamiento fue considerado una violación\na la integridad moral y emocional de la persona afectada,\nlo cual constituye una falta grave contra la convivencia\ny el respeto entre ciudadanos.",
+          "fechaComision": "2023-05-06",
+          "sentencia": {
+            "años": 3,
+            "meses": 5,
+            "fechaIngreso": "2025-05-15",
+            "fechaSalidaCalculada": "2028-10-15"
+          }
+        }
+      ],
+      "nivelDeSeguridad": "Bajo",
+      "seccionAsignada": "Sección C",
+      "condicion": "En espera",
+      "celdaAsignada": "CELD-41",
+      "enAislamiento": false,
+      "nivelDeRiesgo": "Riesgo bajo",
+      "numeroDeVisitas": 0,
+      "grupoSanguineo": "AB+",
+      "fotoPath": "src/Resources/imagenes_presos/preso_3.jpg",
+      "estado": "ACTIVO",
+      "id": 3,
+      "actividadesAsignadasIds": [],
+      "actividadesCanceladasIds": [],
+      "primerNombre": "Rachel",
+      "segundoNombre": "",
+      "primerApellido": "James",
+      "segundoApellido": "Morgan",
+      "edad": 33,
+      "sexo": "F",
+      "nacionalidad": "Rusa",
+      "identificacion": "223344556"
+    },
+    "enfermera": {
+      "turno": "Diurno",
+      "fechaContratacion": "2025-05-20",
+      "fechaFinContrato": "2025-05-24",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/123456789_1747768938541.jpg",
+      "correo": "haider32108@gmail.com",
+      "primerNombre": "Samantha",
+      "segundoNombre": "",
+      "primerApellido": "Pabon",
+      "segundoApellido": "Mejia",
+      "edad": 34,
+      "sexo": "Femenino",
+      "nacionalidad": "Malasia",
+      "identificacion": "123456789"
+    },
+    "estado": "CANCELADO",
+    "diagnostico": "CANCELADA - Razón: porquesi"
+  }
 ]

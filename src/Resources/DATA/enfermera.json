@@ -1,49 +1,19 @@
 {
   "enfermeras": [
     {
-      "turno": "Nocturno",
-      "fechaContratacion": "2025-05-07",
-      "fechaFinContrato": "2025-05-29",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/83712731_1746648267021.jpg",
-      "correo": "haider32108@gmail.com",
-      "primerNombre": "Celina",
-      "segundoNombre": "",
-      "primerApellido": "Celina",
-      "segundoApellido": "Restrepo",
-      "edad": 34,
-      "sexo": "Femenino",
-      "nacionalidad": "Colombiana",
-      "identificacion": "83712731"
-    },
-    {
       "turno": "Diurno",
-      "fechaContratacion": "2025-05-16",
-      "fechaFinContrato": "2025-05-22",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/389183183_1747503293809.png",
-      "correo": "vivasm4g@gmail.com",
-      "primerNombre": "Sharlok",
-      "segundoNombre": "Maia",
-      "primerApellido": "Alcazar",
-      "segundoApellido": "Bernabidez",
+      "fechaContratacion": "2025-05-20",
+      "fechaFinContrato": "2025-05-24",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/123456789_1747768938541.jpg",
+      "correo": "haider32108@gmail.com",
+      "primerNombre": "Samantha",
+      "segundoNombre": "",
+      "primerApellido": "Pabon",
+      "segundoApellido": "Mejia",
       "edad": 34,
       "sexo": "Femenino",
-      "nacionalidad": "Yemení",
-      "identificacion": "389183183"
-    },
-    {
-      "turno": "Nocturno",
-      "fechaContratacion": "2025-05-16",
-      "fechaFinContrato": "2025-05-23",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/09988664_1747440347598.jpg",
-      "correo": "abranolivero21@gmail.com",
-      "primerNombre": "Sharlok",
-      "segundoNombre": "",
-      "primerApellido": "Alcazar",
-      "segundoApellido": "Gutierrez",
-      "edad": 45,
-      "sexo": "Femenino",
-      "nacionalidad": "Mexicana",
-      "identificacion": "09988664"
+      "nacionalidad": "Malasia",
+      "identificacion": "123456789"
     }
   ]
 }

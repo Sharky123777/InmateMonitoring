@@ -12,6 +12,7 @@ import Model.Entities.CitaMedica;
 import Model.Entities.Guardia;
 import Model.Entities.Preso;
 import Model.Entities.Usuario;
+import Utilidades.GeneradorHistoriaClinica;
 import java.awt.Component;
 import java.awt.Image;
 import java.io.File;
@@ -32,24 +33,106 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author gameV
  */
-public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
+public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
 
     /**
      * Creates new form Enfermera
      */
-    private final CitaMedicaController citaController;
     private final PresoDAO presoDAO;
     private Usuario usuario;
     private CitaMedica citaSeleccionada;
     private File archivoHistoriaClinica;
+    private final CitaMedicaController citaController;
+    private LocalDateTime fechaHoraAtencion;
+    private String rutaHistoriaClinica;
+    private EstadoCitaMedicaEnum estado;
 
     public Enfermera() {
         initComponents();
         setLocationRelativeTo(null);
-
-        this.citaController = new CitaMedicaController();
+        this.citaController = new CitaMedicaController(); // Inicialización en el constructor
         this.presoDAO = PresoDAO.getInstancia();
         configurarTablas();
+
+    }
+
+    public void debugCitas() {
+        System.out.println("=== INICIO DEBUG ===");
+
+        // 1. Verificar usuario
+        System.out.println("Usuario actual ID: " + usuario.getIdentificacion());
+
+        // 2. Obtener citas directamente del DAO
+        List<CitaMedica> citas = CitaMedicaDAO.getInstancia().obtenerPorEnfermera(usuario.getIdentificacion());
+        System.out.println("Total citas encontradas: " + citas.size());
+
+        // 3. Filtrar solo pendientes
+        List<CitaMedica> pendientes = citas.stream()
+                .filter(c -> c.getEstado() == EstadoCitaMedicaEnum.PENDIENTE)
+                .collect(Collectors.toList());
+        System.out.println("Citas PENDIENTES: " + pendientes.size());
+
+        // 4. Mostrar detalles de cada cita
+        pendientes.forEach(c -> {
+            System.out.println("\nCita ID: " + c.getId());
+            System.out.println("Preso: " + (c.getPreso() != null
+                    ? c.getPreso().getNombreCompleto() + " (" + c.getPreso().getIdentificacion() + ")" : "NULL"));
+            System.out.println("Enfermera: " + (c.getEnfermera() != null
+                    ? c.getEnfermera().getIdentificacion() : "NULL"));
+            System.out.println("Fecha: " + c.getFecha() + " Hora: " + c.getHora());
+        });
+
+        System.out.println("=== FIN DEBUG ===");
+    }
+
+    private void cargarFotoPreso(String rutaFoto) {
+        try {
+            ImageIcon icon = new ImageIcon(rutaFoto);
+            Image img = icon.getImage().getScaledInstance(lblFotoPreso.getWidth(), lblFotoPreso.getHeight(), Image.SCALE_SMOOTH);
+            lblFotoPreso.setIcon(new ImageIcon(img));
+        } catch (Exception e) {
+            lblFotoPreso.setIcon(null);
+            lblFotoPreso.setText("Foto no disponible");
+        }
+    }
+
+    private void configurarTablas() {
+        // Configurar renderer para mostrar fotos en las tablas
+        tblCitasPendientes.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+
+                if (column == 0) { // Columna de foto
+                    try {
+                        // Verificar que la fila tenga datos
+                        if (table.getModel().getRowCount() > row) {
+                            Object idValue = table.getModel().getValueAt(row, 3); // Columna de identificación
+                            if (idValue != null) {
+                                String idPreso = idValue.toString();
+                                Preso preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
+                                if (preso != null && preso.getFotoPath() != null) {
+                                    try {
+                                        ImageIcon icon = new ImageIcon(preso.getFotoPath());
+                                        Image img = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+                                        return new JLabel(new ImageIcon(img));
+                                    } catch (Exception e) {
+                                        return new JLabel("Error foto");
+                                    }
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return new JLabel("No foto");
+                }
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            }
+        });
+
+        // Configurar altura de filas para mostrar las fotos
+        tblCitasPendientes.setRowHeight(60);
     }
 
     public void setUsuario(Usuario usuario) {
@@ -67,29 +150,8 @@ public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
         }
     }
 
-    private void cargarImagenUsuario(String rutaImagen) {
-        try {
-            ImageIcon icon = new ImageIcon(rutaImagen);
-            Image img = icon.getImage().getScaledInstance(fotolbl.getWidth(), fotolbl.getHeight(), Image.SCALE_SMOOTH);
-            fotolbl.setIcon(new ImageIcon(img));
-        } catch (Exception e) {
-            cargarImagenPorDefecto();
-        }
-    }
-
-    private void cargarImagenPorDefecto() {
-      
-        try {
-            ImageIcon icon = new ImageIcon("src/Resources/Images/default_user.png");
-            Image img = icon.getImage().getScaledInstance(
-                    fotolbl.getWidth(), fotolbl.getHeight(), Image.SCALE_SMOOTH);
-            fotolbl.setIcon(new ImageIcon(img));
-        } catch (Exception e) {
-            fotolbl.setText("No image");
-        }
-    }
-
     private void cargarCitasPendientes() {
+        debugCitas(); // <-- Añade esta línea
         if (usuario != null) {
             citaController.cargarCitasPendientes(tblCitasPendientes, usuario.getIdentificacion());
         }
@@ -101,6 +163,52 @@ public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
         }
     }
 
+    private void generarPDFHistoriaClinica() {
+        // Implementación para generar el PDF con los datos de la consulta
+        // Esto requeriría una librería como iText o Apache PDFBox
+        // Aquí un esqueleto de cómo podría hacerse:
+
+        try {
+            // Crear documento PDF
+            // Agregar datos del preso
+            // Agregar datos de la consulta
+            // Agregar diagnóstico y receta
+            // Guardar el archivo
+
+            JOptionPane.showMessageDialog(this,
+                    "Historia clínica generada exitosamente",
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al generar historia clínica: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void cargarImagenUsuario(String rutaImagen) {
+        try {
+            ImageIcon icon = new ImageIcon(rutaImagen);
+            Image img = icon.getImage().getScaledInstance(fotolbl.getWidth(), fotolbl.getHeight(), Image.SCALE_SMOOTH);
+            fotolbl.setIcon(new ImageIcon(img));
+        } catch (Exception e) {
+            cargarImagenPorDefecto();
+        }
+    }
+
+    private void cargarImagenPorDefecto() {
+
+        try {
+            ImageIcon icon = new ImageIcon("src/Resources/Images/default_user.png");
+            Image img = icon.getImage().getScaledInstance(
+                    fotolbl.getWidth(), fotolbl.getHeight(), Image.SCALE_SMOOTH);
+            fotolbl.setIcon(new ImageIcon(img));
+        } catch (Exception e) {
+            fotolbl.setText("No image");
+        }
+    }
+
     public void cargarCitasPendientes(JTable tabla, String identificacionEnfermera) {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
         modelo.setRowCount(0);
@@ -109,8 +217,7 @@ public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
         List<CitaMedica> citas = CitaMedicaDAO.getInstancia()
                 .obtenerPorEnfermera(identificacionEnfermera)
                 .stream() // Añade esto para convertir a Stream
-                .filter(c -> c.getEstado() == EstadoCitaMedicaEnum.PENDIENTE
-                || c.getEstado() == EstadoCitaMedicaEnum.PRIORITARIO)
+                .filter(c -> c.getEstado() == EstadoCitaMedicaEnum.PENDIENTE)
                 .collect(Collectors.toList());
 
         for (CitaMedica cita : citas) {
@@ -165,28 +272,6 @@ public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
         tabla.setRowHeight(60);
     }
 
-    private void configurarTablas() {
-        // Configurar modelo para citas pendientes
-        String[] columnasPendientes = {"ID", "Nombre Preso", "Identificación", "Fecha", "Hora", "Motivo", "Estado"};
-        DefaultTableModel modelPendientes = new DefaultTableModel(columnasPendientes, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        tblCitasPendientes.setModel(modelPendientes);
-
-        // Configurar modelo para historial atendidos
-        String[] columnasAtendidos = {"ID", "Nombre Preso", "Identificación", "Fecha", "Hora", "Motivo", "Diagnóstico"};
-        DefaultTableModel modelAtendidos = new DefaultTableModel(columnasAtendidos, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        tblHistorial.setModel(modelAtendidos);
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -196,8 +281,9 @@ public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPopupMenu1 = new javax.swing.JPopupMenu();
-        atenderPresa = new javax.swing.JMenuItem();
+        jPopupMenu2 = new javax.swing.JPopupMenu();
+        Atender = new javax.swing.JMenuItem();
+        verMotivo = new javax.swing.JMenuItem();
         cancelarCita = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -212,7 +298,7 @@ public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCitasPendientes = new javax.swing.JTable();
         atendidos = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPane5 = new javax.swing.JScrollPane();
         tblHistorial = new javax.swing.JTable();
         diagnostico = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -243,22 +329,32 @@ public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
         recetaTextPane = new javax.swing.JTextPane();
         txtPesoPresa = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        lblArchivoAdjunto = new javax.swing.JLabel();
 
-        atenderPresa.setText("jMenuItem1");
-        atenderPresa.addActionListener(new java.awt.event.ActionListener() {
+        Atender.setText("Atender reclusa");
+        Atender.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                atenderPresaActionPerformed(evt);
+                AtenderActionPerformed(evt);
             }
         });
-        jPopupMenu1.add(atenderPresa);
+        jPopupMenu2.add(Atender);
 
-        cancelarCita.setText("jMenuItem1");
+        verMotivo.setText("Motivo de la cita");
+        verMotivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                verMotivoActionPerformed(evt);
+            }
+        });
+        jPopupMenu2.add(verMotivo);
+
+        cancelarCita.setText("Cancelar cita");
         cancelarCita.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelarCitaActionPerformed(evt);
             }
         });
-        jPopupMenu1.add(cancelarCita);
+        jPopupMenu2.add(cancelarCita);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -289,18 +385,19 @@ public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
 
         tblCitasPendientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Foto", "ID", "Nombre", "Identificacion", "Fecha", "Hora", "Motivo", "Estado"
             }
         ));
+        tblCitasPendientes.setComponentPopupMenu(jPopupMenu2);
         jScrollPane1.setViewportView(tblCitasPendientes);
 
-        atender.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 770, 580));
+        atender.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 770, 600));
 
         jTabbedPane1.addTab("porAtender", atender);
 
@@ -308,18 +405,19 @@ public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
 
         tblHistorial.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Foto", "ID", "Nombre", "Identificacion", "Fecha", "Hora", "Motivo", "Estado"
             }
         ));
-        jScrollPane2.setViewportView(tblHistorial);
+        tblHistorial.setComponentPopupMenu(jPopupMenu2);
+        jScrollPane5.setViewportView(tblHistorial);
 
-        atendidos.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 770, 560));
+        atendidos.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 770, 600));
 
         jTabbedPane1.addTab("Atendidos", atendidos);
 
@@ -454,6 +552,11 @@ public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
         });
         diagnostico.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 590, -1, -1));
 
+        jLabel13.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel13.setText("Archivo seleccionado:");
+        diagnostico.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 276, -1, 20));
+        diagnostico.add(lblArchivoAdjunto, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 280, 160, 20));
+
         jTabbedPane1.addTab("Diagnostico", diagnostico);
 
         jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 0, 810, 670));
@@ -471,50 +574,6 @@ public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void atenderPresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atenderPresaActionPerformed
-        if (citaSeleccionada != null) {
-            Preso preso = citaSeleccionada.getPreso();
-            Guardia guardia = citaSeleccionada.getGuardia();
-
-            // Mostrar nombres completos (manejando segundos nombres/apellidos opcionales)
-            String nombreCompleto = preso.getPrimerNombre()
-                    + (preso.getSegundoNombre() != null ? " " + preso.getSegundoNombre() : "")
-                    + " " + preso.getPrimerApellido()
-                    + (preso.getSegundoApellido() != null ? " " + preso.getSegundoApellido() : "");
-
-            lblNombrePresa.setText(nombreCompleto);
-            lblIdentificacionPresa.setText(preso.getIdentificacion());
-            lblEdadPresa.setText(String.valueOf(preso.getEdad()));
-            lblGrupoSanguineo.setText(preso.getGrupoSanguineo());
-
-            // Campos editables para peso y estatura
-            txtPesoPresa.setText(String.valueOf(preso.getPeso()));
-            txtEstaturaPresa.setText(String.valueOf(preso.getEstatura()));
-
-            lblGuardiaAcompanante.setText(guardia.getNombreCompleto());
-
-            // Cargar foto del preso
-            cargarFotoPreso(preso.getFotoPath());
-
-            // Limpiar área de diagnóstico
-            txtAreaDiagnostico.setText("");
-
-            // Cambiar al panel de diagnóstico
-            jTabbedPane1.setSelectedComponent(diagnostico);
-        }
-    }//GEN-LAST:event_atenderPresaActionPerformed
-
-    private void cargarFotoPreso(String rutaFoto) {
-        try {
-            ImageIcon icon = new ImageIcon(rutaFoto);
-            Image img = icon.getImage().getScaledInstance(lblFotoPreso.getWidth(), lblFotoPreso.getHeight(), Image.SCALE_SMOOTH);
-            lblFotoPreso.setIcon(new ImageIcon(img));
-        } catch (Exception e) {
-            lblFotoPreso.setIcon(null);
-            lblFotoPreso.setText("Foto no disponible");
-        }
-    }
 
     private void configurarTablasConFotos() {
         // Configurar tabla de citas pendientes
@@ -571,106 +630,140 @@ public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
     }
 
 
-    private void cancelarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarCitaActionPerformed
-        if (citaSeleccionada != null) {
-            int confirmacion = JOptionPane.showConfirmDialog(
-                    this,
-                    "¿Está seguro que desea cancelar esta cita?",
-                    "Confirmar cancelación",
-                    JOptionPane.YES_NO_OPTION
-            );
-
-            if (confirmacion == JOptionPane.YES_OPTION) {
-                String razon = JOptionPane.showInputDialog(
-                        this,
-                        "Ingrese la razón de la cancelación:",
-                        "Razón de cancelación",
-                        JOptionPane.QUESTION_MESSAGE
-                );
-
-                if (razon != null && !razon.trim().isEmpty()) {
-                    if (citaController.cancelarCita(citaSeleccionada.getId(), razon)) {
-                        JOptionPane.showMessageDialog(
-                                this,
-                                "Cita cancelada exitosamente",
-                                "Éxito",
-                                JOptionPane.INFORMATION_MESSAGE
-                        );
-                        cargarCitasPendientes();
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(
-                            this,
-                            "Debe ingresar una razón para cancelar la cita",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE
-                    );
-                }
-            }
-        }
-    }//GEN-LAST:event_cancelarCitaActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "Documentos (PDF, DOC, DOCX)", "pdf", "doc", "docx");
+                "Documentos (PDF)", "pdf");
         fileChooser.setFileFilter(filter);
 
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             archivoHistoriaClinica = fileChooser.getSelectedFile();
-
+            lblArchivoAdjunto.setText(archivoHistoriaClinica.getName());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if (citaSeleccionada == null) {
-            return;
-        }
+       if (citaSeleccionada == null) {
+        return;
+    }
 
-        String diagnostico = txtAreaDiagnostico.getText();
-        if (diagnostico.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe ingresar un diagnóstico", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    String diagnostico = txtAreaDiagnostico.getText();
+    if (diagnostico.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Debe ingresar un diagnóstico", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        // Actualizar peso y estatura del preso si fueron modificados
-        try {
-            double nuevoPeso = Double.parseDouble(txtPesoPresa.getText());
-            double nuevaEstatura = Double.parseDouble(txtEstaturaPresa.getText());
+    // Actualizar peso y estatura del preso
+    try {
+        double nuevoPeso = Double.parseDouble(txtPesoPresa.getText());
+        double nuevaEstatura = Double.parseDouble(txtEstaturaPresa.getText());
 
-            Preso preso = citaSeleccionada.getPreso();
-            preso.setPeso((float) nuevoPeso);
-            preso.setEstatura((float) nuevaEstatura);
-            presoDAO.actualizarPreso(preso);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Peso y estatura deben ser valores numéricos válidos",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        Preso preso = citaSeleccionada.getPreso();
+        preso.setPeso((float) nuevoPeso);
+        preso.setEstatura((float) nuevaEstatura);
+        presoDAO.actualizarPreso(preso);
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this,
+                "Peso y estatura deben ser valores numéricos válidos",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        // Guardar cita con diagnóstico, archivo adjunto y fecha/hora actual
-        String rutaArchivo = archivoHistoriaClinica != null ? archivoHistoriaClinica.getAbsolutePath() : null;
+    // Crear objeto con los datos actualizados
+    CitaMedica citaActualizada = new CitaMedica();
+    citaActualizada.setId(citaSeleccionada.getId());
+    citaActualizada.setDiagnostico(diagnostico);
+    citaActualizada.setEstado(EstadoCitaMedicaEnum.ATENDIDO);
+    citaActualizada.setRutaHistoriaClinica(archivoHistoriaClinica != null ? 
+        archivoHistoriaClinica.getAbsolutePath() : null);
 
-        if (citaController.atenderCita(citaSeleccionada.getId(), diagnostico, rutaArchivo)) {
-            JOptionPane.showMessageDialog(this,
-                    "Consulta guardada exitosamente\nFecha: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
+    // Llamar al controlador para actualizar
+    if (citaController.actualizarCita(citaActualizada)) {
+        // Generar PDF (aquí iría tu código para generar el PDF)
+        
+        JOptionPane.showMessageDialog(this,
+                "Consulta guardada exitosamente\nFecha: " +
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE);
 
-            cargarCitasPendientes();
-            cargarHistorialAtendidos();
-            jTabbedPane1.setSelectedComponent(atendidos);
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    "Error al guardar la consulta",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        }
+        cargarCitasPendientes();
+        cargarHistorialAtendidos();
+        jTabbedPane1.setSelectedComponent(atendidos);
+    } else {
+        JOptionPane.showMessageDialog(this, 
+                "Error al guardar los datos de la consulta", 
+                "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void AtenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AtenderActionPerformed
+        int filaSeleccionada = tblCitasPendientes.getSelectedRow();
+        if (filaSeleccionada >= 0) {
+            int idCita = (int) tblCitasPendientes.getValueAt(filaSeleccionada, 1);
+            citaSeleccionada = citaController.obtenerCitaPorId(idCita);
+
+            if (citaSeleccionada != null) {
+                Preso preso = citaSeleccionada.getPreso();
+
+                // Mostrar datos del preso en el panel de diagnóstico
+                lblNombrePresa.setText(preso.getNombreCompleto());
+                lblIdentificacionPresa.setText(preso.getIdentificacion());
+                lblEdadPresa.setText(String.valueOf(preso.getEdad()));
+                lblGrupoSanguineo.setText(preso.getGrupoSanguineo());
+                txtPesoPresa.setText(String.valueOf(preso.getPeso()));
+                txtEstaturaPresa.setText(String.valueOf(preso.getEstatura()));
+
+                // Cargar foto del preso
+                cargarFotoPreso(preso.getFotoPath());
+
+                // Cambiar al panel de diagnóstico
+                jTabbedPane1.setSelectedComponent(diagnostico);
+            }
+        }
+    }//GEN-LAST:event_AtenderActionPerformed
+
+    private void cancelarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarCitaActionPerformed
+        int filaSeleccionada = tblCitasPendientes.getSelectedRow();
+        if (filaSeleccionada >= 0) {
+            int idCita = (int) tblCitasPendientes.getValueAt(filaSeleccionada, 1);
+
+            String razon = JOptionPane.showInputDialog(
+                    this,
+                    "Ingrese la razón de la cancelación:",
+                    "Cancelar Cita",
+                    JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (razon != null && !razon.trim().isEmpty()) {
+                if (citaController.cancelarCita(idCita, razon)) {
+                    cargarCitasPendientes();
+                }
+            } else {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Debe ingresar una razón para cancelar la cita",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
+    }//GEN-LAST:event_cancelarCitaActionPerformed
+
+    private void verMotivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verMotivoActionPerformed
+        int filaSeleccionada = tblCitasPendientes.getSelectedRow();
+        if (filaSeleccionada >= 0) {
+            String motivo = (String) tblCitasPendientes.getValueAt(filaSeleccionada, 6);
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Motivo de la cita:\n" + motivo,
+                    "Motivo de Cita",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        }
+    }//GEN-LAST:event_verMotivoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -708,8 +801,8 @@ public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem Atender;
     private javax.swing.JPanel atender;
-    private javax.swing.JMenuItem atenderPresa;
     private javax.swing.JPanel atendidos;
     private javax.swing.JMenuItem cancelarCita;
     private javax.swing.JPanel diagnostico;
@@ -720,6 +813,7 @@ public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -731,15 +825,16 @@ public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPopupMenu jPopupMenu1;
+    private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblApellidoPresa;
+    private javax.swing.JLabel lblArchivoAdjunto;
     private javax.swing.JLabel lblBienvenida;
     private javax.swing.JLabel lblEdadPresa;
     private javax.swing.JLabel lblFotoPreso;
@@ -755,5 +850,6 @@ public class Enfermera  extends javax.swing.JFrame implements PerfilUsuario {
     private javax.swing.JTextArea txtAreaDiagnostico;
     private javax.swing.JTextField txtEstaturaPresa;
     private javax.swing.JTextField txtPesoPresa;
+    private javax.swing.JMenuItem verMotivo;
     // End of variables declaration//GEN-END:variables
 }
