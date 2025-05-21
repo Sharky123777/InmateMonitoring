@@ -158,35 +158,66 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
     }
 
     private void cargarHistorialAtendidos() {
-        if (usuario != null) {
-            citaController.cargarHistorialAtendidos(tblHistorial, usuario.getIdentificacion());
+    if (usuario != null) {
+        DefaultTableModel modelo = (DefaultTableModel) tblHistorial.getModel();
+        modelo.setRowCount(0);
+        
+        List<CitaMedica> citas = CitaMedicaDAO.getInstancia()
+                .obtenerPorEnfermera(usuario.getIdentificacion())
+                .stream()
+                .filter(c -> c.getEstado() == EstadoCitaMedicaEnum.ATENDIDO)
+                .collect(Collectors.toList());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        // Configurar renderer para fotos
+        tblHistorial.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, 
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                
+                if (column == 0) { // Columna de foto
+                    try {
+                        String idPreso = table.getModel().getValueAt(row, 3).toString();
+                        Preso preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
+                        
+                        if (preso != null && preso.getFotoPath() != null) {
+                            ImageIcon icon = new ImageIcon(preso.getFotoPath());
+                            Image img = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+                            return new JLabel(new ImageIcon(img));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return new JLabel("No foto");
+                }
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            }
+        });
+
+        for (CitaMedica cita : citas) {
+            modelo.addRow(new Object[]{
+                "", // Espacio para la foto (se llenará con el renderer)
+                cita.getId(),
+                cita.getPreso().getNombreCompleto(),
+                cita.getPreso().getIdentificacion(),
+                cita.getFechaHoraAtencion() != null 
+                    ? cita.getFechaHoraAtencion().format(formatter) : "No registrada",
+                cita.getMotivo(),
+                cita.getDiagnostico(),
+                "ATENDIDO",
+                cita.getRutaHistoriaClinica() != null 
+                    ? new File(cita.getRutaHistoriaClinica()).getName() : "Sin archivo"
+            });
         }
+
+        // Ajustar tamaño de columna de foto
+        tblHistorial.getColumnModel().getColumn(0).setPreferredWidth(60);
+        tblHistorial.setRowHeight(60);
     }
+}
 
-    private void generarPDFHistoriaClinica() {
-        // Implementación para generar el PDF con los datos de la consulta
-        // Esto requeriría una librería como iText o Apache PDFBox
-        // Aquí un esqueleto de cómo podría hacerse:
-
-        try {
-            // Crear documento PDF
-            // Agregar datos del preso
-            // Agregar datos de la consulta
-            // Agregar diagnóstico y receta
-            // Guardar el archivo
-
-            JOptionPane.showMessageDialog(this,
-                    "Historia clínica generada exitosamente",
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al generar historia clínica: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
+    
     private void cargarImagenUsuario(String rutaImagen) {
         try {
             ImageIcon icon = new ImageIcon(rutaImagen);
@@ -576,7 +607,7 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
     }// </editor-fold>//GEN-END:initComponents
 
     private void configurarTablasConFotos() {
-        // Configurar tabla de citas pendientes
+        
         tblCitasPendientes.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
