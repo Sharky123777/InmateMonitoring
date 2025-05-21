@@ -70,9 +70,16 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
         inicializarMenuPresosDisponibles();
         inicializarMenuActividadesGeneral();
         this.setLocationRelativeTo(null);
+        
         soloLetras(NombreAct);
         soloLetras(nuevoNombreAct);
-
+        soloLetras(segundoNuevoApellidoC);
+        soloLetras(primerNuevoApellidoC);
+        soloLetras(nuevoPrimerNombreC);
+        soloLetras(nuevoSegundoNombreC);
+        soloNumeros(nuevaEdadC);
+        
+        
         ActividadController controlador = ActividadController.getInstancia();
 
         controlador.cargarActividadesEnTabla(actividadesTabla);
@@ -88,7 +95,6 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
         List<Object[]> presosParaActividades = ac.obtenerPresosParaActividades();
         cargarPresosAptosEnTabla(presosParaActividades);
 
-        actualizarLabelEstadisticas();
 
     }
 
@@ -129,25 +135,6 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
         lblFotoCoor.setIcon(new ImageIcon("src/Resources/default_avatar.png"));
     }
 
-    private void actualizarLabelEstadisticas() {
-        Map<String, Object> stats = actividadDAO.obtenerEstadisticasActividades();
-
-        String texto = String.format(
-                "<html>"
-                + "<b>Estadísticas de Actividades:</b><br>"
-                + "Activas: %d (%.1f%%)<br>"
-                + "Canceladas: %d (%.1f%%)<br>"
-                + "<i>Total registradas: %d</i>"
-                + "</html>",
-                stats.get("totalActivas"),
-                stats.get("porcentajeActivas"),
-                stats.get("totalCanceladas"),
-                stats.get("porcentajeCanceladas"),
-                stats.get("totalGeneral")
-        );
-
-        lblCantidadDeActividades.setText(texto);
-    }
 
     private void cargarPresosAptosEnTabla(List<Object[]> presos) {
         DefaultTableModel modelo = (DefaultTableModel) TablaPresosCoor.getModel();
@@ -483,7 +470,6 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
         jLabel3 = new javax.swing.JLabel();
         tipoActividad = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
-        lblCantidadDeActividades = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         CrearActividad = new javax.swing.JPanel();
         jPanel4 = new RoundedPanel(30);
@@ -791,10 +777,6 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
         });
         jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 30, 180, 40));
 
-        lblCantidadDeActividades.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblCantidadDeActividades.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel2.add(lblCantidadDeActividades, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 10, 330, 70));
-
         ListaActividades.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 1020, 90));
 
         jButton3.setText("Restablecer tabla");
@@ -860,7 +842,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
         diaCom.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes" }));
         CrearActividad.add(diaCom, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 140, 300, 40));
 
-        horarioCom.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "07:00 am - 08:45 am", "08:45 am - 10:15 am", "10:45 am - 12:45 am", "02:00 pm - 04:15 pm", "04:15 pm - 05:15 pm" }));
+        horarioCom.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "07:00 am - 08:00 am", "08:10 am - 08:50 am", "12:15 pm - 01:15 pm", "02:00 pm - 04:15 pm", "04:15 pm - 05:15 pm" }));
         CrearActividad.add(horarioCom, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 200, 300, 40));
 
         NombreAct.setBackground(new java.awt.Color(204, 204, 204));
@@ -1013,7 +995,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
         });
         jScrollPane3.setViewportView(TablaPresosCoor);
 
-        AsignadorPreso.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 1000, 410));
+        AsignadorPreso.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 1000, 420));
 
         jLabel2.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
@@ -1605,7 +1587,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
 
         nuevoHorarioAct.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         nuevoHorarioAct.setForeground(new java.awt.Color(255, 255, 255));
-        nuevoHorarioAct.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccione>", "07:00 am - 08:45 am", "08:45 am - 10:15 am", "10:45 am - 12:45 am", "02:00 pm - 04:15 pm", "04:15 pm - 05:15 pm" }));
+        nuevoHorarioAct.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccione>", "07:00 am - 08:00 am", "08:10 am - 08:50 am", "12:15 pm - 01:15 pm", "02:00 pm - 04:15 pm", "04:15 pm - 05:15 pm" }));
         ActualizarActividad.add(nuevoHorarioAct, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 220, 290, 40));
 
         nuevoLugarAct.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -1631,7 +1613,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
 
         jLabel18.setForeground(new java.awt.Color(0, 0, 0));
         jLabel18.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
-        ActualizarActividad.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 100, 880, 420));
+        ActualizarActividad.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 90, 880, 420));
 
         jLabel24.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel24.setForeground(new java.awt.Color(0, 0, 0));
@@ -1920,6 +1902,9 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
                     nombre, tipo, dia, horario, lugar, cupoMaximo, oficialSeleccionado, descripcion);
 
             if (actividadAgregada) {
+                
+                JOptionPane.showMessageDialog(null, "Actividad agregada correctamente");
+                
                 controller.cargarActividadesEnTabla(actividadesTabla);
                 limpiarFormularioActividad();
                 CoordinadorDeActividades.setSelectedIndex(0);
@@ -2143,104 +2128,135 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void btnActualizarCoordinadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarCoordinadorActionPerformed
-
-        try {
-            String cedulaOriginal = usuario.getIdentificacion();
-            if (cedulaOriginal.isEmpty()) {
-                throw new IllegalArgumentException("Cédula original no especificada");
-            }
-
-            Model.Entities.CoordinadorDeActividades coordinadorExistente = CoordinadorDeActividadesController.getInstancia().obtenerCoordinadorPorCedula(cedulaOriginal);
-
-            if (coordinadorExistente == null) {
-                throw new IllegalArgumentException("No se encontró una coordinadora de actividades registrada con cédula: " + cedulaOriginal);
-            }
-
-            Map<String, Object> cambios = new HashMap<>();
-
-            if (!nuevoPrimerNombreC.getText().trim().isEmpty()) {
-                cambios.put("primerNombre", nuevoPrimerNombreC.getText().trim());
-            }
-            if (!nuevoSegundoNombreC.getText().trim().isEmpty()) {
-                cambios.put("segundoNombre", nuevoSegundoNombreC.getText().trim());
-            }
-            if (!primerNuevoApellidoC.getText().trim().isEmpty()) {
-                cambios.put("primerApellido", primerNuevoApellidoC.getText().trim());
-            }
-            if (!segundoNuevoApellidoC.getText().trim().isEmpty()) {
-                cambios.put("segundoApellido", segundoNuevoApellidoC.getText().trim());
-            }
-            if (!nuevaEdadC.getText().trim().isEmpty()) {
-                try {
-                    cambios.put("edad", Integer.parseInt(nuevaEdadC.getText().trim()));
-                } catch (NumberFormatException e) {
-                    throw new IllegalArgumentException("La edad debe ser un número válido");
-                }
-            }
-
-            if (cbxNacionalidad.getSelectedItem() != null) {
-                String nacionalidadSeleccionada = cbxNacionalidad.getSelectedItem().toString();
-                if (!nacionalidadSeleccionada.equalsIgnoreCase("<Seleccione>")) {
-                    cambios.put("nacionalidad", nacionalidadSeleccionada);
-                }
-            }
-
-            if (!nuevoUsuarioC.getText().trim().isEmpty()) {
-                cambios.put("nuevoUsuario", nuevoUsuarioC.getText().trim());
-            }
-            if (!nuevaContraC.getText().trim().isEmpty()) {
-                cambios.put("nuevaContraseña", nuevaContraC.getText().trim());
-            }
-
-            File imagenModificada = imagenFueModificada ? imagenSeleccionadaModCDA : null;
-
-            int resultado = CoordinadorDeActividadesController.getInstancia().modificarCoordinadorConCredenciales(cedulaOriginal, cambios, imagenModificada);
-
-            switch (resultado) {
-                case 1:
-                    String mensaje = "¡Actualización exitosa!";
-                    if (cambios.containsKey("nuevoUsuario") || cambios.containsKey("nuevaContraseña")) {
-                        mensaje += "\nCredenciales enviadas al correo registrado";
-                    }
-                    JOptionPane.showMessageDialog(this, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    String nuevaIdentificacion = cambios.containsKey("identificacion")
-                            ? cambios.get("identificacion").toString()
-                            : cedulaOriginal;
-
-                    Usuario usuarioActualizado = CoordinadorDeActividadesController.getInstancia()
-                            .obtenerUsuarioPorIdentificacion(nuevaIdentificacion);
-
-                    setUsuario(usuarioActualizado);
-
-                    mostrarDatosUsuario();
-
-                    limpiarFormulario();
-
-                    CoordinadorDeActividades.setSelectedIndex(1);
-                    break;
-
-                case 0:
-                    JOptionPane.showMessageDialog(this,
-                            "No se detectaron cambios diferentes a los actuales",
-                            "Información", JOptionPane.INFORMATION_MESSAGE);
-                    break;
-
-                case -1:
-                    throw new RuntimeException("Error al guardar en la base de datos");
-            }
-
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error crítico: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+ try {
+        String cedulaOriginal = usuario.getIdentificacion();
+        if (cedulaOriginal.isEmpty()) {
+            throw new IllegalArgumentException("Cédula original no especificada");
         }
+
+        Model.Entities.CoordinadorDeActividades coordinadorExistente =
+                CoordinadorDeActividadesController.getInstancia().obtenerCoordinadorPorCedula(cedulaOriginal);
+
+        if (coordinadorExistente == null) {
+            throw new IllegalArgumentException("No se encontró una coordinadora de actividades registrada con cédula: " + cedulaOriginal);
+        }
+
+        Map<String, Object> cambios = new HashMap<>();
+
+        if (!nuevoPrimerNombreC.getText().trim().isEmpty()) {
+            cambios.put("primerNombre", nuevoPrimerNombreC.getText().trim());
+        }
+        if (!nuevoSegundoNombreC.getText().trim().isEmpty()) {
+            cambios.put("segundoNombre", nuevoSegundoNombreC.getText().trim());
+        }
+        if (!primerNuevoApellidoC.getText().trim().isEmpty()) {
+            cambios.put("primerApellido", primerNuevoApellidoC.getText().trim());
+        }
+        if (!segundoNuevoApellidoC.getText().trim().isEmpty()) {
+            cambios.put("segundoApellido", segundoNuevoApellidoC.getText().trim());
+        }
+
+        String NuevaEdad = nuevaEdadC.getText().trim();
+        if (!NuevaEdad.isEmpty()) {
+            Validador.validarEdadEmpleado(NuevaEdad);
+            cambios.put("edad", Integer.parseInt(NuevaEdad));
+        }
+
+        if (cbxNacionalidad.getSelectedItem() != null) {
+            String nacionalidadSeleccionada = cbxNacionalidad.getSelectedItem().toString();
+            if (!nacionalidadSeleccionada.equalsIgnoreCase("<Seleccione>")) {
+                cambios.put("nacionalidad", nacionalidadSeleccionada);
+            }
+        }
+
+        String usuarioNuevo = nuevoUsuarioC.getText().trim();
+        String contraNueva = nuevaContraC.getText().trim();
+
+        if (!usuarioNuevo.isEmpty()) {
+            if (!Validador.validarUsuario(usuarioNuevo)) {
+                return;
+            }
+            cambios.put("nuevoUsuario", usuarioNuevo);
+        }
+
+        if (!contraNueva.isEmpty()) {
+            if (!Validador.validarContrasena(contraNueva)) {
+                return;
+            }
+            cambios.put("nuevaContraseña", contraNueva);
+        }
+
+        File imagenModificada = imagenFueModificada ? imagenSeleccionadaModCDA : null;
+
+        if (cambios.isEmpty() && imagenModificada == null) {
+            JOptionPane.showMessageDialog(this,
+                    "No hay ningún cambio para guardar.",
+                    "Información", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        int resultado = CoordinadorDeActividadesController.getInstancia()
+                .modificarCoordinadorConCredenciales(cedulaOriginal, cambios, imagenModificada);
+
+        switch (resultado) {
+            case 1:
+                String mensaje = "¡Actualización exitosa!";
+                if (cambios.containsKey("nuevoUsuario") || cambios.containsKey("nuevaContraseña")) {
+                    mensaje += "\nCredenciales enviadas al correo registrado";
+                }
+                JOptionPane.showMessageDialog(this, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+                String nuevaIdentificacion = cambios.containsKey("identificacion")
+                        ? cambios.get("identificacion").toString()
+                        : cedulaOriginal;
+
+                Usuario usuarioActualizado = CoordinadorDeActividadesController.getInstancia()
+                        .obtenerUsuarioPorIdentificacion(nuevaIdentificacion);
+
+                setUsuario(usuarioActualizado);
+                mostrarDatosUsuario();
+                limpiarFormulario();
+
+                CoordinadorDeActividades.setSelectedIndex(0);
+                break;
+
+            case 0:
+                JOptionPane.showMessageDialog(this,
+                        "No se detectaron cambios diferentes a los actuales",
+                        "Información", JOptionPane.INFORMATION_MESSAGE);
+                break;
+
+            case -1:
+                throw new RuntimeException("Error al guardar en la base de datos");
+        }
+
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this, e.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+                "Error crítico: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
 
 
     }//GEN-LAST:event_btnActualizarCoordinadorActionPerformed
 
+    
+     public void soloNumeros(JTextField campo) {
+        campo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                char c = evt.getKeyChar();
+                if (!Character.isDigit(c) && c != '\b') {
+                    evt.consume();
+                    JOptionPane.showMessageDialog(null, "Solo se permiten números.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+    }
+
+ 
+    
     private void limpiarFormulario() {
         nuevoPrimerNombreC.setText("");
         nuevoSegundoNombreC.setText("");
@@ -2462,7 +2478,6 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
     private javax.swing.JSeparator jSeparator85;
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JLabel lblApellidoResponsable;
-    private javax.swing.JLabel lblCantidadDeActividades;
     private javax.swing.JLabel lblFotoCoor;
     private javax.swing.JLabel lblIdentificacionResponsable;
     private javax.swing.JLabel lblNombreActividad;

@@ -7,9 +7,8 @@ public class Usuario extends Persona {
     private String usuario;
     private String password;
     private RolEnum rol;
-    private String rutaImagen; // Nuevo campo para la imagen
+    private String rutaImagen;
 
-    // Constructor actualizado
     public Usuario(String primerNombre, String segundoNombre,
             String primerApellido, String segundoApellido,
             int edad, String sexo, String nacionalidad,
@@ -24,7 +23,6 @@ public class Usuario extends Persona {
         this.rutaImagen = rutaImagen;
     }
 
-    // Getters y Setters
     public String getRutaImagen() {
         return rutaImagen;
     }
@@ -41,7 +39,6 @@ public class Usuario extends Persona {
         return rol;
     }
 
-    // Setters si los necesitas
     public void setPassword(String password) {
         this.password = password;
     }

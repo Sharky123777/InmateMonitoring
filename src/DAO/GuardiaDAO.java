@@ -134,14 +134,14 @@ public class GuardiaDAO {
             String rutaImagen = guardia.getRutaImagen();
             if (rutaImagen != null && rutaImagen.startsWith("C:")) {
                 rutaImagen = rutaImagen.replace("C:\\Users\\gameV\\Documents\\NetBeansProjects\\InmateMonitorinG\\src\\", "src/");
-                rutaImagen = rutaImagen.replace("\\", "/"); // Normalizar separadores
+                rutaImagen = rutaImagen.replace("\\", "/"); 
             }
 
             guardiaJson.addProperty("cargo", guardia.getCargo());
             guardiaJson.addProperty("turno", guardia.getTurno());
             guardiaJson.addProperty("fechaInicioContrato", guardia.getFechaInicioContrato().toString());
             guardiaJson.addProperty("fechaFinContrato", guardia.getFechaFinContrato().toString());
-            guardiaJson.addProperty("rutaImagen", rutaImagen); // Usar la ruta normalizada
+            guardiaJson.addProperty("rutaImagen", rutaImagen); 
             guardiaJson.addProperty("correo", guardia.getCorreo());
             guardiaJson.addProperty("primerNombre", guardia.getPrimerNombre());
             guardiaJson.addProperty("segundoNombre", guardia.getSegundoNombre());
@@ -209,11 +209,9 @@ public class GuardiaDAO {
                 Guardia g = guardias.get(i);
 
                 if (g.getIdentificacion().equals(cedulaOriginal)) {
-                    // 1. Manejar la imagen si se proporciona una nueva
                     String rutaImagenFinal = g.getRutaImagen();
 
                     if (nuevaImagen != null && nuevaImagen.exists()) {
-                        // Eliminar imagen anterior si existe
                         if (rutaImagenFinal != null && !rutaImagenFinal.isEmpty()) {
                             try {
                                 Files.deleteIfExists(Paths.get(rutaImagenFinal));
@@ -222,7 +220,6 @@ public class GuardiaDAO {
                             }
                         }
 
-                        // Guardar nueva imagen
                         String extension = nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
                         String nombreImagen = guardiaModificado.getIdentificacion() + "_"
                                 + System.currentTimeMillis() + extension;
@@ -231,7 +228,6 @@ public class GuardiaDAO {
                         Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
                     }
 
-                    // 2. Actualizar el objeto guardia
                     guardiaModificado.setRutaImagen(rutaImagenFinal);
                     guardias.set(i, guardiaModificado);
                     encontrado = true;

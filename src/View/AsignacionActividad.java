@@ -97,6 +97,7 @@ public AsignacionActividad(java.awt.Frame parent, boolean modal, Preso preso, JT
 
         btnAsignar.setBackground(new java.awt.Color(0, 51, 0));
         btnAsignar.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        btnAsignar.setForeground(new java.awt.Color(255, 255, 255));
         btnAsignar.setText("Asignar");
         btnAsignar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -150,25 +151,32 @@ public AsignacionActividad(java.awt.Frame parent, boolean modal, Preso preso, JT
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAsignarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarActionPerformed
-        int filasSeleccionadas = actividadesAsignacionTabla.getRowCount();
-        boolean actividadSeleccionada = false;
-        
-        for (int i = 0; i < filasSeleccionadas; i++) {
-            boolean actividadMarcada = (Boolean) actividadesAsignacionTabla.getValueAt(i, 0);
-            if (actividadMarcada) {
-                actividadSeleccionada = true;
-                String idActividad = (String) actividadesAsignacionTabla.getValueAt(i, 1);
-                String identificacionPreso = identiPreso.getText();
-                boolean asignado = controller.asignarPresoAActividad(idActividad, identificacionPreso, tablaGeneral);
-                      
-                controller.cargarActividadesEnTabla(tablaGeneral);
-                this.dispose();
-                
-                if (!actividadSeleccionada) {
-                    JOptionPane.showMessageDialog(this, "Por favor seleccione al menos una actividad.");
-                }
+         int filasSeleccionadas = actividadesAsignacionTabla.getRowCount();
+    boolean actividadSeleccionada = false;
+    boolean algunaAsignacionExitosa = false;
+
+    for (int i = 0; i < filasSeleccionadas; i++) {
+        boolean actividadMarcada = (Boolean) actividadesAsignacionTabla.getValueAt(i, 0);
+        if (actividadMarcada) {
+            actividadSeleccionada = true;
+            String idActividad = (String) actividadesAsignacionTabla.getValueAt(i, 1);
+            String identificacionPreso = identiPreso.getText();
+            boolean asignado = controller.asignarPresoAActividad(idActividad, identificacionPreso, tablaGeneral);
+
+            if (asignado) {
+                algunaAsignacionExitosa = true;
             }
         }
+    }
+
+    controller.cargarActividadesEnTabla(tablaGeneral);
+    this.dispose();
+
+    if (!actividadSeleccionada) {
+        JOptionPane.showMessageDialog(this, "Por favor seleccione al menos una actividad.");
+    } else if (algunaAsignacionExitosa) {
+        JOptionPane.showMessageDialog(this, "Actividades asignadas exitosamente.");
+    }
     }//GEN-LAST:event_btnAsignarActionPerformed
 
     /**

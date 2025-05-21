@@ -23,7 +23,6 @@ public class Guardia extends Persona {
         this.cargo = cargo;
     }
 
-    // Métodos específicos de Guardia
     public String getCorreo() {
         return correo != null ? correo : "";
     }

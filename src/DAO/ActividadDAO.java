@@ -234,9 +234,7 @@ public class ActividadDAO {
                 act.setPresosInscritos(act.getPresosInscritos() + 1);
 
                 if (guardarActividades(actividades)) {
-                    JOptionPane.showMessageDialog(null,
-                            "Presa asignada a la actividad correctamente.",
-                            "Información", JOptionPane.INFORMATION_MESSAGE);
+              
                     cargarActividades();
                     
                     return true;
@@ -443,18 +441,15 @@ public class ActividadDAO {
 
     for (Actividad actividad : actividades) {
         if (actividad.getIdActividad().equals(idActividad)) {
-            // Si el nuevo estado es CANCELADA o FINALIZADA, remover al preso
             if (nuevoEstado == EstadoActividadesPresoEnum.CANCELADA || 
                 nuevoEstado == EstadoActividadesPresoEnum.FINALIZADA) {
                 
                 if (actividad.getPresosAsignadosIds().remove(idPreso)) {
-                    // Reducir el contador de inscritos
                     actividad.setPresosInscritos(actividad.getPresosInscritos() - 1);
                     cambioRealizado = true;
                 }
             }
             
-            // Actualizar el estado del preso (aunque lo estemos removiendo)
             actividad.setEstadoPreso(idPreso, nuevoEstado);
             break;
         }
@@ -515,5 +510,24 @@ public class ActividadDAO {
     return stats;
 }
     
+    public boolean esTurnoCompatibleConHorario(String turnoOficial, String horarioActividad) {
+    String turno = turnoOficial.toLowerCase().trim();
+    String horario = horarioActividad.toLowerCase().trim();
+
+    List<String> horariosDiurnos = List.of(
+        "07:00 am - 08:00 am",
+        "08:10 am - 08:50 am",
+        "12:15 pm - 01:15 pm",
+        "02:00 pm - 04:15 pm",
+        "04:15 pm - 05:15 pm"
+    );
+
+    if (turno.equals("diurno")) {
+        return horariosDiurnos.contains(horario); 
+    }
+
+    return false;
+}
+
     
 }

@@ -5,30 +5,31 @@ import java.time.format.DateTimeFormatter;
 import com.google.gson.annotations.SerializedName;
 
 public class PersonalControl extends Persona {
+
     private String usuario;
     private String contrasena;
-    private String turno; // "Diurno" o "Nocturno"
-    
+    private String turno;
+
     @SerializedName("fechaContratacion")
     private LocalDate fechaContratacion;
-    
+
     @SerializedName("fechaFinContrato")
     private LocalDate fechaFinContrato;
-    
+
     @SerializedName("rutaImagen")
     private String rutaImagen;
-    
+
     @SerializedName("correo")
     private String correo;
-    
-    public PersonalControl(String primerNombre, String segundoNombre, 
-               String primerApellido, String segundoApellido,
-               int edad, String sexo, String nacionalidad, 
-               String identificacion, String turno,
-               LocalDate fechaContratacion, LocalDate fechaFinContrato,
-               String correo, String usuario, String contrasena) {
-        super(primerNombre, segundoNombre, primerApellido, segundoApellido, 
-              edad, sexo, nacionalidad, identificacion);
+
+    public PersonalControl(String primerNombre, String segundoNombre,
+            String primerApellido, String segundoApellido,
+            int edad, String sexo, String nacionalidad,
+            String identificacion, String turno,
+            LocalDate fechaContratacion, LocalDate fechaFinContrato,
+            String correo, String usuario, String contrasena) {
+        super(primerNombre, segundoNombre, primerApellido, segundoApellido,
+                edad, sexo, nacionalidad, identificacion);
         this.turno = turno;
         this.fechaContratacion = fechaContratacion;
         this.fechaFinContrato = fechaFinContrato;
@@ -37,7 +38,6 @@ public class PersonalControl extends Persona {
         this.contrasena = contrasena;
     }
 
-    // Getters y Setters
     public String getTurno() {
         return turno != null ? turno : "";
     }
@@ -59,13 +59,13 @@ public class PersonalControl extends Persona {
     }
 
     public String getFechaContratacionFormateada() {
-        return fechaContratacion != null ? 
-               fechaContratacion.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) : "";
+        return fechaContratacion != null
+                ? fechaContratacion.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) : "";
     }
 
     public String getFechaFinContratoFormateada() {
-        return fechaFinContrato != null ? 
-               fechaFinContrato.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) : "";
+        return fechaFinContrato != null
+                ? fechaFinContrato.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) : "";
     }
 
     public void setFechaFinContrato(LocalDate fechaFinContrato) {
@@ -103,7 +103,7 @@ public class PersonalControl extends Persona {
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
     }
-    
+
     public String getNombresParaTabla() {
         String nombres = getPrimerNombre();
         if (!getSegundoNombre().isEmpty()) {
@@ -111,7 +111,7 @@ public class PersonalControl extends Persona {
         }
         return nombres.trim();
     }
-    
+
     public String getApellidosParaTabla() {
         String apellidos = getPrimerApellido();
         if (!getSegundoApellido().isEmpty()) {

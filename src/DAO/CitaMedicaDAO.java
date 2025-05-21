@@ -154,7 +154,6 @@ public class CitaMedicaDAO {
         return false;
     }
 
-    // Adapters para LocalDate y LocalTime
     private static class LocalDateAdapter implements com.google.gson.JsonSerializer<LocalDate>,
             com.google.gson.JsonDeserializer<LocalDate> {
 

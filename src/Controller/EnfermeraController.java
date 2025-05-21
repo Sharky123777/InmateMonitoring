@@ -4,8 +4,10 @@ import DAO.EnfermeraDAO;
 import DAO.UsuarioDAO;
 import Model.Constants.RolEnum;
 import Model.Entities.Enfermera;
+import Model.Entities.SincronizadorJson;
 import Model.Entities.Usuario;
 import Utilidades.EmailSender;
+import Utilidades.GeneradorCredenciales;
 import View.FrmCamara;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -122,45 +124,144 @@ public class EnfermeraController {
     }
 }
 
-    public int modificarEnfermera(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
-        try {
-            
-            Enfermera original = obtenerEnfermeraPorCedula(cedulaOriginal);
-            if (original == null) {
-                throw new IllegalArgumentException("Enfermera no encontrada con cédula: " + cedulaOriginal);
-            }
-
-            
-            if (!verificarCambios(original, cambios, nuevaImagen)) {
-                return 0; 
-            }
-
-            
-            validarCamposModificacion(cambios);
-
-          
-            int edad = (int) cambios.get("edad");
-            LocalDate fechaFin = (LocalDate) cambios.get("fechaFin");
-            String turno = (String) cambios.get("turno");
-
-            validarEdad(edad);
-            validarFechasContrato(original.getFechaContratacion(), fechaFin);
-            validarLimiteEnfermerasPorTurno(turno, cedulaOriginal);
-
-            
-            Enfermera enfermeraModificada = construirEnfermeraModificada(cedulaOriginal, cambios, original);
-
-            
-            boolean resultado = enfermeraDAO.modificarEnfermera(cedulaOriginal, enfermeraModificada, nuevaImagen);
-
-            return resultado ? 1 : -1; // 1=Éxito, -1=Error
-
-        } catch (IllegalArgumentException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Error al modificar enfermera: " + e.getMessage(), e);
+public int modificarEnfermera(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
+    try {
+        Enfermera original = obtenerEnfermeraPorCedula(cedulaOriginal);
+        if (original == null) {
+            throw new IllegalArgumentException("Enfermera no encontrada con cédula: " + cedulaOriginal);
         }
+
+        if (!verificarCambios(original, cambios, nuevaImagen)) {
+            return 0; // No hay cambios
+        }
+
+        validarCamposModificacion(cambios);
+
+        int edad = (int) cambios.get("edad");
+        LocalDate fechaFin = (LocalDate) cambios.get("fechaFin");
+        String turno = (String) cambios.get("turno");
+
+        validarEdad(edad);
+        validarFechasContrato(original.getFechaContratacion(), fechaFin);
+        validarLimiteEnfermerasPorTurno(turno, cedulaOriginal);
+
+        Enfermera enfermeraModificada = construirEnfermeraModificada(cedulaOriginal, cambios, original);
+
+        boolean resultado = enfermeraDAO.modificarEnfermera(cedulaOriginal, enfermeraModificada, nuevaImagen);
+        
+        if (!resultado) {
+            return -1; // Error en la modificación
+        }
+
+        // Sincronizar con el JSON de usuarios después de modificar exitosamente
+        SincronizadorJson.sincronizarConUsuarios(enfermeraModificada);
+
+        return 1; // Éxito
+
+    } catch (IllegalArgumentException e) {
+        throw e;
+    } catch (Exception e) {
+        throw new RuntimeException("Error al modificar enfermera: " + e.getMessage(), e);
     }
+}
+
+    public int modificarEnfermeraConCredenciales(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
+    try {
+        Enfermera original = obtenerEnfermeraPorCedula(cedulaOriginal);
+        if (original == null) {
+            throw new IllegalArgumentException("Enfermera no encontrada con cédula: " + cedulaOriginal);
+        }
+
+        Enfermera modificada = new Enfermera(
+                cambios.getOrDefault("primerNombre", original.getPrimerNombre()).toString(),
+                cambios.getOrDefault("segundoNombre", original.getSegundoNombre()).toString(),
+                cambios.getOrDefault("primerApellido", original.getPrimerApellido()).toString(),
+                cambios.getOrDefault("segundoApellido", original.getSegundoApellido()).toString(),
+                cambios.containsKey("edad") ? Integer.parseInt(cambios.get("edad").toString()) : original.getEdad(),
+                "Femenino", // Sexo fijo para enfermeras
+                cambios.getOrDefault("nacionalidad", original.getNacionalidad()).toString(),
+                cambios.getOrDefault("identificacion", original.getIdentificacion()).toString(),
+                cambios.getOrDefault("turno", original.getTurno()).toString(),
+                original.getFechaContratacion(),
+                cambios.containsKey("fechaFin") ? (LocalDate) cambios.get("fechaFin") : original.getFechaFinContrato(),
+                cambios.getOrDefault("correo", original.getCorreo()).toString(),
+                cambios.getOrDefault("nuevoUsuario", original.getUsuario()).toString(),
+                cambios.containsKey("nuevaContraseña") ? cambios.get("nuevaContraseña").toString() : original.getContrasena()
+        );
+
+        boolean exitoEnfermera = enfermeraDAO.modificarEnfermera(cedulaOriginal, modificada, nuevaImagen);
+        if (!exitoEnfermera) {
+            return -1;
+        }
+
+        SincronizadorJson.sincronizarConUsuarios(modificada);
+
+        if (cambios.containsKey("nuevoUsuario") || cambios.containsKey("nuevaContraseña")) {
+            boolean credencialesOk = UsuarioDAO.getInstancia().modificarCredenciales(
+                    original.getUsuario(),
+                    cambios.containsKey("nuevoUsuario") ? cambios.get("nuevoUsuario").toString() : null,
+                    cambios.containsKey("nuevaContraseña") ? cambios.get("nuevaContraseña").toString() : null,
+                    original.getCorreo(),
+                    RolEnum.ENFERMERA
+            );
+
+            if (!credencialesOk) {
+                return -1;
+            }
+        }
+
+        return 1;
+
+    } catch (IllegalArgumentException e) {
+        throw e;
+    } catch (Exception e) {
+        throw new RuntimeException("Error al modificar enfermera: " + e.getMessage(), e);
+    }
+}
+
+public int modificarCredencialesEnfermera(String cedulaOriginal, String nuevoUsuario, String nuevaContra) {
+    try {
+        Enfermera enfermera = obtenerEnfermeraPorCedula(cedulaOriginal);
+        if (enfermera == null) {
+            throw new IllegalArgumentException("Enfermera no encontrada");
+        }
+
+        nuevoUsuario = nuevoUsuario != null ? nuevoUsuario.toLowerCase() : null;
+        
+        boolean cambioUsuario = nuevoUsuario != null && !nuevoUsuario.equals(enfermera.getUsuario().toLowerCase());
+        boolean cambioContra = nuevaContra != null && !nuevaContra.isEmpty();
+
+        if (!cambioUsuario && !cambioContra) {
+            return 0;
+        }
+
+        if (cambioContra) {
+            enfermera.setContrasena(GeneradorCredenciales.encriptarContrasena(nuevaContra));
+        }
+        if (cambioUsuario) {
+            enfermera.setUsuario(nuevoUsuario);
+        }
+
+        boolean exito = enfermeraDAO.modificarEnfermera(cedulaOriginal, enfermera, null);
+        if (!exito) {
+            return -1;
+        }
+
+        SincronizadorJson.sincronizarConUsuarios(enfermera);
+
+        boolean credencialesOk = UsuarioDAO.getInstancia().modificarCredenciales(
+                enfermera.getUsuario(),
+                cambioUsuario ? nuevoUsuario : null,
+                cambioContra ? nuevaContra : null,
+                enfermera.getCorreo(),
+                RolEnum.ENFERMERA
+        );
+
+        return credencialesOk ? 1 : -1;
+    } catch (Exception e) {
+        throw new RuntimeException("Error al modificar credenciales de enfermera: " + e.getMessage(), e);
+    }
+}
 
     private boolean verificarCambios(Enfermera original, Map<String, Object> cambios, File nuevaImagen) {
         

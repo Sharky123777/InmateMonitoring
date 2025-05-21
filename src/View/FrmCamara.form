@@ -76,9 +76,6 @@
         </Container>
         <Component class="javax.swing.JButton" name="TomarFoto">
           <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Pictures/icons8-camera-55.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="Tomar foto"/>
           </Properties>
           <Events>
@@ -118,9 +115,6 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnGuardarFoto">
           <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Pictures/icons8-checkmark-40.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="SELECCIONAR ESTA FOTO"/>
           </Properties>
           <Events>

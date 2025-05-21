@@ -113,6 +113,15 @@ public class CambioEstadoVisitante extends javax.swing.JDialog {
             }
 
             EstadoVisitanteEnum nuevoEstado = EstadoVisitanteEnum.valueOf(estadoSeleccionado);
+            
+             if (nuevoEstado == EstadoVisitanteEnum.DESHABILITADO && 
+            visitante.getEstado() == EstadoVisitanteEnum.EN_VISITA) {
+            JOptionPane.showMessageDialog(this,
+                    "No se puede deshabilitar un visitante que no esta habilitado",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
 
             if (visitante.getEstado() == nuevoEstado) {
                 JOptionPane.showMessageDialog(this,

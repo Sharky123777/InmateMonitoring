@@ -72,42 +72,15 @@ public class EnfermeraDAO {
         }
     }
 
-   
-    private String generarUsuarioUnico(String primerNombre, String primerApellido, List<Usuario> usuariosExistentes) {
-        Random random = new Random();
-        String usuarioBase = primerNombre + primerApellido;
-        String caracteresEspeciales = "!@#$%^&*";
+ 
+      private void guardarUsuario(Usuario usuario) throws IOException {
+    List<Usuario> usuarios = obtenerTodosUsuarios();
+    usuarios.removeIf(u -> u.getUsuario().equals(usuario.getUsuario()));
+    usuarios.add(usuario);
 
-        while (true) {
-            int numeroRandom = random.nextInt(1000) + 1;
-            char caracterEspecial = caracteresEspeciales.charAt(random.nextInt(caracteresEspeciales.length()));
-
-            String usuarioGenerado = usuarioBase + numeroRandom + caracterEspecial;
-
-           
-            boolean existe = usuariosExistentes.stream()
-                    .anyMatch(u -> u.getUsuario().equalsIgnoreCase(usuarioGenerado));
-
-            if (!existe) {
-                return usuarioGenerado;
-            }
-        }
+    try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
+        gson.toJson(usuarios, writer); 
     }
-
-    private void guardarUsuario(Usuario usuario) throws IOException {
-        List<Usuario> usuarios = obtenerTodosUsuarios();
-
-       
-        usuarios.removeIf(u -> u.getUsuario().equals(usuario.getUsuario()));
-
-        usuarios.add(usuario);
-
-        try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
-            JsonObject jsonObject = new JsonObject();
-            JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
-            jsonObject.add("usuarios", usuariosArray);
-            gson.toJson(jsonObject, writer);
-        }
     }
 
     public Enfermera obtenerEnfermeraPorUsuario(String usuario) {
@@ -127,8 +100,7 @@ public class EnfermeraDAO {
         }
 
         try (FileReader reader = new FileReader(archivo)) {
-            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
-            JsonArray usuariosArray = jsonObject.getAsJsonArray("usuarios");
+            JsonArray usuariosArray = JsonParser.parseReader(reader).getAsJsonArray();
 
             Type tipoLista = new TypeToken<List<Usuario>>() {
             }.getType();
@@ -137,18 +109,14 @@ public class EnfermeraDAO {
     }
 
    
-    private void eliminarUsuario(String usuario) throws IOException {
-        List<Usuario> usuarios = obtenerTodosUsuarios();
-        usuarios.removeIf(u -> u.getUsuario().equals(usuario));
+  private void eliminarUsuario(String usuario) throws IOException {
+    List<Usuario> usuarios = obtenerTodosUsuarios();
+    usuarios.removeIf(u -> u.getUsuario().equals(usuario));
 
-        try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
-            JsonObject jsonObject = new JsonObject();
-            JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
-            jsonObject.add("usuarios", usuariosArray);
-            gson.toJson(jsonObject, writer);
-        }
+    try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
+        gson.toJson(usuarios, writer);
     }
-
+}
     public boolean guardarEnfermera(Enfermera enfermera, File imagen) throws IOException {
        
         UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
@@ -392,8 +360,8 @@ public class EnfermeraDAO {
             e.getNacionalidad(),
             e.getCorreo(),
             e.getTurno(),
-            e.getFechaContratacionFormateada(), // Añadir fecha de inicio
-            e.getFechaFinContratoFormateada() // Cambiar a método formateado
+            e.getFechaContratacionFormateada(), 
+            e.getFechaFinContratoFormateada() 
         })
                 .collect(Collectors.toList());
     }

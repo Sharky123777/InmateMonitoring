@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 public class Enfermera extends Persona {
     private String usuario;
 private String contrasena;
-    private String turno; // "Diurno" o "Nocturno"
+    private String turno; 
     
     @SerializedName("fechaContratacion")
     private LocalDate fechaContratacion;
@@ -38,7 +38,6 @@ private String contrasena;
     this.contrasena = contrasena;
 }
 
-    // Getters y Setters
     public String getTurno() {
         return turno != null ? turno : "";
     }
@@ -118,7 +117,6 @@ public String getFechaFinContratoFormateada() {
  
  
 
-    // Método específico para mostrar apellidos en tabla
     public String getApellidosParaTabla() {
         String apellidos = getPrimerApellido();
         if (!getSegundoApellido().isEmpty()) {

@@ -34,6 +34,8 @@ public class ModificarVisita extends javax.swing.JDialog {
             }
         });
     }
+    
+    
 
     private void regresarATabla1() {
         if (this.getParent() instanceof PersonalDeControl) {
@@ -47,6 +49,12 @@ public class ModificarVisita extends javax.swing.JDialog {
             NuevoTipoVisita.setSelectedIndex(0);
             NuevoLugarVisita.setSelectedIndex(0);
         }
+    }
+    
+    public void limpiarCamposVisita(){
+        NuevoTipoVisita.setSelectedIndex(0);
+        NuevoLugarVisita.setSelectedItem(0);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -136,6 +144,7 @@ public class ModificarVisita extends javax.swing.JDialog {
             if (visitaActualizada != null) {
                 controller.cargarHistorialVisitas(identificacionPreso, tablaVisitas);
 
+                limpiarCamposVisita();
                 regresarATabla1();
 
                 dispose();
@@ -146,9 +155,7 @@ public class ModificarVisita extends javax.swing.JDialog {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }    }//GEN-LAST:event_BotonModificarVisitaActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+   
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

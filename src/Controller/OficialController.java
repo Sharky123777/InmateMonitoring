@@ -1,11 +1,14 @@
+
 package Controller;
 
 import DAO.OficialDAO;
 import DAO.UsuarioDAO;
 import Model.Constants.RolEnum;
 import Model.Entities.Oficial;
+import Model.Entities.SincronizadorJson;
 import Model.Entities.Usuario;
 import Utilidades.EmailSender;
+import Utilidades.GeneradorCredenciales;
 import View.FrmCamara;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -21,6 +24,7 @@ public class OficialController {
     private static OficialController instancia;
     private final OficialDAO oficialDAO;
     private FrmCamara ventanaCamara;
+    private final UsuarioDAO usuarioDAO = UsuarioDAO.getInstancia();
 
     private OficialController() {
         this.oficialDAO = OficialDAO.getInstancia();
@@ -105,50 +109,57 @@ public class OficialController {
         }
     }
 
-    public int modificarOficial(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
-        try {
-            // Validar cédula original
-            if (cedulaOriginal == null || cedulaOriginal.trim().isEmpty()) {
-                throw new IllegalArgumentException("Cédula original es requerida");
-            }
-
-            // Validar cambios
-            if (cambios == null || cambios.isEmpty()) {
-                throw new IllegalArgumentException("No se proporcionaron cambios");
-            }
-
-            // Validar campos obligatorios
-            validarCamposModificacion(cambios);
-
-            Oficial original = obtenerOficialPorCedula(cedulaOriginal);
-            if (original == null) {
-                throw new IllegalArgumentException("Oficial no encontrado con cédula: " + cedulaOriginal);
-            }
-
-            // Verificar si hay cambios reales
-            boolean hayCambios = verificarCambios(original, cambios, nuevaImagen);
-
-            if (!hayCambios) {
-                return 0; // Código para "no hay cambios"
-            }
-
-            // Realizar la modificación
-            boolean exito = oficialDAO.modificarOficial(cedulaOriginal,
-                    construirOficialModificado(cedulaOriginal, cambios, original),
-                    nuevaImagen);
-
-            return exito ? 1 : -1;
-
-        } catch (IllegalArgumentException e) {
-            // Lanzar nuevamente para manejo en la UI
-            throw e;
-        } catch (Exception e) {
-            // Loggear error y lanzar una excepción controlada
-            System.err.println("Error al modificar oficial: " + e.getMessage());
-            throw new RuntimeException("Error interno al modificar oficial", e);
+public int modificarOficial(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
+    try {
+        // Validar cédula original
+        if (cedulaOriginal == null || cedulaOriginal.trim().isEmpty()) {
+            throw new IllegalArgumentException("Cédula original es requerida");
         }
-    }
 
+        // Validar cambios
+        if (cambios == null || cambios.isEmpty()) {
+            throw new IllegalArgumentException("No se proporcionaron cambios");
+        }
+
+        // Validar campos obligatorios
+        validarCamposModificacion(cambios);
+
+        Oficial original = obtenerOficialPorCedula(cedulaOriginal);
+        if (original == null) {
+            throw new IllegalArgumentException("Oficial no encontrado con cédula: " + cedulaOriginal);
+        }
+
+        // Verificar si hay cambios reales
+        boolean hayCambios = verificarCambios(original, cambios, nuevaImagen);
+
+        if (!hayCambios) {
+            return 0; // Código para "no hay cambios"
+        }
+
+        // Construir el oficial modificado
+        Oficial modificado = construirOficialModificado(cedulaOriginal, cambios, original);
+
+        // Realizar la modificación
+        boolean exito = oficialDAO.modificarOficial(cedulaOriginal, modificado, nuevaImagen);
+        
+        if (!exito) {
+            return -1;
+        }
+        
+        // Sincronizar con el JSON de usuarios
+        SincronizadorJson.sincronizarConUsuarios(modificado);
+
+        return 1;
+
+    } catch (IllegalArgumentException e) {
+        // Lanzar nuevamente para manejo en la UI
+        throw e;
+    } catch (Exception e) {
+        // Loggear error y lanzar una excepción controlada
+        System.err.println("Error al modificar oficial: " + e.getMessage());
+        throw new RuntimeException("Error interno al modificar oficial", e);
+    }
+}
     private void validarCamposModificacion(Map<String, Object> cambios) {
         StringBuilder errores = new StringBuilder();
 
@@ -305,4 +316,111 @@ public class OficialController {
             throw new IllegalArgumentException("La edad debe ser un número valido");
         }
     }
+
+    public int modificarOficialConCredenciales(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
+        try {
+            Oficial original = oficialDAO.obtenerOficialPorCedula(cedulaOriginal);
+            if (original == null) {
+                throw new IllegalArgumentException("Oficial no encontrado con cédula: " + cedulaOriginal);
+            }
+
+            Oficial modificado = new Oficial(
+                    cambios.getOrDefault("primerNombre", original.getPrimerNombre()).toString(),
+                    cambios.getOrDefault("segundoNombre", original.getSegundoNombre()).toString(),
+                    cambios.getOrDefault("primerApellido", original.getPrimerApellido()).toString(),
+                    cambios.getOrDefault("segundoApellido", original.getSegundoApellido()).toString(),
+                    cambios.containsKey("edad") ? Integer.parseInt(cambios.get("edad").toString()) : original.getEdad(),
+                    original.getSexo(),
+                    cambios.getOrDefault("nacionalidad", original.getNacionalidad()).toString(),
+                    cambios.getOrDefault("identificacion", original.getIdentificacion()).toString(),
+                    cambios.getOrDefault("turno", original.getTurno()).toString(),
+                    original.getFechaContratacion(),
+                    cambios.containsKey("fechaFin") ? (LocalDate) cambios.get("fechaFin") : original.getFechaFinContrato(),
+                    cambios.getOrDefault("correo", original.getCorreo()).toString(),
+                    cambios.getOrDefault("nuevoUsuario", original.getUsuario()).toString(),
+                    cambios.containsKey("nuevaContraseña") ? cambios.get("nuevaContraseña").toString() : original.getContrasena()
+            );
+
+            boolean exito = oficialDAO.modificarOficial(cedulaOriginal, modificado, nuevaImagen);
+            if (!exito) {
+                return -1;
+            }
+            
+                        SincronizadorJson.sincronizarConUsuarios(modificado);
+
+
+            if (cambios.containsKey("nuevoUsuario") || cambios.containsKey("nuevaContraseña")) {
+                boolean credencialesOk = usuarioDAO.modificarCredenciales(
+                        original.getUsuario(),
+                        cambios.containsKey("nuevoUsuario") ? cambios.get("nuevoUsuario").toString() : null,
+                        cambios.containsKey("nuevaContraseña") ? cambios.get("nuevaContraseña").toString() : null,
+                        original.getCorreo(),
+                        RolEnum.OFICIAL
+                );
+
+                if (!credencialesOk) {
+                    return -1;
+                }
+            }
+
+            return 1;
+
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al modificar oficial: " + e.getMessage(), e);
+        }
+    }
+
+    public int modificarCredencialesOficial(String cedulaOriginal, String nuevoUsuario, String nuevaContra) {
+        try {
+            Oficial oficial = obtenerOficialPorCedula(cedulaOriginal);
+            if (oficial == null) {
+                throw new IllegalArgumentException("Oficial no encontrado");
+            }
+
+            nuevoUsuario = nuevoUsuario != null ? nuevoUsuario.toLowerCase() : null;
+
+            boolean cambioUsuario = nuevoUsuario != null && !nuevoUsuario.equalsIgnoreCase(oficial.getUsuario());
+            boolean cambioContra = nuevaContra != null && !nuevaContra.isEmpty();
+
+            if (!cambioUsuario && !cambioContra) {
+                return 0;
+            }
+
+            if (cambioContra) {
+                oficial.setContrasena(GeneradorCredenciales.encriptarContrasena(nuevaContra));
+            }
+            if (cambioUsuario) {
+                oficial.setUsuario(nuevoUsuario);
+            }
+
+            boolean exito = oficialDAO.modificarOficial(cedulaOriginal, oficial, null);
+            if (!exito) {
+                return -1;
+            }
+
+            boolean credencialesOk = UsuarioDAO.getInstancia().modificarCredenciales(
+                    oficial.getUsuario(),
+                    cambioUsuario ? nuevoUsuario : null,
+                    cambioContra ? nuevaContra : null,
+                    oficial.getCorreo(),
+                    RolEnum.OFICIAL
+            );
+
+            return credencialesOk ? 1 : -1;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al modificar credenciales del oficial: " + e.getMessage(), e);
+        }
+    }
+
+    public Usuario obtenerUsuarioPorIdentificacion(String identificacion) {
+        try {
+            return usuarioDAO.obtenerUsuarioPorIdentificacion(identificacion);
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(OficialController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
 }

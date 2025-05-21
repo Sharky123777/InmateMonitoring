@@ -6,5 +6,6 @@ public enum EstadoPresoEnum {
     ACTIVO,
     LIBERADO,
     FUGADO,
-    FALLECIDO
+    FALLECIDO,
+    EN_VISITA
 }

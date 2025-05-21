@@ -4,6 +4,11 @@ import DAO.GuardiaDAO;
 import DAO.PresoDAO;
 import DAO.SancionDAO;
 import DAO.VisitaDAO;
+import DAO.VisitanteDAO;
+import Model.Constants.EstadoPresoEnum;
+import static Model.Constants.EstadoPresoEnum.FALLECIDO;
+import static Model.Constants.EstadoPresoEnum.FUGADO;
+import static Model.Constants.EstadoPresoEnum.LIBERADO;
 import Model.Constants.EstadoVisitaEnum;
 import Model.Entities.Guardia;
 import Model.Entities.Preso;
@@ -61,19 +66,6 @@ public class SancionController {
             return false;
         }
 
-        int opcion = JOptionPane.showConfirmDialog(
-                view,
-                "¿Está seguro de registrar esta sanción?",
-                "Confirmar Registro",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE
-        );
-
-        if (opcion != JOptionPane.YES_OPTION) {
-            limpiarCamposSancion(view);
-            return false;
-        }
-
         String identificacionPreso = view.getIdentificacionPresoSancion().getText().trim();
         String motivoSancion = view.getMotivoSancion().getText().trim();
         String tipoSancion = view.getTipoSancion().getSelectedItem().toString();
@@ -106,6 +98,21 @@ public class SancionController {
                 return false;
             }
 
+            if (preso.getEstado() != EstadoPresoEnum.ACTIVO) {
+                String mensajeEstado = switch (preso.getEstado()) {
+                    case FALLECIDO ->
+                        "No se pueden registrar sanciones para presos fallecidos";
+                    case LIBERADO ->
+                        "No se pueden registrar sanciones para presos liberados";
+                    case FUGADO ->
+                        "No se pueden registrar sanciones para presos fugados";
+                    default ->
+                        "El preso no puede recibir sanciones en su estado actual: " + preso.getEstado();
+                };
+                mostrarError(mensajeEstado);
+                return false;
+            }
+
             Guardia guardia = new GuardiaDAO().obtenerGuardiaPorCedula(identificacionGuardia);
             if (guardia == null) {
                 mostrarError("Guardia no encontrado.");
@@ -124,6 +131,19 @@ public class SancionController {
                 return false;
             }
 
+            int opcion = JOptionPane.showConfirmDialog(
+                    view,
+                    "¿Está seguro de registrar esta sanción?",
+                    "Confirmar Registro",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (opcion != JOptionPane.YES_OPTION) {
+                limpiarCamposSancion(view);
+                return false;
+            }
+
             Sancion nuevaSancion = new Sancion(0, motivoSancion, fecha, hora, tipoSancion, preso, guardia);
             if (sancionDAO.guardarSancion(nuevaSancion)) {
                 if (nuevaSancion.esAislamiento()) {
@@ -131,7 +151,7 @@ public class SancionController {
                     presoDAO.actualizarPreso(preso);
                 }
 
-                cancelarVisitasPendientes(identificacionPreso, fecha, nuevaSancion.getDiasDuracion());
+                cancelarVisitasPendientes(identificacionPreso, fecha, nuevaSancion.getDiasDuracion(), nuevaSancion.getTipoSancion());
                 mostrarExito("Sanción registrada exitosamente. Duración: " + nuevaSancion.getDiasDuracion() + " días");
                 limpiarCamposSancion(view);
                 return true;
@@ -145,31 +165,68 @@ public class SancionController {
         }
     }
 
-    private void cancelarVisitasPendientes(String identificacionPreso, LocalDate fechaSancion, int diasDuracion) {
+    public void verificarFinAislamiento(Preso preso) {
+        List<Sancion> sanciones = sancionDAO.cargarPorIdentificacionPreso(preso.getIdentificacion());
+        LocalDate hoy = LocalDate.now();
+
+        boolean estaAislado = sanciones.stream()
+                .filter(Sancion::esAislamiento)
+                .anyMatch(s -> {
+                    LocalDate inicio = s.getFechaSancion();
+                    LocalDate fin = inicio.plusDays(s.getDiasDuracion());
+                    return !hoy.isBefore(inicio) && !hoy.isAfter(fin);
+                });
+
+        if (preso.isEnAislamiento() && !estaAislado) {
+            preso.setEnAislamiento(false);
+            presoDAO.actualizarPreso(preso);
+        }
+    }
+
+    private void cancelarVisitasPendientes(String identificacionPreso, LocalDate fechaSancion, int diasDuracion, String tipoSancion) {
         List<Visita> visitas = visitaDAO.cargarPorIdentificacionPreso(identificacionPreso);
         int visitasCanceladas = 0;
 
-        String motivoCancelacion = (diasDuracion == 10)
-                ? "Preso en aislamiento por " + diasDuracion + " días"
-                : "Sanción aplicada al preso (Duración: " + diasDuracion + " días)";
+        boolean debeCancelar = "Aislamiento".equalsIgnoreCase(tipoSancion)
+                || "Suspensión de visitas".equalsIgnoreCase(tipoSancion);
+
+        if (!debeCancelar) {
+            return;
+        }
+
+        String motivoCancelacion = "Visita cancelada por sanción: " + tipoSancion + " (" + diasDuracion + " días)";
+        LocalDate fechaFinSancion = fechaSancion.plusDays(diasDuracion);
 
         for (Visita visita : visitas) {
             LocalDate fechaVisita = visita.getFechaVisita();
-            LocalDate fechaFinSancion = fechaSancion.plusDays(diasDuracion);
 
-            if ((!fechaVisita.isBefore(fechaSancion) && !fechaVisita.isAfter(fechaFinSancion)
-                    && visita.getEstado() == EstadoVisitaEnum.EN_PROCESO)) {
+            if (!fechaVisita.isBefore(fechaSancion)
+                    && !fechaVisita.isAfter(fechaFinSancion)
+                    && visita.getEstado() == EstadoVisitaEnum.EN_PROCESO) {
 
-                visitaDAO.modificarEstadoVisitaYDevolver(visita.getId(), EstadoVisitaEnum.CANCELADA);
-                visitasCanceladas++;
+                Visita visitaCancelada = visitaDAO.modificarEstadoVisitaYDevolver(
+                        visita.getId(), EstadoVisitaEnum.CANCELADA, motivoCancelacion);
 
-                notificarCancelacionAVisitantes(visita, motivoCancelacion);
+                if (visitaCancelada != null) {
+                    Preso presoVisita = visitaCancelada.getPreso();
+                    presoVisita.setEnVisita(false);
+                    presoVisita.setEstado(EstadoPresoEnum.ACTIVO);
+                    presoDAO.actualizarPreso(presoVisita);
+
+                    for (Visitante v : visitaCancelada.getVisitantesConRelacion().keySet()) {
+                        v.setEstado(Model.Constants.EstadoVisitanteEnum.HABILITADO);
+                        VisitanteDAO.getInstancia().guardarVisitante(v, null);
+                    }
+
+                    notificarCancelacionAVisitantes(visitaCancelada, motivoCancelacion);
+                    visitasCanceladas++;
+                }
             }
         }
 
         if (visitasCanceladas > 0) {
             mostrarExito("Se cancelaron " + visitasCanceladas + " visitas programadas. "
-                    + (diasDuracion == 10 ? "El preso estará en aislamiento." : ""));
+                    + "Motivo: " + tipoSancion);
         }
     }
 
@@ -199,14 +256,11 @@ public class SancionController {
     }
 
     private String determinarTurno(LocalTime hora) {
-        if (!hora.isBefore(LocalTime.of(0, 0)) && hora.isBefore(LocalTime.of(8, 0))) {
-            return "Nocturno";
-        } else if (!hora.isBefore(LocalTime.of(8, 0)) && hora.isBefore(LocalTime.of(20, 0))) {
+        if (hora.compareTo(LocalTime.of(7, 0)) >= 0 && hora.compareTo(LocalTime.of(19, 0)) < 0) {
             return "Diurno";
-        } else if (!hora.isBefore(LocalTime.of(20, 0)) && !hora.isAfter(LocalTime.of(23, 59, 59))) {
+        } else {
             return "Nocturno";
         }
-        return null;
     }
 
     private boolean validarCamposSancion(Oficial view) {
@@ -268,6 +322,8 @@ public class SancionController {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
         modelo.setRowCount(0);
 
+            sancionDAO.actualizarSancionesCumplidas(identificacionPreso); 
+
         List<Sancion> sanciones = sancionDAO.cargarPorIdentificacionPreso(identificacionPreso);
         for (Sancion sancion : sanciones) {
             int duracionAcumulada = sancionDAO.obtenerDuracionAcumuladaPorTipo(
@@ -284,7 +340,8 @@ public class SancionController {
                 sancion.getPreso().getIdentificacion(),
                 sancion.getMotivo(),
                 sancion.getGuardia().getIdentificacion(),
-                duracionAcumulada + " días"
+                duracionAcumulada + " días",
+                    sancion.getEstado()
             });
         }
     }
@@ -312,7 +369,8 @@ public class SancionController {
                 sancion.getPreso().getIdentificacion(),
                 sancion.getMotivo(),
                 sancion.getGuardia().getIdentificacion(),
-                duracionAcumulada + " días"
+                duracionAcumulada + " días",
+                sancion.getEstado()
             });
         }
     }
@@ -342,16 +400,26 @@ public class SancionController {
     }
 
     public void buscarPresoPorIdentificacion(String identificacion, JTable tabla) {
-        DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
-        modelo.setRowCount(0);
 
         if (identificacion.isEmpty()) {
             mostrarError("Ingrese una identificación para buscar");
             return;
         }
 
+        if (!identificacion.matches("^[0-9]+$")) {
+            mostrarError("La identificación solo debe contener números");
+            return;
+        }
+
+        if (identificacion.startsWith("-")) {
+            mostrarError("La identificación no puede ser negativa");
+            return;
+        }
+
         Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
         if (preso != null) {
+            DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+            modelo.setRowCount(0);
             ImageIcon foto = cargarImagen(preso.getFotoPath());
             modelo.addRow(new Object[]{
                 foto,
@@ -505,15 +573,14 @@ public class SancionController {
             return;
         }
 
-        DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
-        modelo.setRowCount(0);
-
         List<Guardia> guardias = guardiaDAO.obtenerGuardias();
         boolean encontrado = false;
 
         for (Guardia guardia : guardias) {
             if (guardia.getIdentificacion().equalsIgnoreCase(identificacion)) {
                 ImageIcon foto = cargarImagen(guardia.getRutaImagen());
+                DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+                modelo.setRowCount(0);
 
                 modelo.addRow(new Object[]{
                     foto,

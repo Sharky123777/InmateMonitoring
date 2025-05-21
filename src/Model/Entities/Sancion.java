@@ -1,5 +1,6 @@
 package Model.Entities;
 
+import Model.Constants.EstadoSancionEnum;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -13,6 +14,7 @@ public class Sancion {
     private Preso preso;
     private Guardia guardia;
     private int diasDuracion;
+    private EstadoSancionEnum estado;
 
     public Sancion(int id, String motivo, LocalDate fechaSancion, LocalTime hora,
             String tipoSancion, Preso preso, Guardia guardia) {
@@ -24,6 +26,13 @@ public class Sancion {
         this.preso = preso;
         this.guardia = guardia;
         this.diasDuracion = calcularDuracionPorTipo(tipoSancion);
+        this.estado = EstadoSancionEnum.ACTIVA;
+    }
+
+    public boolean estaActiva() {
+        return this.estado == EstadoSancionEnum.ACTIVA
+                && !LocalDate.now().isBefore(fechaSancion)
+                && !LocalDate.now().isAfter(fechaSancion.plusDays(diasDuracion));
     }
 
     private int calcularDuracionPorTipo(String tipoSancion) {
@@ -51,10 +60,16 @@ public class Sancion {
         return "Aislamiento".equals(this.tipoSancion);
     }
 
-    public boolean estaActiva() {
-        LocalDate hoy = LocalDate.now();
-        LocalDate fechaFin = fechaSancion.plusDays(diasDuracion);
-        return !hoy.isBefore(fechaSancion) && !hoy.isAfter(fechaFin);
+    public EstadoSancionEnum getEstado() {
+        return estado;
+    }
+
+    public void cancelar() {
+        this.estado = EstadoSancionEnum.CANCELADA;
+    }
+
+    public void marcarComoCumplida() {
+        this.estado = EstadoSancionEnum.CUMPLIDA;
     }
 
     public int getId() {

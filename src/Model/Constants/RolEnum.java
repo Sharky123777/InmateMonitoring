@@ -19,7 +19,6 @@ public enum RolEnum {
         return nombreMostrado;
     }
 
-    // Método para obtener el enum desde el texto mostrado
     public static RolEnum fromDisplayText(String displayText) {
         for (RolEnum rol : RolEnum.values()) {
             if (rol.nombreMostrado.equalsIgnoreCase(displayText)) {

@@ -6,7 +6,7 @@ public class IntentoFuga {
 
     private String identificacionPreso;
     private LocalDate fechaFuga;
-    private LocalDate fechaReingreso; // Puede ser null
+    private LocalDate fechaReingreso;
 
     public IntentoFuga() {
     }

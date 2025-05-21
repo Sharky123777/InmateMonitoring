@@ -75,33 +75,33 @@ public class UsuarioController {
         return usuarioDAO.obtenerTodosUsuarios();
     }
 
-   public boolean registrarNuevoUsuario(String primerNombre, String segundoNombre,
+    public boolean registrarNuevoUsuario(String primerNombre, String segundoNombre,
             String primerApellido, String segundoApellido,
             int edad, String sexo, String nacionalidad,
             String identificacion,
             RolEnum rol, String rutaImagen) { // Añade rutaImagen como parámetro
 
-    // Generar credenciales automáticamente
-    String usuario = GeneradorCredenciales.generarUsuarioAleatorio();
-    String contrasena = GeneradorCredenciales.generarContrasenaAleatoria();
-    String contrasenaEncriptada = GeneradorCredenciales.encriptarContrasena(contrasena);
+        // Generar credenciales automáticamente
+        String usuario = GeneradorCredenciales.generarUsuarioAleatorio();
+        String contrasena = GeneradorCredenciales.generarContrasenaAleatoria();
+        String contrasenaEncriptada = GeneradorCredenciales.encriptarContrasena(contrasena);
 
-    Usuario nuevoUsuario = new Usuario(
-            primerNombre, segundoNombre,
-            primerApellido, segundoApellido,
-            edad, sexo, nacionalidad, identificacion,
-            usuario, contrasenaEncriptada, rol,
-            rutaImagen // Pasamos la ruta de la imagen
-    );
+        Usuario nuevoUsuario = new Usuario(
+                primerNombre, segundoNombre,
+                primerApellido, segundoApellido,
+                edad, sexo, nacionalidad, identificacion,
+                usuario, contrasenaEncriptada, rol,
+                rutaImagen // Pasamos la ruta de la imagen
+        );
 
-    try {
-        return usuarioDAO.agregarUsuario(nuevoUsuario);
-    } catch (IOException ex) {
-        Logger.getLogger(UsuarioController.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            return usuarioDAO.agregarUsuario(nuevoUsuario);
+        } catch (IOException ex) {
+            Logger.getLogger(UsuarioController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        // En caso de excepción, devolver false o lo que consideres adecuado
+        return false;
     }
-    // En caso de excepción, devolver false o lo que consideres adecuado
-    return false;
-}
 
     // Método para generar credenciales (puede ser usado por otros controladores)
     public static class Credenciales {

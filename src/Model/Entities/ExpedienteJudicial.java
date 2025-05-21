@@ -1,7 +1,6 @@
 package Model.Entities;
 
 import Model.Constants.EstadoExpedienteEnum;
-import Model.Constants.EstadoPresoEnum;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

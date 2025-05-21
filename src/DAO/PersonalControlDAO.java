@@ -7,18 +7,15 @@ import Utilidades.EmailSender;
 import Model.Entities.Usuario;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
-import javax.imageio.ImageIO;
+import DAO.LocalDateAdapter;
+import Utilidades.GeneradorCredenciales;
 import javax.swing.JOptionPane;
 
 public class PersonalControlDAO {
@@ -49,50 +46,27 @@ public class PersonalControlDAO {
         try {
             Files.createDirectories(Paths.get(RUTA_IMAGENES));
             Files.createDirectories(Paths.get(RUTA_JSON).getParent());
+
+            File archivoJson = new File(RUTA_JSON);
+            if (!archivoJson.exists()) {
+                archivoJson.createNewFile();
+                Files.write(Paths.get(RUTA_JSON), "[]".getBytes());
+            }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null,
-                    "Error al crear directorios: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            System.err.println("Error al crear directorios/archivo: " + e.getMessage());
         }
     }
-
-    private static class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
-
-        private final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
-
-        @Override
-        public JsonElement serialize(LocalDate date, Type typeOfSrc, JsonSerializationContext context) {
-            return date != null ? new JsonPrimitive(date.format(formatter)) : JsonNull.INSTANCE;
-        }
-
-        @Override
-        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-                throws JsonParseException {
-            if (json == null || json.isJsonNull() || json.getAsString().isEmpty()) {
-                return null;
-            }
-            try {
-                return LocalDate.parse(json.getAsString(), formatter);
-            } catch (DateTimeParseException e) {
-                throw new JsonParseException("Formato de fecha inválido: " + json.getAsString(), e);
-            }
-        }
-    }
-
-    
 
     private void guardarUsuario(Usuario usuario) throws IOException {
-        List<Usuario> usuarios = obtenerTodosUsuarios();
-        usuarios.removeIf(u -> u.getUsuario().equals(usuario.getUsuario()));
-        usuarios.add(usuario);
+    List<Usuario> usuarios = obtenerTodosUsuarios();
+    usuarios.removeIf(u -> u.getUsuario().equals(usuario.getUsuario()));
+    usuarios.add(usuario);
 
-        try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
-            JsonObject jsonObject = new JsonObject();
-            JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
-            jsonObject.add("usuarios", usuariosArray);
-            gson.toJson(jsonObject, writer);
-        }
+    try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
+        gson.toJson(usuarios, writer);
     }
+}
+
 
     public PersonalControl obtenerPersonalControlPorUsuario(String usuario) {
         List<PersonalControl> personalControl = obtenerPersonalControl();
@@ -110,8 +84,7 @@ public class PersonalControlDAO {
         }
 
         try (FileReader reader = new FileReader(archivo)) {
-            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
-            JsonArray usuariosArray = jsonObject.getAsJsonArray("usuarios");
+            JsonArray usuariosArray = JsonParser.parseReader(reader).getAsJsonArray();
 
             Type tipoLista = new TypeToken<List<Usuario>>() {
             }.getType();
@@ -120,18 +93,24 @@ public class PersonalControlDAO {
     }
 
     private void eliminarUsuario(String usuario) throws IOException {
-        List<Usuario> usuarios = obtenerTodosUsuarios();
-        usuarios.removeIf(u -> u.getUsuario().equals(usuario));
+    List<Usuario> usuarios = obtenerTodosUsuarios();
+    usuarios.removeIf(u -> u.getUsuario().equals(usuario));
 
-        try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
-            JsonObject jsonObject = new JsonObject();
-            JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
-            jsonObject.add("usuarios", usuariosArray);
-            gson.toJson(jsonObject, writer);
-        }
+    try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
+        gson.toJson(usuarios, writer);
     }
+}
+
 
     public boolean guardarPersonalControl(PersonalControl personalControl, File imagen) throws IOException {
+        if (personalControl == null) {
+            throw new IllegalArgumentException("El objeto personalControl no puede ser null");
+        }
+
+        if (imagen == null || !imagen.exists() || imagen.length() == 0) {
+            throw new IllegalArgumentException("La imagen proporcionada no es válida");
+        }
+
         UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
         String usuario = credenciales.usuario;
         String contrasena = credenciales.contrasena;
@@ -140,121 +119,145 @@ public class PersonalControlDAO {
         personalControl.setUsuario(usuario);
         personalControl.setContrasena(contrasenaEncriptada);
 
-        String nombreImagen = personalControl.getIdentificacion() + "_"
-                + System.currentTimeMillis()
-                + imagen.getName().substring(imagen.getName().lastIndexOf("."));
-
+        String extension = imagen.getName().substring(imagen.getName().lastIndexOf("."));
+        String nombreImagen = personalControl.getIdentificacion() + "_" + System.currentTimeMillis() + extension;
         String rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-        Files.createDirectories(Paths.get(RUTA_IMAGENES));
-        Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
-        personalControl.setRutaImagen(rutaImagenFinal);
 
-        List<PersonalControl> personalControlList = obtenerPersonalControl();
-        personalControlList.add(personalControl);
-        guardarListaPersonalControl(personalControlList);
-
-        Usuario nuevoUsuario = new Usuario(
-                personalControl.getPrimerNombre(),
-                personalControl.getSegundoNombre(),
-                personalControl.getPrimerApellido(),
-                personalControl.getSegundoApellido(),
-                personalControl.getEdad(),
-                personalControl.getSexo(),
-                personalControl.getNacionalidad(),
-                personalControl.getIdentificacion(),
-                usuario,
-                contrasenaEncriptada,
-                RolEnum.PERSONAL_DE_CONTROL,
-                personalControl.getRutaImagen() // Usamos getRutaImagen()
-        );
-
-        guardarUsuario(nuevoUsuario);
-
-        boolean correoEnviado = EmailSender.getInstancia().enviarCredenciales(
-                personalControl.getCorreo(),
-                usuario,
-                contrasena,
-                RolEnum.PERSONAL_DE_CONTROL
-        );
-
-        if (correoEnviado) {
-            JOptionPane.showMessageDialog(null,
-                    "Personal de Control registrado exitosamente y credenciales enviadas al correo.",
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    "Personal de Control registrado pero hubo un error al enviar las credenciales por correo.",
-                    "Advertencia",
-                    JOptionPane.WARNING_MESSAGE);
+        try {
+            Files.createDirectories(Paths.get(RUTA_IMAGENES));
+            Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+            personalControl.setRutaImagen(rutaImagenFinal);
+        } catch (IOException e) {
+            System.err.println("Error al guardar imagen: " + e.getMessage());
+            throw new IOException("No se pudo guardar la imagen del personal de control");
         }
 
-        return true;
+        List<PersonalControl> personalControlList = obtenerPersonalControl();
+
+        if (personalControlList.stream().anyMatch(p -> p.getIdentificacion().equals(personalControl.getIdentificacion()))) {
+            Files.deleteIfExists(Paths.get(rutaImagenFinal));
+            throw new IllegalArgumentException("Ya existe un personal de control con esta cédula");
+        }
+
+        personalControlList.add(personalControl);
+
+        try {
+            guardarListaPersonales(personalControlList);
+
+            Usuario nuevoUsuario = new Usuario(
+                    personalControl.getPrimerNombre(),
+                    personalControl.getSegundoNombre(),
+                    personalControl.getPrimerApellido(),
+                    personalControl.getSegundoApellido(),
+                    personalControl.getEdad(),
+                    personalControl.getSexo(),
+                    personalControl.getNacionalidad(),
+                    personalControl.getIdentificacion(),
+                    usuario,
+                    contrasenaEncriptada,
+                    RolEnum.PERSONAL_DE_CONTROL,
+                    personalControl.getRutaImagen()
+            );
+
+            guardarUsuario(nuevoUsuario);
+
+            try {
+                EmailSender.getInstancia().enviarCredenciales(
+                        personalControl.getCorreo(),
+                        usuario,
+                        contrasena,
+                        RolEnum.PERSONAL_DE_CONTROL
+                );
+            } catch (Exception e) {
+                System.err.println("Error al enviar correo: " + e.getMessage());
+                JOptionPane.showMessageDialog(null,
+                        "Personal de Control registrado pero no se pudieron enviar las credenciales por correo",
+                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }
+
+            return true;
+        } catch (IOException e) {
+            Files.deleteIfExists(Paths.get(rutaImagenFinal));
+            throw e;
+        }
     }
 
     public List<PersonalControl> obtenerPersonalControl() {
-        List<PersonalControl> personalControlList = new ArrayList<>();
         File archivo = new File(RUTA_JSON);
 
         try {
             if (!archivo.exists() || archivo.length() == 0) {
-                guardarListaPersonalControl(new ArrayList<>());
-                return personalControlList;
+                return new ArrayList<>();
             }
 
-            String contenido = new String(Files.readAllBytes(archivo.toPath()));
+            String contenido = new String(Files.readAllBytes(archivo.toPath()), StandardCharsets.UTF_8).trim();
 
-            if (contenido.trim().isEmpty()) {
-                guardarListaPersonalControl(new ArrayList<>());
-                return personalControlList;
+            if (contenido.isEmpty() || contenido.equals("[]")) {
+                return new ArrayList<>();
             }
 
-            try {
-                JsonObject jsonObject = JsonParser.parseString(contenido).getAsJsonObject();
-                JsonArray personalControlArray = jsonObject.getAsJsonArray("personal_control");
-
+            if (contenido.startsWith("[")) {
                 Type tipoLista = new TypeToken<List<PersonalControl>>() {
                 }.getType();
-                return gson.fromJson(personalControlArray, tipoLista);
-            } catch (JsonSyntaxException e) {
-                System.err.println("Formato JSON inválido. Creando nuevo archivo.");
-                guardarListaPersonalControl(new ArrayList<>());
+                return gson.fromJson(contenido, tipoLista);
+            } 
+            else if (contenido.startsWith("{")) {
+                JsonObject jsonObject = JsonParser.parseString(contenido).getAsJsonObject();
+                if (jsonObject.has("Personales")) {
+                    JsonArray array = jsonObject.getAsJsonArray("Personales");
+                    Type tipoLista = new TypeToken<List<PersonalControl>>() {
+                    }.getType();
+                    return gson.fromJson(array, tipoLista);
+                }
             }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null,
-                    "Error al leer/escribir archivo: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+
+            return new ArrayList<>();
+        } catch (Exception e) {
+            System.err.println("Error al leer personal de control: " + e.getMessage());
+            e.printStackTrace();
+            return new ArrayList<>();
         }
-        return personalControlList;
     }
 
-    private void guardarListaPersonalControl(List<PersonalControl> personalControlList) throws IOException {
-        JsonObject jsonObject = new JsonObject();
-        JsonArray personalControlArray = new JsonArray();
-
-        for (PersonalControl personalControl : personalControlList) {
-            JsonObject personalControlJson = new JsonObject();
-            personalControlJson.addProperty("turno", personalControl.getTurno());
-            personalControlJson.addProperty("fechaContratacion", personalControl.getFechaContratacion().toString());
-            personalControlJson.addProperty("fechaFinContrato", personalControl.getFechaFinContrato().toString());
-            personalControlJson.addProperty("rutaImagen", personalControl.getRutaImagen());
-            personalControlJson.addProperty("correo", personalControl.getCorreo());
-            personalControlJson.addProperty("primerNombre", personalControl.getPrimerNombre());
-            personalControlJson.addProperty("segundoNombre", personalControl.getSegundoNombre());
-            personalControlJson.addProperty("primerApellido", personalControl.getPrimerApellido());
-            personalControlJson.addProperty("segundoApellido", personalControl.getSegundoApellido());
-            personalControlJson.addProperty("edad", personalControl.getEdad());
-            personalControlJson.addProperty("sexo", personalControl.getSexo());
-            personalControlJson.addProperty("nacionalidad", personalControl.getNacionalidad());
-            personalControlJson.addProperty("identificacion", personalControl.getIdentificacion());
-
-            personalControlArray.add(personalControlJson);
+    private void guardarListaPersonales(List<PersonalControl> personales) throws IOException {
+        if (personales == null) {
+            throw new IllegalArgumentException("La lista de oficiales no puede ser null");
         }
 
-        jsonObject.add("personal_control", personalControlArray);
+        JsonArray jsonArrayOficiales = new JsonArray();
 
-        try (Writer writer = new FileWriter(RUTA_JSON)) {
-            gson.toJson(jsonObject, writer);
+        for (PersonalControl personalesControl : personales) {
+            JsonObject jsonOficial = new JsonObject();
+
+            jsonOficial.addProperty("primerNombre", personalesControl.getPrimerNombre());
+            jsonOficial.addProperty("segundoNombre", personalesControl.getSegundoNombre());
+            jsonOficial.addProperty("primerApellido", personalesControl.getPrimerApellido());
+            jsonOficial.addProperty("segundoApellido", personalesControl.getSegundoApellido());
+            jsonOficial.addProperty("edad", personalesControl.getEdad());
+            jsonOficial.addProperty("sexo", personalesControl.getSexo());
+            jsonOficial.addProperty("nacionalidad", personalesControl.getNacionalidad());
+            jsonOficial.addProperty("identificacion", personalesControl.getIdentificacion());
+            jsonOficial.addProperty("correo", personalesControl.getCorreo());
+            jsonOficial.addProperty("turno", personalesControl.getTurno());
+            jsonOficial.addProperty("fechaContratacion", personalesControl.getFechaContratacion().toString());
+            jsonOficial.addProperty("fechaFinContrato", personalesControl.getFechaFinContrato().toString());
+            jsonOficial.addProperty("rutaImagen", personalesControl.getRutaImagen());
+            jsonOficial.addProperty("usuario", personalesControl.getUsuario());
+
+            String contrasenaEncriptada = GeneradorCredenciales.encriptarContrasena(personalesControl.getContrasena());
+            jsonOficial.addProperty("contrasena", contrasenaEncriptada);
+
+            jsonArrayOficiales.add(jsonOficial);
+
+        }
+
+        Path path = Paths.get(RUTA_JSON);
+        try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+            gson.toJson(jsonArrayOficiales, writer);
+            System.out.println("Datos guardados como array correctamente en: " + path.toAbsolutePath());
+        } catch (IOException e) {
+            System.err.println("Error al escribir JSON como array: " + e.getMessage());
+            throw e;
         }
     }
 
@@ -276,62 +279,12 @@ public class PersonalControlDAO {
             if (personalControlAEliminar.isPresent()) {
                 eliminarUsuario(personalControlAEliminar.get().getUsuario());
                 personalControlList.removeIf(p -> p.getIdentificacion().equals(cedula));
-                guardarListaPersonalControl(personalControlList);
+                guardarListaPersonales(personalControlList);
                 return true;
             }
             return false;
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error al eliminar el personal de control: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-    }
-
-    public boolean modificarPersonalControl(String cedulaOriginal, PersonalControl personalControlModificado, File nuevaImagen) {
-        try {
-            List<PersonalControl> personalControlList = obtenerPersonalControl();
-
-            for (int i = 0; i < personalControlList.size(); i++) {
-                PersonalControl p = personalControlList.get(i);
-                if (p.getIdentificacion().equals(cedulaOriginal)) {
-                    String rutaImagenFinal = p.getRutaImagen();
-
-                    if (nuevaImagen != null && nuevaImagen.exists()) {
-                        // Eliminar la imagen anterior si existe
-                        if (rutaImagenFinal != null && !rutaImagenFinal.isEmpty()) {
-                            try {
-                                Files.deleteIfExists(Paths.get(rutaImagenFinal));
-                            } catch (IOException e) {
-                                System.err.println("No se pudo eliminar la imagen anterior: " + e.getMessage());
-                            }
-                        }
-
-                        // Crear nueva imagen
-                        String extension = nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
-                        String nombreImagen = personalControlModificado.getIdentificacion() + extension;
-                        rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
-
-                        // Asegurar que el directorio existe
-                        Files.createDirectories(Paths.get(RUTA_IMAGENES));
-
-                        // Copiar la nueva imagen
-                        Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
-                    }
-
-                    personalControlModificado.setUsuario(p.getUsuario());
-                    personalControlModificado.setContrasena(p.getContrasena());
-                    personalControlModificado.setRutaImagen(rutaImagenFinal);
-
-                    personalControlList.set(i, personalControlModificado);
-
-                    guardarListaPersonalControl(personalControlList);
-                    return true;
-                }
-            }
-
-            return false;
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error al modificar personal de control: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -402,5 +355,37 @@ public class PersonalControlDAO {
             String.class,
             String.class
         };
+    }
+
+    public boolean modificarPersonalControl(String cedulaOriginal, PersonalControl personalControlModificado, File nuevaImagen) {
+        try {
+            List<PersonalControl> personalControlList = obtenerPersonalControl();
+
+            for (int i = 0; i < personalControlList.size(); i++) {
+                PersonalControl p = personalControlList.get(i);
+                if (p.getIdentificacion().equals(cedulaOriginal)) {
+                    String rutaImagenFinal = p.getRutaImagen();
+
+                    if (nuevaImagen != null && nuevaImagen.exists()) {
+                        String extension = nuevaImagen.getName().substring(nuevaImagen.getName().lastIndexOf("."));
+                        String nombreImagen = personalControlModificado.getIdentificacion() + "_" + System.currentTimeMillis() + extension;
+                        rutaImagenFinal = RUTA_IMAGENES + nombreImagen;
+                        Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
+                    }
+
+                    personalControlModificado.setRutaImagen(rutaImagenFinal);
+                    personalControlList.set(i, personalControlModificado);
+
+                    guardarListaPersonales(personalControlList);
+
+                    return true;
+                }
+            }
+            return false;
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al modificar personal de control: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 }

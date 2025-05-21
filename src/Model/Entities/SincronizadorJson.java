@@ -24,7 +24,6 @@ public class SincronizadorJson {
     private static final String RUTA_USUARIOS = "src/Resources/DATA/usuarios.json";
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    // Método genérico para sincronizar cualquier tipo de usuario
     private static void sincronizarUsuarioGenerico(
             String identificacion,
             String usuario,
@@ -34,7 +33,7 @@ public class SincronizadorJson {
             Supplier<Usuario> creador) {
         try {
             List<Usuario> usuarios = cargarUsuarios();
-            
+
             boolean encontrado = false;
             for (Usuario u : usuarios) {
                 if (u.getIdentificacion().equals(identificacion)) {
@@ -43,28 +42,27 @@ public class SincronizadorJson {
                     break;
                 }
             }
-            
+
             if (!encontrado) {
                 usuarios.add(creador.get());
             }
-            
+
             guardarUsuarios(usuarios);
-            
+
         } catch (Exception e) {
             System.err.println("Error en sincronización: " + e.getMessage());
             throw new RuntimeException("Error al sincronizar usuarios", e);
         }
     }
 
-    // Métodos para OficialDeRegistro
     public static void sincronizarConUsuarios(OficialDeRegistro oficial) {
         sincronizarUsuarioGenerico(
-            oficial.getIdentificacion(),
-            oficial.getUsuario(),
-            oficial.getContrasena(),
-            oficial.getRutaImagen(),
-            u -> actualizarCamposUsuario(u, oficial),
-            () -> crearUsuarioDesdeOficial(oficial)
+                oficial.getIdentificacion(),
+                oficial.getUsuario(),
+                oficial.getContrasena(),
+                oficial.getRutaImagen(),
+                u -> actualizarCamposUsuario(u, oficial),
+                () -> crearUsuarioDesdeOficial(oficial)
         );
     }
 
@@ -75,30 +73,29 @@ public class SincronizadorJson {
 
     private static Usuario crearUsuarioDesdeOficial(OficialDeRegistro oficial) {
         return new Usuario(
-            oficial.getPrimerNombre(),
-            oficial.getSegundoNombre(),
-            oficial.getPrimerApellido(),
-            oficial.getSegundoApellido(),
-            oficial.getEdad(),
-            oficial.getSexo(),
-            oficial.getNacionalidad(),
-            oficial.getIdentificacion(),
-            oficial.getUsuario().toLowerCase(),
-            oficial.getContrasena(),
-            RolEnum.OFICIAL_DE_REGISTRO,
-            oficial.getRutaImagen()
+                oficial.getPrimerNombre(),
+                oficial.getSegundoNombre(),
+                oficial.getPrimerApellido(),
+                oficial.getSegundoApellido(),
+                oficial.getEdad(),
+                oficial.getSexo(),
+                oficial.getNacionalidad(),
+                oficial.getIdentificacion(),
+                oficial.getUsuario().toLowerCase(),
+                oficial.getContrasena(),
+                RolEnum.OFICIAL_DE_REGISTRO,
+                oficial.getRutaImagen()
         );
     }
 
-    // Métodos para CoordinadorDeActividades
     public static void sincronizarConUsuarios(CoordinadorDeActividades coordinador) {
         sincronizarUsuarioGenerico(
-            coordinador.getIdentificacion(),
-            coordinador.getUsuario(),
-            coordinador.getContrasena(),
-            coordinador.getRutaImagen(),
-            u -> actualizarCamposUsuario(u, coordinador),
-            () -> crearUsuarioDesdeCoordinador(coordinador)
+                coordinador.getIdentificacion(),
+                coordinador.getUsuario(),
+                coordinador.getContrasena(),
+                coordinador.getRutaImagen(),
+                u -> actualizarCamposUsuario(u, coordinador),
+                () -> crearUsuarioDesdeCoordinador(coordinador)
         );
     }
 
@@ -109,30 +106,29 @@ public class SincronizadorJson {
 
     private static Usuario crearUsuarioDesdeCoordinador(CoordinadorDeActividades coordinador) {
         return new Usuario(
-            coordinador.getPrimerNombre(),
-            coordinador.getSegundoNombre(),
-            coordinador.getPrimerApellido(),
-            coordinador.getSegundoApellido(),
-            coordinador.getEdad(),
-            coordinador.getSexo(),
-            coordinador.getNacionalidad(),
-            coordinador.getIdentificacion(),
-            coordinador.getUsuario().toLowerCase(),
-            coordinador.getContrasena(),
-            RolEnum.COORDINADOR_DE_ACTIVIDADES,
-            coordinador.getRutaImagen()
+                coordinador.getPrimerNombre(),
+                coordinador.getSegundoNombre(),
+                coordinador.getPrimerApellido(),
+                coordinador.getSegundoApellido(),
+                coordinador.getEdad(),
+                coordinador.getSexo(),
+                coordinador.getNacionalidad(),
+                coordinador.getIdentificacion(),
+                coordinador.getUsuario().toLowerCase(),
+                coordinador.getContrasena(),
+                RolEnum.COORDINADOR_DE_ACTIVIDADES,
+                coordinador.getRutaImagen()
         );
     }
 
-    // Métodos para PersonalDeControl
     public static void sincronizarConUsuarios(PersonalControl personal) {
         sincronizarUsuarioGenerico(
-            personal.getIdentificacion(),
-            personal.getUsuario(),
-            personal.getContrasena(),
-            personal.getRutaImagen(),
-            u -> actualizarCamposUsuario(u, personal),
-            () -> crearUsuarioDesdePersonal(personal)
+                personal.getIdentificacion(),
+                personal.getUsuario(),
+                personal.getContrasena(),
+                personal.getRutaImagen(),
+                u -> actualizarCamposUsuario(u, personal),
+                () -> crearUsuarioDesdePersonal(personal)
         );
     }
 
@@ -143,30 +139,29 @@ public class SincronizadorJson {
 
     private static Usuario crearUsuarioDesdePersonal(PersonalControl personal) {
         return new Usuario(
-            personal.getPrimerNombre(),
-            personal.getSegundoNombre(),
-            personal.getPrimerApellido(),
-            personal.getSegundoApellido(),
-            personal.getEdad(),
-            personal.getSexo(),
-            personal.getNacionalidad(),
-            personal.getIdentificacion(),
-            personal.getUsuario().toLowerCase(),
-            personal.getContrasena(),
-            RolEnum.PERSONAL_DE_CONTROL,
-            personal.getRutaImagen()
+                personal.getPrimerNombre(),
+                personal.getSegundoNombre(),
+                personal.getPrimerApellido(),
+                personal.getSegundoApellido(),
+                personal.getEdad(),
+                personal.getSexo(),
+                personal.getNacionalidad(),
+                personal.getIdentificacion(),
+                personal.getUsuario().toLowerCase(),
+                personal.getContrasena(),
+                RolEnum.PERSONAL_DE_CONTROL,
+                personal.getRutaImagen()
         );
     }
 
-    // Métodos para Oficial
     public static void sincronizarConUsuarios(Oficial oficial) {
         sincronizarUsuarioGenerico(
-            oficial.getIdentificacion(),
-            oficial.getUsuario(),
-            oficial.getContrasena(),
-            oficial.getRutaImagen(),
-            u -> actualizarCamposUsuario(u, oficial),
-            () -> crearUsuarioDesdeOficial(oficial)
+                oficial.getIdentificacion(),
+                oficial.getUsuario(),
+                oficial.getContrasena(),
+                oficial.getRutaImagen(),
+                u -> actualizarCamposUsuario(u, oficial),
+                () -> crearUsuarioDesdeOficial(oficial)
         );
     }
 
@@ -177,25 +172,23 @@ public class SincronizadorJson {
 
     private static Usuario crearUsuarioDesdeOficial(Oficial oficial) {
         return new Usuario(
-            oficial.getPrimerNombre(),
-            oficial.getSegundoNombre(),
-            oficial.getPrimerApellido(),
-            oficial.getSegundoApellido(),
-            oficial.getEdad(),
-            oficial.getSexo(),
-            oficial.getNacionalidad(),
-            oficial.getIdentificacion(),
-            oficial.getUsuario().toLowerCase(),
-            oficial.getContrasena(),
-            RolEnum.OFICIAL,
-            oficial.getRutaImagen()
+                oficial.getPrimerNombre(),
+                oficial.getSegundoNombre(),
+                oficial.getPrimerApellido(),
+                oficial.getSegundoApellido(),
+                oficial.getEdad(),
+                oficial.getSexo(),
+                oficial.getNacionalidad(),
+                oficial.getIdentificacion(),
+                oficial.getUsuario().toLowerCase(),
+                oficial.getContrasena(),
+                RolEnum.OFICIAL,
+                oficial.getRutaImagen()
         );
     }
 
-    // Métodos comunes
     private static void actualizarCamposComunes(Usuario usuario, Object persona) {
         try {
-            // Usamos reflection para acceder a los métodos comunes
             Method getPrimerNombre = persona.getClass().getMethod("getPrimerNombre");
             Method getSegundoNombre = persona.getClass().getMethod("getSegundoNombre");
             Method getPrimerApellido = persona.getClass().getMethod("getPrimerApellido");
@@ -216,26 +209,27 @@ public class SincronizadorJson {
         }
     }
 
-    // Métodos de carga/guardado
     private static List<Usuario> cargarUsuarios() throws IOException {
         File archivo = new File(RUTA_USUARIOS);
-        
+
         if (!archivo.exists()) {
             return new ArrayList<>();
         }
-        
+
         String contenido = Files.readString(archivo.toPath());
         JsonElement elemento = JsonParser.parseString(contenido);
-        
+
         if (elemento.isJsonArray()) {
-            return gson.fromJson(elemento, new TypeToken<List<Usuario>>(){}.getType());
+            return gson.fromJson(elemento, new TypeToken<List<Usuario>>() {
+            }.getType());
         } else if (elemento.isJsonObject()) {
             JsonObject obj = elemento.getAsJsonObject();
             if (obj.has("usuarios")) {
-                return gson.fromJson(obj.get("usuarios"), new TypeToken<List<Usuario>>(){}.getType());
+                return gson.fromJson(obj.get("usuarios"), new TypeToken<List<Usuario>>() {
+                }.getType());
             }
         }
-        
+
         return new ArrayList<>();
     }
 
@@ -244,4 +238,38 @@ public class SincronizadorJson {
             gson.toJson(usuarios, writer);
         }
     }
+
+    public static void sincronizarConUsuarios(Enfermera enfermera) {
+        sincronizarUsuarioGenerico(
+                enfermera.getIdentificacion(),
+                enfermera.getUsuario(),
+                enfermera.getContrasena(),
+                enfermera.getRutaImagen(),
+                u -> actualizarCamposUsuario(u, enfermera),
+                () -> crearUsuarioDesdeEnfermera(enfermera)
+        );
+    }
+
+    private static void actualizarCamposUsuario(Usuario usuario, Enfermera enfermera) {
+        actualizarCamposComunes(usuario, enfermera);
+        usuario.setRutaImagen(enfermera.getRutaImagen());
+    }
+
+    private static Usuario crearUsuarioDesdeEnfermera(Enfermera enfermera) {
+        return new Usuario(
+                enfermera.getPrimerNombre(),
+                enfermera.getSegundoNombre(),
+                enfermera.getPrimerApellido(),
+                enfermera.getSegundoApellido(),
+                enfermera.getEdad(),
+                enfermera.getSexo(),
+                enfermera.getNacionalidad(),
+                enfermera.getIdentificacion(),
+                enfermera.getUsuario().toLowerCase(),
+                enfermera.getContrasena(),
+                RolEnum.ENFERMERA,
+                enfermera.getRutaImagen()
+        );
+    }
+
 }

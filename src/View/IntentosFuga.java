@@ -42,7 +42,6 @@ public class IntentosFuga extends javax.swing.JDialog {
         
         tablaIntentosFuga.setModel(model);
         
-        // Configurar renderizador
         tablaIntentosFuga.setDefaultRenderer(LocalDate.class, new DefaultTableCellRenderer() {
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             
@@ -156,7 +155,7 @@ public class IntentosFuga extends javax.swing.JDialog {
 
         lblIntentosDeFuga.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lblIntentosDeFuga.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel2.add(lblIntentosDeFuga, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, 210, 20));
+        jPanel2.add(lblIntentosDeFuga, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 210, 30));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, 440, 50));
 

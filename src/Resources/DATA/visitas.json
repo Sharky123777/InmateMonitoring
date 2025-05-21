@@ -1,2 +1,387 @@
 [
+  {
+    "id": 1,
+    "fechaVisita": "2025-05-21",
+    "horaVisita": "09:00",
+    "duracionVisitaEnHoras": "1",
+    "tipoVisita": "Familiar",
+    "lugarVisita": "Cabinas de visitas conyugales",
+    "preso": {
+      "estatura": 1.8,
+      "peso": 50.0,
+      "delitos": [
+        {
+          "id": 1,
+          "presoId": "1237440696",
+          "codigo": 131,
+          "nombre": "Omisión de socorro",
+          "articuloLey": "Artículo 131",
+          "gravedad": "Baja",
+          "descripcion": "La interna fue privada de la libertad por el delito de\nomisión de socorro, tras presenciar un accidente donde\nuna persona quedó gravemente herida. A pesar de estar\nen condiciones de brindar ayuda o alertar a las autoridades,\ndecidió abandonar el lugar sin ofrecer asistencia alguna.\n\nSu omisión representó una vulneración al deber legal y\nhumano de auxilio, poniendo en peligro la vida de otra\npersona por su indiferencia.",
+          "fechaComision": "2024-05-02",
+          "sentencia": {
+            "años": 1,
+            "meses": 2,
+            "fechaIngreso": "2025-05-15",
+            "fechaSalidaCalculada": "2026-07-15"
+          }
+        },
+        {
+          "id": 2,
+          "presoId": "1237440696",
+          "codigo": 246,
+          "nombre": "Fraude",
+          "articuloLey": "Artículo 246 - Fraude",
+          "gravedad": "Baja",
+          "descripcion": "La interna fue privada de la libertad por el delito de\nfraude, al haber engañado de forma deliberada a varias\npersonas mediante la falsificación de documentos y la\nmanipulación de información financiera.\n\nUtilizó estos medios para obtener beneficios económicos\npersonales, afectando el patrimonio de terceros y generando\npérdidas significativas a las víctimas involucradas.\n\nSu conducta violó la confianza depositada en ella y constituyó\nun acto doloso con ánimo de lucro a costa del perjuicio ajeno.",
+          "fechaComision": "2025-05-13",
+          "sentencia": {
+            "años": 2,
+            "meses": 4,
+            "fechaIngreso": "2025-05-15",
+            "fechaSalidaCalculada": "2027-09-15"
+          }
+        },
+        {
+          "id": 8,
+          "presoId": "1237440696",
+          "codigo": 399,
+          "nombre": "Peculado por uso",
+          "articuloLey": "Artículo 399",
+          "gravedad": "Baja",
+          "descripcion": "La detenida fue vista peculando por uso",
+          "fechaComision": "2025-05-15",
+          "sentencia": {
+            "años": 2,
+            "meses": 3,
+            "fechaIngreso": "2025-05-16",
+            "fechaSalidaCalculada": "2027-08-16"
+          }
+        }
+      ],
+      "nivelDeSeguridad": "Media",
+      "seccionAsignada": "Sección C",
+      "condicion": "En espera",
+      "celdaAsignada": "CELD-42",
+      "enAislamiento": false,
+      "enVisita": false,
+      "enActividad": false,
+      "nivelDeRiesgo": "Riesgo medio",
+      "numeroDeVisitas": 0,
+      "grupoSanguineo": "A+",
+      "fotoPath": "src/Resources/imagenes_presos/preso_1.jpg",
+      "estado": "ACTIVO",
+      "id": 1,
+      "actividadesAsignadasIds": [],
+      "actividadesCanceladasIds": [],
+      "primerNombre": "Luz",
+      "segundoNombre": "Dari",
+      "primerApellido": "Crespo",
+      "segundoApellido": "Gomez",
+      "edad": 19,
+      "sexo": "F",
+      "nacionalidad": "Suiza",
+      "identificacion": "1237440696"
+    },
+    "visitantesConRelacion": {
+      "343434543": "Hermano/Hermana",
+      "3764763743": "Novio/Novia"
+    },
+    "estado": "CANCELADA",
+    "razonCancelacion": "Visita cancelada por sanción: Suspensión de visitas (7 días)"
+  },
+  {
+    "id": 2,
+    "fechaVisita": "2026-05-09",
+    "horaVisita": "09:00",
+    "duracionVisitaEnHoras": "1",
+    "tipoVisita": "Familiar",
+    "lugarVisita": "Salas de visitas legales",
+    "preso": {
+      "estatura": 1.8,
+      "peso": 50.0,
+      "delitos": [
+        {
+          "id": 1,
+          "presoId": "1237440696",
+          "codigo": 131,
+          "nombre": "Omisión de socorro",
+          "articuloLey": "Artículo 131",
+          "gravedad": "Baja",
+          "descripcion": "La interna fue privada de la libertad por el delito de\nomisión de socorro, tras presenciar un accidente donde\nuna persona quedó gravemente herida. A pesar de estar\nen condiciones de brindar ayuda o alertar a las autoridades,\ndecidió abandonar el lugar sin ofrecer asistencia alguna.\n\nSu omisión representó una vulneración al deber legal y\nhumano de auxilio, poniendo en peligro la vida de otra\npersona por su indiferencia.",
+          "fechaComision": "2024-05-02",
+          "sentencia": {
+            "años": 1,
+            "meses": 2,
+            "fechaIngreso": "2025-05-15",
+            "fechaSalidaCalculada": "2026-07-15"
+          }
+        },
+        {
+          "id": 2,
+          "presoId": "1237440696",
+          "codigo": 246,
+          "nombre": "Fraude",
+          "articuloLey": "Artículo 246 - Fraude",
+          "gravedad": "Baja",
+          "descripcion": "La interna fue privada de la libertad por el delito de\nfraude, al haber engañado de forma deliberada a varias\npersonas mediante la falsificación de documentos y la\nmanipulación de información financiera.\n\nUtilizó estos medios para obtener beneficios económicos\npersonales, afectando el patrimonio de terceros y generando\npérdidas significativas a las víctimas involucradas.\n\nSu conducta violó la confianza depositada en ella y constituyó\nun acto doloso con ánimo de lucro a costa del perjuicio ajeno.",
+          "fechaComision": "2025-05-13",
+          "sentencia": {
+            "años": 2,
+            "meses": 4,
+            "fechaIngreso": "2025-05-15",
+            "fechaSalidaCalculada": "2027-09-15"
+          }
+        },
+        {
+          "id": 8,
+          "presoId": "1237440696",
+          "codigo": 399,
+          "nombre": "Peculado por uso",
+          "articuloLey": "Artículo 399",
+          "gravedad": "Baja",
+          "descripcion": "La detenida fue vista peculando por uso",
+          "fechaComision": "2025-05-15",
+          "sentencia": {
+            "años": 2,
+            "meses": 3,
+            "fechaIngreso": "2025-05-16",
+            "fechaSalidaCalculada": "2027-08-16"
+          }
+        }
+      ],
+      "nivelDeSeguridad": "Media",
+      "seccionAsignada": "Sección C",
+      "condicion": "En espera",
+      "celdaAsignada": "CELD-42",
+      "enAislamiento": false,
+      "enVisita": false,
+      "enActividad": false,
+      "nivelDeRiesgo": "Riesgo medio",
+      "numeroDeVisitas": 0,
+      "grupoSanguineo": "A+",
+      "fotoPath": "src/Resources/imagenes_presos/preso_1.jpg",
+      "estado": "ACTIVO",
+      "id": 1,
+      "actividadesAsignadasIds": [],
+      "actividadesCanceladasIds": [],
+      "primerNombre": "Luz",
+      "segundoNombre": "Dari",
+      "primerApellido": "Crespo",
+      "segundoApellido": "Gomez",
+      "edad": 19,
+      "sexo": "F",
+      "nacionalidad": "Suiza",
+      "identificacion": "1237440696"
+    },
+    "visitantesConRelacion": {
+      "454543434": "Hijo/Hija"
+    },
+    "estado": "CANCELADA",
+    "razonCancelacion": "El preso ha sido marcado como FUGADO"
+  },
+  {
+    "id": 3,
+    "fechaVisita": "2025-05-25",
+    "horaVisita": "08:00",
+    "duracionVisitaEnHoras": "1",
+    "tipoVisita": "Visita regular",
+    "lugarVisita": "Sala de visitas",
+    "preso": {
+      "estatura": 1.8,
+      "peso": 50.0,
+      "delitos": [
+        {
+          "id": 1,
+          "presoId": "1237440696",
+          "codigo": 131,
+          "nombre": "Omisión de socorro",
+          "articuloLey": "Artículo 131",
+          "gravedad": "Baja",
+          "descripcion": "La interna fue privada de la libertad por el delito de\nomisión de socorro, tras presenciar un accidente donde\nuna persona quedó gravemente herida. A pesar de estar\nen condiciones de brindar ayuda o alertar a las autoridades,\ndecidió abandonar el lugar sin ofrecer asistencia alguna.\n\nSu omisión representó una vulneración al deber legal y\nhumano de auxilio, poniendo en peligro la vida de otra\npersona por su indiferencia.",
+          "fechaComision": "2024-05-02",
+          "sentencia": {
+            "años": 1,
+            "meses": 2,
+            "fechaIngreso": "2025-05-15",
+            "fechaSalidaCalculada": "2026-07-15"
+          }
+        },
+        {
+          "id": 2,
+          "presoId": "1237440696",
+          "codigo": 246,
+          "nombre": "Fraude",
+          "articuloLey": "Artículo 246 - Fraude",
+          "gravedad": "Baja",
+          "descripcion": "La interna fue privada de la libertad por el delito de\nfraude, al haber engañado de forma deliberada a varias\npersonas mediante la falsificación de documentos y la\nmanipulación de información financiera.\n\nUtilizó estos medios para obtener beneficios económicos\npersonales, afectando el patrimonio de terceros y generando\npérdidas significativas a las víctimas involucradas.\n\nSu conducta violó la confianza depositada en ella y constituyó\nun acto doloso con ánimo de lucro a costa del perjuicio ajeno.",
+          "fechaComision": "2025-05-13",
+          "sentencia": {
+            "años": 2,
+            "meses": 4,
+            "fechaIngreso": "2025-05-15",
+            "fechaSalidaCalculada": "2027-09-15"
+          }
+        },
+        {
+          "id": 8,
+          "presoId": "1237440696",
+          "codigo": 399,
+          "nombre": "Peculado por uso",
+          "articuloLey": "Artículo 399",
+          "gravedad": "Baja",
+          "descripcion": "La detenida fue vista peculando por uso",
+          "fechaComision": "2025-05-15",
+          "sentencia": {
+            "años": 2,
+            "meses": 3,
+            "fechaIngreso": "2025-05-16",
+            "fechaSalidaCalculada": "2027-08-16"
+          }
+        }
+      ],
+      "nivelDeSeguridad": "Media",
+      "seccionAsignada": "Sección C",
+      "condicion": "En espera",
+      "celdaAsignada": "CELD-42",
+      "enAislamiento": false,
+      "enVisita": false,
+      "enActividad": false,
+      "nivelDeRiesgo": "Riesgo medio",
+      "numeroDeVisitas": 0,
+      "grupoSanguineo": "A+",
+      "fotoPath": "src/Resources/imagenes_presos/preso_1.jpg",
+      "estado": "ACTIVO",
+      "id": 1,
+      "actividadesAsignadasIds": [],
+      "actividadesCanceladasIds": [],
+      "primerNombre": "Luz",
+      "segundoNombre": "Dari",
+      "primerApellido": "Crespo",
+      "segundoApellido": "Gomez",
+      "edad": 19,
+      "sexo": "F",
+      "nacionalidad": "Suiza",
+      "identificacion": "1237440696"
+    },
+    "visitantesConRelacion": {
+      "23454323": "Esposa/Esposo"
+    },
+    "estado": "CANCELADA",
+    "razonCancelacion": "Visita cancelada por sanción: Suspensión de visitas (7 días)"
+  },
+  {
+    "id": 4,
+    "fechaVisita": "2025-05-23",
+    "horaVisita": "08:00",
+    "duracionVisitaEnHoras": "1",
+    "tipoVisita": "Visita regular",
+    "lugarVisita": "Sala de visitas",
+    "preso": {
+      "estatura": 1.6,
+      "peso": 99.0,
+      "delitos": [
+        {
+          "id": 7,
+          "presoId": "445566778",
+          "codigo": 104,
+          "nombre": "Homicidio agravado",
+          "articuloLey": "Artículo 104",
+          "gravedad": "Alta",
+          "descripcion": "La interna fue condenada por el delito de\nhomicidio agravado, al haber causado la muerte\nde otra persona de manera intencional, con plena\nconciencia y voluntad.\n\nEl hecho se agravó por concurrir circunstancias\nespeciales como la premeditación, la sevicia,\nla relación de confianza con la víctima o la\ncomisión del acto en presencia de menores.\n\nEste delito evidencia una afectación directa\na la vida humana, considerado uno de los\nmás graves dentro del orden penal, por\nsu impacto social y la violencia implicada\nen su ejecución.",
+          "fechaComision": "2025-05-01",
+          "sentencia": {
+            "años": 13,
+            "meses": 4,
+            "fechaIngreso": "2025-05-15",
+            "fechaSalidaCalculada": "2038-09-15"
+          }
+        }
+      ],
+      "nivelDeSeguridad": "Baja",
+      "seccionAsignada": "Sección B",
+      "condicion": "En espera",
+      "celdaAsignada": "CELD-24",
+      "enAislamiento": false,
+      "enVisita": false,
+      "enActividad": false,
+      "nivelDeRiesgo": "Riesgo bajo",
+      "numeroDeVisitas": 0,
+      "grupoSanguineo": "B+",
+      "fotoPath": "src/Resources/imagenes_presos/preso_5.jpg",
+      "estado": "ACTIVO",
+      "id": 5,
+      "actividadesAsignadasIds": [],
+      "actividadesCanceladasIds": [],
+      "primerNombre": "Milenka",
+      "segundoNombre": "Amanda",
+      "primerApellido": "Torredo",
+      "segundoApellido": "Saldovar",
+      "edad": 44,
+      "sexo": "F",
+      "nacionalidad": "Palaosiana",
+      "identificacion": "445566778"
+    },
+    "visitantesConRelacion": {
+      "675462332": "Esposa/Esposo"
+    },
+    "estado": "EN_PROCESO"
+  },
+  {
+    "id": 5,
+    "fechaVisita": "2025-05-31",
+    "horaVisita": "08:00",
+    "duracionVisitaEnHoras": "1",
+    "tipoVisita": "Visita regular",
+    "lugarVisita": "Sala de visitas",
+    "preso": {
+      "estatura": 1.6,
+      "peso": 99.0,
+      "delitos": [
+        {
+          "id": 7,
+          "presoId": "445566778",
+          "codigo": 104,
+          "nombre": "Homicidio agravado",
+          "articuloLey": "Artículo 104",
+          "gravedad": "Alta",
+          "descripcion": "La interna fue condenada por el delito de\nhomicidio agravado, al haber causado la muerte\nde otra persona de manera intencional, con plena\nconciencia y voluntad.\n\nEl hecho se agravó por concurrir circunstancias\nespeciales como la premeditación, la sevicia,\nla relación de confianza con la víctima o la\ncomisión del acto en presencia de menores.\n\nEste delito evidencia una afectación directa\na la vida humana, considerado uno de los\nmás graves dentro del orden penal, por\nsu impacto social y la violencia implicada\nen su ejecución.",
+          "fechaComision": "2025-05-01",
+          "sentencia": {
+            "años": 13,
+            "meses": 4,
+            "fechaIngreso": "2025-05-15",
+            "fechaSalidaCalculada": "2038-09-15"
+          }
+        }
+      ],
+      "nivelDeSeguridad": "Baja",
+      "seccionAsignada": "Sección B",
+      "condicion": "En espera",
+      "celdaAsignada": "CELD-24",
+      "enAislamiento": false,
+      "enVisita": false,
+      "enActividad": false,
+      "nivelDeRiesgo": "Riesgo bajo",
+      "numeroDeVisitas": 0,
+      "grupoSanguineo": "B+",
+      "fotoPath": "src/Resources/imagenes_presos/preso_5.jpg",
+      "estado": "ACTIVO",
+      "id": 5,
+      "actividadesAsignadasIds": [],
+      "actividadesCanceladasIds": [],
+      "primerNombre": "Milenka",
+      "segundoNombre": "Amanda",
+      "primerApellido": "Torredo",
+      "segundoApellido": "Saldovar",
+      "edad": 44,
+      "sexo": "F",
+      "nacionalidad": "Palaosiana",
+      "identificacion": "445566778"
+    },
+    "visitantesConRelacion": {
+      "3456789765": "Esposa/Esposo"
+    },
+    "estado": "EN_PROCESO"
+  }
 ]

@@ -9,7 +9,6 @@ public class Visitante extends Persona {
     private String email;
     private EstadoVisitanteEnum estado;
     private String razonDeshabilitacion;
-    
 
     public Visitante(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
             int edad, String sexo, String nacionalidad, String identificacion,

@@ -1,45 +1,36 @@
 [
   {
-    "estadosPorPreso": {
-      "112233445": "FINALIZADA",
-      "223344556": "FINALIZADA"
-    },
-    "idActividad": "ACT-4",
-    "nombre": "Cultivo de Huertos",
+    "estadosPorPreso": {},
+    "idActividad": "ACT-1",
+    "nombre": "Futbol",
     "tipo": "Laboral",
-    "dia": "Miercoles",
-    "horario": "02:00 pm - 04:15 pm",
-    "lugar": "Taller de Jardinería y Vivero",
-    "cupoMaximo": 30,
+    "dia": "Martes",
+    "horario": "07:00 am - 08:00 am",
+    "lugar": "Taller de Soldadura/Herrería",
+    "cupoMaximo": 20,
     "presosAsignadosIds": [
-      "445566778",
-      "112233445"
-    ],
-    "estado": "ACTIVA",
-    "presosInscritos": 2,
-    "responsableOficial": "31313131",
-    "descripcion": "Actividad al aire libre donde los internos siembran vegetales y hierbas, promoviendo responsabilidad y sostenibilidad."
-  },
-  {
-    "estadosPorPreso": {
-      "112233445": "CANCELADA",
-      "223344556": "CANCELADA",
-      "445566778": "CANCELADA",
-      "334455667": "CANCELADA"
-    },
-    "idActividad": "ACT-5",
-    "nombre": "Tenis",
-    "tipo": "Recreativa",
-    "dia": "Miercoles",
-    "horario": "08:45 am - 10:15 am",
-    "lugar": "Taller de Costura y Confección",
-    "cupoMaximo": 10,
-    "presosAsignadosIds": [
-      "112233445"
+      "445566778"
     ],
     "estado": "ACTIVA",
     "presosInscritos": 1,
-    "responsableOficial": "4243242424",
-    "descripcion": "En esta actividad se realizaran cosas"
+    "responsableOficial": "333399092",
+    "descripcion": "ASJGDUWGD"
+  },
+  {
+    "estadosPorPreso": {},
+    "idActividad": "ACT-2",
+    "nombre": "herreia",
+    "tipo": "Recreativa",
+    "dia": "Jueves",
+    "horario": "02:00 pm - 04:15 pm",
+    "lugar": "Taller de Serigrafía/Estampado",
+    "cupoMaximo": 20,
+    "presosAsignadosIds": [
+      "445566778"
+    ],
+    "estado": "ACTIVA",
+    "presosInscritos": 1,
+    "responsableOficial": "333399092",
+    "descripcion": "kkknkn"
   }
 ]

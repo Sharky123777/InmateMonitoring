@@ -1,6 +1,7 @@
 package Model.Entities;
 
 public class Persona {
+
     private String primerNombre;
     private String segundoNombre;
     private String primerApellido;
@@ -10,10 +11,10 @@ public class Persona {
     private String nacionalidad;
     private String identificacion;
 
-    public Persona(String primerNombre, String segundoNombre, 
-                 String primerApellido, String segundoApellido,
-                 int edad, String sexo, String nacionalidad, 
-                 String identificacion) {
+    public Persona(String primerNombre, String segundoNombre,
+            String primerApellido, String segundoApellido,
+            int edad, String sexo, String nacionalidad,
+            String identificacion) {
         this.primerNombre = primerNombre;
         this.segundoNombre = segundoNombre;
         this.primerApellido = primerApellido;
@@ -24,7 +25,6 @@ public class Persona {
         this.identificacion = identificacion;
     }
 
-    // Métodos básicos de acceso
     public String getPrimerNombre() {
         return primerNombre != null ? primerNombre : "";
     }
@@ -95,11 +95,6 @@ public class Persona {
         this.identificacion = identificacion;
     }
 
-    // Métodos combinados mejorados
-    /**
-     * Devuelve los nombres combinados (primer + segundo nombre)
-     * Ejemplo: "María José"
-     */
     public String getNombresCompletos() {
         String nombres = getPrimerNombre();
         if (!getSegundoNombre().isEmpty()) {
@@ -108,10 +103,6 @@ public class Persona {
         return nombres.trim();
     }
 
-    /**
-     * Devuelve los apellidos combinados (primer + segundo apellido)
-     * Ejemplo: "Pérez López"
-     */
     public String getApellidosCompletos() {
         String apellidos = getPrimerApellido();
         if (!getSegundoApellido().isEmpty()) {
@@ -120,40 +111,27 @@ public class Persona {
         return apellidos.trim();
     }
 
-    /**
-     * Devuelve el nombre completo (nombres + apellidos)
-     * Ejemplo: "María José Pérez López"
-     */
     public String getNombreCompleto() {
         return (getNombresCompletos() + " " + getApellidosCompletos()).trim();
     }
 
-    /**
-     * Versión optimizada para mostrar en tablas JTable
-     * - Omite espacios extras cuando no hay segundo nombre/apellido
-     * - Formato consistente para visualización
-     */
     public String getNombresParaTabla() {
-        return getNombresCompletos(); // Ya está optimizado
+        return getNombresCompletos();
     }
 
     public String getApellidosParaTabla() {
-        return getApellidosCompletos(); // Ya está optimizado
+        return getApellidosCompletos();
     }
 
-    /**
-     * Versión compacta para espacios reducidos
-     * Ejemplo: "M. J. Pérez L."
-     */
     public String getNombreCompacto() {
         String primerInicial = getPrimerNombre().isEmpty() ? "" : getPrimerNombre().charAt(0) + ".";
         String segundoInicial = getSegundoNombre().isEmpty() ? "" : getSegundoNombre().charAt(0) + ".";
         String primerApInicial = getPrimerApellido().isEmpty() ? "" : getPrimerApellido().charAt(0) + ".";
         String segundoApInicial = getSegundoApellido().isEmpty() ? "" : getSegundoApellido().charAt(0) + ".";
-        
-        return String.format("%s%s %s%s", 
-               primerInicial, segundoInicial, 
-               primerApInicial, segundoApInicial).trim();
+
+        return String.format("%s%s %s%s",
+                primerInicial, segundoInicial,
+                primerApInicial, segundoApInicial).trim();
     }
 
     @Override

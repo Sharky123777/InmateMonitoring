@@ -1,42 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package View;
 
-import Controller.CoordinadorDeActividadesController;
 import Model.Entities.CoordinadorDeActividades;
 import Controller.EnfermeraController;
 import Controller.GuardiaController;
 import Controller.PersonalControlController;
-import DAO.CoordinadorDeActividadesDAO;
-import javax.swing.SwingWorker;
-import javax.swing.SwingUtilities;
-import Model.Constants.RolEnum;
-import Model.Entities.PersonalControl;
-import View.FrmCamara;
+
 import Controller.CoordinadorDeActividadesController;
 import Model.Entities.OficialDeRegistro;
-import Controller.OficialController;
 import DAO.EnfermeraDAO;
-import DAO.GuardiaDAO;
-import Model.Constants.RolEnum;
-import Utilidades.EmailSender;
-import java.awt.Image;
-import java.io.File;
+
 import Model.Entities.Oficial;
 import java.time.LocalDate;
-import Model.Entities.Usuario;
 import Model.Entities.Guardia;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import java.awt.Component;
+
 import java.awt.Image;
 import java.io.File;
-import java.util.List;
 import Model.Entities.Enfermera;
 import com.toedter.calendar.JDateChooser;
 import java.awt.BasicStroke;
@@ -46,50 +25,39 @@ import java.awt.Component;
 import Controller.OficialController;
 import Controller.OficialDeRegistroController;
 import java.awt.Graphics2D;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import Model.Entities.PersonalControl;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
+
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
+
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
+
 import javax.swing.ToolTipManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import Utilidades.ModernTopMenu;
 import Model.Entities.Usuario;
 import View.PerfilUsuario;
 
-/**
- *
- * @author Sharlok
- */
+
 public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
     EnfermeraDAO enfermeraDAO = new EnfermeraDAO();
@@ -121,7 +89,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private PersonalControlController controller;
     private File imagenPDCSeleccionada;
     private String cedulaActualModificacion;
-    private ModernTopMenu menuSuperior; // Declaración
+    private ModernTopMenu menuSuperior; 
 
     public Directora() {
         initComponents();
@@ -172,7 +140,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         jDateChooserFinContrato.setDateFormatString("dd/MM/yyyy");
 
         Calendar calendario = Calendar.getInstance();
-        calendario.add(Calendar.DAY_OF_MONTH, 1); // Fecha mínima = mañana
+        calendario.add(Calendar.DAY_OF_MONTH, 1); 
         jDateChooserFinContrato.setMinSelectableDate(calendario.getTime());
 
         calendario.add(Calendar.MONTH, 1);
@@ -4290,7 +4258,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         dateFinContratoMod1.setDate(null);
         txtFechaContratacionMod1.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
         lblImagenMod1.setIcon(null);
-        rutaImagenEnfermeraMod = null; // Limpiar variable de registro
+        rutaImagenEnfermeraMod = null; 
     }
 
     private void cargarDatosOficialParaModificar(Oficial oficial) {
@@ -4317,7 +4285,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             dateFinContratoMod3.setDate(null);
         }
 
-        // Manejo seguro de la imagen
         cargarImagenOficial(oficial.getRutaImagen());
     }
 
@@ -4337,7 +4304,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                     return;
                 }
             }
-            // Imagen por defecto si no hay imagen o no se puede cargar
             lblImagenMod3.setIcon(new ImageIcon(getClass().getResource("/Resources/default_officer.png")));
             rutaImagenOficialMod = null;
         } catch (Exception e) {
@@ -4414,7 +4380,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            // Obtener valores del formulario
             String primerNombre = txtPrimerNombre.getText().trim();
             String segundoNombre = txtSegundoNombre.getText().trim();
             String primerApellido = txtPrimerApellido.getText().trim();
@@ -4425,7 +4390,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             String turno = cmbTurno.getSelectedItem().toString();
             String cargo = cmbCargo.getSelectedItem().toString();
 
-            // Validar edad
             int edad;
             try {
                 edad = Integer.parseInt(txtEdad.getText().trim());
@@ -4433,7 +4397,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 throw new IllegalArgumentException("La edad debe ser un número válido.");
             }
 
-            // Validar fecha fin
             if (jDateChooserFinContrato.getDate() == null) {
                 throw new IllegalArgumentException("Seleccione una fecha de fin de contrato.");
             }
@@ -4445,13 +4408,11 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 throw new IllegalArgumentException("Debe seleccionar una imagen válida del guardia.");
             }
 
-            // Validar formato de imagen
             String nombreImagen = rutaImagenGuardia.getName().toLowerCase();
             if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
                 throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
             }
 
-            // Llamar al Controller (centraliza validaciones adicionales)
             Guardia nuevoGuardia = guardiaController.registrarGuardia(
                     primerNombre,
                     segundoNombre,
@@ -4467,7 +4428,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                     rutaImagenGuardia
             );
 
-            // Éxito
             limpiarFormulario();
             actualizarTablaGuardias();
             JOptionPane.showMessageDialog(this, "Guardia registrado exitosamente.",
@@ -4506,13 +4466,12 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             "Correo",
             "Turno",
             "Cargo",
-            "Inicio Contrato", // Nueva columna
+            "Inicio Contrato",
             "Fin Contrato"
         });
 
         List<Guardia> guardias = guardiaController.obtenerTodosGuardias();
 
-        // Crear una imagen por defecto segura
         ImageIcon iconoPorDefecto = crearIconoPorDefectoGuardia();
 
         for (Guardia g : guardias) {
@@ -4553,21 +4512,18 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     }
 
     private ImageIcon crearIconoPorDefectoGuardia() {
-        // Crear una imagen simple por defecto programáticamente para guardias
         BufferedImage img = new BufferedImage(80, 80, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = img.createGraphics();
 
-        // Dibujar un fondo
         g2d.setColor(new Color(240, 240, 240));
         g2d.fillRect(0, 0, 80, 80);
 
-        // Dibujar un icono simple (puedes personalizarlo diferente al de enfermeras)
         g2d.setColor(Color.BLUE);
         g2d.setStroke(new BasicStroke(2));
         g2d.drawRect(10, 10, 60, 60);
-        g2d.drawLine(25, 50, 55, 50); // Boca
-        g2d.fillOval(20, 25, 10, 10); // Ojo izquierdo
-        g2d.fillOval(50, 25, 10, 10); // Ojo derecho
+        g2d.drawLine(25, 50, 55, 50); 
+        g2d.fillOval(20, 25, 10, 10); 
+        g2d.fillOval(50, 25, 10, 10); 
 
         g2d.dispose();
 
@@ -4616,7 +4572,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // Mostrar opciones al usuario (cámara o selección de archivo)
         Object[] options = {"Tomar Foto", "Seleccionar Archivo", "Cancelar"};
         int opcion = JOptionPane.showOptionDialog(
                 this,
@@ -4632,15 +4587,14 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         try {
             File nuevaImagen = null;
 
-            if (opcion == 0) { // Tomar Foto con cámara
+            if (opcion == 0) { 
                 nuevaImagen = guardiaController.capturarImagenGuardia();
-            } else if (opcion == 1) { // Seleccionar archivo del sistema
+            } else if (opcion == 1) { 
                 JFileChooser fileChooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter(
                         "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");
                 fileChooser.setFileFilter(filter);
 
-                // Configurar el directorio inicial (opcional)
                 fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 
                 int resultado = fileChooser.showOpenDialog(this);
@@ -4648,7 +4602,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 if (resultado == JFileChooser.APPROVE_OPTION) {
                     nuevaImagen = fileChooser.getSelectedFile();
 
-                    // Validar extensión del archivo
                     String nombreArchivo = nuevaImagen.getName().toLowerCase();
                     if (!nombreArchivo.endsWith(".jpg")
                             && !nombreArchivo.endsWith(".jpeg")
@@ -4661,7 +4614,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 }
             }
 
-            // Modificar la parte final del método:
             if (nuevaImagen != null && nuevaImagen.exists()) {
                 ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
                 Image imagenEscalada = icono.getImage()
@@ -4671,7 +4623,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                                 Image.SCALE_SMOOTH
                         );
 
-                // Determinar si es registro o modificación
                 if (tabPrincipal.getSelectedComponent() == AñadirGuardia) {
                     lblFoto.setIcon(new ImageIcon(imagenEscalada));
                     rutaImagenGuardia = nuevaImagen;
@@ -4738,10 +4689,8 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
-            // Obtener valores del formulario
             String cedulaOriginal = txtCedulaMod.getText().trim();
 
-            // Validar que la fecha no sea nula
             if (dateFinContratoMod.getDate() == null) {
                 throw new IllegalArgumentException("Debe seleccionar una fecha de fin de contrato");
             }
@@ -4749,7 +4698,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate();
 
-            // Preparar cambios
             Map<String, Object> cambios = new HashMap<>();
             cambios.put("primerNombre", txtPrimerNombreMod.getText().trim());
             cambios.put("segundoNombre", txtSegundoNombreMod.getText().trim());
@@ -4762,10 +4710,8 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             cambios.put("cargo", txtCargoMod.getSelectedItem().toString());
             cambios.put("fechaFin", fechaFin);
 
-            // Determinar qué imagen enviar al controller
             File imagenParaModificar = imagenFueModificada ? rutaImagenGuardiaMod : null;
 
-            // Llamar al Controller (que manejará todas las validaciones)
             boolean modificado = guardiaController.modificarGuardia(
                     cedulaOriginal,
                     cambios,
@@ -4826,9 +4772,9 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         try {
             File nuevaImagen = null;
 
-            if (opcion == 0) { // Tomar Foto
+            if (opcion == 0) { 
                 nuevaImagen = guardiaController.capturarImagenGuardia();
-            } else if (opcion == 1) { // Seleccionar archivo
+            } else if (opcion == 1) { 
                 JFileChooser fileChooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter(
                         "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");
@@ -4840,7 +4786,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 }
             }
 
-            // Manejar la imagen seleccionada
             if (nuevaImagen != null) {
                 ImageIcon icono = new ImageIcon(nuevaImagen.getAbsolutePath());
                 Image imagenEscalada = icono.getImage()
@@ -4850,7 +4795,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 rutaImagenGuardiaMod = nuevaImagen;
                 lblImagenMod.setToolTipText("Imagen seleccionada: " + nuevaImagen.getAbsolutePath());
 
-                // Marcar que la imagen fue modificada
                 imagenFueModificada = true;
             }
 
@@ -4902,8 +4846,8 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 return;
             }
 
-            String cedula = tablaGuardias.getValueAt(fila, 4).toString(); // Asume columna 4 es cédula
-            this.cedulaActualModificacion = cedula; // <-- ASIGNACIÓN CLAVE
+            String cedula = tablaGuardias.getValueAt(fila, 4).toString(); 
+            this.cedulaActualModificacion = cedula; 
 
             Guardia guardia = guardiaController.obtenerGuardiaPorCedula(cedula);
 
@@ -4962,7 +4906,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         try {
-            // Obtener valores del formulario
             String primerNombre = txtPrimerNombre1.getText().trim();
             String segundoNombre = txtSegundoNombre1.getText().trim();
             String primerApellido = txtPrimerApellido1.getText().trim();
@@ -4972,7 +4915,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             String correo = txtCorreo1.getText().trim();
             String turno = cmbTurno1.getSelectedItem().toString();
 
-            // Validar y convertir edad
             int edad;
             try {
                 edad = Integer.parseInt(txtEdad1.getText().trim());
@@ -4980,36 +4922,30 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 throw new IllegalArgumentException("La edad debe ser un número válido");
             }
 
-            // Validar fecha
             if (dateFinContrato1.getDate() == null) {
                 throw new IllegalArgumentException("Seleccione una fecha de fin de contrato");
             }
             LocalDate fechaFin = dateFinContrato1.getDate().toInstant()
                     .atZone(ZoneId.systemDefault()).toLocalDate();
 
-            // Validar imagen
             if (rutaImagenEnfermera == null) {
                 throw new IllegalArgumentException("Debe seleccionar una imagen de la enfermera");
             }
 
-            // Llamar al controller para registrar
             Enfermera nuevaEnfermera = enfermeraController.registrarEnfermera(
                     primerNombre, segundoNombre, primerApellido, segundoApellido,
                     edad, cedula, nacionalidad, correo, turno, fechaFin,
                     rutaImagenEnfermera
             );
 
-            // Éxito - limpiar y actualizar
             limpiarFormularioEnfermera();
             actualizarTablaEnfermeras();
 
         } catch (IllegalArgumentException e) {
-            // Mostrar mensajes de error de validación
             JOptionPane.showMessageDialog(this,
                     e.getMessage(),
                     "Error de validación", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
-            // Mostrar errores inesperados
             JOptionPane.showMessageDialog(this,
                     "Error al registrar enfermera: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -5027,7 +4963,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 throw new IllegalArgumentException("No se encontró el coordinador");
             }
 
-            // Cargar datos básicos
             txtCedulaMod2.setText(coordinador.getIdentificacion());
             txtPrimerNombreMod2.setText(coordinador.getPrimerNombre());
             txtSegundoNombreMod2.setText(coordinador.getSegundoNombre() != null ? coordinador.getSegundoNombre() : "");
@@ -5038,17 +4973,14 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             txtCorreoMod2.setText(coordinador.getCorreo());
             txtFechaContratacionMod2.setText(coordinador.getFechaInicioContrato().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
 
-            // Cargar comboboxes
             cmbTurnoMod2.setSelectedItem(coordinador.getTurno());
             txtCargoMod1.setSelectedItem(coordinador.getCargo());
 
-            // Cargar fecha fin contrato
             if (coordinador.getFechaFinContrato() != null) {
                 dateFinContratoMod2.setDate(Date.from(coordinador.getFechaFinContrato()
                         .atStartOfDay(ZoneId.systemDefault()).toInstant()));
             }
 
-            // Cargar imagen existente
             if (coordinador.getRutaImagen() != null && !coordinador.getRutaImagen().isEmpty()) {
                 File imagenExistente = new File(coordinador.getRutaImagen());
                 if (imagenExistente.exists()) {
@@ -5058,7 +4990,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                             lblImagenMod2.getHeight(),
                             Image.SCALE_SMOOTH);
                     lblImagenMod2.setIcon(new ImageIcon(img));
-                    // No asignamos a imagenSeleccionadaModCDA porque es la imagen original
                 } else {
                     lblImagenMod2.setIcon(new ImageIcon(getClass().getResource("/Resources/default_coordinator.png")));
                 }
@@ -5098,7 +5029,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             dateFinContratoMod1.setDate(null);
         }
 
-        // Cargar imagen existente
         if (enfermera.getRutaImagen() != null && !enfermera.getRutaImagen().isEmpty()) {
             File imagenExistente = new File(enfermera.getRutaImagen());
             if (imagenExistente.exists()) {
@@ -5143,7 +5073,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
         cmbNacionalidadMod5.setSelectedItem(pdc.getNacionalidad());
 
-        // Cargar imagen existente
         if (pdc.getRutaImagen() != null && !pdc.getRutaImagen().isEmpty()) {
             File imagenExistente = new File(pdc.getRutaImagen());
             if (imagenExistente.exists()) {
@@ -5229,15 +5158,13 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             "Correo",
             "Turno",
             "Cargo",
-            "Inicio Contrato", // Nueva columna
+            "Inicio Contrato", 
             "Fin Contrato"
         });
 
-        // Asegúrate de importar Model.Entities.CoordinadorDeActividades
         List<CoordinadorDeActividades> coordinadores
                 = CoordinadorDeActividadesController.getInstancia().obtenerTodosCoordinadores();
 
-        // Crear una imagen por defecto segura
         ImageIcon iconoPorDefecto = crearIconoPorDefecto();
 
         for (CoordinadorDeActividades c : coordinadores) {
@@ -5300,13 +5227,12 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             "Nacionalidad",
             "Correo",
             "Turno",
-            "Inicio Contrato", // Nueva columna
+            "Inicio Contrato", 
             "Fin Contrato"
         });
 
         List<PersonalControl> pdc = PersonalControlController.getInstancia().obtenerTodosPersonalControl();
 
-        // Crear una imagen por defecto segura
         ImageIcon iconoPorDefecto = crearIconoPorDefecto();
 
         for (PersonalControl p : pdc) {
@@ -5367,13 +5293,12 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             "Nacionalidad",
             "Correo",
             "Turno",
-            "Inicio Contrato", // Nueva columna
+            "Inicio Contrato", 
             "Fin Contrato"
         });
 
         List<Oficial> oficiales = oficialController.obtenerTodosOficiales();
 
-        // Crear una imagen por defecto segura
         ImageIcon iconoPorDefecto = crearIconoPorDefecto();
 
         for (Oficial o : oficiales) {
@@ -5440,38 +5365,29 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
         List<OficialDeRegistro> odr = OficialDeRegistroController.getInstancia().obtenerTodosOficiales();
 
-        // Crear una imagen por defecto segura
         ImageIcon iconoPorDefecto = crearIconoPorDefecto();
 
         for (OficialDeRegistro or : odr) {
             ImageIcon icono = iconoPorDefecto;
 
-            // CORRECCIÓN PRINCIPAL: Cambiar la condición para verificar la ruta de la imagen
             if (or.getRutaImagen() != null && !or.getRutaImagen().isEmpty()) {
                 try {
                     File file = new File(or.getRutaImagen());
                     if (file.exists()) {
-                        // DEBUG: Mostrar información de la imagen
-                        System.out.println("Cargando imagen de: " + or.getRutaImagen());
-                        System.out.println("Tamaño archivo: " + file.length() + " bytes");
-
-                        // Cargar la imagen con mejor manejo de errores
+                       
                         Image img = ImageIO.read(file);
                         if (img != null) {
                             img = img.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
                             icono = new ImageIcon(img);
                         } else {
-                            System.err.println("La imagen no pudo ser cargada (null)");
                         }
                     } else {
-                        System.err.println("Archivo no existe: " + or.getRutaImagen());
                     }
                 } catch (Exception ex) {
                     System.err.println("Error cargando imagen: " + ex.getMessage());
                     ex.printStackTrace();
                 }
             } else {
-                System.out.println("Oficial sin ruta de imagen: " + or.getIdentificacion());
             }
 
             modelo.addRow(new Object[]{
@@ -5493,7 +5409,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         tablaRegistradoras.setRowHeight(85);
         tablaRegistradoras.getColumnModel().getColumn(0).setPreferredWidth(85);
 
-        // Asegurar que el renderizador está configurado correctamente
         tablaRegistradoras.getColumnModel().getColumn(0).setCellRenderer(new ImagenTablaRenderer());
     }
 
@@ -5519,13 +5434,12 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             "Nacionalidad",
             "Correo",
             "Turno",
-            "Inicio Contrato", // Nueva columna
+            "Inicio Contrato",
             "Fin Contrato"
         });
 
         List<Enfermera> enfermeras = enfermeraController.obtenerTodasEnfermeras();
 
-        // Crear una imagen por defecto segura
         ImageIcon iconoPorDefecto = crearIconoPorDefecto();
 
         for (Enfermera e : enfermeras) {
@@ -5575,9 +5489,9 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         g2d.setColor(Color.GRAY);
         g2d.setStroke(new BasicStroke(2));
         g2d.drawOval(10, 10, 60, 60);
-        g2d.drawLine(25, 50, 55, 50); // Boca
-        g2d.fillOval(20, 25, 10, 10); // Ojo izquierdo
-        g2d.fillOval(50, 25, 10, 10); // Ojo derecho
+        g2d.drawLine(25, 50, 55, 50); 
+        g2d.fillOval(20, 25, 10, 10); 
+        g2d.fillOval(50, 25, 10, 10); 
 
         g2d.dispose();
 
@@ -5660,7 +5574,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             File imagen = null;
             if (opcion == 0) {
                 imagen = enfermeraController.capturarImagenEnfermera();
-            } else { // Seleccionar Archivo
+            } else {
                 JFileChooser fileChooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter(
                         "Imágenes", "jpg", "jpeg", "png");
@@ -5676,7 +5590,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 Image img = icono.getImage()
                         .getScaledInstance(lblImagen1.getWidth(), lblImagen1.getHeight(), Image.SCALE_SMOOTH);
                 lblImagen1.setIcon(new ImageIcon(img));
-                rutaImagenEnfermera = imagen; // Asignar a variable de registro
+                rutaImagenEnfermera = imagen; 
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
@@ -5717,14 +5631,12 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         try {
-            // 1. Recoger datos del formulario
             Map<String, Object> cambios = new HashMap<>();
             cambios.put("primerNombre", txtPrimerNombreMod1.getText().trim());
             cambios.put("segundoNombre", txtSegundoNombreMod1.getText().trim());
             cambios.put("primerApellido", txtPrimerApellidoMod1.getText().trim());
             cambios.put("segundoApellido", txtSegundoApellidoMod1.getText().trim());
 
-            // Validar y convertir edad
             try {
                 cambios.put("edad", Integer.parseInt(txtEdadMod1.getText().trim()));
             } catch (NumberFormatException e) {
@@ -5735,26 +5647,22 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             cambios.put("correo", txtCorreoMod1.getText().trim());
             cambios.put("turno", cmbTurnoMod1.getSelectedItem().toString());
 
-            // Validar fecha
             if (dateFinContratoMod1.getDate() == null) {
                 throw new IllegalArgumentException("Seleccione una fecha de fin de contrato");
             }
             cambios.put("fechaFin", dateFinContratoMod1.getDate().toInstant()
                     .atZone(ZoneId.systemDefault()).toLocalDate());
 
-            // 2. Obtener cédula original (no editable)
             String cedulaOriginal = txtCedulaMod1.getText().trim();
 
-            // 3. Llamar al controller
             int resultado = enfermeraController.modificarEnfermera(
                     cedulaOriginal,
                     cambios,
-                    rutaImagenEnfermeraMod // Puede ser null si no se cambió la imagen
+                    rutaImagenEnfermeraMod 
             );
 
-            // 4. Manejar resultados
             switch (resultado) {
-                case 1: // Éxito
+                case 1: 
                     JOptionPane.showMessageDialog(this,
                             "Enfermera modificada exitosamente",
                             "Éxito", JOptionPane.INFORMATION_MESSAGE);
@@ -5763,7 +5671,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                     actualizarTablaEnfermeras();
                     break;
 
-                case 0: // No hay cambios
+                case 0: 
                     int opcion = JOptionPane.showConfirmDialog(this,
                             "No se detectaron cambios. ¿Desea cancelar la modificación?",
                             "Sin cambios",
@@ -5774,7 +5682,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                     }
                     break;
 
-                case -1: // Error (debería haber lanzado excepción)
+                case -1:
                     throw new RuntimeException("Error desconocido al modificar enfermera");
             }
 
@@ -6035,13 +5943,13 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
         } catch (IllegalArgumentException e) {
             System.out.println("Error de validación: " + e.getMessage());
-            e.printStackTrace(); // Opcional: imprime el stack trace completo
+            e.printStackTrace(); 
         } catch (RuntimeException e) {
             System.out.println("Error al guardar el coordinador: " + e.getMessage());
-            e.printStackTrace(); // Opcional: imprime el stack trace completo
+            e.printStackTrace(); 
         } catch (IOException e) {
             System.out.println("Error de E/S: " + e.getMessage());
-            e.printStackTrace(); // Opcional: imprime el stack trace completo
+            e.printStackTrace(); 
         }
     }//GEN-LAST:event_jButton9ActionPerformed
 
@@ -6164,7 +6072,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             cambios.put("primerApellido", txtPrimerApellidoMod2.getText().trim());
             cambios.put("segundoApellido", txtSegundoApellidoMod2.getText().trim());
 
-            // Validar y convertir edad
             try {
                 cambios.put("edad", Integer.parseInt(txtEdadMod2.getText().trim()));
             } catch (NumberFormatException e) {
@@ -6182,15 +6089,13 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             cambios.put("fechaFin", dateFinContratoMod2.getDate().toInstant()
                     .atZone(ZoneId.systemDefault()).toLocalDate());
 
-            // 2. Obtener cédula original (no editable)
             String cedulaOriginal = txtCedulaMod2.getText().trim();
 
             try {
-                // 3. Llamar al controller
                 boolean resultado = CoordinadorDeActividadesController.getInstancia().modificarCoordinador(
                         cedulaOriginal,
                         cambios,
-                        imagenSeleccionadaModCDA // Usamos la imagen modificada
+                        imagenSeleccionadaModCDA 
                 );
 
                 tabPrincipal.setSelectedComponent(mostrarCoordinadora);
@@ -6353,8 +6258,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtPrimerApellido1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellido1KeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6364,8 +6268,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtSegundoApellido1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellido1KeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6375,8 +6278,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtPrimerNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreKeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6386,8 +6288,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtSegundoNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombreKeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6397,8 +6298,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtPrimerApellidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellidoKeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6408,8 +6308,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtSegundoApellidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellidoKeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6430,8 +6329,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtSegundoNombreMod1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombreMod1KeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6441,8 +6339,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtPrimerApellidoMod1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellidoMod1KeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6452,8 +6349,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtSegundoApellidoMod1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellidoMod1KeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6463,8 +6359,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtPrimerNombreModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreModKeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6474,8 +6369,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtSegundoNombreModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombreModKeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6485,8 +6379,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtPrimerApellidoModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellidoModKeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6496,8 +6389,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtSegundoApellidoModKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellidoModKeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6507,8 +6399,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtPrimerNombre2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombre2KeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6518,8 +6409,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtSegundoNombre2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombre2KeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6529,8 +6419,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtPrimerApellido2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellido2KeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6540,8 +6429,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtSegundoApellido2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellido2KeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6551,8 +6439,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtPrimerNombreMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerNombreMod2KeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6562,8 +6449,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtSegundoNombreMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoNombreMod2KeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6573,8 +6459,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtPrimerApellidoMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimerApellidoMod2KeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6584,8 +6469,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void txtSegundoApellidoMod2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSegundoApellidoMod2KeyTyped
         char c = evt.getKeyChar();
         if (!Character.isLetter(c) && c != ' ' && c != '\b') {
-            evt.consume(); // no permite que el carácter se escriba
-            // solo muestra el mensaje si no es backspace
+            evt.consume(); 
             if (c != '\b') {
                 JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
             }
@@ -6606,8 +6490,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             return;
         }
 
-        // Obtener la cédula de la columna correcta (ajusta el índice según tu tabla)
-        String cedula = tablaCoordinadores.getValueAt(fila, 4).toString(); // Cambia 4 por el índice correcto
+        String cedula = tablaCoordinadores.getValueAt(fila, 4).toString(); 
 
         try {
 
@@ -6618,7 +6501,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
                 cargarDatosCoordinadorParaModificar(coordinador);
 
-                // Cambiar al panel de modificación (asegúrate que el nombre sea correcto)
                 tabPrincipal.setSelectedComponent(ModificarCoordinador);
             } else {
                 JOptionPane.showMessageDialog(this,
@@ -6643,7 +6525,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             return;
         }
 
-        String cedula = tablaCoordinadores.getValueAt(fila, 4).toString(); // Asumiendo que la cédula está en la columna 5
+        String cedula = tablaCoordinadores.getValueAt(fila, 4).toString(); 
 
         int confirmacion = JOptionPane.showConfirmDialog(this,
                 "¿Está seguro que desea eliminar este coordinador?",
@@ -6675,7 +6557,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
         try {
-            // Obtener valores del formulario
             String primerNombre = txtPrimerNombre3.getText().trim();
             String segundoNombre = txtSegundoNombre3.getText().trim();
             String primerApellido = txtPrimerApellido3.getText().trim();
@@ -6877,18 +6758,18 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                     JOptionPane.showMessageDialog(this,
                             "Oficial modificado exitosamente",
                             "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    tabPrincipal.setSelectedComponent(mostrarOficial); // Cambiar al panel de tabla
-                    cargarTablaOficiales(); // Actualizar tabla
+                    tabPrincipal.setSelectedComponent(mostrarOficial);
+                    cargarTablaOficiales(); 
                     break;
 
-                case 0: // No hay cambios
+                case 0: 
                     int opcion = JOptionPane.showConfirmDialog(this,
                             "No se detectaron cambios. ¿Desea cancelar la modificación?",
                             "Sin cambios",
                             JOptionPane.YES_NO_OPTION);
 
                     if (opcion == JOptionPane.YES_OPTION) {
-                        tabPrincipal.setSelectedComponent(mostrarOficial); // Cambiar al panel de tabla
+                        tabPrincipal.setSelectedComponent(mostrarOficial); 
                     }
                     break;
 
@@ -7053,7 +6934,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             return;
         }
 
-        String cedula = tablaOficial.getValueAt(fila, 4).toString(); // Cambia 4 por el índice correcto
+        String cedula = tablaOficial.getValueAt(fila, 4).toString(); 
 
         try {
 
@@ -7097,7 +6978,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 throw new IllegalArgumentException("La edad debe ser un número válido.");
             }
 
-            // Validar fecha fin
             if (dateFinContrato4.getDate() == null) {
                 throw new IllegalArgumentException("Seleccione una fecha de fin de contrato.");
             }
@@ -7109,16 +6989,13 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 throw new IllegalArgumentException("Debe seleccionar una imagen válida de la registradora.");
             }
 
-            // Validar formato de imagen
             String nombreImagen = imagenSeleccionadaODR.getName().toLowerCase();
             if (!nombreImagen.endsWith(".jpg") && !nombreImagen.endsWith(".jpeg") && !nombreImagen.endsWith(".png")) {
                 throw new IllegalArgumentException("Formato de imagen no válido. Use JPG, JPEG o PNG.");
             }
 
             OficialDeRegistro nuevoOficialR = oficialRegistro.registrarOficial(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, cedula, nacionalidad, correo, turno, fechaFin, imagenSeleccionadaODR);
-            // Llamar al Controller (centraliza validaciones adicionales)
 
-            // Éxito
             limpiarFormularioODR();
             actualizarTablaODR();
             JOptionPane.showMessageDialog(this, "Registradora agregada exitosamente.",
@@ -7160,7 +7037,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         );
 
         try {
-            if (opcion == 0) { // Tomar foto
+            if (opcion == 0) { 
                 imagenSeleccionadaODR = oficialRegistro.capturarImagenOficial();
                 if (imagenSeleccionadaODR == null) {
                     JOptionPane.showMessageDialog(this,
@@ -7168,7 +7045,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                             "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-            } else if (opcion == 1) { // Seleccionar archivo
+            } else if (opcion == 1) { 
                 JFileChooser fileChooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter(
                         "Imágenes (JPG, PNG, JPEG)", "jpg", "png", "jpeg");
@@ -7179,7 +7056,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 if (resultado == JFileChooser.APPROVE_OPTION) {
                     File archivoSeleccionado = fileChooser.getSelectedFile();
 
-                    // Validar extensión
                     String nombreArchivo = archivoSeleccionado.getName().toLowerCase();
                     if (!nombreArchivo.endsWith(".jpg") && !nombreArchivo.endsWith(".jpeg")
                             && !nombreArchivo.endsWith(".png")) {
@@ -7190,7 +7066,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                         return;
                     }
 
-                    // Crear copia en directorio temporal
                     String tempDir = System.getProperty("java.io.tmpdir");
                     String nombreTemp = "oficial_registro_" + System.currentTimeMillis()
                             + nombreArchivo.substring(nombreArchivo.lastIndexOf("."));
@@ -7209,7 +7084,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 }
             }
 
-            // Actualizar vista
             if (imagenSeleccionadaODR != null && imagenSeleccionadaODR.exists()) {
                 ImageIcon icono = new ImageIcon(imagenSeleccionadaODR.getAbsolutePath());
                 Image img = icono.getImage()
@@ -7266,7 +7140,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
     private void jButton20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton20ActionPerformed
         try {
-            // 1. Preparar cambios
             Map<String, Object> cambios = new HashMap<>();
             cambios.put("primerNombre", txtPrimerNombreMod4.getText().trim());
             cambios.put("segundoNombre", txtSegundoNombreMod4.getText().trim());
@@ -7281,36 +7154,33 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
             String cedulaOriginal = txtCedulaMod4.getText().trim();
 
-            // 2. Solo considerar como nueva imagen si el usuario seleccionó una explícitamente
             File imagenModificada = imagenFueModificada ? imagenSeleccionadaModODR : null;
 
-            // 3. Llamar al controlador
             int resultado = OficialDeRegistroController.getInstancia().modificarOficial(cedulaOriginal, cambios, imagenSeleccionadaModODR);
 
-            // 4. Manejar resultados
             switch (resultado) {
-                case 1: // Éxito
+                case 1: 
                     JOptionPane.showMessageDialog(this,
                             "Registradora modificada exitosamente",
                             "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     actualizarTablaODR();
                     limpiarFormularioModificacionODR();
-                    tabPrincipal.setSelectedComponent(mostrarODR); // Cambiar al panel de tabla
-                    cargarTablaOficiales(); // Actualizar tabla
+                    tabPrincipal.setSelectedComponent(mostrarODR); 
+                    cargarTablaOficiales(); 
                     break;
 
-                case 0: // No hay cambios
+                case 0: 
                     int opcion = JOptionPane.showConfirmDialog(this,
                             "No se detectaron cambios. ¿Desea cancelar la modificación?",
                             "Sin cambios",
                             JOptionPane.YES_NO_OPTION);
 
                     if (opcion == JOptionPane.YES_OPTION) {
-                        tabPrincipal.setSelectedComponent(mostrarODR); // Cambiar al panel de tabla
+                        tabPrincipal.setSelectedComponent(mostrarODR); 
                     }
                     break;
 
-                case -1: // Error
+                case -1: 
                     throw new RuntimeException("Error desconocido al modificar la registradora");
             }
 
@@ -7419,7 +7289,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             return;
         }
 
-        String cedula = tablaRegistradoras.getValueAt(fila, 4).toString(); // Cambia 4 por el índice correcto
+        String cedula = tablaRegistradoras.getValueAt(fila, 4).toString(); 
 
         try {
 
@@ -7430,7 +7300,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
                 cargarDatosODRParaModificar(oficialR);
 
-                // Cambiar al panel de modificación (asegúrate que el nombre sea correcto)
                 tabPrincipal.setSelectedComponent(ModificarODR);
             } else {
                 JOptionPane.showMessageDialog(this,
@@ -7482,7 +7351,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
     private void jButton22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton22ActionPerformed
         try {
-            // Obtener valores del formulario
             String primerNombre = txtPrimerNombre5.getText().trim();
             String segundoNombre = txtSegundoNombre5.getText().trim();
             String primerApellido = txtPrimerApellido5.getText().trim();
@@ -7492,7 +7360,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             String correo = txtCorreo5.getText().trim();
             String turno = cmbTurno5.getSelectedItem().toString();
 
-            // Validar edad
             int edad;
             try {
                 edad = Integer.parseInt(txtEdad5.getText().trim());
@@ -7500,7 +7367,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 throw new IllegalArgumentException("La edad debe ser un número válido.");
             }
 
-            // Validar fecha fin
             if (dateFinContrato5.getDate() == null) {
                 throw new IllegalArgumentException("Seleccione una fecha de fin de contrato.");
             }
@@ -7508,7 +7374,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate();
 
-            // Validar imagen
             if (rutaImagenPDC == null || !rutaImagenPDC.exists()) {
                 throw new IllegalArgumentException("Debe seleccionar una imagen válida del personal de control.");
             }
@@ -7520,7 +7385,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
             PersonalControl nuevoPersonal = PersonalControlController.getInstancia().registrarPersonalControl(primerNombre, segundoNombre, primerApellido, segundoApellido, edad, cedula, nacionalidad, correo, turno, fechaFin, rutaImagenPDC);
 
-            // Éxito
             limpiarFormularioPDC();
             cargarTablaPDC();
             JOptionPane.showMessageDialog(this, "Empleada registrada exitosamente.",
@@ -7565,7 +7429,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             File imagen = null;
             if (opcion == 0) {
                 imagen = PersonalControlController.getInstancia().capturarImagenPersonalControl();
-            } else { // Seleccionar Archivo
+            } else { 
                 JFileChooser fileChooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter(
                         "Imágenes", "jpg", "jpeg", "png");
@@ -7624,14 +7488,12 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
     private void jButton24ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton24ActionPerformed
         try {
-            // 1. Preparar cambios
             Map<String, Object> cambios = new HashMap<>();
             cambios.put("primerNombre", txtPrimerNombreMod5.getText().trim());
             cambios.put("segundoNombre", txtSegundoNombreMod5.getText().trim());
             cambios.put("primerApellido", txtPrimerApellidoMod5.getText().trim());
             cambios.put("segundoApellido", txtSegundoApellidoMod5.getText().trim());
 
-            // Validar edad antes de parsear
             if (txtEdadMod5.getText().trim().isEmpty()) {
                 throw new IllegalArgumentException("La edad es obligatoria");
             }
@@ -7641,7 +7503,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             cambios.put("correo", txtCorreoMod5.getText().trim());
             cambios.put("turno", cmbTurnoMod5.getSelectedItem().toString());
 
-            // Validar fecha
             if (dateFinContratoMod5.getDate() == null) {
                 throw new IllegalArgumentException("La fecha fin de contrato es obligatoria");
             }
@@ -7650,15 +7511,13 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
 
             String cedulaOriginal = txtCedulaMod5.getText().trim();
 
-            // 2. Solo considerar como nueva imagen si el usuario seleccionó una explícitamente
             File imagenModificada = imagenFueModificada ? rutaImagenPDCMod : null;
 
-            // 3. Llamar al controlador
             int resultado = PersonalControlController.getInstancia()
                     .modificarPersonalControl(cedulaOriginal, cambios, imagenModificada);
 
             switch (resultado) {
-                case 1: // Éxito
+                case 1: 
                     JOptionPane.showMessageDialog(this,
                             "Empleada modificada exitosamente",
                             "Éxito", JOptionPane.INFORMATION_MESSAGE);
@@ -7677,7 +7536,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                     }
                     break;
 
-                case -1: // Error
+                case -1:
                     JOptionPane.showMessageDialog(this,
                             "Error al guardar los cambios en la base de datos",
                             "Error", JOptionPane.ERROR_MESSAGE);
@@ -7793,17 +7652,15 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             return;
         }
 
-        String cedula = personalTabla.getValueAt(fila, 4).toString(); // Ajusta el índice según tu tabla
+        String cedula = personalTabla.getValueAt(fila, 4).toString(); 
 
         try {
             PersonalControl personal = PersonalControlController.getInstancia()
                     .obtenerPersonalControlPorCedula(cedula);
 
             if (personal != null) {
-                // Cargar datos en el formulario de modificación
                 cargarDatosPDCParaModificar(personal);
 
-                // Cambiar al panel de modificación
                 tabPrincipal.setSelectedComponent(modPDC);
             } else {
                 JOptionPane.showMessageDialog(this,
@@ -7853,9 +7710,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         }
     }//GEN-LAST:event_eliminarPDCActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+   
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

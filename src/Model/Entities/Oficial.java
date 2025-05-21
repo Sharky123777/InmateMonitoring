@@ -37,7 +37,6 @@ public class Oficial extends Persona {
         this.contrasena = contrasena;
     }
 
-    // Getters y Setters
     public String getTurno() {
         return turno != null ? turno : "";
     }

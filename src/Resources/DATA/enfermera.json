@@ -32,18 +32,18 @@
     },
     {
       "turno": "Nocturno",
-      "fechaContratacion": "2025-05-16",
-      "fechaFinContrato": "2025-05-23",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/09988664_1747440347598.jpg",
-      "correo": "abranolivero21@gmail.com",
-      "primerNombre": "Sharlok",
-      "segundoNombre": "",
-      "primerApellido": "Alcazar",
-      "segundoApellido": "Gutierrez",
-      "edad": 45,
+      "fechaContratacion": "2025-05-21",
+      "fechaFinContrato": "2025-05-24",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/12783131_1747855698543.png",
+      "correo": "verdad@gmail.com",
+      "primerNombre": "fuck",
+      "segundoNombre": "you",
+      "primerApellido": "s",
+      "segundoApellido": "s",
+      "edad": 34,
       "sexo": "Femenino",
-      "nacionalidad": "Mexicana",
-      "identificacion": "09988664"
+      "nacionalidad": "Afgana",
+      "identificacion": "12783131"
     }
   ]
 }

@@ -13,7 +13,6 @@ public class CambioEstadoPresoActividad extends javax.swing.JDialog {
     private Preso preso;
 
     ActividadController ac = ActividadController.getInstancia();
-    
 
     public CambioEstadoPresoActividad(java.awt.Frame parent, boolean modal, Preso preso) {
         super(parent, modal);
@@ -103,71 +102,66 @@ public class CambioEstadoPresoActividad extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnCambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarActionPerformed
-String estadoSeleccionado = nuevoEstadoPresoAct.getSelectedItem().toString();
+        String estadoSeleccionado = nuevoEstadoPresoAct.getSelectedItem().toString();
 
-if (estadoSeleccionado.equals("<Seleccione>")) {
-    JOptionPane.showMessageDialog(this, "Por favor, seleccione un estado válido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-    return;
-}
-
-EstadoActividadesPresoEnum nuevoEstado;
-try {
-    nuevoEstado = EstadoActividadesPresoEnum.valueOf(estadoSeleccionado);
-} catch (IllegalArgumentException e) {
-    JOptionPane.showMessageDialog(this, "Estado seleccionado no válido.", "Error", JOptionPane.ERROR_MESSAGE);
-    return;
-}
-
-List<Actividad> actividades = ActividadDAO.getInstancia().cargarActividades();
-
-for (Actividad act : actividades) {
-    if (act.getPresosAsignadosIds().contains(preso.getIdentificacion())) {
-        EstadoActividadesPresoEnum estadoActual = act.getEstadoPreso(preso.getIdentificacion());
-
-        // Validación de estados no permitidos
-        if ((estadoActual == EstadoActividadesPresoEnum.FINALIZADA || estadoActual == EstadoActividadesPresoEnum.CANCELADA)
-                && nuevoEstado == EstadoActividadesPresoEnum.EN_PROCESO) {
-            JOptionPane.showMessageDialog(this, 
-                "No se puede cambiar a EN_PROCESO porque la actividad ya fue FINALIZADA o CANCELADA.", 
-                "Operación no permitida", JOptionPane.ERROR_MESSAGE);
+        if (estadoSeleccionado.equals("<Seleccione>")) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un estado válido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // Si el nuevo estado es FINALIZADA o CANCELADA, remover al preso
-        if (nuevoEstado == EstadoActividadesPresoEnum.FINALIZADA || 
-            nuevoEstado == EstadoActividadesPresoEnum.CANCELADA) {
-            
-            // Remover al preso de la actividad
-            act.getPresosAsignadosIds().remove(preso.getIdentificacion());
-            
-            // Reducir el contador de inscritos
-            if (act.getPresosInscritos() > 0) {
-                act.setPresosInscritos(act.getPresosInscritos() - 1);
+        EstadoActividadesPresoEnum nuevoEstado;
+        try {
+            nuevoEstado = EstadoActividadesPresoEnum.valueOf(estadoSeleccionado);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, "Estado seleccionado no válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        List<Actividad> actividades = ActividadDAO.getInstancia().cargarActividades();
+
+        for (Actividad act : actividades) {
+            if (act.getPresosAsignadosIds().contains(preso.getIdentificacion())) {
+                EstadoActividadesPresoEnum estadoActual = act.getEstadoPreso(preso.getIdentificacion());
+
+                if ((estadoActual == EstadoActividadesPresoEnum.FINALIZADA || estadoActual == EstadoActividadesPresoEnum.CANCELADA)
+                        && nuevoEstado == EstadoActividadesPresoEnum.EN_PROCESO) {
+                    JOptionPane.showMessageDialog(this,
+                            "No se puede cambiar a EN_PROCESO porque la actividad ya fue FINALIZADA o CANCELADA.",
+                            "Operación no permitida", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (nuevoEstado == EstadoActividadesPresoEnum.FINALIZADA
+                        || nuevoEstado == EstadoActividadesPresoEnum.CANCELADA) {
+
+                    act.getPresosAsignadosIds().remove(preso.getIdentificacion());
+
+                    if (act.getPresosInscritos() > 0) {
+                        act.setPresosInscritos(act.getPresosInscritos() - 1);
+                    }
+                }
+
+                act.setEstadoPreso(preso.getIdentificacion(), nuevoEstado);
+                break;
             }
         }
 
-        // Actualizar el estado del preso en la actividad
-        act.setEstadoPreso(preso.getIdentificacion(), nuevoEstado);
-        break;
-    }
-}
+        boolean guardado = ActividadDAO.getInstancia().guardarActividades(actividades);
 
-boolean guardado = ActividadDAO.getInstancia().guardarActividades(actividades);
+        if (guardado) {
+            JOptionPane.showMessageDialog(this,
+                    "Estado del preso actualizado correctamente. "
+                    + (nuevoEstado == EstadoActividadesPresoEnum.FINALIZADA
+                    || nuevoEstado == EstadoActividadesPresoEnum.CANCELADA
+                            ? "El preso ha sido removido de la actividad." : ""),
+                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "No se pudo guardar el cambio en el archivo.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
 
-if (guardado) {
-    JOptionPane.showMessageDialog(this, 
-        "Estado del preso actualizado correctamente. " + 
-        (nuevoEstado == EstadoActividadesPresoEnum.FINALIZADA || 
-         nuevoEstado == EstadoActividadesPresoEnum.CANCELADA ? 
-         "El preso ha sido removido de la actividad." : ""), 
-        "Éxito", JOptionPane.INFORMATION_MESSAGE);
-} else {
-    JOptionPane.showMessageDialog(this, 
-        "No se pudo guardar el cambio en el archivo.", 
-        "Error", JOptionPane.ERROR_MESSAGE);
-}
-
-this.dispose();
+        this.dispose();
 
     }//GEN-LAST:event_btnCambiarActionPerformed
 

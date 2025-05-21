@@ -27,6 +27,23 @@ public class ModificarVisitante extends javax.swing.JDialog {
         this.identificacionPreso = identificacionPreso;
         cargarDatosVisitante();
         setLocationRelativeTo(parent);
+
+        soloLetras(NuevoPrimerNombreVisitante);
+        soloLetras(NuevoSegundoNombreVisitante);
+        soloLetras(NuevoPrimerApellidoVisitante);
+        soloLetras(NuevoSegundoApellidoVisitante);
+        soloNumeros(NuevaEdadVisitante);
+    }
+    public void limpiarCamposVisitante() {
+        NuevoPrimerNombreVisitante.setText("");
+        NuevoSegundoNombreVisitante.setText("");
+        NuevoPrimerApellidoVisitante.setText("");
+        NuevoSegundoApellidoVisitante.setText("");
+        NuevaEdadVisitante.setText("");
+        NuevoSexoVisitante.setSelectedIndex(0);
+        NuevaVistaPreviaVisitante.setIcon(null);
+        NuevaVistaPreviaVisitante.setToolTipText(null);
+        nuevaImagenVisitante = null;
     }
 
     private void cargarDatosVisitante() {
@@ -169,7 +186,7 @@ public class ModificarVisitante extends javax.swing.JDialog {
 
             if (opcion == 0) {
                 nuevaImagen = controller.capturarImagenVisitante();
-            } else if (opcion == 1) { 
+            } else if (opcion == 1) {
                 nuevaImagen = controller.seleccionarImagen(this, getNuevaVistaPreviaVisitante());
             }
 
@@ -210,7 +227,6 @@ public class ModificarVisitante extends javax.swing.JDialog {
             String edadStr = getNuevaEdadVisitante().getText();
             String sexo = getNuevoSexoVisitante().getSelectedItem().toString();
 
-
             File imagen = nuevaImagenVisitante != null ? nuevaImagenVisitante : new File(visitante.getFotoPath());
 
             VisitaController controller = new VisitaController();
@@ -227,6 +243,7 @@ public class ModificarVisitante extends javax.swing.JDialog {
 
             if (visitanteActualizado != null) {
                 controller.cargarHistorialVisitantes(identificacionPreso, tablaVisitantes);
+                limpiarCamposVisitante();
                 dispose();
             }
         } catch (Exception e) {
@@ -236,10 +253,31 @@ public class ModificarVisitante extends javax.swing.JDialog {
         }
 
     }//GEN-LAST:event_BotonModificarVisitanteActionPerformed
+    public void soloNumeros(JTextField campo) {
+        campo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                char c = evt.getKeyChar();
+                if (!Character.isDigit(c) && c != '\b') {
+                    evt.consume();
+                    JOptionPane.showMessageDialog(null, "Solo se permiten números.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+    }
 
-    /**
-     * @param args the command line arguments
-     */
+    public void soloLetras(JTextField campo) {
+        campo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                char c = evt.getKeyChar();
+                if (!Character.isLetter(c) && !Character.isWhitespace(c) && c != '\b') {
+                    evt.consume();
+                    JOptionPane.showMessageDialog(null, "Solo se permiten letras.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+    }
+
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

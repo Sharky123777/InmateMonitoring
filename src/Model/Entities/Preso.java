@@ -26,10 +26,9 @@ public class Preso extends Persona {
     private List<String> actividadesAsignadasIds = new ArrayList<>();
     private List<String> actividadesCanceladasIds = new ArrayList<>();
     private LocalDate fechaLiberacion;
-private LocalDate fechaDefuncion;
-private LocalDate fechaFuga;
+    private LocalDate fechaDefuncion;
+    private LocalDate fechaFuga;
 
-    
     public Preso(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
             int edad, String sexo, String nacionalidad, String identificacion,
             float estatura, float peso, List<Delito> delitos,
@@ -54,8 +53,7 @@ private LocalDate fechaFuga;
         this.fotoPath = fotoPath;
         this.id = id;
         this.estado = EstadoPresoEnum.ACTIVO;
-        
-        
+
     }
 
     public boolean isEnVisita() {
@@ -73,9 +71,6 @@ private LocalDate fechaFuga;
     public void setEnActividad(boolean enActividad) {
         this.enActividad = enActividad;
     }
-    
-    
-    
 
     public LocalDate getFechaLiberacion() {
         return fechaLiberacion;
@@ -93,9 +88,6 @@ private LocalDate fechaFuga;
         this.fechaFuga = fechaFuga;
     }
 
-    
-    
-    
     public float getEstatura() {
         return estatura;
     }

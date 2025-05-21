@@ -1,5 +1,6 @@
 package DAO;
 
+import Model.Constants.EstadoSancionEnum;
 import Model.Entities.LocalDateAdapter;
 import Model.Entities.LocalTimeAdapter;
 import Model.Entities.Sancion;
@@ -199,4 +200,21 @@ public class SancionDAO {
                 .mapToInt(Sancion::getDuracionBase)
                 .sum();
     }
+
+    public void actualizarSancionesCumplidas(String identificacionPreso) {
+        List<Sancion> sanciones = cargarPorIdentificacionPreso(identificacionPreso);
+        boolean huboCambios = false;
+
+        for (Sancion sancion : sanciones) {
+            if (sancion.getEstado() == EstadoSancionEnum.ACTIVA && !sancion.estaActiva()) {
+                sancion.marcarComoCumplida();
+                huboCambios = true;
+            }
+        }
+
+        if (huboCambios) {
+            guardarTodas(sanciones);
+        }
+    }
+
 }

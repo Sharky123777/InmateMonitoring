@@ -39,7 +39,6 @@ public class CoordinadorDeActividades extends Persona {
         this.cargo = cargo;
     }
 
-    // Getters y Setters
     public String getUsuario() {
         return usuario;
     }

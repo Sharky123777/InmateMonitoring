@@ -1,6 +1,12 @@
 package Utilidades;
 
 import Model.Constants.RolEnum;
+import static Model.Constants.RolEnum.COORDINADOR_DE_ACTIVIDADES;
+import static Model.Constants.RolEnum.DIRECTOR;
+import static Model.Constants.RolEnum.ENFERMERA;
+import static Model.Constants.RolEnum.OFICIAL;
+import static Model.Constants.RolEnum.OFICIAL_DE_REGISTRO;
+import static Model.Constants.RolEnum.PERSONAL_DE_CONTROL;
 import Model.Entities.Visita;
 import Model.Entities.Visitante;
 import java.time.format.DateTimeFormatter;
@@ -36,7 +42,6 @@ public class EmailSender {
     }
 
     public boolean enviarCredenciales(String destinatario, String usuario, String contrasena, RolEnum rol) {
-        // Validaciones
         if (destinatario == null || destinatario.isEmpty()
                 || usuario == null || usuario.isEmpty()
                 || contrasena == null || contrasena.isEmpty()
@@ -118,7 +123,7 @@ public class EmailSender {
 
     private String obtenerSaludoPorRol(RolEnum rol) {
         if (rol == null) {
-            return "Estimado/a Usuario";
+            return "Estimada Usuario";
         }
 
         switch (rol) {
@@ -129,7 +134,7 @@ public class EmailSender {
             case OFICIAL_DE_REGISTRO:
                 return "Estimada oficial de registro";
             case PERSONAL_DE_CONTROL:
-                return "Estimada Oficial";
+                return "Estimada personal de control";
             case COORDINADOR_DE_ACTIVIDADES:
                 return "Estimada Coordinadora";
             case ENFERMERA:
@@ -271,139 +276,298 @@ public class EmailSender {
     }
 
     private String construirMensajeCancelacionHTML(Visitante visitante, Visita visita, String motivo) {
-    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
 
-    String fechaFormateada = visita.getFechaVisita().format(dateFormatter);
-    String horaFormateada = visita.getHoraVisita().format(timeFormatter);
+        String fechaFormateada = visita.getFechaVisita().format(dateFormatter);
+        String horaFormateada = visita.getHoraVisita().format(timeFormatter);
 
-    return "<!DOCTYPE html>"
-            + "<html>"
-            + "<head>"
-            + "<style>"
-            + "body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }"
-            + ".header { text-align: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }"
-            + ".details { background-color: #f9f9f9; padding: 20px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #dc3545; }"
-            + ".footer { margin-top: 20px; font-size: 0.8em; color: #6c757d; text-align: center; }"
-            + "h2 { color: #0056b3; margin-top: 0; }"
-            + "strong { color: #343a40; }"
-            + ".important { color: #dc3545; font-weight: bold; }"
-            + ".cancel-banner { background-color: #dc3545; color: white; padding: 10px; text-align: center; border-radius: 5px; margin: 20px 0; }"
-            + ".instructions { background-color: #e9ecef; padding: 15px; border-radius: 5px; margin: 20px 0; }"
-            + "</style>"
-            + "</head>"
-            + "<body>"
-            + "<div class='header'>"
-            + "<h2>Notificación de Cancelación de Visita</h2>"
-            + "</div>"
-            + "<div class='cancel-banner'>"
-            + "<h3>VISITA CANCELADA</h3>"
-            + "</div>"
-            + "<p>Estimado/a " + visitante.getPrimerNombre() + " " + visitante.getPrimerApellido() + ",</p>"
-            + "<p>Lamentamos informarle que su visita programada ha sido cancelada debido a circunstancias institucionales.</p>"
-            + "<div class='details'>"
-            + "<h3>Detalles de la visita cancelada:</h3>"
-            + "<p><strong>Fecha programada:</strong> " + fechaFormateada + "</p>"
-            + "<p><strong>Hora programada:</strong> " + horaFormateada + "</p>"
-            + "<p><strong>Preso:</strong> " + visita.getPreso().getNombresCompletos() + " " + visita.getPreso().getApellidosCompletos() + "</p>"
-            + "<p><strong>Identificación del preso:</strong> " + visita.getPreso().getIdentificacion() + "</p>"
-            + "<p><strong>Tipo de visita:</strong> " + visita.getTipoVisita() + "</p>"
-            + "<p><strong>Motivo de cancelación:</strong> " + motivo + "</p>"
-            + "</div>"
-            + "<div class='instructions'>"
-            + "<h3>¿Qué puede hacer ahora?</h3>"
-            + "<ul>"
-            + "<li>Para reprogramar su visita, por favor comuníquese con nuestro departamento de visitas.</li>"
-            + "<li>Si tiene preguntas sobre esta cancelación, puede responder a este correo electrónico.</li>"
-            + "<li>Consulte nuestro reglamento de visitas para conocer las políticas actuales.</li>"
-            + "</ul>"
-            + "</div>"
-            + "<p>Disculpe las molestias ocasionadas y agradecemos su comprensión.</p>"
-            + "<div class='footer'>"
-            + "<p>Este es un mensaje automático. Para asistencia, contacte a visitas@inpec.gov.co</p>"
-            + "<p>&copy; " + java.time.Year.now().getValue() + " Instituto Nacional Penitenciario y Carcelario. Todos los derechos reservados.</p>"
-            + "</div>"
-            + "</body>"
-            + "</html>";
-}
-    
+        return "<!DOCTYPE html>"
+                + "<html>"
+                + "<head>"
+                + "<style>"
+                + "body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }"
+                + ".header { text-align: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }"
+                + ".details { background-color: #f9f9f9; padding: 20px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #dc3545; }"
+                + ".footer { margin-top: 20px; font-size: 0.8em; color: #6c757d; text-align: center; }"
+                + "h2 { color: #0056b3; margin-top: 0; }"
+                + "strong { color: #343a40; }"
+                + ".important { color: #dc3545; font-weight: bold; }"
+                + ".cancel-banner { background-color: #dc3545; color: white; padding: 10px; text-align: center; border-radius: 5px; margin: 20px 0; }"
+                + ".instructions { background-color: #e9ecef; padding: 15px; border-radius: 5px; margin: 20px 0; }"
+                + "</style>"
+                + "</head>"
+                + "<body>"
+                + "<div class='header'>"
+                + "<h2>Notificación de Cancelación de Visita</h2>"
+                + "</div>"
+                + "<div class='cancel-banner'>"
+                + "<h3>VISITA CANCELADA</h3>"
+                + "</div>"
+                + "<p>Estimado/a " + visitante.getPrimerNombre() + " " + visitante.getPrimerApellido() + ",</p>"
+                + "<p>Lamentamos informarle que su visita programada ha sido cancelada debido a circunstancias institucionales.</p>"
+                + "<div class='details'>"
+                + "<h3>Detalles de la visita cancelada:</h3>"
+                + "<p><strong>Fecha programada:</strong> " + fechaFormateada + "</p>"
+                + "<p><strong>Hora programada:</strong> " + horaFormateada + "</p>"
+                + "<p><strong>Preso:</strong> " + visita.getPreso().getNombresCompletos() + " " + visita.getPreso().getApellidosCompletos() + "</p>"
+                + "<p><strong>Identificación del preso:</strong> " + visita.getPreso().getIdentificacion() + "</p>"
+                + "<p><strong>Tipo de visita:</strong> " + visita.getTipoVisita() + "</p>"
+                + "<p><strong>Motivo de cancelación:</strong> " + motivo + "</p>"
+                + "</div>"
+                + "<div class='instructions'>"
+                + "<h3>¿Qué puede hacer ahora?</h3>"
+                + "<ul>"
+                + "<li>Para reprogramar su visita, por favor comuníquese con nuestro departamento de visitas.</li>"
+                + "<li>Si tiene preguntas sobre esta cancelación, puede responder a este correo electrónico.</li>"
+                + "<li>Consulte nuestro reglamento de visitas para conocer las políticas actuales.</li>"
+                + "</ul>"
+                + "</div>"
+                + "<p>Disculpe las molestias ocasionadas y agradecemos su comprensión.</p>"
+                + "<div class='footer'>"
+                + "<p>Este es un mensaje automático. Para asistencia, contacte a visitas@inpec.gov.co</p>"
+                + "<p>&copy; " + java.time.Year.now().getValue() + " Instituto Nacional Penitenciario y Carcelario. Todos los derechos reservados.</p>"
+                + "</div>"
+                + "</body>"
+                + "</html>";
+    }
+
     public boolean enviarCredencialesActualizadas(String destinatario, String usuario, String contrasena, RolEnum rol) {
-    if (destinatario == null || destinatario.isEmpty()
-            || usuario == null || usuario.isEmpty()
-            || contrasena == null || contrasena.isEmpty()
-            || rol == null) {
-        JOptionPane.showMessageDialog(null, "Error: Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
-        return false;
+        if (destinatario == null || destinatario.isEmpty()
+                || usuario == null || usuario.isEmpty()
+                || contrasena == null || contrasena.isEmpty()
+                || rol == null) {
+            JOptionPane.showMessageDialog(null, "Error: Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (!destinatario.contains("@") || !destinatario.endsWith(".com")) {
+            JOptionPane.showMessageDialog(null, "Error: Formato de correo inválido", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        try {
+            Session session = Session.getInstance(props,
+                    new Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(username, password);
+                }
+            });
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
+            message.setSubject("Actualización de Credenciales - Sistema de Monitoreo de Reclusas");
+
+            String htmlContent = construirMensajeHTMLActualizacion(usuario, contrasena, rol);
+            message.setContent(htmlContent, "text/html; charset=utf-8");
+
+            Transport.send(message);
+            return true;
+        } catch (MessagingException e) {
+            System.err.println("Error al enviar correo: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al enviar correo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } catch (Exception e) {
+            System.err.println("Error inesperado al enviar correo: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error inesperado al enviar correo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
-    if (!destinatario.contains("@") || !destinatario.endsWith(".com")) {
-        JOptionPane.showMessageDialog(null, "Error: Formato de correo inválido", "Error", JOptionPane.ERROR_MESSAGE);
-        return false;
+    private String construirMensajeHTMLActualizacion(String usuario, String contrasena, RolEnum rol) {
+        String saludo = obtenerSaludoPorRol(rol);
+        String rolFormateado = formatearRol(rol);
+
+        return "<!DOCTYPE html>"
+                + "<html>"
+                + "<head>"
+                + "<style>"
+                + "body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }"
+                + ".header { text-align: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }"
+                + ".credentials { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; }"
+                + ".footer { margin-top: 20px; font-size: 0.8em; color: #6c757d; text-align: center; }"
+                + "h2 { color: #0056b3; margin-top: 0; }"
+                + "strong { color: #343a40; }"
+                + "</style>"
+                + "</head>"
+                + "<body>"
+                + "<div class='header'>"
+                + "<h2>Sistema de Monitoreo de Reclusas</h2>"
+                + "</div>"
+                + "<p>" + saludo + ",</p>"
+                + "<p>Sus credenciales de acceso al sistema han sido actualizadas exitosamente. A continuación, encontrará sus nuevos datos:</p>"
+                + "<div class='credentials'>"
+                + "<p><strong>Rol:</strong> " + rolFormateado + "</p>"
+                + "<p><strong>Usuario:</strong> " + usuario + "</p>"
+                + "<p><strong>Contraseña: </strong> " + contrasena + "</p>"
+                + "</div>"
+                + "<p>Le recomendamos cambiar su contraseña después del próximo inicio de sesión por seguridad.</p>"
+                + "<p>Si usted no solicitó esta actualización, por favor contacte al administrador del sistema de inmediato.</p>"
+                + "<div class='footer'>"
+                + "<p>Este es un mensaje automático, por favor no responda a este correo.</p>"
+                + "<p>&copy; " + java.time.Year.now().getValue() + " Sistema de Monitoreo de Reclusos. Todos los derechos reservados.</p>"
+                + "</div>"
+                + "</body>"
+                + "</html>";
     }
 
-    try {
-        Session session = Session.getInstance(props,
-                new Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
-                    }
-                });
+    public boolean enviarNotificacionDeshabilitacion(Visitante visitante, String motivo) {
+        if (visitante == null || visitante.getEmail() == null || visitante.getEmail().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se puede enviar el correo: datos incompletos",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
 
-        Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(username));
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
-        message.setSubject("Actualización de Credenciales - Sistema de Monitoreo de Reclusas");
+        try {
+            Session session = Session.getInstance(props,
+                    new Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(username, password);
+                }
+            });
 
-        String htmlContent = construirMensajeHTMLActualizacion(usuario, contrasena, rol);
-        message.setContent(htmlContent, "text/html; charset=utf-8");
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(visitante.getEmail()));
+            message.setSubject("Cuenta Deshabilitada - Sistema Penitenciario");
 
-        Transport.send(message);
-        return true;
-    } catch (MessagingException e) {
-        System.err.println("Error al enviar correo: " + e.getMessage());
-        JOptionPane.showMessageDialog(null, "Error al enviar correo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        return false;
-    } catch (Exception e) {
-        System.err.println("Error inesperado al enviar correo: " + e.getMessage());
-        JOptionPane.showMessageDialog(null, "Error inesperado al enviar correo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        return false;
+            String htmlContent = construirMensajeDeshabilitacionHTML(visitante, motivo);
+            message.setContent(htmlContent, "text/html; charset=utf-8");
+
+            Transport.send(message);
+            System.out.println("Notificación de deshabilitación enviada a: " + visitante.getEmail());
+            return true;
+        } catch (MessagingException e) {
+            System.err.println("Error al enviar notificación de deshabilitación: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al enviar correo: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
-}
 
-private String construirMensajeHTMLActualizacion(String usuario, String contrasena, RolEnum rol) {
-    String saludo = obtenerSaludoPorRol(rol);
-    String rolFormateado = formatearRol(rol);
+    private String construirMensajeDeshabilitacionHTML(Visitante visitante, String motivo) {
+        return "<!DOCTYPE html>"
+                + "<html>"
+                + "<head>"
+                + "<style>"
+                + "body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }"
+                + ".header { text-align: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }"
+                + ".details { background-color: #f9f9f9; padding: 20px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #dc3545; }"
+                + ".footer { margin-top: 20px; font-size: 0.8em; color: #6c757d; text-align: center; }"
+                + "h2 { color: #0056b3; margin-top: 0; }"
+                + "strong { color: #343a40; }"
+                + ".important { color: #dc3545; font-weight: bold; }"
+                + ".cancel-banner { background-color: #dc3545; color: white; padding: 10px; text-align: center; border-radius: 5px; margin: 20px 0; }"
+                + ".instructions { background-color: #e9ecef; padding: 15px; border-radius: 5px; margin: 20px 0; }"
+                + "</style>"
+                + "</head>"
+                + "<body>"
+                + "<div class='header'>"
+                + "<h2>Notificación de Deshabilitación de Cuenta</h2>"
+                + "</div>"
+                + "<div class='cancel-banner'>"
+                + "<h3>CUENTA DESHABILITADA</h3>"
+                + "</div>"
+                + "<p>Estimado/a " + visitante.getPrimerNombre() + " " + visitante.getPrimerApellido() + ",</p>"
+                + "<p>Lamentamos informarle que su cuenta de visitante ha sido deshabilitada en nuestro sistema.</p>"
+                + "<div class='details'>"
+                + "<h3>Detalles de la deshabilitación:</h3>"
+                + "<p><strong>Identificación:</strong> " + visitante.getIdentificacion() + "</p>"
+                + "<p><strong>Nombre completo:</strong> " + visitante.getNombresCompletos() + " " + visitante.getApellidosCompletos() + "</p>"
+                + "<p><strong>Motivo:</strong> " + motivo + "</p>"
+                + "</div>"
+                + "<div class='instructions'>"
+                + "<h3>¿Qué significa esto?</h3>"
+                + "<ul>"
+                + "<li>No podrá registrar nuevas visitas en nuestro sistema.</li>"
+                + "<li>Cualquier visita programada previamente será cancelada.</li>"
+                + "<li>Para solicitar la reactivación de su cuenta, debe presentarse personalmente en nuestras oficinas.</li>"
+                + "</ul>"
+                + "</div>"
+                + "<p>&copy; " + java.time.Year.now().getValue() + " Instituto Nacional Penitenciario y Carcelario. Todos los derechos reservados.</p>"
+                + "</div>"
+                + "</body>"
+                + "</html>";
+    }
 
-    return "<!DOCTYPE html>"
-            + "<html>"
-            + "<head>"
-            + "<style>"
-            + "body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }"
-            + ".header { text-align: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }"
-            + ".credentials { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; }"
-            + ".footer { margin-top: 20px; font-size: 0.8em; color: #6c757d; text-align: center; }"
-            + "h2 { color: #0056b3; margin-top: 0; }"
-            + "strong { color: #343a40; }"
-            + "</style>"
-            + "</head>"
-            + "<body>"
-            + "<div class='header'>"
-            + "<h2>Sistema de Monitoreo de Reclusas</h2>"
-            + "</div>"
-            + "<p>" + saludo + ",</p>"
-            + "<p>Sus credenciales de acceso al sistema han sido actualizadas exitosamente. A continuación, encontrará sus nuevos datos:</p>"
-            + "<div class='credentials'>"
-            + "<p><strong>Rol:</strong> " + rolFormateado + "</p>"
-            + "<p><strong>Usuario:</strong> " + usuario + "</p>"
-            + "<p><strong>Contraseña: </strong> " + contrasena + "</p>"
-            + "</div>"
-            + "<p>Si usted no solicitó esta actualización, por favor contacte al administrador del sistema de inmediato.</p>"
-            + "<div class='footer'>"
-            + "<p>Este es un mensaje automático, por favor no responda a este correo.</p>"
-            + "<p>&copy; " + java.time.Year.now().getValue() + " Sistema de Monitoreo de Reclusos. Todos los derechos reservados.</p>"
-            + "</div>"
-            + "</body>"
-            + "</html>";
-}
+    public boolean enviarNotificacionHabilitacion(Visitante visitante, String motivo) {
+        if (visitante == null || visitante.getEmail() == null || visitante.getEmail().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se puede enviar el correo: datos incompletos",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        try {
+            Session session = Session.getInstance(props,
+                    new Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(username, password);
+                }
+            });
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(visitante.getEmail()));
+            message.setSubject("Cuenta Habilitada - Sistema Penitenciario");
+
+            String htmlContent = construirMensajeHabilitacionHTML(visitante, motivo);
+            message.setContent(htmlContent, "text/html; charset=utf-8");
+
+            Transport.send(message);
+            System.out.println("Notificación de habilitación enviada a: " + visitante.getEmail());
+            return true;
+        } catch (MessagingException e) {
+            System.err.println("Error al enviar notificación de habilitación: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al enviar correo: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    private String construirMensajeHabilitacionHTML(Visitante visitante, String motivo) {
+        return "<!DOCTYPE html>"
+                + "<html>"
+                + "<head>"
+                + "<style>"
+                + "body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }"
+                + ".header { text-align: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }"
+                + ".details { background-color: #f9f9f9; padding: 20px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #28a745; }"
+                + ".footer { margin-top: 20px; font-size: 0.8em; color: #6c757d; text-align: center; }"
+                + "h2 { color: #0056b3; margin-top: 0; }"
+                + "strong { color: #343a40; }"
+                + ".important { color: #28a745; font-weight: bold; }"
+                + ".banner { background-color: #28a745; color: white; padding: 10px; text-align: center; border-radius: 5px; margin: 20px 0; }"
+                + ".instructions { background-color: #e9ecef; padding: 15px; border-radius: 5px; margin: 20px 0; }"
+                + "</style>"
+                + "</head>"
+                + "<body>"
+                + "<div class='header'>"
+                + "<h2>Notificación de Habilitación de Cuenta</h2>"
+                + "</div>"
+                + "<div class='banner'>"
+                + "<h3>CUENTA HABILITADA</h3>"
+                + "</div>"
+                + "<p>Estimado/a " + visitante.getPrimerNombre() + " " + visitante.getPrimerApellido() + ",</p>"
+                + "<p>Le informamos que su cuenta de visitante ha sido habilitada nuevamente en nuestro sistema.</p>"
+                + "<div class='details'>"
+                + "<h3>Detalles de la habilitación:</h3>"
+                + "<p><strong>Identificación:</strong> " + visitante.getIdentificacion() + "</p>"
+                + "<p><strong>Nombre completo:</strong> " + visitante.getNombresCompletos() + " " + visitante.getApellidosCompletos() + "</p>"
+                + "<p><strong>Motivo:</strong> " + (motivo != null ? motivo : "El personal consideró que ya puede estar habilitado. Toda la responsabilidad recae en el personal.") + "</p>"
+                + "</div>"
+                + "<div class='instructions'>"
+                + "<h3>¿Qué significa esto?</h3>"
+                + "<ul>"
+                + "<li>Ahora puede registrar nuevas visitas en nuestro sistema.</li>"
+                + "<li>Recuerde seguir todas las normas y reglamentos del establecimiento.</li>"
+                + "<li>Cualquier incumplimiento puede resultar en una nueva deshabilitación.</li>"
+                + "</ul>"
+                + "</div>"
+                + "<p>&copy; " + java.time.Year.now().getValue() + " Instituto Nacional Penitenciario y Carcelario. Todos los derechos reservados.</p>"
+                + "</div>"
+                + "</body>"
+                + "</html>";
+    }
 
 }

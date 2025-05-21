@@ -5,14 +5,15 @@ import DAO.DelitoDAO;
 import DAO.ExpedienteDAO;
 import DAO.IntentoFugaDAO;
 import DAO.PresoDAO;
+import DAO.SancionDAO;
 import Model.Constants.EstadoExpedienteEnum;
 import Model.Constants.EstadoPresoEnum;
-import Model.Entities.Actividad;
 import Model.Entities.Celda;
 import Model.Entities.Delito;
 import Model.Entities.ExpedienteJudicial;
 import Model.Entities.IntentoFuga;
 import Model.Entities.Preso;
+import Model.Entities.Sancion;
 import Model.Entities.Sentencia;
 import Utilidades.Validador;
 import View.FrmCamara;
@@ -647,6 +648,9 @@ public class PresoController {
 
         for (Preso preso : presos) {
             ImageIcon foto = obtenerFotoPreso(preso);
+            
+                        String aislamientoTexto = preso.isEnAislamiento() ? "Sí" : "No"; 
+
 
             filas.add(new Object[]{
                 foto,
@@ -658,7 +662,8 @@ public class PresoController {
                 preso.getIdentificacion(),
                 preso.getCeldaAsignada(),
                 preso.getSeccionAsignada(),
-                preso.getEstado()
+                preso.getEstado(),
+                aislamientoTexto
             });
         }
 
@@ -699,6 +704,9 @@ public class PresoController {
         List<Object[]> filas = new ArrayList<>();
 
         for (Preso preso : todosLosPresos) {
+
+            String aislamientoTexto = preso.isEnAislamiento() ? "Sí" : "No"; 
+
             ImageIcon foto = obtenerFotoPreso(preso);
 
             List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(preso.getIdentificacion());
@@ -714,7 +722,8 @@ public class PresoController {
                 preso.getNacionalidad(),
                 preso.getSeccionAsignada(),
                 preso.getCeldaAsignada(),
-                preso.getEstado()
+                preso.getEstado(),
+                aislamientoTexto 
             });
         }
 
@@ -858,8 +867,6 @@ public class PresoController {
 
                 break;
         }
-        
-  
 
         return presoDAO.cambiarEstadoPreso(identificacion, nuevoEstado, fechaCambio);
     }
@@ -919,34 +926,15 @@ public class PresoController {
     public int contarPresosLiberados() {
         return presoDAO.contarPresosLiberados();
     }
-
-    public String obtenerEstadisticasPresosHorizontal() {
-        int total = presoDAO.cargarTodos().size();
-        if (total == 0) {
-            return "No hay presos registrados";
-        }
-
-        int fallecidos = contarPresosFallecidos();
-        int liberados = contarPresosLiberados();
-        int activos = total - fallecidos - liberados;
-
-        double porcentajeActivos = (activos * 100.0) / total;
-        double porcentajeLiberados = (liberados * 100.0) / total;
-        double porcentajeFallecidos = (fallecidos * 100.0) / total;
-
-        return String.format(
-                "<html><div style='font-family: Arial; font-size: 15pt;'>"
-                + "<b>ESTADÍSTICAS:</b> "
-                + "Total: <b>%d</b> | "
-                + "Activos: <b>%d</b> (%.1f%%) | "
-                + "Liberados: <b>%d</b> (%.1f%%) | "
-                + "Fallecidos: <b>%d</b> (%.1f%%)"
-                + "</div></html>",
-                total,
-                activos, porcentajeActivos,
-                liberados, porcentajeLiberados,
-                fallecidos, porcentajeFallecidos
-        );
+    
+    private void cancelarSancionesActivas(String identificacionPreso) {
+    List<Sancion> sancionesActivas = SancionDAO.getInstancia()
+            .obtenerSancionesActivasPorPreso(identificacionPreso);
+    
+    for (Sancion sancion : sancionesActivas) {
+        sancion.cancelar();
+        SancionDAO.getInstancia().actualizarSancion(sancion);
     }
+}
 
 }

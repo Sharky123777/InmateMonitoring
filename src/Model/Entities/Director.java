@@ -42,7 +42,6 @@ public class Director extends Persona {
         this.nivelAcceso = nivelAcceso;
     }
 
-    // Getters y Setters
     public String getTurno() {
         return turno != null ? turno : "";
     }

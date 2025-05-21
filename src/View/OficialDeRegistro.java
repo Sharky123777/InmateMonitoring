@@ -29,7 +29,6 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -78,7 +77,6 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
 
     private List<Delito> delitosTemporales = new ArrayList<>();
 
-    private OficialDeRegistroController oficialRegistro = OficialDeRegistroController.getInstancia();
     public boolean imagenFueModificada;
     private File imagenSeleccionadaModODR;
 
@@ -128,8 +126,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         celda.generarCeldas("Seccion C", 20, 2);
 
         soloNumeros(nuevaEdadField);
-        soloNumeros(nuevoPesoField);
-        soloNumeros(nuevaEstaturaField);
+
         soloLetras(nuevoPrimerNombreField);
         soloLetras(nuevoSegundoNombreField);
         soloLetras(nuevoPrimerApellidoField);
@@ -148,11 +145,37 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         soloNumeros(InputEdadPreso);
         soloNumeros(InputIdentificacionPreso);
 
-        actualizarEstadisticasCompletas();
+        soloEstatura(InputEstaturaPreso);
+        soloPeso(InputPesoPreso);
+        soloEstatura(nuevaEstaturaField);
+        soloPeso(nuevoPesoField);
 
         cantidadDelitos.addActionListener(e -> {
             actualizarProgreso();
             actualizarEstadoBotonDelito();
+        });
+
+        cantidadDelitos.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                int index = cantidadDelitos.getSelectedIndex();
+                if (index > 0 && cantidadDelitos.isEnabled()) {
+                    int seleccion = JOptionPane.showConfirmDialog(
+                            null,
+                            "¿Está seguro de que desea ingresar " + cantidadDelitos.getSelectedItem() + " delito(s)?\n"
+                            + "No podrá modificar la cantidad después de confirmar.",
+                            "Confirmar cantidad de delitos",
+                            JOptionPane.YES_NO_OPTION
+                    );
+
+                    if (seleccion == JOptionPane.YES_OPTION) {
+                        cantidadDelitos.setEnabled(false);
+                    } else {
+                        cantidadDelitos.setSelectedIndex(0);
+                    }
+                }
+            }
+
         });
 
         agregarValidacionInstantanea();
@@ -168,9 +191,57 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         });
     }
 
+    public void soloPeso(JTextField campo) {
+        campo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                char c = evt.getKeyChar();
+                String texto = campo.getText();
+
+                if (Character.isISOControl(c)) {
+                    return;
+                }
+
+                if (!Character.isDigit(c) && c != '.') {
+                    evt.consume();
+                    JOptionPane.showMessageDialog(null, "Solo se permiten números y un punto.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if (c == '.' && texto.contains(".")) {
+                    evt.consume();
+                    JOptionPane.showMessageDialog(null, "Ya se ha ingresado un punto decimal.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+    }
+
+    public void soloEstatura(JTextField campo) {
+        campo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                char c = evt.getKeyChar();
+                String texto = campo.getText();
+
+                if (Character.isISOControl(c)) {
+                    return;
+                }
+
+                if (!Character.isDigit(c) && c != '.') {
+                    evt.consume();
+                    JOptionPane.showMessageDialog(null, "Solo se permiten números y un punto.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if (c == '.' && texto.contains(".")) {
+                    evt.consume();
+                    JOptionPane.showMessageDialog(null, "Ya se ha ingresado un punto decimal.", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+    }
+
     public void setUsuario(Usuario usuario) {
         try {
-            this.usuario = usuarioDAO.obtenerUsuarioPorIdentificacion(usuario.getIdentificacion()); // recarga desde JSON
+            this.usuario = usuarioDAO.obtenerUsuarioPorIdentificacion(usuario.getIdentificacion());
         } catch (IOException ex) {
             Logger.getLogger(OficialDeRegistro.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -203,13 +274,6 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
 
     private void cargarImagenPorDefecto() {
         lblFoto.setIcon(new ImageIcon("src/Resources/default_avatar.png"));
-    }
-
-    private void actualizarEstadisticasCompletas() {
-        String estadisticas = presoController.obtenerEstadisticasPresosHorizontal();
-
-        lblFallecidas.setText(estadisticas);
-
     }
 
     private void configurarCampoIdentificacion() {
@@ -759,11 +823,11 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         InputApellidoPreso.setText("");
         InputEdadPreso.setText("");
         InputIdentificacionPreso.setText("");
-        InputSexoPreso.setSelectedItem(0);
-        InputNacionalidadPreso.setSelectedItem(0);
+        InputSexoPreso.setSelectedIndex(0);
+        InputNacionalidadPreso.setSelectedIndex(0);
         InputEstaturaPreso.setText("");
         InputPesoPreso.setText("");
-        TipoSangreCombobox.setSelectedItem(0);
+        TipoSangreCombobox.setSelectedIndex(0);
         lblFoto.setIcon(null);
     }
 
@@ -920,19 +984,18 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         guardarDelito = new javax.swing.JButton();
         jLabel105 = new javax.swing.JLabel();
         ArticuloLey = new javax.swing.JLabel();
-        lblProgreso = new javax.swing.JLabel();
         AñoD = new com.toedter.components.JSpinField();
         MesD = new com.toedter.components.JSpinField();
         jLabel82 = new javax.swing.JLabel();
         jLabel83 = new javax.swing.JLabel();
         jLabel84 = new javax.swing.JLabel();
         cancelarD = new javax.swing.JButton();
-        AñadirPreso = new javax.swing.JButton();
         jLabel29 = new javax.swing.JLabel();
         btnRegresarAJudicial = new javax.swing.JButton();
+        AñadirPreso = new javax.swing.JButton();
+        lblProgreso = new javax.swing.JLabel();
         ActualizarInformacionPreso = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
-        jPanel33 = new javax.swing.JPanel();
         jPanel17 = new javax.swing.JPanel();
         jPanel39 = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
@@ -980,6 +1043,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         jLabel91 = new javax.swing.JLabel();
         jSeparator61 = new javax.swing.JSeparator();
         nuevaSeccion = new javax.swing.JComboBox<>();
+        jPanel33 = new javax.swing.JPanel();
         jLabel30 = new javax.swing.JLabel();
         actualizarPreso = new javax.swing.JButton();
         Perfil = new javax.swing.JPanel();
@@ -1102,7 +1166,6 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         ;
         jLabel79 = new javax.swing.JLabel();
         comboInactivos = new javax.swing.JComboBox<>();
-        lblFallecidas = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jPanel16 = new RoundedPanel(30);
         txtBusquedPresosInactivos = new javax.swing.JTextField();
@@ -1525,7 +1588,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         jPanel7.add(riesgo, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 150, 150, 40));
 
         seguridad.setBackground(new java.awt.Color(51, 51, 51));
-        seguridad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "Bajo", "Medio", "Alto" }));
+        seguridad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "Baja", "Media", "Alta" }));
         jPanel7.add(seguridad, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 220, 150, 40));
 
         condicionComb.setBackground(new java.awt.Color(51, 51, 51));
@@ -1595,17 +1658,17 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
 
         jPanel12.setBackground(new java.awt.Color(29, 35, 51));
         jPanel12.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel10.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 460, 960, 10));
+        jPanel10.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, 960, 10));
 
         jLabel24.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel24.setForeground(new java.awt.Color(0, 0, 0));
         jLabel24.setText("Mes");
-        jPanel10.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 330, 50, 30));
+        jPanel10.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 360, 50, 30));
 
         jLabel25.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel25.setForeground(new java.awt.Color(0, 0, 0));
         jLabel25.setText("Articulo:");
-        jPanel10.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 250, 70, 30));
+        jPanel10.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 270, 70, 30));
 
         jLabel26.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel26.setForeground(new java.awt.Color(0, 0, 0));
@@ -1627,7 +1690,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
                 cantidadDelitosActionPerformed(evt);
             }
         });
-        jPanel10.add(cantidadDelitos, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 50, 210, 30));
+        jPanel10.add(cantidadDelitos, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 50, 220, 30));
 
         jLabel28.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel28.setForeground(new java.awt.Color(0, 0, 0));
@@ -1649,12 +1712,12 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         DescripcionDelito.setRows(5);
         jScrollPane2.setViewportView(DescripcionDelito);
 
-        jPanel10.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 150, 330, 100));
+        jPanel10.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 150, 330, 130));
 
         jLabel33.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel33.setForeground(new java.awt.Color(0, 0, 0));
         jLabel33.setText("Sentencia por delito:");
-        jPanel10.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, 140, 30));
+        jPanel10.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 320, 140, 30));
 
         guardarDelito.setBackground(new java.awt.Color(0, 0, 51));
         guardarDelito.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -1665,24 +1728,20 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
                 guardarDelitoActionPerformed(evt);
             }
         });
-        jPanel10.add(guardarDelito, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 270, 150, 30));
+        jPanel10.add(guardarDelito, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 360, 150, 40));
 
         jLabel105.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel105.setForeground(new java.awt.Color(0, 0, 0));
         jLabel105.setText("Codigo:");
-        jPanel10.add(jLabel105, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 210, 100, 20));
+        jPanel10.add(jLabel105, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, 100, 20));
 
         ArticuloLey.setBackground(new java.awt.Color(204, 204, 204));
         ArticuloLey.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         ArticuloLey.setForeground(new java.awt.Color(0, 0, 0));
         ArticuloLey.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
-        jPanel10.add(ArticuloLey, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 250, 280, 30));
-
-        lblProgreso.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        lblProgreso.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel10.add(lblProgreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 10, 260, 20));
-        jPanel10.add(AñoD, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 330, 90, -1));
-        jPanel10.add(MesD, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 330, 80, -1));
+        jPanel10.add(ArticuloLey, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 270, 280, 30));
+        jPanel10.add(AñoD, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 360, 90, -1));
+        jPanel10.add(MesD, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 360, 80, -1));
 
         jLabel82.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel82.setForeground(new java.awt.Color(0, 0, 0));
@@ -1697,7 +1756,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         jLabel84.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel84.setForeground(new java.awt.Color(0, 0, 0));
         jLabel84.setText("Año");
-        jPanel10.add(jLabel84, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 330, 50, 30));
+        jPanel10.add(jLabel84, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 360, 50, 30));
 
         cancelarD.setBackground(new java.awt.Color(51, 0, 0));
         cancelarD.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -1708,25 +1767,14 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
                 cancelarDActionPerformed(evt);
             }
         });
-        jPanel10.add(cancelarD, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 270, 160, 30));
-
-        AñadirPreso.setBackground(new java.awt.Color(7, 56, 7));
-        AñadirPreso.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        AñadirPreso.setForeground(new java.awt.Color(255, 255, 255));
-        AñadirPreso.setText("Finalizar y añadir preso");
-        AñadirPreso.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AñadirPresoActionPerformed(evt);
-            }
-        });
-        jPanel10.add(AñadirPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 410, 170, 40));
-
-        PanelIngresarDelito.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 40, 960, 470));
+        jPanel10.add(cancelarD, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 360, 160, 40));
 
         jLabel29.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
         jLabel29.setForeground(new java.awt.Color(102, 0, 0));
         jLabel29.setText("Todos los campos son obligarorios*");
-        PanelIngresarDelito.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 10, 200, -1));
+        jPanel10.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 20, 200, -1));
+
+        PanelIngresarDelito.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 40, 960, 450));
 
         btnRegresarAJudicial.setBackground(new java.awt.Color(51, 0, 0));
         btnRegresarAJudicial.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
@@ -1737,7 +1785,22 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
                 btnRegresarAJudicialActionPerformed(evt);
             }
         });
-        PanelIngresarDelito.add(btnRegresarAJudicial, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 60, 30));
+        PanelIngresarDelito.add(btnRegresarAJudicial, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, 60, 30));
+
+        AñadirPreso.setBackground(new java.awt.Color(7, 56, 7));
+        AñadirPreso.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        AñadirPreso.setForeground(new java.awt.Color(255, 255, 255));
+        AñadirPreso.setText("Finalizar y añadir preso");
+        AñadirPreso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AñadirPresoActionPerformed(evt);
+            }
+        });
+        PanelIngresarDelito.add(AñadirPreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 500, 170, 40));
+
+        lblProgreso.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lblProgreso.setForeground(new java.awt.Color(0, 0, 0));
+        PanelIngresarDelito.add(lblProgreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 10, 260, 20));
 
         TabbedAñadirInformacionGeneral.addTab("TabbedAñadirInformacionGeneral", PanelIngresarDelito);
 
@@ -1746,19 +1809,6 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
 
         jPanel13.setBackground(new java.awt.Color(204, 204, 204));
         jPanel13.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        javax.swing.GroupLayout jPanel33Layout = new javax.swing.GroupLayout(jPanel33);
-        jPanel33.setLayout(jPanel33Layout);
-        jPanel33Layout.setHorizontalGroup(
-            jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel33Layout.setVerticalGroup(
-            jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        jPanel13.add(jPanel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 20, 10, 430));
 
         jPanel17.setBackground(new java.awt.Color(29, 35, 51));
 
@@ -2044,6 +2094,21 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         nuevaSeccion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "Sección A", "Sección B", "Sección C" }));
         jPanel13.add(nuevaSeccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 250, 220, 30));
 
+        jPanel33.setBackground(new java.awt.Color(12, 12, 28));
+
+        javax.swing.GroupLayout jPanel33Layout = new javax.swing.GroupLayout(jPanel33);
+        jPanel33.setLayout(jPanel33Layout);
+        jPanel33Layout.setHorizontalGroup(
+            jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel33Layout.setVerticalGroup(
+            jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jPanel13.add(jPanel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 0, 10, 430));
+
         ActualizarInformacionPreso.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 1030, 450));
 
         jLabel30.setFont(new java.awt.Font("Arial", 2, 14)); // NOI18N
@@ -2325,29 +2390,29 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         TablaPresos.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         TablaPresos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Foto", "Id", "Nombres", "Apellidos", "Edad", "Identificación", "Nacionalidad", "Seccion", "Celda", "Estado"
+                "Foto", "Id", "Nombres", "Apellidos", "Edad", "Identificación", "Nacionalidad", "Seccion", "Celda", "Estado", "Aislamiento"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -2365,12 +2430,13 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         jScrollPane1.setViewportView(TablaPresos);
         if (TablaPresos.getColumnModel().getColumnCount() > 0) {
             TablaPresos.getColumnModel().getColumn(0).setPreferredWidth(20);
-            TablaPresos.getColumnModel().getColumn(1).setPreferredWidth(3);
+            TablaPresos.getColumnModel().getColumn(1).setPreferredWidth(2);
             TablaPresos.getColumnModel().getColumn(2).setPreferredWidth(60);
             TablaPresos.getColumnModel().getColumn(3).setPreferredWidth(60);
-            TablaPresos.getColumnModel().getColumn(4).setPreferredWidth(3);
+            TablaPresos.getColumnModel().getColumn(4).setPreferredWidth(2);
             TablaPresos.getColumnModel().getColumn(7).setPreferredWidth(20);
             TablaPresos.getColumnModel().getColumn(8).setPreferredWidth(20);
+            TablaPresos.getColumnModel().getColumn(10).setPreferredWidth(4);
         }
 
         PanelTablaPresoBase.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 1020, 360));
@@ -2715,7 +2781,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         tablaInactivos.setRowHeight(50);
         jScrollPane3.setViewportView(tablaInactivos);
 
-        presosInactivos.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 1000, 330));
+        presosInactivos.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 1000, 390));
 
         jPanel15.setBackground(new java.awt.Color(29, 35, 51));
         jPanel15.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -2734,10 +2800,6 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         jPanel15.add(comboInactivos, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 30, 120, 30));
 
         presosInactivos.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 30, 410, 90));
-
-        lblFallecidas.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblFallecidas.setForeground(new java.awt.Color(0, 0, 0));
-        presosInactivos.add(lblFallecidas, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 970, 50));
 
         jButton1.setBackground(new java.awt.Color(51, 0, 0));
         jButton1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -3583,6 +3645,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
                 limpiarFormularioCompleto();
                 cargarTodosLosPresos();
                 cargarPresosInactivos();
+                cantidadDelitos.setEnabled(true);
                 OficialDeRegistroView.setSelectedIndex(3);
             } else {
                 throw new RuntimeException("Error al guardar el preso en la base de datos");
@@ -3611,7 +3674,9 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
 
             limpiarFormularioCompleto();
             limpiarCamposDelito();
-            OficialDeRegistroView.setSelectedIndex(4);
+            cantidadDelitos.setEnabled(true);
+            cantidadDelitos.setSelectedIndex(0);
+            OficialDeRegistroView.setSelectedIndex(3);
 
         }
     }//GEN-LAST:event_cancelarDActionPerformed
@@ -3918,6 +3983,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         NuevosDelitosNombre1.setSelectedIndex(0);
         fechaComisionActualizar.setDate(null);
         textAreaDescripcion1.setText("");
+        cantidadDelitos.setSelectedIndex(0);
     }
 
 
@@ -4096,12 +4162,12 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
             if (!segundoNuevoApellido1.getText().trim().isEmpty()) {
                 cambios.put("segundoApellido", segundoNuevoApellido1.getText().trim());
             }
-            if (!nuevaEdad.getText().trim().isEmpty()) {
-                try {
-                    cambios.put("edad", Integer.parseInt(nuevaEdad.getText().trim()));
-                } catch (NumberFormatException e) {
-                    throw new IllegalArgumentException("La edad debe ser un número válido");
-                }
+
+            String NuevaEdad = nuevaEdad.getText().trim();
+
+            if (!NuevaEdad.isEmpty()) {
+                Validador.validarEdadEmpleado(NuevaEdad);
+                cambios.put("edad", Integer.parseInt(NuevaEdad));
             }
 
             if (cbxNacionalidad.getSelectedItem() != null) {
@@ -4111,14 +4177,31 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
                 }
             }
 
-            if (!nuevoUsuario.getText().trim().isEmpty()) {
-                cambios.put("nuevoUsuario", nuevoUsuario.getText().trim());
+            String usuarioNuevo = nuevoUsuario.getText().trim();
+            String contraNueva = nuevaContra.getText().trim();
+
+            if (!usuarioNuevo.isEmpty()) {
+                if (!Validador.validarUsuario(usuarioNuevo)) {
+                    return;
+                }
+                cambios.put("nuevoUsuario", usuarioNuevo);
             }
-            if (!nuevaContra.getText().trim().isEmpty()) {
-                cambios.put("nuevaContraseña", nuevaContra.getText().trim());
+
+            if (!contraNueva.isEmpty()) {
+                if (!Validador.validarContrasena(contraNueva)) {
+                    return;
+                }
+                cambios.put("nuevaContraseña", contraNueva);
             }
 
             File imagenModificada = imagenFueModificada ? imagenSeleccionadaModODR : null;
+
+            if (cambios.isEmpty() && imagenModificada == null) {
+                JOptionPane.showMessageDialog(this,
+                        "No hay ningún cambio para guardar.",
+                        "Información", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
 
             int resultado = OficialDeRegistroController.getInstancia()
                     .modificarOficialConCredenciales(cedulaOriginal, cambios, imagenModificada);
@@ -4130,6 +4213,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
                         mensaje += "\nCredenciales enviadas al correo registrado";
                     }
                     JOptionPane.showMessageDialog(this, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
                     String nuevaIdentificacion = cambios.containsKey("identificacion")
                             ? cambios.get("identificacion").toString()
                             : cedulaOriginal;
@@ -4140,7 +4224,6 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
                     setUsuario(usuarioActualizado);
 
                     mostrarDatosUsuario();
-
                     limpiarFormulario();
 
                     OficialDeRegistroView.setSelectedIndex(1);
@@ -4164,7 +4247,6 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
                     "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
-
 
     }//GEN-LAST:event_btnActualilzarODRActionPerformed
 
@@ -4670,7 +4752,6 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JSeparator jSeparator92;
     private javax.swing.JSeparator jSeparator93;
-    private javax.swing.JLabel lblFallecidas;
     private javax.swing.JLabel lblFechaSalida;
     private javax.swing.JLabel lblFoto;
     private javax.swing.JLabel lblMensajeEspecialPreso;

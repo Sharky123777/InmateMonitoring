@@ -190,10 +190,14 @@ public class OficialDeRegistroController {
             validarFechasContrato(original.getFechaContratacion(), fechaFin);
 
             OficialDeRegistro oficialModificado = construirOficialModificado(cedulaOriginal, cambios, original);
+            
+            
 
             boolean resultado = oficialDAO.modificarOficial(cedulaOriginal, oficialModificado, nuevaImagen);
+            
+            SincronizadorJson.sincronizarConUsuarios(oficialModificado);
 
-            return resultado ? 1 : -1; // 1=Éxito, -1=Error
+            return resultado ? 1 : -1; 
 
         } catch (IllegalArgumentException e) {
             throw e;

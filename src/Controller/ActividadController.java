@@ -12,12 +12,9 @@ import Model.Entities.Preso;
 import Utilidades.Validador;
 import View.ActividadRenderer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Stream;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -54,19 +51,24 @@ public class ActividadController {
         return actividadesActuales < limiteActividades;
     }
 
-    public boolean agregarActividad(String nombre, String tipo, Object dia, Object horario, String lugar, String cupoMaximoStr, Oficial responsable, String descripcion) {
+    public boolean agregarActividad(String nombre, String tipo, Object dia, Object horario,
+            String lugar, String cupoMaximoStr, Oficial responsable,
+            String descripcion) {
         try {
             Validador.validarActividadCompleta(nombre, tipo, dia, horario, lugar, cupoMaximoStr);
 
-            ActividadController controller = ActividadController.getInstancia();
+            if (!actividadDAO.esTurnoCompatibleConHorario(responsable.getTurno(), horario.toString())) {
+                Validador.mostrarError("El horario de la actividad no es compatible con el turno del oficial.");
+                return false;
+            }
 
             boolean tieneActividad = actividadDAO.tieneActividadEnMismoHorario(responsable, dia, horario);
-
             if (tieneActividad) {
                 Validador.mostrarError("El oficial ya tiene una actividad en el mismo día y horario.");
                 return false;
             }
 
+            ActividadController controller = ActividadController.getInstancia();
             if (!controller.puedeAgregarActividad(responsable)) {
                 Validador.mostrarError("El responsable ya tiene el límite de actividades alcanzado.");
                 return false;
@@ -88,7 +90,6 @@ public class ActividadController {
             );
 
             if (actividadDAO.agregarActividad(actividad)) {
-                Validador.mostrarInfo("Actividad agregada exitosamente");
                 return true;
             } else {
                 Validador.mostrarError("No se pudo agregar la actividad");
@@ -221,7 +222,7 @@ public class ActividadController {
                         preso.getEdad(),
                         preso.getIdentificacion(),
                         actividad.getHorario(),
-                        actividad.getEstadoPreso(preso.getIdentificacion()) 
+                        actividad.getEstadoPreso(preso.getIdentificacion())
                     });
                 }
             } catch (Exception e) {
@@ -256,34 +257,33 @@ public class ActividadController {
         return filas;
     }
 
-   public List<Object[]> obtenerPresosParaActividades() {
-    List<Preso> presos = presoDAO.cargarTodos();
-    List<Object[]> filas = new ArrayList<>();
+    public List<Object[]> obtenerPresosParaActividades() {
+        List<Preso> presos = presoDAO.cargarTodos();
+        List<Object[]> filas = new ArrayList<>();
 
-    for (Preso preso : presos) {
-        if (preso.getEstado() == EstadoPresoEnum.ACTIVO &&
-            preso.getNivelDeRiesgo().equalsIgnoreCase("RIESGO BAJO") &&
-            !preso.isEnAislamiento()) {
-            
-            ImageIcon foto = pc.obtenerFotoPreso(preso);
+        for (Preso preso : presos) {
+            if (preso.getEstado() == EstadoPresoEnum.ACTIVO
+                    && preso.getNivelDeRiesgo().equalsIgnoreCase("RIESGO BAJO")
+                    && !preso.isEnAislamiento()) {
 
-            filas.add(new Object[]{
-                foto,
-                preso.getId(),
-                preso.getNombresCompletos(),
-                preso.getApellidosCompletos(),
-                preso.getEdad(),
-                preso.getIdentificacion(),
-                preso.getNacionalidad(),
-                preso.getSeccionAsignada(),
-                preso.getCeldaAsignada()
-            });
+                ImageIcon foto = pc.obtenerFotoPreso(preso);
+
+                filas.add(new Object[]{
+                    foto,
+                    preso.getId(),
+                    preso.getNombresCompletos(),
+                    preso.getApellidosCompletos(),
+                    preso.getEdad(),
+                    preso.getIdentificacion(),
+                    preso.getNacionalidad(),
+                    preso.getSeccionAsignada(),
+                    preso.getCeldaAsignada()
+                });
+            }
         }
+
+        return filas;
     }
-
-    return filas;
-}
-
 
     public boolean actualizarEstadoActividad(String idActividad, EstadoActividadesEnum nuevoEstado) {
         return actividadDAO.actualizarEstadoActividad(idActividad, nuevoEstado);
@@ -292,11 +292,11 @@ public class ActividadController {
     public void actualizarEstadoPresosActividad(String idActividad, EstadoActividadesEnum estado) {
         actividadDAO.actualizarEstadoPresosActividad(idActividad, estado);
     }
+
     public void actualizarEstadoPresoEnActividad(String idActividad, String idPreso, EstadoActividadesPresoEnum nuevoEstado) {
-    actividadDAO.actualizarEstadoPresoEnActividad(idActividad, idPreso, nuevoEstado);
+        actividadDAO.actualizarEstadoPresoEnActividad(idActividad, idPreso, nuevoEstado);
 
-}
-
+    }
 
     public boolean hayCambiosActividad(Actividad actividadOriginal,
             String nombre,
@@ -350,7 +350,6 @@ public class ActividadController {
                     ? actividadOriginal.getCupoMaximo() : Integer.parseInt(cupoMaximo.toString());
             String responsableFinal = (responsableOficial == null || responsableOficial.trim().isEmpty())
                     ? actividadOriginal.getResponsableOficial() : responsableOficial.trim();
-
             String descripcionFinal = (descripcion == null || descripcion.trim().isEmpty())
                     ? actividadOriginal.getDescripcion() : descripcion.trim();
 
@@ -379,23 +378,23 @@ public class ActividadController {
                     throw new Exception("El guardia ya tiene 2 actividades asignadas");
                 }
 
-                if (!diaFinal.equals(actividadOriginal.getDia())
-                        || !horarioFinal.equals(actividadOriginal.getHorario())) {
+                if (!actividadDAO.esTurnoCompatibleConHorario(oficial.getTurno(), horarioFinal)) {
+                    throw new Exception("El horario de la actividad no es compatible con el turno del nuevo oficial.");
+                }
 
+                if (!diaFinal.equals(actividadOriginal.getDia()) || !horarioFinal.equals(actividadOriginal.getHorario())) {
                     if (actividadDAO.tieneActividadEnMismoHorario(oficial, diaFinal, horarioFinal)) {
-                        throw new Exception("El guardia ya tiene actividad en ese horario");
+                        throw new Exception("El guardia ya tiene una actividad en ese horario.");
                     }
                 }
             }
 
-            if ((!diaFinal.equals(actividadOriginal.getDia())
-                    || (!horarioFinal.equals(actividadOriginal.getHorario())))) {
-
+            if (!diaFinal.equals(actividadOriginal.getDia()) || !horarioFinal.equals(actividadOriginal.getHorario())) {
                 for (String idPreso : actividadOriginal.getPresosAsignadosIds()) {
                     if (actividadDAO.tieneActividadEnMismoHorarioPreso(idPreso, diaFinal, horarioFinal)) {
                         Preso preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
                         throw new Exception("El preso " + preso.getNombresCompletos()
-                                + " tiene conflicto de horario con la nueva programación");
+                                + " tiene conflicto de horario con la nueva programación.");
                     }
                 }
             }

@@ -6,9 +6,8 @@ public class Celda {
     private String tipo;
     private int capacidadMaxima;
     private boolean ocupada;
-    
-    public Celda(){
-        
+
+    public Celda() {
     }
 
     public Celda(int idCelda, String tipo, int capacidadMaxima, boolean ocupada) {
@@ -49,8 +48,8 @@ public class Celda {
     public void setOcupada(boolean ocupada) {
         this.ocupada = ocupada;
     }
-    
-     public String getNombreFormateado() {
-    return "CELD-" + idCelda;
-}
+
+    public String getNombreFormateado() {
+        return "CELD-" + idCelda;
+    }
 }

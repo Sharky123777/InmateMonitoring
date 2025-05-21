@@ -1,8 +1,11 @@
 package DAO;
 
+import Model.Constants.EstadoPresoEnum;
 import Model.Constants.EstadoVisitaEnum;
+import Model.Constants.EstadoVisitanteEnum;
 import Model.Entities.LocalDateAdapter;
 import Model.Entities.LocalTimeAdapter;
+import Model.Entities.Preso;
 import Model.Entities.Visita;
 import Model.Entities.Visitante;
 import com.google.gson.*;
@@ -114,7 +117,7 @@ public class VisitaDAO {
         return visitasFiltradas;
     }
 
-    private void guardarTodas(List<Visita> visitas) {
+    public void guardarTodas(List<Visita> visitas) {
         try (Writer writer = new FileWriter(JSON_FILE)) {
             gson.toJson(visitas, writer);
         } catch (IOException e) {
@@ -218,34 +221,33 @@ public class VisitaDAO {
         return null;
     }
 
-    public List<Visita> cargarPorIdentificacionPresoFechaYHora(String identificacionPreso, LocalDate fecha, LocalTime hora) {
-        List<Visita> todasVisitas = cargarTodas();
-        List<Visita> visitasFiltradas = new ArrayList<>();
-
-        for (Visita visita : todasVisitas) {
-            if (visita.getPreso() != null
-                    && visita.getPreso().getIdentificacion().equals(identificacionPreso)
-                    && visita.getFechaVisita().equals(fecha)
-                    && visita.getHoraVisita().equals(hora)
-                    && visita.getEstado() != EstadoVisitaEnum.CANCELADA) {
-                visitasFiltradas.add(visita);
-            }
-        }
-
-        return visitasFiltradas;
-    }
-
-    public boolean tieneVisitaEnFecha(String identificacionVisitante, LocalDate fecha) {
+    public boolean tieneVisitaEnFecha(String identificacionVisitante, LocalDate fecha, String identificacionPreso) {
         List<Visita> todasVisitas = cargarTodas();
 
         for (Visita visita : todasVisitas) {
             if (visita.getEstado() != EstadoVisitaEnum.CANCELADA
-                    && visita.getFechaVisita().equals(fecha)) {
+                    && visita.getFechaVisita().equals(fecha)
+                    && visita.getPreso() != null
+                    && visita.getPreso().getIdentificacion().equals(identificacionPreso)) {
                 for (Visitante visitante : visita.getVisitantesConRelacion().keySet()) {
                     if (visitante.getIdentificacion().equals(identificacionVisitante)) {
                         return true;
                     }
                 }
+            }
+        }
+        return false;
+    }
+
+    public boolean presoTieneVisitaEnFecha(String identificacionPreso, LocalDate fecha) {
+        List<Visita> todasVisitas = cargarTodas();
+
+        for (Visita visita : todasVisitas) {
+            if (visita.getEstado() != EstadoVisitaEnum.CANCELADA
+                    && visita.getPreso() != null
+                    && visita.getPreso().getIdentificacion().equals(identificacionPreso)
+                    && visita.getFechaVisita().equals(fecha)) {
+                return true;
             }
         }
         return false;
@@ -271,20 +273,113 @@ public class VisitaDAO {
     }
 
     public int finalizarVisitasAutomaticamente() {
-        List<Visita> visitasAFinalizar = obtenerVisitasParaFinalizar();
-        if (visitasAFinalizar.isEmpty()) {
-            return 0;
-        }
+        LocalDate hoy = LocalDate.now();
+        LocalTime horaActual = LocalTime.now();
+        int contador = 0;
 
         List<Visita> todasVisitas = cargarTodas();
         for (Visita visita : todasVisitas) {
-            if (visitasAFinalizar.stream().anyMatch(v -> v.getId() == visita.getId())) {
-                visita.setEstado(EstadoVisitaEnum.FINALIZADA);
+            if (visita.getEstado() == EstadoVisitaEnum.PROGRAMADA
+                    && visita.getFechaVisita().equals(hoy)
+                    && !horaActual.isBefore(visita.getHoraVisita())
+                    && horaActual.isBefore(visita.getHoraVisita().plusMinutes(30))) {
+
+                if (iniciarVisita(visita.getId())) {
+                    contador++;
+                }
+            } else if (visita.getEstado() == EstadoVisitaEnum.EN_PROCESO) {
+                LocalTime horaFin = visita.getHoraVisita().plusHours(1);
+
+                if (visita.getFechaVisita().isBefore(hoy)
+                        || (visita.getFechaVisita().equals(hoy) && horaActual.isAfter(horaFin))) {
+
+                    visita.setEstado(EstadoVisitaEnum.FINALIZADA);
+
+                    for (Visitante visitante : visita.getVisitantesConRelacion().keySet()) {
+                        visitante.setEstado(EstadoVisitanteEnum.HABILITADO);
+                        VisitanteDAO.getInstancia().guardarVisitante(visitante, null);
+                    }
+
+                    Preso preso = visita.getPreso();
+                    if (preso != null) {
+                        preso.setEstado(EstadoPresoEnum.ACTIVO);
+                        preso.setEnVisita(false);
+                        PresoDAO.getInstancia().actualizarPreso(preso);
+                    }
+
+                    contador++;
+                }
             }
         }
 
-        guardarTodas(todasVisitas);
-        return visitasAFinalizar.size();
+        if (contador > 0) {
+            guardarTodas(todasVisitas);
+        }
+
+        return contador;
     }
+
+    public boolean iniciarVisita(int idVisita) {
+        List<Visita> visitas = cargarTodas();
+        for (Visita visita : visitas) {
+            if (visita.getId() == idVisita && visita.getEstado() == EstadoVisitaEnum.PROGRAMADA) {
+                visita.setEstado(EstadoVisitaEnum.EN_PROCESO);
+
+                for (Visitante visitante : visita.getVisitantesConRelacion().keySet()) {
+                    visitante.setEstado(EstadoVisitanteEnum.EN_VISITA);
+                    VisitanteDAO.getInstancia().guardarVisitante(visitante, null);
+                }
+
+                Preso preso = visita.getPreso();
+                if (preso != null) {
+                    preso.setEstado(EstadoPresoEnum.EN_VISITA);
+                    preso.setEnVisita(true);
+                    PresoDAO.getInstancia().actualizarPreso(preso);
+                }
+
+                guardarTodas(visitas);
+                return true;
+            }
+        }
+        return false;
+    }
+    public int cancelarVisitasPreso(String identificacionPreso, String razon) {
+    List<Visita> todasVisitas = cargarTodas();
+    int contador = 0;
+    
+    for (Visita visita : todasVisitas) {
+        if (visita.getPreso() != null && 
+            visita.getPreso().getIdentificacion().equals(identificacionPreso) &&
+            (visita.getEstado() == EstadoVisitaEnum.PROGRAMADA || 
+             visita.getEstado() == EstadoVisitaEnum.EN_PROCESO)) {
+            
+            visita.setEstado(EstadoVisitaEnum.CANCELADA);
+            visita.setRazonCancelacion(razon);
+            contador++;
+        }
+    }
+    
+    if (contador > 0) {
+        guardarTodas(todasVisitas);
+    }
+    
+    return contador;
+}
+    
+    public boolean presoTieneVisitaEnFechaYHora(String identificacionPreso, LocalDate fecha, LocalTime hora) {
+    List<Visita> todasVisitas = cargarTodas();
+
+    for (Visita visita : todasVisitas) {
+        if (visita.getEstado() != EstadoVisitaEnum.CANCELADA
+                && visita.getPreso() != null
+                && visita.getPreso().getIdentificacion().equals(identificacionPreso)
+                && visita.getFechaVisita().equals(fecha)
+                && visita.getHoraVisita().equals(hora)) {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 }

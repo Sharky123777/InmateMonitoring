@@ -57,18 +57,16 @@ public class OficialDeRegistroDAO {
         }
     }
 
-    public void guardarUsuario(Usuario usuario) throws IOException {
-        List<Usuario> usuarios = obtenerTodosUsuarios();
-        usuarios.removeIf(u -> u.getUsuario().equals(usuario.getUsuario()));
-        usuarios.add(usuario);
+    private void guardarUsuario(Usuario usuario) throws IOException {
+    List<Usuario> usuarios = obtenerTodosUsuarios();
+    usuarios.removeIf(u -> u.getUsuario().equals(usuario.getUsuario()));
+    usuarios.add(usuario);
 
-        try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
-            JsonObject jsonObject = new JsonObject();
-            JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
-            jsonObject.add("usuarios", usuariosArray);
-            gson.toJson(jsonObject, writer);
-        }
+    try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
+        gson.toJson(usuarios, writer); 
     }
+    }
+    
 
     public OficialDeRegistro obtenerOficialPorUsuario(String usuario) {
         List<OficialDeRegistro> oficiales = obtenerOficiales();
@@ -94,17 +92,15 @@ public class OficialDeRegistroDAO {
         }
     }
 
-    private void eliminarUsuario(String usuario) throws IOException {
-        List<Usuario> usuarios = obtenerTodosUsuarios();
-        usuarios.removeIf(u -> u.getUsuario().equals(usuario));
+   private void eliminarUsuario(String usuario) throws IOException {
+    List<Usuario> usuarios = obtenerTodosUsuarios();
+    usuarios.removeIf(u -> u.getUsuario().equals(usuario));
 
-        try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
-            JsonObject jsonObject = new JsonObject();
-            JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
-            jsonObject.add("usuarios", usuariosArray);
-            gson.toJson(jsonObject, writer);
-        }
+    try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
+        gson.toJson(usuarios, writer);
     }
+}
+
 
     public boolean guardarOficial(OficialDeRegistro oficial, File imagen) throws IOException {
         if (oficial == null) {

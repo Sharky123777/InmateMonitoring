@@ -14,7 +14,6 @@ public Component getTableCellRendererComponent(JTable table, Object value,
 
     String estado = "";
     if (value != null) {
-        // Si el valor es un Enum, lo convertimos a String
         if (value instanceof Enum) {
             estado = value.toString();
         } else {

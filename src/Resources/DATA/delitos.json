@@ -158,5 +158,37 @@
       "fechaIngreso": "2025-05-17",
       "fechaSalidaCalculada": "2027-06-17"
     }
+  },
+  {
+    "id": 11,
+    "presoId": "838297329",
+    "codigo": 221,
+    "nombre": "Calumnia",
+    "articuloLey": "Artículo 221",
+    "gravedad": "Media",
+    "descripcion": "shudhdushudshd",
+    "fechaComision": "2025-05-02",
+    "sentencia": {
+      "años": 2,
+      "meses": 1,
+      "fechaIngreso": "2025-05-21",
+      "fechaSalidaCalculada": "2027-06-21"
+    }
+  },
+  {
+    "id": 12,
+    "presoId": "838297329",
+    "codigo": 265,
+    "nombre": "Daño en bien ajeno",
+    "articuloLey": "Artículo 265",
+    "gravedad": "Media",
+    "descripcion": "jsdiwjiwjsjiwe",
+    "fechaComision": "2024-05-25",
+    "sentencia": {
+      "años": 3,
+      "meses": 2,
+      "fechaIngreso": "2025-05-21",
+      "fechaSalidaCalculada": "2028-07-21"
+    }
   }
 ]

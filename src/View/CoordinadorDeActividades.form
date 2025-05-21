@@ -423,21 +423,6 @@
                         </Constraint>
                       </Constraints>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="lblCantidadDeActividades">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Arial" size="14" style="0"/>
-                        </Property>
-                        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="0" green="0" red="0" type="rgb"/>
-                        </Property>
-                      </Properties>
-                      <Constraints>
-                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                          <AbsoluteConstraints x="360" y="10" width="330" height="70"/>
-                        </Constraint>
-                      </Constraints>
-                    </Component>
                   </SubComponents>
                 </Container>
                 <Component class="javax.swing.JButton" name="jButton3">
@@ -696,9 +681,9 @@
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="6">
                         <StringItem index="0" value="&lt;Seleccionar&gt;"/>
-                        <StringItem index="1" value="07:00 am - 08:45 am"/>
-                        <StringItem index="2" value="08:45 am - 10:15 am"/>
-                        <StringItem index="3" value="10:45 am - 12:45 am"/>
+                        <StringItem index="1" value="07:00 am - 08:00 am"/>
+                        <StringItem index="2" value="08:10 am - 08:50 am"/>
+                        <StringItem index="3" value="12:15 pm - 01:15 pm"/>
                         <StringItem index="4" value="02:00 pm - 04:15 pm"/>
                         <StringItem index="5" value="04:15 pm - 05:15 pm"/>
                       </StringArray>
@@ -1051,7 +1036,7 @@
                   </AuxValues>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="50" y="140" width="1000" height="410"/>
+                      <AbsoluteConstraints x="50" y="140" width="1000" height="420"/>
                     </Constraint>
                   </Constraints>
 
@@ -3127,9 +3112,9 @@
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="6">
                         <StringItem index="0" value="&lt;Seleccione&gt;"/>
-                        <StringItem index="1" value="07:00 am - 08:45 am"/>
-                        <StringItem index="2" value="08:45 am - 10:15 am"/>
-                        <StringItem index="3" value="10:45 am - 12:45 am"/>
+                        <StringItem index="1" value="07:00 am - 08:00 am"/>
+                        <StringItem index="2" value="08:10 am - 08:50 am"/>
+                        <StringItem index="3" value="12:15 pm - 01:15 pm"/>
                         <StringItem index="4" value="02:00 pm - 04:15 pm"/>
                         <StringItem index="5" value="04:15 pm - 05:15 pm"/>
                       </StringArray>
@@ -3230,7 +3215,7 @@
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="90" y="100" width="880" height="420"/>
+                      <AbsoluteConstraints x="100" y="90" width="880" height="420"/>
                     </Constraint>
                   </Constraints>
                 </Component>

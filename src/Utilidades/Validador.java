@@ -2,7 +2,6 @@ package Utilidades;
 
 import DAO.PresoDAO;
 import Model.Constants.EstadoPresoEnum;
-import Model.Entities.Oficial;
 import Model.Entities.Preso;
 import javax.swing.JOptionPane;
 import java.io.File;
@@ -32,41 +31,41 @@ public class Validador {
         }
         return result;
     }
-    
-    public void validarEntradaPositiva(String dato){
-        
-         try {
-        long datoLong = Long.parseLong(dato);
-        if (datoLong < 0) {
-            throw new ArithmeticException(dato + " debe ser positivo");
+
+    public void validarEntradaPositiva(String dato) {
+
+        try {
+            long datoLong = Long.parseLong(dato);
+            if (datoLong < 0) {
+                throw new ArithmeticException(dato + " debe ser positivo");
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(dato + " no es un número válido.");
         }
-    } catch (NumberFormatException e) {
-        throw new IllegalArgumentException(dato + " no es un número válido.");
-    }
-        
+
     }
 
-public void validarIdentificacionUnica(String identificacion) {
-    validarFormatoIdentificacion(identificacion);
+    public void validarIdentificacionUnica(String identificacion) {
+        validarFormatoIdentificacion(identificacion);
 
-    Preso presoExistente = presoDAO.buscarPresoPorIdentificacion(identificacion);
+        Preso presoExistente = presoDAO.buscarPresoPorIdentificacion(identificacion);
 
-    if (presoExistente != null) {
-        EstadoPresoEnum estado = presoExistente.getEstado();
+        if (presoExistente != null) {
+            EstadoPresoEnum estado = presoExistente.getEstado();
 
-        if (estado != EstadoPresoEnum.LIBERADO) {
-            throw new IllegalArgumentException("Ya existe un preso con esta identificación y su estado actual es: " + estado);
+            if (estado != EstadoPresoEnum.LIBERADO) {
+                throw new IllegalArgumentException("Ya existe un preso con esta identificación y su estado actual es: " + estado);
+            }
         }
     }
-}
 
     public static void validarFormatoIdentificacion(String identificacion) {
         if (identificacion == null || identificacion.trim().isEmpty()) {
             throw new IllegalArgumentException("La identificación es obligatoria");
         }
 
-        if (!Pattern.matches("^\\d{9,15}$", identificacion)) {
-            throw new IllegalArgumentException("La identificación debe tener entre 9 y 15 dígitos");
+        if (!Pattern.matches("^\\d{6,10}$", identificacion)) {
+            throw new IllegalArgumentException("La identificación debe tener entre 6 y 10 dígitos");
         }
     }
 
@@ -138,12 +137,12 @@ public void validarIdentificacionUnica(String identificacion) {
     public static void mostrarInfo(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
     }
-    
-    public static void validarString (String nombre){
-      if (!Pattern.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]{2,50}$", nombre)) {
+
+    public static void validarString(String nombre) {
+        if (!Pattern.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]{2,50}$", nombre)) {
             throw new IllegalArgumentException("El campo solo puede contener letras y espacios (2-50 caracteres)");
         }
-  
+
     }
 
     public static void validarNombre(String nombre) {
@@ -161,6 +160,17 @@ public void validarIdentificacionUnica(String identificacion) {
             int edad = Integer.parseInt(edadStr);
             if (edad < 18 || edad > 110) {
                 throw new IllegalArgumentException("La edad debe estar entre 18 y 110 años");
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("La edad debe ser un número válido");
+        }
+    }
+
+    public static void validarEdadEmpleado(String edadStr) {
+        try {
+            int edad = Integer.parseInt(edadStr);
+            if (edad < 18 || edad > 70) {
+                throw new IllegalArgumentException("La edad debe estar entre 18 y 70 años");
             }
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("La edad debe ser un número válido");
@@ -241,7 +251,7 @@ public void validarIdentificacionUnica(String identificacion) {
         if (nombre == null || nombre.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "El nombre de la actividad no puede estar vacío");
         }
-  
+
     }
 
     public static void validarTipoActividad(String tipo) {
@@ -278,9 +288,9 @@ public void validarIdentificacionUnica(String identificacion) {
 
         String valor = horario.toString().trim();
         List<String> horariosValidos = List.of(
-                "07:00 am - 08:45 am",
-                "08:45 am - 10:15 am",
-                "10:45 am - 12:45 am",
+                "07:00 am - 08:00 am",
+                "08:10 am - 08:50 am",
+                "12:15 pm - 01:15 pm",
                 "02:00 pm - 04:15 pm",
                 "04:15 pm - 05:15 pm"
         );
@@ -318,6 +328,69 @@ public void validarIdentificacionUnica(String identificacion) {
         validarHorarioActividad(horario);
         validarLugarActividad(lugar);
         validarCupoMaximo(cupoMaximoStr);
+    }
+
+    public static boolean validarContrasena(String contrasena) {
+        if (contrasena == null || contrasena.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "La contraseña no puede estar vacía.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        int letras = 0, numeros = 0, especiales = 0;
+
+        for (char c : contrasena.toCharArray()) {
+            if (Character.isLetter(c)) {
+                letras++;
+            } else if (Character.isDigit(c)) {
+                numeros++;
+            } else {
+                especiales++;
+            }
+        }
+
+        StringBuilder errores = new StringBuilder();
+
+        if (letras < 4) {
+            errores.append("- Al menos 4 letras.\n");
+        }
+        if (numeros < 3) {
+            errores.append("- Al menos 3 números.\n");
+        }
+        if (especiales < 2) {
+            errores.append("- Al menos 2 símbolos especiales.\n");
+        }
+
+        if (errores.length() > 0) {
+            JOptionPane.showMessageDialog(null, "La contraseña no es segura. Faltan:\n" + errores.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        JOptionPane.showMessageDialog(null, "Contraseña segura y válida.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        return true;
+    }
+
+    public static boolean validarUsuario(String usuario) {
+        if (usuario == null || usuario.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El nombre de usuario no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        boolean tieneLetra = usuario.matches(".*[A-Za-z].*");
+        boolean tieneNumero = usuario.matches(".*\\d.*");
+
+        if (!tieneLetra && !tieneNumero) {
+            JOptionPane.showMessageDialog(null, "El usuario debe contener al menos una letra y un número.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (!tieneLetra) {
+            JOptionPane.showMessageDialog(null, "El usuario debe contener al menos una letra.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (!tieneNumero) {
+            JOptionPane.showMessageDialog(null, "El usuario debe contener al menos un número.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        JOptionPane.showMessageDialog(null, "Usuario válido y seguro.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        return true;
     }
 
 }

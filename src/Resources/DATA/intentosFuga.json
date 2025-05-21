@@ -36,5 +36,23 @@
   {
     "identificacionPreso": "334455667",
     "fechaFuga": "2025-05-17"
+  },
+  {
+    "identificacionPreso": "112233445",
+    "fechaFuga": "2025-05-20"
+  },
+  {
+    "identificacionPreso": "223344556",
+    "fechaFuga": "2025-05-20"
+  },
+  {
+    "identificacionPreso": "1237440696",
+    "fechaFuga": "2025-05-20",
+    "fechaReingreso": "2025-05-20"
+  },
+  {
+    "identificacionPreso": "1237440696",
+    "fechaFuga": "2025-05-20",
+    "fechaReingreso": "2025-05-20"
   }
 ]

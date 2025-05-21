@@ -22,9 +22,9 @@ import javax.swing.JOptionPane;
 
 public class CoordinadorDeActividadesDAO {
 
-    private static final String RUTA_JSON = "src/Resources/DATA/CDA.json/";
+    private static final String RUTA_JSON = "src/Resources/DATA/CDA.json";
     private static final String RUTA_IMAGENES = "src/Resources/imagenes_CDA/";
-    private static final String RUTA_USUARIOS = "src/Resources/DATA/usuarios.json/";
+    private static final String RUTA_USUARIOS = "src/Resources/DATA/usuarios.json";
     private final Gson gson;
     private static CoordinadorDeActividadesDAO instancia;
 
@@ -48,6 +48,7 @@ public class CoordinadorDeActividadesDAO {
         try {
             Files.createDirectories(Paths.get(RUTA_IMAGENES));
             Files.createDirectories(Paths.get(RUTA_JSON).getParent());
+            Files.createDirectories(Paths.get(RUTA_USUARIOS).getParent());
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null,
                     "Error al crear directorios: " + e.getMessage(),
@@ -71,10 +72,35 @@ public class CoordinadorDeActividadesDAO {
         }
     }
 
-    public void guardarUsuario(Usuario usuario) throws IOException {
+    private void guardarUsuario(Usuario usuario) throws IOException {
         List<Usuario> usuarios = obtenerTodosUsuarios();
         usuarios.removeIf(u -> u.getUsuario().equals(usuario.getUsuario()));
         usuarios.add(usuario);
+
+        try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
+            gson.toJson(usuarios, writer); 
+        }
+    }
+
+    public List<Usuario> obtenerTodosUsuarios() throws IOException {
+        File archivo = new File(RUTA_USUARIOS);
+
+        if (!archivo.exists() || archivo.length() == 0) {
+            return new ArrayList<>();
+        }
+
+        try (Reader reader = new FileReader(archivo)) {
+            Type tipoLista = new TypeToken<List<Usuario>>() {}.getType();
+            return gson.fromJson(reader, tipoLista);
+        } catch (JsonSyntaxException | JsonIOException e) {
+            System.err.println("Error al leer usuarios: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    private void eliminarUsuario(String usuario) throws IOException {
+        List<Usuario> usuarios = obtenerTodosUsuarios();
+        usuarios.removeIf(u -> u.getUsuario().equals(usuario));
 
         try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
             gson.toJson(usuarios, writer);
@@ -87,46 +113,6 @@ public class CoordinadorDeActividadesDAO {
                 .filter(c -> c.getUsuario().equals(usuario))
                 .findFirst()
                 .orElse(null);
-    }
-
-    private List<Usuario> obtenerTodosUsuarios() throws IOException {
-        File archivo = new File(RUTA_USUARIOS);
-
-        if (!archivo.exists() || archivo.length() == 0) {
-            return new ArrayList<>();
-        }
-
-        try (FileReader reader = new FileReader(archivo)) {
-            JsonElement elemento = JsonParser.parseReader(reader);
-
-            if (elemento.isJsonArray()) {
-                Type tipoLista = new TypeToken<List<Usuario>>() {
-                }.getType();
-                return gson.fromJson(elemento, tipoLista);
-            } else if (elemento.isJsonObject()) {
-                JsonObject jsonObject = elemento.getAsJsonObject();
-                if (jsonObject.has("usuarios")) {
-                    JsonArray usuariosArray = jsonObject.getAsJsonArray("usuarios");
-                    Type tipoLista = new TypeToken<List<Usuario>>() {
-                    }.getType();
-                    return gson.fromJson(usuariosArray, tipoLista);
-                }
-            }
-
-            return new ArrayList<>();
-        }
-    }
-
-    private void eliminarUsuario(String usuario) throws IOException {
-        List<Usuario> usuarios = obtenerTodosUsuarios();
-        usuarios.removeIf(u -> u.getUsuario().equals(usuario));
-
-        try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
-            JsonObject jsonObject = new JsonObject();
-            JsonArray usuariosArray = gson.toJsonTree(usuarios).getAsJsonArray();
-            jsonObject.add("usuarios", usuariosArray);
-            gson.toJson(jsonObject, writer);
-        }
     }
 
     public boolean guardarCoordinador(CoordinadorDeActividades coordinador, File imagen) throws IOException {
@@ -191,8 +177,7 @@ public class CoordinadorDeActividadesDAO {
                 return new ArrayList<>();
             }
 
-            Type tipoLista = new TypeToken<List<CoordinadorDeActividades>>() {
-            }.getType();
+            Type tipoLista = new TypeToken<List<CoordinadorDeActividades>>() {}.getType();
             return gson.fromJson(contenido, tipoLista);
 
         } catch (Exception e) {
@@ -306,6 +291,8 @@ public class CoordinadorDeActividadesDAO {
             return false;
         }
     }
+
+
 
     public CoordinadorDeActividades obtenerCoordinadorPorCedula(String cedula) {
         return obtenerCoordinadores().stream()

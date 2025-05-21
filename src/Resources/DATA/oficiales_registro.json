@@ -14,7 +14,7 @@
     "fechaFinContrato": "2027-05-07",
     "rutaImagen": "src/Resources/imagenes_oficiales_registro/901010101_1747659186552.jpg",
     "usuario": "DCw?ñp8HMa6",
-    "contrasena": "0379021f83282216f3fc10d24000bdb513d47505c83487a54540d390ca4d94a1"
+    "contrasena": "695a61cdc133fb3beeaf0f2db7ace12632b26f1e93c019df2ea312555f03cf55"
   },
   {
     "primerNombre": "wd",
@@ -31,7 +31,7 @@
     "fechaFinContrato": "2027-05-06",
     "rutaImagen": "src/Resources/imagenes_oficiales_registro/1231231234_1747659344997.jpg",
     "usuario": "\u0026\u0026wR3adK¡pCB",
-    "contrasena": "a3ea960ba2fb348a9e63b889a8a23b4f3bccd4f07d1f69ec3040f529a661802f"
+    "contrasena": "c9990c87ba74403e29fe4da097231a7344dec4bae905ad15fc1095479fbdcb4e"
   },
   {
     "primerNombre": "Karen",
@@ -48,7 +48,7 @@
     "fechaFinContrato": "2028-05-06",
     "rutaImagen": "src/Resources/imagenes_oficiales_registro/123667685_1747659733550.jpg",
     "usuario": "LUZDARI",
-    "contrasena": "3c3213d7339a7b34a5da0340b3da81dfb94044e0845c293562ee092228eb2c4d"
+    "contrasena": "8153657c85c7dfce453df58ffca13b7a75b325ba557be55017445cac82a5ae19"
   },
   {
     "primerNombre": "Andreina",
@@ -65,7 +65,7 @@
     "fechaFinContrato": "2027-05-02",
     "rutaImagen": "src/Resources/imagenes_oficiales_registro/777777777_1747671045771.jpg",
     "usuario": "oruno",
-    "contrasena": "89890481dbe5409b75540a1f9928ea8bb40207bad8093cdcb97f69de5c45bed7"
+    "contrasena": "a7cc95628e9fcd3342b1f5a0fe942cf13a64fb4e87c15860ab5258aa7d6c75f5"
   },
   {
     "primerNombre": "Ana",
@@ -82,6 +82,125 @@
     "fechaFinContrato": "2027-05-01",
     "rutaImagen": "src/Resources/imagenes_oficiales_registro/444555667_1747672893645.jpg",
     "usuario": "anamaria",
-    "contrasena": "f0837f84e66628d017d85b057e73251107d68367c7db0b284bc7ba4a083d792e"
+    "contrasena": "6a4a8db38be96eacd55a2afed6a52e1e069f2006ff167ebc961c54e6edfcdaad"
+  },
+  {
+    "primerNombre": "efewfeef",
+    "segundoNombre": "efefse",
+    "primerApellido": "fesfsew",
+    "segundoApellido": "sfsfef",
+    "edad": 23,
+    "sexo": "Femenino",
+    "nacionalidad": "Boliviana",
+    "identificacion": "253215313",
+    "correo": "nicollelopez081@gmail.com",
+    "turno": "Diurno",
+    "fechaContratacion": "2025-05-20",
+    "fechaFinContrato": "2026-05-08",
+    "rutaImagen": "src/Resources/imagenes_oficiales_registro/253215313_1747753511119.jpg",
+    "usuario": "BtV2\u0026w!T",
+    "contrasena": "5130f1cc1dd056f58bead74f297f6de93152ee535d4ca675d5239094ef347a7c"
+  },
+  {
+    "primerNombre": "lkl",
+    "segundoNombre": "uuu",
+    "primerApellido": "uuy",
+    "segundoApellido": "yy",
+    "edad": 33,
+    "sexo": "Femenino",
+    "nacionalidad": "Afgana",
+    "identificacion": "2366543556",
+    "correo": "luzdaricrespo@gmail.com",
+    "turno": "Diurno",
+    "fechaContratacion": "2025-05-20",
+    "fechaFinContrato": "2029-05-06",
+    "rutaImagen": "src/Resources/imagenes_oficiales_registro/2366543556_1747763648990.jpg",
+    "usuario": "jks2",
+    "contrasena": "1776f155ddf1e13ebc6f02a5d280258a688130007551848f3f66858b9b5bd960"
+  },
+  {
+    "primerNombre": "JSHDSHYDUS",
+    "segundoNombre": "EJHEJDE",
+    "primerApellido": "DSMDNSJD",
+    "segundoApellido": "FEUHUEF",
+    "edad": 55,
+    "sexo": "Femenino",
+    "nacionalidad": "Afgana",
+    "identificacion": "736483798",
+    "correo": "luzdaricrespo@gmail.com",
+    "turno": "Diurno",
+    "fechaContratacion": "2025-05-21",
+    "fechaFinContrato": "2027-05-07",
+    "rutaImagen": "src/Resources/imagenes_oficiales_registro/736483798_1747836020154.jpg",
+    "usuario": "SVe#Ñ2%j",
+    "contrasena": "fa00a3e67841e22d95347ddba125b1137706e95392b5b2eeb95815664fb4ec79"
+  },
+  {
+    "primerNombre": "s",
+    "segundoNombre": "s",
+    "primerApellido": "s",
+    "segundoApellido": "s",
+    "edad": 34,
+    "sexo": "Femenino",
+    "nacionalidad": "Afgana",
+    "identificacion": "783163612",
+    "correo": "papa@gmail.com",
+    "turno": "Diurno",
+    "fechaContratacion": "2025-05-21",
+    "fechaFinContrato": "2025-05-24",
+    "rutaImagen": "src/Resources/imagenes_oficiales_registro/783163612_1747836621626.jpg",
+    "usuario": "sg\u0026CzZ?qiH7",
+    "contrasena": "405b28d54bc39ae98e39e30f7acc6573829148348be84fc8a008fd8cb1c8a965"
+  },
+  {
+    "primerNombre": "lopo",
+    "segundoNombre": "loñp",
+    "primerApellido": "kio",
+    "segundoApellido": "jiol",
+    "edad": 40,
+    "sexo": "Femenino",
+    "nacionalidad": "Afgana",
+    "identificacion": "101092834",
+    "correo": "luzdaricrespo@gmail.com",
+    "turno": "Diurno",
+    "fechaContratacion": "2025-05-21",
+    "fechaFinContrato": "2026-05-02",
+    "rutaImagen": "src/Resources/imagenes_oficiales_registro/101092834_1747837590956.jpg",
+    "usuario": "pHT\u0026@Rd30i@z",
+    "contrasena": "ba337d0231e53f8507ffd4a1b10b27d63484985aee6f99b8200cab8d8ccc3988"
+  },
+  {
+    "primerNombre": "ere",
+    "segundoNombre": "rer",
+    "primerApellido": "trt",
+    "segundoApellido": "ere",
+    "edad": 55,
+    "sexo": "Femenino",
+    "nacionalidad": "Afgana",
+    "identificacion": "444444445",
+    "correo": "rfrfrfrf@gmail.com",
+    "turno": "Diurno",
+    "fechaContratacion": "2025-05-21",
+    "fechaFinContrato": "2026-05-02",
+    "rutaImagen": "src/Resources/imagenes_oficiales_registro/444444445_1747838668427.jpg",
+    "usuario": "kOT1@ackÑ51b",
+    "contrasena": "aee27d715270c07a37cb4c1ba923219be146bcfcab2384fb3e6c0c8a35c7794d"
+  },
+  {
+    "primerNombre": "sa prueba",
+    "segundoNombre": "s",
+    "primerApellido": "s",
+    "segundoApellido": "s",
+    "edad": 34,
+    "sexo": "Femenino",
+    "nacionalidad": "Afgana",
+    "identificacion": "127317345",
+    "correo": "pecho@gmail.com",
+    "turno": "Diurno",
+    "fechaContratacion": "2025-05-21",
+    "fechaFinContrato": "2025-05-24",
+    "rutaImagen": "src/Resources/imagenes_oficiales_registro/127317345_1747853691541.png",
+    "usuario": "\u0026RyA¿G7OR",
+    "contrasena": "49b661201331c826921c0bf2a428b26753be072ebe109c354c70689b4041ee54"
   }
 ]

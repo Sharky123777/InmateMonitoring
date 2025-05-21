@@ -138,67 +138,65 @@ public class CoordinadorDeActividadesController {
         }
     }
 
-    public boolean modificarCoordinador(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
+public boolean modificarCoordinador(String cedulaOriginal, Map<String, Object> cambios, File nuevaImagen) {
+    try {
+        CoordinadorDeActividades original = validarYObternerOriginal(cedulaOriginal);
+        validarCamposModificados(cambios);
 
-        try {
-            CoordinadorDeActividades original = validarYObternerOriginal(cedulaOriginal);
+        boolean hayCambios = verificarCambios(original, cambios, nuevaImagen);
 
-            validarCamposModificados(cambios);
+        if (!hayCambios) {
+            int opcion = JOptionPane.showConfirmDialog(null,
+                    "¿Está segura que no desea realizar cambios?",
+                    "Sin cambios detectados",
+                    JOptionPane.YES_NO_OPTION);
 
-            boolean hayCambios = verificarCambios(original, cambios, nuevaImagen);
-
-            if (!hayCambios) {
-
-                int opcion = JOptionPane.showConfirmDialog(null,
-                        "¿Está segura que no desea realizar cambios?",
-                        "Sin cambios detectados",
-                        JOptionPane.YES_NO_OPTION);
-
-                if (opcion == JOptionPane.YES_OPTION) {
-
-                    return false;
-                } else {
-
-                    throw new CancelarModificacionException();
-                }
+            if (opcion == JOptionPane.YES_OPTION) {
+                return false;
+            } else {
+                throw new CancelarModificacionException();
             }
-
-            int edad = validarEdad((int) cambios.get("edad"));
-
-            LocalDate fechaFin = validarFechas(original.getFechaInicioContrato(), (LocalDate) cambios.get("fechaFin"));
-
-            if (nuevaImagen != null) {
-                validarImagen(nuevaImagen);
-            }
-
-            CoordinadorDeActividades coordinadorModificado = crearCoordinadorModificado(
-                    original, cambios, edad, fechaFin);
-
-            File imagenFinal = determinarImagenFinal(original, nuevaImagen);
-
-            boolean resultado = coordinadorDAO.modificarCoordinador(cedulaOriginal, coordinadorModificado, imagenFinal);
-
-            if (resultado) {
-                System.out.println("Modificación exitosa, mostrando mensaje");
-                JOptionPane.showMessageDialog(null,
-                        "COORDINADORA MODIFICADA EXITOSAMENTE",
-                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            }
-
-            return resultado;
-
-        } catch (CancelarModificacionException e) {
-            throw e;
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
-            throw e;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,
-                    "Error al modificar coordinador: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            throw new RuntimeException("Error al modificar coordinador: " + e.getMessage(), e);
         }
+
+        int edad = validarEdad((int) cambios.get("edad"));
+        LocalDate fechaFin = validarFechas(original.getFechaInicioContrato(), (LocalDate) cambios.get("fechaFin"));
+
+        if (nuevaImagen != null) {
+            validarImagen(nuevaImagen);
+        }
+
+        CoordinadorDeActividades coordinadorModificado = crearCoordinadorModificado(
+                original, cambios, edad, fechaFin);
+
+        File imagenFinal = determinarImagenFinal(original, nuevaImagen);
+
+        boolean resultado = coordinadorDAO.modificarCoordinador(cedulaOriginal, coordinadorModificado, imagenFinal);
+
+        if (resultado) {
+            
+            SincronizadorJson.sincronizarConUsuarios(coordinadorModificado);
+            
+            System.out.println("Modificación exitosa, mostrando mensaje");
+            JOptionPane.showMessageDialog(null,
+                    "COORDINADORA MODIFICADA EXITOSAMENTE",
+                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        return resultado;
+
+    } catch (CancelarModificacionException e) {
+        throw e;
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(null, e.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+        throw e;
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null,
+                "Error al modificar coordinador: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        throw new RuntimeException("Error al modificar coordinador: " + e.getMessage(), e);
     }
+}
+
 
     private boolean verificarCambios(CoordinadorDeActividades original, Map<String, Object> cambios, File nuevaImagen) {
         System.out.println("Verificando cambios:");
