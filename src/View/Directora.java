@@ -217,8 +217,12 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void mostrarDatosUsuario() {
         if (usuario != null) {
 
-            lblNombre.setText(usuario.getPrimerNombre() + " " + usuario.getPrimerApellido());
+            lblNombre.setText(usuario.getNombresCompletos() + " " + usuario.getApellidosCompletos());
             lblRol.setText(usuario.getRol().toString());
+            IdentificacionD.setText("" + usuario.getIdentificacion());
+            EdadD.setText(" " + usuario.getEdad());
+            NacionalidadD.setText(usuario.getNacionalidad());
+            SexoD.setText(usuario.getSexo());
 
             cargarImagenUsuario();
         }
@@ -269,8 +273,25 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         lblNombre = new javax.swing.JLabel();
         lblRol = new javax.swing.JLabel();
         jSeparator125 = new javax.swing.JSeparator();
-        jLabel20 = new javax.swing.JLabel();
         jSeparator126 = new javax.swing.JSeparator();
+        jLabel20 = new javax.swing.JLabel();
+        jPanel41 = new javax.swing.JPanel();
+        jLabel188 = new javax.swing.JLabel();
+        jLabel192 = new javax.swing.JLabel();
+        jLabel193 = new javax.swing.JLabel();
+        jLabel194 = new javax.swing.JLabel();
+        NombreD = new javax.swing.JLabel();
+        IdentificacionD = new javax.swing.JLabel();
+        EdadD = new javax.swing.JLabel();
+        NacionalidadD = new javax.swing.JLabel();
+        jSeparator127 = new javax.swing.JSeparator();
+        jSeparator128 = new javax.swing.JSeparator();
+        jSeparator129 = new javax.swing.JSeparator();
+        jSeparator130 = new javax.swing.JSeparator();
+        jLabel195 = new javax.swing.JLabel();
+        jSeparator131 = new javax.swing.JSeparator();
+        SexoD = new javax.swing.JLabel();
+        botonIrPanelActualizar = new javax.swing.JButton();
         DisminuirSentencia = new javax.swing.JPanel();
         jPanel33 = new javax.swing.JPanel();
         jLabel182 = new javax.swing.JLabel();
@@ -965,28 +986,87 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         fotolbl.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
-        jPanel6.add(fotolbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, 270, 190));
+        jPanel6.add(fotolbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, 270, 190));
 
         lblNombre.setBackground(new java.awt.Color(255, 255, 255));
         lblNombre.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         lblNombre.setForeground(new java.awt.Color(255, 255, 255));
         lblNombre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jPanel6.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 300, 210, 30));
+        jPanel6.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, 210, 30));
 
         lblRol.setBackground(new java.awt.Color(255, 255, 255));
         lblRol.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         lblRol.setForeground(new java.awt.Color(255, 255, 255));
         lblRol.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jPanel6.add(lblRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 340, 150, 20));
-        jPanel6.add(jSeparator125, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 360, 150, 20));
+        jPanel6.add(lblRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 300, 150, 20));
+        jPanel6.add(jSeparator125, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 320, 150, 20));
+        jPanel6.add(jSeparator126, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, 210, 20));
 
-        jLabel20.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel20.setForeground(new java.awt.Color(255, 255, 255));
+        Director.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 40, 370, 460));
+
+        jLabel20.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(0, 0, 0));
         jLabel20.setText("LE DAMOS LA BIENVENIDA.");
-        jPanel6.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 60, -1, -1));
-        jPanel6.add(jSeparator126, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 330, 210, 20));
+        Director.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 50, -1, -1));
 
-        Director.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, 880, 450));
+        jPanel41.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel41.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        jPanel41.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel188.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel188.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel188.setText("Nombre completo:");
+        jPanel41.add(jLabel188, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, -1, -1));
+
+        jLabel192.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel192.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel192.setText("Identificacion:");
+        jPanel41.add(jLabel192, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, -1, -1));
+
+        jLabel193.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel193.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel193.setText("Edad:");
+        jPanel41.add(jLabel193, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, -1, -1));
+
+        jLabel194.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel194.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel194.setText("Nacionalidad:");
+        jPanel41.add(jLabel194, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, -1, -1));
+
+        NombreD.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jPanel41.add(NombreD, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, 390, 30));
+
+        IdentificacionD.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jPanel41.add(IdentificacionD, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 80, 390, 30));
+
+        EdadD.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jPanel41.add(EdadD, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 140, 390, 30));
+
+        NacionalidadD.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jPanel41.add(NacionalidadD, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 200, 390, 30));
+        jPanel41.add(jSeparator127, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 540, 10));
+        jPanel41.add(jSeparator128, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 540, 10));
+        jPanel41.add(jSeparator129, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 540, 10));
+        jPanel41.add(jSeparator130, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 540, 10));
+
+        jLabel195.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel195.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel195.setText("Genero:");
+        jPanel41.add(jLabel195, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, -1, -1));
+        jPanel41.add(jSeparator131, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 540, 10));
+
+        SexoD.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jPanel41.add(SexoD, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 260, 390, 30));
+
+        botonIrPanelActualizar.setText("Actualizar información");
+        botonIrPanelActualizar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                botonIrPanelActualizarMouseClicked(evt);
+            }
+        });
+        jPanel41.add(botonIrPanelActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 330, 160, 30));
+
+        Director.add(jPanel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 100, 630, 400));
 
         tabPrincipal.addTab("Director", Director);
 
@@ -996,16 +1076,17 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         jPanel33.setBackground(new java.awt.Color(153, 153, 153));
         jPanel33.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel182.setFont(new java.awt.Font("Arial", 0, 10)); // NOI18N
         jLabel182.setForeground(new java.awt.Color(0, 0, 0));
         jLabel182.setText("INGRESE LA IDENTIFICACIÓN DE LA  RECLUSA QUE DESEA MODIFICAR SU SENTENCIA:");
-        jPanel33.add(jLabel182, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, 30));
+        jPanel33.add(jLabel182, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, -1, 30));
 
         txtIdentificacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIdentificacionActionPerformed(evt);
             }
         });
-        jPanel33.add(txtIdentificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 30, 180, -1));
+        jPanel33.add(txtIdentificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 20, 180, -1));
 
         jLabel184.setForeground(new java.awt.Color(0, 0, 0));
         jLabel184.setText("Nombre:");
@@ -1048,7 +1129,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 btnBuscarActionPerformed(evt);
             }
         });
-        jPanel33.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 30, -1, -1));
+        jPanel33.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 20, -1, -1));
 
         jLabel186.setForeground(new java.awt.Color(0, 0, 0));
         jLabel186.setText("Foto de la reclusa:");
@@ -1065,7 +1146,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 btnModificarSentenciaActionPerformed(evt);
             }
         });
-        jPanel33.add(btnModificarSentencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 340, -1, -1));
+        jPanel33.add(btnModificarSentencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 370, -1, -1));
         jPanel33.add(spnMeses, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 280, 80, -1));
 
         jLabel191.setForeground(new java.awt.Color(0, 0, 0));
@@ -1082,7 +1163,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         lblArchivoSeleccionado.setText("Seleccione un archivo...");
         jPanel33.add(lblArchivoSeleccionado, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 200, -1, 50));
 
-        DisminuirSentencia.add(jPanel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 110, 770, 440));
+        DisminuirSentencia.add(jPanel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 770, 460));
 
         jLabel30.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel30.setForeground(new java.awt.Color(255, 255, 255));
@@ -7901,21 +7982,18 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         String identificacion = txtIdentificacion.getText().trim();
         try {
-            // Validar identificación no vacía
             if (identificacion.isEmpty()) {
                 throw new IllegalArgumentException("Debe ingresar una identificación");
             }
 
-            // Buscar la reclusa
             Presa reclusa = presaController.buscarPreso(identificacion);
             if (reclusa == null) {
                 throw new IllegalStateException("No se encontró reclusa con esa identificación.");
             }
 
-            // Mostrar datos básicos
-            lblNombre.setText(reclusa.getNombresCompletos());
+            lblNombrePresa.setText(reclusa.getNombresCompletos());
+            
 
-            // Obtener expediente para mostrar la sentencia
             ExpedienteJudicial expediente = expedienteController.obtenerExpedienteAbierto(identificacion);
             if (expediente != null) {
                 Sentencia sentenciaTotal = expedienteDAO.calcularSentenciaTotal(expediente.getDelitos());
@@ -7924,7 +8002,6 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                 lblCondena.setText("No hay expediente abierto");
             }
 
-            // Cargar imagen
             cargarFotoPreso(reclusa.getFotoPath(), lblFoto);
 
         } catch (Exception e) {
@@ -7936,29 +8013,23 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private void btnModificarSentenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarSentenciaActionPerformed
         String identificacion = txtIdentificacion.getText().trim();
         try {
-            // Validar que se haya ingresado una identificación
             if (identificacion.isEmpty()) {
                 throw new IllegalArgumentException("Debe ingresar una identificación primero");
             }
 
-            // Obtener los valores de modificación de los JSpinner
             int añosModificacion = (Integer) spnAnos.getValue();
             int mesesModificacion = (Integer) spnMeses.getValue();
 
-            // Validar que al menos haya un cambio
             if (añosModificacion == 0 && mesesModificacion == 0) {
                 throw new IllegalArgumentException("Debe especificar al menos años o meses para modificar");
             }
 
-            // Validar que se haya seleccionado la orden del juez
             if (fileOrdenJuez == null || !fileOrdenJuez.exists()) {
                 throw new IllegalArgumentException("Debe seleccionar la orden del juez como respaldo");
             }
 
-            // Crear objeto Sentencia con la modificación (puede ser positivo o negativo)
             Sentencia modificacion = new Sentencia(añosModificacion, mesesModificacion, LocalDate.now());
 
-            // Llamar al controlador para aplicar la modificación
             boolean exito = presaController.modificarSentencia(identificacion, modificacion, fileOrdenJuez);
 
             if (exito) {
@@ -7967,8 +8038,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
                         "Éxito",
                         JOptionPane.INFORMATION_MESSAGE);
 
-                // Actualizar la vista con los nuevos datos
-                btnBuscarActionPerformed(null); // Esto recargará los datos
+                btnBuscarActionPerformed(null); 
             } else {
                 throw new IllegalStateException("No se pudo completar la modificación");
             }
@@ -7995,6 +8065,10 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
             lblArchivoSeleccionado.setText("Archivo seleccionado: " + fileOrdenJuez.getName());
         }
     }//GEN-LAST:event_btnSeleccionarOrdenJuezActionPerformed
+
+    private void botonIrPanelActualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonIrPanelActualizarMouseClicked
+      
+    }//GEN-LAST:event_botonIrPanelActualizarMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -8041,10 +8115,12 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private javax.swing.JPanel Credenciales;
     private javax.swing.JPanel Director;
     private javax.swing.JPanel DisminuirSentencia;
+    private javax.swing.JLabel EdadD;
     private javax.swing.JMenuItem Eliminar;
     private javax.swing.JMenuItem EliminarCDA;
     private javax.swing.JMenuItem EliminarEnfermera;
     private javax.swing.JMenuItem EliminarODR;
+    private javax.swing.JLabel IdentificacionD;
     private javax.swing.JPanel ListaDeGuardias;
     private javax.swing.JMenuItem Modificar;
     private javax.swing.JMenuItem ModificarCDA;
@@ -8055,8 +8131,12 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private javax.swing.JPanel ModificarODR;
     private javax.swing.JPanel ModificarOficial;
     private javax.swing.JPanel MostrarEnfermeras;
+    private javax.swing.JLabel NacionalidadD;
+    private javax.swing.JLabel NombreD;
+    private javax.swing.JLabel SexoD;
     private javax.swing.JPanel aggPDC;
     private javax.swing.JPanel añadirODR;
+    private javax.swing.JButton botonIrPanelActualizar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnModificarSentencia;
     private javax.swing.JButton btnSeleccionarOrdenJuez;
@@ -8222,10 +8302,15 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private javax.swing.JLabel jLabel185;
     private javax.swing.JLabel jLabel186;
     private javax.swing.JLabel jLabel187;
+    private javax.swing.JLabel jLabel188;
     private javax.swing.JLabel jLabel189;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel190;
     private javax.swing.JLabel jLabel191;
+    private javax.swing.JLabel jLabel192;
+    private javax.swing.JLabel jLabel193;
+    private javax.swing.JLabel jLabel194;
+    private javax.swing.JLabel jLabel195;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
@@ -8349,6 +8434,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private javax.swing.JPanel jPanel39;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel40;
+    private javax.swing.JPanel jPanel41;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
@@ -8397,7 +8483,12 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
     private javax.swing.JSeparator jSeparator124;
     private javax.swing.JSeparator jSeparator125;
     private javax.swing.JSeparator jSeparator126;
+    private javax.swing.JSeparator jSeparator127;
+    private javax.swing.JSeparator jSeparator128;
+    private javax.swing.JSeparator jSeparator129;
     private javax.swing.JSeparator jSeparator13;
+    private javax.swing.JSeparator jSeparator130;
+    private javax.swing.JSeparator jSeparator131;
     private javax.swing.JSeparator jSeparator14;
     private javax.swing.JSeparator jSeparator15;
     private javax.swing.JSeparator jSeparator16;

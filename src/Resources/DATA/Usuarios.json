@@ -264,5 +264,19 @@
     "sexo": "Femenino",
     "nacionalidad": "Afgana",
     "identificacion": "123456789"
+  },
+  {
+    "usuario": "Smag2007",
+    "password": "Sharlok16@",
+    "rol": "DIRECTOR",
+    "rutaImagen": "src/Resources/imagenes_enfermeras/123456789_1747863195188.png",
+    "primerNombre": "d",
+    "segundoNombre": "d",
+    "primerApellido": "dd",
+    "segundoApellido": "dporr",
+    "edad": 34,
+    "sexo": "Femenino",
+    "nacionalidad": "Afgana",
+    "identificacion": "123456789"
   }
 ]
