@@ -15,6 +15,10 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
@@ -977,6 +981,33 @@ public class Oficial extends javax.swing.JFrame implements PerfilUsuario {
 
 
     private void botonAgendarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgendarCitaActionPerformed
+
+        String identificacionPreso = IdentificacionPresoCita.getText().trim();
+        String identificacionGuardia = IdentificacionGuardia.getText();
+        String motivo = MotivoCita.getText().trim();
+
+        if (FechaCita.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Por favor selecciona una fecha válida.");
+            return;
+        }
+        LocalDate fecha = FechaCita.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        String horaSeleccionada = (String) JcomboHoraCita.getSelectedItem();
+        if (horaSeleccionada == null || horaSeleccionada.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor selecciona una hora válida.");
+            return;
+        }
+        LocalTime hora;
+        try {
+            hora = LocalTime.parse(horaSeleccionada);
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(this, "Formato de hora inválido.");
+            return;
+        }
+
+        // Usa el campo de clase ya inicializado
+        citaMedicaController.agendarCita(identificacionPreso, identificacionGuardia, motivo, fecha, hora);
+        
     }//GEN-LAST:event_botonAgendarCitaActionPerformed
 
     private void BarraDeBusquedaGuardiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BarraDeBusquedaGuardiasActionPerformed

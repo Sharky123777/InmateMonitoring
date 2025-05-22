@@ -236,5 +236,33 @@
     "sexo": "Femenino",
     "nacionalidad": "Afgana",
     "identificacion": "12783131"
+  },
+  {
+    "usuario": "QZHgr!c7!ÑG",
+    "password": "22faa07f3d3b4f8052b20d660f2d138af03d55b7bb62d26efef9099fbbefbad9",
+    "rol": "ENFERMERA",
+    "rutaImagen": "src/Resources/imagenes_enfermeras/183168313_1747863149502.png",
+    "primerNombre": "cel",
+    "segundoNombre": "sakjjd",
+    "primerApellido": "sd",
+    "segundoApellido": "d",
+    "edad": 34,
+    "sexo": "Femenino",
+    "nacionalidad": "Afgana",
+    "identificacion": "183168313"
+  },
+  {
+    "usuario": "ñ@¡\u0026Sq1h",
+    "password": "a746f6ea35adf6f85204883fcecaed3faaf169d40e62a8dddf8e6582298f8ce3",
+    "rol": "ENFERMERA",
+    "rutaImagen": "src/Resources/imagenes_enfermeras/123456789_1747863195188.png",
+    "primerNombre": "d",
+    "segundoNombre": "d",
+    "primerApellido": "dd",
+    "segundoApellido": "dporr",
+    "edad": 34,
+    "sexo": "Femenino",
+    "nacionalidad": "Afgana",
+    "identificacion": "123456789"
   }
 ]

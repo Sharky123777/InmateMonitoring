@@ -24,10 +24,14 @@ import javax.swing.table.DefaultTableModel;
 
 public class CitaMedicaController {
 
-    private final CitaMedicaDAO citaMedicaDAO = CitaMedicaDAO.getInstancia();
+    private final CitaMedicaDAO citaMedicaDAO;
     private final PresoDAO presoDAO = PresoDAO.getInstancia();
     private final GuardiaDAO guardiaDAO = GuardiaDAO.getInstancia();
     private final EnfermeraDAO enfermeraDAO = EnfermeraDAO.getInstancia();
+
+    public CitaMedicaController() {
+        this.citaMedicaDAO = CitaMedicaDAO.getInstancia();
+    }
 
     private void mostrarError(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
@@ -39,7 +43,6 @@ public class CitaMedicaController {
 
     public boolean agendarCita(String identificacionPreso, String identificacionGuardia,
             String motivo, LocalDate fecha, LocalTime hora) {
-
         if (!validarCamposCita(identificacionPreso, identificacionGuardia, motivo, fecha, hora)) {
             return false;
         }
@@ -47,38 +50,27 @@ public class CitaMedicaController {
         Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
         Guardia guardia = guardiaDAO.obtenerGuardiaPorCedula(identificacionGuardia);
 
-        if (preso == null) {
-            mostrarError("Preso no encontrado");
-            return false;
-        }
-        if (guardia == null) {
-            mostrarError("Guardia no encontrado");
+        if (preso == null || guardia == null) {
+            mostrarError("Preso o guardia no encontrado");
             return false;
         }
 
-        String turnoCita = determinarTurno(hora);
-
-        if (!turnoCita.equalsIgnoreCase(guardia.getTurno())) {
-            mostrarError("El guardia no está en el turno correspondiente a la hora de la cita");
-            return false;
-        }
-
+        String turno = determinarTurno(hora);
         Enfermera enfermera = enfermeraDAO.obtenerEnfermeras().stream()
-                .filter(e -> e.getTurno().equalsIgnoreCase(turnoCita))
+                .filter(e -> e.getTurno().equalsIgnoreCase(turno))
                 .findFirst()
                 .orElse(null);
 
         if (enfermera == null) {
-            mostrarError("No hay enfermeras disponibles para el turno " + turnoCita);
+            mostrarError("No hay enfermeras disponibles para el turno " + turno);
             return false;
         }
 
         CitaMedica nuevaCita = new CitaMedica(0, fecha, hora, motivo, guardia, preso, enfermera);
-
         boolean resultado = citaMedicaDAO.guardarCita(nuevaCita);
 
         if (resultado) {
-            mostrarExito("Cita agendada exitosamente para la enfermera " + enfermera.getNombreCompleto());
+            mostrarExito("Cita agendada exitosamente");
         } else {
             mostrarError("Error al guardar la cita");
         }
@@ -103,40 +95,96 @@ public class CitaMedicaController {
         return resultado;
     }
 
-    public boolean marcarComoPrioritario(int idCita) {
-        boolean resultado = citaMedicaDAO.marcarComoPrioritario(idCita);
 
-        if (resultado) {
-            mostrarExito("Cita marcada como prioritaria");
-        } else {
-            mostrarError("Error al marcar como prioritaria");
-        }
 
-        return resultado;
-    }
+   public void cargarHistorialAtendidos(JTable tabla, String identificacionEnfermera) {
+        
+        String[] columnNames = {
+            "Foto",
+            "ID",
+            "Nombre Preso",
+            "Identificación",
+            "Fecha Atención",
+            "Hora Atención",
+            "Motivo Consulta",
+            "Estado"
+        };
 
-    public void cargarHistorialAtendidos(JTable tabla, String identificacionEnfermera) {
-        DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
-        modelo.setRowCount(0);
+        DefaultTableModel modelo = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
-        List<CitaMedica> citas = citaMedicaDAO.obtenerPorEnfermera(identificacionEnfermera).stream()
+        List<CitaMedica> citas = CitaMedicaDAO.getInstancia()
+                .obtenerPorEnfermera(identificacionEnfermera)
+                .stream()
                 .filter(c -> c.getEstado() == EstadoCitaMedicaEnum.ATENDIDO)
                 .collect(Collectors.toList());
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        DateTimeFormatter fechaFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter horaFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
         for (CitaMedica cita : citas) {
-            modelo.addRow(new Object[]{
-                cita.getId(),
-                cita.getPreso().getNombreCompleto(),
-                cita.getPreso().getIdentificacion(),
+            Object[] rowData = new Object[]{
+                "", 
+                cita.getId(), 
+                cita.getPreso().getNombreCompleto(), 
+                cita.getPreso().getIdentificacion(), 
                 cita.getFechaHoraAtencion() != null
-                ? cita.getFechaHoraAtencion().format(formatter) : "No registrada",
-                cita.getMotivo(),
-                cita.getDiagnostico(),
-                cita.getRutaHistoriaClinica() != null
-                ? new File(cita.getRutaHistoriaClinica()).getName() : "Sin archivo"
-            });
+                ? cita.getFechaHoraAtencion().toLocalDate().format(fechaFormatter) : "N/A",
+                cita.getFechaHoraAtencion() != null
+                ? cita.getFechaHoraAtencion().toLocalTime().format(horaFormatter) : "N/A", 
+                cita.getMotivo(),      
+                cita.getEstado().toString()       
+              
+            };
+            modelo.addRow(rowData);
+        }
+
+        tabla.setModel(modelo);
+
+        // Ajustar anchos de columnas
+        tabla.getColumnModel().getColumn(4).setPreferredWidth(100); // Fecha
+        tabla.getColumnModel().getColumn(5).setPreferredWidth(80);  // Hora
+        tabla.getColumnModel().getColumn(6).setPreferredWidth(200); // Motivo
+        tabla.getColumnModel().getColumn(7).setPreferredWidth(250); // Diagnóstico
+    }
+
+    public boolean actualizarCita(CitaMedica citaActualizada) {
+        try {
+            // Obtener la cita existente
+            CitaMedica citaExistente = citaMedicaDAO.buscarPorId(citaActualizada.getId());
+            if (citaExistente == null) {
+                return false;
+            }
+
+            // Actualizar solo los campos necesarios
+            if (citaActualizada.getDiagnostico() != null) {
+                citaExistente.setDiagnostico(citaActualizada.getDiagnostico());
+            }
+
+            if (citaActualizada.getRutaHistoriaClinica() != null) {
+                citaExistente.setRutaHistoriaClinica(citaActualizada.getRutaHistoriaClinica());
+            }
+
+            if (citaActualizada.getEstado() != null) {
+                citaExistente.setEstado(citaActualizada.getEstado());
+
+                // Si se marca como atendida y no tiene fecha, establecerla
+                if (citaActualizada.getEstado() == EstadoCitaMedicaEnum.ATENDIDO
+                        && citaExistente.getFechaHoraAtencion() == null) {
+                    citaExistente.setFechaHoraAtencion(LocalDateTime.now());
+                }
+            }
+
+            // Guardar los cambios usando el método existente guardarCita
+            return citaMedicaDAO.guardarCita(citaExistente);
+
+        } catch (Exception e) {
+            System.err.println("Error al actualizar cita: " + e.getMessage());
+            return false;
         }
     }
 
@@ -153,25 +201,43 @@ public class CitaMedicaController {
     }
 
     public void cargarCitasPendientes(JTable tabla, String identificacionEnfermera) {
-        DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
-        modelo.setRowCount(0);
+        DefaultTableModel modelo = new DefaultTableModel(
+                new Object[]{"Foto", "ID", "Nombre", "Identificación", "Fecha", "Hora", "Motivo", "Estado"},
+                0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Hacer que la tabla no sea editable
+            }
+        };
 
-        List<CitaMedica> citas = citaMedicaDAO.obtenerPorEnfermera(identificacionEnfermera).stream()
-                .filter(c -> c.getEstado() == EstadoCitaMedicaEnum.PENDIENTE
-                || c.getEstado() == EstadoCitaMedicaEnum.PRIORITARIO)
+        List<CitaMedica> citas = citaMedicaDAO.obtenerPorEnfermera(identificacionEnfermera)
+                .stream()
+                .filter(c -> c.getEstado() == EstadoCitaMedicaEnum.PENDIENTE)
                 .collect(Collectors.toList());
+
+        DateTimeFormatter fechaFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter horaFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
         for (CitaMedica cita : citas) {
             modelo.addRow(new Object[]{
+                "", // Foto (se llena con el renderer)
                 cita.getId(),
                 cita.getPreso().getNombreCompleto(),
                 cita.getPreso().getIdentificacion(),
-                cita.getFecha(),
-                cita.getHora(),
+                cita.getFecha() != null ? cita.getFecha().format(fechaFormatter) : "",
+                cita.getHora() != null ? cita.getHora().format(horaFormatter) : "",
                 cita.getMotivo(),
-                cita.getEstado()
+                cita.getEstado().toString()
             });
         }
+
+        tabla.setModel(modelo);
+
+        // Ajustar el ancho de columnas
+        tabla.getColumnModel().getColumn(4).setPreferredWidth(90); // Fecha
+        tabla.getColumnModel().getColumn(5).setPreferredWidth(60); // Hora
+        tabla.getColumnModel().getColumn(6).setPreferredWidth(150); // Motivo
     }
 
     public Preso obtenerPresoDeCita(int idCita) {
@@ -215,9 +281,9 @@ public class CitaMedicaController {
     }
 
     private String determinarTurno(LocalTime hora) {
-        if (!hora.isBefore(LocalTime.of(7, 0)) && hora.isBefore(LocalTime.of(16, 40))) {
+        if (!hora.isBefore(LocalTime.of(8, 0)) && hora.isBefore(LocalTime.of(16, 0))) {
             return "Diurno";
-        } else if (!hora.isBefore(LocalTime.of(17, 0)) && hora.isBefore(LocalTime.of(18, 40).plusMinutes(1))) {
+        } else if (!hora.isBefore(LocalTime.of(16, 0)) && hora.isBefore(LocalTime.of(24, 0))) {
             return "Nocturno";
         }
         return null;

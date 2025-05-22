@@ -1,0 +1,19 @@
+[
+  {
+    "primerNombre": "s",
+    "segundoNombre": "s",
+    "primerApellido": "ss",
+    "segundoApellido": "seee",
+    "edad": 29,
+    "sexo": "Femenino",
+    "nacionalidad": "Afgana",
+    "identificacion": "313178313",
+    "correo": "dias@gmail.com",
+    "turno": "Diurno",
+    "fechaContratacion": "2025-05-21",
+    "fechaFinContrato": "2025-05-24",
+    "rutaImagen": "src/Resources/imagenes_enfermeras/313178313_1747862181507.png",
+    "usuario": "g3Ñ%E?MwC7",
+    "contrasena": "1da1aa275c230b3a38a288324b95972284622dcd77fa4db12ecb168c35c70bc7"
+  }
+]

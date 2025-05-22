@@ -18,7 +18,13 @@ public class CitaMedica {
     private String diagnostico;  
     private String rutaHistoriaClinica;
     private LocalDateTime fechaHoraAtencion;
+    private String receta;
 
+     public CitaMedica() {
+        this.estado = EstadoCitaMedicaEnum.PENDIENTE;
+        this.diagnostico = "";
+    }
+     
     public CitaMedica(int id, LocalDate fecha, LocalTime hora, String motivo, Guardia guardia, Preso preso, Enfermera enfermera) {
         this.id = id;
         this.fecha = fecha;
@@ -119,5 +125,14 @@ public class CitaMedica {
     public LocalDateTime getFechaHoraAtencion() {
         return fechaHoraAtencion;
     }
+
+    public String getReceta() {
+        return receta;
+    }
+
+    public void setReceta(String receta) {
+        this.receta = receta;
+    }
     
+     
 }

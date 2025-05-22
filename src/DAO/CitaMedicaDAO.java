@@ -12,7 +12,6 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -88,6 +87,8 @@ public class CitaMedicaDAO {
                 .filter(c -> c.getPreso().getIdentificacion().equals(identificacionPreso))
                 .collect(Collectors.toList());
     }
+    
+    
 
     public List<CitaMedica> obtenerPorEstado(EstadoCitaMedicaEnum estado) {
         return cargarTodas().stream()
@@ -103,10 +104,12 @@ public class CitaMedicaDAO {
     }
 
     public List<CitaMedica> obtenerPorEnfermera(String identificacionEnfermera) {
-        return cargarTodas().stream()
-                .filter(c -> c.getEnfermera().getIdentificacion().equals(identificacionEnfermera))
-                .collect(Collectors.toList());
-    }
+    return cargarTodas().stream()
+            .filter(c -> c.getEnfermera() != null && 
+                        c.getEnfermera().getIdentificacion() != null &&
+                        c.getEnfermera().getIdentificacion().equals(identificacionEnfermera))
+            .collect(Collectors.toList());
+}
 
     public boolean actualizarDiagnostico(int idCita, String diagnostico, String rutaArchivo) {
         CitaMedica cita = buscarPorId(idCita);
@@ -136,15 +139,6 @@ public class CitaMedicaDAO {
         }
     }
 
-    public boolean marcarComoPrioritario(int idCita) {
-        CitaMedica cita = buscarPorId(idCita);
-        if (cita != null) {
-            cita.setEstado(EstadoCitaMedicaEnum.PRIORITARIO);
-            return guardarCita(cita);
-        }
-        return false;
-    }
-
     public boolean cancelarCita(int idCita) {
         CitaMedica cita = buscarPorId(idCita);
         if (cita != null) {
@@ -154,6 +148,7 @@ public class CitaMedicaDAO {
         return false;
     }
 
+   
     private static class LocalDateAdapter implements com.google.gson.JsonSerializer<LocalDate>,
             com.google.gson.JsonDeserializer<LocalDate> {
 

@@ -1,49 +1,19 @@
 {
   "enfermeras": [
     {
-      "turno": "Nocturno",
-      "fechaContratacion": "2025-05-07",
-      "fechaFinContrato": "2025-05-29",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/83712731_1746648267021.jpg",
-      "correo": "haider32108@gmail.com",
-      "primerNombre": "Celina",
-      "segundoNombre": "",
-      "primerApellido": "Celina",
-      "segundoApellido": "Restrepo",
-      "edad": 34,
-      "sexo": "Femenino",
-      "nacionalidad": "Colombiana",
-      "identificacion": "83712731"
-    },
-    {
       "turno": "Diurno",
-      "fechaContratacion": "2025-05-16",
-      "fechaFinContrato": "2025-05-22",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/389183183_1747503293809.png",
-      "correo": "vivasm4g@gmail.com",
-      "primerNombre": "Sharlok",
-      "segundoNombre": "Maia",
-      "primerApellido": "Alcazar",
-      "segundoApellido": "Bernabidez",
-      "edad": 34,
-      "sexo": "Femenino",
-      "nacionalidad": "Yemení",
-      "identificacion": "389183183"
-    },
-    {
-      "turno": "Nocturno",
       "fechaContratacion": "2025-05-21",
-      "fechaFinContrato": "2025-05-24",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/12783131_1747855698543.png",
-      "correo": "verdad@gmail.com",
-      "primerNombre": "fuck",
-      "segundoNombre": "you",
-      "primerApellido": "s",
-      "segundoApellido": "s",
+      "fechaFinContrato": "2025-05-31",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/123456789_1747863195188.png",
+      "correo": "mama@gmail.com",
+      "primerNombre": "d",
+      "segundoNombre": "d",
+      "primerApellido": "dd",
+      "segundoApellido": "dporr",
       "edad": 34,
       "sexo": "Femenino",
       "nacionalidad": "Afgana",
-      "identificacion": "12783131"
+      "identificacion": "123456789"
     }
   ]
 }
