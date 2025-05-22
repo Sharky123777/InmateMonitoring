@@ -2,18 +2,18 @@
   "enfermeras": [
     {
       "turno": "Diurno",
-      "fechaContratacion": "2025-05-21",
+      "fechaContratacion": "2025-05-22",
       "fechaFinContrato": "2025-05-31",
-      "rutaImagen": "src/Resources/imagenes_enfermeras/123456789_1747863195188.png",
-      "correo": "mama@gmail.com",
-      "primerNombre": "d",
-      "segundoNombre": "d",
-      "primerApellido": "dd",
-      "segundoApellido": "dporr",
+      "rutaImagen": "src/Resources/imagenes_enfermeras/098654321_1747954405469.jpeg",
+      "correo": "vivasm4@gmail.com",
+      "primerNombre": "Regina",
+      "segundoNombre": "Maria",
+      "primerApellido": "Delgado",
+      "segundoApellido": "Guerrero",
       "edad": 34,
       "sexo": "Femenino",
       "nacionalidad": "Afgana",
-      "identificacion": "123456789"
+      "identificacion": "098654321"
     }
   ]
 }

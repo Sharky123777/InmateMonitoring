@@ -1589,6 +1589,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         jPanel10.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, -1, 30));
 
         txtSegundoNombreMod1.setBackground(new java.awt.Color(29, 35, 51));
+        txtSegundoNombreMod1.setForeground(new java.awt.Color(255, 255, 255));
         txtSegundoNombreMod1.setBorder(null);
         txtSegundoNombreMod1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -1598,6 +1599,7 @@ public class Directora extends javax.swing.JFrame implements PerfilUsuario {
         jPanel10.add(txtSegundoNombreMod1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 50, 180, 30));
 
         txtPrimerNombreMod1.setBackground(new java.awt.Color(29, 35, 51));
+        txtPrimerNombreMod1.setForeground(new java.awt.Color(255, 255, 255));
         txtPrimerNombreMod1.setBorder(null);
         txtPrimerNombreMod1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {

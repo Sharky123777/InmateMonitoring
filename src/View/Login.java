@@ -1,25 +1,24 @@
-
 package View;
 
 import Controller.UsuarioController;
 import Model.Constants.RolEnum;
 import Model.Entities.Usuario;
+import Utilidades.textoSombra;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-
 public class Login extends javax.swing.JFrame {
 
-    
     public Login() {
         initComponents();
         setLocationRelativeTo(null);
 
+        textoSombra usuario = new textoSombra("Ingrese su usuario", FieldUsuario);
+        textoSombra contraseña = new textoSombra("Ingrese su contraseña", Password);
 
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
 
-       
         for (RolEnum rol : RolEnum.values()) {
             model.addElement(rol.toString());
         }
@@ -27,7 +26,6 @@ public class Login extends javax.swing.JFrame {
         RolCmbBox.setModel(model);
     }
 
-   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -65,14 +63,14 @@ public class Login extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Correo:");
+        jLabel2.setText("Usuario:");
         jPanel6.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 170, -1, -1));
 
         FieldUsuario.setBackground(new java.awt.Color(29, 35, 51));
         FieldUsuario.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         FieldUsuario.setForeground(new java.awt.Color(255, 255, 255));
         FieldUsuario.setBorder(null);
-        jPanel6.add(FieldUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 200, 350, 40));
+        jPanel6.add(FieldUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 200, 390, 40));
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -82,7 +80,7 @@ public class Login extends javax.swing.JFrame {
         Password.setBackground(new java.awt.Color(29, 35, 51));
         Password.setForeground(new java.awt.Color(255, 255, 255));
         Password.setBorder(null);
-        jPanel6.add(Password, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 300, 350, 40));
+        jPanel6.add(Password, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 300, 390, 40));
 
         jSeparator1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel6.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 240, 390, 10));
@@ -107,11 +105,11 @@ public class Login extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1066, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
         );
 
         pack();
@@ -157,7 +155,7 @@ public class Login extends javax.swing.JFrame {
         String rolTexto = (String) RolCmbBox.getSelectedItem();
 
         try {
-           
+
             if (username.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
                         "Por favor complete todos los campos",
@@ -166,13 +164,10 @@ public class Login extends javax.swing.JFrame {
                 return;
             }
 
-           
             RolEnum rol = RolEnum.fromDisplayText(rolTexto);
 
-            
             Usuario usuario = UsuarioController.getInstancia().autenticarUsuario(username, password, rol);
 
-           
             redirigirSegunRol(usuario);
             this.dispose();
 
@@ -196,7 +191,6 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
- 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

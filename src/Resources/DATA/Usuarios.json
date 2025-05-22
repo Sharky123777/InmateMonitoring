@@ -14,20 +14,6 @@
     "identificacion": "738373837"
   },
   {
-    "usuario": "Fn5¿1%9K",
-    "password": "82abe70ded4d229e6e212ac514fe685f60667a7627b289df8e383ebd4855502f",
-    "rol": "OFICIAL",
-    "rutaImagen": "src/Resources/imagenes_oficiales/678378498_1747840228215.jpg",
-    "primerNombre": "uhc",
-    "segundoNombre": "fef",
-    "primerApellido": "fefe",
-    "segundoApellido": "fefe",
-    "edad": 55,
-    "sexo": "Femenino",
-    "nacionalidad": "Afgana",
-    "identificacion": "678378498"
-  },
-  {
     "usuario": "KbTu@Ñ\u00267qb",
     "password": "d175e8a9a0572056324aef2e417e1ee04be19cfee1c3593d4895ab5285248c08",
     "rol": "COORDINADOR_DE_ACTIVIDADES",
@@ -40,48 +26,6 @@
     "sexo": "Femenino",
     "nacionalidad": "Afgana",
     "identificacion": "837483748"
-  },
-  {
-    "usuario": "tc3\u0026uN9OhG\u0026",
-    "password": "c8fb97691ea38f656dea3ad579b2582f003d4016683404d617fdca042ded8587",
-    "rol": "OFICIAL",
-    "rutaImagen": "src/Resources/imagenes_oficiales/434343467_1747841220943.jpg",
-    "primerNombre": "hfddws9odw",
-    "segundoNombre": "jhuh8y",
-    "primerApellido": "jhsudhu",
-    "segundoApellido": "ugugug",
-    "edad": 44,
-    "sexo": "Femenino",
-    "nacionalidad": "Afgana",
-    "identificacion": "434343467"
-  },
-  {
-    "usuario": "jb\u00262OsG%xeñf",
-    "password": "778651a45836113a6d9b6ff1599b76893cdfa6ef95532c2c6d36e0cf1d7409bb",
-    "rol": "OFICIAL",
-    "rutaImagen": "src/Resources/imagenes_oficiales/0022885334_1747841718530.jpg",
-    "primerNombre": "JD",
-    "segundoNombre": "EU",
-    "primerApellido": "MD",
-    "segundoApellido": "JF",
-    "edad": 66,
-    "sexo": "Femenino",
-    "nacionalidad": "Afgana",
-    "identificacion": "0022885334"
-  },
-  {
-    "usuario": "Whu¿LñR1N",
-    "password": "0cf6c4392c8b38e6a9c953863cb998878d574015de277bcd0c9cde80513ccb9f",
-    "rol": "OFICIAL",
-    "rutaImagen": "src/Resources/imagenes_oficiales/873698374_1747841843743.jpg",
-    "primerNombre": "jdhfdfdf",
-    "segundoNombre": "jhjjh",
-    "primerApellido": "hjh",
-    "segundoApellido": "jhj",
-    "edad": 37,
-    "sexo": "Femenino",
-    "nacionalidad": "Afgana",
-    "identificacion": "873698374"
   },
   {
     "usuario": "1iG#p!34RñO6",
@@ -124,34 +68,6 @@
     "sexo": "Femenino",
     "nacionalidad": "Afgana",
     "identificacion": "137178317"
-  },
-  {
-    "usuario": "%ñGWK4c1",
-    "password": "b2960725cea6ff6f51ee183ca08c0b8cbaa3d6f1bded8f5b514095f43ba9d611",
-    "rol": "OFICIAL",
-    "rutaImagen": "src/Resources/imagenes_oficiales/31371234_1747852102242.png",
-    "primerNombre": "PRUEBA",
-    "segundoNombre": "MODIFICA",
-    "primerApellido": "jh",
-    "segundoApellido": "j",
-    "edad": 34,
-    "sexo": "Femenino",
-    "nacionalidad": "Afgana",
-    "identificacion": "31371234"
-  },
-  {
-    "usuario": "$#D8LF¿a!",
-    "password": "277c83ba7e5a029a174f25a1e02224b2ca625a4a5d31cf10916286ab97384d71",
-    "rol": "OFICIAL",
-    "rutaImagen": "src/Resources/imagenes_oficiales/817317837_1747852667486.png",
-    "primerNombre": "homcenter",
-    "segundoNombre": "PRUEBADOS",
-    "primerApellido": "ADA",
-    "segundoApellido": "DAHDH",
-    "edad": 34,
-    "sexo": "Femenino",
-    "nacionalidad": "Afgana",
-    "identificacion": "817317837"
   },
   {
     "usuario": "1xfñi%!I#s",
@@ -252,20 +168,6 @@
     "identificacion": "183168313"
   },
   {
-    "usuario": "ñ@¡\u0026Sq1h",
-    "password": "a746f6ea35adf6f85204883fcecaed3faaf169d40e62a8dddf8e6582298f8ce3",
-    "rol": "ENFERMERA",
-    "rutaImagen": "src/Resources/imagenes_enfermeras/123456789_1747863195188.png",
-    "primerNombre": "d",
-    "segundoNombre": "d",
-    "primerApellido": "dd",
-    "segundoApellido": "dporr",
-    "edad": 34,
-    "sexo": "Femenino",
-    "nacionalidad": "Afgana",
-    "identificacion": "123456789"
-  },
-  {
     "usuario": "Smag2007",
     "password": "Sharlok16@",
     "rol": "DIRECTOR",
@@ -278,5 +180,19 @@
     "sexo": "Femenino",
     "nacionalidad": "Afgana",
     "identificacion": "123456789"
+  },
+  {
+    "usuario": "RuW##r\u0026xA6",
+    "password": "2cb14be8ef4d1073322bfac3a20f7904833f9a0c57f48ca60ccd448e754e0dea",
+    "rol": "ENFERMERA",
+    "rutaImagen": "src/Resources/imagenes_enfermeras/098654321_1747954405469.jpeg",
+    "primerNombre": "Regina",
+    "segundoNombre": "Maria",
+    "primerApellido": "Delgado",
+    "segundoApellido": "Guerrero",
+    "edad": 34,
+    "sexo": "Femenino",
+    "nacionalidad": "Afgana",
+    "identificacion": "098654321"
   }
 ]

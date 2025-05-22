@@ -72,15 +72,14 @@ public class EnfermeraDAO {
         }
     }
 
- 
-      private void guardarUsuario(Usuario usuario) throws IOException {
-    List<Usuario> usuarios = obtenerTodosUsuarios();
-    usuarios.removeIf(u -> u.getUsuario().equals(usuario.getUsuario()));
-    usuarios.add(usuario);
+    private void guardarUsuario(Usuario usuario) throws IOException {
+        List<Usuario> usuarios = obtenerTodosUsuarios();
+        usuarios.removeIf(u -> u.getUsuario().equals(usuario.getUsuario()));
+        usuarios.add(usuario);
 
-    try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
-        gson.toJson(usuarios, writer); 
-    }
+        try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
+            gson.toJson(usuarios, writer);
+        }
     }
 
     public Enfermera obtenerEnfermeraPorUsuario(String usuario) {
@@ -91,7 +90,6 @@ public class EnfermeraDAO {
                 .orElse(null);
     }
 
-    
     private List<Usuario> obtenerTodosUsuarios() throws IOException {
         File archivo = new File(RUTA_USUARIOS);
 
@@ -108,27 +106,25 @@ public class EnfermeraDAO {
         }
     }
 
-   
-  private void eliminarUsuario(String usuario) throws IOException {
-    List<Usuario> usuarios = obtenerTodosUsuarios();
-    usuarios.removeIf(u -> u.getUsuario().equals(usuario));
+    private void eliminarUsuario(String usuario) throws IOException {
+        List<Usuario> usuarios = obtenerTodosUsuarios();
+        usuarios.removeIf(u -> u.getUsuario().equals(usuario));
 
-    try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
-        gson.toJson(usuarios, writer);
+        try (Writer writer = new FileWriter(RUTA_USUARIOS)) {
+            gson.toJson(usuarios, writer);
+        }
     }
-}
+
     public boolean guardarEnfermera(Enfermera enfermera, File imagen) throws IOException {
-       
+
         UsuarioController.Credenciales credenciales = UsuarioController.getInstancia().generarCredenciales();
         String usuario = credenciales.usuario;
         String contrasena = credenciales.contrasena;
         String contrasenaEncriptada = UsuarioController.getInstancia().encriptarContrasena(contrasena);
 
-       
         enfermera.setUsuario(usuario);
-        enfermera.setContrasena(contrasenaEncriptada); 
+        enfermera.setContrasena(contrasenaEncriptada);
 
-        
         String nombreImagen = enfermera.getIdentificacion() + "_"
                 + System.currentTimeMillis()
                 + imagen.getName().substring(imagen.getName().lastIndexOf("."));
@@ -138,7 +134,6 @@ public class EnfermeraDAO {
         Files.copy(imagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
         enfermera.setRutaImagen(rutaImagenFinal);
 
-        
         List<Enfermera> enfermeras = obtenerEnfermeras();
         enfermeras.add(enfermera);
         guardarListaEnfermeras(enfermeras);
@@ -155,16 +150,15 @@ public class EnfermeraDAO {
                 usuario,
                 contrasenaEncriptada,
                 RolEnum.ENFERMERA,
-                enfermera.getRutaImagen() 
+                enfermera.getRutaImagen()
         );
 
         guardarUsuario(nuevoUsuario);
 
-        
         boolean correoEnviado = EmailSender.getInstancia().enviarCredenciales(
                 enfermera.getCorreo(),
                 usuario,
-                contrasena, 
+                contrasena,
                 RolEnum.ENFERMERA
         );
 
@@ -173,6 +167,14 @@ public class EnfermeraDAO {
                     "Enfermera registrada pero hubo un error al enviar las credenciales por correo.",
                     "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Enfermera contratada correctamente.\nRevise su correo para conocer sus credenciales de acceso",
+                    "Información",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
         }
 
         return true;
@@ -220,7 +222,7 @@ public class EnfermeraDAO {
 
         for (Enfermera enfermera : enfermeras) {
             JsonObject enfermeraJson = new JsonObject();
-           
+
             enfermeraJson.addProperty("turno", enfermera.getTurno());
             enfermeraJson.addProperty("fechaContratacion", enfermera.getFechaContratacion().toString());
             enfermeraJson.addProperty("fechaFinContrato", enfermera.getFechaFinContrato().toString());
@@ -248,12 +250,10 @@ public class EnfermeraDAO {
     public boolean puedeAgregarEnfermera(String turno) {
         List<Enfermera> enfermeras = obtenerEnfermeras();
 
-
         if (enfermeras.size() >= 4) {
             return false;
         }
 
-       
         long countPorTurno = enfermeras.stream()
                 .filter(e -> e.getTurno().equalsIgnoreCase(turno))
                 .count();
@@ -277,10 +277,9 @@ public class EnfermeraDAO {
                     .findFirst();
 
             if (enfermeraAEliminar.isPresent()) {
-                
+
                 eliminarUsuario(enfermeraAEliminar.get().getUsuario());
 
-                
                 enfermeras.removeIf(e -> e.getIdentificacion().equals(cedula));
                 guardarListaEnfermeras(enfermeras);
                 return true;
@@ -300,7 +299,7 @@ public class EnfermeraDAO {
             for (int i = 0; i < enfermeras.size(); i++) {
                 Enfermera e = enfermeras.get(i);
                 if (e.getIdentificacion().equals(cedulaOriginal)) {
-                    
+
                     String rutaImagenFinal = e.getRutaImagen();
 
                     if (nuevaImagen != null && nuevaImagen.exists()) {
@@ -310,7 +309,6 @@ public class EnfermeraDAO {
                         Files.copy(nuevaImagen.toPath(), Paths.get(rutaImagenFinal), StandardCopyOption.REPLACE_EXISTING);
                     }
 
-                  
                     enfermeraModificada.setUsuario(e.getUsuario());
                     enfermeraModificada.setContrasena(e.getContrasena());
                     enfermeraModificada.setRutaImagen(rutaImagenFinal);
@@ -337,7 +335,6 @@ public class EnfermeraDAO {
                 .orElse(null);
     }
 
-   
     public Enfermera obtenerEnfermeraPorIdentificacion(String cedula) {
         return obtenerEnfermeraPorCedula(cedula);
     }
@@ -360,8 +357,8 @@ public class EnfermeraDAO {
             e.getNacionalidad(),
             e.getCorreo(),
             e.getTurno(),
-            e.getFechaContratacionFormateada(), 
-            e.getFechaFinContratoFormateada() 
+            e.getFechaContratacionFormateada(),
+            e.getFechaFinContratoFormateada()
         })
                 .collect(Collectors.toList());
     }
@@ -377,7 +374,7 @@ public class EnfermeraDAO {
             "Nacionalidad",
             "Correo",
             "Turno",
-            "Inicio Contrato", 
+            "Inicio Contrato",
             "Fin de Contrato"
         };
     }
@@ -394,7 +391,7 @@ public class EnfermeraDAO {
             String.class,
             String.class,
             String.class,
-            String.class 
+            String.class
         };
     }
 }

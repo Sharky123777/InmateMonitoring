@@ -281,6 +281,10 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
         lblNombre = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         lblRol = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel14 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         atender = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -361,6 +365,36 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 290, 670));
 
+        jPanel5.setBackground(new java.awt.Color(0, 51, 102));
+        jPanel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel5MouseEntered(evt);
+            }
+        });
+        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel14.setText("VER RECLUSAS POR ATENDER");
+        jPanel5.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, 200, -1));
+
+        jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 0, 430, 70));
+
+        jPanel6.setBackground(new java.awt.Color(0, 51, 102));
+        jPanel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel6MouseEntered(evt);
+            }
+        });
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel15.setText("VER RECLUSAS ATENDIDAS");
+        jPanel6.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 200, -1));
+
+        jPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 0, 380, 70));
+
+        atender.setBackground(new java.awt.Color(255, 255, 255));
+        atender.setForeground(new java.awt.Color(255, 255, 255));
         atender.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tblCitasPendientes.setModel(new javax.swing.table.DefaultTableModel(
@@ -377,7 +411,7 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
         tblCitasPendientes.setComponentPopupMenu(jPopupMenu1);
         jScrollPane1.setViewportView(tblCitasPendientes);
 
-        atender.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 770, 580));
+        atender.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 770, 530));
 
         jTabbedPane1.addTab("porAtender", atender);
 
@@ -543,7 +577,7 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
 
         jTabbedPane1.addTab("Diagnostico", diagnostico);
 
-        jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 0, 810, 670));
+        jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 30, 810, 640));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -789,6 +823,14 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jPanel5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseEntered
+       jTabbedPane1.setSelectedIndex(0);
+    }//GEN-LAST:event_jPanel5MouseEntered
+
+    private void jPanel6MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel6MouseEntered
+        jTabbedPane1.setSelectedIndex(1);
+    }//GEN-LAST:event_jPanel6MouseEntered
+
     /**
      * @param args the command line arguments
      */
@@ -838,6 +880,8 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -849,6 +893,8 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
