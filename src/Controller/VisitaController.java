@@ -1,7 +1,7 @@
 package Controller;
 
 import DAO.PersonalControlDAO;
-import DAO.PresoDAO;
+import DAO.PresaDAO;
 import DAO.SancionDAO;
 import DAO.VisitaDAO;
 import DAO.VisitanteDAO;
@@ -9,7 +9,7 @@ import Model.Constants.EstadoPresoEnum;
 import static Model.Constants.EstadoPresoEnum.FALLECIDO;
 import static Model.Constants.EstadoPresoEnum.FUGADO;
 import static Model.Constants.EstadoPresoEnum.LIBERADO;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import Model.Entities.Visita;
 import Model.Entities.Visitante;
 import Model.Constants.EstadoVisitaEnum;
@@ -317,7 +317,7 @@ public class VisitaController {
                 }
             }
 
-            Preso presoVisitante = PresoDAO.getInstancia().buscarPresoPorIdentificacion(identificacion);
+            Presa presoVisitante = PresaDAO.getInstancia().buscarPresoPorIdentificacion(identificacion);
             if (presoVisitante != null) {
                 mostrarError("Los presos no pueden ser visitantes. \n"
                         + "La identificación " + identificacion + " pertenece al preso: \n"
@@ -452,7 +452,7 @@ public class VisitaController {
 
         try {
             String identificacionPreso = view.getIdentificacionPresoVisita().getText().trim();
-            Preso preso = PresoDAO.getInstancia().buscarPresoPorIdentificacion(identificacionPreso);
+            Presa preso = PresaDAO.getInstancia().buscarPresoPorIdentificacion(identificacionPreso);
 
             if (preso == null) {
                 mostrarError("No se encontró ningún preso con la identificación: " + identificacionPreso);
@@ -784,10 +784,10 @@ public class VisitaController {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
         modelo.setRowCount(0);
 
-        PresoDAO presoDAO = PresoDAO.getInstancia();
-        List<Preso> presos = presoDAO.cargarTodos();
+        PresaDAO presoDAO = PresaDAO.getInstancia();
+        List<Presa> presos = presoDAO.cargarTodos();
 
-        for (Preso preso : presos) {
+        for (Presa preso : presos) {
             ImageIcon foto = cargarImagen(preso.getFotoPath());
             modelo.addRow(new Object[]{
                 foto,
@@ -822,7 +822,7 @@ public class VisitaController {
             return;
         }
 
-        Preso preso = PresoDAO.getInstancia().buscarPresoPorIdentificacion(identificacion);
+        Presa preso = PresaDAO.getInstancia().buscarPresoPorIdentificacion(identificacion);
         if (preso != null) {
             DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
             modelo.setRowCount(0);
@@ -920,10 +920,10 @@ public class VisitaController {
         DefaultTableModel modelo = (DefaultTableModel) tablaPresos.getModel();
         modelo.setRowCount(0);
 
-        PresoDAO presoDAO = PresoDAO.getInstancia();
-        List<Preso> presos = presoDAO.cargarTodos();
+        PresaDAO presoDAO = PresaDAO.getInstancia();
+        List<Presa> presos = presoDAO.cargarTodos();
 
-        for (Preso preso : presos) {
+        for (Presa preso : presos) {
             if (preso.getSeccionAsignada() != null && preso.getSeccionAsignada().equalsIgnoreCase(seccionFiltrada)) {
                 ImageIcon foto = null;
                 if (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty()) {
@@ -1160,8 +1160,8 @@ public class VisitaController {
         }
     }
 
-    public Preso buscarPresoPorIdentificacion(String identificacion) {
-        return PresoDAO.getInstancia().buscarPresoPorIdentificacion(identificacion);
+    public Presa buscarPresoPorIdentificacion(String identificacion) {
+        return PresaDAO.getInstancia().buscarPresoPorIdentificacion(identificacion);
     }
 
     public Visita cambiarEstadoVisita(int idVisita, EstadoVisitaEnum nuevoEstado, String razonCancelacion) {
@@ -1208,10 +1208,10 @@ public class VisitaController {
                 visitanteDAO.guardarVisitante(visitante, null);
             }
 
-            Preso preso = visita.getPreso();
+            Presa preso = visita.getPreso();
             if (preso != null) {
                 preso.setEstado(EstadoPresoEnum.ACTIVO);
-                PresoDAO.getInstancia().actualizarPreso(preso);
+                PresaDAO.getInstancia().actualizarPreso(preso);
             }
         } else if (nuevoEstado == EstadoVisitaEnum.EN_PROCESO) {
             for (Visitante visitante : visita.getVisitantesConRelacion().keySet()) {
@@ -1219,10 +1219,10 @@ public class VisitaController {
                 visitanteDAO.guardarVisitante(visitante, null);
             }
 
-            Preso preso = visita.getPreso();
+            Presa preso = visita.getPreso();
             if (preso != null) {
                 preso.setEstado(EstadoPresoEnum.EN_VISITA);
-                PresoDAO.getInstancia().actualizarPreso(preso);
+                PresaDAO.getInstancia().actualizarPreso(preso);
             }
         }
 

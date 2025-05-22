@@ -1,7 +1,7 @@
 package Controller;
 
 import DAO.GuardiaDAO;
-import DAO.PresoDAO;
+import DAO.PresaDAO;
 import DAO.SancionDAO;
 import DAO.VisitaDAO;
 import DAO.VisitanteDAO;
@@ -11,7 +11,7 @@ import static Model.Constants.EstadoPresoEnum.FUGADO;
 import static Model.Constants.EstadoPresoEnum.LIBERADO;
 import Model.Constants.EstadoVisitaEnum;
 import Model.Entities.Guardia;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import Model.Entities.Sancion;
 import Model.Entities.Visita;
 import Model.Entities.Visitante;
@@ -45,7 +45,7 @@ import javax.swing.table.DefaultTableModel;
 public class SancionController {
 
     private SancionDAO sancionDAO = SancionDAO.getInstancia();
-    private PresoDAO presoDAO = PresoDAO.getInstancia();
+    private PresaDAO presoDAO = PresaDAO.getInstancia();
     private VisitaDAO visitaDAO = VisitaDAO.getInstancia();
     private GuardiaDAO guardiaDAO = GuardiaDAO.getInstancia();
 
@@ -92,7 +92,7 @@ public class SancionController {
         }
 
         try {
-            Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
+            Presa preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
             if (preso == null) {
                 mostrarError("Preso no encontrado.");
                 return false;
@@ -165,7 +165,7 @@ public class SancionController {
         }
     }
 
-    public void verificarFinAislamiento(Preso preso) {
+    public void verificarFinAislamiento(Presa preso) {
         List<Sancion> sanciones = sancionDAO.cargarPorIdentificacionPreso(preso.getIdentificacion());
         LocalDate hoy = LocalDate.now();
 
@@ -208,7 +208,7 @@ public class SancionController {
                         visita.getId(), EstadoVisitaEnum.CANCELADA, motivoCancelacion);
 
                 if (visitaCancelada != null) {
-                    Preso presoVisita = visitaCancelada.getPreso();
+                    Presa presoVisita = visitaCancelada.getPreso();
                     presoVisita.setEnVisita(false);
                     presoVisita.setEstado(EstadoPresoEnum.ACTIVO);
                     presoDAO.actualizarPreso(presoVisita);
@@ -379,10 +379,10 @@ public class SancionController {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
         modelo.setRowCount(0);
 
-        PresoDAO presoDAO = new PresoDAO();
-        List<Preso> presos = presoDAO.cargarTodos();
+        PresaDAO presoDAO = new PresaDAO();
+        List<Presa> presos = presoDAO.cargarTodos();
 
-        for (Preso preso : presos) {
+        for (Presa preso : presos) {
             ImageIcon foto = cargarImagen(preso.getFotoPath());
             modelo.addRow(new Object[]{
                 foto,
@@ -416,7 +416,7 @@ public class SancionController {
             return;
         }
 
-        Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
+        Presa preso = new PresaDAO().buscarPresoPorIdentificacion(identificacion);
         if (preso != null) {
             DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
             modelo.setRowCount(0);
@@ -538,10 +538,10 @@ public class SancionController {
         DefaultTableModel modelo = (DefaultTableModel) tablaPresos.getModel();
         modelo.setRowCount(0);
 
-        PresoDAO presoDAO = new PresoDAO();
-        List<Preso> presos = presoDAO.cargarTodos();
+        PresaDAO presoDAO = new PresaDAO();
+        List<Presa> presos = presoDAO.cargarTodos();
 
-        for (Preso preso : presos) {
+        for (Presa preso : presos) {
             if (preso.getSeccionAsignada() != null && preso.getSeccionAsignada().equalsIgnoreCase(seccionFiltrada)) {
                 ImageIcon foto = null;
                 if (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty()) {

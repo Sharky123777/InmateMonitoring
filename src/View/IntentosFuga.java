@@ -1,7 +1,7 @@
 
 package View;
 
-import Controller.PresoController;
+import Controller.PresaController;
 import Model.Entities.IntentoFuga;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,12 +14,12 @@ import javax.swing.table.DefaultTableModel;
 
 
 public class IntentosFuga extends javax.swing.JDialog {
-    private final PresoController presoController;
+    private final PresaController presoController;
 
     private String identificacionPreso;
     private DefaultTableModel modeloTabla;
    
-    public IntentosFuga(java.awt.Frame parent, boolean modal, PresoController controller, String identificacion) {
+    public IntentosFuga(java.awt.Frame parent, boolean modal, PresaController controller, String identificacion) {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
@@ -83,7 +83,7 @@ public class IntentosFuga extends javax.swing.JDialog {
     }
     
     
-     public static void mostrarDialog(JFrame parent, PresoController controller, String identificacion) {
+     public static void mostrarDialog(JFrame parent, PresaController controller, String identificacion) {
         IntentosFuga dialog = new IntentosFuga(parent, true, controller, identificacion);
         dialog.setVisible(true);
     }

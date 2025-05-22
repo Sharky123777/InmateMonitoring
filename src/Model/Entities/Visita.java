@@ -14,13 +14,13 @@ public class Visita {
     private final String duracionVisitaEnHoras = "1";
     private String tipoVisita;
     private String lugarVisita;
-    private Preso preso;
+    private Presa preso;
     private Map<Visitante, String> visitantesConRelacion;
     private EstadoVisitaEnum estado;
     private String razonCancelacion;
 
     public Visita(int id, LocalDate fechaVisita, LocalTime horaVisita, String tipoVisita,
-            String lugarVisita, Preso preso) {
+            String lugarVisita, Presa preso) {
         this.id = id;
         this.fechaVisita = fechaVisita;
         this.horaVisita = horaVisita;
@@ -84,11 +84,11 @@ public class Visita {
         this.lugarVisita = lugarVisita;
     }
 
-    public Preso getPreso() {
+    public Presa getPreso() {
         return preso;
     }
 
-    public void setPreso(Preso preso) {
+    public void setPreso(Presa preso) {
         this.preso = preso;
     }
 

@@ -2,13 +2,13 @@ package Controller;
 
 import DAO.ActividadDAO;
 import DAO.OficialDAO;
-import DAO.PresoDAO;
+import DAO.PresaDAO;
 import Model.Constants.EstadoActividadesEnum;
 import Model.Constants.EstadoActividadesPresoEnum;
 import Model.Constants.EstadoPresoEnum;
 import Model.Entities.Actividad;
 import Model.Entities.Oficial;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import Utilidades.Validador;
 import View.ActividadRenderer;
 import java.util.ArrayList;
@@ -23,12 +23,12 @@ public class ActividadController {
     private static volatile ActividadController instancia;
     private final OficialDAO oficialDAO;
     private final ActividadDAO actividadDAO;
-    private final PresoDAO presoDAO;
-    PresoController pc = PresoController.getInstancia();
+    private final PresaDAO presoDAO;
+    PresaController pc = PresaController.getInstancia();
 
     private ActividadController() {
         this.actividadDAO = ActividadDAO.getInstancia();
-        this.presoDAO = PresoDAO.getInstancia();
+        this.presoDAO = PresaDAO.getInstancia();
         this.oficialDAO = OficialDAO.getInstancia();
     }
 
@@ -209,11 +209,11 @@ public class ActividadController {
             return;
         }
 
-        PresoController presoController = PresoController.getInstancia();
+        PresaController presoController = PresaController.getInstancia();
 
         for (String idPreso : actividad.getPresosAsignadosIds()) {
             try {
-                Preso preso = presoController.buscarPreso(idPreso);
+                Presa preso = presoController.buscarPreso(idPreso);
 
                 if (preso != null) {
                     model.addRow(new Object[]{
@@ -258,10 +258,10 @@ public class ActividadController {
     }
 
     public List<Object[]> obtenerPresosParaActividades() {
-        List<Preso> presos = presoDAO.cargarTodos();
+        List<Presa> presos = presoDAO.cargarTodos();
         List<Object[]> filas = new ArrayList<>();
 
-        for (Preso preso : presos) {
+        for (Presa preso : presos) {
             if (preso.getEstado() == EstadoPresoEnum.ACTIVO
                     && preso.getNivelDeRiesgo().equalsIgnoreCase("RIESGO BAJO")
                     && !preso.isEnAislamiento()) {
@@ -392,7 +392,7 @@ public class ActividadController {
             if (!diaFinal.equals(actividadOriginal.getDia()) || !horarioFinal.equals(actividadOriginal.getHorario())) {
                 for (String idPreso : actividadOriginal.getPresosAsignadosIds()) {
                     if (actividadDAO.tieneActividadEnMismoHorarioPreso(idPreso, diaFinal, horarioFinal)) {
-                        Preso preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
+                        Presa preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
                         throw new Exception("El preso " + preso.getNombresCompletos()
                                 + " tiene conflicto de horario con la nueva programación.");
                     }

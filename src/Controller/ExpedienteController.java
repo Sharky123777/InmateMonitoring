@@ -3,10 +3,10 @@ package Controller;
 import DAO.DelitoDAO;
 import DAO.ExpedienteDAO;
 import DAO.IntentoFugaDAO;
-import DAO.PresoDAO;
+import DAO.PresaDAO;
 import Model.Constants.EstadoExpedienteEnum;
 import Model.Constants.EstadoPresoEnum;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import Model.Entities.Delito;
 import Model.Entities.ExpedienteJudicial;
 import Model.Entities.GeneradorExpedientePDF;
@@ -34,11 +34,11 @@ public class ExpedienteController {
     private static ExpedienteController instancia;
     private final IntentoFugaDAO intentoFugaDAO = IntentoFugaDAO.getInstancia();
     private final ExpedienteDAO expedienteDAO = ExpedienteDAO.getInstancia();
-    private final PresoDAO presoDAO;
+    private final PresaDAO presoDAO;
     private final DelitoDAO delitoDAO;
-    private final PresoController presoController;
+    private final PresaController presoController;
 
-    private ExpedienteController(PresoDAO presoDAO, DelitoDAO delitoDAO, PresoController presoController) {
+    private ExpedienteController(PresaDAO presoDAO, DelitoDAO delitoDAO, PresaController presoController) {
         this.presoDAO = presoDAO;
         this.delitoDAO = delitoDAO;
         this.presoController = presoController;
@@ -51,9 +51,9 @@ public class ExpedienteController {
                 result = instancia;
                 if (result == null) {
                     instancia = result = new ExpedienteController(
-                            PresoDAO.getInstancia(),
+                            PresaDAO.getInstancia(),
                             DelitoDAO.getInstancia(),
-                            PresoController.getInstancia()
+                            PresaController.getInstancia()
                     );
                 }
             }
@@ -87,7 +87,7 @@ public class ExpedienteController {
                 throw new IllegalArgumentException("Identificación del preso no puede ser nula o vacía");
             }
 
-            Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
+            Presa preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
             if (preso == null) {
                 throw new IllegalStateException("No se encontró preso con identificación: " + identificacionPreso);
             }
@@ -144,7 +144,7 @@ public class ExpedienteController {
         }
     }
 
-    private void cargarDatosPresoUI(Preso preso, JLabel nombre, JLabel apellidos,
+    private void cargarDatosPresoUI(Presa preso, JLabel nombre, JLabel apellidos,
             JLabel edad, JLabel identificacion,
             JLabel nacionalidad, JLabel fotoLabel,
             JLabel estadoPresoLabel, JPanel panelEstadoEspecialPreso, JLabel lblMensajeEspecialPreso) {
@@ -222,21 +222,35 @@ public class ExpedienteController {
         }
     }
 
-    private void cargarFotoPreso(String fotoPath, JLabel fotoLabel) {
+    private void cargarFotoPreso(String fotoPath, JLabel labelFoto) {
         try {
             if (fotoPath != null && !fotoPath.isEmpty()) {
                 ImageIcon icon = new ImageIcon(fotoPath);
-                Image img = icon.getImage().getScaledInstance(
-                        fotoLabel.getWidth(),
-                        fotoLabel.getHeight(),
-                        Image.SCALE_SMOOTH
-                );
-                fotoLabel.setIcon(new ImageIcon(img));
+                Image img = icon.getImage();
+
+               
+                int labelWidth = labelFoto.getWidth();
+                int labelHeight = labelFoto.getHeight();
+                double imgRatio = (double) icon.getIconWidth() / icon.getIconHeight();
+                double labelRatio = (double) labelWidth / labelHeight;
+
+                int newWidth, newHeight;
+                if (labelRatio > imgRatio) {
+                    newHeight = labelHeight;
+                    newWidth = (int) (newHeight * imgRatio);
+                } else {
+                    newWidth = labelWidth;
+                    newHeight = (int) (newWidth / imgRatio);
+                }
+
+               
+                Image scaledImg = img.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+                labelFoto.setIcon(new ImageIcon(scaledImg));
             } else {
-                fotoLabel.setIcon(null);
+                labelFoto.setIcon(null);
             }
         } catch (Exception e) {
-            fotoLabel.setIcon(null);
+            labelFoto.setIcon(null);
             System.err.println("Error al cargar foto: " + e.getMessage());
         }
     }
@@ -244,21 +258,20 @@ public class ExpedienteController {
     public String obtenerDescripcionDelito(int idDelito) {
         return delitoDAO.obtenerDescripcionDelito(idDelito);
     }
-    
-public ExpedienteJudicial actualizarExpedienteConDelitos(String identificacionPreso) {
-    ExpedienteJudicial expediente = expedienteDAO.obtenerExpedienteAbierto(identificacionPreso);
-    
-    if (expediente == null) {
-        Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
-        expediente = new ExpedienteJudicial(preso);
-        expediente.setDelitos(new ArrayList<>());
-    }
-    
-    expedienteDAO.guardarExpediente(expediente);
-    
-    return expediente;
-}
 
+    public ExpedienteJudicial actualizarExpedienteConDelitos(String identificacionPreso) {
+        ExpedienteJudicial expediente = expedienteDAO.obtenerExpedienteAbierto(identificacionPreso);
+
+        if (expediente == null) {
+            Presa preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
+            expediente = new ExpedienteJudicial(preso);
+            expediente.setDelitos(new ArrayList<>());
+        }
+
+        expedienteDAO.guardarExpediente(expediente);
+
+        return expediente;
+    }
 
     public void cargarTablaDelitos(List<Delito> delitos, JTable tabla) {
         DefaultTableModel model = (DefaultTableModel) tabla.getModel();
@@ -299,7 +312,7 @@ public ExpedienteJudicial actualizarExpedienteConDelitos(String identificacionPr
                 throw new IllegalArgumentException("Identificación del preso no puede estar vacía");
             }
 
-            Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
+            Presa preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
             if (preso == null) {
                 throw new IllegalStateException("No se encontró preso con identificación: " + identificacionPreso);
             }
@@ -331,108 +344,172 @@ public ExpedienteJudicial actualizarExpedienteConDelitos(String identificacionPr
             ex.printStackTrace();
         }
     }
-    
-  
+
     public List<ExpedienteJudicial> obtenerHistorialExpedientes(String identificacionPreso) {
-    try {
-        Validador.validarFormatoIdentificacion(identificacionPreso);
-        
-        List<ExpedienteJudicial> expedientes = expedienteDAO.buscarExpedientesPorPreso(identificacionPreso);
-        
-        if (expedientes == null || expedientes.isEmpty()) {
-            throw new IllegalStateException("No se encontraron expedientes para este preso");
+        try {
+            Validador.validarFormatoIdentificacion(identificacionPreso);
+
+            List<ExpedienteJudicial> expedientes = expedienteDAO.buscarExpedientesPorPreso(identificacionPreso);
+
+            if (expedientes == null || expedientes.isEmpty()) {
+                throw new IllegalStateException("No se encontraron expedientes para este preso");
+            }
+
+            // Ordenar por fecha de apertura (más reciente primero)
+            expedientes.sort((e1, e2) -> e2.getFechaApertura().compareTo(e1.getFechaApertura()));
+
+            return expedientes;
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            Validador.mostrarError(e.getMessage());
+            return new ArrayList<>();
+        } catch (Exception e) {
+            Validador.mostrarError("Error al obtener historial: " + e.getMessage());
+            return new ArrayList<>();
         }
-        
-        // Ordenar por fecha de apertura (más reciente primero)
-        expedientes.sort((e1, e2) -> e2.getFechaApertura().compareTo(e1.getFechaApertura()));
-        
-        return expedientes;
-    } catch (IllegalArgumentException | IllegalStateException e) {
-        Validador.mostrarError(e.getMessage());
-        return new ArrayList<>();
-    } catch (Exception e) {
-        Validador.mostrarError("Error al obtener historial: " + e.getMessage());
-        return new ArrayList<>();
     }
-}
-    
+
     public ExpedienteJudicial obtenerExpedientePorCodigo(String codigoExpediente) {
-    try {
-        if (codigoExpediente == null || codigoExpediente.trim().isEmpty()) {
-            throw new IllegalArgumentException("Código de expediente no puede estar vacío");
+        try {
+            if (codigoExpediente == null || codigoExpediente.trim().isEmpty()) {
+                throw new IllegalArgumentException("Código de expediente no puede estar vacío");
+            }
+
+            return expedienteDAO.buscarPorCodigo(codigoExpediente);
+        } catch (IllegalArgumentException e) {
+            Validador.mostrarError(e.getMessage());
+            return null;
+        } catch (Exception e) {
+            Validador.mostrarError("Error al obtener expediente: " + e.getMessage());
+            return null;
         }
-        
-        return expedienteDAO.buscarPorCodigo(codigoExpediente);
-    } catch (IllegalArgumentException e) {
-        Validador.mostrarError(e.getMessage());
-        return null;
-    } catch (Exception e) {
-        Validador.mostrarError("Error al obtener expediente: " + e.getMessage());
-        return null;
     }
-}
-    
-  public void cargarExpedienteCompletoDesdeObjeto(
-        ExpedienteJudicial expediente,
-        JLabel fechaSalida,
-        JLabel registroNum,
-        JLabel codExpe,
-        JLabel fechaAper,
-        JLabel estado,
-        JLabel juzgado,
-        JLabel nivelRiesgo,
-        JLabel nombre,
-        JLabel apellidos,
-        JLabel edad,
-        JLabel identificacion,
-        JLabel nacionalidad,
-        JLabel fotoLabel,
-        JTable tablaExpediente,
-        JLabel sentenciaTotalLabel,
-        JPanel panelEstadoEspecialPreso,
-        JLabel lblMensajeEspecialPreso
-) {
-    try {
-        Preso preso = expediente.getPreso();
-        if (preso == null) {
-            throw new IllegalStateException("El expediente no contiene un preso asociado.");
+
+    public void cargarExpedienteCompletoDesdeObjeto(
+            ExpedienteJudicial expediente,
+            JLabel fechaSalida,
+            JLabel registroNum,
+            JLabel codExpe,
+            JLabel fechaAper,
+            JLabel estado,
+            JLabel juzgado,
+            JLabel nivelRiesgo,
+            JLabel nombre,
+            JLabel apellidos,
+            JLabel edad,
+            JLabel identificacion,
+            JLabel nacionalidad,
+            JLabel fotoLabel,
+            JTable tablaExpediente,
+            JLabel sentenciaTotalLabel,
+            JPanel panelEstadoEspecialPreso,
+            JLabel lblMensajeEspecialPreso
+    ) {
+        try {
+            Presa preso = expediente.getPreso();
+            if (preso == null) {
+                throw new IllegalStateException("El expediente no contiene un preso asociado.");
+            }
+
+            List<Delito> delitos = expediente.getDelitos();
+            if (delitos == null) {
+                delitos = new ArrayList<>();
+            }
+
+            cargarDatosPresoUI(
+                    preso,
+                    nombre,
+                    apellidos,
+                    edad,
+                    identificacion,
+                    nacionalidad,
+                    fotoLabel,
+                    estado,
+                    panelEstadoEspecialPreso,
+                    lblMensajeEspecialPreso
+            );
+
+            cargarDatosExpedienteUI(expediente, registroNum, codExpe, fechaAper, estado, juzgado, nivelRiesgo);
+
+            Sentencia sentencia = expedienteDAO.calcularSentenciaTotal(delitos);
+            sentenciaTotalLabel.setText(sentencia.getSentenciaFormateada());
+
+            if (sentencia.getFechaSalidaCalculada() != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                fechaSalida.setText(sentencia.getFechaSalidaCalculada().format(formatter));
+            } else {
+                fechaSalida.setText("No disponible");
+            }
+
+            cargarTablaDelitosUI(delitos, tablaExpediente);
+
+        } catch (Exception e) {
+            Validador.mostrarError("Error al cargar expediente: " + e.getMessage());
         }
-
-        List<Delito> delitos = expediente.getDelitos();
-        if (delitos == null) delitos = new ArrayList<>();
-
-        cargarDatosPresoUI(
-                preso,
-                nombre,
-                apellidos,
-                edad,
-                identificacion,
-                nacionalidad,
-                fotoLabel,
-                estado,
-                panelEstadoEspecialPreso,
-                lblMensajeEspecialPreso
-        );
-
-        cargarDatosExpedienteUI(expediente, registroNum, codExpe, fechaAper, estado, juzgado, nivelRiesgo);
-
-        Sentencia sentencia = expedienteDAO.calcularSentenciaTotal(delitos);
-        sentenciaTotalLabel.setText(sentencia.getSentenciaFormateada());
-
-        if (sentencia.getFechaSalidaCalculada() != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            fechaSalida.setText(sentencia.getFechaSalidaCalculada().format(formatter));
-        } else {
-            fechaSalida.setText("No disponible");
-        }
-
-        cargarTablaDelitosUI(delitos, tablaExpediente);
-
-    } catch (Exception e) {
-        Validador.mostrarError("Error al cargar expediente: " + e.getMessage());
     }
-}
 
+    public boolean modificarSentencia(String identificacion, Sentencia modificacion, boolean esDisminucion, String rutaOrdenJuez) {
+        try {
+            Validador.validarFormatoIdentificacion(identificacion);
 
+            // Validar que la reclusa exista
+            Presa preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
+            if (preso == null) {
+                throw new IllegalStateException("No se encontró una reclusa con esa identificación");
+            }
+
+            // Validar que no esté fugada, liberada o fallecida
+            if (preso.getEstado() != EstadoPresoEnum.ACTIVO) {
+                throw new IllegalStateException("No se puede modificar la sentencia de una reclusa " + preso.getEstado().toString().toLowerCase());
+            }
+
+            // Validar valores positivos
+            if (modificacion.getAños() < 0 || modificacion.getMeses() < 0) {
+                throw new IllegalArgumentException("Los valores de años y meses deben ser positivos");
+            }
+
+            return presoDAO.actualizarSentencia(identificacion, modificacion, esDisminucion, rutaOrdenJuez);
+
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            Validador.mostrarError(e.getMessage());
+            return false;
+        }
+    }
+
+    public ExpedienteJudicial obtenerExpedienteAbierto(String identificacion) {
+        try {
+            Validador.validarFormatoIdentificacion(identificacion);
+            ExpedienteJudicial expediente = expedienteDAO.obtenerExpedienteAbierto(identificacion);
+
+            if (expediente == null) {
+                throw new IllegalStateException("No existe expediente abierto para esta reclusa");
+            }
+
+            // Cargar delitos si no están cargados
+            if (expediente.getDelitos() == null || expediente.getDelitos().isEmpty()) {
+                List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(identificacion);
+                expediente.setDelitos(delitos);
+            }
+
+            return expediente;
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            throw e; // Re-lanzar para manejar en la vista
+        }
+    }
+
+    private void validarDisminucion(Sentencia actual, Sentencia disminucion) {
+        int mesesActual = actual.getAños() * 12 + actual.getMeses();
+        int mesesDisminuir = disminucion.getAños() * 12 + disminucion.getMeses();
+        double porcentaje = (mesesDisminuir * 100.0) / mesesActual;
+
+        if (porcentaje > 45) {
+            throw new IllegalArgumentException("¡Error! La disminución no puede superar el 45% de la condena original.");
+        }
+    }
+
+    private void validarAumento(Sentencia aumento) {
+        if (aumento.getAños() <= 0 && aumento.getMeses() <= 0) {
+            throw new IllegalArgumentException("El aumento debe ser mayor a 0.");
+        }
+    }
 
 }

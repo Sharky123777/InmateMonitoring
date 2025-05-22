@@ -24,28 +24,42 @@ public class Sentencia {
     }
 
     public void sumarSentencia(Sentencia otra) {
-        this.años += otra.getAños();
         this.meses += otra.getMeses();
+        this.años += otra.getAños();
 
-        this.años += this.meses / 12;
-        this.meses = this.meses % 12;
-
-        calcularFechaSalida();
+        // Ajustar si los meses pasan de 12
+        if (this.meses >= 12) {
+            this.años += this.meses / 12;
+            this.meses = this.meses % 12;
+        }
     }
 
     public void restarSentencia(Sentencia otra) {
-        int totalMesesActual = this.años * 12 + this.meses;
-        int totalMesesARestar = otra.getAños() * 12 + otra.getMeses();
+        int totalMesesThis = this.años * 12 + this.meses;
+        int totalMesesOtra = otra.getAños() * 12 + otra.getMeses();
 
-        if (totalMesesARestar > totalMesesActual) {
-            throw new IllegalArgumentException("No se puede restar una sentencia mayor a la actual");
+        if (totalMesesOtra > totalMesesThis) {
+            throw new IllegalArgumentException("No se puede restar una sentencia mayor a la original");
         }
 
-        int totalMesesRestantes = totalMesesActual - totalMesesARestar;
-        this.años = totalMesesRestantes / 12;
-        this.meses = totalMesesRestantes % 12;
+        int resultadoMeses = totalMesesThis - totalMesesOtra;
 
-        calcularFechaSalida();
+        this.años = resultadoMeses / 12;
+        this.meses = resultadoMeses % 12;
+    }
+
+    public String getSentenciaFormateada() {
+        StringBuilder sb = new StringBuilder();
+        if (años > 0) {
+            sb.append(años).append(años == 1 ? " año" : " años");
+        }
+        if (meses > 0) {
+            if (años > 0) {
+                sb.append(" y ");
+            }
+            sb.append(meses).append(meses == 1 ? " mes" : " meses");
+        }
+        return sb.toString();
     }
 
     private void calcularFechaSalida() {
@@ -69,16 +83,7 @@ public class Sentencia {
         return fechaSalidaCalculada;
     }
 
-    public String getSentenciaFormateada() {
-        StringBuilder sb = new StringBuilder();
-        if (años > 0) {
-            sb.append(años).append(años == 1 ? " año " : " años ");
-        }
-        if (meses > 0) {
-            sb.append(meses).append(meses == 1 ? " mes" : " meses");
-        }
-        return sb.toString().trim();
-    }
+   
 
     public String getFormatoAlmacenamiento() {
         return años + "|" + meses + "|" + fechaIngreso.toString();

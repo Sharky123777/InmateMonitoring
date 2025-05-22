@@ -1,18 +1,18 @@
 package View;
 
 import Controller.ActividadController;
-import Controller.CoordinadorDeActividadesController;
-import Controller.PresoController;
+import Controller.CoordinadoraDeActividadesController;
+import Controller.PresaController;
 import DAO.ActividadDAO;
 import DAO.CeldaDAO;
 import Model.Entities.Oficial;
 
 import DAO.DelitoDAO;
 import DAO.OficialDAO;
-import DAO.PresoDAO;
+import DAO.PresaDAO;
 import DAO.UsuarioDAO;
 import Model.Entities.Actividad;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import Model.Entities.Usuario;
 import Utilidades.Validador;
 import java.awt.AlphaComposite;
@@ -42,29 +42,29 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-public class CoordinadorDeActividades extends javax.swing.JFrame implements PerfilUsuario {
+public class CoordinadoraDeActividades extends javax.swing.JFrame implements PerfilUsuario {
 
     OficialDAO oficialDAO = OficialDAO.getInstancia();
     ActividadController ac = ActividadController.getInstancia();
     private final UsuarioDAO usuarioDAO = UsuarioDAO.getInstancia();
     private Usuario usuario;
 
-    private final PresoController presoController;
-    private final PresoDAO presoDAO;
+    private final PresaController presoController;
+    private final PresaDAO presoDAO;
 
     private final DelitoDAO delitoDAO;
     private final ActividadDAO actividadDAO;
     private final CeldaDAO celdaDAO;
     private final Validador validador;
     CeldaDAO celda = new CeldaDAO();
-    private Preso presoOriginal;
+    private Presa presoOriginal;
 
     private Actividad actividadSeleccionada;
     private Oficial oficialSeleccionado;
     public boolean imagenFueModificada;
     private File imagenSeleccionadaModCDA;
 
-    public CoordinadorDeActividades() {
+    public CoordinadoraDeActividades() {
         initComponents();
         inicializarMenuActividadesEspecifica();
         inicializarMenuPresosDisponibles();
@@ -84,10 +84,10 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
 
         controlador.cargarActividadesEnTabla(actividadesTabla);
         this.actividadDAO = ActividadDAO.getInstancia();
-        this.presoDAO = new PresoDAO();
+        this.presoDAO = new PresaDAO();
         this.celdaDAO = new CeldaDAO();
         this.delitoDAO = new DelitoDAO();
-        this.presoController = PresoController.getInstancia();
+        this.presoController = PresaController.getInstancia();
         this.validador = Validador.getInstancia();
 
         configurarTablaImagenes();
@@ -163,7 +163,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
 
                 System.out.println("Se selecciono un preso");
 
-                Preso preso = presoController.obtenerPresoDesdeTabla(filaSeleccionada, TablaPresosCoor);
+                Presa preso = presoController.obtenerPresoDesdeTabla(filaSeleccionada, TablaPresosCoor);
 
                 AsignacionActividad dialogo = new AsignacionActividad(null, true, preso, actividadesTabla);
                 dialogo.setVisible(true);
@@ -182,7 +182,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
                 if (filaSeleccionada == -1) {
                     throw new IllegalArgumentException("Seleccione un preso primero");
                 }
-                Preso preso = presoController.obtenerPresoDesdeTabla(filaSeleccionada, TablaPresosCoor);
+                Presa preso = presoController.obtenerPresoDesdeTabla(filaSeleccionada, TablaPresosCoor);
 
                 nom.setText(preso.getNombresCompletos());
                 ape.setText(preso.getApellidosCompletos());
@@ -226,7 +226,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
                 if (filaSeleccionada == -1) {
                     throw new IllegalArgumentException("Seleccione un preso primero");
                 }
-                Preso preso = presoController.obtenerPresoDesdeTablaActividadEspecifica(filaSeleccionada, tablaPresosAsignadosActividad);
+                Presa preso = presoController.obtenerPresoDesdeTablaActividadEspecifica(filaSeleccionada, tablaPresosAsignadosActividad);
 
                 CambioEstadoPresoActividad cepa = new CambioEstadoPresoActividad(this, true, preso);
                 cepa.setVisible(true);
@@ -2135,7 +2135,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
         }
 
         Model.Entities.CoordinadorDeActividades coordinadorExistente =
-                CoordinadorDeActividadesController.getInstancia().obtenerCoordinadorPorCedula(cedulaOriginal);
+                CoordinadoraDeActividadesController.getInstancia().obtenerCoordinadorPorCedula(cedulaOriginal);
 
         if (coordinadorExistente == null) {
             throw new IllegalArgumentException("No se encontró una coordinadora de actividades registrada con cédula: " + cedulaOriginal);
@@ -2195,7 +2195,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
             return;
         }
 
-        int resultado = CoordinadorDeActividadesController.getInstancia()
+        int resultado = CoordinadoraDeActividadesController.getInstancia()
                 .modificarCoordinadorConCredenciales(cedulaOriginal, cambios, imagenModificada);
 
         switch (resultado) {
@@ -2210,7 +2210,7 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
                         ? cambios.get("identificacion").toString()
                         : cedulaOriginal;
 
-                Usuario usuarioActualizado = CoordinadorDeActividadesController.getInstancia()
+                Usuario usuarioActualizado = CoordinadoraDeActividadesController.getInstancia()
                         .obtenerUsuarioPorIdentificacion(nuevaIdentificacion);
 
                 setUsuario(usuarioActualizado);
@@ -2303,20 +2303,21 @@ public class CoordinadorDeActividades extends javax.swing.JFrame implements Perf
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CoordinadorDeActividades.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CoordinadoraDeActividades.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CoordinadorDeActividades.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CoordinadoraDeActividades.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CoordinadorDeActividades.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CoordinadoraDeActividades.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CoordinadorDeActividades.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CoordinadoraDeActividades.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CoordinadorDeActividades().setVisible(true);
+                new CoordinadoraDeActividades().setVisible(true);
             }
         });
     }

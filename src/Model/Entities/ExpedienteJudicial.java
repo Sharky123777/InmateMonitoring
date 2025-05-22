@@ -19,9 +19,10 @@ public class ExpedienteJudicial {
     private List<String> actividades;
     private String observacionesConducta;
     private String nivelRiesgo;
-    private Preso preso;
+    private Presa preso;
+    private String rutaOrdenJuez;
 
-    public ExpedienteJudicial(Preso preso) {
+    public ExpedienteJudicial(Presa preso) {
         if (preso == null) {
             throw new IllegalArgumentException("El expediente judicial requiere un preso asociado");
         }
@@ -41,7 +42,7 @@ public class ExpedienteJudicial {
             EstadoExpedienteEnum estado, List<Delito> delitos, LocalDate fechaSentencia,
             String juzgado, int totalVisitas, String nivelAdaptacion,
             List<String> actividades, String observacionesConducta,
-            String nivelRiesgo, Preso preso) {
+            String nivelRiesgo, Presa preso) {
         this(preso);
         this.codigoExpediente = codigoExpediente != null ? codigoExpediente : GeneradorDeCodigos.generarCodigoExpediente();
         this.numeroRegistro = numeroRegistro != null ? numeroRegistro : GeneradorDeCodigos.generarNumeroRegistro();
@@ -153,11 +154,21 @@ public class ExpedienteJudicial {
         this.nivelRiesgo = nivelRiesgo;
     }
 
-    public Preso getPreso() {
+    public Presa getPreso() {
         return preso;
     }
 
-    public void setPreso(Preso preso) {
+    public String getRutaOrdenJuez() {
+        return rutaOrdenJuez;
+    }
+
+    public void setRutaOrdenJuez (String rutaOrdenJuez) {
+        this.rutaOrdenJuez = rutaOrdenJuez;
+    }
+    
+    
+
+    public void setPreso(Presa preso) {
         if (preso == null) {
             throw new IllegalArgumentException("El expediente judicial requiere un preso asociado");
         }

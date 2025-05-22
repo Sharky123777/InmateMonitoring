@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Preso extends Persona {
+public class Presa extends Persona {
 
     private float estatura;
     private float peso;
@@ -29,7 +29,7 @@ public class Preso extends Persona {
     private LocalDate fechaDefuncion;
     private LocalDate fechaFuga;
 
-    public Preso(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
+    public Presa(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
             int edad, String sexo, String nacionalidad, String identificacion,
             float estatura, float peso, List<Delito> delitos,
             String nivelDeSeguridad, String seccionAsignada, String condicion,

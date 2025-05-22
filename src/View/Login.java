@@ -134,7 +134,7 @@ public class Login extends javax.swing.JFrame {
                 vista = new PersonalDeControl();
                 break;
             case COORDINADOR_DE_ACTIVIDADES:
-                vista = new CoordinadorDeActividades();
+                vista = new CoordinadoraDeActividades();
                 break;
             case ENFERMERA:
                 vista = new Enfermera();

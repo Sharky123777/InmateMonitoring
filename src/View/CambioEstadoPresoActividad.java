@@ -4,17 +4,17 @@ import Controller.ActividadController;
 import DAO.ActividadDAO;
 import Model.Constants.EstadoActividadesPresoEnum;
 import Model.Entities.Actividad;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import java.util.List;
 import javax.swing.JOptionPane;
 
 public class CambioEstadoPresoActividad extends javax.swing.JDialog {
 
-    private Preso preso;
+    private Presa preso;
 
     ActividadController ac = ActividadController.getInstancia();
 
-    public CambioEstadoPresoActividad(java.awt.Frame parent, boolean modal, Preso preso) {
+    public CambioEstadoPresoActividad(java.awt.Frame parent, boolean modal, Presa preso) {
         super(parent, modal);
         this.preso = preso;
         this.setLocationRelativeTo(null);

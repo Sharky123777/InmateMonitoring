@@ -12,7 +12,7 @@ public class CitaMedica {
     private LocalTime hora;
     private String motivo;
     private Guardia guardia;
-    private Preso preso;
+    private Presa preso;
     private Enfermera enfermera;
     private EstadoCitaMedicaEnum estado;
     private String diagnostico;  
@@ -25,7 +25,7 @@ public class CitaMedica {
         this.diagnostico = "";
     }
      
-    public CitaMedica(int id, LocalDate fecha, LocalTime hora, String motivo, Guardia guardia, Preso preso, Enfermera enfermera) {
+    public CitaMedica(int id, LocalDate fecha, LocalTime hora, String motivo, Guardia guardia, Presa preso, Enfermera enfermera) {
         this.id = id;
         this.fecha = fecha;
         this.hora = hora;
@@ -77,11 +77,11 @@ public class CitaMedica {
         this.guardia = guardia;
     }
 
-    public Preso getPreso() {
+    public Presa getPreso() {
         return preso;
     }
 
-    public void setPreso(Preso preso) {
+    public void setPreso(Presa preso) {
         this.preso = preso;
     }
 

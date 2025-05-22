@@ -20,15 +20,15 @@ import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
-public class CoordinadorDeActividadesDAO {
+public class CoordinadoraDeActividadesDAO {
 
     private static final String RUTA_JSON = "src/Resources/DATA/CDA.json";
     private static final String RUTA_IMAGENES = "src/Resources/imagenes_CDA/";
     private static final String RUTA_USUARIOS = "src/Resources/DATA/usuarios.json";
     private final Gson gson;
-    private static CoordinadorDeActividadesDAO instancia;
+    private static CoordinadoraDeActividadesDAO instancia;
 
-    public CoordinadorDeActividadesDAO() {
+    public CoordinadoraDeActividadesDAO() {
         this.gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
@@ -37,9 +37,9 @@ public class CoordinadorDeActividadesDAO {
         crearDirectoriosSiNoExisten();
     }
 
-    public static synchronized CoordinadorDeActividadesDAO getInstancia() {
+    public static synchronized CoordinadoraDeActividadesDAO getInstancia() {
         if (instancia == null) {
-            instancia = new CoordinadorDeActividadesDAO();
+            instancia = new CoordinadoraDeActividadesDAO();
         }
         return instancia;
     }

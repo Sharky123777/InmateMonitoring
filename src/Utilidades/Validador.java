@@ -1,8 +1,8 @@
 package Utilidades;
 
-import DAO.PresoDAO;
+import DAO.PresaDAO;
 import Model.Constants.EstadoPresoEnum;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import javax.swing.JOptionPane;
 import java.io.File;
 import java.time.LocalDate;
@@ -13,10 +13,10 @@ public class Validador {
 
     private static volatile Validador instancia;
 
-    private final PresoDAO presoDAO;
+    private final PresaDAO presoDAO;
 
     private Validador() {
-        this.presoDAO = PresoDAO.getInstancia();
+        this.presoDAO = PresaDAO.getInstancia();
     }
 
     public static Validador getInstancia() {
@@ -48,7 +48,7 @@ public class Validador {
     public void validarIdentificacionUnica(String identificacion) {
         validarFormatoIdentificacion(identificacion);
 
-        Preso presoExistente = presoDAO.buscarPresoPorIdentificacion(identificacion);
+        Presa presoExistente = presoDAO.buscarPresoPorIdentificacion(identificacion);
 
         if (presoExistente != null) {
             EstadoPresoEnum estado = presoExistente.getEstado();

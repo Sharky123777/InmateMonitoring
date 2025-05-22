@@ -3,11 +3,11 @@ package Controller;
 import DAO.CitaMedicaDAO;
 import DAO.EnfermeraDAO;
 import DAO.GuardiaDAO;
-import DAO.PresoDAO;
+import DAO.PresaDAO;
 import Model.Entities.CitaMedica;
 import Model.Entities.Enfermera;
 import Model.Entities.Guardia;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import Model.Constants.EstadoCitaMedicaEnum;
 import java.io.File;
 import java.time.LocalDate;
@@ -25,7 +25,7 @@ import javax.swing.table.DefaultTableModel;
 public class CitaMedicaController {
 
     private final CitaMedicaDAO citaMedicaDAO;
-    private final PresoDAO presoDAO = PresoDAO.getInstancia();
+    private final PresaDAO presoDAO = PresaDAO.getInstancia();
     private final GuardiaDAO guardiaDAO = GuardiaDAO.getInstancia();
     private final EnfermeraDAO enfermeraDAO = EnfermeraDAO.getInstancia();
 
@@ -47,7 +47,7 @@ public class CitaMedicaController {
             return false;
         }
 
-        Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
+        Presa preso = presoDAO.buscarPresoPorIdentificacion(identificacionPreso);
         Guardia guardia = guardiaDAO.obtenerGuardiaPorCedula(identificacionGuardia);
 
         if (preso == null || guardia == null) {
@@ -240,7 +240,7 @@ public class CitaMedicaController {
         tabla.getColumnModel().getColumn(6).setPreferredWidth(150); // Motivo
     }
 
-    public Preso obtenerPresoDeCita(int idCita) {
+    public Presa obtenerPresoDeCita(int idCita) {
         CitaMedica cita = citaMedicaDAO.buscarPorId(idCita);
         return cita != null ? cita.getPreso() : null;
     }

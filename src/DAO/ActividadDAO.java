@@ -4,7 +4,7 @@ import Model.Constants.EstadoActividadesEnum;
 import Model.Constants.EstadoActividadesPresoEnum;
 import Model.Entities.Actividad;
 import Model.Entities.Oficial;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import java.io.*;
@@ -396,13 +396,13 @@ public class ActividadDAO {
 
    public void actualizarEstadoPresosActividad(String idActividad, EstadoActividadesEnum nuevoEstado) {
     List<Actividad> actividades = cargarActividades();
-    PresoDAO presoDAO = PresoDAO.getInstancia();
+    PresaDAO presoDAO = PresaDAO.getInstancia();
 
     for (Actividad actividad : actividades) {
         if (actividad.getIdActividad().equals(idActividad)) {
             if (nuevoEstado == EstadoActividadesEnum.CANCELADA) {
                 for (String idPreso : actividad.getPresosAsignadosIds()) {
-                    Preso preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
+                    Presa preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
                     if (preso != null) {
                         preso.marcarActividadCancelada(idActividad);
                         presoDAO.actualizarPreso(preso);

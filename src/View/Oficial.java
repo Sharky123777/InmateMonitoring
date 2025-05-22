@@ -3,8 +3,8 @@ package View;
 import Controller.CitaMedicaController;
 import Controller.OficialController;
 import Controller.SancionController;
-import DAO.PresoDAO;
-import Model.Entities.Preso;
+import DAO.PresaDAO;
+import Model.Entities.Presa;
 import Model.Entities.Usuario;
 import Utilidades.Validador;
 import com.toedter.calendar.JDateChooser;
@@ -124,7 +124,7 @@ public class Oficial extends javax.swing.JFrame implements PerfilUsuario {
             }
 
             presoSeleccionadoIdentificacion = TablaPresos.getValueAt(filaSeleccionada, 5).toString();
-            Preso preso = new PresoDAO().buscarPresoPorIdentificacion(presoSeleccionadoIdentificacion);
+            Presa preso = new PresaDAO().buscarPresoPorIdentificacion(presoSeleccionadoIdentificacion);
 
             if (preso != null) {
                 sancionController.cargarHistorialSanciones(presoSeleccionadoIdentificacion, TablaHistorialSanciones);

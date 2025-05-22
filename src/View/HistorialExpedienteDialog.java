@@ -1,10 +1,10 @@
 package View;
 
 import Controller.ExpedienteController;
-import Controller.PresoController;
+import Controller.PresaController;
 import Model.Entities.Delito;
 import Model.Entities.ExpedienteJudicial;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import java.awt.Component;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -33,7 +33,7 @@ public class HistorialExpedienteDialog extends javax.swing.JDialog {
     private final JLabel lblMensajeEspecialPreso;
 
     private List<ExpedienteJudicial> todosExpedientes;
-    private PresoController controllerPreso = PresoController.getInstancia();
+    private PresaController controllerPreso = PresaController.getInstancia();
 
     public HistorialExpedienteDialog(
             java.awt.Frame parent,
@@ -95,7 +95,7 @@ public class HistorialExpedienteDialog extends javax.swing.JDialog {
         actualizarTabla();
 
         try {
-            Preso preso = PresoController.getInstancia().buscarPreso(identificacionPreso);
+            Presa preso = PresaController.getInstancia().buscarPreso(identificacionPreso);
             if (preso != null) {
                 this.txtReclusa.setText(preso.getNombresCompletos());
                 this.txtIdentificacionReclusa.setText(preso.getIdentificacion());

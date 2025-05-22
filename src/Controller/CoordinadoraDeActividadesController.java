@@ -1,6 +1,6 @@
 package Controller;
 
-import DAO.CoordinadorDeActividadesDAO;
+import DAO.CoordinadoraDeActividadesDAO;
 import DAO.UsuarioDAO;
 import Model.Entities.CoordinadorDeActividades;
 import Model.Entities.Usuario;
@@ -20,20 +20,20 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class CoordinadorDeActividadesController {
+public class CoordinadoraDeActividadesController {
 
     private static UsuarioDAO usuarioDAO = UsuarioDAO.getInstancia();
-    private static CoordinadorDeActividadesController instancia;
-    private final CoordinadorDeActividadesDAO coordinadorDAO;
+    private static CoordinadoraDeActividadesController instancia;
+    private final CoordinadoraDeActividadesDAO coordinadorDAO;
     private FrmCamara ventanaCamara;
 
-    private CoordinadorDeActividadesController() {
-        this.coordinadorDAO = CoordinadorDeActividadesDAO.getInstancia();
+    private CoordinadoraDeActividadesController() {
+        this.coordinadorDAO = CoordinadoraDeActividadesDAO.getInstancia();
     }
 
-    public static synchronized CoordinadorDeActividadesController getInstancia() {
+    public static synchronized CoordinadoraDeActividadesController getInstancia() {
         if (instancia == null) {
-            instancia = new CoordinadorDeActividadesController();
+            instancia = new CoordinadoraDeActividadesController();
         }
         return instancia;
     }
@@ -485,7 +485,7 @@ public boolean modificarCoordinador(String cedulaOriginal, Map<String, Object> c
                     cambios.getOrDefault("cargo", original.getCargo()).toString() // agregado
             );
 
-            boolean exitoCoordinador = CoordinadorDeActividadesDAO.getInstancia()
+            boolean exitoCoordinador = CoordinadoraDeActividadesDAO.getInstancia()
                     .modificarCoordinador(cedulaOriginal, modificado, nuevaImagen);
 
             if (!exitoCoordinador) {
@@ -540,7 +540,7 @@ public boolean modificarCoordinador(String cedulaOriginal, Map<String, Object> c
                 coordinador.setUsuario(nuevoUsuario);
             }
 
-            boolean exito = CoordinadorDeActividadesDAO.getInstancia()
+            boolean exito = CoordinadoraDeActividadesDAO.getInstancia()
                     .modificarCoordinador(cedulaOriginal, coordinador, null);
             if (!exito) {
                 return -1;

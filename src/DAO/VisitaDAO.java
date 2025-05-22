@@ -5,7 +5,7 @@ import Model.Constants.EstadoVisitaEnum;
 import Model.Constants.EstadoVisitanteEnum;
 import Model.Entities.LocalDateAdapter;
 import Model.Entities.LocalTimeAdapter;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import Model.Entities.Visita;
 import Model.Entities.Visitante;
 import com.google.gson.*;
@@ -300,11 +300,11 @@ public class VisitaDAO {
                         VisitanteDAO.getInstancia().guardarVisitante(visitante, null);
                     }
 
-                    Preso preso = visita.getPreso();
+                    Presa preso = visita.getPreso();
                     if (preso != null) {
                         preso.setEstado(EstadoPresoEnum.ACTIVO);
                         preso.setEnVisita(false);
-                        PresoDAO.getInstancia().actualizarPreso(preso);
+                        PresaDAO.getInstancia().actualizarPreso(preso);
                     }
 
                     contador++;
@@ -330,11 +330,11 @@ public class VisitaDAO {
                     VisitanteDAO.getInstancia().guardarVisitante(visitante, null);
                 }
 
-                Preso preso = visita.getPreso();
+                Presa preso = visita.getPreso();
                 if (preso != null) {
                     preso.setEstado(EstadoPresoEnum.EN_VISITA);
                     preso.setEnVisita(true);
-                    PresoDAO.getInstancia().actualizarPreso(preso);
+                    PresaDAO.getInstancia().actualizarPreso(preso);
                 }
 
                 guardarTodas(visitas);

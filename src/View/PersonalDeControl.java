@@ -2,12 +2,12 @@ package View;
 
 import Controller.PersonalControlController;
 import Controller.VisitaController;
-import DAO.PresoDAO;
+import DAO.PresaDAO;
 import DAO.UsuarioDAO;
 import DAO.VisitaDAO;
 import DAO.VisitanteDAO;
 import Model.Entities.PersonalControl;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import Model.Entities.Usuario;
 import Model.Entities.Visita;
 import Model.Entities.Visitante;
@@ -170,7 +170,7 @@ public class PersonalDeControl extends javax.swing.JFrame implements PerfilUsuar
             }
 
             String identificacion = TablaPresos.getValueAt(filaSeleccionada, 6).toString();
-            Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
+            Presa preso = new PresaDAO().buscarPresoPorIdentificacion(identificacion);
 
             if (preso != null) {
                 visitaController.cargarHistorialVisitas(identificacion, TablaHistorialVisitas);
@@ -188,7 +188,7 @@ public class PersonalDeControl extends javax.swing.JFrame implements PerfilUsuar
             }
 
             String identificacion = TablaPresos.getValueAt(filaSeleccionada, 6).toString();
-            Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
+            Presa preso = new PresaDAO().buscarPresoPorIdentificacion(identificacion);
 
             if (preso != null) {
                 visitaController.cargarHistorialVisitantes(identificacion, TablaHistorialVisitantes);

@@ -6,11 +6,11 @@ package View;
 
 import Controller.CitaMedicaController;
 import DAO.CitaMedicaDAO;
-import DAO.PresoDAO;
+import DAO.PresaDAO;
 import Model.Constants.EstadoCitaMedicaEnum;
 import Model.Entities.CitaMedica;
 import Model.Entities.Guardia;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import Model.Entities.Usuario;
 import Utilidades.GeneradorHistoriaClinica;
 import java.awt.Component;
@@ -38,7 +38,7 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
     /**
      * Creates new form Enfermera
      */
-    private final PresoDAO presoDAO;
+    private final PresaDAO presoDAO;
     private Usuario usuario;
     private CitaMedica citaSeleccionada;
     private File archivoHistoriaClinica;
@@ -51,7 +51,7 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
         initComponents();
         setLocationRelativeTo(null);
         this.citaController = new CitaMedicaController(); 
-        this.presoDAO = PresoDAO.getInstancia();
+        this.presoDAO = PresaDAO.getInstancia();
         configurarTablas();
     }
 
@@ -69,7 +69,7 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
                             Object idValue = table.getModel().getValueAt(row, 3); 
                             if (idValue != null) {
                                 String idPreso = idValue.toString();
-                                Preso preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
+                                Presa preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
                                 if (preso != null && preso.getFotoPath() != null) {
                                     try {
                                         ImageIcon icon = new ImageIcon(preso.getFotoPath());
@@ -138,7 +138,7 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
                     if (column == 0) {
                         try {
                             String idPreso = table.getModel().getValueAt(row, 3).toString();
-                            Preso preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
+                            Presa preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
 
                             if (preso != null && preso.getFotoPath() != null) {
                                 ImageIcon icon = new ImageIcon(preso.getFotoPath());
@@ -566,7 +566,7 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
             citaSeleccionada = citaController.obtenerCitaPorId(idCita);
 
             if (citaSeleccionada != null) {
-                Preso preso = citaSeleccionada.getPreso();
+                Presa preso = citaSeleccionada.getPreso();
 
                 
                 lblNombrePresa.setText(preso.getNombreCompleto());
@@ -607,7 +607,7 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
                 if (column == 0) {
                     try {
                         String idPreso = table.getModel().getValueAt(row, 2).toString(); // Obtener ID del preso
-                        Preso preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
+                        Presa preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
 
                         if (preso != null && preso.getFotoPath() != null) {
                             ImageIcon icon = new ImageIcon(preso.getFotoPath());
@@ -633,7 +633,7 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
                 if (column == 0) {
                     try {
                         String idPreso = table.getModel().getValueAt(row, 2).toString(); // Obtener ID del preso
-                        Preso preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
+                        Presa preso = presoDAO.buscarPresoPorIdentificacion(idPreso);
 
                         if (preso != null && preso.getFotoPath() != null) {
                             ImageIcon icon = new ImageIcon(preso.getFotoPath());
@@ -707,7 +707,7 @@ public class Enfermera extends javax.swing.JFrame implements PerfilUsuario {
             double nuevoPeso = Double.parseDouble(txtPesoPresa.getText());
             double nuevaEstatura = Double.parseDouble(txtEstaturaPresa.getText());
 
-            Preso preso = citaSeleccionada.getPreso();
+            Presa preso = citaSeleccionada.getPreso();
             preso.setPeso((float) nuevoPeso);
             preso.setEstatura((float) nuevaEstatura);
             presoDAO.actualizarPreso(preso);

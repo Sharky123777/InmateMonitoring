@@ -1,7 +1,7 @@
 package View;
 
 import Controller.ActividadController;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
@@ -11,7 +11,7 @@ public class AsignacionActividad extends javax.swing.JDialog {
     
    private JTable tablaGeneral;
 
-public AsignacionActividad(java.awt.Frame parent, boolean modal, Preso preso, JTable tablaGeneral) {
+public AsignacionActividad(java.awt.Frame parent, boolean modal, Presa preso, JTable tablaGeneral) {
     super(parent, modal);
     initComponents();
     setLocationRelativeTo(parent);

@@ -11,13 +11,13 @@ public class Sancion {
     private LocalDate fechaSancion;
     private LocalTime hora;
     private String tipoSancion;
-    private Preso preso;
+    private Presa preso;
     private Guardia guardia;
     private int diasDuracion;
     private EstadoSancionEnum estado;
 
     public Sancion(int id, String motivo, LocalDate fechaSancion, LocalTime hora,
-            String tipoSancion, Preso preso, Guardia guardia) {
+            String tipoSancion, Presa preso, Guardia guardia) {
         this.id = id;
         this.motivo = motivo;
         this.fechaSancion = fechaSancion;
@@ -113,11 +113,11 @@ public class Sancion {
         this.diasDuracion = calcularDuracionPorTipo(tipoSancion);
     }
 
-    public Preso getPreso() {
+    public Presa getPreso() {
         return preso;
     }
 
-    public void setPreso(Preso preso) {
+    public void setPreso(Presa preso) {
         this.preso = preso;
     }
 

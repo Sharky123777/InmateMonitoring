@@ -18,7 +18,7 @@ public class GeneradorExpedientePDF {
     private static final BaseColor COLOR_EXITO = new BaseColor(0, 100, 0); 
     private static final BaseColor COLOR_FONDO_FOTO = new BaseColor(240, 240, 240);
 
-    public void generarPDFExpediente(Preso preso, ExpedienteJudicial expediente,
+    public void generarPDFExpediente(Presa preso, ExpedienteJudicial expediente,
                                    List<Delito> delitos, Sentencia sentenciaTotal,
                                    String rutaDestino) throws Exception {
 

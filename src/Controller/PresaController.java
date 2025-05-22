@@ -4,7 +4,7 @@ import DAO.CeldaDAO;
 import DAO.DelitoDAO;
 import DAO.ExpedienteDAO;
 import DAO.IntentoFugaDAO;
-import DAO.PresoDAO;
+import DAO.PresaDAO;
 import DAO.SancionDAO;
 import Model.Constants.EstadoExpedienteEnum;
 import Model.Constants.EstadoPresoEnum;
@@ -12,7 +12,7 @@ import Model.Entities.Celda;
 import Model.Entities.Delito;
 import Model.Entities.ExpedienteJudicial;
 import Model.Entities.IntentoFuga;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import Model.Entities.Sancion;
 import Model.Entities.Sentencia;
 import Utilidades.Validador;
@@ -25,6 +25,10 @@ import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -42,28 +46,28 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-public class PresoController {
+public class PresaController {
 
-    private static PresoController instancia;
+    private static PresaController instancia;
 
     private final IntentoFugaDAO intentoFugaDAO = IntentoFugaDAO.getInstancia();
     private final ExpedienteDAO expedienteDAO = ExpedienteDAO.getInstancia();
-    private final PresoDAO presoDAO;
+    private final PresaDAO presoDAO;
     private final CeldaDAO celdaDAO;
     private final DelitoDAO delitoDAO;
     private final Validador validador;
 
-    private PresoController(PresoDAO presoDAO, CeldaDAO celdaDAO, DelitoDAO delitoDAO, Validador vañidador) {
+    private PresaController(PresaDAO presoDAO, CeldaDAO celdaDAO, DelitoDAO delitoDAO, Validador vañidador) {
         this.presoDAO = presoDAO;
         this.celdaDAO = celdaDAO;
         this.delitoDAO = delitoDAO;
         this.validador = vañidador;
     }
 
-    public static synchronized PresoController getInstancia() {
+    public static synchronized PresaController getInstancia() {
         if (instancia == null) {
-            instancia = new PresoController(
-                    PresoDAO.getInstancia(),
+            instancia = new PresaController(
+                    PresaDAO.getInstancia(),
                     CeldaDAO.getInstancia(),
                     DelitoDAO.getInstancia(),
                     Validador.getInstancia()
@@ -72,7 +76,7 @@ public class PresoController {
         return instancia;
     }
 
-    public boolean hayCambios(Preso presoOriginal,
+    public boolean hayCambios(Presa presoOriginal,
             String primerNombre,
             String segundoNombre,
             String primerApellido,
@@ -109,7 +113,138 @@ public class PresoController {
         ).anyMatch(Boolean::booleanValue);
     }
 
-    public boolean actualizarPreso(Preso presoOriginal,
+    public boolean modificarSentencia(String identificacion, Sentencia modificacion, File ordenJuez) {
+        try {
+            // Validar identificación
+            Validador.validarFormatoIdentificacion(identificacion);
+
+            // Validar que la reclusa exista
+            Presa preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
+            if (preso == null) {
+                throw new IllegalStateException("No se encontró la reclusa con esa identificación");
+            }
+
+            // Validar que no esté fugada, liberada o fallecida
+            if (preso.getEstado() != EstadoPresoEnum.ACTIVO) {
+                throw new IllegalStateException("No se puede modificar la sentencia de una reclusa "
+                        + preso.getEstado().toString().toLowerCase());
+            }
+
+            // Validar orden del juez
+            if (ordenJuez == null || !ordenJuez.exists()) {
+                throw new IllegalArgumentException("La orden del juez es obligatoria");
+            }
+
+            // Obtener expediente abierto
+            ExpedienteJudicial expediente = expedienteDAO.obtenerExpedienteAbierto(identificacion);
+            if (expediente == null) {
+                throw new IllegalStateException("No existe expediente abierto para esta reclusa");
+            }
+
+            // Calcular sentencia actual para validaciones
+            Sentencia sentenciaActual = expedienteDAO.calcularSentenciaTotal(expediente.getDelitos());
+
+            // Validar disminución (si es el caso)
+            if (modificacion.getAños() < 0 || modificacion.getMeses() < 0) {
+                int mesesActual = sentenciaActual.getAños() * 12 + sentenciaActual.getMeses();
+                int mesesDisminucion = Math.abs(modificacion.getAños() * 12 + modificacion.getMeses());
+
+                if (mesesDisminucion > mesesActual) {
+                    throw new IllegalArgumentException("No puede disminuir más tiempo del que tiene la sentencia actual");
+                }
+
+                if (mesesDisminucion > (mesesActual * 0.45)) {
+                    throw new IllegalArgumentException("La disminución no puede superar el 45% de la sentencia actual");
+                }
+            }
+
+            // Guardar orden del juez
+            String rutaOrden = guardarOrdenJuez(ordenJuez, identificacion);
+
+            // Aplicar modificación a cada delito
+            for (Delito delito : expediente.getDelitos()) {
+                if (modificacion.getAños() < 0 || modificacion.getMeses() < 0) {
+                    // Para disminución usar valores absolutos
+                    Sentencia disminucion = new Sentencia(
+                            Math.abs(modificacion.getAños()),
+                            Math.abs(modificacion.getMeses()),
+                            LocalDate.now()
+                    );
+                    delito.getSentencia().restarSentencia(disminucion);
+                } else {
+                    delito.getSentencia().sumarSentencia(modificacion);
+                }
+                delitoDAO.actualizarDelito(delito);
+            }
+
+            // Actualizar expediente
+            expediente.setRutaOrdenJuez(rutaOrden);
+            return expedienteDAO.guardarExpediente(expediente);
+
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al modificar sentencia: " + e.getMessage());
+        }
+    }
+
+    private String guardarOrdenJuez(File ordenJuez, String identificacion) throws IOException {
+        String extension = ordenJuez.getName().substring(ordenJuez.getName().lastIndexOf("."));
+        String nombreArchivo = "orden_" + identificacion + "_" + LocalDate.now() + extension;
+        String rutaDestino = "src/Resources/ordenes_juez/" + nombreArchivo;
+
+        // Crear directorio si no existe
+        new File("src/Resources/ordenes_juez/").mkdirs();
+
+        Files.copy(ordenJuez.toPath(), Paths.get(rutaDestino), StandardCopyOption.REPLACE_EXISTING);
+        return rutaDestino;
+    }
+
+   
+
+    private String getExtension(String filename) {
+        return filename.substring(filename.lastIndexOf("."));
+    }
+
+    private void validarDisminucion(Sentencia sentenciaActual, Sentencia disminucion) {
+        int mesesActual = sentenciaActual.getAños() * 12 + sentenciaActual.getMeses();
+        int mesesDisminucion = Math.abs(disminucion.getAños() * 12 + disminucion.getMeses());
+
+        if (mesesDisminucion > mesesActual) {
+            throw new IllegalArgumentException("No puede disminuir más tiempo del que tiene la sentencia actual");
+        }
+
+        if (mesesDisminucion > (mesesActual * 0.45)) {
+            throw new IllegalArgumentException("La disminución no puede superar el 45% de la sentencia actual");
+        }
+    }
+
+    private void validarAumento(Sentencia aumento) {
+        if (aumento.getAños() <= 0 && aumento.getMeses() <= 0) {
+            throw new IllegalArgumentException("El aumento debe ser mayor a 0");
+        }
+    }
+
+    public Presa buscarReclusa(String identificacion) {
+        return presoDAO.buscarPresoPorIdentificacion(identificacion);
+    }
+
+    public ExpedienteJudicial obtenerExpedienteAbierto(String identificacion) {
+        try {
+            Validador.validarFormatoIdentificacion(identificacion);
+            ExpedienteJudicial expediente = expedienteDAO.obtenerExpedienteAbierto(identificacion);
+
+            if (expediente == null) {
+                throw new IllegalStateException("No existe un expediente abierto para esta reclusa");
+            }
+
+            return expediente;
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            throw e; // Re-lanzamos para manejar en la vista
+        }
+    }
+
+    public boolean actualizarPreso(Presa presoOriginal,
             String primerNombre,
             String segundoNombre,
             String primerApellido,
@@ -235,7 +370,7 @@ public class PresoController {
             String identificacionStr = (String) identificacion;
             String seccionStr = seccion.toString();
 
-            Preso presoExistente = presoDAO.buscarPresoPorIdentificacion(identificacionStr);
+            Presa presoExistente = presoDAO.buscarPresoPorIdentificacion(identificacionStr);
 
             if (presoExistente != null) {
                 if (presoExistente.getEstado() == EstadoPresoEnum.FALLECIDO) {
@@ -324,7 +459,7 @@ public class PresoController {
                 throw new RuntimeException("No se pudo asignar celda automáticamente");
             }
 
-            Preso nuevoPreso = new Preso(
+            Presa nuevoPreso = new Presa(
                     primerNombre, segundoNombre, primerApellido, segundoApellido,
                     Integer.parseInt(edadStr), sexo, nacionalidad, identificacionStr,
                     Float.parseFloat(estaturaStr), Float.parseFloat(pesoStr),
@@ -359,7 +494,7 @@ public class PresoController {
         }
     }
 
-    public boolean agregarDelitoAPreso(Preso preso, String codigoStr, String articulo,
+    public boolean agregarDelitoAPreso(Presa preso, String codigoStr, String articulo,
             String nombreDelito, String gravedad, String descripcion,
             Date fechaComision, String añosStr, String mesesStr) {
         try {
@@ -405,7 +540,7 @@ public class PresoController {
             nuevoDelito.setId(idGenerado);
 
             preso.getDelitos().add(nuevoDelito);
-            PresoDAO.getInstancia().actualizarPreso(preso);
+            PresaDAO.getInstancia().actualizarPreso(preso);
 
             ExpedienteDAO expedienteDAO = ExpedienteDAO.getInstancia();
             ExpedienteJudicial expedienteAbierto = expedienteDAO.obtenerExpedienteAbierto(preso.getIdentificacion());
@@ -439,7 +574,7 @@ public class PresoController {
         }
     }
 
-    public Preso obtenerPresoDesdeTablaActividadEspecifica(int filaSeleccionada, JTable tablaPresos) {
+    public Presa obtenerPresoDesdeTablaActividadEspecifica(int filaSeleccionada, JTable tablaPresos) {
         try {
             if (filaSeleccionada == -1) {
                 throw new IllegalArgumentException("Debe seleccionar un preso de la tabla");
@@ -452,7 +587,7 @@ public class PresoController {
             String identificacion = tablaPresos.getValueAt(filaSeleccionada, 3).toString();
             Validador.validarFormatoIdentificacion(identificacion);
 
-            Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
+            Presa preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
             if (preso == null) {
                 throw new IllegalStateException("No se encontró el preso con identificación: " + identificacion);
             }
@@ -471,7 +606,7 @@ public class PresoController {
         }
     }
 
-    public Preso obtenerPresoDesdeTabla(int filaSeleccionada, JTable tablaPresos) {
+    public Presa obtenerPresoDesdeTabla(int filaSeleccionada, JTable tablaPresos) {
         try {
             if (filaSeleccionada == -1) {
                 throw new IllegalArgumentException("Debe seleccionar un preso de la tabla");
@@ -484,7 +619,7 @@ public class PresoController {
             String identificacion = tablaPresos.getValueAt(filaSeleccionada, 5).toString();
             Validador.validarFormatoIdentificacion(identificacion);
 
-            Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
+            Presa preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
             if (preso == null) {
                 throw new IllegalStateException("No se encontró el preso con identificación: " + identificacion);
             }
@@ -534,7 +669,7 @@ public class PresoController {
         }
     }
 
-    public void cargarTablaDelitos(Preso preso, JTable tabla) {
+    public void cargarTablaDelitos(Presa preso, JTable tabla) {
         try {
             if (preso == null) {
                 throw new IllegalArgumentException("Preso no puede ser nulo");
@@ -582,11 +717,11 @@ public class PresoController {
         };
     }
 
-    public Preso obtenerPresoConDelitos(String identificacion) {
+    public Presa obtenerPresoConDelitos(String identificacion) {
         try {
             Validador.validarFormatoIdentificacion(identificacion);
 
-            Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
+            Presa preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
             if (preso == null) {
                 throw new IllegalStateException("No se encontró el preso con identificación: " + identificacion);
             }
@@ -621,7 +756,7 @@ public class PresoController {
         }
     }
 
-    public Preso buscarPreso(String identificacion) throws Exception {
+    public Presa buscarPreso(String identificacion) throws Exception {
         return presoDAO.buscarPresoPorIdentificacion(identificacion);
     }
 
@@ -634,7 +769,7 @@ public class PresoController {
         }
     }
 
-    public ImageIcon obtenerFotoPreso(Preso preso) {
+    public ImageIcon obtenerFotoPreso(Presa preso) {
         if (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty()) {
             return cargarImagenPreso(preso.getFotoPath());
         }
@@ -642,15 +777,14 @@ public class PresoController {
     }
 
     public List<Object[]> obtenerPresosPorSeccion(String seccion) {
-        List<Preso> presos = presoDAO.buscarPorSeccion(seccion);
+        List<Presa> presos = presoDAO.buscarPorSeccion(seccion);
 
         List<Object[]> filas = new ArrayList<>();
 
-        for (Preso preso : presos) {
+        for (Presa preso : presos) {
             ImageIcon foto = obtenerFotoPreso(preso);
-            
-                        String aislamientoTexto = preso.isEnAislamiento() ? "Sí" : "No"; 
 
+            String aislamientoTexto = preso.isEnAislamiento() ? "Sí" : "No";
 
             filas.add(new Object[]{
                 foto,
@@ -671,11 +805,11 @@ public class PresoController {
     }
 
     public List<Object[]> obtenerPresosPorEstado(EstadoPresoEnum estado) {
-        List<Preso> presos = presoDAO.buscarPorEstado(estado);
+        List<Presa> presos = presoDAO.buscarPorEstado(estado);
 
         List<Object[]> filas = new ArrayList<>();
 
-        for (Preso preso : presos) {
+        for (Presa preso : presos) {
             ImageIcon foto = obtenerFotoPreso(preso);
 
             filas.add(new Object[]{
@@ -694,18 +828,18 @@ public class PresoController {
     }
 
     public List<Object[]> obtenerTodosLosPresosParaTabla() {
-        List<Preso> presosActivos = presoDAO.buscarPorEstado(EstadoPresoEnum.ACTIVO);
-        List<Preso> presosFugados = presoDAO.buscarPorEstado(EstadoPresoEnum.FUGADO);
+        List<Presa> presosActivos = presoDAO.buscarPorEstado(EstadoPresoEnum.ACTIVO);
+        List<Presa> presosFugados = presoDAO.buscarPorEstado(EstadoPresoEnum.FUGADO);
 
-        List<Preso> todosLosPresos = new ArrayList<>();
+        List<Presa> todosLosPresos = new ArrayList<>();
         todosLosPresos.addAll(presosActivos);
         todosLosPresos.addAll(presosFugados);
 
         List<Object[]> filas = new ArrayList<>();
 
-        for (Preso preso : todosLosPresos) {
+        for (Presa preso : todosLosPresos) {
 
-            String aislamientoTexto = preso.isEnAislamiento() ? "Sí" : "No"; 
+            String aislamientoTexto = preso.isEnAislamiento() ? "Sí" : "No";
 
             ImageIcon foto = obtenerFotoPreso(preso);
 
@@ -723,7 +857,7 @@ public class PresoController {
                 preso.getSeccionAsignada(),
                 preso.getCeldaAsignada(),
                 preso.getEstado(),
-                aislamientoTexto 
+                aislamientoTexto
             });
         }
 
@@ -731,12 +865,12 @@ public class PresoController {
     }
 
     public List<Object[]> obtenerPresosInactivosParaTabla() {
-        List<Preso> liberados = presoDAO.buscarPorEstado(EstadoPresoEnum.LIBERADO);
-        List<Preso> fallecidos = presoDAO.buscarPorEstado(EstadoPresoEnum.FALLECIDO);
+        List<Presa> liberados = presoDAO.buscarPorEstado(EstadoPresoEnum.LIBERADO);
+        List<Presa> fallecidos = presoDAO.buscarPorEstado(EstadoPresoEnum.FALLECIDO);
 
         List<Object[]> filas = new ArrayList<>();
 
-        for (Preso preso : liberados) {
+        for (Presa preso : liberados) {
             ImageIcon foto = (preso.getFotoPath() != null && !preso.getFotoPath().isEmpty())
                     ? cargarImagenPreso(preso.getFotoPath())
                     : new ImageIcon(getClass().getResource("/images/default_profile.png"));
@@ -752,7 +886,7 @@ public class PresoController {
                 EstadoPresoEnum.LIBERADO,});
         }
 
-        for (Preso preso : fallecidos) {
+        for (Presa preso : fallecidos) {
             ImageIcon foto = obtenerFotoPreso(preso);
             filas.add(new Object[]{
                 foto,
@@ -831,7 +965,7 @@ public class PresoController {
             throw new IllegalArgumentException("Fecha no valida, fecha futura.");
         }
 
-        Preso preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
+        Presa preso = presoDAO.buscarPresoPorIdentificacion(identificacion);
         if (preso == null) {
             throw new IllegalStateException("Preso no encontrado");
         }
@@ -871,7 +1005,7 @@ public class PresoController {
         return presoDAO.cambiarEstadoPreso(identificacion, nuevoEstado, fechaCambio);
     }
 
-    private void validarLiberacionCompleta(Preso preso, LocalDate fechaLiberacion) {
+    private void validarLiberacionCompleta(Presa preso, LocalDate fechaLiberacion) {
         if (preso.getEstado() == EstadoPresoEnum.FUGADO) {
             throw new IllegalStateException("No se puede liberar un preso fugado");
         }
@@ -926,15 +1060,32 @@ public class PresoController {
     public int contarPresosLiberados() {
         return presoDAO.contarPresosLiberados();
     }
-    
+
     private void cancelarSancionesActivas(String identificacionPreso) {
-    List<Sancion> sancionesActivas = SancionDAO.getInstancia()
-            .obtenerSancionesActivasPorPreso(identificacionPreso);
-    
-    for (Sancion sancion : sancionesActivas) {
-        sancion.cancelar();
-        SancionDAO.getInstancia().actualizarSancion(sancion);
+        List<Sancion> sancionesActivas = SancionDAO.getInstancia()
+                .obtenerSancionesActivasPorPreso(identificacionPreso);
+
+        for (Sancion sancion : sancionesActivas) {
+            sancion.cancelar();
+            SancionDAO.getInstancia().actualizarSancion(sancion);
+        }
     }
-}
+
+    public ExpedienteJudicial obtenerExpedienteReclusa(String identificacion) {
+        // Primero validar que la reclusa existe
+        Presa reclusa = presoDAO.buscarPresoPorIdentificacion(identificacion);
+        if (reclusa == null) {
+            throw new IllegalArgumentException("No se encontró reclusa con esa identificación");
+        }
+        return expedienteDAO.obtenerExpedienteAbierto(identificacion);
+    }
+
+    public Sentencia calcularSentenciaActual(String identificacion) {
+        ExpedienteJudicial expediente = expedienteDAO.obtenerExpedienteAbierto(identificacion);
+        if (expediente == null) {
+            throw new IllegalStateException("La reclusa no tiene un expediente abierto activo");
+        }
+        return expedienteDAO.calcularSentenciaTotal(expediente.getDelitos());
+    }
 
 }

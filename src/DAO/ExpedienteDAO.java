@@ -3,7 +3,7 @@ package DAO;
 import Model.Constants.EstadoExpedienteEnum;
 import Model.Entities.Delito;
 import Model.Entities.ExpedienteJudicial;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import Model.Entities.Sentencia;
 import Model.Entities.LocalDateAdapter;
 import com.google.gson.Gson;
@@ -146,7 +146,7 @@ public class ExpedienteDAO {
         return false;
     }
 
-    public ExpedienteJudicial actualizarExpedienteConDelitos(Preso preso, List<Delito> delitos) {
+    public ExpedienteJudicial actualizarExpedienteConDelitos(Presa preso, List<Delito> delitos) {
         List<ExpedienteJudicial> expedientes = buscarExpedientesPorPreso(preso.getIdentificacion());
 
         ExpedienteJudicial expediente = expedientes.stream()
@@ -207,7 +207,7 @@ public Sentencia calcularSentenciaTotal(List<Delito> delitos) {
             .orElse(null);
 }
 
-    public ExpedienteJudicial crearExpedienteNuevoParaReincidencia(Preso preso, List<Delito> nuevosDelitos) {
+    public ExpedienteJudicial crearExpedienteNuevoParaReincidencia(Presa preso, List<Delito> nuevosDelitos) {
     ExpedienteJudicial expediente = new ExpedienteJudicial(preso);
     expediente.setCodigoExpediente(generarCodigoUnico());
     expediente.setFechaApertura(LocalDate.now());
@@ -217,6 +217,8 @@ public Sentencia calcularSentenciaTotal(List<Delito> delitos) {
     guardarExpediente(expediente);
     return expediente;
 }
+    
+    
     
    
 

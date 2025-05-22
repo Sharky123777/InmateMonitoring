@@ -11,8 +11,9 @@ import Model.Entities.Actividad;
 import Model.Entities.Celda;
 import Model.Entities.ExpedienteJudicial;
 import Model.Entities.Delito;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import Model.Entities.Sancion;
+import Model.Entities.Sentencia;
 import Model.Entities.Visita;
 import Model.Entities.Visitante;
 import Utilidades.EmailSender;
@@ -41,13 +42,13 @@ import java.time.LocalDate;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
-public class PresoDAO {
+public class PresaDAO {
 
     private static IntentoFugaDAO intentoFugaDAO = IntentoFugaDAO.getInstancia();
     private static DelitoDAO delitoDAO = DelitoDAO.getInstancia();
     private static ExpedienteDAO expedienteDAO = ExpedienteDAO.getInstancia();
     private static ActividadDAO actividadDAO = ActividadDAO.getInstancia();
-    private static PresoDAO instancia;
+    private static PresaDAO instancia;
 
     private static final String JSON_FILE = "src/Resources/DATA/presos.json/";
     private static final String RUTA_IMAGENES = "src/Resources/imagenes_presos/";
@@ -57,9 +58,9 @@ public class PresoDAO {
             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
             .create();
 
-    public static synchronized PresoDAO getInstancia() {
+    public static synchronized PresaDAO getInstancia() {
         if (instancia == null) {
-            instancia = new PresoDAO();
+            instancia = new PresaDAO();
         }
         return instancia;
     }
@@ -79,20 +80,77 @@ public class PresoDAO {
     }
 
     private int obtenerProximoId() {
-        List<Preso> presos = cargarTodos();
+        List<Presa> presos = cargarTodos();
         if (presos.isEmpty()) {
             return 1;
         }
 
         int maxId = presos.stream()
-                .mapToInt(Preso::getId)
+                .mapToInt(Presa::getId)
                 .max()
                 .orElse(0);
 
         return maxId + 1;
     }
 
-    public List<Preso> cargarTodos() {
+    public ExpedienteJudicial buscarExpedienteAbierto(String identificacion) {
+        ExpedienteJudicial expediente = expedienteDAO.obtenerExpedienteAbierto(identificacion);
+        if (expediente == null) {
+            throw new IllegalStateException("No existe expediente abierto para la reclusa");
+        }
+        return expediente;
+    }
+
+    public boolean actualizarSentencia(String identificacion, Sentencia modificacion, boolean esDisminucion, String rutaOrdenJuez) {
+        try {
+            
+            Presa preso = buscarPresoPorIdentificacion(identificacion);
+            if (preso == null) {
+                throw new IllegalStateException("Preso no encontrado");
+            }
+
+           
+            ExpedienteJudicial expediente = expedienteDAO.obtenerExpedienteAbierto(identificacion);
+            if (expediente == null) {
+                throw new IllegalStateException("No existe expediente abierto para la reclusa");
+            }
+
+            
+            for (Delito delito : expediente.getDelitos()) {
+                if (esDisminucion) {
+                    delito.getSentencia().restarSentencia(modificacion);
+                } else {
+                    delito.getSentencia().sumarSentencia(modificacion);
+                }
+
+                delitoDAO.actualizarDelito(delito);
+            }
+
+            expediente.setRutaOrdenJuez(rutaOrdenJuez);
+            expedienteDAO.guardarExpediente(expediente);
+
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error al actualizar sentencia: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private void validarDisminucion(Sentencia sentenciaOriginal, Sentencia disminucion) {
+        int mesesOriginal = sentenciaOriginal.getAños() * 12 + sentenciaOriginal.getMeses();
+        int mesesDisminucion = disminucion.getAños() * 12 + disminucion.getMeses();
+
+        double porcentajeDisminucion = (mesesDisminucion * 100.0) / mesesOriginal;
+        if (porcentajeDisminucion > 45) {
+            throw new IllegalArgumentException("La disminución no puede superar el 45% de la sentencia original");
+        }
+
+        if (mesesDisminucion >= mesesOriginal) {
+            throw new IllegalArgumentException("La disminución no puede ser mayor o igual a la sentencia original");
+        }
+    }
+
+    public List<Presa> cargarTodos() {
         File archivo = new File(JSON_FILE);
         archivo.getParentFile().mkdirs();
 
@@ -112,12 +170,12 @@ public class PresoDAO {
         }
 
         try (Reader reader = new FileReader(JSON_FILE)) {
-            Type tipoListaPreso = new TypeToken<ArrayList<Preso>>() {
+            Type tipoListaPreso = new TypeToken<ArrayList<Presa>>() {
             }.getType();
-            List<Preso> presos = gson.fromJson(reader, tipoListaPreso);
+            List<Presa> presos = gson.fromJson(reader, tipoListaPreso);
 
             SancionController sc = new SancionController();
-            for (Preso p : presos) {
+            for (Presa p : presos) {
             }
 
             return presos != null ? presos : new ArrayList<>();
@@ -127,12 +185,12 @@ public class PresoDAO {
         }
     }
 
-    public boolean guardarPreso(Preso preso, File imagenSeleccionada) {
+    public boolean guardarPreso(Presa preso, File imagenSeleccionada) {
         if (preso == null) {
             System.err.println("Error: El preso no puede ser nulo");
             return false;
         }
-        List<Preso> presos = cargarTodos();
+        List<Presa> presos = cargarTodos();
 
         if (preso.getId() == 0) {
             preso.setId(obtenerProximoId());
@@ -182,7 +240,7 @@ public class PresoDAO {
         return (lastDot == -1) ? "" : filename.substring(lastDot);
     }
 
-    private boolean guardarTodos(List<Preso> presos) {
+    private boolean guardarTodos(List<Presa> presos) {
         try (Writer writer = new FileWriter(JSON_FILE)) {
             gson.toJson(presos, writer);
             return true;
@@ -192,9 +250,9 @@ public class PresoDAO {
         }
     }
 
-    public Preso buscarPresoPorIdentificacion(String identificacion) {
-        List<Preso> presos = cargarTodos();
-        for (Preso preso : presos) {
+    public Presa buscarPresoPorIdentificacion(String identificacion) {
+        List<Presa> presos = cargarTodos();
+        for (Presa preso : presos) {
             if (preso.getIdentificacion().equals(identificacion)) {
                 List<Delito> delitos = delitoDAO.obtenerDelitosPorPreso(preso.getIdentificacion());
                 preso.setDelitos(delitos);
@@ -208,7 +266,7 @@ public class PresoDAO {
     }
 
     public boolean eliminarPreso(String numeroIdentificacion) {
-        List<Preso> presos = cargarTodos();
+        List<Presa> presos = cargarTodos();
 
         boolean eliminado = presos.removeIf(preso
                 -> preso.getIdentificacion().equals(numeroIdentificacion));
@@ -244,10 +302,10 @@ public class PresoDAO {
             String nuevoNivelRiesgo,
             File nuevaFoto) {
 
-        List<Preso> presos = cargarTodos();
+        List<Presa> presos = cargarTodos();
         boolean encontrado = false;
 
-        for (Preso preso : presos) {
+        for (Presa preso : presos) {
             if (preso.getIdentificacion().equals(identificacionOriginal)) {
                 encontrado = true;
 
@@ -331,7 +389,7 @@ public class PresoDAO {
         return guardarCambios(presos);
     }
 
-    private boolean actualizarDatosJudiciales(Preso preso, String nuevaSeccion,
+    private boolean actualizarDatosJudiciales(Presa preso, String nuevaSeccion,
             String nivelSeguridad, Boolean enAislamiento,
             String nivelRiesgo) {
         CeldaDAO celdaDAO = new CeldaDAO();
@@ -363,7 +421,7 @@ public class PresoDAO {
         return true;
     }
 
-    public void actualizarFotoPreso(Preso preso, File nuevaFoto) {
+    public void actualizarFotoPreso(Presa preso, File nuevaFoto) {
         try {
             String extension = nuevaFoto.getName().substring(nuevaFoto.getName().lastIndexOf("."));
             String nombreArchivo = "preso_" + preso.getId() + extension;
@@ -377,13 +435,13 @@ public class PresoDAO {
         }
     }
 
-    private boolean guardarCambios(List<Preso> presos) {
+    private boolean guardarCambios(List<Presa> presos) {
         return guardarTodos(presos);
     }
 
     public boolean existePresoConIdentificacion(String identificacion) {
-        List<Preso> presos = cargarTodos();
-        for (Preso preso : presos) {
+        List<Presa> presos = cargarTodos();
+        for (Presa preso : presos) {
             if (preso.getIdentificacion().equals(identificacion)) {
                 return true;
             }
@@ -391,11 +449,11 @@ public class PresoDAO {
         return false;
     }
 
-    public List<Preso> buscarPorSeccion(String seccion) {
-        List<Preso> todos = cargarTodos();
-        List<Preso> filtrados = new ArrayList<>();
+    public List<Presa> buscarPorSeccion(String seccion) {
+        List<Presa> todos = cargarTodos();
+        List<Presa> filtrados = new ArrayList<>();
 
-        for (Preso preso : todos) {
+        for (Presa preso : todos) {
             if (seccion != null && seccion.equalsIgnoreCase(preso.getSeccionAsignada())
                     && preso.getEstado() == EstadoPresoEnum.ACTIVO) {
                 filtrados.add(preso);
@@ -405,10 +463,10 @@ public class PresoDAO {
     }
 
     public boolean agregarActividadAsignada(String idPreso, String idActividad) {
-        List<Preso> presos = cargarTodos();
+        List<Presa> presos = cargarTodos();
 
         try {
-            for (Preso preso : presos) {
+            for (Presa preso : presos) {
                 if (preso.getIdentificacion().equals(idPreso)) {
                     preso.agregarActividadAsignada(idActividad);
                     guardarTodos(presos);
@@ -423,10 +481,10 @@ public class PresoDAO {
     }
 
     public boolean marcarActividadCancelada(String idPreso, String idActividad) {
-        List<Preso> presos = cargarTodos();
+        List<Presa> presos = cargarTodos();
 
         try {
-            for (Preso preso : presos) {
+            for (Presa preso : presos) {
                 if (preso.getIdentificacion().equals(idPreso)) {
                     preso.marcarActividadCancelada(idActividad);
                     guardarTodos(presos);
@@ -440,92 +498,91 @@ public class PresoDAO {
         }
     }
 
-public boolean cambiarEstadoPreso(String identificacion, EstadoPresoEnum nuevoEstado, LocalDate fechaCambio) {
-    List<Preso> presos = cargarTodos();
-    ActividadController actividadController = ActividadController.getInstancia();
-    VisitaDAO visitaDAO = VisitaDAO.getInstancia();
-    SancionDAO sancionDAO = SancionDAO.getInstancia(); 
+    public boolean cambiarEstadoPreso(String identificacion, EstadoPresoEnum nuevoEstado, LocalDate fechaCambio) {
+        List<Presa> presos = cargarTodos();
+        ActividadController actividadController = ActividadController.getInstancia();
+        VisitaDAO visitaDAO = VisitaDAO.getInstancia();
+        SancionDAO sancionDAO = SancionDAO.getInstancia();
 
-    for (Preso preso : presos) {
-        if (preso.getIdentificacion().equals(identificacion)) {
-            EstadoPresoEnum estadoActual = preso.getEstado();
+        for (Presa preso : presos) {
+            if (preso.getIdentificacion().equals(identificacion)) {
+                EstadoPresoEnum estadoActual = preso.getEstado();
 
-            List<Actividad> actividadesPreso = actividadController.buscarActividadesPorPreso(identificacion);
+                List<Actividad> actividadesPreso = actividadController.buscarActividadesPorPreso(identificacion);
 
-            preso.setEstado(nuevoEstado);
+                preso.setEstado(nuevoEstado);
 
-            switch (nuevoEstado) {
-                case FUGADO:
-                    preso.setFechaFuga(fechaCambio);
-                    intentoFugaDAO.registrarFuga(identificacion, fechaCambio);
+                switch (nuevoEstado) {
+                    case FUGADO:
+                        preso.setFechaFuga(fechaCambio);
+                        intentoFugaDAO.registrarFuga(identificacion, fechaCambio);
 
-                    if (preso.isEnAislamiento()) {
-                        preso.setEnAislamiento(false);
-                    }
+                        if (preso.isEnAislamiento()) {
+                            preso.setEnAislamiento(false);
+                        }
 
-                    for (Actividad actividad : actividadesPreso) {
-                        actividadDAO.removerPresoDeActividad(actividad.getIdActividad(), identificacion);
-                    }
+                        for (Actividad actividad : actividadesPreso) {
+                            actividadDAO.removerPresoDeActividad(actividad.getIdActividad(), identificacion);
+                        }
 
-                    cancelarVisitasPreso(identificacion, "El preso ha sido marcado como FUGADO");
+                        cancelarVisitasPreso(identificacion, "El preso ha sido marcado como FUGADO");
 
-                    cancelarSancionesActivas(identificacion, sancionDAO);
-                    break;
+                        cancelarSancionesActivas(identificacion, sancionDAO);
+                        break;
 
-                case LIBERADO:
-                    preso.setFechaLiberacion(fechaCambio);
+                    case LIBERADO:
+                        preso.setFechaLiberacion(fechaCambio);
 
-                    for (Actividad actividad : actividadesPreso) {
-                        actividadDAO.removerPresoDeActividad(actividad.getIdActividad(), identificacion);
-                    }
+                        for (Actividad actividad : actividadesPreso) {
+                            actividadDAO.removerPresoDeActividad(actividad.getIdActividad(), identificacion);
+                        }
 
-                    ExpedienteJudicial expedienteAbierto = expedienteDAO.obtenerExpedienteAbierto(identificacion);
-                    if (expedienteAbierto != null) {
-                        expedienteAbierto.setEstado(EstadoExpedienteEnum.CERRADO);
-                        expedienteDAO.actualizarExpediente(expedienteAbierto);
-                    }
+                        ExpedienteJudicial expedienteAbierto = expedienteDAO.obtenerExpedienteAbierto(identificacion);
+                        if (expedienteAbierto != null) {
+                            expedienteAbierto.setEstado(EstadoExpedienteEnum.CERRADO);
+                            expedienteDAO.actualizarExpediente(expedienteAbierto);
+                        }
 
-                    cancelarVisitasPreso(identificacion, "El preso ha sido LIBERADO");
+                        cancelarVisitasPreso(identificacion, "El preso ha sido LIBERADO");
 
-                    cancelarSancionesActivas(identificacion, sancionDAO);
-                    break;
+                        cancelarSancionesActivas(identificacion, sancionDAO);
+                        break;
 
-                case FALLECIDO:
-                    preso.setFechaDefuncion(fechaCambio);
+                    case FALLECIDO:
+                        preso.setFechaDefuncion(fechaCambio);
 
-                    for (Actividad actividad : actividadesPreso) {
-                        actividadDAO.removerPresoDeActividad(actividad.getIdActividad(), identificacion);
-                    }
+                        for (Actividad actividad : actividadesPreso) {
+                            actividadDAO.removerPresoDeActividad(actividad.getIdActividad(), identificacion);
+                        }
 
-                    ExpedienteJudicial expedienteAbiertoFallecido = expedienteDAO.obtenerExpedienteAbierto(identificacion);
-                    if (expedienteAbiertoFallecido != null) {
-                        expedienteAbiertoFallecido.setEstado(EstadoExpedienteEnum.CERRADO);
-                        expedienteDAO.actualizarExpediente(expedienteAbiertoFallecido);
-                    }
+                        ExpedienteJudicial expedienteAbiertoFallecido = expedienteDAO.obtenerExpedienteAbierto(identificacion);
+                        if (expedienteAbiertoFallecido != null) {
+                            expedienteAbiertoFallecido.setEstado(EstadoExpedienteEnum.CERRADO);
+                            expedienteDAO.actualizarExpediente(expedienteAbiertoFallecido);
+                        }
 
-                    cancelarVisitasPreso(identificacion, "El preso ha FALLECIDO");
+                        cancelarVisitasPreso(identificacion, "El preso ha FALLECIDO");
 
-                    cancelarSancionesActivas(identificacion, sancionDAO);
-                    break;
+                        cancelarSancionesActivas(identificacion, sancionDAO);
+                        break;
 
-                case ACTIVO:
-                    if (estadoActual == EstadoPresoEnum.FUGADO) {
-                        intentoFugaDAO.registrarReingreso(identificacion, fechaCambio);
-                    }
-                    preso.setFechaFuga(null);
-                    preso.setFechaLiberacion(null);
-                    preso.setFechaDefuncion(null);
-                    break;
+                    case ACTIVO:
+                        if (estadoActual == EstadoPresoEnum.FUGADO) {
+                            intentoFugaDAO.registrarReingreso(identificacion, fechaCambio);
+                        }
+                        preso.setFechaFuga(null);
+                        preso.setFechaLiberacion(null);
+                        preso.setFechaDefuncion(null);
+                        break;
+                }
+
+                return guardarCambios(presos);
             }
-
-            return guardarCambios(presos);
         }
+        return false;
     }
-    return false;
-}
 
-
- private void cancelarSancionesActivas(String identificacionPreso, SancionDAO sancionDAO) {
+    private void cancelarSancionesActivas(String identificacionPreso, SancionDAO sancionDAO) {
         List<Sancion> sancionesActivas = sancionDAO.obtenerSancionesActivasPorPreso(identificacionPreso);
 
         for (Sancion sancion : sancionesActivas) {
@@ -534,40 +591,39 @@ public boolean cambiarEstadoPreso(String identificacion, EstadoPresoEnum nuevoEs
         }
     }
 
-private void cancelarVisitasPreso(String identificacionPreso, String razon) {
-    int cantidadVisitasCanceladas = VisitaDAO.getInstancia()
-                                .cancelarVisitasPreso(identificacionPreso, razon);
-    
-    if (cantidadVisitasCanceladas > 0) {
-        List<Visita> visitasRecientesCanceladas = VisitaDAO.getInstancia()
-            .cargarPorIdentificacionPreso(identificacionPreso)
-            .stream()
-            .filter(v -> v.getEstado() == EstadoVisitaEnum.CANCELADA && 
-                        v.getRazonCancelacion().equals(razon) &&
-                        v.getFechaVisita().isAfter(LocalDate.now().minusDays(7))) 
-            .collect(Collectors.toList());
-            
-        for (Visita visita : visitasRecientesCanceladas) {
-            notificarCancelacionVisita(visita);
-        }
-    }
-}
-private void notificarCancelacionVisita(Visita visita) {
-    for (Visitante visitante : visita.getVisitantesConRelacion().keySet()) {
-        visitante.setEstado(EstadoVisitanteEnum.HABILITADO);
-        VisitanteDAO.getInstancia().guardarVisitante(visitante, null);
-        
-        if (visitante.getEdad() >= 18 && visitante.getEmail() != null) {
-            EmailSender.getInstancia().enviarNotificacionCancelacion(
-                visitante, 
-                visita, 
-                visita.getRazonCancelacion()
-            );
-        }
-    }
-}
+    private void cancelarVisitasPreso(String identificacionPreso, String razon) {
+        int cantidadVisitasCanceladas = VisitaDAO.getInstancia()
+                .cancelarVisitasPreso(identificacionPreso, razon);
 
-   
+        if (cantidadVisitasCanceladas > 0) {
+            List<Visita> visitasRecientesCanceladas = VisitaDAO.getInstancia()
+                    .cargarPorIdentificacionPreso(identificacionPreso)
+                    .stream()
+                    .filter(v -> v.getEstado() == EstadoVisitaEnum.CANCELADA
+                    && v.getRazonCancelacion().equals(razon)
+                    && v.getFechaVisita().isAfter(LocalDate.now().minusDays(7)))
+                    .collect(Collectors.toList());
+
+            for (Visita visita : visitasRecientesCanceladas) {
+                notificarCancelacionVisita(visita);
+            }
+        }
+    }
+
+    private void notificarCancelacionVisita(Visita visita) {
+        for (Visitante visitante : visita.getVisitantesConRelacion().keySet()) {
+            visitante.setEstado(EstadoVisitanteEnum.HABILITADO);
+            VisitanteDAO.getInstancia().guardarVisitante(visitante, null);
+
+            if (visitante.getEdad() >= 18 && visitante.getEmail() != null) {
+                EmailSender.getInstancia().enviarNotificacionCancelacion(
+                        visitante,
+                        visita,
+                        visita.getRazonCancelacion()
+                );
+            }
+        }
+    }
 
     public boolean marcarComoLiberado(String numeroIdentificacion) {
         return cambiarEstadoPreso(numeroIdentificacion, EstadoPresoEnum.LIBERADO, LocalDate.now());
@@ -581,11 +637,11 @@ private void notificarCancelacionVisita(Visita visita) {
         return cambiarEstadoPreso(numeroIdentificacion, EstadoPresoEnum.FUGADO, fechaFuga);
     }
 
-    public List<Preso> buscarPorEstado(EstadoPresoEnum estado) {
-        List<Preso> todos = cargarTodos();
-        List<Preso> filtrados = new ArrayList<>();
+    public List<Presa> buscarPorEstado(EstadoPresoEnum estado) {
+        List<Presa> todos = cargarTodos();
+        List<Presa> filtrados = new ArrayList<>();
 
-        for (Preso preso : todos) {
+        for (Presa preso : todos) {
             if (preso.getEstado() == estado) {
                 filtrados.add(preso);
             }
@@ -593,8 +649,8 @@ private void notificarCancelacionVisita(Visita visita) {
         return filtrados;
     }
 
-    public boolean actualizarPreso(Preso preso) {
-        List<Preso> presos = cargarTodos();
+    public boolean actualizarPreso(Presa preso) {
+        List<Presa> presos = cargarTodos();
 
         try {
             boolean encontrado = false;
@@ -621,7 +677,7 @@ private void notificarCancelacionVisita(Visita visita) {
 
     public int contarPresosFallecidos() {
         int contador = 0;
-        for (Preso preso : cargarTodos()) {
+        for (Presa preso : cargarTodos()) {
             if (preso.getEstado() == EstadoPresoEnum.FALLECIDO) {
                 contador++;
             }
@@ -631,7 +687,7 @@ private void notificarCancelacionVisita(Visita visita) {
 
     public int contarPresosLiberados() {
         int contador = 0;
-        for (Preso preso : cargarTodos()) {
+        for (Presa preso : cargarTodos()) {
             if (preso.getEstado() == EstadoPresoEnum.LIBERADO) {
                 contador++;
             }

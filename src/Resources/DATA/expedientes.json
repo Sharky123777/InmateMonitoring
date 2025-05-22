@@ -337,7 +337,7 @@
         "descripcion": "La detenida fue vista peculando por uso",
         "fechaComision": "2025-05-15",
         "sentencia": {
-          "años": 2,
+          "años": 6,
           "meses": 3,
           "fechaIngreso": "2025-05-16",
           "fechaSalidaCalculada": "2027-08-16"
@@ -411,7 +411,8 @@
       "sexo": "F",
       "nacionalidad": "Suiza",
       "identificacion": "1237440696"
-    }
+    },
+    "rutaOrdenJuez": "src/Resources/ordenes_juez/orden_1237440696_2025-05-22.pdf"
   },
   {
     "codigoExpediente": "EXP-1747426411525",
@@ -563,7 +564,7 @@
         "descripcion": "shudhdushudshd",
         "fechaComision": "2025-05-02",
         "sentencia": {
-          "años": 2,
+          "años": 5,
           "meses": 1,
           "fechaIngreso": "2025-05-21",
           "fechaSalidaCalculada": "2027-06-21"
@@ -579,7 +580,7 @@
         "descripcion": "jsdiwjiwjsjiwe",
         "fechaComision": "2024-05-25",
         "sentencia": {
-          "años": 3,
+          "años": 6,
           "meses": 2,
           "fechaIngreso": "2025-05-21",
           "fechaSalidaCalculada": "2028-07-21"
@@ -619,6 +620,7 @@
       "sexo": "F",
       "nacionalidad": "Alemana",
       "identificacion": "838297329"
-    }
+    },
+    "rutaOrdenJuez": "src/Resources/ordenes_juez/orden_838297329_2025-05-22.pdf"
   }
 ]

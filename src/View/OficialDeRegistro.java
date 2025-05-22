@@ -1,17 +1,17 @@
 package View;
 
-import Controller.PresoController;
+import Controller.PresaController;
 import Controller.ExpedienteController;
 import Controller.OficialDeRegistroController;
 import DAO.CeldaDAO;
 import DAO.DelitoDAO;
 import DAO.ExpedienteDAO;
-import DAO.PresoDAO;
+import DAO.PresaDAO;
 import DAO.UsuarioDAO;
 import Model.Constants.EstadoPresoEnum;
 import Model.Entities.Delito;
 import Model.Entities.ExpedienteJudicial;
-import Model.Entities.Preso;
+import Model.Entities.Presa;
 import Model.Entities.Sentencia;
 import Model.Entities.Usuario;
 
@@ -80,7 +80,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
     public boolean imagenFueModificada;
     private File imagenSeleccionadaModODR;
 
-    private Preso presoOriginal;
+    private Presa presoOriginal;
     CeldaDAO celda = new CeldaDAO();
     private int delitoActual = 1;
     private int totalDelitos = 1;
@@ -91,7 +91,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
     private final UsuarioDAO usuarioDAO = UsuarioDAO.getInstancia();
 
     private final ExpedienteController expedienteController;
-    private final PresoController presoController;
+    private final PresaController presoController;
     private final Validador validador;
     private final CeldaDAO celdaDAO;
 
@@ -101,7 +101,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
         this.celdaDAO = CeldaDAO.getInstancia();
 
         this.expedienteDAO = ExpedienteDAO.getInstancia();
-        this.presoController = PresoController.getInstancia();
+        this.presoController = PresaController.getInstancia();
         this.expedienteController = ExpedienteController.getInstancia();
         this.validador = Validador.getInstancia();
 
@@ -319,7 +319,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
 
             try {
                 String identificacion = tablaInactivos.getValueAt(fila, 5).toString();
-                Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
+                Presa preso = new PresaDAO().buscarPresoPorIdentificacion(identificacion);
 
                 if (preso == null) {
                     JOptionPane.showMessageDialog(this, "No se encontró el preso", "Error", JOptionPane.ERROR_MESSAGE);
@@ -447,7 +447,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
             }
 
             String id = TablaPresos.getValueAt(fila, 5).toString();
-            Preso preso = new PresoDAO().buscarPresoPorIdentificacion(id);
+            Presa preso = new PresaDAO().buscarPresoPorIdentificacion(id);
 
             if (preso != null) {
                 presoOriginal = preso;
@@ -468,7 +468,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
             }
 
             String identificacion = TablaPresos.getValueAt(fila, 5).toString();
-            Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
+            Presa preso = new PresaDAO().buscarPresoPorIdentificacion(identificacion);
 
             if (preso == null) {
                 JOptionPane.showMessageDialog(null, "Preso no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
@@ -488,7 +488,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
 
             try {
                 String identificacion = TablaPresos.getValueAt(fila, 5).toString();
-                Preso preso = new PresoDAO().buscarPresoPorIdentificacion(identificacion);
+                Presa preso = new PresaDAO().buscarPresoPorIdentificacion(identificacion);
 
                 if (preso == null) {
                     JOptionPane.showMessageDialog(this, "No se encontró el preso", "Error", JOptionPane.ERROR_MESSAGE);
@@ -570,7 +570,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
             }
 
             String identificacion = TablaPresos.getValueAt(filaSeleccionada, 5).toString();
-            Preso preso = presoController.obtenerPresoDesdeTabla(filaSeleccionada, TablaPresos);
+            Presa preso = presoController.obtenerPresoDesdeTabla(filaSeleccionada, TablaPresos);
             LocalDate fechaCambio;
 
             if (nuevoEstado == EstadoPresoEnum.FUGADO || nuevoEstado == EstadoPresoEnum.ACTIVO) {
@@ -664,7 +664,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
 
     }
 
-    private void cargarDatosPresoEnFormularioActualizacion(Preso preso) {
+    private void cargarDatosPresoEnFormularioActualizacion(Presa preso) {
         this.delitosTemporales = new ArrayList<>();
 
         nuevoPrimerNombreField.setText("");
@@ -3260,7 +3260,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
                 ppMenuTablaPresos.setVisible(false);
             }
 
-            PresoController controller = PresoController.getInstancia();
+            PresaController controller = PresaController.getInstancia();
 
             boolean actualizado = controller.actualizarPreso(
                     presoOriginal,
@@ -3427,7 +3427,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
                 return;
             }
 
-            Preso preso = presoController.buscarPreso(idBuscado);
+            Presa preso = presoController.buscarPreso(idBuscado);
             DefaultTableModel model = (DefaultTableModel) TablaPresos.getModel();
             model.setRowCount(0);
 
@@ -3617,7 +3617,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
                 throw new IllegalArgumentException("Debe seleccionar una foto del preso");
             }
 
-            PresoController controller = PresoController.getInstancia();
+            PresaController controller = PresaController.getInstancia();
 
             LocalDate fechaIngreso = LocalDate.now();
 
@@ -3994,7 +3994,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
                 throw new IllegalStateException("Datos del preso no están inicializados correctamente");
             }
 
-            boolean delitoAgregado = PresoController.getInstancia().agregarDelitoAPreso(
+            boolean delitoAgregado = PresaController.getInstancia().agregarDelitoAPreso(
                     presoOriginal,
                     cod.getText(),
                     art.getText(),
@@ -4350,7 +4350,7 @@ public class OficialDeRegistro extends javax.swing.JFrame implements PerfilUsuar
 
             Validador.validarFormatoIdentificacion(idBuscado);
 
-            Preso preso = presoController.buscarPreso(idBuscado);
+            Presa preso = presoController.buscarPreso(idBuscado);
 
             DefaultTableModel model = (DefaultTableModel) tablaInactivos.getModel();
             model.setRowCount(0);
